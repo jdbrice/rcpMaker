@@ -1,0 +1,37 @@
+<config>
+
+	<!-- input of data and or root files -->
+	<input>
+		<rootIn file="qa.root" />
+		<dataDir maxFiles="5" >/star/institutions/rice/jdb/run14/auau15/rcp/data/output/</dataDir>
+	</input>
+
+	<!-- output of root data file and PDF report -->
+	<output>
+		<base></base>
+		<root>qa.root</root>
+		<report>rqa.pdf</report>
+	</output>
+
+	<!-- histograms -->
+	<histograms>
+		<refMult      	type="1D" title="Reference Multiplicity"  nBinsX="300" x1="0" x2="13000000"/>
+		<central      	type="1D" title="Reference Multiplicity : central"  nBinsX="300" x1="0" x2="13000000"/>
+		<peripheral    	type="1D" title="Reference Multiplicity : peripheral"  nBinsX="300" x1="0" x2="13000000"/>
+
+		<ptAll        	type="1D" title="pt All centrality, Central, Peripheral"  nBinsX="50" x1="0" x2="5"/>
+		<ptCentral    	type="1D" title="pt Central" 	nBinsX="50" x1="0" x2="5"/>
+		<ptPeripheral  	type="1D" title="pt Peripheral" nBinsX="50" x1="0" x2="5"/>
+		
+		<ptPeripheralScaled  	type="1D" title="pt Peripheral" nBinsX="50" x1="0" x2="5"/>
+		<ptRatio 		type="1D" title="pt : Central / Peripheral" nBinsX="50" x1="0" x2="5"/>
+	</histograms>
+
+
+	<!-- Analysis cuts -->
+	<cuts>
+		<central>.05</central>
+		<peripheral>.40</peripheral>
+	</cuts>
+
+</config>
