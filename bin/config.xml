@@ -27,13 +27,23 @@
 		<ptRatio 		type="1D" title="R_{CP} (0-5%) / (60-80%); P_{T} [GeV/c]; R_{CP}" 	nBinsX="15" x1="0" x2="4"/>
 
 		<vr 			type="1D" title="Vr" nBinsX="200" x1="0" x2="4"/>
-		<vrOffset 			type="1D" title="Vr Offset" nBinsX="200" x1="0" x2="4"/>
+		<vrCut 			type="1D" title="VrCut" nBinsX="200" x1="0" x2="4"/>
+		<vrOffset 		type="1D" title="Vr Offset" nBinsX="200" x1="0" x2="4"/>
+		
 		<vz 			type="1D" title="Vz" nBinsX="600" x1="-300" x2="300"/>
-		<vzOffset 			type="1D" title="Vz" nBinsX="600" x1="-300" x2="300"/>
+		<vzCut 			type="1D" title="Vz Cut" nBinsX="600" x1="-300" x2="300"/>
+
+		<vzOffset 		type="1D" title="Vz" nBinsX="600" x1="-300" x2="300"/>
 		<vxy 			type="2D" title="Vr;x;y" nBinsX="600" x1="-3.5" x2="3.5" nBinsY="600" y1="-3.5" y2="3.5"/>
-		<vxyOffset 			type="2D" title="Vr w/Offset;x;y" nBinsX="600" x1="-3.5" x2="3.5" nBinsY="600" y1="-3.5" y2="3.5"/>
+		<vxyOffset 		type="2D" title="Vr w/Offset;x;y" nBinsX="600" x1="-3.5" x2="3.5" nBinsY="600" y1="-3.5" y2="3.5"/>
 	</histograms>
 	<s hide="true">
+		<refMult 		draw="h" 	  logY="1" range="0.1, 1000" />
+		<peripheral 	draw="h same" linecolor="3" fillcolor="3" logY="1" range="0.1, 1000" />
+		<central 		draw="h same" linecolor="2" fillcolor="2" logY="1" range="0.1, 1000" />
+		<1D 			draw="h" />
+		<filled			draw="same h" fillcolor="2" linecolor="2" />
+
 		<2D draw="colz" />
 		<rcp draw="pe" logY="1" range=".1, 13" />
 	</s>
@@ -44,7 +54,7 @@
 		<central>.05</central>
 		<peripheral min=".60" max=".80" />
 		<pt>0.1</pt>
-		<vz min="-15" max="15" />
+		<vz min="-30" max="30" />
 		<vrMax>1.5</vrMax>
 		<vertexOffset x="0" y="-.9115" z="-9.392" />
 	</cuts>

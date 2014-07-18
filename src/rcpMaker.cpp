@@ -120,7 +120,9 @@ void rcpMaker::loopEvents() {
 	book->make( config, "histograms.ptRatio" );
 
 	book->make( "histograms.vz" );
+	book->make( "histograms.vzCut" );
 	book->make( "histograms.vr" );
+	book->make( "histograms.vrCut" );
 	book->make( "histograms.vxy" );
 	book->make( "histograms.vzOffset" );
 	book->make( "histograms.vrOffset" );
@@ -154,9 +156,16 @@ void rcpMaker::loopEvents() {
     	book->fill( "vrOffset", vr );
     	book->fill( "vzOffset", vz );
 
-    	if ( eventCut() )
+    	if ( vzCut() )
     		continue;
+		book->fill( "vzCut", vz );    	
 
+		if ( vrCut() )
+    		continue;
+		book->fill( "vrCut", vr );    	    	
+
+		if ( eventCut() )
+    		continue;
 
     	double central = rmh->findCentrality( refMult, book->get( "refMult" ) );
 
@@ -210,14 +219,14 @@ void rcpMaker::loopEvents() {
 
 	report->newPage();
 	gPad->SetLogy();
-	book->style( "refMult" )->set( "draw", "h" )->set( "range", 0.1, 10000 )->draw();
-	book->style( "central" )->set( "draw", "same" )->set("linecolor", kRed)->set( "range", 0.1, 10000 )->draw();
-	book->style( "peripheral" )->set( "draw", "same" )->set( "linecolor", kGreen )->set( "range", 0.1, 10000 )->draw();
+	book->style( "refMult" )->set( "s.refMult" )->draw();
+	book->style( "central" )->set( "s.peripheral" )->draw();
+	book->style( "peripheral" )->set( "s.central" )->draw();
 	report->savePage();
 
 	report->newPage();
-	book->style( "vz" )->set( "draw", "h" )->draw();
-	book->style( "vzOffset" )->set( "draw", "sameh" )->set( "linecolor", 2 )->draw();
+	book->style( "vzOffset" )->set( "s.1D" )->draw();
+	book->style( "vzCut" )->set( "s.filled" )->draw();
 	report->savePage();
 
 	report->newPage();
@@ -260,20 +269,27 @@ void rcpMaker::loopEvents() {
 }
 
 
-
-bool rcpMaker::eventCut() {
-
+bool rcpMaker::vzCut() {
 	double vz = pico->vertexZ;
 	if ( vz - vOffsetZ > vzMax || vz - vOffsetZ < vzMin )
     		return true;
-
-    double vx = pico->vertexX - vOffsetX;
+    return false;	
+}
+bool rcpMaker::vrCut(){
+	double vx = pico->vertexX - vOffsetX;
 	double vy = pico->vertexY - vOffsetY;
 	double vr = TMath::Sqrt( vx*vx + vy*vy );
 
 	if ( vr > vrMax )
 		return true;
+	return false;
+}
+bool rcpMaker::eventCut() {
 
+	if ( vzCut() )
+		return true;
+	if ( vrCut() )
+		return true;
 
     return false;
 }

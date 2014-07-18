@@ -57,6 +57,8 @@ public:
 	
 	void loopEvents();
 
+	bool vzCut();
+	bool vrCut();
 	bool eventCut();
 	
 
