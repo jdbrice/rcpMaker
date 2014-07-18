@@ -1,10 +1,18 @@
 
 # project name and executable name
+<<<<<<< HEAD
 project = rcp
 # source suffix
 source = .cpp 
 # object files to make
 objects = rcp.o histoBook.o chainLoader.o rcpMaker.o reporter.o TOFrPicoDst.o utils.o
+=======
+project = app
+# source suffix
+source = .cpp 
+# object files to make
+objects = app.o histoBook.o chainLoader.o analyzer.o reporter.o utils.o
+>>>>>>> upstream/master
 
 sources = $(wildcard *.cpp)
 headers = $(wildcard ../include/*.h)
