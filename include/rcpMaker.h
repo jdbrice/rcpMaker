@@ -39,6 +39,13 @@ private:
 
 	clock_t startTime;
 
+
+	/**
+	 * Cut Varaibles
+	 */
+	double vzMax, vzMin, vrMax;
+	double vOffsetX, vOffsetY, vOffsetZ;
+
 public:
 
 
@@ -50,6 +57,7 @@ public:
 	
 	void loopEvents();
 
+	bool eventCut();
 	
 
 protected:
