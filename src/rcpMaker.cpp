@@ -80,10 +80,7 @@ void rcpMaker::loopEvents() {
 
 
 	book->cd( "" );
-	book->make( config, "histograms.refMult" );
-	book->make( config, "histograms.central" );
-	book->make( config, "histograms.peripheral" );
-	
+	book->makeAll( "histograms" );
 	
 	vector<double> avgP;
 	vector<double> avgC;
@@ -111,22 +108,6 @@ void rcpMaker::loopEvents() {
 	double cutPeripheralMin = rmh->findCut( config->getDouble( "cuts.peripheral:min", 0.6 ), book->get("refMult" ) );
 	double cutPeripheralMax = rmh->findCut( config->getDouble( "cuts.peripheral:max", 0.8 ), book->get("refMult" ) );
 
-	
-
-	book->make( config, "histograms.ptAll" );
-	book->make( config, "histograms.ptCentral" );
-	book->make( config, "histograms.ptPeripheral" );
-	book->make( config, "histograms.ptPeripheralScaled" );
-	book->make( config, "histograms.ptRatio" );
-
-	book->make( "histograms.vz" );
-	book->make( "histograms.vzCut" );
-	book->make( "histograms.vr" );
-	book->make( "histograms.vrCut" );
-	book->make( "histograms.vxy" );
-	book->make( "histograms.vzOffset" );
-	book->make( "histograms.vrOffset" );
-	book->make( "histograms.vxyOffset" );
 
 	book->get( "ptRatio" )->Sumw2();
 	
@@ -162,7 +143,8 @@ void rcpMaker::loopEvents() {
 
 		if ( vrCut() )
     		continue;
-		book->fill( "vrCut", vr );    	    	
+		book->fill( "vrCut", vr );
+		book->fill( "vxyCut", vx, vy );    	    	
 
 		if ( eventCut() )
     		continue;
@@ -224,29 +206,29 @@ void rcpMaker::loopEvents() {
 	book->style( "peripheral" )->set( "s.central" )->draw();
 	report->savePage();
 
-	report->newPage();
+	report->newPage(2, 2);
+	book->clearLegend();
 	book->style( "vzOffset" )->set( "s.1D" )->draw();
-	book->style( "vzCut" )->set( "s.filled" )->draw();
-	report->savePage();
+	book->style( "vzCut" )->set( "s.cut" )->draw();
 
-	report->newPage();
-	book->style( "vr" )->set( "draw", "h" )->draw();
-	book->style( "vrOffset" )->set( "draw", "sameh" )->set( "linecolor", 2 )->draw();
-	report->savePage();
+	book->clearLegend();
+	report->cd( 2, 1 );
+	book->style( "vrOffset" )->set( "draw", "h" )->set( "logY", 1)->draw();
+	book->style( "vrCut" )->set( "s.cut" )->draw();
 
-	report->newPage();
-	book->style( "vxy" )->set( "s.2D" )->draw();
-	report->savePage();
-
-	report->newPage();
+	report->cd( 1, 2 );
 	book->style( "vxyOffset" )->set( "s.2D" )->draw();
+
+	report->cd( 2, 2 );
+	book->style( "vxyCut" )->set( "s.2D" )->draw();
 	report->savePage();
 
 	report->newPage();
 	gPad->SetLogy( 1 );
-	book->style( "ptAll" )->set( "draw", "h" )->draw();
-	book->style( "ptCentral" )->set( "draw", "same" )->set("linecolor", kRed)->draw();
-	book->style( "ptPeripheral" )->set( "draw", "same" )->set( "linecolor", kGreen )->draw();
+	book->clearLegend();
+	book->style( "ptAll" )->set( "histograms.ptAll.style" )->draw();
+	book->style( "ptCentral" )->set( "histograms.ptCentral.style" )->draw();
+	book->style( "ptPeripheral" )->set( "draw", "same" )->set( "linecolor", kGreen )->set( "legend", "Peripheral", "L" )->draw();
 	report->savePage();
 
 	/*report->newPage();
