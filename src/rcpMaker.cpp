@@ -226,9 +226,9 @@ void rcpMaker::loopEvents() {
 	report->newPage();
 	gPad->SetLogy( 1 );
 	book->clearLegend();
-	book->style( "ptAll" )->set( "histograms.ptAll.style" )->draw();
-	book->style( "ptCentral" )->set( "histograms.ptCentral.style" )->draw();
-	book->style( "ptPeripheral" )->set( "draw", "same" )->set( "linecolor", kGreen )->set( "legend", "Peripheral", "L" )->draw();
+	book->style( "ptAll" )->draw();
+	book->style( "ptCentral" )->draw();
+	book->style( "ptPeripheral" )->draw();
 	report->savePage();
 
 	/*report->newPage();
