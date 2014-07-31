@@ -2,16 +2,17 @@
 #define UTILS_H
 
 #include <string>
-#include <time.h>   
+#include <time.h>  
+#include <unistd.h> 
 
 using namespace std;
 
 
 namespace jdbUtils{
 
-	std::string ts( int );
-	std::string ts( double );
-	std::string ts( uint );
+	std::string ts( int, int len = -1 );
+	std::string ts( double, int len = -1 );
+	std::string ts( unsigned int, int len = -1 );
 	void progressBar( int i, int nevents, int max );
 
 	class timer

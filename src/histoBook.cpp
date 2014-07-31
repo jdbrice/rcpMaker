@@ -199,10 +199,25 @@ void histoBook::make( xmlConfig * config, string nodeName ){
 
 		string type = config->getString( nodeName + ":type", "1D" );
 
+		
 		if ( "1D" == type ){
+			if ( config->nodeExists( nodeName + ".xBins" ) ){
+				
+				vector<double> xBins = config->getDoubleVector( nodeName + ".xBins" );
+				make1D( hName, config->getString( nodeName + ":title", hName ), 
+					xBins.size() - 1, xBins.data() );
+
+			} else if ( config->nodeExists( nodeName + ":xBins" ) ) {
+
+				vector<double> xBins = config->getDoubleVector( config->getString( nodeName + ":xBins" ) );
+				make1D( hName, config->getString( nodeName + ":title", hName ), 
+					xBins.size() - 1, xBins.data() );
+
+			} else {	
 			make1D( hName, config->getString( nodeName + ":title", hName ), 
 					config->getInt( nodeName + ":nBinsX", 1 ), config->getDouble( nodeName + ":x1", 0 ),
 					config->getDouble( nodeName + ":x2", 1 ) );
+			}
 
 		} else if ( "2D" == type ){
 			make2D( hName, config->getString( nodeName + ":title", hName ), 
@@ -211,6 +226,7 @@ void histoBook::make( xmlConfig * config, string nodeName ){
 					config->getInt( nodeName + ":nBinsY", 1 ), config->getDouble( nodeName + ":y1", 0 ),
 					config->getDouble( nodeName + ":y2", 1 ) );
 		}
+
 
 	
 	}
@@ -285,12 +301,25 @@ TH2* histoBook::get2D( string name, string sdir  ){
 		sdir = currentDir;
 	return (TH2*)book[ ( sdir  + name  ) ];
 }
+TH3* histoBook::get3D( string name, string sdir ){
+	return (( TH3* ) get( name, sdir ));
+}
 
 void histoBook::fill( string name, double bin, double weight ){ 
 	if ( get( name ) != 0)
 		get( name )->Fill( bin, weight );
 }
 
+
+histoBook* histoBook::exportAs( string filename ) {
+
+	string outName = styling + ".png";
+	if ( "" != filename )
+		outName = filename;
+	gPad->SaveAs( outName.c_str() );
+	return this;
+
+}
 
 void histoBook::globalStyle(){
 
@@ -323,10 +352,13 @@ void histoBook::globalStyle(){
 
 histoBook* histoBook::style( string histName ){
 	styling = histName;
-	
+
+	// set the default style if it is there
 	if ( config && config->nodeExists( configPath[ histName ] + ".style" ) ){
-		cout << "setting : " << configPath[histName] + ".style" << "as default style " << endl;
 		set( configPath[histName] + ".style" );
+	} else if ( config && config->nodeExists( configPath[ histName ] + ":style" ) && config->nodeExists( config->getString( configPath[ histName ] + ":style" ) ) ){
+		set( config->getString( configPath[ histName ] + ":style" ) );
+		cout << "hello " << endl;
 	}
 
 	return this;
