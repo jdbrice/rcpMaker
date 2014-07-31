@@ -3,7 +3,7 @@
 	<!-- input of data and or root files -->
 	<input>
 		<rootIn file="qa.root" />
-		<dataDir maxFiles="20" >/star/institutions/rice/jdb/run14/auau15/rcp/data/output/</dataDir>
+		<dataDir maxFiles="20" >/Users/danielbrandenburg/bnl/local/data/auau15Rcp/</dataDir>
 	</input>
 
 	<!-- output of root data file and PDF report -->
@@ -70,9 +70,9 @@
 		<central>.05</central>
 		<peripheral min=".60" max=".80" />
 		<pt>0.1</pt>
-		<vz min="-30" max="30" />
+		<vz min="-70" max="70" />
 		<vrMax>1.5</vrMax>
-		<vertexOffset x="0" y="-.9115" z="-9.392" />
+		<vertexOffset x="0" y="-.9115" z="0" />
 	</cuts>
 
 
