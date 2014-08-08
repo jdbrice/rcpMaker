@@ -5,6 +5,7 @@
 #include <fstream>
 #include <sstream>
 #include "refMultHelper.h"
+#include "pidLUTHelper.h"
 
 // provides my own string shortcuts etc.
 using namespace jdbUtils;
@@ -29,7 +30,10 @@ rcpMaker::rcpMaker( TChain* chain, xmlConfig* con )  {
 	gStyle->SetOptStat( 0 );
 	
 	// create the histogram book
+	
 	book = new histoBook( ( config->getString( "output.base" ) + config->getString( "output.root" ) ), config );
+	
+
 	
 	// create a report builder 
 	report = new reporter( config->getString( "output.base" ) + config->getString( "output.report" ) );
@@ -42,9 +46,33 @@ rcpMaker::rcpMaker( TChain* chain, xmlConfig* con )  {
 	vOffsetX = config->getDouble( "cuts.vertexOffset:x", 0);
 	vOffsetY = config->getDouble( "cuts.vertexOffset:y", 0);
 	vOffsetZ = config->getDouble( "cuts.vertexOffset:z", 0);
+
 	vzMin = config->getDouble( "cuts.vz:min", -5);
 	vzMax = config->getDouble( "cuts.vz:max", 5);
 	vrMax = config->getDouble( "cuts.vrMax", 2);
+
+
+
+	pidLUT = new histoBook( config->getString( "output.pidLUT" ), config );
+	TFile * f = new TFile( config->getString( "input.pidLUT" ).c_str(), "READ" );
+
+	TH1* h = (TH1*)f->Get( "xMeanPi" );
+	pidLUT->add( "xMeanPi", h );
+	h = (TH1*)f->Get( "yMeanPi" );
+	pidLUT->add( "yMeanPi", h );
+	h = (TH1*)f->Get( "xSigmaPi" );
+	pidLUT->add( "xSigmaPi", h );
+	h = (TH1*)f->Get( "ySigmaPi" );
+	pidLUT->add( "ySigmaPi", h );
+
+	h = (TH1*)f->Get( "xMeanK" );
+	pidLUT->add( "xMeanK", h );
+	h = (TH1*)f->Get( "yMeanK" );
+	pidLUT->add( "yMeanK", h );
+	h = (TH1*)f->Get( "xSigmaK" );
+	pidLUT->add( "xSigmaK", h );
+	h = (TH1*)f->Get( "ySigmaK" );
+	pidLUT->add( "ySigmaK", h );
 
 }
 
@@ -54,6 +82,7 @@ rcpMaker::rcpMaker( TChain* chain, xmlConfig* con )  {
 rcpMaker::~rcpMaker() {
 	
 	delete book;
+	//delete pidLUT;
 	delete report;
 	
 	cout << "[rcpMaker.~rcpMaker] " << endl;
@@ -77,10 +106,9 @@ void rcpMaker::loopEvents() {
 	Int_t nevents = (Int_t)_chain->GetEntries();
 	cout << "[rcpMaker." << __FUNCTION__ << "] Loaded: " << nevents << " events " << endl;
 
-
-
 	book->cd( "" );
 	book->makeAll( "histograms" );
+
 	
 	vector<double> avgP;
 	vector<double> avgC;
@@ -88,11 +116,15 @@ void rcpMaker::loopEvents() {
 	/**
 	 *  Loop over all the events and build the refMult histogram
 	 */
+	cout << " Determining RefMult" << endl;
+	uint totalEventsKept = 0;
 	for(Int_t i=0; i<nevents; i++) {
     	_chain->GetEntry(i);
+    	progressBar( i, nevents, 60 );
 
-    	if ( eventCut() )
+    	if ( keepEvent() )
     		continue;
+    	totalEventsKept ++ ;
 
     	double tStart = pico->tStart;
     	Int_t refMult = pico->refMult;
@@ -100,7 +132,8 @@ void rcpMaker::loopEvents() {
    
 	} // end loop on events for refMult
 
-	
+	cout << "Total Events Kept: " << totalEventsKept << endl;
+	cout << "refMult Histo : " << book->exists( "refMult" ) << endl;
 
 	refMultHelper *rmh = new refMultHelper();
 
@@ -111,13 +144,23 @@ void rcpMaker::loopEvents() {
 
 	book->get( "ptRatio" )->Sumw2();
 	
+	vector<string> pTypes = config->getStringVector( "pid.species" );
+	pidLUTHelper pidHelper( pidLUT );
+
+	double cutNSigDedx = config->getDouble( "pid.nSigma:dedx", 1 );
+	double cutNSigDB = config->getDouble( "pid.nSigma:deltaBeta", 1 );
 	
 	// loop over all events
 	for(Int_t i=0; i<nevents; i++) {
     	_chain->GetEntry(i);
 
+    	progressBar( i, nevents, 60 );
+
     	double tStart = pico->tStart;
     	Int_t refMult = pico->refMult;
+
+
+
 
     	double vz = pico->vertexZ;
     	double vx = pico->vertexX;
@@ -137,16 +180,14 @@ void rcpMaker::loopEvents() {
     	book->fill( "vrOffset", vr );
     	book->fill( "vzOffset", vz );
 
-    	if ( vzCut() )
-    		continue;
+    	
 		book->fill( "vzCut", vz );    	
 
-		if ( vrCut() )
-    		continue;
+		
 		book->fill( "vrCut", vr );
 		book->fill( "vxyCut", vx, vy );    	    	
 
-		if ( eventCut() )
+		if ( keepEvent() )
     		continue;
 
     	double central = rmh->findCentrality( refMult, book->get( "refMult" ) );
@@ -166,7 +207,43 @@ void rcpMaker::loopEvents() {
     	int nTofHits = pico->nTofHits;
     	for ( int iHit = 0; iHit < nTofHits; iHit++ ){
 
+    		if ( !keepTrack( iHit ) )
+    			continue;
+
     		double pt = pico->pt[ iHit ];
+
+
+    		
+    		// loop over the particle types
+    		for ( int iP = 0; iP < pTypes.size(); iP++ ){
+    			string pType = pTypes[ iP ];
+    			// nSigmaDeDx
+    			double nDedx = nSigDedx( pType, iHit );
+    			// delta 1/beta
+    			double db = dBeta( pType, iHit );
+    			// momentum
+    			double p = pico->p[ iHit ];
+
+    			
+ 	   			bool passPID = pidHelper.isParticle( pType, p, 0, 
+ 	   							nDedx, db, cutNSigDedx, cutNSigDB );
+
+ 	   			if ( passPID  ){
+ 	   				book->fill( "ptAll"+pType, pt );
+ 	   				if ( refMult >= cutCentral ){
+		    			book->fill( "ptCentral" + pType, pt );
+		    			book->fill( "ptRatio" + pType, pt   );
+		    			
+		    		}
+		    		if ( refMult >= cutPeripheralMax && refMult <= cutPeripheralMin  ){
+		    			book->fill( "ptPeripheral" + pType, pt );
+		    			book->fill( "ptPeripheralScaled" + pType, pt );
+		 
+		    		}
+ 	   			}
+    			
+
+    		}
 
     		book->fill( "ptAll", pt );
     		if ( refMult >= cutCentral ){
@@ -208,13 +285,13 @@ void rcpMaker::loopEvents() {
 
 	report->newPage(2, 2);
 	book->clearLegend();
-	book->style( "vzOffset" )->set( "s.1D" )->draw();
-	book->style( "vzCut" )->set( "s.cut" )->draw();
+	book->style( "vzOffset" )->set( "s.log1D" )->draw();
+	//book->style( "vzCut" )->set( "s.cut" )->draw();
 
 	book->clearLegend();
 	report->cd( 2, 1 );
 	book->style( "vrOffset" )->set( "draw", "h" )->set( "logY", 1)->draw();
-	book->style( "vrCut" )->set( "s.cut" )->draw();
+	//book->style( "vrCut" )->set( "s.cut" )->draw();
 
 	report->cd( 1, 2 );
 	book->style( "vxyOffset" )->set( "s.2D" )->draw();
@@ -238,40 +315,131 @@ void rcpMaker::loopEvents() {
 
 	double cScale = 196.96657 * ( 1 - ( totalC / avgC.size() ) );
 	double pScale = 196.96657 * ( 1 - ( totalP / avgP.size() ) ); 
-	book->get( "ptPeripheralScaled" )->Scale( cScale );
-	book->get( "ptRatio" )->Scale( pScale );
+
+	cout << " cScale : " << cScale << endl;
+	cout << " pScale : " << pScale << endl;
+
+	book->get( "ptPeripheralScaled" )->Scale( 790 );
+	book->get( "ptRatio" )->Scale( 19 );
 	book->get( "ptRatio" )->Divide( book->get( "ptPeripheralScaled" ) );
 
 	report->newPage();
 	book->style( "ptRatio" )->set( "s.rcp" )->draw();
 	report->savePage();
 
+	for ( int iP = 0; iP < pTypes.size(); iP++ ){
+
+		string pType = pTypes[ iP ];
+		book->get( "ptPeripheralScaled"+pType )->Scale( 790 );
+		book->get( "ptRatio"+pType )->Scale( 19 );
+		book->get( "ptRatio"+pType )->Divide( book->get( "ptPeripheralScaled"+pType ) );
+
+		report->newPage();
+		book->style( "ptRatio"+pType )->set("title", "R_{cp} " + pType )->draw();
+		report->savePage();
+
+	}
+
+	
+
 
 	cout << "[rcpMaker." << __FUNCTION__ << "] completed in " << elapsed() << " seconds " << endl;
 }
 
 
-bool rcpMaker::vzCut() {
+bool rcpMaker::keepEvent() {
+
 	double vz = pico->vertexZ;
-	if ( vz - vOffsetZ > vzMax || vz - vOffsetZ < vzMin )
-    		return true;
-    return false;	
-}
-bool rcpMaker::vrCut(){
-	double vx = pico->vertexX - vOffsetX;
-	double vy = pico->vertexY - vOffsetY;
+	double vx = pico->vertexX;
+	double vy = pico->vertexY;
+
+
+	
+
 	double vr = TMath::Sqrt( vx*vx + vy*vy );
 
-	if ( vr > vrMax )
-		return true;
-	return false;
+	double vrOff = TMath::Sqrt( (vx - vOffsetX)*(vx - vOffsetX) + (vy - vOffsetY)*(vy - vOffsetY) );
+
+	/*
+	 * Vertex cuts
+	 */
+	if ( TMath::Abs( vz ) > config->getDouble( "cut.vZ", 30 ) )
+		return false;
+	if (  vrOff > config->getDouble( "cut.vR", 10 ) )
+		return false;
+
+	/**
+	 * Number of hits cuts
+	 */
+	int nT0 = pico->nTZero;
+	int nTofHits = pico->nTofHits;
+
+	if ( nT0 < config->getDouble( "cut.nT0", 0 ) )
+		return false;
+	if ( nTofHits < config->getDouble( "cut.nTof", 0 ) )
+		return false;
+
+
+	return true;
 }
-bool rcpMaker::eventCut() {
 
-	if ( vzCut() )
-		return true;
-	if ( vrCut() )
-		return true;
+bool rcpMaker::keepTrack( int iHit ) {
 
-    return false;
+	double xDCA = pico->dcaZ[ iHit ];
+	double yDCA = pico->dcaX[ iHit ];
+	double zDCA = pico->dcaY[ iHit ];
+
+	double dca = TMath::Sqrt( xDCA*xDCA + yDCA*yDCA + zDCA*zDCA );
+
+	/*
+	 * Distance to closest approach cut
+	 */
+	book->fill( "dcaMag", dca );
+	if ( dca > 1 )
+		return false;
+
+	if ( pico->nHits[iHit] <= 15 )
+		return false;
+	if ( pico->nHitsDedx[ iHit ] <= 10 )
+		return false;
+	if ( pico->nHitsFit[ iHit ] / pico->nHitsPossible[ iHit ] <= 0.52 )
+		return false;
+
+	if ( TMath::Abs( pico->eta[ iHit ] ) > 0.5  )
+		return false;
+
+	return true;
+
+}
+
+
+double rcpMaker::dBeta( string pType, int iHit ){
+
+	double tof = pico->tof[ iHit ];
+	double length = pico->length[ iHit ];
+	double p = pico->p[ iHit ];
+	double beta = pico->beta[ iHit ];
+	double m2 = p*p * ( constants::c*constants::c * tof*tof / ( length*length ) - 1  );
+
+
+	double deltaB = 1 - (beta) * TMath::Sqrt( (constants::kaonMass*constants::kaonMass) / (p*p) + 1 );
+
+	if ( "Pi" == pType )
+		deltaB = 1 - (beta) * TMath::Sqrt( (constants::piMass*constants::piMass) / (p*p) + 1 );		
+	if ( "P" == pType )
+		deltaB = 1 - (beta) * TMath::Sqrt( (constants::protonMass*constants::protonMass) / (p*p) + 1 );		
+	
+	return deltaB;
+}
+
+double rcpMaker::nSigInvBeta( string pType, int iHit  ){
+
+	double b = pico->beta[ iHit ];
+	double p = pico->p[ iHit ];
+	double expectedBeta = eBeta( eMass( pType ), p );
+	double invBetaSig = config->getDouble( "binning.invBetaSig" );
+
+	double deltaInvBeta = ( 1.0 / b ) - ( 1.0 / expectedBeta );
+
+	return (deltaInvBeta / invBetaSig);
 }

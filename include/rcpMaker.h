@@ -30,6 +30,7 @@ private:
 
 	// the histobook that stores all of our rcpMaker histograms
 	histoBook *book;
+	histoBook *pidLUT;
 
 	// the pico dst for simpler chain usage
 	TOFrPicoDst * pico;
@@ -57,10 +58,35 @@ public:
 	
 	void loopEvents();
 
-	bool vzCut();
-	bool vrCut();
-	bool eventCut();
+
+	bool keepEvent();
+	bool keepTrack( int iHit );
 	
+
+	double nSigDedx( string pType, int iHit ) { 
+		if ( "P" == pType )
+			return pico->nSigP[ iHit ];
+		if ( "K" == pType )
+			return pico->nSigK[ iHit ];
+		if ( "Pi" == pType )
+			return pico->nSigPi[ iHit ];
+		return -999.0;
+	}
+	double nSigInvBeta( string pType, int iHit  );
+	double dBeta( string pType, int iHit  );
+
+	double eMass( string pType ){
+		if ( "P" == pType )
+			return constants::protonMass;
+		if ( "K" == pType )
+			return constants::kaonMass;
+		if ( "Pi" == pType )
+			return constants::piMass;
+		return -10.0;	
+	}
+	double eBeta( double m, double p ){
+		return TMath::Sqrt( p*p / ( p*p + m*m ) );
+	}
 
 protected:
 

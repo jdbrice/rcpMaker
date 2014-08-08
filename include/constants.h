@@ -25,11 +25,14 @@ public:
 	// minimum number of hits 
 	static const Int_t minHits = 3;
 
-	static const Double_t c = 29.9792458;	// 29.979 * 10^7 m/s
+	static constexpr Double_t c = 29.9792458;	// 29.979 * 10^7 m/s
 
-	static const Double_t tacToNS = 0.01773; // from bill llope
+	static constexpr Double_t tacToNS = 0.01773; // from bill llope
 
-
+	static constexpr double eMass = 0.0005109;
+	static constexpr double piMass = 0.1396;
+	static constexpr double kaonMass = 0.495;
+	static constexpr double protonMass = 0.938272;
 	
 };
 
