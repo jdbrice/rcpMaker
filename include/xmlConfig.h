@@ -45,7 +45,7 @@ public:
 
 	xmlConfig( xmlConfig & config ){
 		fname = config.getFilename();
-		cout << "my fnmae = " << fname << endl;
+		
 
 		configFile = getFileContents( fname.c_str() );
 
