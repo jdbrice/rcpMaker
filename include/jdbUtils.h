@@ -76,11 +76,11 @@ namespace jdbUtils{
 				return;
 
 			double per = progress  * 100;
-			per = TMath::Nint( per );
+			per = round( per );
 
 			cout << "[";
 	    	for ( int ip = 0; ip < textWidth; ip ++ ){
-	    		if ( ip < TMath::Nint( (progress * (double)textWidth) ) )
+	    		if ( ip < round( (progress * (double)textWidth) ) )
 	    			cout << "=";
 	    		else 
 	    			cout << " ";
