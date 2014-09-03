@@ -30,22 +30,22 @@ namespace jdbUtils{
 	/**
 	 * String utilities that need >= c++ 2011
 	 */
-	std::string ts( int i, int len = -1){
+	inline std::string ts( int i, int len = -1){
 		if ( len <= -1 )
 			return (to_string( (long long int) i));
 		else
 			return (to_string( (long long int) i)).substr( 0, len );
 	}
-	std::string ts( double d, int len = -1){
+	inline std::string ts( double d, int len = -1){
 		if ( len <= -1 )
 			return to_string( (long double) d);
 		else 
 			return (to_string( (long double) d)).substr( 0, len );
 	}
-	std::string ts( float f, int len  = -1){
+	inline std::string ts( float f, int len  = -1){
 		return ts( (double) f, len );
 	}
-	std::string ts( uint u, int len  = -1){
+	inline std::string ts( uint u, int len  = -1){
 		if ( len <= -1 )
 			return to_string( (long long unsigned int) u);
 		else 
@@ -58,7 +58,7 @@ namespace jdbUtils{
 	 * simply call inside loop
 	 */
 	
-	void progressBar( int i, int nevents, int textWidth = 60 ){
+	inline void progressBar( int i, int nevents, int textWidth = 60 ){
 		
 		double progress =  ((double)i / (double)nevents);
 		if ( i == nevents - 1)

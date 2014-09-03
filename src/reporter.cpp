@@ -1,6 +1,6 @@
 
 #include "reporter.h"
-#include "utils.h"
+#include "jdbUtils.h"
 
 int reporter::instances = 0;
 using namespace jdbUtils;

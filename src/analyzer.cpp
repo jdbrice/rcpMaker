@@ -48,8 +48,8 @@ analyzer::~analyzer() {
 
 void analyzer::loopEvents() {
 
-	jdbUtils::timer t;
-	t.startTimer();
+	taskTimer t;
+	t.start();
 
 	if ( !_chain ){
 		cout << "[analyzer." << __FUNCTION__ << "] ERROR: Invalid chain " << endl;
