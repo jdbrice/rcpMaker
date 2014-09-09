@@ -52,13 +52,13 @@ namespace jdbUtils{
 			return (to_string( (long long unsigned int) u)).substr( 0, len );
 	}
 
-
+	
 	/**
 	 * Plain text progress bar 
 	 * simply call inside loop
 	 */
 	
-	inline void progressBar( int i, int nevents, int textWidth = 60 ){
+	inline void progressBar( int i, int nevents, int textWidth = 60, double elapsedTime = -1 ){
 		
 		double progress =  ((double)i / (double)nevents);
 		if ( i == nevents - 1)
@@ -86,7 +86,11 @@ namespace jdbUtils{
 	    			cout << " ";
 	    	}
 	    	if (isatty(fileno(stdout)) ){ 
-		 	   	cout << "]" << per << "%" << "\r";
+		 	   	cout << "]" << per << "%" ;
+				if ( elapsedTime >= 0 ){
+					cout << " : " << ts(elapsedTime, 4) << " sec ";
+				}
+				cout << "\r";
 				std::cout.flush();
 				if (progress > 1)
 					cout << "[" << endl;
@@ -95,6 +99,48 @@ namespace jdbUtils{
 			}
 		}
 	}
+
+
+	/**
+	 * 
+	 */
+	class taskProgress{
+	protected:
+		int max = 100;
+		int barWidth = 60;
+		bool showTitle = true;
+		bool showElapsed = true;
+		string title = "";
+
+		taskTimer tt;
+
+	public:
+		taskProgress(){
+
+		}
+		taskProgress( string title, int max = 100, int width = 60, bool sTitle = true, bool sElapse = true ){
+			this->title = title;
+			this->max = max;
+			barWidth = width;
+			showTitle = sTitle;
+			showElapsed = sElapse;
+		}
+
+		void showProgress( int i ){
+			if ( 0 == i){
+				tt.start();
+				if ( showTitle )
+					cout << "Running Task : " << title << endl;
+			}
+
+			if ( showElapsed )
+				progressBar( i, max, barWidth, tt.elapsed() );
+			else 
+				progressBar( i, max, barWidth );
+		}
+
+
+	};
 
 }
 

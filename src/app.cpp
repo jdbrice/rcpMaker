@@ -72,10 +72,13 @@ int main( int argc, char* argv[] ) {
 
         taskTimer tt;
         tt.start();
-        for ( int i = 0; i < 2000; i++ ){
-          progressBar( i, 2000 );
+
+        taskProgress tp( "taskProgress Test", 2000000 );
+        for ( int i = 0; i < 2000000; i++ ){
+          //progressBar( i, 2000 );
+          tp.showProgress( i );
         }
-        cout << "Elapsed: " << tt.elapsed() << " [sec] " << endl;
+        //cout << "Elapsed: " << tt.elapsed() << " [sec] " << endl;
         
     }
 
