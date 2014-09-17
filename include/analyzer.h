@@ -2,9 +2,9 @@
 #define analyzer_H
 
 #include "allroot.h"
-#include "histoBook.h"
+#include "HistoBook.h"
 #include "constants.h"
-#include "xmlConfig.h"
+#include "XmlConfig.h"
 #include "jdbUtils.h"
 #include "reporter.h"
 
@@ -20,16 +20,16 @@ protected:
 	TChain * _chain;
 
 	// the histobook that stores all of our analyzer histograms
-	histoBook *book;
+	HistoBook *book;
 
 	// config file
-	xmlConfig* config;
+	XmlConfig* config;
 
 public:
 
 
 	// Constructor
-	analyzer( TChain * chain, xmlConfig *config );
+	analyzer( TChain * chain, XmlConfig *config );
 
 	// destructor
 	~analyzer();

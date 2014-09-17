@@ -1,10 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <config>
 
 	<input>
-		<rootIn file="dqa.root" />
+		<rootIn file="" />
 		<dataDir maxFiles="1" >/star/institutions</dataDir>
 		<maxFiles>1</maxFiles>
 	</input>
+	
 	<array hide="true">
 		<dates index="vv">
 			<vv>                                  12-12-02</vv>
@@ -56,7 +58,7 @@
 	</bins>
 
 	<h>
-		<a type="1D" title="dan" nBinsX="10" x1="1" x2="10" >
+		<histo1 type="1D" title="dan" nBinsX="10" x1="1" x2="10" >
 			<style draw="h" linecolor="red" />
 		</a>
 

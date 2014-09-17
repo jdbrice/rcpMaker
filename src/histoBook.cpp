@@ -1,8 +1,9 @@
 
 
-#include "histoBook.h"
+#include "HistoBook.h"
 #include "TKey.h"
 #include "TObject.h"
+#include "logger.h"
 
 /**
  * Creates a histobook and allows the root filename to be set. optionally read from an existing root 
@@ -11,7 +12,12 @@
  * @param input input filename
  * @param inDir input starting directory
  */
-histoBook::histoBook( string name, string input, string inDir ){
+HistoBook::HistoBook( string name, string input, string inDir, Logger * nLog ){
+
+	if ( NULL == nLog )
+		log = new Logger( Logger::llAll, "HistoBook" );
+	else 
+		log = nLog;
 
 	if (name.find(  ".root") != std::string::npos){
 		filename = name;	
@@ -22,6 +28,8 @@ histoBook::histoBook( string name, string input, string inDir ){
 
 	file = new TFile( filename.c_str(), "recreate" );
 	file->cd();
+
+	log->info(__FUNCTION__) << "Output File : " << filename << " opened" << endl;
 
 	
 	// make the legend and draw it once to apply styles etc. 
@@ -35,6 +43,7 @@ histoBook::histoBook( string name, string input, string inDir ){
 
 	// if an input was given merge it into the live record
 	if ( input.length() >= 5 ){
+		log->info(__FUNCTION__) << "Loading : " << inDir << " from " << input << endl;
 		TFile * fin = new TFile( input.c_str() );
 		cd ( inDir );
 		fin->cd( inDir.c_str() );
@@ -48,7 +57,15 @@ histoBook::histoBook( string name, string input, string inDir ){
  * @param name name of file to use for saving root data
  * @param con  The config file to use for all config relates calls
  */
-histoBook::histoBook( string name, xmlConfig * con, string input, string inDir ){
+HistoBook::HistoBook( string name, XmlConfig * con, string input, string inDir, Logger * nLog){
+	
+	if ( NULL == nLog ){
+		log = new Logger( Logger::llInfo, "HistoBook" );
+	}
+	else 
+		log = nLog;
+
+	log->info(__FUNCTION__) << "" << endl;
 
 	if (name.find(  ".root") != std::string::npos){
 		filename = name;	
@@ -60,6 +77,8 @@ histoBook::histoBook( string name, xmlConfig * con, string input, string inDir )
 	file = new TFile( filename.c_str(), "recreate" );
 	file->cd();
 
+	log->info(__FUNCTION__) << "Output File : " << filename << " opened" << endl;
+
 	// make the legend and draw it once to apply styles etc. 
 	// for some reason needed to make styling work on the first draw
 	legend = new TLegend( 0.65, 0.65, 0.9, 0.9);
@@ -70,9 +89,11 @@ histoBook::histoBook( string name, xmlConfig * con, string input, string inDir )
 	globalStyle();
 
 	config = con;
+	log->info(__FUNCTION__) << " Set Configuration " << endl;
 
 	// if an input was given merge it into the live record
 	if ( input.length() >= 5 ){
+		log->info(__FUNCTION__) << "Loading : " << inDir << " from " << input << endl;
 		TFile * fin = new TFile( input.c_str() );
 		cd ( inDir );
 		fin->cd( inDir.c_str() );
@@ -81,28 +102,28 @@ histoBook::histoBook( string name, xmlConfig * con, string input, string inDir )
 }
 
 // destructor
-histoBook::~histoBook(){
-
+HistoBook::~HistoBook(){
+	log->info(__FUNCTION__) << "" << endl;
 	delete legend;
 
 	save();
 	file->Close();
+	log->info(__FUNCTION__) << " Memory freed, data written, file closed " << endl;
 }
-void histoBook::save() {
-
+void HistoBook::save() {
+	log->info(__FUNCTION__) << " Save to File " << filename << endl;
 	file->Write();
 }
 
-void histoBook::loadRootDir( TDirectory* tDir, string path ){
-
-	//cout << "histoBook.loadRootDir] Path : " << path << endl;
+void HistoBook::loadRootDir( TDirectory* tDir, string path ){
+	log->info(__FUNCTION__) << " Loading from directory " << path << endl;
 
 	TList* list;
 
 	if ( tDir ){
 		list = tDir->GetListOfKeys();  
 	} else {
-		cout << "[histoBook.loadRootDir] Bad Directory Given " << endl;
+		log->info(__FUNCTION__) << " Bad Directory " << path << endl;
 		return;
 	}
 
@@ -130,7 +151,7 @@ void histoBook::loadRootDir( TDirectory* tDir, string path ){
 				// not a 1d or 2d histogram
 			} else {
 				// add it to the book
-				//cout << "Adding : " << obj->GetName() << endl;
+				
 				add( obj->GetName(), (TH1*)obj->Clone( obj->GetName() ) );
 			}    
 			
@@ -140,7 +161,9 @@ void histoBook::loadRootDir( TDirectory* tDir, string path ){
 }
 
 
-void histoBook::add( string name, TH1* h ){
+void HistoBook::add( string name, TH1* h ){
+	
+	log->info(__FUNCTION__) << " Adding " << name << endl;
 
 	string oName = name;
 	if ( name.length() <= 1 || !h )
@@ -150,20 +173,21 @@ void histoBook::add( string name, TH1* h ){
 	
 	// dont allow duplicated name overites
 	if ( book[ name ] ){
-		cout << "[histoBook.add] Duplicate histogram name in this directory " << currentDir << " / " << oName << endl;
+		log->warn(__FUNCTION__) << " Cannot add " << name << " to dir " << currentDir << " duplicate exists" << endl;
 		return;
 	}
 
 	// save the histo to the map
 	book[ name ] = h;
-
+	log->info(__FUNCTION__) << name << " Added" << endl;
 }
 /*
 *
 * TODO:: add support for full subdirectory trees
 */
-string histoBook::cd( string sdir  ){
+string HistoBook::cd( string sdir  ){
 
+	log->info(__FUNCTION__) << " In Directory " << sdir << endl;
 	string old = currentDir;
 
 	char* csdir = (char*)sdir.c_str();
@@ -172,7 +196,7 @@ string histoBook::cd( string sdir  ){
 	if ( file->GetDirectory( csdir ) ){
 		file->cd( csdir );
 	} else {
-		cout << "[histoBook.cd] creating directory " << sdir << endl;
+		log->info(__FUNCTION__) << " Creating Directory " << sdir << endl;
 		file->mkdir( csdir );
 		file->cd( csdir );
 	}
@@ -182,11 +206,11 @@ string histoBook::cd( string sdir  ){
 	return old;
 }
 
-void histoBook::make( string nodeName ){
+void HistoBook::make( string nodeName ){
 	if ( config )
 		make( config, nodeName );
 }
-void histoBook::make( xmlConfig * config, string nodeName ){
+void HistoBook::make( XmlConfig * config, string nodeName ){
 
 	if ( config && config->nodeExists( nodeName ) ){
 		
@@ -214,9 +238,11 @@ void histoBook::make( xmlConfig * config, string nodeName ){
 					xBins.size() - 1, xBins.data() );
 
 			} else {	
-			make1D( hName, config->getString( nodeName + ":title", hName ), 
+			
+				make1D( hName, config->getString( nodeName + ":title", hName ), 
 					config->getInt( nodeName + ":nBinsX", 1 ), config->getDouble( nodeName + ":x1", 0 ),
 					config->getDouble( nodeName + ":x2", 1 ) );
+			
 			}
 
 		} else if ( "2D" == type ){
@@ -232,25 +258,37 @@ void histoBook::make( xmlConfig * config, string nodeName ){
 	}
 
 }
-void histoBook::makeAll( xmlConfig * con, string nodeName ){
+void HistoBook::makeAll( XmlConfig * con, string nodeName ){
 	
 	if ( !con )
 		return;
 	vector<string> paths = con->childrenOf( nodeName );
 
 	for ( int i=0; i < paths.size(); i++ ){
+
 		make( paths[ i ] );
 	}
 }
-void histoBook::makeAll( string nodeName ){
+void HistoBook::makeAll( string nodeName ){
 	if ( !config )
 		return;
 
 	makeAll( config, nodeName );
 }
 
-void histoBook::make1F( string name, string title, uint nBins, double low, double hi  ){
+void HistoBook::clone( string existing, string create ){
 
+	log->info(__FUNCTION__) << " Cloning " << existing << " into " << create << endl;
+	if ( get( existing ) ){
+		TH1* nHist = (TH1*)get( existing )->Clone( create.c_str() );
+	} else {
+		log->warn(__FUNCTION__) << existing << " Does Not Exist " << endl;
+	}
+
+}
+
+void HistoBook::make1F( string name, string title, uint nBins, double low, double hi  ){
+	log->info(__FUNCTION__) << "TH1F( " << name << ", " << title << ", " << nBins << ", " << low << ", " << hi << " )" << endl;
 	TH1F* h;
 	h = new TH1F( name.c_str(), title.c_str(), nBins, low, hi );
 
@@ -258,32 +296,34 @@ void histoBook::make1F( string name, string title, uint nBins, double low, doubl
 }
 
 
-void histoBook::make1D( string name, string title, uint nBins, double low, double hi  ){
+void HistoBook::make1D( string name, string title, uint nBins, double low, double hi  ){
 
+	log->info(__FUNCTION__) << "TH1D( " << name << ", " << title << ", " << nBins << ", " << low << ", " << hi << " )" << endl;
 	TH1D* h;
 	h = new TH1D( name.c_str(), title.c_str(), nBins, low, hi );
 
 	this->add( name, h );
 }
 
-void histoBook::make1D( string name, string title, uint nBins, const Double_t* bins  ){
-
+void HistoBook::make1D( string name, string title, uint nBins, const Double_t* bins  ){
+	log->info(__FUNCTION__) << "TH1D( " << name << ", " << title << ", " << nBins << ", " << "[]" <<  " )" << endl;
 	TH1D* h;
 	h = new TH1D( name.c_str(), title.c_str(), nBins, bins );
 
 	this->add( name, h );
 }
 
-void histoBook::make2D( string name, string title, uint nBinsX, double lowX, double hiX, uint nBinsY, double lowY, double hiY ){
+void HistoBook::make2D( string name, string title, uint nBinsX, double lowX, double hiX, uint nBinsY, double lowY, double hiY ){
 
+	log->info(__FUNCTION__) << "TH1D( " << name << ", " << title << ", " << nBinsX << ", " << lowX << ", " << hiX << ", " << nBinsY << ", " << lowY << ", " << hiY << " )" << endl;
 	TH2D* h;
 
 	h = new TH2D( name.c_str(), title.c_str(), nBinsX, lowX, hiX, nBinsY, lowY, hiY );
 
 	this->add( name, h );
 }
-void histoBook::make2D( string name, string title, uint nBinsX, const Double_t* xBins, uint nBinsY, double lowY, double hiY ){
-
+void HistoBook::make2D( string name, string title, uint nBinsX, const Double_t* xBins, uint nBinsY, double lowY, double hiY ){
+	log->info(__FUNCTION__) << "TH1D( " << name << ", " << title << ", " << nBinsX << ", " << "[]" << ", " << nBinsY << ", []" << " )" << endl;
 	TH2D* h;
 	h = new TH2D( name.c_str(), title.c_str(), nBinsX, xBins, nBinsY, lowY, hiY );
 
@@ -291,37 +331,42 @@ void histoBook::make2D( string name, string title, uint nBinsX, const Double_t* 
 }
 
 
-TH1* histoBook::get( string name, string sdir  ){
+TH1* HistoBook::get( string name, string sdir  ){
 	if ( sdir.compare("") == 0)
 		sdir = currentDir;
 	return book[ ( sdir  + name  ) ];
 }
-TH2* histoBook::get2D( string name, string sdir  ){
+TH2* HistoBook::get2D( string name, string sdir  ){
 	if ( sdir.compare("") == 0)
 		sdir = currentDir;
 	return (TH2*)book[ ( sdir  + name  ) ];
 }
-TH3* histoBook::get3D( string name, string sdir ){
+TH3* HistoBook::get3D( string name, string sdir ){
 	return (( TH3* ) get( name, sdir ));
 }
 
-void histoBook::fill( string name, double bin, double weight ){ 
+void HistoBook::fill( string name, double bin, double weight ){ 
 	if ( get( name ) != 0)
 		get( name )->Fill( bin, weight );
+	else
+		log->warn(__FUNCTION__) << name << " Does Not Exist, cannot fill " << endl;
 }
 
 
-histoBook* histoBook::exportAs( string filename ) {
+HistoBook* HistoBook::exportAs( string filename ) {
 
 	string outName = styling + ".png";
 	if ( "" != filename )
 		outName = filename;
+
+	log->info(__FUNCTION__) << "Exporting Pad to " << outName << endl;
+
 	gPad->SaveAs( outName.c_str() );
 	return this;
 
 }
 
-void histoBook::globalStyle(){
+void HistoBook::globalStyle(){
 
 	gStyle->SetCanvasColor(kWhite);     // background is no longer mouse-dropping white
   	gStyle->SetPalette(1,0);            // blue to red false color palette. Use 9 for b/w
@@ -350,20 +395,24 @@ void histoBook::globalStyle(){
 }
 
 
-histoBook* histoBook::style( string histName ){
+HistoBook* HistoBook::style( string histName ){
 	styling = histName;
+
+	log->info(__FUNCTION__) << " Styling " << histName << endl;
 
 	// set the default style if it is there
 	if ( config && config->nodeExists( configPath[ histName ] + ".style" ) ){
+		log->info(__FUNCTION__) << " Setting style from " << configPath[ histName ] << ".style" << endl;
 		set( configPath[histName] + ".style" );
 	} else if ( config && config->nodeExists( configPath[ histName ] + ":style" ) && config->nodeExists( config->getString( configPath[ histName ] + ":style" ) ) ){
+		log->info(__FUNCTION__) << " Setting Style from " << config->getString( configPath[ histName ] + ":style" ) << endl;
 		set( config->getString( configPath[ histName ] + ":style" ) );
 	}
 
 	return this;
 }
 
-histoBook* histoBook::set( string param, string p1, string p2, string p3, string p4 ){
+HistoBook* HistoBook::set( string param, string p1, string p2, string p3, string p4 ){
 	
 	vector<string> l;
 	l.push_back( p1 );
@@ -375,7 +424,7 @@ histoBook* histoBook::set( string param, string p1, string p2, string p3, string
 	return this;
 }
 
-histoBook* histoBook::set( string param, double p1, double p2, double p3, double p4  ){
+HistoBook* HistoBook::set( string param, double p1, double p2, double p3, double p4  ){
 
 	vector<string> list;
 	stringstream sstr;
@@ -400,7 +449,7 @@ histoBook* histoBook::set( string param, double p1, double p2, double p3, double
 	return this;
 }
 
-histoBook* histoBook::set( xmlConfig* config, string nodePath ){
+HistoBook* HistoBook::set( XmlConfig* config, string nodePath ){
 
 	// get the list of attributes and set the style from that
 	vector< pair< string, string > > list = config->getAttributes( nodePath );
@@ -419,13 +468,8 @@ histoBook* histoBook::set( xmlConfig* config, string nodePath ){
 
 	return this;
 }
-histoBook* histoBook::set( string opt, vector<string> params ){
+HistoBook* HistoBook::set( string opt, vector<string> params ){
 
-	//cout  << "Setting : " << opt << endl;
-	//for ( int i = 0; i < params.size(); i++ ){
-	//	cout << params[ i ] << " ";
-	//}
-	//cout << endl;
 	// force the param name to lowercase
 	transform(opt.begin(), opt.end(), opt.begin(), ::tolower);
 
@@ -540,7 +584,7 @@ histoBook* histoBook::set( string opt, vector<string> params ){
 
 
 }
-histoBook * histoBook::set( string nodeName ){
+HistoBook * HistoBook::set( string nodeName ){
 	if ( config )
 		set( config, nodeName );
 	return this;
@@ -548,7 +592,8 @@ histoBook * histoBook::set( string nodeName ){
 
 
 
-histoBook* histoBook::draw(string name, Option_t* opt ){
+HistoBook* HistoBook::draw(string name, Option_t* opt ){
+
 
 	// no parameters
 	if ( name == ""){
@@ -557,20 +602,28 @@ histoBook* histoBook::draw(string name, Option_t* opt ){
 			// use the draw option set in its styling
 			h->Draw( drawOption.c_str() );
 			drawOption = "";
-		}	
+			log->info(__FUNCTION__) << "Drawing " << styling << endl;
+		}
+		log->warn(__FUNCTION__) << styling << " does not exist " << endl;	
 	} else {
 		TH1* h = get( name );
 		if ( h ){
 			h->Draw( opt );
+			log->info(__FUNCTION__) << "Drawing " << name << endl;
 		}
+		log->warn(__FUNCTION__) << name << " does not exist " << endl;
 	}
 	
+	log->warn(__FUNCTION__) << "Could Not Draw " << endl;
+
 	return this;
 }
 
 
-histoBook* histoBook::placeLegend( int alignmentX, int alignmentY, double width, double height ){
+HistoBook* HistoBook::placeLegend( int alignmentX, int alignmentY, double width, double height ){
 
+
+	log->info(__FUNCTION__) << "Placing Legend" << endl;
 	double mR = 1 - gPad->GetRightMargin();
 	double mL = gPad->GetLeftMargin();
 	double mT = 1- gPad->GetTopMargin();

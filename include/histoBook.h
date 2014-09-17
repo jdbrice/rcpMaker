@@ -7,7 +7,8 @@
 #include <string>
 #include <sstream>
 #include <stdarg.h>
-#include "xmlConfig.h"
+#include "XmlConfig.h"
+#include "logger.h"
 
 using namespace std;
 
@@ -33,9 +34,11 @@ public:
 
 };
 
-class histoBook {
+class HistoBook {
 
-private:
+protected:
+
+	Logger * log;
 
 	string currentDir;
 
@@ -52,15 +55,15 @@ private:
 	TLegend * legend;
 
 	// optional config to use for all config related calls
-	xmlConfig * config;
+	XmlConfig * config;
 
 
 
 public:
 
-	histoBook( string name, string input = "", string inDir = "" );
-	histoBook( string name, xmlConfig* config, string input = "", string inDir = "" );
-	~histoBook();
+	HistoBook( string name, string input = "", string inDir = "", Logger * nLog = NULL );
+	HistoBook( string name, XmlConfig* config, string input = "", string inDir = "", Logger * nLog = NULL );
+	~HistoBook();
 
 	
 	string cd( string dir = "/" );
@@ -76,17 +79,18 @@ public:
 					uint nBinsX, double lowX, double hiX, uint nBinsY, double lowY, double hiY );
 	void make2D( 	string name, string title, 
 					uint nBinsX, const Double_t* xBins, uint nBinsY, double lowY, double hiY );
-	void make( xmlConfig * config, string nodeName );
+	void make( XmlConfig * config, string nodeName );
 	void make( string nodeName );
 	void makeAll( string nodeName );
-	void makeAll( xmlConfig * config, string nodeName );
+	void makeAll( XmlConfig * config, string nodeName );
+	void clone( string existing, string create );
 
 	TLegend* getLegend() { return legend; }
 
-	histoBook* draw(string name = "", Option_t* opt= "" );
+	HistoBook* draw(string name = "", Option_t* opt= "" );
 	
 
-	histoBook* clearLegend() { legend->Clear(); return this; };
+	HistoBook* clearLegend() { legend->Clear(); return this; };
 	
 	// add a legend by setting the legendName
 	
@@ -95,17 +99,17 @@ public:
 
 	void save();
 
-	histoBook* style( string hName );
+	HistoBook* style( string hName );
 
 	//set( string param, ... )
 	// for function chaining and rapid styling
-	histoBook* set( string param, string p1, string p2 = "", string p3 = "", string p4 = "" );
-	histoBook* set( string param, double p1, double p2 = -1, double p3 = -1, double p4 = -1 );
-	histoBook* set( xmlConfig* config, string nodePath );
-	histoBook* set( string nodePath );
-	histoBook* set( string opt, vector<string> nodePath );
+	HistoBook* set( string param, string p1, string p2 = "", string p3 = "", string p4 = "" );
+	HistoBook* set( string param, double p1, double p2 = -1, double p3 = -1, double p4 = -1 );
+	HistoBook* set( XmlConfig* config, string nodePath );
+	HistoBook* set( string nodePath );
+	HistoBook* set( string opt, vector<string> nodePath );
 
-	histoBook* exportAs( string filename = "" );
+	HistoBook* exportAs( string filename = "" );
 
 	bool exists( string name, string sdir = "" ){
 		if ( NULL != get( name, sdir ) )
@@ -127,7 +131,7 @@ public:
 
 private:
 	void globalStyle();
-	histoBook* placeLegend( int alignmentX, int alignmentY, double width = -1, double height = -1 );
+	HistoBook* placeLegend( int alignmentX, int alignmentY, double width = -1, double height = -1 );
 	void loadRootDir( TDirectory*, string path = "" );
 
 	string sParam( vector<string> params, int p, string def="" ) {

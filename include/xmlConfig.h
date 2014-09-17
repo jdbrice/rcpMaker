@@ -23,7 +23,7 @@
 using namespace std;
 using namespace rapidxml;
 
-class xmlConfig {
+class XmlConfig {
 
 public: 
 	/*
@@ -31,7 +31,7 @@ public:
 	*	Parameters:
 	*		filename: the config filename
 	*/
-	xmlConfig( const char * filename = "config.xml" ) {
+	XmlConfig( const char * filename = "config.xml" ) {
 		fname = filename;
 		configFile = getFileContents( filename );
 
@@ -43,7 +43,7 @@ public:
 
 	string getFilename() { return fname; }
 
-	xmlConfig( xmlConfig & config ){
+	XmlConfig( XmlConfig & config ){
 		fname = config.getFilename();
 		
 

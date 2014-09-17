@@ -1,7 +1,6 @@
 
 #include "constants.h"
 #include "analyzer.h"
-#include "histoBook.h"
 
 // provides my own string shortcuts etc.
 using namespace jdbUtils;
@@ -14,7 +13,7 @@ using namespace jdbUtils;
  *					such as number of tot bins to use, data location etc. See repo Readme
  *					for a sample configuration.
  */
-analyzer::analyzer( TChain* chain, xmlConfig* con )  {
+analyzer::analyzer( TChain* chain, XmlConfig* con )  {
 	cout << "[analyzer.analyzer] " << endl;
 	
 	gErrorIgnoreLevel=kError;
@@ -25,7 +24,7 @@ analyzer::analyzer( TChain* chain, xmlConfig* con )  {
 	gStyle->SetOptStat( 0 );
 	
 	// create the histogram book
-	book = new histoBook( ( config->getString( "output.base" ) + config->getString( "output.root" ) ), config );
+	book = new HistoBook( ( config->getString( "output.base" ) + config->getString( "output.root" ) ), config );
 	
 	// create a report builder 
 	report = new reporter( config->getString( "output.base" ) + config->getString( "output.report" ) );
