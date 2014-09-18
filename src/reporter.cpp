@@ -1,61 +1,86 @@
 
-#include "reporter.h"
-#include "jdbUtils.h"
+#include "Reporter.h"
+#include "Utils.h"
 
-int reporter::instances = 0;
-using namespace jdbUtils;
 
-reporter::reporter( string filename, int w, int h ){
+namespace jdb{
 
-	this->filename = filename;
+	int Reporter::instances = 0;
 
-	canvas = new TCanvas( ("reporter"+ts(instances)).c_str() , "canvas", w, h);
-	canvas->Print( ( filename + "[" ).c_str() );
-	instances++;
-}
+	Reporter::Reporter( string filename, int w, int h, Logger * pLog ){
 
-reporter::~reporter() {
-	// properly close the report file
-	canvas->Print( ( filename + "]" ).c_str() );
-	delete canvas;
-}
+		if ( NULL == pLog )
+			log = new Logger( Logger::llDefault, "HistoBook" );
+		else 
+			log = pLog;
 
-void reporter::newPage( int dx, int dy){
+		this->filename = filename;
 
-	this->dx = dx;
-	this->dy = dy;
+		canvas = new TCanvas( ("Reporter"+ts(instances)).c_str() , "canvas", w, h);
+		canvas->Print( ( filename + "[" ).c_str() );
+		log->info(__FUNCTION__) << " Opening " << filename << endl;
+		instances++;
 
-	canvas->Clear();
-	canvas->Divide( dx, dy );
-	cd( 1 );
-}
-
-void reporter::cd( int pad ){
-	canvas->cd( pad );
-	currentPad = pad;
-}
-
-void reporter::cd( int x, int y){
-	cd( ( (y - 1 ) * dx) + x );
-}
-
-void reporter::next(){
-	currentPad++;
-	if ( currentPad > dx*dy){
-		savePage();
-		newPage( dx, dy);
-	} else {
-		cd( currentPad );
+		log->info(__FUNCTION__) << " Instance #" << instances << endl;
 	}
-}
 
-void reporter::savePage( string name ) {
-	if ( "" == name )
-		canvas->Print( ( filename ).c_str() );
-	else 
-		canvas->Print( name.c_str() );
-}
+	Reporter::~Reporter() {
+		// properly close the report file
+		log->info(__FUNCTION__) << " " << endl;
+		
+		canvas->Print( ( filename + "]" ).c_str() );
+		delete canvas;
 
-void reporter::saveImage( string name ){
-	canvas->SaveAs( name.c_str() );
+		log->info(__FUNCTION__) << filename << " Closed " << endl;
+	}
+
+	void Reporter::newPage( int dx, int dy){
+		log->info(__FUNCTION__) << " New Page ( " << dx << ", " << dy << " ) " << endl;
+
+		this->dx = dx;
+		this->dy = dy;
+
+		canvas->Clear();
+		canvas->Divide( dx, dy );
+		cd( 1 );
+	}
+
+	void Reporter::cd( int pad ){
+		log->info(__FUNCTION__) << " Current Pad " << pad << endl;
+		canvas->cd( pad );
+		currentPad = pad;
+	}
+
+	void Reporter::cd( int x, int y){
+		cd( ( (y - 1 ) * dx) + x );
+	}
+
+	void Reporter::next(){
+		log->info(__FUNCTION__) << " Pushing to next pad " << endl;
+		currentPad++;
+		if ( currentPad > dx*dy){
+			savePage();
+			newPage( dx, dy);
+		} else {
+			cd( currentPad );
+		}
+	}
+
+	void Reporter::savePage( string name ) {
+
+		if ( "" == name ){
+			canvas->Print( ( filename ).c_str() );
+			log->info(__FUNCTION__) << " Saving Page to " << filename << endl;
+		}
+		else {
+			canvas->Print( name.c_str() );
+			log->info(__FUNCTION__) << " Saving Page to " << name << endl;
+		}
+	}
+
+	void Reporter::saveImage( string name ){
+		log->info(__FUNCTION__) << " Saving Image to " << name << endl;
+		canvas->SaveAs( name.c_str() );
+	}
+	
 }

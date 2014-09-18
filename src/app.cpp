@@ -4,10 +4,9 @@
 #include "constants.h"
 #include "HistoBook.h"
 #include "XmlConfig.h"
-#include "jdbUtils.h"
+#include "Utils.h"
 
-using namespace jdbUtils;
-
+using namespace jdb;
 /* 
 *
 *	GUI Application
@@ -30,7 +29,7 @@ int main(int argc, char* argv[]) {
 */
 
 
-int unitTest_jdbUtils(){
+int unitTest_Utils(){
 
 	cout << endl << endl << "jdbUtils Tests: " << endl << endl;
     cout << " int to string " << ts( 1000 ) << endl;
@@ -92,7 +91,7 @@ int main( int argc, char* argv[] ) {
         
     }
 
-    unitTest_jdbUtils();
+    unitTest_Utils();
 
 
 	return 0;

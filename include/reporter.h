@@ -2,29 +2,37 @@
 #define REPORTER_H
 
 #include "allroot.h"
+#include "Logger.h"
 
-class reporter
-{
-public:
-	reporter( string filename, int w = 791, int h = 1024 );
-	~reporter();
+namespace jdb {
 
-	void newPage( int dx = 1, int dy = 1);
-	void cd( int pad );
-	void cd( int padX, int padY);
-	void next();
-	void savePage( string name = "" );
-	void saveImage( string name = "" );
+	class Reporter
+	{
+	public:
+		Reporter( string filename, int w = 791, int h = 1024, Logger * pLog = NULL  );
+		~Reporter();
 
-private:
+		void newPage( int dx = 1, int dy = 1);
+		void cd( int pad );
+		void cd( int padX, int padY);
+		void next();
+		void savePage( string name = "" );
+		void saveImage( string name = "" );
 
-	TCanvas* canvas;
-	int currentPad;
-	int dx, dy;
+	protected:
 
-	string filename;
-	static int instances;
+		Logger * log;
+		TCanvas* canvas;
+		int currentPad;
+		int dx, dy;
 
-};
+		string filename;
+		static int instances;
+
+	};
+	
+}
+
+
 
 #endif

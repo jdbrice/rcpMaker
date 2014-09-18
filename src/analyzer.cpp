@@ -1,9 +1,9 @@
 
 #include "constants.h"
-#include "analyzer.h"
+#include "Analyzer.h"
 
 // provides my own string shortcuts etc.
-using namespace jdbUtils;
+using namespace jdb;
 
 
 /**
@@ -13,8 +13,8 @@ using namespace jdbUtils;
  *					such as number of tot bins to use, data location etc. See repo Readme
  *					for a sample configuration.
  */
-analyzer::analyzer( TChain* chain, XmlConfig* con )  {
-	cout << "[analyzer.analyzer] " << endl;
+Analyzer::Analyzer( TChain* chain, XmlConfig* con )  {
+	cout << "[Analyzer.Analyzer] " << endl;
 	
 	gErrorIgnoreLevel=kError;
 
@@ -27,7 +27,7 @@ analyzer::analyzer( TChain* chain, XmlConfig* con )  {
 	book = new HistoBook( ( config->getString( "output.base" ) + config->getString( "output.root" ) ), config );
 	
 	// create a report builder 
-	report = new reporter( config->getString( "output.base" ) + config->getString( "output.report" ) );
+	report = new Reporter( config->getString( "output.base" ) + config->getString( "output.report" ) );
 
 	_chain = chain;
 }
@@ -35,28 +35,28 @@ analyzer::analyzer( TChain* chain, XmlConfig* con )  {
 /**
  *	Destructor - Deletes the histoBook ensuring it is saved.
  */
-analyzer::~analyzer() {
+Analyzer::~Analyzer() {
 	
 	delete book;
 	delete report;
 	
-	cout << "[analyzer.~analyzer] " << endl;
+	cout << "[Analyzer.~Analyzer] " << endl;
 }
 
 
 
-void analyzer::loopEvents() {
+void Analyzer::loopEvents() {
 
 	taskTimer t;
 	t.start();
 
 	if ( !_chain ){
-		cout << "[analyzer." << __FUNCTION__ << "] ERROR: Invalid chain " << endl;
+		cout << "[Analyzer." << __FUNCTION__ << "] ERROR: Invalid chain " << endl;
 		return;
 	}
 
 	Int_t nEvents = (Int_t)_chain->GetEntries();
-	cout << "[analyzer." << __FUNCTION__ << "] Loaded: " << nEvents << " events " << endl;
+	cout << "[Analyzer." << __FUNCTION__ << "] Loaded: " << nEvents << " events " << endl;
 
 	book->cd( "" );
 
@@ -73,5 +73,5 @@ void analyzer::loopEvents() {
 	
 
 
-	cout << "[analyzer." << __FUNCTION__ << "] completed in " << t.elapsed() << " seconds " << endl;
+	cout << "[Analyzer." << __FUNCTION__ << "] completed in " << t.elapsed() << " seconds " << endl;
 }

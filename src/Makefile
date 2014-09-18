@@ -4,7 +4,8 @@ project = app
 # source suffix
 source = .cpp 
 # object files to make
-objects = app.o HistoBook.o chainLoader.o analyzer.o reporter.o
+objects = app.o HistoBook.o ChainLoader.o Analyzer.o Reporter.o
+libObjects = HistoBook.o ChainLoader.o Analyzer.o Reporter.o
 
 sources = $(wildcard *.cpp)
 headers = $(wildcard ../include/*.h)
@@ -19,6 +20,7 @@ ROOTGLIBS     	= $(shell root-config --glibs)
 includes		= -I../include -I. -I$(ROOTSYS)/include -I$(ROOTDEV)/include 
 libraries 			= 	$(ROOTLIBS) -lGui -lHtml -lGuiHtml $(CERNLIBS) $(SYSLIBS) \
 
+
 cxx 		= g++ -std=c++0x
 flags 		= -Wall -g $(ROOTCFLAGS) $(includes) -Wno-write-strings -fno-inline 
 compile 	= $(cxx) $(flags) -c 
@@ -26,9 +28,12 @@ ldFlags  	= $(ROOTLDFLAGS) -g
 
 all: $(project)
 
+
 $(project): $(objects)
-		$(cxx) $(ldFlags) -o  $(project) $(objects) $(ROOTGLIBS) $(libraries)
+		ar rcs jdbREF.a $(libObjects)
+		$(cxx) $(ldFlags) -o  $(project) app.o jdbREF.a $(ROOTGLIBS) $(libraries)
 		@cp $(project) ../bin
+#$(cxx) $(ldFlags) -o  $(project) $(objects) $(ROOTGLIBS) $(libraries)
 
 %.o: %$(source)
 		$(compile)  $<
@@ -36,6 +41,7 @@ $(project): $(objects)
 clean:
 		@rm -f $(objects) $(project)
 		@rm -f ../bin/$(project)
+		@rm -f jdbREF.a
 		@echo "clean done"
 
 full:

@@ -16,7 +16,7 @@
 using namespace std;
 
 
-namespace jdbUtils{
+namespace jdb{
 
 	class taskTimer{
 	public:
