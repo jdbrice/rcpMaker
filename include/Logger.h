@@ -63,7 +63,7 @@ namespace jdb {
 			if ( logLevel < llWarn )
 				return ns;
 
-			preMessage( "Warning:", functionName );
+			preMessage( "Warning", functionName );
 			
 			return (*os);
 		}
@@ -94,6 +94,19 @@ namespace jdb {
 
 		static const int llDefault	= llWarn;
 
+		static int logLevelFromString( string ll ){
+			if ( "info" == ll )
+				return llInfo;
+			else if ( "warning" == ll  )
+				return llWarn;
+			else if ( "error" == ll )
+				return llError;
+			else if ( "all" == ll )
+				return llAll;
+			else if ( "none" == ll )
+				return llNone;
+			return llAll;
+		}
 
 	protected:
 		
@@ -101,12 +114,13 @@ namespace jdb {
 
 		void preMessage( string level = "", string functionName = "" ){
 
+			int w1 = 8;
 			if ( cSpace.length() >= 2 && functionName.length() >= 2 )
-				(*os) << level << " : " << "[" << cSpace << "." << functionName << "] ";
+				(*os) << std::left << std::setw(w1) << level << " : " << "[" << cSpace << "." << functionName << "] ";
 			else if (cSpace.length() < 2 && functionName.length() >= 2)
-				(*os) << level << " : " << "[" << functionName << "] ";
+				(*os) << std::left << std::setw(w1) << level << " : " << "[" << functionName << "] ";
 			else if ( level.length() >= 1 )
-				(*os) << "" << level << " : ";
+				(*os) << "" << std::left << std::setw(w1) << level << " : ";
 		}
 
 		std::ostream* os;

@@ -19,8 +19,10 @@ namespace jdb {
 
 		if ( NULL == nLog )
 			log = new Logger( Logger::llDefault, "HistoBook" );
-		else 
+		else {
 			log = nLog;
+			
+		}
 
 		if (name.find(  ".root") != std::string::npos){
 			filename = name;	
@@ -65,8 +67,10 @@ namespace jdb {
 		if ( NULL == nLog ){
 			log = new Logger( Logger::llDefault, "HistoBook" );
 		}
-		else 
+		else {
 			log = nLog;
+			
+		}
 
 		log->info(__FUNCTION__) << "" << endl;
 
@@ -169,20 +173,22 @@ namespace jdb {
 		log->info(__FUNCTION__) << " Adding " << name << endl;
 
 		string oName = name;
-		if ( name.length() <= 1 || !h )
+		if ( name.length() <= 1 || !h ){
+			log->warn(__FUNCTION__) << " Cannot add " << name << " to dir " << currentDir << " : Invalid name" << endl;
 			return;
+		}
 
 		name = currentDir + name;
 		
 		// dont allow duplicated name overites
 		if ( book[ name ] ){
-			log->warn(__FUNCTION__) << " Cannot add " << name << " to dir " << currentDir << " duplicate exists" << endl;
+			log->warn(__FUNCTION__) << " Cannot add " << name << " to dir " << currentDir << " : Duplicate exists" << endl;
 			return;
 		}
 
 		// save the histo to the map
 		book[ name ] = h;
-		log->info(__FUNCTION__) << name << " Added" << endl;
+		
 	}
 	/*
 	*
@@ -284,6 +290,8 @@ namespace jdb {
 		log->info(__FUNCTION__) << " Cloning " << existing << " into " << create << endl;
 		if ( get( existing ) ){
 			TH1* nHist = (TH1*)get( existing )->Clone( create.c_str() );
+			// add the new one
+			add( create, nHist );
 		} else {
 			log->warn(__FUNCTION__) << existing << " Does Not Exist " << endl;
 		}
@@ -337,12 +345,13 @@ namespace jdb {
 	TH1* HistoBook::get( string name, string sdir  ){
 		if ( sdir.compare("") == 0)
 			sdir = currentDir;
+		if ( NULL == book[ ( sdir  + name  ) ] )
+			log->warn(__FUNCTION__) << sdir + name  << " Does Not Exist " << endl;
+
 		return book[ ( sdir  + name  ) ];
 	}
 	TH2* HistoBook::get2D( string name, string sdir  ){
-		if ( sdir.compare("") == 0)
-			sdir = currentDir;
-		return (TH2*)book[ ( sdir  + name  ) ];
+		return ((TH2*)get( name, sdir ));
 	}
 	TH3* HistoBook::get3D( string name, string sdir ){
 		return (( TH3* ) get( name, sdir ));
@@ -616,8 +625,6 @@ namespace jdb {
 			}
 			log->warn(__FUNCTION__) << name << " does not exist " << endl;
 		}
-		
-		log->warn(__FUNCTION__) << "Could Not Draw " << endl;
 
 		return this;
 	}

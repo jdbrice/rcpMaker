@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
 
+	<Logger>
+		<stream>stdout</stream>
+		<logLevel>all</logLevel>
+	</Logger>
+
 	<input>
 		<rootIn file="" />
 		<dataDir maxFiles="1" >/star/institutions</dataDir>
