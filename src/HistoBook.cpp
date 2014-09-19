@@ -3,7 +3,8 @@
 #include "HistoBook.h"
 #include "TKey.h"
 #include "TObject.h"
-#include "logger.h"
+#include "Logger.h"
+#include "LoggerConfig.h"
 
 
 namespace jdb {
@@ -17,8 +18,9 @@ namespace jdb {
 	 */
 	HistoBook::HistoBook( string name, string input, string inDir, Logger * nLog ){
 
-		if ( NULL == nLog )
+		if ( NULL == nLog ){
 			log = new Logger( Logger::llDefault, "HistoBook" );
+		}
 		else {
 			log = nLog;
 			
@@ -64,8 +66,13 @@ namespace jdb {
 	 */
 	HistoBook::HistoBook( string name, XmlConfig * con, string input, string inDir, Logger * nLog){
 		
+
+		config = con;
+
+		
 		if ( NULL == nLog ){
-			log = new Logger( Logger::llDefault, "HistoBook" );
+			log = LoggerConfig::makeLogger( config, "Logger" );
+			log->setClassSpace("HistoBook" );
 		}
 		else {
 			log = nLog;
@@ -95,7 +102,7 @@ namespace jdb {
 
 		globalStyle();
 
-		config = con;
+		
 		log->info(__FUNCTION__) << " Set Configuration " << endl;
 
 		// if an input was given merge it into the live record

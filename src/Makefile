@@ -22,7 +22,7 @@ libraries 			= 	$(ROOTLIBS) -lGui -lHtml -lGuiHtml $(CERNLIBS) $(SYSLIBS) \
 
 
 cxx 		= g++ -std=c++0x
-flags 		= -Wall -g $(ROOTCFLAGS) $(includes) -Wno-write-strings -fno-inline 
+flags 		= -Wall -g $(ROOTCFLAGS) $(includes) -Wno-write-strings 
 compile 	= $(cxx) $(flags) -c 
 ldFlags  	= $(ROOTLDFLAGS) -g
 

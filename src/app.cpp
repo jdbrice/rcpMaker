@@ -53,7 +53,7 @@ int unitTest_Utils(){
 int unitTest_HistoBook( XmlConfig * config ){
 
 	  cout << endl << endl << "HistoBook Tests: " << endl << endl;
-	HistoBook* book = new HistoBook( "out.root", config, "", "", logger );
+	HistoBook* book = new HistoBook( "out.root", config );
 
 	book->makeAll( "h" );
 	book->clone( "histo1", "histo2" );
