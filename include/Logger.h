@@ -12,6 +12,7 @@ namespace jdb {
 
 
 	protected:
+
 		/**
 		 * For removing output seamlessly
 		 * Not the most efficient but I like the way it allows the system to behave
@@ -29,6 +30,9 @@ namespace jdb {
 		};
 
 	public:
+
+		
+
 		/**
 		 * Logger - constructor
 		 * @param	ll - log level

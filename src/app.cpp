@@ -40,10 +40,12 @@ int unitTest_Utils(){
 	taskTimer tt;
 	tt.start();
 
-	taskProgress tp( "taskProgress Test", 2000000 );
-	for ( int i = 0; i < 2000000; i++ ){
+	int n = 10000000;
+	taskProgress tp( "taskProgress Test", n );
+	for ( int i = 0; i < n; i++ ){
 	  
-	  tp.showProgress( i );
+	  tp.showProgress( i ); 
+	  
 	}
 
 	return 0;
@@ -52,7 +54,7 @@ int unitTest_Utils(){
 
 int unitTest_HistoBook( XmlConfig * config ){
 
-	  cout << endl << endl << "HistoBook Tests: " << endl << endl;
+	cout << endl << endl << "HistoBook Tests: " << endl << endl;
 	HistoBook* book = new HistoBook( "out.root", config );
 
 	book->makeAll( "h" );
@@ -62,11 +64,12 @@ int unitTest_HistoBook( XmlConfig * config ){
 	book->draw( "tommy" );
 	
 	logger->info() << " green is : " << book->color( "green" ) << endl;
-	//book->style( "a" );
-	//book->style( "b" );
 	
-	//book->style( "a" )->draw();
-	//book->clone( "a", "aa" );
+	vector<double> bins = HistoBook::binsFrom( 10, 0, 10 );
+
+	for ( int i = -1; i< 12; i ++ ){
+		cout << " value " << i << " is in bin [ " << HistoBook::findBin( bins, i ) << " ] " << endl; 
+	}
 
 	delete book;
 

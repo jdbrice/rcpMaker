@@ -74,6 +74,11 @@ namespace jdb{
 
 	public:
 
+		/**
+		 * Static Usage
+		 */
+		static vector<double> binsFrom( int nBins, double low, double high );
+		static int findBin( vector<double> &bins, double value );
 		HistoBook( string name, string input = "", string inDir = "", Logger * nLog = NULL );
 		HistoBook( string name, XmlConfig* config, string input = "", string inDir = "", Logger * nLog = NULL );
 		~HistoBook();
@@ -92,6 +97,10 @@ namespace jdb{
 						uint nBinsX, double lowX, double hiX, uint nBinsY, double lowY, double hiY );
 		void make2D( 	string name, string title, 
 						uint nBinsX, const Double_t* xBins, uint nBinsY, double lowY, double hiY );
+		void make2D( 	string name, string title, 
+						uint nBinsX, double x1, double x2, uint nBinsY, const Double_t* yBins );
+		void make2D( 	string name, string title, 
+						uint nBinsX, const Double_t* xBins, uint nBinsY, const Double_t*yBins );
 		void make( XmlConfig * config, string nodeName );
 		void make( string nodeName );
 		void makeAll( string nodeName );

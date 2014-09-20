@@ -13,6 +13,9 @@
 // for round
 #include <math.h>
 
+// for logging in the framework
+#include "Logger.h"
+
 using namespace std;
 
 
@@ -60,6 +63,9 @@ namespace jdb{
 	
 	inline void progressBar( int i, int nevents, int textWidth = 60, double elapsedTime = -1 ){
 		
+		// for output
+
+
 		double progress =  ((double)i / (double)nevents);
 		if ( i == nevents - 1)
     		progress = 1.001;
@@ -78,6 +84,7 @@ namespace jdb{
 			double per = progress  * 100;
 			per = round( per );
 
+			
 			cout << "[";
 	    	for ( int ip = 0; ip < textWidth; ip ++ ){
 	    		if ( ip < round( (progress * (double)textWidth) ) )
@@ -88,7 +95,13 @@ namespace jdb{
 	    	if (isatty(fileno(stdout)) ){ 
 		 	   	cout << "]" << per << "%" ;
 				if ( elapsedTime >= 0 ){
-					cout << " : " << ts(elapsedTime, 4) << " sec ";
+					
+					int nDig = 3;
+					
+					if ( elapsedTime >= 1 )
+						nDig = ceil( log10( elapsedTime ) ) + 2;
+
+					cout << " : " << ts(elapsedTime, nDig) << " sec ";
 				}
 				cout << "\r";
 				std::cout.flush();
