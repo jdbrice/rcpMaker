@@ -77,8 +77,12 @@ namespace jdb{
 		/**
 		 * Static Usage
 		 */
-		static vector<double> binsFrom( int nBins, double low, double high );
+		static vector<double> makeNBins( int nBins, double low, double high );
+		static vector<double> makeFixedWidthBins( double binWidth, double low, double high );
 		static int findBin( vector<double> &bins, double value );
+		/**
+		 * Static Usage
+		 */
 		HistoBook( string name, string input = "", string inDir = "", Logger * nLog = NULL );
 		HistoBook( string name, XmlConfig* config, string input = "", string inDir = "", Logger * nLog = NULL );
 		~HistoBook();

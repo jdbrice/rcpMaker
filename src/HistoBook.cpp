@@ -128,17 +128,33 @@ namespace jdb{
 	}	// Destructor
 
 	/**
-	 * Static binsFrom
+	 * Static makeNBins
 	 * @param nBins int number of bins
 	 * @param low double low end of bins
 	 * @param high double high end of bins
 	 * @return a vector containing the bin edges
 	 */
-	vector<double> HistoBook::binsFrom( int nBins, double low, double high ){
+	vector<double> HistoBook::makeNBins( int nBins, double low, double high ){
 
 		vector<double> bins;
 		double step = (high - low ) / (double) nBins;
 		for (double i = low; i <= high; i += step ){
+			bins.push_back( i );
+		}
+		return bins;
+	}	// binsFrom
+	
+	/**
+	 * Static makeFixedWidthBins
+	 * @param binWidth double width of each bin
+	 * @param low double low end of bins
+	 * @param high double high end of bins
+	 * @return a vector containing the bin edges
+	 */
+	vector<double> HistoBook::makeFixedWidthBins( double binWidth, double low, double high ){
+
+		vector<double> bins;
+		for (double i = low; i <= high; i += binWidth ){
 			bins.push_back( i );
 		}
 		return bins;
