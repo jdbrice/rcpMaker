@@ -393,6 +393,8 @@ namespace jdb {
 			} else {
 				return false;
 			}
+
+			return false;
 		}
 
 		// report
