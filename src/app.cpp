@@ -75,6 +75,8 @@ int unitTest_HistoBook( XmlConfig * config ){
 	for ( double i = -1; i< 12; i += .5 ){
 		cout << " value " << i << " is in bin [ " << HistoBook::findBin( bins2, i ) << " ] " << endl; 
 	}
+	
+
 
 	delete book;
 

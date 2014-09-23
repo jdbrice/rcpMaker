@@ -62,6 +62,7 @@
 		<p2> 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 13, 15, 18, 19 </p2>
 	</bins>
 
+
 	<h>
 		<histo1 type="1D" title="dan" nBinsX="10" x1="1" x2="10" >
 			<style draw="h" linecolor="red" />
