@@ -9,7 +9,7 @@
 
 namespace jdb{
 	/**
-	 * Creates a histobook and allows the root filename to be set. optionally read from an existing root 
+	 * Creates a histobook and allows the root filename to be set. optionally read from an existing root
 	 * file and include everything into the working space
 	 * @param name  root filename
 	 * @param input input filename
@@ -38,7 +38,7 @@ namespace jdb{
 		log->info(__FUNCTION__) << "Output File : " << filename << " opened" << endl;
 
 
-		// make the legend and draw it once to apply styles etc. 
+		// make the legend and draw it once to apply styles etc.
 		// for some reason needed to make styling work on the first draw
 		legend = new TLegend( 0.65, 0.65, 0.9, 0.9);
 		legend->SetFillColor( kWhite );
@@ -68,7 +68,6 @@ namespace jdb{
 
 		config = con;
 
-
 		if ( NULL == nLog ){
 			log = LoggerConfig::makeLogger( config, "Logger" );
 			log->setClassSpace("HistoBook" );
@@ -92,7 +91,7 @@ namespace jdb{
 
 		log->info(__FUNCTION__) << "Output File : " << filename << " opened" << endl;
 
-		// make the legend and draw it once to apply styles etc. 
+		// make the legend and draw it once to apply styles etc.
 		// for some reason needed to make styling work on the first draw
 		legend = new TLegend( 0.65, 0.65, 0.9, 0.9);
 		legend->SetFillColor( kWhite );
@@ -188,19 +187,19 @@ namespace jdb{
 		TList* list;
 
 		if ( tDir ){
-			list = tDir->GetListOfKeys();  
+			list = tDir->GetListOfKeys();
 		} else {
 			log->info(__FUNCTION__) << " Bad Directory " << path << endl;
 			return;
 		}
 
-		TIter next(list);  
-		TKey* key;  
-		TObject* obj;   
+		TIter next(list);
+		TKey* key;
+		TObject* obj;
 
-		while ( (key = (TKey*)next()) ) {    
+		while ( (key = (TKey*)next()) ) {
 
-			obj = key->ReadObj() ;    
+			obj = key->ReadObj() ;
 
 			if ( 0 == strcmp(obj->IsA()->GetName(),"TDirectoryFile") ){
 				TDirectoryFile* dir = (TDirectoryFile*)obj;
@@ -208,19 +207,19 @@ namespace jdb{
 				string nPath = path + dir->GetName();
 				if ( path == (string) "" )
 					nPath = path + dir->GetName();
-				else 
+				else
 					nPath = path + "/" + dir->GetName();
 
 				cd( nPath );
 				loadRootDir( dir, nPath );
 			} else if ( obj ){
-				if (    (strcmp(obj->IsA()->GetName(),"TProfile")!=0) && (!obj->InheritsFrom("TH2") && (!obj->InheritsFrom("TH1"))) ) {      
+				if (    (strcmp(obj->IsA()->GetName(),"TProfile")!=0) && (!obj->InheritsFrom("TH2") && (!obj->InheritsFrom("TH1"))) ) {
 					// not a 1d or 2d histogram
 				} else {
 					// add it to the book
 
 					add( obj->GetName(), (TH1*)obj->Clone( obj->GetName() ) );
-				}    
+				}
 
 			}
 		}
@@ -228,7 +227,7 @@ namespace jdb{
 	} // loadRootDir
 
 	void HistoBook::add( string name, TH1* h ){
-		
+
 		log->info(__FUNCTION__) << " Adding " << name << endl;
 
 		string oName = name;
@@ -275,7 +274,7 @@ namespace jdb{
 	void HistoBook::make( string nodeName ){
 		if ( config )
 			make( config, nodeName );
-	}	//make 
+	}	//make
 	void HistoBook::make( XmlConfig * config, string nodeName ){
 
 		if ( config && config->nodeExists( nodeName ) ){
@@ -294,18 +293,18 @@ namespace jdb{
 				if ( config->nodeExists( nodeName + ".xBins" ) ){
 
 					vector<double> xBins = config->getDoubleVector( nodeName + ".xBins" );
-					make1D( hName, config->getString( nodeName + ":title", hName ), 
+					make1D( hName, config->getString( nodeName + ":title", hName ),
 						xBins.size() - 1, xBins.data() );
 
 				} else if ( config->nodeExists( nodeName + ":xBins" ) ) {
 
 					vector<double> xBins = config->getDoubleVector( config->getString( nodeName + ":xBins" ) );
-					make1D( hName, config->getString( nodeName + ":title", hName ), 
+					make1D( hName, config->getString( nodeName + ":title", hName ),
 						xBins.size() - 1, xBins.data() );
 
 				} else {
 
-					make1D( hName, config->getString( nodeName + ":title", hName ), 
+					make1D( hName, config->getString( nodeName + ":title", hName ),
 						config->getInt( nodeName + ":nBinsX", 1 ), config->getDouble( nodeName + ":x1", 0 ),
 						config->getDouble( nodeName + ":x2", 1 ) );
 
@@ -313,12 +312,12 @@ namespace jdb{
 
 			} else if ( "2D" == type ){
 				if ( config->nodeExists( nodeName + ":xBins" ) && config->nodeExists( nodeName + ":yBins" ) ){
-					
+
 					if ( !config->nodeExists( config->getString( nodeName + ":xBins" ) ) )
 						log->warn(__FUNCTION__) << "Invalid Bins specified in config" << endl;
 					if ( !config->nodeExists( config->getString( nodeName + ":yBins" ) ) )
 						log->warn(__FUNCTION__) << "Invalid Bins specified in config" << endl;
-					
+
 					vector<double> xBins = config->getDoubleVector( config->getString( nodeName + ":xBins" ) );
 					vector<double> yBins = config->getDoubleVector( config->getString( nodeName + ":yBins" ) );
 
@@ -334,7 +333,7 @@ namespace jdb{
 					double y1 = config->getDouble( nodeName + ":y1", 0 );
 					double y2 = config->getDouble( nodeName + ":y2", 0 );
 
-					make2D( hName, config->getString( nodeName + ":title", hName ), 
+					make2D( hName, config->getString( nodeName + ":title", hName ),
 							xBins.size() - 1, xBins.data(), nBinsY, y1, y2 );
 
 				} else if ( config->nodeExists( nodeName + ":yBins" ) ){
@@ -346,17 +345,17 @@ namespace jdb{
 					double x1 = config->getDouble( nodeName + ":x1", 0 );
 					double x2 = config->getDouble( nodeName + ":x2", 0 );
 
-					make2D( hName, config->getString( nodeName + ":title", hName ), 
+					make2D( hName, config->getString( nodeName + ":title", hName ),
 							nBinsX, x1, x2, yBins.size() - 1, yBins.data() );
 				} else {
-					make2D( hName, config->getString( nodeName + ":title", hName ), 
+					make2D( hName, config->getString( nodeName + ":title", hName ),
 						config->getInt( nodeName + ":nBinsX", 1 ), config->getDouble( nodeName + ":x1", 0 ),
 						config->getDouble( nodeName + ":x2", 1 ),
 						config->getInt( nodeName + ":nBinsY", 1 ), config->getDouble( nodeName + ":y1", 0 ),
-						config->getDouble( nodeName + ":y2", 1 ) );	
+						config->getDouble( nodeName + ":y2", 1 ) );
 				}
 
-				
+
 			}
 
 
@@ -393,7 +392,7 @@ namespace jdb{
 			log->warn(__FUNCTION__) << existing << " Does Not Exist " << endl;
 		}
 	}	//clone
-	
+
 	void HistoBook::make1F( string name, string title, uint nBins, double low, double hi  ){
 		log->info(__FUNCTION__) << "TH1F( " << name << ", " << title << ", " << nBins << ", " << low << ", " << hi << " )" << endl;
 		TH1F* h;
@@ -410,7 +409,7 @@ namespace jdb{
 
 		this->add( name, h );
 	}	//make1D
-	
+
 	void HistoBook::make1D( string name, string title, uint nBins, const Double_t* bins  ){
 		log->info(__FUNCTION__) << "TH1D( " << name << ", " << title << ", " << nBins << ", " << "[]" <<  " )" << endl;
 		TH1D* h;
@@ -418,7 +417,7 @@ namespace jdb{
 
 		this->add( name, h );
 	}	//make1D
-	
+
 	void HistoBook::make2D( string name, string title, uint nBinsX, double lowX, double hiX, uint nBinsY, double lowY, double hiY ){
 
 		log->info(__FUNCTION__) << "TH2D( " << name << ", " << title << ", " << nBinsX << ", " << lowX << ", " << hiX << ", " << nBinsY << ", " << lowY << ", " << hiY << " )" << endl;
@@ -428,7 +427,7 @@ namespace jdb{
 
 		this->add( name, h );
 	}	//make2D
-	
+
 	void HistoBook::make2D( string name, string title, uint nBinsX, const Double_t* xBins, uint nBinsY, double lowY, double hiY ){
 		log->info(__FUNCTION__) << "TH2D( " << name << ", " << title << ", " << nBinsX << ", " << "[]" << ", " << nBinsY << ", " << lowY << ", " << hiY << " )" << endl;
 		TH2D* h;
@@ -469,7 +468,7 @@ namespace jdb{
 		return (( TH3* ) get( name, sdir ));
 	}	//get3D
 
-	void HistoBook::fill( string name, double bin, double weight ){ 
+	void HistoBook::fill( string name, double bin, double weight ){
 		if ( get( name ) != 0)
 			get( name )->Fill( bin, weight );
 		else
@@ -509,8 +508,8 @@ namespace jdb{
 	  	gStyle->SetPadBottomMargin(0.16);
 	  	gStyle->SetPadLeftMargin(0.2);
 
-	  	gStyle->SetFillColor(-1); 
-		gStyle->SetFillStyle(4000); 
+	  	gStyle->SetFillColor(-1);
+		gStyle->SetFillStyle(4000);
 
 	}	//globalStyle
 
@@ -564,7 +563,7 @@ namespace jdb{
 		list.push_back( sstr.str() );
 
 		set( param, list );
-	    
+
 		return this;
 	}
 
@@ -630,14 +629,14 @@ namespace jdb{
 
 		    	if ( 1 != axis && 2 != axis )
 		    		axis = 1;
-		    
+
 		    	if ( thresh >= 0) {
 		    		if ( -1 >= min )
 		    			min = h->FindFirstBinAbove( thresh, axis );
 		    		if ( -1 >= max )
 		    			max = h->FindLastBinAbove( thresh, axis );
 		    	}
-		    
+
 		    	if ( 1 == axis )
 			  	  h->GetXaxis()->SetRange( min, max );
 			  	else if ( 2 == axis )
@@ -647,7 +646,7 @@ namespace jdb{
 
 		    	double min = dParam( params, 0);
 		    	double max = dParam( params, 1);
-		    
+
 		    	h->GetYaxis()->SetRangeUser( min, max );
 		    } else if ( "markercolor" == opt ) {
 		    	int c = color( cParam( params, 0) );
@@ -683,7 +682,7 @@ namespace jdb{
 
 			    if ( 2 == (int)p3 )
 			    	h->GetYaxis()->SetNdivisions( (int) p1, (int) p2, 0, true );
-			    else 
+			    else
 			    	h->GetXaxis()->SetNdivisions( (int) p1, (int) p2, 0, true );
 		    } else if ( "logy" == opt ){
 		    	gPad->SetLogy( (int)dParam( params, 0 ) );
@@ -722,14 +721,14 @@ namespace jdb{
 				h->Draw( drawOption.c_str() );
 				drawOption = "";
 				log->info(__FUNCTION__) << "Drawing " << styling << endl;
-			} else 
+			} else
 				log->warn(__FUNCTION__) << styling << " does not exist " << endl;
 		} else {
 			TH1* h = get( name );
 			if ( h ){
 				h->Draw( opt );
 				log->info(__FUNCTION__) << "Drawing " << name << endl;
-			} else  
+			} else
 				log->warn(__FUNCTION__) << name << " does not exist " << endl;
 		}
 
@@ -799,30 +798,3 @@ namespace jdb{
 	}
 
 } // jdb namespace
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
