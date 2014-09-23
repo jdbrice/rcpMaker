@@ -169,6 +169,8 @@ namespace jdb{
 	 */
 	int HistoBook::findBin( vector<double> &bins, double val ){
 
+		for ( int i = 0; i < bins.size(); i ++ )
+			cout << "[ " << i << " ] = " << bins[ i ] << endl;
 		if ( bins.size() < 2 )
 			return -1;
 
