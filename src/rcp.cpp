@@ -14,7 +14,9 @@ int main( int argc, char* argv[] ) {
     XmlConfig config( argv[ 1 ] );
     config.report();
 
+    InclusiveSpectra is( &config, "InclusiveSpectra" );
 
+    //is.eventLoop();
 
 
   }

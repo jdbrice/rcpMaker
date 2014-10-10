@@ -181,6 +181,8 @@ public :
    virtual Bool_t   Notify();
    virtual void     Show(Long64_t entry = -1);
 
+   TTree * getTree() { return fChain; }
+
 
    /**
     * Implement the PicoDataStore Interface

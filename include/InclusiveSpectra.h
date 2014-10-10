@@ -34,7 +34,7 @@ protected:
 	string nodePath;
 
 	TChain * chain;
-	TofPicoDst * pico;
+	PicoDataStore * pico;
 
 
 public:
