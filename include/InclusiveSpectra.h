@@ -4,6 +4,7 @@
 /**
  * JDB 
  */
+
 #include "Utils.h"
 #include "XmlConfig.h"
 #include "Logger.h"
@@ -19,6 +20,10 @@ using namespace jdb;
  * STD
  */
 
+/**
+ * Local
+ */
+#include "TofPicoDst.h"
 
 class InclusiveSpectra
 {
@@ -28,7 +33,9 @@ protected:
 	XmlConfig * cfg;
 	string nodePath;
 
-	TChain * 
+	TChain * chain;
+	TofPicoDst * pico;
+
 
 public:
 	InclusiveSpectra( XmlConfig * config, string nodePath );

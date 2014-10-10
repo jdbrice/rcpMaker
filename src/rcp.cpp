@@ -1,13 +1,11 @@
 
 
-#include "allroot.h"
-#include "HistoBook.h"
 #include "XmlConfig.h"
-#include "ChainLoader.h"
 using namespace jdb;
 
-#include <iostream>
 
+#include <iostream>
+#include "InclusiveSpectra.h"
 
 int main( int argc, char* argv[] ) {
 
@@ -16,11 +14,6 @@ int main( int argc, char* argv[] ) {
     XmlConfig config( argv[ 1 ] );
     config.report();
 
-    TChain * chain = new TChain( "tof" );
-    ChainLoader::load( chain, config.getString( "input.dataDir" ).c_str(), config.getInt( "input.dataDir:maxFiles" ) );
-
-    //cout << "Available branches : " << endl;
-    //chain->Print();
 
 
 

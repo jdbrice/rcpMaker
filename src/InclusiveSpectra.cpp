@@ -1,6 +1,6 @@
 
 #include "InclusiveSpectra.h"
-
+#include "ChainLoader.h"
 
 /**
  * Constructor
@@ -15,8 +15,11 @@ InclusiveSpectra::InclusiveSpectra( XmlConfig * config, string np){
 	lg = LoggerConfig::makeLogger( cfg, np + "Logger" );
 
 	//Create the chain
-	TChain * chain = new TChain( config->getString(np+"input.chain:name", "tof" ).c_str() );
-    ChainLoader::load( chain, config.getString( "input.dataDir" ).c_str(), config.getInt( "input.dataDir:maxFiles" ) );
+	TChain * chain = new TChain( cfg->getChar(np+"input.dst:treeName", "tof" ) );
+    ChainLoader::load( chain, cfg->getChar( np+"input.dst:url" ), config.getInt( np+"input.dst:maxFiles" ) );
+
+
+
 
 }
 /**
@@ -26,6 +29,6 @@ InclusiveSpectra::~InclusiveSpectra(){
 
 }
 
-void InclusiveSpectra::LoopTree(){
+void InclusiveSpectra::eventLoop(){
 
 }
