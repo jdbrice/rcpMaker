@@ -4,7 +4,7 @@ project = rcp
 # source suffix
 source = .cpp 
 # object files to make
-objects = rcp.o histoBook.o chainLoader.o rcpMaker.o reporter.o TOFrPicoDst.o utils.o
+objects = rcp.o TOFrPicoDst.o
 
 sources = $(wildcard *.cpp)
 headers = $(wildcard ../include/*.h)
@@ -17,7 +17,8 @@ ROOTGLIBS     	= $(shell root-config --glibs)
 
 # Custom Project includes and libs
 includes		= -I../include -I. -I$(ROOTSYS)/include -I$(ROOTDEV)/include 
-libraries 			= 	$(ROOTLIBS) -lGui -lHtml -lGuiHtml $(CERNLIBS) $(SYSLIBS) \
+libraries 		= 	$(ROOTLIBS) -lGui -lHtml -lGuiHtml $(CERNLIBS) $(SYSLIBS)
+staticLibs 		= jdbREF.a
 
 cxx 		= g++ -std=c++0x
 flags 		= -Wall -g $(ROOTCFLAGS) $(includes) -Wno-write-strings -fno-inline 
@@ -27,7 +28,7 @@ ldFlags  	= $(ROOTLDFLAGS) -g
 all: $(project)
 
 $(project): $(objects)
-		$(cxx) $(ldFlags) -o  $(project) $(objects) $(ROOTGLIBS) $(libraries)
+		$(cxx) $(ldFlags) -o  $(project) $(objects) $(staticLibs) $(ROOTGLIBS) $(libraries)
 		@cp $(project) ../bin
 
 %.o: %$(source)
@@ -41,11 +42,3 @@ clean:
 full:
 	clean
 	$(project)
-
-#doc:
-#	@echo "Generating documentation..." 	\					
-#	cldoc generate $(CXXFLAGS) --			\
-#		--report 							\
-#		--merge docs 						\
-#		--output html 						\
-#		$(sources) $(headers)

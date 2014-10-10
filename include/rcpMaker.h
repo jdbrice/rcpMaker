@@ -1,20 +1,20 @@
-#ifndef rcpMaker_H
-#define rcpMaker_H
+#ifndef RCP_MAKER_H
+#define RCP_MAKER_H
 
 #include "allroot.h"
 
-#include "histoBook.h"
+#include "HistoBook.h"
 #include "constants.h"
 #include "TOFrPicoDst.h"
+
+#include "XmlConfig.h"
+#include "Utils.h"
+#include "Reporter.h"
+
+#include "RefMultHelper.h"
+#include "PidLUTHelper.h"
+
 #include <vector>
-
-// clock_t, clock, CLOCKS_PER_SEC 
-#include <time.h>       
-
-// for testing if stdout is interactive or pipe / file
-#include "xmlConfig.h"
-#include "utils.h"
-#include "reporter.h"
 
 
 class rcpMaker{
@@ -22,21 +22,21 @@ class rcpMaker{
 private:
 
 	// the canvas used to draw report hidtos
-	reporter* report;
+	Reporter* report;
 
 	
 	// the main chain object
 	TChain * _chain;
 
 	// the histobook that stores all of our rcpMaker histograms
-	histoBook *book;
-	histoBook *pidLUT;
+	HistoBook *book;
+	HistoBook *pidLUT;
 
 	// the pico dst for simpler chain usage
 	TOFrPicoDst * pico;
 
 	// config file
-	xmlConfig* config;
+	XmlConfig* config;
 
 	clock_t startTime;
 
@@ -51,7 +51,7 @@ public:
 
 
 	// Constructor
-	rcpMaker( TChain * chain, xmlConfig *config );
+	rcpMaker( TChain * chain, XmlConfig *config );
 
 	// destructor
 	~rcpMaker();

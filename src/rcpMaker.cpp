@@ -1,11 +1,10 @@
 
 #include "constants.h"
-#include "rcpMaker.h"
-#include "histoBook.h"
+#include "RcpMaker.h"
+
+
 #include <fstream>
 #include <sstream>
-#include "refMultHelper.h"
-#include "pidLUTHelper.h"
 
 // provides my own string shortcuts etc.
 using namespace jdbUtils;
@@ -18,8 +17,8 @@ using namespace jdbUtils;
  *					such as number of tot bins to use, data location etc. See repo Readme
  *					for a sample configuration.
  */
-rcpMaker::rcpMaker( TChain* chain, xmlConfig* con )  {
-	cout << "[rcpMaker.rcpMaker] " << endl;
+RcpMaker::RcpMaker( TChain* chain, xmlConfig* con )  {
+	cout << "[RcpMaker.RcpMaker] " << endl;
 	
 	gErrorIgnoreLevel=kError;
 
@@ -79,13 +78,13 @@ rcpMaker::rcpMaker( TChain* chain, xmlConfig* con )  {
 /**
  *	Destructor - Deletes the histoBook ensuring it is saved.
  */
-rcpMaker::~rcpMaker() {
+RcpMaker::~RcpMaker() {
 	
 	delete book;
 	//delete pidLUT;
 	delete report;
 	
-	cout << "[rcpMaker.~rcpMaker] " << endl;
+	cout << "[RcpMaker.~RcpMaker] " << endl;
 }
 
 
@@ -94,17 +93,17 @@ rcpMaker::~rcpMaker() {
  *	Calculates the initial offsets for each channel with respect to channel 1 on the west side.
  *	Then performs the offset calculation again after all corrections have been applied
  */
-void rcpMaker::loopEvents() {
+void RcpMaker::loopEvents() {
 
 	startTimer();
 
 	if ( !_chain ){
-		cout << "[rcpMaker." << __FUNCTION__ << "] ERROR: Invalid chain " << endl;
+		cout << "[RcpMaker." << __FUNCTION__ << "] ERROR: Invalid chain " << endl;
 		return;
 	}
 
 	Int_t nevents = (Int_t)_chain->GetEntries();
-	cout << "[rcpMaker." << __FUNCTION__ << "] Loaded: " << nevents << " events " << endl;
+	cout << "[RcpMaker." << __FUNCTION__ << "] Loaded: " << nevents << " events " << endl;
 
 	book->cd( "" );
 	book->makeAll( "histograms" );
@@ -343,11 +342,11 @@ void rcpMaker::loopEvents() {
 	
 
 
-	cout << "[rcpMaker." << __FUNCTION__ << "] completed in " << elapsed() << " seconds " << endl;
+	cout << "[RcpMaker." << __FUNCTION__ << "] completed in " << elapsed() << " seconds " << endl;
 }
 
 
-bool rcpMaker::keepEvent() {
+bool RcpMaker::keepEvent() {
 
 	double vz = pico->vertexZ;
 	double vx = pico->vertexX;
@@ -383,7 +382,7 @@ bool rcpMaker::keepEvent() {
 	return true;
 }
 
-bool rcpMaker::keepTrack( int iHit ) {
+bool RcpMaker::keepTrack( int iHit ) {
 
 	double xDCA = pico->dcaZ[ iHit ];
 	double yDCA = pico->dcaX[ iHit ];
@@ -413,7 +412,7 @@ bool rcpMaker::keepTrack( int iHit ) {
 }
 
 
-double rcpMaker::dBeta( string pType, int iHit ){
+double RcpMaker::dBeta( string pType, int iHit ){
 
 	double tof = pico->tof[ iHit ];
 	double length = pico->length[ iHit ];
@@ -432,7 +431,7 @@ double rcpMaker::dBeta( string pType, int iHit ){
 	return deltaB;
 }
 
-double rcpMaker::nSigInvBeta( string pType, int iHit  ){
+double RcpMaker::nSigInvBeta( string pType, int iHit  ){
 
 	double b = pico->beta[ iHit ];
 	double p = pico->p[ iHit ];
