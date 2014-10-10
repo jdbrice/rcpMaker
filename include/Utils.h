@@ -21,7 +21,7 @@ using namespace std;
 
 namespace jdb{
 
-	class taskTimer{
+	class TaskTimer{
 	public:
 
 		clock_t startTime;
@@ -117,7 +117,7 @@ namespace jdb{
 	/**
 	 * 
 	 */
-	class taskProgress{
+	class TaskProgress{
 	protected:
 		int max = 100;
 		int barWidth = 60;
@@ -125,13 +125,13 @@ namespace jdb{
 		bool showElapsed = true;
 		string title = "";
 
-		taskTimer tt;
+		TaskTimer tt;
 
 	public:
-		taskProgress(){
+		TaskProgress(){
 
 		}
-		taskProgress( string title, int max = 100, int width = 60, bool sTitle = true, bool sElapse = true ){
+		TaskProgress( string title, int max = 100, int width = 60, bool sTitle = true, bool sElapse = true ){
 			this->title = title;
 			this->max = max;
 			barWidth = width;
