@@ -18,11 +18,12 @@ ParamSpectra::ParamSpectra( XmlConfig * config, string np)
 	// Initialize the Phase Space Recentering Object
 	psr = new PhaseSpaceRecentering( cfg->getDouble( np+"PhaseSpaceRecentering.sigma:dedx", 0.06),
 									 cfg->getDouble( np+"PhaseSpaceRecentering.sigma:tof", 0.0012),
-									 cfg->getDouble( np+"Bichsel.table", "dedxBichsel.root"),
+									 cfg->getString( np+"Bichsel.table", "dedxBichsel.root"),
 									 cfg->getInt( np+"Bichsel.method", 0) );
 	centerSpecies = cfg->getString( np+"PhaseSpaceRecentering.centerSpecies", "K" );
 
-	binsPt = new HistoBins()
+	binsPt = new HistoBins( cfg, "binning.pt" );
+	binsEta = new HistoBins( cfg, "binning.eta" );
 
 }
 
@@ -30,7 +31,9 @@ ParamSpectra::ParamSpectra( XmlConfig * config, string np)
 void ParamSpectra::analyzeTrack( Int_t iTrack ){
 
 	// first apply the phase space recentering
-
+	double pt = pico->trackPt( iTrack );
+	int ptBin = binsPt->findBin( pt );
+	cout << "Pt Bin For " << pt << " = " << ptBin << endl;
 
 	//lg->(__FUNCTION__) << " Mean[ " << 
 

@@ -4,7 +4,7 @@
 #include "InclusiveSpectra.h"
 #include "PidParams.h"
 #include "PhaseSpaceRecentering.h"
-#include "HistogramBins.h"
+#include "HistoBins.h"
 
 #include <vector>
 #include <string>
@@ -20,8 +20,8 @@ protected:
 	PhaseSpaceRecentering * psr;
 
 	// Bins
-	HistogramBins * binsPt;
-	HistogramBins * binsEta;
+	HistoBins * binsPt;
+	HistoBins * binsEta;
 
 public:
 	ParamSpectra( XmlConfig * config, string np);
