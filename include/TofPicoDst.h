@@ -181,19 +181,22 @@ public :
    virtual Bool_t   Notify();
    virtual void     Show(Long64_t entry = -1);
 
-   TTree * getTree() { return fChain; }
+
 
 
    /**
     * Implement the PicoDataStore Interface
     */
-   virtual double trackPt( int iHit );
-   virtual double trackP( int iHit );
-   virtual double trackEta( int iHit );
-   virtual double trackDedx( int iHit );
-   virtual double trackPathLength( int iHit );
-   virtual double trackTof( int iHit );
-   virtual double trackBeta( int iHit );
+   virtual TTree * getTree() { return fChain; }
+   virtual Int_t numTofTracks();
+   virtual Double_t trackPt( Int_t iHit );
+   virtual Double_t trackP( Int_t iHit );
+   virtual Double_t trackEta( Int_t iHit );
+   virtual Double_t trackDedx( Int_t iHit );
+   virtual Double_t trackPathLength( Int_t iHit );
+   virtual Double_t trackTof( Int_t iHit );
+   virtual Double_t trackBeta( Int_t iHit );
+   virtual Int_t trackCharge( Int_t iHit );
 
 
 };

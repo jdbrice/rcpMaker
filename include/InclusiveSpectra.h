@@ -9,6 +9,7 @@
 #include "XmlConfig.h"
 #include "Logger.h"
 #include "LoggerConfig.h"
+#include "HistoBook.h"
 using namespace jdb;
 
 /**
@@ -33,6 +34,9 @@ protected:
 	XmlConfig * cfg;
 	string nodePath;
 
+	HistoBook * book;
+
+
 	TChain * chain;
 	PicoDataStore * pico;
 
@@ -41,7 +45,9 @@ public:
 	InclusiveSpectra( XmlConfig * config, string nodePath );
 	~InclusiveSpectra();
 
-
+	void make() {
+		eventLoop();
+	}
 
 protected:
 
@@ -50,6 +56,26 @@ protected:
 	 * recentering for use with unbinned methods
 	 */
 	void eventLoop();
+
+	/**
+	 * Analyze a track in the current Event
+	 * @param	iTrack 	- Track index 
+	 */
+	virtual void analyzeTrack( Int_t iTrack );
+
+	/**
+	 * Performs event based cuts
+	 * @return 	True 	- Keep Event 
+	 *          False 	- Reject Event
+	 */
+	virtual bool eventCut();
+
+	/**
+	 * Performs track based cuts
+	 * @return 	True 	- Keep Track 
+	 *          False 	- Reject Track
+	 */
+	virtual bool trackCut( Int_t iTrack );
 	
 };
 

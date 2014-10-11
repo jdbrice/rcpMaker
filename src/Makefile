@@ -4,7 +4,7 @@ project = rcp
 # source suffix
 source = .cpp 
 # object files to make
-objects = rcp.o TofPicoDst.o InclusiveSpectra.o
+objects = rcp.o TofPicoDst.o InclusiveSpectra.o ParamSpectra.o
 
 sources = $(wildcard *.cpp)
 headers = $(wildcard ../include/*.h)

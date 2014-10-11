@@ -6,17 +6,24 @@ using namespace jdb;
 
 #include <iostream>
 #include "InclusiveSpectra.h"
+#include "ParamSpectra.h"
+
+#include <exception>
 
 int main( int argc, char* argv[] ) {
 
   if ( argc >= 2 ){
 
-    XmlConfig config( argv[ 1 ] );
-    config.report();
+  	try{
+    	XmlConfig config( argv[ 1 ] );
+    	config.report();
 
-    InclusiveSpectra is( &config, "InclusiveSpectra" );
+    	ParamSpectra ps( &config, "ParamSpectra." );
 
-    //is.eventLoop();
+    	ps.make();
+	} catch ( exception &e ){
+		cout << e.what() << endl;
+	}
 
 
   }

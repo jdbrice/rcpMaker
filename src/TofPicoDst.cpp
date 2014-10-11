@@ -6,28 +6,33 @@ using namespace std;
 /**
  * Implement the PicoDataStore Interface
  */
-
-double TofPicoDst::trackPt( int iHit ){
+Int_t TofPicoDst::numTofTracks(){
+   return nTofHits;
+}
+Double_t TofPicoDst::trackPt( Int_t iHit ){
    return pt[ iHit ];
 }
-double TofPicoDst::trackP( int iHit ){
+Double_t TofPicoDst::trackP( Int_t iHit ){
    return p[ iHit ];
 }
-double TofPicoDst::trackEta( int iHit ){
+Double_t TofPicoDst::trackEta( Int_t iHit ){
    return eta[ iHit ];
 }
 
-double TofPicoDst::trackDedx( int iHit ){
+Double_t TofPicoDst::trackDedx( Int_t iHit ){
    return dedx[ iHit ];
 }
-double TofPicoDst::trackPathLength( int iHit ){
+Double_t TofPicoDst::trackPathLength( Int_t iHit ){
    return length[ iHit ];
 }
-double TofPicoDst::trackTof( int iHit ){
+Double_t TofPicoDst::trackTof( Int_t iHit ){
    return tof[ iHit ];
 }
-double TofPicoDst::trackBeta( int iHit ){
+Double_t TofPicoDst::trackBeta( Int_t iHit ){
    return beta[ iHit ];
+}
+Int_t TofPicoDst::trackCharge( Int_t iHit ){
+   return charge[ iHit ];
 }
 
 
@@ -169,7 +174,6 @@ void TofPicoDst::Init(TTree *tree)
    fChain->SetBranchAddress("length", length, &b_length);
    fChain->SetBranchAddress("tof", tof, &b_tof);
    fChain->SetBranchAddress("beta", beta, &b_beta);
-
 
    Notify();
 }
