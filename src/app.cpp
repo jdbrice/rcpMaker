@@ -37,11 +37,11 @@ int unitTest_Utils(){
 	cout << " double to string " << ts( 1000.123123 ) << endl;
 	cout << " float to string " << ts( 1000.123f ) << endl;
 
-	taskTimer tt;
+	TaskTimer tt;
 	tt.start();
 
 	int n = 10000000;
-	taskProgress tp( "taskProgress Test", n );
+	TaskProgress tp( "taskProgress Test", n );
 	for ( int i = 0; i < n; i++ ){
 	  
 	  tp.showProgress( i ); 
