@@ -127,68 +127,6 @@ namespace jdb{
 		log->info(__FUNCTION__) << " Memory freed, data written, file closed " << endl;
 	}	// Destructor
 
-	/**
-	 * Static makeNBins
-	 * @param nBins int number of bins
-	 * @param low double low end of bins
-	 * @param high double high end of bins
-	 * @return a vector containing the bin edges
-	 */
-	vector<double> HistoBook::makeNBins( int nBins, double low, double high ){
-
-		vector<double> bins;
-		double step = (high - low ) / (double) nBins;
-		for (double i = low; i <= high; i += step ){
-			bins.push_back( i );
-		}
-		return bins;
-	}	// binsFrom
-	
-	/**
-	 * Static makeFixedWidthBins
-	 * @param binWidth double width of each bin
-	 * @param low double low end of bins
-	 * @param high double high end of bins
-	 * @return a vector containing the bin edges
-	 */
-	vector<double> HistoBook::makeFixedWidthBins( double binWidth, double low, double high ){
-
-		vector<double> bins;
-		for (double i = low; i <= high; i += binWidth ){
-			bins.push_back( i );
-		}
-		return bins;
-	}	// binsFrom
-
-	/**
-	 * Static findBin
-	 * Used to fnd the bin corresponding to a value in user space
-	 * @param  bins vector of in edes from low to high
-	 * @param  val  the value whose bin is desired
-	 * @return      bin index starting at zero, -1 for underflow and -2 for overflow
-	 */
-	int HistoBook::findBin( vector<double> &bins, double val ){
-
-		if ( bins.size() < 2 )
-			return -1;
-
-		int n = bins.size();
-
-		// overflow and underflow
-		if ( val < bins[ 0 ] )
-			return -1;
-		else if ( val > bins[ n - 1 ] )
-			return -2;
-
-		for ( int i = n-2; i >= 0; i-- ){
-			if ( val >= bins[ i ] )
-				return i;
-		}
-
-		return -1;
-
-	}	// findBin
-
 	void HistoBook::save() {
 		log->info(__FUNCTION__) << " Save to File " << filename << endl;
 		file->Write();

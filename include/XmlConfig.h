@@ -195,9 +195,6 @@ namespace jdb {
 			return def;
 		}
 
-		const char * getChar( string nName, string def = "", bool trimW = true ){
-			return getString( nName, def, trimW ).c_str();
-		}
 
 		vector<string> childrenOf( string path ){
 

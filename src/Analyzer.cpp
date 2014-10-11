@@ -47,7 +47,7 @@ Analyzer::~Analyzer() {
 
 void Analyzer::loopEvents() {
 
-	taskTimer t;
+	TaskTimer t;
 	t.start();
 
 	if ( !_chain ){

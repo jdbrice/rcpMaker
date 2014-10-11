@@ -9,6 +9,7 @@
 #include <stdarg.h>
 #include "XmlConfig.h"
 #include "Logger.h"
+#include "HistoBins.h"
 
 using namespace std;
 
@@ -77,9 +78,15 @@ namespace jdb{
 		/**
 		 * Static Usage
 		 */
-		static vector<double> makeNBins( int nBins, double low, double high );
-		static vector<double> makeFixedWidthBins( double binWidth, double low, double high );
-		static int findBin( vector<double> &bins, double value );
+		static vector<double> makeNBins( int nBins, double low, double high ){
+			return HistoBins::makeNBins( nBins, low, high );
+		}
+		static vector<double> makeFixedWidthBins( double binWidth, double low, double high ){
+			return HistoBins::makeFixedWidthBins( binWidth, low, high );
+		}
+		static int findBin( vector<double> &bins, double value ){
+			return HistoBins::findBin( bins, value );
+		}
 		/**
 		 * Static Usage
 		 */
