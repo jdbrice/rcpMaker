@@ -18,7 +18,7 @@
 #include <string.h>
 #include <iomanip>
 #include <utility>      // std::pair, std::make_pair
-
+#include <exception>
 
 using namespace std;
 using namespace rapidxml;
@@ -40,7 +40,12 @@ namespace jdb {
 			char* cstr = new char[configFile.size() + 1];  	// Create char buffer to store string copy
 		  	strcpy (cstr, configFile.c_str());             		// Copy string into char buffer
 
-		  	doc.parse<0>(cstr); 
+		  	try {
+		  		doc.parse<0>(cstr);
+		  	} catch ( exception &e ){
+		  		cout << "Could not parse " << filename << " : " << e.what() << endl;
+		  	}
+		  	 
 		}
 
 		string getFilename() { return fname; }
