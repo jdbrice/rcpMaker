@@ -79,6 +79,13 @@ namespace jdb{
 			return findBin( bins, val );
 		} // findBin
 
+		int length() {
+			return bins.size();
+		}
+		int size() {
+			return bins.size();
+		}
+
 		/**
 		 * Constructor for fixed width bins
 		 */
