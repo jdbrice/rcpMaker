@@ -21,10 +21,9 @@ int main( int argc, char* argv[] ) {
 			ParamSpectra ps( &config, "ParamSpectra." );
 
 			ps.make();
-	} catch ( exception &e ){
-		cout << e.what() << endl;
-	}
-
+		} catch ( exception &e ){
+			cout << e.what() << endl;
+		}
 
 	}
 	return 0;

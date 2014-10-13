@@ -28,6 +28,8 @@ protected:
 	double nSigmaDedx;
 	string nSigmaType;
 	
+	static string DEDX_CUT;
+	static string TOF_CUT;
 	static string SQUARE_CUT;
 	static string ELLIPSE_CUT;
 
@@ -38,6 +40,7 @@ public:
 protected:
 
 	virtual void analyzeTrack( Int_t iTrack );
+	virtual void preLoop();
 	
 };
 

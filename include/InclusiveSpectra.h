@@ -58,6 +58,16 @@ protected:
 	void eventLoop();
 
 	/**
+	 * Before the event loop starts - for subclass init
+	 */
+	virtual void preLoop(){}
+
+	/**
+	 * After the event loop starts - for subclass reporting
+	 */
+	virtual void postLoop(){}
+
+	/**
 	 * Analyze a track in the current Event
 	 * @param	iTrack 	- Track index 
 	 */

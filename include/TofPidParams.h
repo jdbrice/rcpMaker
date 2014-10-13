@@ -38,7 +38,7 @@ public:
 
 		const Double_t pMeV = p * 1000;
 		const Double_t mMeV = m * 1000;
-		
+
 		const Double_t rp = minP / pMeV;
 		const Double_t d1 = ASin( rp ) * Sqrt( 1 - rp*rp );
 		const Double_t a = ( 1 - rp / d1 ) * muP;
@@ -63,7 +63,7 @@ public:
 		const Double_t d2 = pMeV * Sqrt( pMeV*pMeV + mMeV*mMeV );
 		const Double_t b = Power( (mMeV*mMeV / d2 ) * sigEP, 2 );
 
-		return (Power( sigT, 2 ) + a + b);
+		return Sqrt(Power( sigT, 2 ) + a + b);
 	}
 	
 };

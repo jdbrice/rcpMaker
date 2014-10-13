@@ -27,7 +27,7 @@ InclusiveSpectra::InclusiveSpectra( XmlConfig * config, string np){
     // create the book
     lg->info(__FUNCTION__) << " Creating book "<< endl;
     book = new HistoBook( config->getString( np + "output.data" ), config );
-    lg->info(__FUNCTION__) << " Creating book "<< endl;
+
 
 }
 /**
@@ -54,6 +54,8 @@ void InclusiveSpectra::eventLoop(){
 	lg->info(__FUNCTION__) << "Making all histograms in : " << nodePath + "histograms" << endl;
 	book->makeAll( nodePath + "histograms" );
 
+	preLoop();
+
 	TaskProgress tp( "Event Loop", nEvents );
 
 	for ( Int_t iEvent = 0; iEvent < nEvents; iEvent ++ ){
@@ -77,6 +79,8 @@ void InclusiveSpectra::eventLoop(){
 		}
 
 	}
+
+	postLoop();
 
 	lg->info(__FUNCTION__) << "Complete" << endl;
 

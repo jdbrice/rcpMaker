@@ -1,5 +1,7 @@
 #include "ParamSpectra.h"
 
+string ParamSpectra::DEDX_CUT = "dedx";
+string ParamSpectra::TOF_CUT = "tof";
 string ParamSpectra::SQUARE_CUT = "square";
 string ParamSpectra::ELLIPSE_CUT = "ellipse";
 
@@ -36,6 +38,33 @@ ParamSpectra::ParamSpectra( XmlConfig * config, string np)
 	nSigmaDedx = cfg->getDouble( np+"nSigmaCut:dedx", 1.0 );
 	nSigmaType = cfg->getString( np+"nSigmaCut:type", SQUARE_CUT );
 
+	book->cd();
+
+}
+
+
+void ParamSpectra::preLoop(){
+
+	lg->info(__FUNCTION__) << endl;
+	
+	for ( int iS = 0; iS < species.size(); iS ++ ){
+		book->clone( "mean", "mean" + species[ iS ] );
+		book->clone( "sigma", "sigma" + species[ iS ] );
+
+		book->clone( "ptBase", "pt" + species[ iS ] );
+	}
+
+
+	for ( double ip = .2; ip < 4; ip+=.025 ){
+		for ( int iS = 0; iS < species.size(); iS ++ ){
+			double tofMean = tofParams[ iS ]->mean( ip, psr->mass( species[ iS ] ) ) ;
+			double tofSigma = tofParams[ iS ]->sigma( ip, psr->mass( species[ iS ] ) ) ;
+			book->get( "mean" + species[ iS ] )->SetBinContent( binsPt->findBin( ip ) + 1, tofMean );
+			book->get( "sigma" + species[ iS ] )->SetBinContent( binsPt->findBin( ip ) + 1, tofSigma );
+		}	
+	}
+	
+
 }
 
 
@@ -47,6 +76,7 @@ void ParamSpectra::analyzeTrack( Int_t iTrack ){
 	double pt = pico->trackPt( iTrack );
 	int ptBin = binsPt->findBin( pt );
 	
+	
 	if ( ptBin < binsPt->length() - 1 ){
 		double avgPt = (binsPt->bins[ ptBin ] + binsPt->bins[ ptBin + 1 ]) / 2.0;
 
@@ -54,20 +84,21 @@ void ParamSpectra::analyzeTrack( Int_t iTrack ){
 							pt, avgPt );
 		double tof = psr->nlTof( centerSpecies, pico->trackBeta( iTrack ), 
 							pt, avgPt );
+		
+		book->fill( "tof", tof ); 
 
-		//cout << "[ " << dedx << " , " << tof << " ] <pt> = " << avgPt << endl;
-
-		book->fill( "tof", tof );
 		for ( int iS = 0; iS < species.size(); iS ++ ){
 			
 			double tofMean = tofParams[ iS ]->mean( pt, psr->mass( species[ iS ] ) ) ;
 			double tofSigma = tofParams[ iS ]->sigma( pt, psr->mass( species[ iS ] ) );
 			
-			tofSigma = 0.012;
 			if ( 	tof >= tofMean - tofSigma * ( nSigmaTof / 2.0 ) && 
 					tof <= tofMean + tofSigma * ( nSigmaTof / 2.0 ) ){
-				//cout << species[ iS ] << " : ";
+				//cout << species[ iS ] << " : " ;
 				//cout << "\t" << tofMean << " +/- " << tofSigma << endl;
+				
+				book->fill( "pt" + species[ iS ], pt );
+
 			}
 
 		}
