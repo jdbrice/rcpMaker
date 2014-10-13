@@ -29,6 +29,11 @@ InclusiveSpectra::InclusiveSpectra( XmlConfig * config, string np){
     book = new HistoBook( config->getString( np + "output.data" ), config );
 
 
+    /**
+     * Setup the ana cuts
+     */
+    cutVertexZ = new ConfigPoint( cfg, np + "eventCuts.vertexZ", ":min", ":max" );
+
 }
 /**
  * Destructor
@@ -101,7 +106,10 @@ void InclusiveSpectra::analyzeTrack( Int_t iTrack ){
 
 bool InclusiveSpectra::eventCut(){
 
-	
+
+	double z = pico->eventVertexZ();
+
+	if ( z > cutVertexZ.x );
 
 	return true;
 }

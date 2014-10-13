@@ -43,7 +43,7 @@ protected:
 	/**
 	 * Analysis cut Alias
 	 */
-	
+	ConfigPoint *cutVertexZ;
 
 
 public:
