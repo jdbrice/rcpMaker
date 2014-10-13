@@ -26,8 +26,8 @@ InclusiveSpectra::InclusiveSpectra( XmlConfig * config, string np){
 
     // create the book
     lg->info(__FUNCTION__) << " Creating book "<< endl;
-    book = new HistoBook( cfg->getString( np + "output.data" ), config );
-
+    book = new HistoBook( config->getString( np + "output.data" ), config );
+    lg->info(__FUNCTION__) << " Creating book "<< endl;
 
 }
 /**
