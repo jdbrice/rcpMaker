@@ -36,6 +36,14 @@ public:
 	/**
 	 * Analysis Cuts
 	 */
+	virtual Double_t eventVertexX(  ) = 0;
+	virtual Double_t eventVertexY(  ) = 0;
+	virtual Double_t eventVertexZ(  ) = 0;
+
+	virtual Double_t trackDcaX( Int_t iHit ) = 0;
+	virtual Double_t trackDcaY( Int_t iHit ) = 0;
+	virtual Double_t trackDcaZ( Int_t iHit ) = 0;
+
 
 };
 

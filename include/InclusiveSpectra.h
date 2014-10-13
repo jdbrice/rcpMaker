@@ -40,6 +40,11 @@ protected:
 	TChain * chain;
 	PicoDataStore * pico;
 
+	/**
+	 * Analysis cut Alias
+	 */
+	
+
 
 public:
 	InclusiveSpectra( XmlConfig * config, string nodePath );

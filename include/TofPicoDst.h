@@ -198,6 +198,14 @@ public :
    virtual Double_t trackBeta( Int_t iHit );
    virtual Int_t trackCharge( Int_t iHit );
 
+   virtual Double_t eventVertexX( ){ return vertexX; }
+   virtual Double_t eventVertexY( ){ return vertexY; }
+   virtual Double_t eventVertexZ( ){ return vertexZ; }
+
+   virtual Double_t trackDcaX( Int_t iHit ){ return dcaX[iHit]; }
+   virtual Double_t trackDcaY( Int_t iHit ){ return dcaY[iHit]; }
+   virtual Double_t trackDcaZ( Int_t iHit ){ return dcaZ[iHit]; }
+
 
 };
 
