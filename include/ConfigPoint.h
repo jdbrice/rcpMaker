@@ -1,5 +1,5 @@
-#ifndef ConfigPoint
-#define ConfigPoint
+#ifndef CONFIG_POINT_H
+#define CONFIG_POINT_H
 
 #include "XmlConfig.h"
 
@@ -12,10 +12,10 @@ namespace jdb{
 		double x;
 		double y;
 
-		ConfigPoint( XmlConfig * cfg, string np, string attrX = ":x", string attrY = ":y"){
+		ConfigPoint( XmlConfig * cfg, string np, double dX = 0, double dY = 0, string attrX = ":x", string attrY = ":y"){
 			if ( cfg ){
-				x = cfg->getDouble( np + attrX, 0 );
-				y = cfg->getDouble( np + attrY, 0 );
+				x = cfg->getDouble( np + attrX, dX );
+				y = cfg->getDouble( np + attrY, dY );
 			} 
 		}
 		~ConfigPoint();
