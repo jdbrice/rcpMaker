@@ -329,8 +329,10 @@ namespace jdb{
 		}
 	}	//makeAll
 	void HistoBook::makeAll( string nodeName ){
-		if ( !config )
+		if ( !config ){
+			log->info( __FUNCTION__ ) << "No config" << endl;
 			return;
+		}
 
 		makeAll( config, nodeName );
 	}	//makeAll
