@@ -74,7 +74,6 @@ namespace jdb{
 		}
 		else {
 			log = nLog;
-
 		}
 
 		log->info(__FUNCTION__) << "" << endl;
