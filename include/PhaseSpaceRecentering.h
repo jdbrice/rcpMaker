@@ -19,6 +19,8 @@ protected:
 	Bichsel * dedxGen;
 	TofGenerator * tofGen;
 
+	vector<string> species;
+
 public:
 	PhaseSpaceRecentering( double dedxSigma, double tofSigma, string bTable = "dedxBichsel.root", int bMethod = 0 ){
 		this->dedxSigma = dedxSigma;
@@ -26,6 +28,8 @@ public:
 
 		dedxGen = new Bichsel( bTable, bMethod);
 		tofGen = new TofGenerator();
+
+		species = { "Pi", "K", "P" };
 	}
 	~PhaseSpaceRecentering(){
 		delete dedxGen;
@@ -35,16 +39,19 @@ public:
 	/**
 	 * Static usage
 	 */
-	static constexpr double piMass = 0.1395702;
-	static constexpr double kaonMass = 0.493667;
-	static constexpr double protonMass = 0.9382721;
+	static constexpr double piMass = 0.1395702;		// [GeV]
+	static constexpr double kaonMass = 0.493667;	// [GeV]
+	static constexpr double protonMass = 0.9382721;	// [GeV]
 	
 	 /**
 	 * Get the expected mass from the string identifier
 	 * @param  	pType 	- string identifier for species
 	 * @return	mass of the given particle species
 	 */
-	static double mass( string pType ){
+	
+	TofGenerator * tofGenerator() { return tofGen; }
+	Bichsel * dedxGenerator() { return dedxGen; }
+	double mass( string pType ){
 		if ( "P" == pType )
 			return protonMass;
 		if ( "K" == pType )
@@ -52,6 +59,64 @@ public:
 		if ( "Pi" == pType )
 			return piMass;
 		return -10.0;	
+	}
+	vector<string> otherSpecies( string center ){
+		vector<string> res;
+		for ( int i = 0; i < species.size(); i++ ){
+			if ( species[ i ] != center )
+				res.push_back( species[ i ] );
+		}
+		return res;
+	}
+	vector<string> allSpecies(){
+		return species;
+	}
+	vector<double> centeredTofMeans( string center, double p, vector<string> others ){
+
+		double cMean = tofGen->mean( p, mass( center ) );
+		
+		vector<double> res;
+		for ( int i = 0; i < others.size(); i++ ){
+			double m = (tofGen->mean( p, mass( others[ i ] ) ) - cMean);
+			res.push_back( m );
+		}
+
+		return res;
+	}
+	vector<double> centeredTofMeans( string center, double p ){
+
+		double cMean = tofGen->mean( p, mass( center ) );
+		
+		vector<double> res;
+		for ( int i = 0; i < species.size(); i++ ){
+			double m = (tofGen->mean( p, mass( species[ i ] ) ) - cMean);
+			res.push_back( m );
+		}
+
+		return res;
+	}
+	vector<double> centeredDedxMeans( string center, double p, vector<string> others ){
+		
+		const double cMean = dedxGen->mean10( p, mass( center ), -1, 1000 );
+
+		vector<double> res;
+		for ( int i = 0; i < others.size(); i++ ){
+			double m = dedxGen->mean10( p, mass( others[ i ] ), -1, 1000 ) - cMean;
+			res.push_back( m );
+		}
+
+		return res;
+	}
+	vector<double> centeredDedxMeans( string center, double p ){
+		
+		const double cMean = dedxGen->mean10( p, mass( center ), -1, 1000 );
+		
+		vector<double> res;
+		for ( int i = 0; i < species.size(); i++ ){
+			double m = dedxGen->mean10( p, mass( species[ i ] ), -1, 1000 ) - cMean;
+			res.push_back( m );
+		}
+		return res;
 	}
 
 	/**
@@ -84,18 +149,16 @@ public:
 		double dedx10 = Log10( dedx );
 
 		// mean for this species
-		double mu = dedxGen->mean10( p, mass( centerSpecies ), -1, 1000 );
-		double muAvg = dedxGen->mean10( avgP, mass( centerSpecies ), -1, 1000 );
-
-		vector< string > species = { "K", "P", "Pi" };
+		//double mu = dedxGen->mean10( p, mass( centerSpecies ), -1, 1000 );
+		const double muAvg = dedxGen->mean10( avgP, mass( centerSpecies ), -1, 1000 );
 
 		double n1 = 0;
 		double d1 = 0;
 
 		for ( int i = 0; i < species.size(); i++ ){
 
-			double iMu = dedxGen->mean10( p, mass( species[ i ] ), -1, 1000 );
-			double iMuAvg = dedxGen->mean10( avgP, mass( species[ i ] ), -1, 1000 );
+			const double iMu = dedxGen->mean10( p, mass( species[ i ] ), -1, 1000 );
+			const double iMuAvg = dedxGen->mean10( avgP, mass( species[ i ] ), -1, 1000 );
 			
 			// may change to a functional dependance 
 			double sigma = dedxSigma; 
@@ -147,7 +210,7 @@ public:
 		const double tof = 1.0 / beta;
 		
 		// mean for this species
-		const double mu =  tofGen->mean( p, mass( centerSpecies ) );
+		//const double mu =  tofGen->mean( p, mass( centerSpecies ) );
 		const double muAvg =  tofGen->mean( avgP, mass( centerSpecies ) );
 
 		const vector< string > species = { "K", "P", "Pi" };

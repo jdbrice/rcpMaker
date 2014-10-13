@@ -12,20 +12,20 @@ using namespace jdb;
 
 int main( int argc, char* argv[] ) {
 
-  if ( argc >= 2 ){
+	if ( argc >= 2 ){
 
-  	try{
-    	XmlConfig config( argv[ 1 ] );
-    	config.report();
+		try{
+			XmlConfig config( argv[ 1 ] );
+			config.report();
 
-    	ParamSpectra ps( &config, "ParamSpectra." );
+			ParamSpectra ps( &config, "ParamSpectra." );
 
-    	ps.make();
+			ps.make();
 	} catch ( exception &e ){
 		cout << e.what() << endl;
 	}
 
 
-  }
+	}
 	return 0;
 }

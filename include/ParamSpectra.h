@@ -2,7 +2,7 @@
 #define PARAM_SPECTRA
 
 #include "InclusiveSpectra.h"
-#include "PidParams.h"
+#include "TofPidParams.h"
 #include "PhaseSpaceRecentering.h"
 #include "HistoBins.h"
 
@@ -14,7 +14,7 @@ class ParamSpectra : public InclusiveSpectra
 protected:
 
 	vector<string> species;
-	vector<PidParams*> pidParams;
+	vector<TofPidParams*> tofParams;
 
 	string centerSpecies;
 	PhaseSpaceRecentering * psr;
@@ -22,6 +22,14 @@ protected:
 	// Bins
 	HistoBins * binsPt;
 	HistoBins * binsEta;
+
+	// Cutting
+	double nSigmaTof;
+	double nSigmaDedx;
+	string nSigmaType;
+	
+	static string SQUARE_CUT;
+	static string ELLIPSE_CUT;
 
 public:
 	ParamSpectra( XmlConfig * config, string np);
