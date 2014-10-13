@@ -322,7 +322,7 @@ namespace jdb{
 		if ( !con )
 			return;
 		vector<string> paths = con->childrenOf( nodeName );
-
+		log->info(__FUNCTION__) << " Found " << paths.size() << " histogram paths " << endl;
 		for ( int i=0; i < paths.size(); i++ ){
 
 			make( paths[ i ] );
