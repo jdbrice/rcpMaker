@@ -243,24 +243,15 @@ namespace jdb{
 
 
 			if ( "1D" == type ){
-				if ( config->nodeExists( nodeName + ".xBins" ) ){
 
-					vector<double> xBins = config->getDoubleVector( nodeName + ".xBins" );
+				if ( config->nodeExists( nodeName + ":xBins" ) ){
+					HistoBins hb( config, config->getString( nodeName + ":xBins" ) );
 					make1D( hName, config->getString( nodeName + ":title", hName ),
-						xBins.size() - 1, xBins.data() );
-
-				} else if ( config->nodeExists( nodeName + ":xBins" ) ) {
-
-					vector<double> xBins = config->getDoubleVector( config->getString( nodeName + ":xBins" ) );
-					make1D( hName, config->getString( nodeName + ":title", hName ),
-						xBins.size() - 1, xBins.data() );
-
+						hb.size() - 1, hb.bins.data() );
 				} else {
-
 					make1D( hName, config->getString( nodeName + ":title", hName ),
 						config->getInt( nodeName + ":nBinsX", 1 ), config->getDouble( nodeName + ":x1", 0 ),
 						config->getDouble( nodeName + ":x2", 1 ) );
-
 				}
 
 			} else if ( "2D" == type ){

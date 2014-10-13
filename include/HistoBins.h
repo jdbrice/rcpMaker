@@ -119,6 +119,18 @@ namespace jdb{
 					config->getDouble( nodePath + ":min" ), 
 					config->getDouble( nodePath + ":max" ) 
 				);
+			} else if (
+						config->nodeExists( nodePath + ":n" ) &&
+						config->nodeExists( nodePath + ":min" ) &&
+						config->nodeExists( nodePath + ":max" )
+						) {
+				
+				// build the bins from the range and width
+				bins = makeNBins( 
+					config->getInt( nodePath + ":n" ), 
+					config->getDouble( nodePath + ":min" ), 
+					config->getDouble( nodePath + ":max" ) 
+				);
 			}
 
 		}
