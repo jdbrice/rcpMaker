@@ -12,13 +12,13 @@ namespace jdb{
 		double min;
 		double max;
 
-		ConfigPoint( XmlConfig * cfg, string np, double dMin = 0, double dMax = 0, string attrMin = ":min", string attrMax = ":max"){
+		ConfigRange( XmlConfig * cfg, string np, double dMin = 0, double dMax = 0, string attrMin = ":min", string attrMax = ":max"){
 			if ( cfg ){
 				min = cfg->getDouble( np + attrMin, dMin );
 				max = cfg->getDouble( np + attrMax, dMax );
 			} 
 		}
-		~ConfigPoint();
+		~ConfigRange();
 		
 	};
 
