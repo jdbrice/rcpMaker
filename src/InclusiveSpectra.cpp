@@ -32,7 +32,7 @@ InclusiveSpectra::InclusiveSpectra( XmlConfig * config, string np){
     /**
      * Setup the ana cuts
      */
-    cutVertexZ = new ConfigPoint( cfg, np + "eventCuts.vertexZ", ":min", ":max" );
+    cutVertexZ = new ConfigRange( cfg, np + "eventCuts.vertexZ", -200, 200 );
 
 }
 /**
@@ -109,7 +109,8 @@ bool InclusiveSpectra::eventCut(){
 
 	double z = pico->eventVertexZ();
 
-	if ( z > cutVertexZ.x );
+	if ( z < cutVertexZ.min || z > cutVertexZ.max );
+		return false;
 
 	return true;
 }

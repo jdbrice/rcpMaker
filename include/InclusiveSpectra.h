@@ -10,6 +10,7 @@
 #include "Logger.h"
 #include "LoggerConfig.h"
 #include "HistoBook.h"
+#include "ConfigRange.h"
 using namespace jdb;
 
 /**
@@ -43,7 +44,7 @@ protected:
 	/**
 	 * Analysis cut Alias
 	 */
-	ConfigPoint *cutVertexZ;
+	ConfigRange *cutVertexZ;
 
 
 public:
