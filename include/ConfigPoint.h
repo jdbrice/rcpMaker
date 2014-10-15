@@ -16,9 +16,12 @@ namespace jdb{
 			if ( cfg ){
 				x = cfg->getDouble( np + attrX, dX );
 				y = cfg->getDouble( np + attrY, dY );
-			} 
+			} else {
+				x = dX;
+				y = dY;
+			}
 		}
-		~ConfigPoint();
+		~ConfigPoint(){}
 		
 	};
 

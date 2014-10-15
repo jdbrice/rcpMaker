@@ -16,9 +16,12 @@ namespace jdb{
 			if ( cfg ){
 				min = cfg->getDouble( np + attrMin, dMin );
 				max = cfg->getDouble( np + attrMax, dMax );
-			} 
+			} else {
+				min = dMin;	
+				max = dMax;
+			}
 		}
-		~ConfigRange();
+		~ConfigRange(){}
 		
 	};
 
