@@ -350,6 +350,14 @@ namespace jdb {
 			}
 			return res;
 		}
+		vector<int> getIntVector( string nName ){
+			vector<string> str = getStringVector( nName );
+			vector<int> res;
+			for ( uint i = 0; i < str.size(); i++ ){
+				res.push_back( atoi( str[ i ].c_str() ) );
+			}
+			return res;
+		}
 
 		bool nodeExists( string nName ){
 			vector<string> ntf = split( nName, '.' );
