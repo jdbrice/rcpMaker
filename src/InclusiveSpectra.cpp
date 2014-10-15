@@ -33,6 +33,10 @@ InclusiveSpectra::InclusiveSpectra( XmlConfig * config, string np){
      * Setup the ana cuts
      */
     cutVertexZ = new ConfigRange( cfg, np + "eventCuts.vertexZ", -200, 200 );
+    cutVertexR = new ConfigRange( cfg, np + "eventCuts.vertexR", 0, 10 );
+    cutVertexROffset = new ConfigPoint( cfg, np + "eventCuts.vertexROffset", 0.0, 0.0 );
+
+    cutNTZero = new ConfigRange( cfg, np + "eventCuts.nTZero", 0, 10000 );
 
 }
 /**
@@ -45,6 +49,12 @@ InclusiveSpectra::~InclusiveSpectra(){
 	lg->info(__FUNCTION__) << endl;
 	delete lg;
 }
+
+
+void InclusiveSpectra::refMultLoop() {
+
+}
+
 
 void InclusiveSpectra::eventLoop(){
 	lg->info(__FUNCTION__) << endl;
@@ -108,8 +118,26 @@ bool InclusiveSpectra::eventCut(){
 
 
 	double z = pico->eventVertexZ();
+	double x = pico->eventVertexX() + cutVertexROffset->x;
+	double y = pico->eventVertexY() + cutVertexROffset->y;
+	double r = TMath::Sqrt( x*x + y*y );
 
-	if ( z < cutVertexZ.min || z > cutVertexZ.max );
+	int nT0 = pico->eventNTZero();
+
+	book->fill( "vertexZ", z);
+	book->fill( "vertexR", r);
+	
+	if ( z < cutVertexZ->min || z > cutVertexZ->max )
+		return false;
+
+	book->fill( "vertexZ_zCut", z);
+	book->fill( "vertexR_zCut", r);
+	if ( r < cutVertexR->min || r > cutVertexR->max )
+		return false;
+	book->fill( "vertexZ_r_zCut", z);
+	book->fill( "vertexR_r_zCut", r);
+
+	if ( nT0 < cutNTZero->min || nT0 > cutNTZero->max )
 		return false;
 
 	return true;
@@ -117,6 +145,10 @@ bool InclusiveSpectra::eventCut(){
 
 bool InclusiveSpectra::trackCut( Int_t iTrack ){
 
+	double eta = pico->trackEta( iTrack );
+
+	if ( eta > .2 )
+		return false;
 
 	return true;
 }

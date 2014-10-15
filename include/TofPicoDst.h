@@ -206,6 +206,16 @@ public :
    virtual Double_t trackDcaY( Int_t iHit ){ return dcaY[iHit]; }
    virtual Double_t trackDcaZ( Int_t iHit ){ return dcaZ[iHit]; }
 
+   virtual Double_t eventNTZero() { return nTZero; }
+   virtual Double_t eventRefMult() { return refMult; }
+   virtual Double_t eventRefMultPos() { return refMultPos; }
+   virtual Double_t eventRefMultNeg() { return refMultNeg; }
+
+   virtual Double_t trackNHits( Int_t iHit ) { return nHits[ iHit ]; }
+   virtual Double_t trackNHitsDedx( Int_t iHit ){return nHitsDedx[ iHit ]; }
+   virtual Double_t trackNHitsFit( Int_t iHit ){ return nHitsFit[ iHit ]; }
+   virtual Double_t trackNHitsPossible( Int_t iHit ) { return nHitsPossible[ iHit ]; }
+
 
 };
 

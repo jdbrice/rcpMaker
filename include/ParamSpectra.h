@@ -43,11 +43,11 @@ protected:
 	virtual void analyzeTrack( Int_t iTrack );
 	virtual void preLoop();
 
-	string pid( string type, double p, double dedx, double tof );
-	string pidTof( double p, double tof );
-	string pidDedx( double p, double dedx );
-	string pidSquare( double p, double dedx, double tof );
-	string pidEllipse( double p, double dedx, double tof );
+	vector<string> pid( string type, double p, double dedx, double tof );
+	vector<string> pidTof( double p, double tof );
+	vector<string> pidDedx( double p, double dedx );
+	vector<string> pidSquare( double p, double dedx, double tof );
+	vector<string> pidEllipse( double p, double dedx, double tof );
 
 	
 };

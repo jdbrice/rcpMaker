@@ -10,7 +10,7 @@ public:
 	virtual TTree * getTree() = 0;
 	virtual Int_t    GetEntry(Long64_t entry) = 0;
 
-
+	
 	virtual Int_t numTofTracks() = 0;
 	/**
 	 * Kinematics
@@ -40,9 +40,19 @@ public:
 	virtual Double_t eventVertexY(  ) = 0;
 	virtual Double_t eventVertexZ(  ) = 0;
 
+	virtual Double_t eventNTZero(  ) = 0;
+	virtual Double_t eventRefMult(  ) = 0;
+	virtual Double_t eventRefMultPos(  ) = 0;
+	virtual Double_t eventRefMultNeg(  ) = 0;
+
 	virtual Double_t trackDcaX( Int_t iHit ) = 0;
 	virtual Double_t trackDcaY( Int_t iHit ) = 0;
 	virtual Double_t trackDcaZ( Int_t iHit ) = 0;
+
+	virtual Double_t trackNHits( Int_t iHit ) = 0;
+	virtual Double_t trackNHitsDedx( Int_t iHit ) = 0;
+	virtual Double_t trackNHitsFit( Int_t iHit ) = 0;
+	virtual Double_t trackNHitsPossible( Int_t iHit ) = 0;
 
 
 };

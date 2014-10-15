@@ -11,6 +11,7 @@
 #include "LoggerConfig.h"
 #include "HistoBook.h"
 #include "ConfigRange.h"
+ #include "ConfigPoint.h"
 using namespace jdb;
 
 /**
@@ -45,6 +46,9 @@ protected:
 	 * Analysis cut Alias
 	 */
 	ConfigRange *cutVertexZ;
+	ConfigRange *cutVertexR;
+	ConfigPoint *cutVertexROffset;
+	ConfigRange *cutNTZero;
 
 
 public:
@@ -57,6 +61,11 @@ public:
 
 protected:
 
+	/**
+	 * Loop for preview RefMult definitions
+	 */
+	void refMultLoop();
+	
 	/**
 	 * Loops the tree events and calculates the non-linear
 	 * recentering for use with unbinned methods

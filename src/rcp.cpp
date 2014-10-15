@@ -7,6 +7,7 @@ using namespace jdb;
 #include <iostream>
 #include "InclusiveSpectra.h"
 #include "ParamSpectra.h"
+#include "RefMultHelper.h"
 
 #include <exception>
 
@@ -16,11 +17,18 @@ int main( int argc, char* argv[] ) {
 
 		try{
 			XmlConfig config( argv[ 1 ] );
-			config.report();
+			//config.report();
 
-			ParamSpectra ps( &config, "ParamSpectra." );
+			string job = config.getString( "jobType" );
 
-			ps.make();
+			if ( "RefMultHelper" == job ){
+				RefMultHelper rmh( &config, "RefMultHelper." );
+				rmh.eventLoop();
+			}
+
+			//ParamSpectra ps( &config, "ParamSpectra." );
+
+			//ps.make();
 		} catch ( exception &e ){
 			cout << e.what() << endl;
 		}
