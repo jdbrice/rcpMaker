@@ -49,6 +49,7 @@ protected:
 	ConfigRange *cutVertexR;
 	ConfigPoint *cutVertexROffset;
 	ConfigRange *cutNTZero;
+	vector<int> cutTriggers;
 
 
 public:

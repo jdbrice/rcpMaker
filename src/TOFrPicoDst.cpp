@@ -127,6 +127,9 @@ void TOFrPicoDst::Init(TTree *tree)
    fCurrent = -1;
    fChain->SetMakeClass(1);
 
+   fChain->SetBranchAddress("nTriggers", &nTriggers, &b_nTriggers);
+   fChain->SetBranchAddress("triggerIds", &triggerIds, &b_triggerIds);
+
    fChain->SetBranchAddress("run", &run, &b_run);
    fChain->SetBranchAddress("evt", &evt, &b_evt);
    fChain->SetBranchAddress("refMult", &refMult, &b_refMult);

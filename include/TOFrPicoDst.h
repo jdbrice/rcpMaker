@@ -20,6 +20,8 @@ public :
    // Declaration of leave types
    Int_t           run;
    Int_t           evt;
+   Int_t          nTriggers;
+   UInt_t         triggerIds[ 400 ];
    Int_t             refMult, refMultNeg, refMultPos;
 
    Float_t         vertexX;
@@ -92,6 +94,8 @@ public :
    Int_t           Ieast;//added
 
    // List of branches
+   TBranch        *b_nTriggers;   //!
+   TBranch        *b_triggerIds;   //!
    TBranch        *b_run;   //!
    TBranch        *b_evt;   //!
    TBranch        *b_refMult, *b_refMultNeg, *b_refMultPos;

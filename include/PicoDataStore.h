@@ -2,6 +2,7 @@
 #define PICO_DATA_STORE_H
 
 #include "TTree.h"
+#include <vector>
 
 class PicoDataStore
 {
@@ -11,6 +12,12 @@ public:
 	virtual Int_t    GetEntry(Long64_t entry) = 0;
 
 	
+	/**
+	 * Triggers
+	 */
+	virtual Int_t numEventTriggers() = 0;
+	virtual std::vector<UInt_t> eventTriggerIds() = 0;
+
 	virtual Int_t numTofTracks() = 0;
 	/**
 	 * Kinematics

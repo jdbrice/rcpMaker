@@ -20,6 +20,8 @@ public :
    Int_t           fCurrent; //!current Tree number in a TChain
 
    // Declaration of leave types
+   Int_t          nTriggers;
+   UInt_t         triggerIds[ 400 ];
    Int_t           run;
    Int_t           evt;
    Int_t             refMult, refMultNeg, refMultPos;
@@ -94,6 +96,8 @@ public :
    Int_t           Ieast;//added
 
    // List of branches
+   TBranch        *b_nTriggers;   //!
+   TBranch        *b_triggerIds;   //!
    TBranch        *b_run;   //!
    TBranch        *b_evt;   //!
    TBranch        *b_refMult, *b_refMultNeg, *b_refMultPos;
@@ -215,6 +219,9 @@ public :
    virtual Double_t trackNHitsDedx( Int_t iHit ){return nHitsDedx[ iHit ]; }
    virtual Double_t trackNHitsFit( Int_t iHit ){ return nHitsFit[ iHit ]; }
    virtual Double_t trackNHitsPossible( Int_t iHit ) { return nHitsPossible[ iHit ]; }
+
+   virtual Int_t numEventTriggers() { return nTriggers; }
+   virtual std::vector<UInt_t> eventTriggerIds() { std::vector<UInt_t> v( std::begin(triggerIds), std::end(triggerIds) ); return v;}
 
 
 };

@@ -37,6 +37,7 @@ InclusiveSpectra::InclusiveSpectra( XmlConfig * config, string np){
     cutVertexROffset = new ConfigPoint( cfg, np + "eventCuts.vertexROffset", 0.0, 0.0 );
 
     cutNTZero = new ConfigRange( cfg, np + "eventCuts.nTZero", 0, 10000 );
+    cutTriggers = cfg->getIntVector( np + "eventCuts.triggers" );
 
 }
 /**
@@ -116,6 +117,15 @@ void InclusiveSpectra::analyzeTrack( Int_t iTrack ){
 
 bool InclusiveSpectra::eventCut(){
 
+	vector<UInt_t> triggerIds = pico->eventTriggerIds();
+	//440005, 440015
+	bool findTrigger = false;
+	for ( int iTrig = 0; iTrig < cutTriggers.size(); iTrig++ ){
+		if ( triggerIds.end() != find( triggerIds.begin(), triggerIds.end(), (UInt_t)cutTriggers[ iTrig ] ) )
+			findTrigger = true;
+	}
+	if ( !findTrigger )
+		return false;
 
 	double z = pico->eventVertexZ();
 	double x = pico->eventVertexX() + cutVertexROffset->x;

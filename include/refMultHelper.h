@@ -24,9 +24,13 @@ protected:
 
 	TofPicoDst * pico;
 
+	ConfigRange * central;
+	ConfigRange * peripheral;
+
 	ConfigRange * cutVertexZ;
 	ConfigRange * cutVertexR;
 	ConfigPoint * cutVertexROffset;
+	ConfigRange * cutNTZero;
 
 public:
 	RefMultHelper(XmlConfig * config, string np ){
@@ -55,7 +59,10 @@ public:
 	    cutVertexZ = new ConfigRange( cfg, np + "eventCuts.vertexZ", -200, 200 );
 	    cutVertexR = new ConfigRange( cfg, np + "eventCuts.vertexR", 0, 10 );
 	    cutVertexROffset = new ConfigPoint( cfg, np + "eventCuts.vertexROffset", 0.0, 0.0 );
+	    cutNTZero = new ConfigRange( cfg, np + "eventCuts.nTZero", 0, 10000 );
 
+	    central = new ConfigRange( cfg, np + "central", 0.0, 0.05 );
+	    peripheral = new ConfigRange( cfg, np + "peripheral", 0.0, 0.05 );
 
 	}
 	~RefMultHelper(){
@@ -97,8 +104,19 @@ public:
 	   
 		} // end loop on events for refMult
 
-		lg->info(__FUNCTION__) << "Total Events Kept: " << totalEventsKept << endl;
-	
+		lg->info(__FUNCTION__) << "Total Events Kept: " << totalEventsKept << endl << endl;
+		lg->info(__FUNCTION__) << "Generating RefMult Centrality Cuts" << endl;
+
+
+		double cutCentralMin = findCut( central->min, book->get( "refMult" ) );
+		double cutCentralMax = findCut( central->max, book->get( "refMult" ) );
+
+		double cutPeripheralMin = findCut( peripheral->min, book->get( "refMult" ) );
+		double cutPeripheralMax = findCut( peripheral->max, book->get( "refMult" ) );
+
+		lg->info(__FUNCTION__) << "Central : ( " << cutCentralMax << ", " << cutCentralMin << " ) " << endl;
+		lg->info(__FUNCTION__) << "Peripheral : ( " << cutPeripheralMax << ", " << cutPeripheralMin << " ) " << endl;
+
 	}
 
 	bool keepEvent() {
@@ -122,6 +140,9 @@ public:
 			return false;
 		book->fill( "vertexZ_r_zCut", z);
 		book->fill( "vertexR_r_zCut", r);
+
+		if ( nT0 < cutNTZero->min || nT0 > cutNTZero->max )
+			return false;
 
 		return true;
 	}
