@@ -245,6 +245,9 @@ namespace jdb{
 			if ( "1D" == type ){
 
 				if ( config->nodeExists( nodeName + ":xBins" ) ){
+					if ( !config->nodeExists( config->getString( nodeName + ":xBins" ) ) )
+						log->warn(__FUNCTION__) << "Invalid Bins specified in config" << endl;
+
 					HistoBins hb( config, config->getString( nodeName + ":xBins" ) );
 					make1D( hName, config->getString( nodeName + ":title", hName ),
 						hb.size() - 1, hb.bins.data() );
@@ -255,6 +258,8 @@ namespace jdb{
 				}
 
 			} else if ( "2D" == type ){
+
+
 				if ( config->nodeExists( nodeName + ":xBins" ) && config->nodeExists( nodeName + ":yBins" ) ){
 
 					if ( !config->nodeExists( config->getString( nodeName + ":xBins" ) ) )
@@ -262,12 +267,12 @@ namespace jdb{
 					if ( !config->nodeExists( config->getString( nodeName + ":yBins" ) ) )
 						log->warn(__FUNCTION__) << "Invalid Bins specified in config" << endl;
 
-					vector<double> xBins = config->getDoubleVector( config->getString( nodeName + ":xBins" ) );
-					vector<double> yBins = config->getDoubleVector( config->getString( nodeName + ":yBins" ) );
+					HistoBins xBins( config, config->getString( nodeName + ":xBins" ) );
+					HistoBins yBins( config, config->getString( nodeName + ":xBins" ) );
 
 					make2D( hName, config->getString( nodeName + ":title", hName ),
-							xBins.size() - 1, xBins.data(),
-							yBins.size() - 1, yBins.data() );
+							xBins.size() - 1, xBins.bins.data(),
+							yBins.size() - 1, yBins.bins.data() );
 
 				} else if ( config->nodeExists( nodeName + ":xBins" ) ){
 					if ( !config->nodeExists( config->getString( nodeName + ":xBins" ) ) )
