@@ -94,6 +94,7 @@ void InclusiveSpectra::eventLoop(){
 	/**
 	 * Make the Histograms
 	 */
+	book->cd();
 	lg->info(__FUNCTION__) << "Making all histograms in : " << nodePath + "histograms" << endl;
 	book->makeAll( nodePath + "histograms" );
 

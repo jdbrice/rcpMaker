@@ -62,11 +62,16 @@ void PidPhaseSpace::analyzeTrack( int iTrack ){
 	double tof=psr->rTof(centerSpecies, pico->trackBeta(iTrack), p );
 	double dedx=psr->rDedx(centerSpecies, pico->trackDedx(iTrack), p );
 
-	book->fill( "trBeta", tof )
+	book->fill( "trBeta", p, tof );
+
+	double tofNL=psr->nlTof(centerSpecies, pico->trackBeta(iTrack), p, avgP );
+	double dedxNL=psr->nlDedx(centerSpecies, pico->trackDedx(iTrack), p, avgP );
+
+	book->fill( "nlBeta", p, tofNL );
 
 	if ( "nonlinear" == psrMethod ){
-		tof=psr->nlTof(centerSpecies, pico->trackBeta(iTrack), p, avgP );
-		dedx=psr->nlDedx(centerSpecies, pico->trackDedx(iTrack), p, avgP );
+		tof = tofNL;
+		dedx = dedxNL;
 	}
 
 	book->cd( "dedx_tof" );
