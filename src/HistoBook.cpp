@@ -268,35 +268,39 @@ namespace jdb{
 						log->warn(__FUNCTION__) << "Invalid Bins specified in config" << endl;
 
 					HistoBins xBins( config, config->getString( nodeName + ":xBins" ) );
-					HistoBins yBins( config, config->getString( nodeName + ":xBins" ) );
+					HistoBins yBins( config, config->getString( nodeName + ":yBins" ) );
 
 					make2D( hName, config->getString( nodeName + ":title", hName ),
-							xBins.size() - 1, xBins.bins.data(),
-							yBins.size() - 1, yBins.bins.data() );
+							xBins.bins.size() - 1, xBins.bins.data(),
+							yBins.bins.size() - 1, yBins.bins.data() );
 
 				} else if ( config->nodeExists( nodeName + ":xBins" ) ){
 					if ( !config->nodeExists( config->getString( nodeName + ":xBins" ) ) )
 						log->warn(__FUNCTION__) << "Invalid Bins specified in config" << endl;
-					vector<double> xBins = config->getDoubleVector( config->getString( nodeName + ":xBins" ) );
+
+					HistoBins xBins( config, config->getString( nodeName + ":xBins" ) );
+
 					int nBinsY = config->getInt( nodeName + ":nBinsY", 1 );
 					double y1 = config->getDouble( nodeName + ":y1", 0 );
 					double y2 = config->getDouble( nodeName + ":y2", 0 );
 
 					make2D( hName, config->getString( nodeName + ":title", hName ),
-							xBins.size() - 1, xBins.data(), nBinsY, y1, y2 );
+							xBins.bins.size() - 1, xBins.bins.data(), nBinsY, y1, y2 );
 
 				} else if ( config->nodeExists( nodeName + ":yBins" ) ){
 					if ( !config->nodeExists( config->getString( nodeName + ":yBins" ) ) )
 						log->warn(__FUNCTION__) << "Invalid Bins specified in config" << endl;
 
-					vector<double> yBins = config->getDoubleVector( config->getString( nodeName + ":yBins" ) );
+					HistoBins yBins( config, config->getString( nodeName + ":yBins" ) );
+					
 					int nBinsX = config->getInt( nodeName + ":nBinsX", 1 );
 					double x1 = config->getDouble( nodeName + ":x1", 0 );
 					double x2 = config->getDouble( nodeName + ":x2", 0 );
 
 					make2D( hName, config->getString( nodeName + ":title", hName ),
-							nBinsX, x1, x2, yBins.size() - 1, yBins.data() );
+							nBinsX, x1, x2, yBins.bins.size() - 1, yBins.bins.data() );
 				} else {
+					
 					make2D( hName, config->getString( nodeName + ":title", hName ),
 						config->getInt( nodeName + ":nBinsX", 1 ), config->getDouble( nodeName + ":x1", 0 ),
 						config->getDouble( nodeName + ":x2", 1 ),
