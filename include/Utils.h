@@ -33,44 +33,39 @@ namespace jdb{
 	/**
 	 * String utilities that need >= c++ 2011
 	 */
-	
+	inline std::string ts( int i, int len = -1){
+		if ( len <= -1 )
+			return (to_string( (long long int) i));
+		else
+			return (to_string( (long long int) i)).substr( 0, len );
+	}
+	inline std::string ts( double d, int len = -1){
+		if ( len <= -1 )
+			return to_string( (long double) d);
+		else 
+			return (to_string( (long double) d)).substr( 0, len );
+	}
+	inline std::string ts( float f, int len  = -1){
+		return ts( (double) f, len );
+	}
+	inline std::string ts( uint u, int len  = -1){
+		if ( len <= -1 )
+			return to_string( (long long unsigned int) u);
+		else 
+			return (to_string( (long long unsigned int) u)).substr( 0, len );
+	}
+
 	// inefficient but works, TODO : think of better way
-	inline std::string trim0( string in ) {
+	inline std::string trimTrailingZeros( string in ) {
 		string r = in;
 		while ( r[ r.size() - 1 ] == '0' ){
 			r = r.substr( 0, r.size() - 1 );
 		}
 		return r;
 	}
-	inline std::string ts( int i, int len = -1){
-		string r = "";
-		if ( len <= -1 )
-			r = (to_string( (long long int) i));
-		else
-			r =  (to_string( (long long int) i)).substr( 0, len );
-		return trim0( r );
+	inline std::string dts( double d ){
+		return trimTrailingZeros( ts( d ) );
 	}
-	inline std::string ts( double d, int len = -1){
-		string r = "";
-		if ( len <= -1 )
-			r = to_string( (long double) d);
-		else 
-			r = (to_string( (long double) d)).substr( 0, len );
-		return trim0( r );
-	}
-	inline std::string ts( float f, int len  = -1){
-		return ts( (double) f, len );
-	}
-	inline std::string ts( uint u, int len  = -1){
-		string r = "";
-		if ( len <= -1 )
-			r = to_string( (long long unsigned int) u);
-		else 
-			r = (to_string( (long long unsigned int) u)).substr( 0, len );
-		return trim0( r );
-	}
-
-	
 
 	
 	/**
