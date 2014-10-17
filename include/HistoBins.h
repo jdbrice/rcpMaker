@@ -2,6 +2,7 @@
 #define HISTOGRAM_BINS
 
 #include "XmlConfig.h"
+#include "Utils.h"
 
 namespace jdb{
 	class HistoBins
@@ -85,6 +86,9 @@ namespace jdb{
 		int size() {
 			return bins.size();
 		}
+		int nBins(){
+			return bins.size() - 1;
+		}
 
 		/**
 		 * Constructor for fixed width bins
@@ -103,48 +107,42 @@ namespace jdb{
 		/**
 		 * Constructor from config
 		 */
-		HistoBins( XmlConfig * config, string nodePath ){
+		HistoBins( XmlConfig * config, string nodePath, string mod = "" ){
 
 			if ( config->nodeExists( nodePath ) && config->getDoubleVector( nodePath ).size() >= 2 ){
 				bins = config->getDoubleVector( nodePath );
-			} else if (
-						config->nodeExists( nodePath + ":width" ) &&
-						config->nodeExists( nodePath + ":min" ) &&
-						config->nodeExists( nodePath + ":max" )
-						) {
-				
-				// build the bins from the range and width
-				bins = makeFixedWidthBins( 
-					config->getDouble( nodePath + ":width" ), 
-					config->getDouble( nodePath + ":min" ), 
-					config->getDouble( nodePath + ":max" ) 
-				);
+				min = bins[ 0 ];
+				max = bins[ nBins() ];
+				width = -1;
 				return;
-			} else if (
-						config->nodeExists( nodePath + ":n" ) &&
-						config->nodeExists( nodePath + ":min" ) &&
-						config->nodeExists( nodePath + ":max" )
-						) {
-				
-				// build the bins from the range and width
-				bins = makeNBins( 
-					config->getInt( nodePath + ":n" ), 
-					config->getDouble( nodePath + ":min" ), 
-					config->getDouble( nodePath + ":max" ) 
-				);
+			}  
+
+			string wTag 	= ":width" + mod;
+			string minTag 	= ":min" + mod;
+			string maxTag 	= ":max" + mod;
+			
+
+			if ( config->nodeExists( nodePath + wTag ) && config->nodeExists( nodePath + minTag ) && config->nodeExists( nodePath + maxTag ) ) {
+
+				min = config->getDouble( nodePath + minTag );
+				max = config->getDouble( nodePath + maxTag );
+				width = config->getDouble( nodePath + wTag );
+
+				bins = makeFixedWidthBins( width, min, max );
 				return;
 			}
+		
+			string nTag 	= ":nBins" + mod;
+			if ( config->nodeExists( nodePath + nTag ) && config->nodeExists( nodePath + minTag ) && config->nodeExists( nodePath + maxTag ) ) {
 
-			vector<string> nTag = { ":n", ":nBinsX", ":nBinsY", ":nBinsZ" };
-			vector<string> minTag = {":min", ":x1", ":y1", ":z1" };
-			vector<string> maxTag = {":max", ":x2", ":y2", ":z2" };
+				min = config->getDouble( nodePath + minTag );
+				max = config->getDouble( nodePath + maxTag );
+				double n = config->getInt( nodePath + nTag );
+				width = (max - min ) / (double)n;
 
-			for (int i = 0; i < nTag.size(); i++ ){
-				if ( config->nodeExists( nodePath + nTag[ i ] ) && config->nodeExists( nodePath + minTag[ i ] ) && config->nodeExists( nodePath + maxTag[ i ] ) ) {
-					bins = makeNBins( config->getInt( nodePath + nTag[ i ] ), config->getDouble( nodePath + minTag[ i ] ), config->getDouble( nodePath + maxTag[i] ) );
-					return;
-				}
-			} 
+				bins = makeNBins( n, min, max );
+				return;
+			}
 
 		}
 
@@ -152,11 +150,31 @@ namespace jdb{
 			return bins[ nIndex ];
 		}
 
+		string toString() {
+			if ( width > 0 ) 
+				return "< " + ts( nBins() ) + " bins ( " + ts(min) + " -> " + ts(max) + " )  >";
+			else {
+				string ba = "< " + ts( nBins() ) + " bins { ";
+
+				for ( int i = 0; i < bins.size(); i++  ){
+					if ( i+1  < bins.size() )
+						ba += ("( " + ts( bins[i] ) +" -> " + ts( bins[i+1] ) + " )" );
+					if ( i+3  < bins.size() )
+						ba += ", ";
+				}
+				ba += " } >";
+				return ba;
+			}
+
+			return "";
+		}
 
 
 		~HistoBins(){}
 		
 		vector<double> bins;
+		double width;
+		double min, max;
 
 	};
 }

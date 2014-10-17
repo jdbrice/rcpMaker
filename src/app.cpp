@@ -75,7 +75,12 @@ int unitTest_HistoBook( XmlConfig * config ){
 	for ( double i = -1; i< 12; i += .5 ){
 		cout << " value " << i << " is in bin [ " << HistoBook::findBin( bins2, i ) << " ] " << endl; 
 	}
-	
+
+	// HistoBins helper class
+	HistoBins hbX( config, "h.histo1", "X" );
+	logger->info(__FUNCTION__) << hbX.toString() << endl;
+	HistoBins hbY( config, "h.histo1", "Y" );
+	logger->info(__FUNCTION__) << hbY.toString() << endl;
 
 
 	delete book;
@@ -103,6 +108,8 @@ int main( int argc, char* argv[] ) {
 	   	logger->error() << " this will show if the log level is at least error " << endl;
 		logger->info(__FUNCTION__) << " this will show if the log level is at least info and will display the calling function name " << endl;
 		
+		logger->info( __FUNCTION__ ) << "trimming trailing 0s from 0.100000 : " << trim0( "0.100000" ) << endl; 
+
 		unitTest_HistoBook( &config );
 		
 	   
