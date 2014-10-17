@@ -50,12 +50,14 @@ void PidPhaseSpace::analyzeTrack( int iTrack ){
 	double eta = pico->trackEta( iTrack );
 
 	int ptBin = binsPt->findBin( pt );
-	int etaBin = binsEta->findBin( eta );
+	int etaBin = binsEta->findBin( TMath::Abs( eta ) );
 
 	if ( ptBin < 0 || etaBin < 0)
 		return;
 
+	book->fill( "eta", eta );
 	double avgP = ( binsPt->bins[ ptBin ] + binsPt->bins[ ptBin+1] ) / 2.0;
+	//lg->info(__FUNCTION__) << "Pt: " << binsPt->bins[ ptBin ] << " -> " << binsPt->bins[ ptBin+1 ] <<  ", <P> = " << avgP << endl;
 
 	string hName = speciesName( centerSpecies, 0, ptBin, etaBin );
 
@@ -87,8 +89,10 @@ void PidPhaseSpace::preparePhaseSpaceHistograms( string plc){
 	lg->info(__FUNCTION__) << "Making Histograms with centering spceies: " << plc << endl;
 
 	/**
-	 * Make the dedx + tof binning width for dynamic bins
+	 * Make the dedx + tof binning 
+	 * Only the bin width is used for dynamic bins
 	 */
+	
 	dedxBinWidth = cfg->getDouble( "binning.dedxBinWidth", 0.01 );
 	tofBinWidth = cfg->getDouble( "binning.tofBinWidth", 0.002 );
 

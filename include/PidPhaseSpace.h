@@ -12,6 +12,8 @@ protected:
 	/**
 	 * Binning
 	 */
+	HistoBins* binsTof;
+	HistoBins* binsDedx;
 	HistoBins* binsPt;
 	HistoBins* binsEta;
 	HistoBins* binsCharge;

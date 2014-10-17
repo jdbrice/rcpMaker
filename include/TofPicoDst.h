@@ -192,15 +192,15 @@ public :
     * Implement the PicoDataStore Interface
     */
    virtual TTree * getTree() { return fChain; }
-   virtual Int_t numTofTracks();
-   virtual Double_t trackPt( Int_t iHit );
-   virtual Double_t trackP( Int_t iHit );
-   virtual Double_t trackEta( Int_t iHit );
-   virtual Double_t trackDedx( Int_t iHit );
-   virtual Double_t trackPathLength( Int_t iHit );
-   virtual Double_t trackTof( Int_t iHit );
-   virtual Double_t trackBeta( Int_t iHit );
-   virtual Int_t trackCharge( Int_t iHit );
+   virtual Int_t numTofTracks(){ return nTofHits; }
+   virtual Double_t trackPt( Int_t iHit ) { return pt[ iHit ]; }
+   virtual Double_t trackP( Int_t iHit ){ return p[ iHit ]; }
+   virtual Double_t trackEta( Int_t iHit ) { return eta[ iHit ]; }
+   virtual Double_t trackDedx( Int_t iHit ){ return dedx[ iHit ]; }
+   virtual Double_t trackPathLength( Int_t iHit ){ return length[ iHit ]; }
+   virtual Double_t trackTof( Int_t iHit ){ return tof[ iHit ]; }
+   virtual Double_t trackBeta( Int_t iHit ){ return beta[ iHit ]; }
+   virtual Int_t trackCharge( Int_t iHit ){ return charge[ iHit ]; }
 
    virtual Double_t eventVertexX( ){ return vertexX; }
    virtual Double_t eventVertexY( ){ return vertexY; }

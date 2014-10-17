@@ -3,37 +3,12 @@
 using namespace std;
 
 
-/**
- * Implement the PicoDataStore Interface
- */
-Int_t TofPicoDst::numTofTracks(){
-   return nTofHits;
-}
-Double_t TofPicoDst::trackPt( Int_t iHit ){
-   return pt[ iHit ];
-}
-Double_t TofPicoDst::trackP( Int_t iHit ){
-   return p[ iHit ];
-}
-Double_t TofPicoDst::trackEta( Int_t iHit ){
-   return eta[ iHit ];
-}
 
-Double_t TofPicoDst::trackDedx( Int_t iHit ){
-   return dedx[ iHit ];
-}
-Double_t TofPicoDst::trackPathLength( Int_t iHit ){
-   return length[ iHit ];
-}
-Double_t TofPicoDst::trackTof( Int_t iHit ){
-   return tof[ iHit ];
-}
-Double_t TofPicoDst::trackBeta( Int_t iHit ){
-   return beta[ iHit ];
-}
-Int_t TofPicoDst::trackCharge( Int_t iHit ){
-   return charge[ iHit ];
-}
+
+
+
+
+
 
 
 

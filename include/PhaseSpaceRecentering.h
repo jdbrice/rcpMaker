@@ -58,6 +58,8 @@ public:
 			return kaonMass;
 		if ( "Pi" == pType )
 			return piMass;
+
+		cout << " UNKOWN plc : " << pType << endl; 
 		return -10.0;	
 	}
 	vector<string> otherSpecies( string center ){
@@ -173,7 +175,7 @@ public:
 		}
 
 		if ( 0 == n1 || 0 == d1){
-			//return dedx10 - muAvg;
+			return dedx10 - muAvg;
 		}
 
 		double nDedx = (n1/d1) - (muAvg);
@@ -210,7 +212,7 @@ public:
 		const double tof = 1.0 / beta;
 		
 		// mean for this species
-		//const double mu =  tofGen->mean( p, mass( centerSpecies ) );
+		const double mu =  tofGen->mean( p, mass( centerSpecies ) );
 		const double muAvg =  tofGen->mean( avgP, mass( centerSpecies ) );
 
 		double n1 = 0;
@@ -231,7 +233,7 @@ public:
 		}
 
 		if ( 0 == n1 || 0 == d1){
-			//return tof - muAvg;
+			return tof - muAvg;
 		}
 		
 		double nTof = (n1/d1) - ( muAvg );
