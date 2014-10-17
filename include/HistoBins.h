@@ -119,6 +119,7 @@ namespace jdb{
 					config->getDouble( nodePath + ":min" ), 
 					config->getDouble( nodePath + ":max" ) 
 				);
+				return;
 			} else if (
 						config->nodeExists( nodePath + ":n" ) &&
 						config->nodeExists( nodePath + ":min" ) &&
@@ -131,9 +132,26 @@ namespace jdb{
 					config->getDouble( nodePath + ":min" ), 
 					config->getDouble( nodePath + ":max" ) 
 				);
+				return;
 			}
 
+			vector<string> nTag = { ":n", ":nBinsX", ":nBinsY", ":nBinsZ" };
+			vector<string> minTag = {":min", ":x1", ":y1", ":z1" };
+			vector<string> maxTag = {":max", ":x2", ":y2", ":z2" };
+
+			for (int i = 0; i < nTag.size(); i++ ){
+				if ( config->nodeExists( nodePath + nTag[ i ] ) && config->nodeExists( nodePath + minTag[ i ] ) && config->nodeExists( nodePath + maxTag[ i ] ) ) {
+					bins = makeNBins( config->getInt( nodePath + nTag[ i ] ), config->getDouble( nodePath + minTag[ i ] ), config->getDouble( nodePath + maxTag[i] ) );
+					return;
+				}
+			} 
+
 		}
+
+		double& operator[] ( const int nIndex ){
+			return bins[ nIndex ];
+		}
+
 
 
 		~HistoBins(){}
