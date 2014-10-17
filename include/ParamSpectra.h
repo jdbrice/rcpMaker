@@ -42,6 +42,9 @@ protected:
 
 	virtual void analyzeTrack( Int_t iTrack );
 	virtual void preLoop();
+	virtual string histoForCentrality( string cent, string pType, string pidCut )
+			{ return "pt_" + pidCut + "_" + pType + "_" + cent; }
+	virtual void makeCentralityHistos();
 
 	vector<string> pid( string type, double p, double dedx, double tof );
 	vector<string> pidTof( double p, double tof );

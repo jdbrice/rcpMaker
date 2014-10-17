@@ -11,7 +11,8 @@
 #include "LoggerConfig.h"
 #include "HistoBook.h"
 #include "ConfigRange.h"
- #include "ConfigPoint.h"
+#include "ConfigPoint.h"
+#include "Reporter.h"
 using namespace jdb;
 
 /**
@@ -37,7 +38,7 @@ protected:
 	string nodePath;
 
 	HistoBook * book;
-
+	Reporter * reporter;
 
 	TChain * chain;
 	PicoDataStore * pico;
@@ -50,6 +51,8 @@ protected:
 	ConfigPoint *cutVertexROffset;
 	ConfigRange *cutNTZero;
 	vector<int> cutTriggers;
+	vector<string> centrals;
+	map< string, ConfigRange* > cutCentrality;
 
 
 public:
@@ -63,10 +66,12 @@ public:
 protected:
 
 	/**
-	 * Loop for preview RefMult definitions
+	 * Makes pt histograms for each centrality
 	 */
-	void refMultLoop();
-	
+	virtual void makeCentralityHistos();
+	virtual string histoForCentrality( string centralityCut ){
+		return ("pt_" + centralityCut );
+	}
 	/**
 	 * Loops the tree events and calculates the non-linear
 	 * recentering for use with unbinned methods
@@ -76,7 +81,7 @@ protected:
 	/**
 	 * Before the event loop starts - for subclass init
 	 */
-	virtual void preLoop(){}
+	virtual void preLoop();
 
 	/**
 	 * After the event loop starts - for subclass reporting
@@ -103,6 +108,8 @@ protected:
 	 */
 	virtual bool trackCut( Int_t iTrack );
 	
+
+
 };
 
 

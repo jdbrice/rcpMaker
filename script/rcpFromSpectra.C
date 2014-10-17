@@ -1,0 +1,36 @@
+
+
+void rcpFromSpectra( string fname = "inclusiveSpectra.root", string bName = "pt_" ){
+
+	TCanvas * c = new TCanvas( "c", "R_{CP}", 800, 600 );
+	TFile * f = new TFile( fname.c_str(), "READ" );
+
+	string cName = bName + "0to5";
+	string pName = bName + "60to80";
+	TH1D * central = (TH1D*)f->Get( cName.c_str() );
+	TH1D * per = (TH1D*)f->Get( pName.c_str() );
+
+
+	c->Divide( 2, 1 );
+	c->cd(1 );
+	central->Scale( 19 );
+	per->Scale( 790 );
+
+	per->SetTitle( "0%-5% (Blue), 60%-80% (Red)" );
+	per->Sumw2();
+	central->Sumw2();
+	per->Draw( "pe" );
+	central->Draw( "same pe");
+	per->SetLineColor( kRed );
+	
+
+	gPad->SetLogy(1);
+
+	c->cd(2 );
+	TH1D* rcp = (TH1D*)central->Clone( "ratio" );
+	rcp->SetTitle( "0%-5% / 60%-80% " );
+	rcp->Divide( per );
+
+	rcp->Draw();
+
+}

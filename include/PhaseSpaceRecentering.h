@@ -173,7 +173,7 @@ public:
 		}
 
 		if ( 0 == n1 || 0 == d1){
-			return dedx10 - muAvg;
+			//return dedx10 - muAvg;
 		}
 
 		double nDedx = (n1/d1) - (muAvg);
@@ -213,8 +213,6 @@ public:
 		//const double mu =  tofGen->mean( p, mass( centerSpecies ) );
 		const double muAvg =  tofGen->mean( avgP, mass( centerSpecies ) );
 
-		const vector< string > species = { "K", "P", "Pi" };
-
 		double n1 = 0;
 		double d1 = 0;
 
@@ -233,7 +231,7 @@ public:
 		}
 
 		if ( 0 == n1 || 0 == d1){
-			return tof - muAvg;
+			//return tof - muAvg;
 		}
 		
 		double nTof = (n1/d1) - ( muAvg );

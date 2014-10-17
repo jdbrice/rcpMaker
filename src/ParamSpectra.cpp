@@ -43,15 +43,33 @@ ParamSpectra::ParamSpectra( XmlConfig * config, string np)
 	
 	cuts = { TOF_CUT, DEDX_CUT, SQUARE_CUT, ELLIPSE_CUT};
 
-
-
 	book->cd();
 
 }
 
+void ParamSpectra::makeCentralityHistos()  {
+	book->cd();
+	lg->info(__FUNCTION__) << endl;
+	/**
+	 * Make centrality ptHistos
+	 */
+	for (int iCut = 0; iCut < cuts.size(); iCut++ ){
+		for ( int iS = 0; iS < species.size(); iS ++ ){
+			string s = species[ iS ];
+			for ( int iC = 0; iC < centrals.size(); iC ++ ){
+				string hName = histoForCentrality( centrals[ iC ], s, cuts[ iCut ] );
+				lg->info( __FUNCTION__ ) << hName << endl;
+				book->clone( "ptBase", hName );
+			} //centralities
+		} // pid species
+	} // pid Cuts
+	
+}
+
 
 void ParamSpectra::preLoop(){
-
+	InclusiveSpectra::preLoop();
+	
 	lg->info(__FUNCTION__) << endl;
 	
 	for ( int iS = 0; iS < species.size(); iS ++ ){
@@ -90,6 +108,7 @@ void ParamSpectra::analyzeTrack( Int_t iTrack ){
 	double eta = pico->trackEta( iTrack );
 	double p = pico->trackP( iTrack );
 	int ptBin = binsPt->findBin( pt );
+	Int_t refMult = pico->eventRefMult();
 	
 	/**
 	 * For now skip other eta bins
@@ -121,12 +140,26 @@ void ParamSpectra::analyzeTrack( Int_t iTrack ){
 			if ( 0 == pidRes.size() )
 				book->fill( "pt", pt );
 			else {
-				for ( int iP = 0; iP < pidRes.size(); iP++ )
+				for ( int iP = 0; iP < pidRes.size(); iP++ ){
 					book->fill( cuts[ iC ] + "Pt" + pidRes[ iP ], pt );
-			}
-		} 
+
+
+					/**
+					 * Centrality cuts
+					 */
+					 for ( int iCent = 0; iCent < centrals.size(); iCent++ ){
+					 	string cent = centrals[ iCent ];
+					 	//lg->info( __FUNCTION__ ) << book->get( histoForCentrality( cent, "K" ) )<< endl;
+					 	string hName = histoForCentrality( cent, pidRes[ iP ], cuts[ iC ] );
+					 	if ( 	refMult >= cutCentrality[ cent ]->min && refMult <= cutCentrality[ cent ]->max ){
+					 		book->fill( hName, pt );
+					 	}
+					 } // loop on centrality cuts
+				} // loop in Pid results
+			} // Pid exists for this track
+		} // loop on cuts
 		
-	}
+	} // ptBin in range
 
 
 }
@@ -145,10 +178,10 @@ vector<string> ParamSpectra::pid( string type, double p, double dedx, double tof
 
 	if ( TOF_CUT == type )
 		return pidTof( p, tof );
-	//else if ( SQUARE_CUT == type )
-	//	return pidSquare( p, dedx, tof );
-	//else if ( ELLIPSE_CUT == type )
-	//	return pidEllipse( p, dedx, tof );
+	else if ( SQUARE_CUT == type )
+		return pidSquare( p, dedx, tof );
+	else if ( ELLIPSE_CUT == type )
+		return pidEllipse( p, dedx, tof );
 
 	return pidDedx( p, dedx );
 
@@ -162,11 +195,15 @@ vector<string> ParamSpectra::pidTof( double p, double tof ){
 		double tofMean = tofParams[ iS ]->mean( p, psr->mass( species[ iS ] ) ) ;
 		double tofSigma = tofParams[ iS ]->sigma( p, psr->mass( species[ iS ] ) );
 		
-		if ( 	tof >= tofMean - tofSigma * ( nSigmaTof / 2.0 ) && 
-				tof <= tofMean + tofSigma * ( nSigmaTof / 2.0 ) ){
+		if ( 	tof >= tofMean - tofSigma * nSigmaTof && tof <= tofMean + tofSigma * nSigmaTof ){
 			res.push_back( species[ iS ] );
 		}
-
+		/*double km = psr->tofGenerator()->mean( p, psr->mass( centerSpecies ) );
+		double m = psr->tofGenerator()->mean( p, psr->mass( species[ iS ] ) );
+		double rcTof = (tof + km  - m) / 0.0012;
+		if (  rcTof <= nSigmaTof && rcTof >= -nSigmaTof )
+			res.push_back( species[ iS ]);
+		*/
 	}
 
 	return res;
@@ -179,11 +216,9 @@ vector<string> ParamSpectra::pidDedx( double p, double dedx ){
 	for ( int iS = 0; iS < species.size(); iS ++ ){
 		
 		double rcDedx = psr->rDedx( species[ iS ], dedx, p );
-
 		double sigma = 0.06;
 
-		if ( 	rcDedx >= -sigma * ( nSigmaDedx / 2.0 ) && 
-				rcDedx <=  sigma * ( nSigmaDedx / 2.0 ) ){
+		if ( 	rcDedx >= -sigma * nSigmaDedx && rcDedx <=  sigma * nSigmaDedx ){
 			res.push_back( species[ iS ] );
 		}
 
@@ -192,35 +227,47 @@ vector<string> ParamSpectra::pidDedx( double p, double dedx ){
 	return res;
 
 }
-/*
-string ParamSpectra::pidSquare( double p, double dedx, double tof ){
 
-	string tofPid = pidTof( p, tof );
-	string dedxPid = pidDedx( p, dedx );
+vector<string> ParamSpectra::pidSquare( double p, double dedx, double tof ){
 
-	if ( tofPid == dedxPid )
-		return tofPid;
+	vector<string> tid = pidTof( p, tof );
+	vector<string> did = pidDedx( p, dedx );
 
-	return "";
+	vector<string> res;
+	for ( int i = 0; i < did.size(); i++ ){
+		if ( tid.end() != find( tid.begin(), tid.end(), did[i] ) )
+			res.push_back( did[ i ] ); 
+	} 
+	return res;
 }
 
-string ParamSpectra::pidEllipse( double p, double dedx, double tof ){
+vector<string> ParamSpectra::pidEllipse( double p, double dedx, double tof ){
 
-	vector<double> lDedx;
-	
+	vector<string> res;
 	for ( int iS = 0; iS < species.size(); iS ++ ){
 		
+		double tofMean = tofParams[ iS ]->mean( p, psr->mass( species[ iS ] ) ) ;
+		double tofSigma = tofParams[ iS ]->sigma( p, psr->mass( species[ iS ] ) );
+
 		double rcDedx = psr->rDedx( species[ iS ], dedx, p );
 		double sigma = 0.06;
+		double nsDedx = (rcDedx / sigma );
 
-		
+		double rcTof = (tof - tofMean);
+		double nsTof = (rcTof / tofSigma);
+
+		double cut = TMath::Power((nsTof / nSigmaTof), 2) + TMath::Power((nsDedx / nSigmaDedx), 2);
+		if ( cut <= 1 ){
+			//lg->info(__FUNCTION__) << species[ iS ] << " : " << cut << endl;
+			res.push_back( species[ iS ] );
+		}
+		//lg->info( __FUNCTION__ ) << "nSig dEdx = " << nSigDedx << ", nSig Tof = " << nSigTof << endl; 
 
 	}
 
-	return "";
+	return res;
 }
 
-*/
 
 
 

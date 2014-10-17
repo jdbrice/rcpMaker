@@ -8,6 +8,7 @@ using namespace jdb;
 #include "InclusiveSpectra.h"
 #include "ParamSpectra.h"
 #include "RefMultHelper.h"
+#include "PidPhaseSpace.h"
 
 #include <exception>
 
@@ -24,6 +25,15 @@ int main( int argc, char* argv[] ) {
 			if ( "RefMultHelper" == job ){
 				RefMultHelper rmh( &config, "RefMultHelper." );
 				rmh.eventLoop();
+			} else if ( "InclusiveSpectra" == job ){
+				InclusiveSpectra is( &config, "InclusiveSpectra.");
+				is.make();
+			} else if ( "ParamSpectra" == job ){
+				ParamSpectra ps( &config, "ParamSpectra.");
+				ps.make();
+			} else if ( "PidPhaseSpace" == job ){
+				PidPhaseSpace pps( &config, "PidPhaseSpace." );
+				pps.make();
 			}
 
 			//ParamSpectra ps( &config, "ParamSpectra." );
