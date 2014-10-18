@@ -58,7 +58,7 @@ namespace jdb{
 	// inefficient but works, TODO : think of better way
 	inline std::string trimTrailingZeros( string in ) {
 		string r = in;
-		while ( r[ r.size() - 1 ] == '0' ){
+		while ( r[ r.size() - 1 ] == '0' && r.size() > 1 && r[ r.size() - 2 ] != '.' ){
 			r = r.substr( 0, r.size() - 1 );
 		}
 		return r;

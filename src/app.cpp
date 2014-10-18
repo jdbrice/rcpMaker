@@ -108,7 +108,7 @@ int main( int argc, char* argv[] ) {
 	   	logger->error() << " this will show if the log level is at least error " << endl;
 		logger->info(__FUNCTION__) << " this will show if the log level is at least info and will display the calling function name " << endl;
 		
-		logger->info( __FUNCTION__ ) << "trimming trailing 0s from 0.100000 : " << trimTrailingZeros( "0.100000" ) << endl; 
+		logger->info( __FUNCTION__ ) << "trimming trailing 0s from 10.00000 : " << trimTrailingZeros( "10.00000" ) << endl; 
 
 		unitTest_HistoBook( &config );
 		
