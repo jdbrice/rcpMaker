@@ -6,6 +6,7 @@
 #include "PidPhaseSpace.h"
 #include "TLine.h"
 
+vector<string> PidPhaseSpace::species = { "Pi", "K", "P" };
 
 PidPhaseSpace::PidPhaseSpace( XmlConfig* config, string np ) : InclusiveSpectra( config, np ) {
 
@@ -17,16 +18,16 @@ PidPhaseSpace::PidPhaseSpace( XmlConfig* config, string np ) : InclusiveSpectra(
 	lg->info(__FUNCTION__) << "Tof Padding ( " << tofPadding << ", " << tofScalePadding << " ) " << endl;
 
 	// Initialize the Phase Space Recentering Object
-	psr = new PhaseSpaceRecentering( cfg->getDouble( np+"PhaseSpaceRecentering.sigma:dedx", 0.06),
-									 cfg->getDouble( np+"PhaseSpaceRecentering.sigma:tof", 0.0012),
+	tofSigmaIdeal = cfg->getDouble( np+"PhaseSpaceRecentering.sigma:tof", 0.0012);
+	dedxSigmaIdeal = cfg->getDouble( np+"PhaseSpaceRecentering.sigma:dedx", 0.06);
+	psr = new PhaseSpaceRecentering( dedxSigmaIdeal,
+									 tofSigmaIdeal,
 									 cfg->getString( np+"Bichsel.table", "dedxBichsel.root"),
 									 cfg->getInt( np+"Bichsel.method", 0) );
 	psrMethod = config->getString( np+"PhaseSpaceRecentering.method", "traditional" );
 
 	// alias the centered species for ease of use
 	centerSpecies = cfg->getString( np+"PhaseSpaceRecentering.centerSpecies", "K" );
-
-	species = { "Pi", "K", "P" };
 
 	tofCut = cfg->getDouble( np+"enhanceDistributions:tof", 1.0 );
 	dedxCut = cfg->getDouble( np+"enhanceDistributions:dedx", 1.0 );
@@ -231,8 +232,8 @@ void PidPhaseSpace::enhanceDistributions( int ptBin, int etaBin, double dedx, do
 
 	double avgP = ( binsPt->bins[ ptBin ] + binsPt->bins[ ptBin+1] ) / 2.0;
 	
-	double dSigma = 0.06;
-	double tSigma = 0.0012;
+	double dSigma = dedxSigmaIdeal * dedxCut;
+	double tSigma = tofSigmaIdeal * tofCut;
 
 	vector<double> tMeans = psr->centeredTofMeans( centerSpecies, avgP );
 	vector<double> dMeans = psr->centeredDedxMeans( centerSpecies, avgP );

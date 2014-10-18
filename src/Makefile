@@ -4,7 +4,7 @@ project = rcp
 # source suffix
 source = .cpp 
 # object files to make
-objects = rcp.o TofPicoDst.o InclusiveSpectra.o ParamSpectra.o PidPhaseSpace.o
+objects = rcp.o TofPicoDst.o InclusiveSpectra.o ParamSpectra.o PidPhaseSpace.o PidParamMaker.o
 
 sources = $(wildcard *.cpp)
 headers = $(wildcard ../include/*.h)
@@ -17,7 +17,7 @@ ROOTGLIBS     	= $(shell root-config --glibs)
 
 # Custom Project includes and libs
 includes		= -I../include -I. -I$(ROOTSYS)/include -I$(ROOTDEV)/include 
-libraries 		= 	$(ROOTLIBS) -lGui -lHtml -lGuiHtml $(CERNLIBS) $(SYSLIBS)
+libraries 		= 	$(ROOTLIBS) -lGui -lHtml -lGuiHtml -lRooFitCore -lRooFit $(CERNLIBS) $(SYSLIBS)
 staticLibs 		= jdbREF.a
 
 cxx 		= g++ -std=c++0x

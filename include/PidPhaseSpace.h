@@ -31,8 +31,9 @@ protected:
 	 */
 	string centerSpecies;
 	string psrMethod;
+	double dedxSigmaIdeal, tofSigmaIdeal;
 	PhaseSpaceRecentering * psr;
-	vector<string> species;
+	
 
 	double tofCut, dedxCut;
 
@@ -51,6 +52,7 @@ public:
 
 	void enhanceDistributions( int ptBin, int etaBin, double dedx, double tof );
 
+	static vector<string> species;
 	/**
 	 * Get the string part of the name based on charge
 	 * @param  charge charge as -1, 0, +1

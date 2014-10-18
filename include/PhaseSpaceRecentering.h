@@ -212,7 +212,7 @@ public:
 		const double tof = 1.0 / beta;
 		
 		// mean for this species
-		const double mu =  tofGen->mean( p, mass( centerSpecies ) );
+		//const double mu =  tofGen->mean( p, mass( centerSpecies ) );
 		const double muAvg =  tofGen->mean( avgP, mass( centerSpecies ) );
 
 		double n1 = 0;

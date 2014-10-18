@@ -9,6 +9,7 @@ using namespace jdb;
 #include "ParamSpectra.h"
 #include "RefMultHelper.h"
 #include "PidPhaseSpace.h"
+#include "PidParamMaker.h"
 
 #include <exception>
 
@@ -34,11 +35,11 @@ int main( int argc, char* argv[] ) {
 			} else if ( "PidPhaseSpace" == job ){
 				PidPhaseSpace pps( &config, "PidPhaseSpace." );
 				pps.make();
+			} else if ( "MakePidParams" == job ){
+				PidParamMaker ppm( &config, "PidParamMaker." );
+				ppm.make();
 			}
 
-			//ParamSpectra ps( &config, "ParamSpectra." );
-
-			//ps.make();
 		} catch ( exception &e ){
 			cout << e.what() << endl;
 		}
