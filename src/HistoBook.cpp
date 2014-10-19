@@ -243,9 +243,9 @@ namespace jdb{
 			string hTitle = config->getString( nodeName + ":title", hName );
 
 
-			HistoBins* bx;
-			HistoBins* by;
-			HistoBins* bz;
+			HistoBins* bx = NULL;
+			HistoBins* by = NULL;
+			HistoBins* bz = NULL;
 			if ( config->nodeExists( nodeName + ":xBins" ) )
 				bx = new HistoBins( config, config->getString( nodeName + ":xBins" ) );
 			else 
@@ -259,14 +259,14 @@ namespace jdb{
 			else 
 				bz = new HistoBins( config, nodeName, "Z" );
 
-			if ( "1D" == type || ( bx && !by && !bz )){
+			if ( "1D" == type || ( (bx->nBins() > 0) && (bx->nBins() <= 0) && (bx->nBins() <= 0) )){
 
 				if ( bx->nBins() >= 1 )
 					make1D( hName, hTitle, bx->nBins(), bx->bins.data() );
 				else 
 					log->warn(__FUNCTION__) << "Invalid Bins given for " << hName << endl;
 
-			} else if ( "2D" == type || ( bx && by && !bz )){
+			} else if ( "2D" == type || ( (bx->nBins() > 0) && (bx->nBins() > 0) && (bx->nBins() <= 0) )){
 
 				if ( bx->nBins() >= 1 && by->nBins() >= 1 )
 					make2D( hName, hTitle,
