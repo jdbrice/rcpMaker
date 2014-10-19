@@ -239,7 +239,7 @@ namespace jdb{
 			// store the path in the config file
 			configPath[ hName ] = nodeName;
 
-			string type = config->getString( nodeName + ":type", "1D" );
+			string type = config->getString( nodeName + ":type" );
 			string hTitle = config->getString( nodeName + ":title", hName );
 
 
