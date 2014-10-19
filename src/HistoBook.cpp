@@ -259,14 +259,14 @@ namespace jdb{
 			else 
 				bz = new HistoBins( config, nodeName, "Z" );
 
-			if ( "1D" == type || ( (bx->nBins() > 0) && (bx->nBins() <= 0) && (bx->nBins() <= 0) )){
+			if ( "1D" == type || ( (bx->nBins() > 0) && (by->nBins() <= 0) && (bz->nBins() <= 0) )){
 
 				if ( bx->nBins() >= 1 )
 					make1D( hName, hTitle, bx->nBins(), bx->bins.data() );
 				else 
 					log->warn(__FUNCTION__) << "Invalid Bins given for " << hName << endl;
 
-			} else if ( "2D" == type || ( (bx->nBins() > 0) && (bx->nBins() > 0) && (bx->nBins() <= 0) )){
+			} else if ( "2D" == type || ( (bx->nBins() > 0) && (by->nBins() > 0) && (bz->nBins() <= 0) )){
 
 				if ( bx->nBins() >= 1 && by->nBins() >= 1 )
 					make2D( hName, hTitle,
@@ -274,54 +274,8 @@ namespace jdb{
 				else 
 					log->warn(__FUNCTION__) << "Invalid Bins given for " << hName << endl;
 
-	/*
-				if ( config->nodeExists( nodeName + ":xBins" ) && config->nodeExists( nodeName + ":yBins" ) ){
-
-					if ( !config->nodeExists( config->getString( nodeName + ":xBins" ) ) )
-						log->warn(__FUNCTION__) << "Invalid Bins specified in config" << endl;
-					if ( !config->nodeExists( config->getString( nodeName + ":yBins" ) ) )
-						log->warn(__FUNCTION__) << "Invalid Bins specified in config" << endl;
-
-					HistoBins xBins( config, config->getString( nodeName + ":xBins" ) );
-					HistoBins yBins( config, config->getString( nodeName + ":yBins" ) );
-
-					
-
-				} else if ( config->nodeExists( nodeName + ":xBins" ) ){
-					if ( !config->nodeExists( config->getString( nodeName + ":xBins" ) ) )
-						log->warn(__FUNCTION__) << "Invalid Bins specified in config" << endl;
-
-					HistoBins xBins( config, config->getString( nodeName + ":xBins" ) );
-
-					int nBinsY = config->getInt( nodeName + ":nBinsY", 1 );
-					double y1 = config->getDouble( nodeName + ":y1", 0 );
-					double y2 = config->getDouble( nodeName + ":y2", 0 );
-
-					make2D( hName, config->getString( nodeName + ":title", hName ),
-							xBins.bins.size() - 1, xBins.bins.data(), nBinsY, y1, y2 );
-
-				} else if ( config->nodeExists( nodeName + ":yBins" ) ){
-					if ( !config->nodeExists( config->getString( nodeName + ":yBins" ) ) )
-						log->warn(__FUNCTION__) << "Invalid Bins specified in config" << endl;
-
-					HistoBins yBins( config, config->getString( nodeName + ":yBins" ) );
-					
-					int nBinsX = config->getInt( nodeName + ":nBinsX", 1 );
-					double x1 = config->getDouble( nodeName + ":x1", 0 );
-					double x2 = config->getDouble( nodeName + ":x2", 0 );
-
-					make2D( hName, config->getString( nodeName + ":title", hName ),
-							nBinsX, x1, x2, yBins.bins.size() - 1, yBins.bins.data() );
-				} else {
-					
-					make2D( hName, config->getString( nodeName + ":title", hName ),
-						config->getInt( nodeName + ":nBinsX", 1 ), config->getDouble( nodeName + ":x1", 0 ),
-						config->getDouble( nodeName + ":x2", 1 ),
-						config->getInt( nodeName + ":nBinsY", 1 ), config->getDouble( nodeName + ":y1", 0 ),
-						config->getDouble( nodeName + ":y2", 1 ) );
-				}*/
-
-
+			} else {
+				log->warn(__FUNCTION__) << "Histogram " << hName << " was not made "<< endl;
 			}
 
 
