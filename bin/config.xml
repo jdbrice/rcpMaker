@@ -54,6 +54,9 @@
 
 
 	<h>
+		<auto1D title="auto 1D" nBinsX="10" minX="10" maxX="11"/>
+		<auto2D title="auto 1D" nBinsX="10" minX="10" maxX="11" yBins="bins.p"/>
+		
 		<histo1 type="1D" title="dan" nBinsX="10" minX="1" maxX="10" nBinsY="11" minY="1" maxY="100" >
 			<style draw="h" linecolor="red" />
 		</histo1>
@@ -62,6 +65,8 @@
 			
 		</b>
 		<c type="1D" title="dan2" nBinsX="10" minX="1" maxX="10" />
+
+
 	</h>
 
 </config>
