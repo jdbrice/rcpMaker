@@ -210,6 +210,8 @@ public :
    virtual Double_t trackDcaY( Int_t iHit ){ return dcaY[iHit]; }
    virtual Double_t trackDcaZ( Int_t iHit ){ return dcaZ[iHit]; }
 
+   virtual Double_t trackYLocal( Int_t iHit ){ return yLocal[iHit]; }
+
    virtual Double_t eventNTZero() { return nTZero; }
    virtual Double_t eventRefMult() { return refMult; }
    virtual Double_t eventRefMultPos() { return refMultPos; }

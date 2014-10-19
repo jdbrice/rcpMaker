@@ -33,11 +33,12 @@ public:
 
 	~TofPidParams(){}
 
-	Double_t mean( Double_t p, Double_t m ){
+	Double_t mean( Double_t p, Double_t m, Double_t mr ){
 		using namespace TMath;
 
 		const Double_t pMeV = p * 1000;
 		const Double_t mMeV = m * 1000;
+		const Double_t mrMeV = mr * 1000;
 
 		const Double_t rp = minP / pMeV;
 		const Double_t d1 = ASin( rp ) * Sqrt( 1 - rp*rp );
@@ -46,15 +47,19 @@ public:
 		const Double_t d2 = pMeV * Sqrt( pMeV*pMeV + mMeV*mMeV );
 		const Double_t b = (mMeV*mMeV / d2 ) * muEP;
 
-		return (muT + a + b);
+		const Double_t d3 = pMeV * Sqrt( pMeV*pMeV + mrMeV*mrMeV );
+		const Double_t c = (mrMeV*mrMeV / d3 ) * muEP;
+
+		return (muT + a + b + c);
 	}
 	
 
-	Double_t sigma( Double_t p, Double_t m ){
+	Double_t sigma( Double_t p, Double_t m, Double_t mr ){
 		using namespace TMath;
 
 		const Double_t pMeV = p * 1000;
 		const Double_t mMeV = m * 1000;
+		const Double_t mrMeV = mr * 1000;
 
 		const Double_t rp = minP / pMeV;
 		const Double_t d1 = ASin( rp ) * Sqrt( 1 - rp*rp );
@@ -63,7 +68,10 @@ public:
 		const Double_t d2 = pMeV * Sqrt( pMeV*pMeV + mMeV*mMeV );
 		const Double_t b = Power( (mMeV*mMeV / d2 ) * sigEP, 2 );
 
-		return Sqrt(Power( sigT, 2 ) + a + b);
+		const Double_t d3 = pMeV * Sqrt( pMeV*pMeV + mrMeV*mrMeV );
+		const Double_t c = Power( (mrMeV*mrMeV / d3 ) * sigEP, 2 );
+
+		return Sqrt(Power( sigT, 2 ) + a + b + c);
 	}
 	
 };

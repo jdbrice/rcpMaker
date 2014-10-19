@@ -5,7 +5,7 @@
 #include "TofPidParams.h"
 #include "PhaseSpaceRecentering.h"
 #include "HistoBins.h"
-
+#include "Reporter.h"
 #include <vector>
 #include <string>
 
@@ -17,7 +17,9 @@ protected:
 	vector<TofPidParams*> tofParams;
 
 	string centerSpecies;
+	double tofSigmaIdeal, dedxSigmaIdeal;
 	PhaseSpaceRecentering * psr;
+	string psrMethod;
 
 	// Bins
 	HistoBins * binsPt;
@@ -36,12 +38,13 @@ protected:
 
 public:
 	ParamSpectra( XmlConfig * config, string np);
-	~ParamSpectra(){}
+	~ParamSpectra();
 
 protected:
 
 	virtual void analyzeTrack( Int_t iTrack );
 	virtual void preLoop();
+	virtual void postLoop();
 	virtual string histoForCentrality( string cent, string pType, string pidCut )
 			{ return "pt_" + pidCut + "_" + pType + "_" + cent; }
 	virtual void makeCentralityHistos();

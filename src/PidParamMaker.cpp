@@ -76,17 +76,41 @@ void PidParamMaker::make(){
 	book->makeAll( nodePath + "histograms" );
 	vector<string> species = PidPhaseSpace::species;
 
+	/**
+	 * Less than lovely mathematica export
+	 */
 	vector<string> mdMu;
+	vector<string> mdPlotMu;
 	vector<string> mdSigma;
+	vector<string> mdPlotSigma;
+
+	vector<string> dMu;
+	vector<string> dPlotMu;
+	vector<string> dSigma;
+	vector<string> dPlotSigma;
 	for ( int iS = 0; iS < species.size(); iS ++ ){
 
-		string mName = "mean" + species[iS];
-		string sName = "sigma" + species[iS];
+		// For tof
+		string mName = "tofMean" + species[iS];
+		string sName = "tofSigma" + species[iS];
 		book->clone( "mean", mName );
 		book->clone( "sigma", sName );
 
 		mdMu.push_back( (mName + " = { ") );
 		mdSigma.push_back( sName + " = { ");
+		mdPlotMu.push_back( (mName + "Error = { ") );
+		mdPlotSigma.push_back( sName + "Error = { ");
+
+		// For Dedx
+		mName = "dedxMean" + species[iS];
+		sName = "dedxSigma" + species[iS];
+		book->clone( "mean", mName );
+		book->clone( "sigma", sName );
+
+		dMu.push_back( (mName + " = { ") );
+		dSigma.push_back( sName + " = { ");
+		dPlotMu.push_back( (mName + "Error = { ") );
+		dPlotSigma.push_back( sName + "Error = { ");
 	}
 
 
@@ -95,29 +119,66 @@ void PidParamMaker::make(){
 
 			double avgP = ((*binsPt)[i] + (*binsPt)[i+1] ) / 2.0;
 
-			vector<double> mus = psr->centeredTofMeans( centerSpecies, avgP );
+			vector<double> tofMus = psr->centeredTofMeans( centerSpecies, avgP );
+			vector<double> dedxMus = psr->centeredDedxMeans( centerSpecies, avgP );
 
 		for ( int iS = 0; iS < species.size(); iS ++ ){
-			string mName = "mean" + species[iS];
-			string sName = "sigma" + species[iS];
+			string mName = "tofMean" + species[iS];
+			string sName = "tofSigma" + species[iS];
 
 			string name = "tof/" + PidPhaseSpace::tofName( centerSpecies, 0, i, 0, species[ iS ] );
 			TH1D* tofAll = (TH1D*)inFile->Get( name.c_str() );
 		
-			GaussianFitResult gfr =  fitSingleSpecies( tofAll, mus[ iS ], tofSigmaIdeal );
+			GaussianFitResult tofGfr =  fitSingleSpecies( tofAll, tofMus[ iS ], tofSigmaIdeal );
 
-			book->get( mName )->SetBinContent( i, gfr.mu );
-			book->get( sName )->SetBinContent( i, gfr.sigma );
-			book->get( mName )->SetBinError( i, gfr.muError );
-			book->get( sName )->SetBinError( i, gfr.sigmaError );	
+			book->get( mName )->SetBinContent( i, tofGfr.mu );
+			book->get( sName )->SetBinContent( i, tofGfr.sigma );
+			book->get( mName )->SetBinError( i, tofGfr.muError );
+			book->get( sName )->SetBinError( i, tofGfr.sigmaError );	
 
-			mdMu[ iS ] += ("{ " + ts(avgP*1000) + ", " + ts(gfr.mu) + " }" );
+			mdMu[ iS ] += ("{ " + dts(avgP*1000) + ", " + dts(tofGfr.mu) + " }" );
+			mdPlotMu[ iS ] += ("{{ " + dts(avgP*1000) + ", " + dts(tofGfr.mu) + " }, ErrorBar[" + dts( tofGfr.muError ) + " ] }" );
 			if ( i != binsPt->nBins() - 1 )
 				mdMu[ iS ] += ", ";
+			if ( i != binsPt->nBins() - 1 )
+				mdPlotMu[ iS ] += ", ";
 
-			mdSigma[ iS ] += ("{ " + ts(avgP*1000) + ", " + ts(gfr.sigma) + " }" );
+			mdSigma[ iS ] += ("{ " + dts(avgP*1000) + ", " + dts(tofGfr.sigma) + " }" );
 			if ( i != binsPt->nBins() - 1 )
 				mdSigma[ iS ] += ", ";
+			mdPlotSigma[ iS ] += ("{{ " + dts(avgP*1000) + ", " + dts(tofGfr.sigma) + " }, ErrorBar[" + dts( tofGfr.sigmaError ) + " ] }" );
+			if ( i != binsPt->nBins() - 1 )
+				mdPlotSigma[ iS ] += ", ";
+
+			/**
+			 * Fit dedx now
+			 */
+			mName = "dedxMean" + species[iS];
+			sName = "dedxSigma" + species[iS];
+
+			name = "dedx/" + PidPhaseSpace::dedxName( centerSpecies, 0, i, 0, species[ iS ] );
+			TH1D* hDedx = (TH1D*)inFile->Get( name.c_str() );
+		
+			GaussianFitResult dedxGfr =  fitSingleSpecies( hDedx, dedxMus[ iS ], dedxSigmaIdeal );
+
+			book->get( mName )->SetBinContent( i, dedxGfr.mu );
+			book->get( sName )->SetBinContent( i, dedxGfr.sigma );
+			book->get( mName )->SetBinError( i, dedxGfr.muError );
+			book->get( sName )->SetBinError( i, dedxGfr.sigmaError );
+
+			dMu[ iS ] += ("{ " + dts(avgP*1000) + ", " + ts( dedxGfr.mu ) + " }" );
+			dPlotMu[ iS ] += ("{{ " + dts(avgP*1000) + ", " + dts(dedxGfr.mu) + " }, ErrorBar[" + dts( dedxGfr.muError ) + " ] }" );
+			if ( i != binsPt->nBins() - 1 )
+				dMu[ iS ] += ", ";
+			if ( i != binsPt->nBins() - 1 )
+				dPlotMu[ iS ] += ", ";
+
+			dSigma[ iS ] += ("{ " + dts(avgP*1000) + ", " + dts(dedxGfr.sigma) + " }" );
+			if ( i != binsPt->nBins() - 1 )
+				dSigma[ iS ] += ", ";
+			dPlotSigma[ iS ] += ("{{ " + dts(avgP*1000) + ", " + dts(dedxGfr.sigma) + " }, ErrorBar[" + dts( dedxGfr.sigmaError ) + " ] }" );
+			if ( i != binsPt->nBins() - 1 )
+				dPlotSigma[ iS ] += ", ";	
 			
 		}
 		
@@ -126,10 +187,24 @@ void PidParamMaker::make(){
 	}
 
 	for ( int iS = 0; iS < species.size(); iS++ ){
-		mdMu[ iS ] += " }";
-		mdSigma[ iS ] += " }";
+		mdMu[ iS ] += " };";
+		mdPlotMu[ iS ] += " };";
+		mdSigma[ iS ] += " };";
+		mdPlotSigma[ iS ] += " };";
 		cout << mdMu[ iS ] << endl << endl << endl;
+		cout << mdPlotMu[ iS ] << endl << endl << endl;
 		cout << mdSigma[ iS ] << endl << endl << endl;
+		cout << mdPlotSigma[ iS ] << endl << endl << endl;
+
+		dMu[ iS ] += " };";
+		dPlotMu[ iS ] += " };";
+		dSigma[ iS ] += " };";
+		dPlotSigma[ iS ] += " };";
+
+		cout << dMu[ iS ] << endl << endl << endl;
+		cout << dPlotMu[ iS ] << endl << endl << endl;
+		cout << dSigma[ iS ] << endl << endl << endl;
+		cout << dPlotSigma[ iS ] << endl << endl << endl;
 	}
 
 	

@@ -18,7 +18,7 @@ PidPhaseSpace::PidPhaseSpace( XmlConfig* config, string np ) : InclusiveSpectra(
 	lg->info(__FUNCTION__) << "Tof Padding ( " << tofPadding << ", " << tofScalePadding << " ) " << endl;
 
 	// Initialize the Phase Space Recentering Object
-	tofSigmaIdeal = cfg->getDouble( np+"PhaseSpaceRecentering.sigma:tof", 0.0012);
+	tofSigmaIdeal = cfg->getDouble( np+"PhaseSpaceRecentering.sigma:tof", 0.012);
 	dedxSigmaIdeal = cfg->getDouble( np+"PhaseSpaceRecentering.sigma:dedx", 0.06);
 	psr = new PhaseSpaceRecentering( dedxSigmaIdeal,
 									 tofSigmaIdeal,
@@ -66,11 +66,16 @@ void PidPhaseSpace::analyzeTrack( int iTrack ){
 	double dedx=psr->rDedx(centerSpecies, pico->trackDedx(iTrack), p );
 
 	book->fill( "trBeta", p, tof );
+	book->fill( "beta", p, 1.0/pico->trackBeta( iTrack ) );
+
+	book->fill( "trDedx", p, dedx );
+	book->fill( "dedx", p, pico->trackDedx( iTrack ) );
 
 	double tofNL=psr->nlTof(centerSpecies, pico->trackBeta(iTrack), p, avgP );
 	double dedxNL=psr->nlDedx(centerSpecies, pico->trackDedx(iTrack), p, avgP );
 
 	book->fill( "nlBeta", p, tofNL );
+	book->fill( "nlDedx", p, dedxNL );
 
 	if ( "nonlinear" == psrMethod ){
 		tof = tofNL;
@@ -122,7 +127,7 @@ void PidPhaseSpace::preparePhaseSpaceHistograms( string plc){
 		double p = (binsPt->bins[ ptBin ] + binsPt->bins[ ptBin + 1 ]) / 2.0;
 
 		double tofLow, tofHigh, dedxLow, dedxHigh;
-		autoViewport( plc, p, &tofLow, &tofHigh, &dedxLow, &dedxHigh, tofPadding, dedxPadding, tofScalePadding, dedxScalePadding );
+		autoViewport( plc, p, psr, &tofLow, &tofHigh, &dedxLow, &dedxHigh, tofPadding, dedxPadding, tofScalePadding, dedxScalePadding );
 		
 		
 		vector<double> tofBins = HistoBook::makeFixedWidthBins( tofBinWidth, tofLow, tofHigh );
@@ -171,21 +176,21 @@ void PidPhaseSpace::preparePhaseSpaceHistograms( string plc){
 	} // loop on ptBins
 }
 
-void PidPhaseSpace::autoViewport( 	string pType, double p, double * tofLow, double* tofHigh, double * dedxLow, double * dedxHigh, double tofPadding, double dedxPadding, double tofScaledPadding, double dedxScaledPadding  ){
+void PidPhaseSpace::autoViewport( 	string pType, double p, PhaseSpaceRecentering * lpsr, double * tofLow, double* tofHigh, double * dedxLow, double * dedxHigh, double tofPadding, double dedxPadding, double tofScaledPadding, double dedxScaledPadding  ){
 
 
-	TofGenerator * tofGen = psr->tofGenerator();
-	Bichsel * dedxGen = psr->dedxGenerator();
+	TofGenerator * tofGen = lpsr->tofGenerator();
+	Bichsel * dedxGen = lpsr->dedxGenerator();
 
-	double tofCenter = tofGen->mean( p, psr->mass( pType ) );
-	double dedxCenter = dedxGen->mean10( p, psr->mass( pType ), -1, 1000 );
+	double tofCenter = tofGen->mean( p, lpsr->mass( pType ) );
+	double dedxCenter = dedxGen->mean10( p, lpsr->mass( pType ), -1, 1000 );
 
 	vector<double> tofMean;
 	vector<double> dedxMean;
 
 	for ( int i = 0; i < species.size(); i ++ ){
-		tofMean.push_back(  tofGen->mean( p, psr->mass( species[ i ] ) ) );
-		dedxMean.push_back( dedxGen->mean10( p, psr->mass( species[ i ] ), -1, 1000 ) );
+		tofMean.push_back(  tofGen->mean( p, lpsr->mass( species[ i ] ) ) );
+		dedxMean.push_back( dedxGen->mean10( p, lpsr->mass( species[ i ] ), -1, 1000 ) );
 	}
 
 

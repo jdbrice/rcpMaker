@@ -13,7 +13,7 @@ InclusiveSpectra::InclusiveSpectra( XmlConfig * config, string np){
 	// Save Class Members
 	cfg = config;
 	nodePath = np;
-
+ 
 	// make the Logger
 	lg = LoggerConfig::makeLogger( cfg, np + "Logger" );
 
@@ -32,7 +32,7 @@ InclusiveSpectra::InclusiveSpectra( XmlConfig * config, string np){
     reporter = new Reporter( config->getString( np + "output.report" ) );
 
     /**
-     * Setup the ana cuts
+     * Setup the event cuts
      */
     cutVertexZ = new ConfigRange( cfg, np + "eventCuts.vertexZ", -200, 200 );
     cutVertexR = new ConfigRange( cfg, np + "eventCuts.vertexR", 0, 10 );
@@ -48,6 +48,15 @@ InclusiveSpectra::InclusiveSpectra( XmlConfig * config, string np){
     	cutCentrality[ centrals[ iC ] ] = cut;
     	lg->info(__FUNCTION__) << "Centrality Cut " << centrals[iC] << " ( " << cut->min << ", " << cut->max <<" )" << endl;
     }
+
+    /**
+     * Setup the Track Cuts
+     */
+    cutNHits = new ConfigRange( cfg, np + "trackCuts.nHits", 0, INT_MAX );
+    cutNHitsDedx = new ConfigRange( cfg, np + "trackCuts.nHitsDedx", 0, INT_MAX );
+    cutNHitsFitOverPossible = new ConfigRange( cfg, np + "trackCuts.cutNHitsFitOverPossible", 0, INT_MAX );
+    cutDca = new ConfigRange( cfg, np + "trackCuts.dca", 0, INT_MAX );
+    cutYLocal = new ConfigRange( cfg, np + "trackCuts.yLocal", -100, 100 );
 
 }
 /**
@@ -204,6 +213,45 @@ bool InclusiveSpectra::trackCut( Int_t iTrack ){
 
 	if ( eta > .2 )
 		return false;
+
+	double dcaX = pico->trackDcaX( iTrack );
+	double dcaY = pico->trackDcaY( iTrack );
+	double dcaZ = pico->trackDcaZ( iTrack );
+	double dca = TMath::Sqrt( dcaX*dcaX + dcaY*dcaY + dcaZ*dcaZ );
+
+	int nHits = pico->trackNHits( iTrack );
+	int nHitsDedx = pico->trackNHitsDedx( iTrack );
+	int nHitsFit = pico->trackNHitsFit( iTrack );
+	int nHitsPossible = pico->trackNHitsPossible( iTrack );
+	double fitPoss = ( (double)nHitsFit /  (double)nHitsPossible);
+
+	double yLocal = pico->trackYLocal( iTrack );
+/*	
+	book->fill( "yLocal", yLocal );
+	book->fill( "dca", dca );
+	book->fill( "nHits", nHits );
+	book->fill( "nHitsDedx", nHitsDedx );
+	book->fill( "nHitsFit", nHitsFit );
+	book->fill( "nHitsPossible", nHitsPossible );
+	book->fill( "nHitsFitOverPossible", fitPoss );*/
+
+	if ( yLocal < cutYLocal->min || yLocal > cutYLocal->max )
+		return false;
+	if ( dca < cutDca->min || dca > cutDca->max )
+		return false;
+	if ( nHitsDedx < cutNHitsDedx->min || nHitsDedx > cutNHitsDedx->max )
+		return false;
+	if ( nHits < cutNHits->min || nHits > cutNHits->max )
+		return false;
+	if ( fitPoss < cutNHitsFitOverPossible->min || fitPoss > cutNHitsFitOverPossible->max )
+		return false;
+/*
+	book->fill( "_dca", dca );
+	book->fill( "_nHits", nHits );
+	book->fill( "_nHitsDedx", nHitsDedx );
+	book->fill( "_nHitsFit", nHitsFit );
+	book->fill( "_nHitsPossible", nHitsPossible );
+	book->fill( "_nHitsFitOverPossible", fitPoss );*/
 
 	return true;
 }

@@ -56,6 +56,8 @@ public:
 	virtual Double_t trackDcaY( Int_t iHit ) = 0;
 	virtual Double_t trackDcaZ( Int_t iHit ) = 0;
 
+	virtual Double_t trackYLocal( Int_t iHit ) = 0;
+
 	virtual Double_t trackNHits( Int_t iHit ) = 0;
 	virtual Double_t trackNHitsDedx( Int_t iHit ) = 0;
 	virtual Double_t trackNHitsFit( Int_t iHit ) = 0;

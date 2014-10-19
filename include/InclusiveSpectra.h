@@ -44,7 +44,7 @@ protected:
 	PicoDataStore * pico;
 
 	/**
-	 * Analysis cut Alias
+	 * Event cuts
 	 */
 	ConfigRange *cutVertexZ;
 	ConfigRange *cutVertexR;
@@ -53,6 +53,15 @@ protected:
 	vector<int> cutTriggers;
 	vector<string> centrals;
 	map< string, ConfigRange* > cutCentrality;
+
+	/**
+	 * Track Cuts
+	 */
+	ConfigRange *cutYLocal;
+	ConfigRange *cutNHits;
+	ConfigRange *cutNHitsDedx;
+	ConfigRange *cutNHitsFitOverPossible;
+	ConfigRange *cutDca;
 
 
 public:

@@ -91,10 +91,6 @@ public:
 			return "dedx_" + chargeString(charge) + "_" + centerSpecies + "_" + ts(ptBin) + "_" + ts(etaBin) + "_" + eSpecies;
 	}
 
-protected:
-
-	void preparePhaseSpaceHistograms( string plc );
-
 	/**
 	 * Computes the upper and lower limits in tof and dedx phase space
 	 * @param pType             centering plc
@@ -108,9 +104,14 @@ protected:
 	 * @param tofScaledPadding  percent padding added to tof range
 	 * @param dedxScaledPadding percent padding added to dedx range
 	 */
-	void autoViewport( 	string pType, double p, double * tofLow, double* tofHigh, double * dedxLow, double * dedxHigh, 
+	static void autoViewport( 	string pType, double p, PhaseSpaceRecentering * lpsr, double * tofLow, double* tofHigh, double * dedxLow, double * dedxHigh, 
 								double tofPadding = 1, double dedxPadding = 1, double tofScaledPadding = 0, double dedxScaledPadding = 0 );
 
+protected:
+
+	void preparePhaseSpaceHistograms( string plc );
+
+	
 	
 };
 

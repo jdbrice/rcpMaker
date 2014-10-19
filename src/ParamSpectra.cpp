@@ -1,5 +1,9 @@
 #include "ParamSpectra.h"
 
+/**
+ * Root Includes
+ */
+#include "TLine.h"
 
 /**
  * Static const definitions of the nSigma Cut Types
@@ -15,6 +19,7 @@ ParamSpectra::ParamSpectra( XmlConfig * config, string np)
 
 	species = cfg->getStringVector( np+"PidSpecies" );
 
+
 	lg->info(__FUNCTION__) << "Setting up Tof Pid Params for : " << endl;
 	// make the list of tofPidParams
 	for ( int i = 0; i < species.size(); i++ ){
@@ -26,10 +31,13 @@ ParamSpectra::ParamSpectra( XmlConfig * config, string np)
 	}
 
 	// Initialize the Phase Space Recentering Object
-	psr = new PhaseSpaceRecentering( cfg->getDouble( np+"PhaseSpaceRecentering.sigma:dedx", 0.06),
-									 cfg->getDouble( np+"PhaseSpaceRecentering.sigma:tof", 0.0012),
+	tofSigmaIdeal = cfg->getDouble( np+"PhaseSpaceRecentering.sigma:tof", 0.0012);
+	dedxSigmaIdeal = cfg->getDouble( np+"PhaseSpaceRecentering.sigma:dedx", 0.06);
+	psr = new PhaseSpaceRecentering( dedxSigmaIdeal,
+									 tofSigmaIdeal,
 									 cfg->getString( np+"Bichsel.table", "dedxBichsel.root"),
 									 cfg->getInt( np+"Bichsel.method", 0) );
+	psrMethod = config->getString( np+"PhaseSpaceRecentering.method", "traditional" );
 	// alias the centered species for ease of use
 	centerSpecies = cfg->getString( np+"PhaseSpaceRecentering.centerSpecies", "K" );
 
@@ -45,6 +53,11 @@ ParamSpectra::ParamSpectra( XmlConfig * config, string np)
 
 	book->cd();
 
+	
+
+}
+
+ParamSpectra::~ParamSpectra(){
 }
 
 void ParamSpectra::makeCentralityHistos()  {
@@ -88,13 +101,78 @@ void ParamSpectra::preLoop(){
 
 	for ( double ip = .2; ip < 4; ip+=.025 ){
 		for ( int iS = 0; iS < species.size(); iS ++ ){
-			double tofMean = tofParams[ iS ]->mean( ip, psr->mass( species[ iS ] ) ) ;
-			double tofSigma = tofParams[ iS ]->sigma( ip, psr->mass( species[ iS ] ) ) ;
+			double tofMean = tofParams[ iS ]->mean( ip, psr->mass( species[ iS ] ), psr->mass( centerSpecies ) ) ;
+			double tofSigma = tofParams[ iS ]->sigma( ip, psr->mass( species[ iS ] ), psr->mass( centerSpecies ) ) ;
+			//if ( "Pi" == species[ iS ] )
+			//	tofMean *= -1;
 			book->get( "mean" + species[ iS ] )->SetBinContent( binsPt->findBin( ip ) + 1, tofMean );
 			book->get( "sigma" + species[ iS ] )->SetBinContent( binsPt->findBin( ip ) + 1, tofSigma );
 		}	
 	}
 	
+
+}
+
+void ParamSpectra::postLoop() {
+
+	book->cd();
+	for (int i= 0; i < binsPt->nBins(); i++ ){
+		
+		double p = ( (*binsPt)[ i] + (*binsPt)[ i+1 ] )/2.0;
+		lg->info( __FUNCTION__ ) << "Saving Bin " << i << endl;
+
+		reporter->newPage();
+		TH1D* h = (TH1D*)book->get( "tof_" + ts(i) );
+		gPad->SetLogy(1);
+		h->Draw();
+
+
+
+		for ( int iS = 0; iS < species.size(); iS ++ ){
+			
+			double tofMean = tofParams[ iS ]->mean( p, psr->mass( species[ iS ] ), psr->mass( centerSpecies ) ) ;
+			double tofSigma = tofParams[ iS ]->sigma( p, psr->mass( species[ iS ] ), psr->mass( centerSpecies ) ) ;
+
+
+
+			lg->info(__FUNCTION__) << species[ iS ] << "p = " << p << " mu = " << tofMean << endl;
+			TLine * l1 = new TLine( tofMean - nSigmaTof*tofSigma , h->GetMinimum(), tofMean -nSigmaTof*tofSigma, h->GetMaximum() );
+			l1->SetLineColor( iS+1 );
+			l1->Draw();
+
+			TLine * l2 = new TLine( tofMean + nSigmaTof*tofSigma, h->GetMinimum(), tofMean + nSigmaTof*tofSigma, h->GetMaximum() );
+			l2->SetLineColor( iS+1 );
+			l2->Draw();
+
+		}
+		
+		reporter->savePage();
+
+		vector<double> dedxMus = psr->centeredDedxMeans( centerSpecies, p );
+
+		reporter->newPage();
+		h = (TH1D*)book->get( "dedx_" + ts(i) );
+		gPad->SetLogy(1);
+		h->Draw();
+
+		for ( int iS = 0; iS < species.size(); iS ++ ){
+			
+			lg->info(__FUNCTION__) << species[ iS ] << "p = " << p << " mu = " << dedxMus[iS] << endl;
+			TLine * l1 = new TLine( dedxMus[ iS ] - nSigmaDedx*dedxSigmaIdeal , h->GetMinimum(), dedxMus[ iS ] -nSigmaDedx*dedxSigmaIdeal, h->GetMaximum() );
+			l1->SetLineColor( iS+1 );
+			l1->Draw();
+
+			TLine * l2 = new TLine( dedxMus[ iS ] + nSigmaDedx*dedxSigmaIdeal, h->GetMinimum(), dedxMus[ iS ] + nSigmaDedx*dedxSigmaIdeal, h->GetMaximum() );
+			l2->SetLineColor( iS+1 );
+			l2->Draw();
+
+		}
+
+
+		reporter->savePage();
+
+
+	}
 
 }
 
@@ -105,32 +183,36 @@ void ParamSpectra::analyzeTrack( Int_t iTrack ){
 	
 	//TODO not really correct
 	double pt = pico->trackPt( iTrack );
-	double eta = pico->trackEta( iTrack );
+	double eta = TMath::Abs( pico->trackEta( iTrack ) );
 	double p = pico->trackP( iTrack );
 	int ptBin = binsPt->findBin( pt );
+	int etaBin = binsEta->findBin( TMath::Abs( eta ) );
+
+	
 	Int_t refMult = pico->eventRefMult();
 	
 	/**
 	 * For now skip other eta bins
 	 */
-	if ( binsEta->findBin( eta ) >= 1 )
+	if ( ptBin < 0 || etaBin < 0)
 		return;
+
 	
-	if ( ptBin < binsPt->length() - 1 ){
-		double avgPt = (binsPt->bins[ ptBin ] + binsPt->bins[ ptBin + 1 ]) / 2.0;
+	if ( ptBin < binsPt->nBins() ){
+		double avgP = ( binsPt->bins[ ptBin ] + binsPt->bins[ ptBin+1] ) / 2.0;
 
 		//double dedx = psr->nlDedx( centerSpecies, pico->trackDedx( iTrack ), 
 		//					pt, avgPt );
-		double dedx = pico->trackDedx( iTrack);
-		double tof = psr->nlTof( centerSpecies, pico->trackBeta( iTrack ), 
-							pt, avgPt );
+		//double dedx = pico->trackDedx( iTrack);
+		double dedx = psr->nlDedx( centerSpecies, pico->trackDedx( iTrack ), p, avgP );
+		double tof = psr->nlTof( centerSpecies, pico->trackBeta( iTrack ), p, avgP );
 		
 
 		book->fill( "tof", tof ); 
-		//book->fill( "dedx", dedx );
+		book->fill( "dedx", dedx );
 		if ( ptBin >= 0 ){
 			book->fill( "tof_"+ts(ptBin), tof ); 
-			book->fill( "dedx_"+ts(ptBin), TMath::Log10(dedx) );	
+			book->fill( "dedx_"+ts(ptBin), dedx );	
 		}
 		
 
@@ -192,10 +274,10 @@ vector<string> ParamSpectra::pidTof( double p, double tof ){
 	vector<string> res;
 	for ( int iS = 0; iS < species.size(); iS ++ ){
 			
-		double tofMean = tofParams[ iS ]->mean( p, psr->mass( species[ iS ] ) ) ;
-		double tofSigma = tofParams[ iS ]->sigma( p, psr->mass( species[ iS ] ) );
-		
-		if ( 	tof >= tofMean - tofSigma * nSigmaTof && tof <= tofMean + tofSigma * nSigmaTof ){
+		double tofMean = tofParams[ iS ]->mean( p, psr->mass( species[ iS ] ), psr->mass( centerSpecies ) ) ;
+		double tofSigma = tofParams[ iS ]->sigma( p, psr->mass( species[ iS ] ), psr->mass( centerSpecies ) );
+
+		if ( tof >= tofMean - tofSigma * nSigmaTof && tof <= tofMean + tofSigma * nSigmaTof ){
 			res.push_back( species[ iS ] );
 		}
 		/*double km = psr->tofGenerator()->mean( p, psr->mass( centerSpecies ) );
@@ -213,12 +295,13 @@ vector<string> ParamSpectra::pidTof( double p, double tof ){
 vector<string> ParamSpectra::pidDedx( double p, double dedx ){
 
 	vector<string> res;
+	vector<double> means = psr->centeredDedxMeans( centerSpecies, p );
 	for ( int iS = 0; iS < species.size(); iS ++ ){
 		
 		double rcDedx = psr->rDedx( species[ iS ], dedx, p );
 		double sigma = 0.06;
 
-		if ( 	rcDedx >= -sigma * nSigmaDedx && rcDedx <=  sigma * nSigmaDedx ){
+		if (	dedx >= means[ iS ] -sigma * nSigmaDedx && dedx <=  means[ iS ] + sigma * nSigmaDedx ){
 			res.push_back( species[ iS ] );
 		}
 
@@ -246,8 +329,8 @@ vector<string> ParamSpectra::pidEllipse( double p, double dedx, double tof ){
 	vector<string> res;
 	for ( int iS = 0; iS < species.size(); iS ++ ){
 		
-		double tofMean = tofParams[ iS ]->mean( p, psr->mass( species[ iS ] ) ) ;
-		double tofSigma = tofParams[ iS ]->sigma( p, psr->mass( species[ iS ] ) );
+		double tofMean = 0;//tofParams[ iS ]->mean( p, psr->mass( species[ iS ] ) ) ;
+		double tofSigma = 0.012;//tofParams[ iS ]->sigma( p, psr->mass( species[ iS ] ) );
 
 		double rcDedx = psr->rDedx( species[ iS ], dedx, p );
 		double sigma = 0.06;
