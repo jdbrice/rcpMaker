@@ -10,6 +10,7 @@ void rcpFromSpectra( string fname = "inclusiveSpectra.root", string bName = "pt_
 	TH1D * central = (TH1D*)f->Get( cName.c_str() );
 	TH1D * per = (TH1D*)f->Get( pName.c_str() );
 
+	gStyle->SetOptStat(0);
 
 	c->Divide( 2, 1 );
 	c->cd(1 );
@@ -31,6 +32,9 @@ void rcpFromSpectra( string fname = "inclusiveSpectra.root", string bName = "pt_
 	rcp->SetTitle( "0%-5% / 60%-80% " );
 	rcp->Divide( per );
 
+	rcp->GetYaxis()->SetRangeUser( 0, 3 );
 	rcp->Draw();
+
+	c->Print( (bName+".pdf").c_str() );
 
 }

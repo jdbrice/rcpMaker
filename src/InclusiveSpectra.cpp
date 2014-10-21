@@ -1,6 +1,8 @@
 
 #include "InclusiveSpectra.h"
 #include "ChainLoader.h"
+#include "AnaPicoDst.h"
+#include "TofPicoDst.h"
 
 /**
  * Constructor
@@ -23,7 +25,7 @@ InclusiveSpectra::InclusiveSpectra( XmlConfig * config, string np){
 	TChain * chain = new TChain( cfg->getString(np+"input.dst:treeName", "tof" ).c_str() );
     ChainLoader::load( chain, cfg->getString( np+"input.dst:url" ).c_str(), cfg->getInt( np+"input.dst:maxFiles" ) );
 
-    pico = new TofPicoDst( chain );
+    pico = new AnaPicoDst( chain );
 
     // create the book
     lg->info(__FUNCTION__) << " Creating book "<< endl;
@@ -106,6 +108,8 @@ void InclusiveSpectra::eventLoop(){
 	book->cd();
 	lg->info(__FUNCTION__) << "Making all histograms in : " << nodePath + "histograms" << endl;
 	book->makeAll( nodePath + "histograms" );
+	if ( cfg->nodeExists( "RefMultHelper.histograms" ) )
+		book->makeAll( "RefMultHelper.histograms" );
 
 	preLoop();
 
@@ -186,28 +190,34 @@ bool InclusiveSpectra::eventCut(){
 
 	int nT0 = pico->eventNTZero();
 
-	//book->fill( "vertexZ", z);
-	//book->fill( "vertexR", r);
+	book->fill( "vertexZ", z);
+	book->fill( "vertexR", r);
 	
 	if ( z < cutVertexZ->min || z > cutVertexZ->max )
 		return false;
 
-	//book->fill( "vertexZ_zCut", z);
-	//book->fill( "vertexR_zCut", r);
+	book->fill( "vertexZ_zCut", z);
+	book->fill( "vertexR_zCut", r);
 	if ( r < cutVertexR->min || r > cutVertexR->max )
 		return false;
-	//book->fill( "vertexZ_r_zCut", z);
-	//book->fill( "vertexR_r_zCut", r);
+	book->fill( "vertexZ_r_zCut", z);
+	book->fill( "vertexR_r_zCut", r);
 
 	if ( nT0 < cutNTZero->min || nT0 > cutNTZero->max )
 		return false;
 
-	//book->fill( "refMult", pico->eventRefMult() );
+	book->fill( "refMult", pico->eventRefMult() );
 
 	return true;
 }
 
 bool InclusiveSpectra::trackCut( Int_t iTrack ){
+
+
+	double beta = pico->trackBeta( iTrack );
+
+	if ( (1.0 / beta) < 0.5 )
+		return false; 
 
 	double eta = pico->trackEta( iTrack );
 

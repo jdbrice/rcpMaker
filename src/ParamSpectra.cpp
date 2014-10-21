@@ -115,6 +115,7 @@ void ParamSpectra::preLoop(){
 
 void ParamSpectra::postLoop() {
 
+	gStyle->SetOptStat(0);
 	book->cd();
 	for (int i= 0; i < binsPt->nBins(); i++ ){
 		
@@ -127,13 +128,16 @@ void ParamSpectra::postLoop() {
 		h->Draw();
 
 
-
+		vector<double> tofMus = psr->centeredTofMeans( centerSpecies, p );
 		for ( int iS = 0; iS < species.size(); iS ++ ){
 			
 			double tofMean = tofParams[ iS ]->mean( p, psr->mass( species[ iS ] ), psr->mass( centerSpecies ) ) ;
 			double tofSigma = tofParams[ iS ]->sigma( p, psr->mass( species[ iS ] ), psr->mass( centerSpecies ) ) ;
 
 
+			if ( "Pi" == species[ iS ] && i < 15){
+				tofMean = tofMus[ iS ];
+			}
 
 			lg->info(__FUNCTION__) << species[ iS ] << "p = " << p << " mu = " << tofMean << endl;
 			TLine * l1 = new TLine( tofMean - nSigmaTof*tofSigma , h->GetMinimum(), tofMean -nSigmaTof*tofSigma, h->GetMaximum() );

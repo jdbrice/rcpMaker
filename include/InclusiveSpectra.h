@@ -27,7 +27,7 @@ using namespace jdb;
 /**
  * Local
  */
-#include "TofPicoDst.h"
+#include "PicoDataStore.h"
 
 class InclusiveSpectra
 {

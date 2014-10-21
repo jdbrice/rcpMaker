@@ -80,7 +80,7 @@ void PidPhaseSpace::analyzeTrack( int iTrack ){
 	if ( "nonlinear" == psrMethod ){
 		tof = tofNL;
 		dedx = dedxNL;
-	}
+	} 
 
 	book->cd( "dedx_tof" );
 	book->fill( hName, dedx, tof );
