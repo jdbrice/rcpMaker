@@ -11,6 +11,7 @@
 #include <TROOT.h>
 #include <TChain.h>
 #include <TFile.h>
+#include <TMath.h>
 
 #include "PicoDataStore.h"
 
@@ -192,15 +193,18 @@ public :
     * Implement the PicoDataStore Interface
     */
    virtual TTree * getTree() { return fChain; }
-   virtual Int_t numTofTracks(){ return nTofHits; }
+   
    virtual Double_t trackPt( Int_t iHit ) { return pt[ iHit ]; }
    virtual Double_t trackP( Int_t iHit ){ return p[ iHit ]; }
    virtual Double_t trackEta( Int_t iHit ) { return eta[ iHit ]; }
+   virtual Int_t trackCharge( Int_t iHit ){ return charge[ iHit ]; }
+
    virtual Double_t trackDedx( Int_t iHit ){ return dedx[ iHit ]; }
    virtual Double_t trackPathLength( Int_t iHit ){ return length[ iHit ]; }
    virtual Double_t trackTof( Int_t iHit ){ return tof[ iHit ]; }
    virtual Double_t trackBeta( Int_t iHit ){ return beta[ iHit ]; }
-   virtual Int_t trackCharge( Int_t iHit ){ return charge[ iHit ]; }
+   virtual Int_t trackTofMatch( Int_t iHit ){ return 1;}
+   
 
    virtual Double_t eventVertexX( ){ return vertexX; }
    virtual Double_t eventVertexY( ){ return vertexY; }
@@ -209,18 +213,29 @@ public :
    virtual Double_t trackDcaX( Int_t iHit ){ return dcaX[iHit]; }
    virtual Double_t trackDcaY( Int_t iHit ){ return dcaY[iHit]; }
    virtual Double_t trackDcaZ( Int_t iHit ){ return dcaZ[iHit]; }
+   virtual Double_t trackDca( Int_t iHit ){ return TMath::Sqrt(dcaX[iHit]*dcaX[iHit]+dcaY[iHit]*dcaY[iHit]+dcaZ[iHit]*dcaZ[iHit]) ; }
 
    virtual Double_t trackYLocal( Int_t iHit ){ return yLocal[iHit]; }
-
-   virtual Double_t eventNTZero() { return nTZero; }
-   virtual Double_t eventRefMult() { return refMult; }
-   virtual Double_t eventRefMultPos() { return refMultPos; }
-   virtual Double_t eventRefMultNeg() { return refMultNeg; }
 
    virtual Double_t trackNHits( Int_t iHit ) { return nHits[ iHit ]; }
    virtual Double_t trackNHitsDedx( Int_t iHit ){return nHitsDedx[ iHit ]; }
    virtual Double_t trackNHitsFit( Int_t iHit ){ return nHitsFit[ iHit ]; }
    virtual Double_t trackNHitsPossible( Int_t iHit ) { return nHitsPossible[ iHit ]; }
+
+   virtual UInt_t eventRunId(){return run;}
+   virtual UInt_t eventEventId(){return evt;}
+   virtual UInt_t eventDay(){return 0;}
+   virtual UInt_t eventYear(){return 0;}
+
+   virtual Int_t eventNTZero() { return nTZero; }
+   virtual Short_t eventTofMult(){return nTofHits; }
+   virtual UShort_t eventRefMult(){return refMult;}
+   virtual Int_t eventNumTracks(){return nTofHits;}
+   virtual Short_t eventNumPrimary(){return 0;}
+   virtual Short_t eventNumGlobal(){return 0;}
+
+   virtual Float_t eventZDC(){return 0;}
+   virtual Float_t eventBBC(){return 0;}
 
    virtual Int_t numEventTriggers() { return nTriggers; }
    virtual std::vector<UInt_t> eventTriggerIds() { std::vector<UInt_t> v( std::begin(triggerIds), std::end(triggerIds) ); return v;}

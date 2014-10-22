@@ -42,6 +42,7 @@ protected:
 
 	TChain * chain;
 	PicoDataStore * pico;
+	Int_t nEventsToProcess;
 
 	/**
 	 * Event cuts
@@ -49,7 +50,7 @@ protected:
 	ConfigRange *cutVertexZ;
 	ConfigRange *cutVertexR;
 	ConfigPoint *cutVertexROffset;
-	ConfigRange *cutNTZero;
+	ConfigRange *cutTofMatch;
 	vector<int> cutTriggers;
 	vector<string> centrals;
 	map< string, ConfigRange* > cutCentrality;

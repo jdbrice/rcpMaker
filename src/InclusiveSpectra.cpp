@@ -40,7 +40,7 @@ InclusiveSpectra::InclusiveSpectra( XmlConfig * config, string np){
     cutVertexR = new ConfigRange( cfg, np + "eventCuts.vertexR", 0, 10 );
     cutVertexROffset = new ConfigPoint( cfg, np + "eventCuts.vertexROffset", 0.0, 0.0 );
 
-    cutNTZero = new ConfigRange( cfg, np + "eventCuts.nTZero", 0, 10000 );
+    
     cutTriggers = cfg->getIntVector( np + "eventCuts.triggers" );
     vector<string> centralPaths = cfg->childrenOf( np + "centrality" );
 
@@ -56,9 +56,10 @@ InclusiveSpectra::InclusiveSpectra( XmlConfig * config, string np){
      */
     cutNHits = new ConfigRange( cfg, np + "trackCuts.nHits", 0, INT_MAX );
     cutNHitsDedx = new ConfigRange( cfg, np + "trackCuts.nHitsDedx", 0, INT_MAX );
-    cutNHitsFitOverPossible = new ConfigRange( cfg, np + "trackCuts.cutNHitsFitOverPossible", 0, INT_MAX );
+    cutNHitsFitOverPossible = new ConfigRange( cfg, np + "trackCuts.nHitsFitOverPossible", 0, INT_MAX );
     cutDca = new ConfigRange( cfg, np + "trackCuts.dca", 0, INT_MAX );
     cutYLocal = new ConfigRange( cfg, np + "trackCuts.yLocal", -100, 100 );
+    cutTofMatch = new ConfigRange( cfg, np + "trackCuts.tofMatch", 0, 3 );
 
 }
 /**
@@ -99,6 +100,8 @@ void InclusiveSpectra::eventLoop(){
 	lg->info(__FUNCTION__) << endl;
 
 	Int_t nEvents = (Int_t)pico->getTree()->GetEntries();
+	nEventsToProcess = cfg->getInt( nodePath+"input.dst:nEvents", nEvents );
+
 	lg->info(__FUNCTION__) << "Reading " << nEvents << " events from chain" << endl;
 
 
@@ -108,14 +111,16 @@ void InclusiveSpectra::eventLoop(){
 	book->cd();
 	lg->info(__FUNCTION__) << "Making all histograms in : " << nodePath + "histograms" << endl;
 	book->makeAll( nodePath + "histograms" );
-	if ( cfg->nodeExists( "RefMultHelper.histograms" ) )
+	if ( cfg->nodeExists( "RefMultHelper.histograms" ) ){
+		lg->info(__FUNCTION__) << " Making histograms in RefMultHelper.histograms " << endl;
 		book->makeAll( "RefMultHelper.histograms" );
+	}
 
 	preLoop();
 
 	TaskProgress tp( "Event Loop", nEvents );
 
-	for ( Int_t iEvent = 0; iEvent < nEvents; iEvent ++ ){
+	for ( Int_t iEvent = 0; iEvent < nEventsToProcess; iEvent ++ ){
 		pico->GetEntry(iEvent);
 
 		tp.showProgress( iEvent );
@@ -124,7 +129,7 @@ void InclusiveSpectra::eventLoop(){
 		if ( !eventCut( ) )
 			continue;
 		
-		Int_t nTracks = pico->numTofTracks();
+		Int_t nTracks = pico->eventNumTracks();
 
 		for ( Int_t iTrack = 0; iTrack < nTracks; iTrack ++ ){
 
@@ -172,7 +177,7 @@ bool InclusiveSpectra::eventCut(){
 
 	// if a trigger list is given then filter,
 	// if not don't worry about triggers
-	if ( cutTriggers.size() >= 1  ){
+	/*if ( cutTriggers.size() >= 1  ){
 		vector<UInt_t> triggerIds = pico->eventTriggerIds();
 		bool findTrigger = false;
 		for ( int iTrig = 0; iTrig < cutTriggers.size(); iTrig++ ){
@@ -181,37 +186,35 @@ bool InclusiveSpectra::eventCut(){
 		}
 		if ( !findTrigger )
 			return false;
-	}
+	}*/
+
+	UShort_t refMult = pico->eventRefMult();
+	book->fill( "preRefMult", refMult );
 
 	double z = pico->eventVertexZ();
 	double x = pico->eventVertexX() + cutVertexROffset->x;
 	double y = pico->eventVertexY() + cutVertexROffset->y;
 	double r = TMath::Sqrt( x*x + y*y );
 
-	int nT0 = pico->eventNTZero();
-
-	book->fill( "vertexZ", z);
-	book->fill( "vertexR", r);
+	book->fill( "preVertexZ", z);
+	book->fill( "preVertexR", r);
 	
 	if ( z < cutVertexZ->min || z > cutVertexZ->max )
 		return false;
-
-	book->fill( "vertexZ_zCut", z);
-	book->fill( "vertexR_zCut", r);
 	if ( r < cutVertexR->min || r > cutVertexR->max )
 		return false;
-	book->fill( "vertexZ_r_zCut", z);
-	book->fill( "vertexR_r_zCut", r);
+	book->fill( "vertexZ", z);
+	book->fill( "vertexR", r);
 
-	if ( nT0 < cutNTZero->min || nT0 > cutNTZero->max )
-		return false;
-
-	book->fill( "refMult", pico->eventRefMult() );
+	book->fill( "refMult", refMult );
+	
+	
 
 	return true;
 }
 
 bool InclusiveSpectra::trackCut( Int_t iTrack ){
+
 
 
 	double beta = pico->trackBeta( iTrack );
@@ -221,7 +224,7 @@ bool InclusiveSpectra::trackCut( Int_t iTrack ){
 
 	double eta = pico->trackEta( iTrack );
 
-	if ( eta > .2 )
+	if ( eta > .5 )
 		return false;
 
 	double dcaX = pico->trackDcaX( iTrack );
@@ -229,6 +232,7 @@ bool InclusiveSpectra::trackCut( Int_t iTrack ){
 	double dcaZ = pico->trackDcaZ( iTrack );
 	double dca = TMath::Sqrt( dcaX*dcaX + dcaY*dcaY + dcaZ*dcaZ );
 
+	int tofMatch = pico->trackTofMatch( iTrack );
 	int nHits = pico->trackNHits( iTrack );
 	int nHitsDedx = pico->trackNHitsDedx( iTrack );
 	int nHitsFit = pico->trackNHitsFit( iTrack );
@@ -236,15 +240,19 @@ bool InclusiveSpectra::trackCut( Int_t iTrack ){
 	double fitPoss = ( (double)nHitsFit /  (double)nHitsPossible);
 
 	double yLocal = pico->trackYLocal( iTrack );
-/*	
-	book->fill( "yLocal", yLocal );
-	book->fill( "dca", dca );
-	book->fill( "nHits", nHits );
-	book->fill( "nHitsDedx", nHitsDedx );
-	book->fill( "nHitsFit", nHitsFit );
-	book->fill( "nHitsPossible", nHitsPossible );
-	book->fill( "nHitsFitOverPossible", fitPoss );*/
 
+	book->fill( "preTofMatch", tofMatch );
+	book->fill( "preYLocal", yLocal );
+	book->fill( "preDca", dca );
+	book->fill( "preNHits", nHits );
+	book->fill( "preNHitsDedx", nHitsDedx );
+	book->fill( "preNHitsFit", nHitsFit );
+	book->fill( "preNHitsPossible", nHitsPossible );
+	book->fill( "preNHitsFitOverPossible", fitPoss );
+	
+
+	if ( tofMatch < cutTofMatch->min || tofMatch > cutTofMatch->max )
+		return false;
 	if ( yLocal < cutYLocal->min || yLocal > cutYLocal->max )
 		return false;
 	if ( dca < cutDca->min || dca > cutDca->max )
@@ -254,14 +262,16 @@ bool InclusiveSpectra::trackCut( Int_t iTrack ){
 	if ( nHits < cutNHits->min || nHits > cutNHits->max )
 		return false;
 	if ( fitPoss < cutNHitsFitOverPossible->min || fitPoss > cutNHitsFitOverPossible->max )
-		return false;
-/*
-	book->fill( "_dca", dca );
-	book->fill( "_nHits", nHits );
-	book->fill( "_nHitsDedx", nHitsDedx );
-	book->fill( "_nHitsFit", nHitsFit );
-	book->fill( "_nHitsPossible", nHitsPossible );
-	book->fill( "_nHitsFitOverPossible", fitPoss );*/
+		return false; 
+
+	book->fill( "tofMatch", tofMatch );
+	book->fill( "yLocal", yLocal );
+	book->fill( "dca", dca );
+	book->fill( "nHits", nHits );
+	book->fill( "nHitsDedx", nHitsDedx );
+	book->fill( "nHitsFit", nHitsFit );
+	book->fill( "nHitsPossible", nHitsPossible );
+	book->fill( "nHitsFitOverPossible", fitPoss );
 
 	return true;
 }

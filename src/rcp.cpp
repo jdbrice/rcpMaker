@@ -10,6 +10,7 @@ using namespace jdb;
 #include "RefMultHelper.h"
 #include "PidPhaseSpace.h"
 #include "PidParamMaker.h"
+#include "SimultaneousGaussians.h"
 
 #include <exception>
 
@@ -38,6 +39,9 @@ int main( int argc, char* argv[] ) {
 			} else if ( "MakePidParams" == job ){
 				PidParamMaker ppm( &config, "PidParamMaker." );
 				ppm.make();
+			} else if ( "SimultaneousGaussians" == job ){
+				SimultaneousGaussians sg( &config, "SimultaneousGaussians." );
+				sg.make();
 			}
 
 		} catch ( exception &e ){

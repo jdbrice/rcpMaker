@@ -44,6 +44,7 @@ ParamSpectra::ParamSpectra( XmlConfig * config, string np)
 	// get the Bins for pt and eta
 	binsPt = new HistoBins( cfg, "binning.pt" );
 	binsEta = new HistoBins( cfg, "binning.eta" );
+	binsEta = new HistoBins( cfg, "binning.charge" );
 
 	// initialize the pid cut
 	nSigmaTof = cfg->getDouble( np+"nSigmaCut:tof", 1.0 );
@@ -71,6 +72,14 @@ void ParamSpectra::makeCentralityHistos()  {
 			string s = species[ iS ];
 			for ( int iC = 0; iC < centrals.size(); iC ++ ){
 				string hName = histoForCentrality( centrals[ iC ], s, cuts[ iCut ] );
+				lg->info( __FUNCTION__ ) << hName << endl;
+				book->clone( "ptBase", hName );
+
+				hName = histoForCentrality( centrals[ iC ], s, cuts[ iCut ], 1 );
+				lg->info( __FUNCTION__ ) << hName << endl;
+				book->clone( "ptBase", hName );
+
+				hName = histoForCentrality( centrals[ iC ], s, cuts[ iCut ], -1 );
 				lg->info( __FUNCTION__ ) << hName << endl;
 				book->clone( "ptBase", hName );
 			} //centralities
@@ -191,7 +200,7 @@ void ParamSpectra::analyzeTrack( Int_t iTrack ){
 	double p = pico->trackP( iTrack );
 	int ptBin = binsPt->findBin( pt );
 	int etaBin = binsEta->findBin( TMath::Abs( eta ) );
-
+	int charge = pico->trackCharge( iTrack  );
 	
 	Int_t refMult = pico->eventRefMult();
 	
@@ -222,7 +231,7 @@ void ParamSpectra::analyzeTrack( Int_t iTrack ){
 
 
 		for (int iC = 0; iC < cuts.size(); iC++ ){
-			vector<string> pidRes = pid( cuts[ iC ], p, dedx, tof );
+			vector<string> pidRes = pid( cuts[ iC ], p, dedx, tof, avgP );
 			if ( 0 == pidRes.size() )
 				book->fill( "pt", pt );
 			else {
@@ -236,10 +245,14 @@ void ParamSpectra::analyzeTrack( Int_t iTrack ){
 					 for ( int iCent = 0; iCent < centrals.size(); iCent++ ){
 					 	string cent = centrals[ iCent ];
 					 	//lg->info( __FUNCTION__ ) << book->get( histoForCentrality( cent, "K" ) )<< endl;
+					 	
 					 	string hName = histoForCentrality( cent, pidRes[ iP ], cuts[ iC ] );
+					 	string hcName = histoForCentrality( cent, pidRes[ iP ], cuts[ iC ], charge );
 					 	if ( 	refMult >= cutCentrality[ cent ]->min && refMult <= cutCentrality[ cent ]->max ){
 					 		book->fill( hName, pt );
+					 		book->fill( hcName, pt );
 					 	}
+
 					 } // loop on centrality cuts
 				} // loop in Pid results
 			} // Pid exists for this track
@@ -260,14 +273,14 @@ void ParamSpectra::analyzeTrack( Int_t iTrack ){
  * @param  tof  tof raw nl
  * @return      string for pid or "" if no pid
  */
-vector<string> ParamSpectra::pid( string type, double p, double dedx, double tof ){
+vector<string> ParamSpectra::pid( string type, double p, double dedx, double tof, double avgP ){
 
 	if ( TOF_CUT == type )
 		return pidTof( p, tof );
 	else if ( SQUARE_CUT == type )
 		return pidSquare( p, dedx, tof );
 	else if ( ELLIPSE_CUT == type )
-		return pidEllipse( p, dedx, tof );
+		return pidEllipse( p, dedx, tof, avgP );
 
 	return pidDedx( p, dedx );
 
@@ -328,16 +341,19 @@ vector<string> ParamSpectra::pidSquare( double p, double dedx, double tof ){
 	return res;
 }
 
-vector<string> ParamSpectra::pidEllipse( double p, double dedx, double tof ){
+vector<string> ParamSpectra::pidEllipse( double p, double dedx, double tof, double avgP ){
 
 	vector<string> res;
+
+	vector<double> dedxMeans = psr->centeredDedxMeans( centerSpecies, avgP );
+
 	for ( int iS = 0; iS < species.size(); iS ++ ){
 		
-		double tofMean = 0;//tofParams[ iS ]->mean( p, psr->mass( species[ iS ] ) ) ;
-		double tofSigma = 0.012;//tofParams[ iS ]->sigma( p, psr->mass( species[ iS ] ) );
+		double tofMean = tofParams[ iS ]->mean( avgP, psr->mass( species[ iS ] ), psr->mass( centerSpecies ) ) ;
+		double tofSigma = tofParams[ iS ]->sigma( avgP, psr->mass( species[ iS ]), psr->mass( centerSpecies ) );
 
-		double rcDedx = psr->rDedx( species[ iS ], dedx, p );
-		double sigma = 0.06;
+		double sigma = dedxSigmaIdeal;
+		double rcDedx = dedx - dedxMeans[ iS ];
 		double nsDedx = (rcDedx / sigma );
 
 		double rcTof = (tof - tofMean);
@@ -345,6 +361,7 @@ vector<string> ParamSpectra::pidEllipse( double p, double dedx, double tof ){
 
 		double cut = TMath::Power((nsTof / nSigmaTof), 2) + TMath::Power((nsDedx / nSigmaDedx), 2);
 		if ( cut <= 1 ){
+			//lg->info(__FUNCTION__) << "Ellipse:" << endl;
 			//lg->info(__FUNCTION__) << species[ iS ] << " : " << cut << endl;
 			res.push_back( species[ iS ] );
 		}

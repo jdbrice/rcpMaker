@@ -24,6 +24,7 @@ protected:
 	// Bins
 	HistoBins * binsPt;
 	HistoBins * binsEta;
+	HistoBins * binsCharge;
 
 	// Cutting
 	double nSigmaTof;
@@ -45,15 +46,22 @@ protected:
 	virtual void analyzeTrack( Int_t iTrack );
 	virtual void preLoop();
 	virtual void postLoop();
-	virtual string histoForCentrality( string cent, string pType, string pidCut )
-			{ return "pt_" + pidCut + "_" + pType + "_" + cent; }
+	string chargeName( int charge ) {
+		if ( 0 > charge  )
+			return "n";
+		else if ( 0 < charge  )
+			return "p";
+		return "a";
+	}
+	virtual string histoForCentrality( string cent, string pType, string pidCut, int charge = 0 )
+			{ return "pt_" + pidCut + "_" + pType + "_" + chargeName( charge ) + "_" + cent; }
 	virtual void makeCentralityHistos();
 
-	vector<string> pid( string type, double p, double dedx, double tof );
+	vector<string> pid( string type, double p, double dedx, double tof, double avgP );
 	vector<string> pidTof( double p, double tof );
 	vector<string> pidDedx( double p, double dedx );
 	vector<string> pidSquare( double p, double dedx, double tof );
-	vector<string> pidEllipse( double p, double dedx, double tof );
+	vector<string> pidEllipse( double p, double dedx, double tof, double avgP );
 
 	
 };

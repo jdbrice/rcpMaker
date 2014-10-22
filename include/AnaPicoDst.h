@@ -1,9 +1,17 @@
+//////////////////////////////////////////////////////////
+// This class has been automatically generated on
+// Wed Apr 22 16:44:52 2009 by ROOT version 5.12/00h-rc2
+// from TTree tof/BTof cell data
+// found on file: ntupleAllDays.root
+//////////////////////////////////////////////////////////
+
 #ifndef ANA_PICO_DST_H
 #define ANA_PICO_DST_H
 
 #include <TROOT.h>
 #include <TChain.h>
 #include <TFile.h>
+#include <TMath.h>
 
 #include "PicoDataStore.h"
 
@@ -12,117 +20,80 @@ public :
    TTree          *fChain;   //!pointer to the analyzed TTree or TChain
    Int_t           fCurrent; //!current Tree number in a TChain
 
-   UInt_t          runid;
-   UInt_t          evtid;
-   UInt_t          itime;
-   Short_t         refmult;
-   Short_t         refmult2;
-   Short_t         refmult3;
-   Short_t         nprimary;
-   Short_t         nglobal;
-   Short_t         tofmult;
-   Short_t         tofmatch;
-   Float_t         vtx[3];
-   Float_t         vtxe[3];
-   Float_t         vtxrank;
-   UInt_t          trigindex;
-   UInt_t          trigindexupper;
-   Float_t         field;
-   Float_t         bbccoinrate;
-   Float_t         zdccoinrate;
-   Float_t         bbcsumadc;
-   Float_t         zdcsumadc;
-   Float_t         vpdsumadc;
-   Float_t         emcsumadc;
-   Float_t         emcsume;
-   Int_t           bemcntow4rms;
-   Float_t         etaasym;
-   Float_t         etaasymtof;
-   Int_t           ntrkgl;
-   Int_t           ntrk;
-   Int_t           flag[609];   //[ntrk]
-   Float_t         eta[609];   //[ntrk]
-   Float_t         phi[609];   //[ntrk]
-   Float_t         pt[609];   //[ntrk]
-   Float_t         ptot[609];   //[ntrk]
-   Short_t         chg[609];   //[ntrk]
-   UChar_t         nhitsfit[609];   //[ntrk]
-   UChar_t         nhitsdedx[609];   //[ntrk]
-   UChar_t         nhitsposs[609];   //[ntrk]
-   Float_t         chi2[609];   //[ntrk]
-   Float_t         gldcax[609];   //[ntrk]
-   Float_t         gldcay[609];   //[ntrk]
-   Float_t         gldcaz[609];   //[ntrk]
-   Float_t         dedx[609];   //[ntrk]
-   Short_t         nsigtpc_e[609];   //[ntrk]
-   Short_t         nsigtpc_pi[609];   //[ntrk]
-   Short_t         nsigtpc_k[609];   //[ntrk]
-   Short_t         nsigtpc_p[609];   //[ntrk]
-   Float_t         defvpdvtxz;
-   UShort_t        defmatchFlag[609];   //[ntrk]
-   Float_t         defyLocal[609];   //[ntrk]
-   Float_t         defzLocal[609];   //[ntrk]
-   Float_t         defpathLength[609];   //[ntrk]
-   Float_t         deftot[609];   //[ntrk]
-   Float_t         deftof[609];   //[ntrk]
-   Float_t         definvbeta[609];   //[ntrk]
+   // Declaration of leave types
+   Int_t          nTriggers;
+   UInt_t         triggerIds[ 400 ];
+   Int_t           run;
+   Int_t           evt;
+   Int_t             refMult;
 
+   Float_t         vertexX;
+   Float_t         vertexY;
+   Float_t         vertexZ;
+   Int_t             nTZero;
+   Float_t         vpdVz;
+   
+   Int_t           nTofHits;
+   Float_t         yLocal[8000];   
+   Float_t         zLocal[8000];   
+   Int_t           charge[8000];   
+   Float_t         pt[8000];   
+   Float_t         eta[8000];   
+   Float_t         phi[8000];
+   Float_t         pX[8000], pY[8000], pZ[8000], p[8000];
+   Float_t         dcaX[8000];   
+   Float_t         dcaY[8000];   
+   Float_t         dcaZ[8000];   
+   Int_t           nHits[8000];   
+   Int_t           nHitsPossible[8000];
+   Int_t           nHitsFit[8000];   
+   Int_t           nHitsDedx[8000];   
+   Float_t         dedx[8000];   
+   Float_t         length[8000];
+   Float_t         tof[8000];   
+   Float_t         beta[8000];   
+   
+
+   // from VPD start time if it has been calculated
+   Double_t        T0;//added
+   Double_t        vzVpd;//added
+   
    // List of branches
-   TBranch        *b_runid;   //!
-   TBranch        *b_evtid;   //!
-   TBranch        *b_itime;   //!
-   TBranch        *b_refmult;   //!
-   TBranch        *b_refmult2;   //!
-   TBranch        *b_refmult3;   //!
-   TBranch        *b_nprimary;   //!
-   TBranch        *b_nglobal;   //!
-   TBranch        *b_tofmult;   //!
-   TBranch        *b_tofmatch;   //!
-   TBranch        *b_vtx;   //!
-   TBranch        *b_vtxe;   //!
-   TBranch        *b_vtxrank;   //!
-   TBranch        *b_trigindex;   //!
-   TBranch        *b_trigindexupper;   //!
-   TBranch        *b_field;   //!
-   TBranch        *b_bbccoinrate;   //!
-   TBranch        *b_zdccoinrate;   //!
-   TBranch        *b_bbcsumadc;   //!
-   TBranch        *b_zdcsumadc;   //!
-   TBranch        *b_vpdsumadc;   //!
-   TBranch        *b_emcsumadc;   //!
-   TBranch        *b_emcsume;   //!
-   TBranch        *b_bemcntow4rms;   //!
-   TBranch        *b_etaasym;   //!
-   TBranch        *b_etaasymtof;   //!
-   TBranch        *b_ntrkgl;   //!
-   TBranch        *b_ntrk;   //!
-   TBranch        *b_flag;   //!
+   TBranch        *b_nTriggers;   //!
+   TBranch        *b_triggerIds;   //!
+   TBranch        *b_run;   //!
+   TBranch        *b_evt;   //!
+   TBranch        *b_refMult;
+   TBranch        *b_vertexX;   //!
+   TBranch        *b_vertexY;   //!
+   TBranch        *b_vertexZ;   //!
+   TBranch        *b_nTZero;
+   TBranch        *b_vpdVz;   //!
+   TBranch        *b_nTofHits;   //!
+   TBranch        *b_yLocal;   //!
+   TBranch        *b_zLocal;   //!
+   TBranch        *b_charge;   //!
+   TBranch        *b_pt;   //!
    TBranch        *b_eta;   //!
    TBranch        *b_phi;   //!
-   TBranch        *b_pt;   //!
-   TBranch        *b_ptot;   //!
-   TBranch        *b_chg;   //!
-   TBranch        *b_nhitsfit;   //!
-   TBranch        *b_nhitsdedx;   //!
-   TBranch        *b_nhitsposs;   //!
-   TBranch        *b_chi2;   //!
-   TBranch        *b_gldcax;   //!
-   TBranch        *b_gldcay;   //!
-   TBranch        *b_gldcaz;   //!
+   TBranch        *b_pX, *b_pY, *b_pZ, *b_p;
+   TBranch        *b_dcaX;   //!
+   TBranch        *b_dcaY;   //!
+   TBranch        *b_dcaZ;   //!
+   TBranch        *b_length;   //!
+   TBranch        *b_nHits;   //!
+   TBranch        *b_nHitsPossible;
+   TBranch        *b_nHitsFit;   //!
+   TBranch        *b_nHitsDedx;   //!
    TBranch        *b_dedx;   //!
-   TBranch        *b_nsigtpc_e;   //!
-   TBranch        *b_nsigtpc_pi;   //!
-   TBranch        *b_nsigtpc_k;   //!
-   TBranch        *b_nsigtpc_p;   //!
-   TBranch        *b_defvpdvtxz;   //!
-   TBranch        *b_defmatchFlag;   //!
-   TBranch        *b_defyLocal;   //!
-   TBranch        *b_defzLocal;   //!
-   TBranch        *b_defpathLength;   //!
-   TBranch        *b_deftot;   //!
-   TBranch        *b_deftof;   //!
-   TBranch        *b_definvbeta;   //!
+   TBranch        *b_tof;   //!
+   TBranch        *b_beta;   //!
 
+
+
+   TBranch        *b_T0;
+   TBranch        *b_vzVpd;
+   
 
    AnaPicoDst(TTree *tree=0);
 
@@ -144,61 +115,58 @@ public :
    virtual void     Show(Long64_t entry = -1);
 
 
-   const Int_t TrigIDs14_015[4]     = {440005,           // BBC_MB
-                                       440015,           // BBC_MB
-                                       440006,           // bbc_mon_tof
-                                       440016 };
+
 
    /**
-    * Implement the PicoDataStore Interface
+   e
     */
-   
    virtual TTree * getTree() { return fChain; }
    
-   virtual Int_t numTofTracks(){ return tofmult; }
    virtual Double_t trackPt( Int_t iHit ) { return pt[ iHit ]; }
-   virtual Double_t trackP( Int_t iHit ){ return ptot[ iHit ]; }
+   virtual Double_t trackP( Int_t iHit ){ return p[ iHit ]; }
    virtual Double_t trackEta( Int_t iHit ) { return eta[ iHit ]; }
+   virtual Int_t trackCharge( Int_t iHit ){ return charge[ iHit ]; }
+
    virtual Double_t trackDedx( Int_t iHit ){ return dedx[ iHit ]; }
-   virtual Double_t trackPathLength( Int_t iHit ){ return defpathLength[ iHit ]; }
-   virtual Double_t trackTof( Int_t iHit ){ return deftof[ iHit ]; }
-   virtual Double_t trackBeta( Int_t iHit ){ return (1.0/definvbeta[ iHit ]); }
-   virtual Int_t trackCharge( Int_t iHit ){ return chg[ iHit ]; }
+   virtual Double_t trackPathLength( Int_t iHit ){ return length[ iHit ]; }
+   virtual Double_t trackTof( Int_t iHit ){ return tof[ iHit ]; }
+   virtual Double_t trackBeta( Int_t iHit ){ return beta[ iHit ]; }
+   virtual Int_t trackTofMatch( Int_t iHit ){ return 1;}
+   
 
-   virtual Double_t eventVertexX( ){ return vtx[0]; }
-   virtual Double_t eventVertexY( ){ return vtx[1]; }
-   virtual Double_t eventVertexZ( ){ return vtx[2]; }
+   virtual Double_t eventVertexX( ){ return vertexX; }
+   virtual Double_t eventVertexY( ){ return vertexY; }
+   virtual Double_t eventVertexZ( ){ return vertexZ; }
 
-   virtual Double_t trackDcaX( Int_t iHit ){ return gldcax[iHit]; }
-   virtual Double_t trackDcaY( Int_t iHit ){ return gldcay[iHit]; }
-   virtual Double_t trackDcaZ( Int_t iHit ){ return gldcaz[iHit]; }
+   virtual Double_t trackDcaX( Int_t iHit ){ return dcaX[iHit]; }
+   virtual Double_t trackDcaY( Int_t iHit ){ return dcaY[iHit]; }
+   virtual Double_t trackDcaZ( Int_t iHit ){ return dcaZ[iHit]; }
+   virtual Double_t trackDca( Int_t iHit ){ return TMath::Sqrt(dcaX[iHit]*dcaX[iHit]+dcaY[iHit]*dcaY[iHit]+dcaZ[iHit]*dcaZ[iHit]) ; }
 
-   virtual Double_t trackYLocal( Int_t iHit ){ return defyLocal[iHit]; }
+   virtual Double_t trackYLocal( Int_t iHit ){ return yLocal[iHit]; }
 
-   virtual Double_t eventNTZero() { return 0; }
-   virtual Double_t eventRefMult() { return refmult; }
-   virtual Double_t eventRefMultPos() { return 0; }
-   virtual Double_t eventRefMultNeg() { return 0; }
+   virtual Double_t trackNHits( Int_t iHit ) { return nHits[ iHit ]; }
+   virtual Double_t trackNHitsDedx( Int_t iHit ){return nHitsDedx[ iHit ]; }
+   virtual Double_t trackNHitsFit( Int_t iHit ){ return nHitsFit[ iHit ]; }
+   virtual Double_t trackNHitsPossible( Int_t iHit ) { return nHitsPossible[ iHit ]; }
 
-   virtual Double_t trackNHits( Int_t iHit ) { return 999; } // not included but cut > 15
-   virtual Double_t trackNHitsDedx( Int_t iHit ){return nhitsdedx[ iHit ]; }
-   virtual Double_t trackNHitsFit( Int_t iHit ){ return nhitsfit[ iHit ]; }
-   virtual Double_t trackNHitsPossible( Int_t iHit ) { return nhitsposs[ iHit ]; }
+   virtual UInt_t eventRunId(){return run;}
+   virtual UInt_t eventEventId(){return evt;}
+   virtual UInt_t eventDay(){return 0;}
+   virtual UInt_t eventYear(){return 0;}
 
-   virtual Int_t numEventTriggers() { return 0; }
-   virtual std::vector<UInt_t> eventTriggerIds() { 
+   virtual Int_t eventNTZero() { return nTZero; }
+   virtual Short_t eventTofMult(){return nTofHits; }
+   virtual UShort_t eventRefMult(){return refMult;}
+   virtual Int_t eventNumTracks(){return nTofHits;}
+   virtual Short_t eventNumPrimary(){return 0;}
+   virtual Short_t eventNumGlobal(){return 0;}
 
-      std::vector<UInt_t> v; 
-      if ( trigindex & 1 )
-         v.push_back( TrigIDs14_015[0] );
-      if ( trigindex & 2 )
-         v.push_back( TrigIDs14_015[1] );
-      if ( trigindex & 4 )
-         v.push_back( TrigIDs14_015[2] );
-      if ( trigindex & 8 )
-         v.push_back( TrigIDs14_015[3] );
-      return v;
-   }
+   virtual Float_t eventZDC(){return 0;}
+   virtual Float_t eventBBC(){return 0;}
+
+   virtual Int_t numEventTriggers() { return nTriggers; }
+   virtual std::vector<UInt_t> eventTriggerIds() { std::vector<UInt_t> v( std::begin(triggerIds), std::end(triggerIds) ); return v;}
 
 
 };

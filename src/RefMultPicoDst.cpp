@@ -1,31 +1,32 @@
-#include "AnaPicoDst.h"
+#include "RefMultPicoDst.h"
 #include <iostream>
 using namespace std;
 
-AnaPicoDst::AnaPicoDst(TTree *tree)
+
+RefMultPicoDst::RefMultPicoDst(TTree *tree)
 {
 // if parameter tree is not specified (or zero), connect the file
 // used to generate this class and read the Tree.
    if (tree == 0) {
-      cout << "[AnaPicoDst] Error Invalid Tree " << endl;
+      cout << "[RefMultPicoDst] Error Invalid Tree " << endl;
       return;
    }
    Init(tree);
 }
 
-AnaPicoDst::~AnaPicoDst()
+RefMultPicoDst::~RefMultPicoDst()
 {
    //if (!fChain) return;
    //delete fChain->GetCurrentFile();
 }
 
-Int_t AnaPicoDst::GetEntry(Long64_t entry)
+Int_t RefMultPicoDst::GetEntry(Long64_t entry)
 {
 // Read contents of entry.
    if (!fChain) return 0;
    return fChain->GetEntry(entry);
 }
-Long64_t AnaPicoDst::LoadTree(Long64_t entry)
+Long64_t RefMultPicoDst::LoadTree(Long64_t entry)
 {
 // Set the environment to read one entry
    if (!fChain) return -5;
@@ -40,7 +41,7 @@ Long64_t AnaPicoDst::LoadTree(Long64_t entry)
    return centry;
 }
 
-void AnaPicoDst::Init(TTree *tree)
+void RefMultPicoDst::Init(TTree *tree)
 {
    // The Init() function is called when the selector needs to initialize
    // a new tree or chain. Typically here the branch addresses and branch
@@ -56,23 +57,22 @@ void AnaPicoDst::Init(TTree *tree)
    fCurrent = -1;
    fChain->SetMakeClass(1);
 
+   fChain->SetBranchAddress("runId", &runId, &b_runId);
+   fChain->SetBranchAddress("eventId", &eventId, &b_eventId);
+   fChain->SetBranchAddress("iDay", &iDay, &b_iDay);
+   fChain->SetBranchAddress("iYear", &iYear, &b_iYear);
    fChain->SetBranchAddress("nTriggers", &nTriggers, &b_nTriggers);
-   fChain->SetBranchAddress("triggerIds", &triggerIds, &b_triggerIds);
-   
-   fChain->SetBranchAddress("run", &run, &b_run);
-   fChain->SetBranchAddress("evt", &evt, &b_evt);
+   fChain->SetBranchAddress("triggerIds", triggerIds, &b_triggerIds);
    fChain->SetBranchAddress("refMult", &refMult, &b_refMult);
-   
-
    fChain->SetBranchAddress("vertexX", &vertexX, &b_vertexX);
    fChain->SetBranchAddress("vertexY", &vertexY, &b_vertexY);
    fChain->SetBranchAddress("vertexZ", &vertexZ, &b_vertexZ);
    fChain->SetBranchAddress("nTZero", &nTZero, &b_nTZero);
-
-   fChain->SetBranchAddress("vpdVz", &vpdVz, &b_vpdVz);
-   
-   
-   fChain->SetBranchAddress("nTofHits", &nTofHits, &b_nTofHits);
+   fChain->SetBranchAddress("tofMult", &tofMult, &b_tofMult);
+   fChain->SetBranchAddress("nTracks", &nTracks, &b_nTracks);
+   fChain->SetBranchAddress("nPrimary", &nPrimary, &b_nPrimary);
+   fChain->SetBranchAddress("nGlobal", &nGlobal, &b_nGlobal);
+   fChain->SetBranchAddress("tofMatchFlag", tofMatchFlag, &b_tofMatchFlag);
    fChain->SetBranchAddress("yLocal", yLocal, &b_yLocal);
    fChain->SetBranchAddress("zLocal", zLocal, &b_zLocal);
    fChain->SetBranchAddress("charge", charge, &b_charge);
@@ -83,25 +83,25 @@ void AnaPicoDst::Init(TTree *tree)
    fChain->SetBranchAddress("pY", pY, &b_pY);
    fChain->SetBranchAddress("pZ", pZ, &b_pZ);
    fChain->SetBranchAddress("p", p, &b_p);
-
    fChain->SetBranchAddress("dcaX", dcaX, &b_dcaX);
    fChain->SetBranchAddress("dcaY", dcaY, &b_dcaY);
    fChain->SetBranchAddress("dcaZ", dcaZ, &b_dcaZ);
-   
+   fChain->SetBranchAddress("dca", dca, &b_dca);
    fChain->SetBranchAddress("nHits", nHits, &b_nHits);
-   fChain->SetBranchAddress("nHitsPossible", nHitsPossible, &b_nHitsPossible);
    fChain->SetBranchAddress("nHitsFit", nHitsFit, &b_nHitsFit);
+   fChain->SetBranchAddress("nHitsPossible", nHitsPossible, &b_nHitsPossible);
    fChain->SetBranchAddress("nHitsDedx", nHitsDedx, &b_nHitsDedx);
-
    fChain->SetBranchAddress("dedx", dedx, &b_dedx);
-   fChain->SetBranchAddress("length", length, &b_length);
+   fChain->SetBranchAddress("pathLength", pathLength, &b_pathLength);
    fChain->SetBranchAddress("tof", tof, &b_tof);
    fChain->SetBranchAddress("beta", beta, &b_beta);
-
+   fChain->SetBranchAddress("bbcCoinRate", &bbcCoinRate, &b_bbcCoinRate);
+   fChain->SetBranchAddress("zdcCoinRate", &zdcCoinRate, &b_zdcCoinRate);
+   
    Notify();
 }
 
-Bool_t AnaPicoDst::Notify()
+Bool_t RefMultPicoDst::Notify()
 {
    // The Notify() function is called when a new file is opened. This
    // can be either for a new TTree in a TChain or when when a new TTree
@@ -112,14 +112,14 @@ Bool_t AnaPicoDst::Notify()
    return kTRUE;
 }
 
-void AnaPicoDst::Show(Long64_t entry)
+void RefMultPicoDst::Show(Long64_t entry)
 {
 // Print contents of entry.
 // If entry is not specified, print current entry
    if (!fChain) return;
    fChain->Show(entry);
 }
-Int_t AnaPicoDst::Cut(Long64_t entry)
+Int_t RefMultPicoDst::Cut(Long64_t entry)
 {
 // This function may be called from Loop.
 // returns  1 if entry is accepted.
