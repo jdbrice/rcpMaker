@@ -18,8 +18,8 @@ PidPhaseSpace::PidPhaseSpace( XmlConfig* config, string np ) : InclusiveSpectra(
 	lg->info(__FUNCTION__) << "Tof Padding ( " << tofPadding << ", " << tofScalePadding << " ) " << endl;
 
 	// Initialize the Phase Space Recentering Object
-	tofSigmaIdeal = cfg->getDouble( np+"PhaseSpaceRecentering.sigma:tof", 0.012);
-	dedxSigmaIdeal = cfg->getDouble( np+"PhaseSpaceRecentering.sigma:dedx", 0.06);
+	tofSigmaIdeal = cfg->getDouble( np+"PhaseSpaceRecentering.sigma:tof", 0.011);
+	dedxSigmaIdeal = cfg->getDouble( np+"PhaseSpaceRecentering.sigma:dedx", 0.033);
 	psr = new PhaseSpaceRecentering( dedxSigmaIdeal,
 									 tofSigmaIdeal,
 									 cfg->getString( np+"Bichsel.table", "dedxBichsel.root"),
@@ -45,6 +45,8 @@ void PidPhaseSpace::postLoop() {
 
 
 void PidPhaseSpace::analyzeTrack( int iTrack ){
+
+	book->cd();
 
 	double pt = pico->trackPt( iTrack );
 	double p = pico->trackP( iTrack );
@@ -94,13 +96,14 @@ void PidPhaseSpace::preparePhaseSpaceHistograms( string plc){
 
 	lg->info(__FUNCTION__) << "Making Histograms with centering spceies: " << plc << endl;
 
+	book->cd();
 	/**
 	 * Make the dedx + tof binning 
 	 * Only the bin width is used for dynamic bins
 	 */
 	
-	dedxBinWidth = cfg->getDouble( "binning.dedxBinWidth", 0.01 );
-	tofBinWidth = cfg->getDouble( "binning.tofBinWidth", 0.002 );
+	dedxBinWidth = cfg->getDouble( "binning.dedx:width", 0.015 );
+	tofBinWidth = cfg->getDouble( "binning.tof:width", 0.006 );
 
 	/**
 	 * Make the momentum transverse binning
@@ -164,8 +167,10 @@ void PidPhaseSpace::preparePhaseSpaceHistograms( string plc){
 
 				book->cd( "dedx" );
 				string dName = dedxName( plc, charge, ptBin, etaBin );
+				book->cd( "dedx" );
 				book->make1D( dName, "dEdx", dedxBins.size()-1, dedxBins.data() );
 				for ( int iS = 0; iS < species.size(); iS++ ){
+					book->cd( "dedx" );
 					dName = dedxName( plc, charge, ptBin, etaBin, species[ iS ] );
 					book->make1D( dName, "dEdx", dedxBins.size()-1, dedxBins.data() );
 				} 

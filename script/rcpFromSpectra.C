@@ -28,7 +28,8 @@ void rcpFromSpectra( string fname = "inclusiveSpectra.root", string bName = "pt_
 	gPad->SetLogy(1);
 
 	c->cd(2 );
-	TH1D* rcp = (TH1D*)central->Clone( "ratio" );
+	TH1D* rcp = ((TH1D*)central->Clone( "ratio" ))->Rebin(2);
+	TH1D* rbPer = per->Rebin( 2 );
 	rcp->SetTitle( "0%-5% / 60%-80% " );
 	rcp->Divide( per );
 

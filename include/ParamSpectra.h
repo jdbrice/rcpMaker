@@ -3,6 +3,7 @@
 
 #include "InclusiveSpectra.h"
 #include "TofPidParams.h"
+#include "DedxPidParams.h"
 #include "PhaseSpaceRecentering.h"
 #include "HistoBins.h"
 #include "Reporter.h"
@@ -15,6 +16,7 @@ protected:
 
 	vector<string> species;
 	vector<TofPidParams*> tofParams;
+	vector<DedxPidParams*> dedxParams;
 
 	string centerSpecies;
 	double tofSigmaIdeal, dedxSigmaIdeal;

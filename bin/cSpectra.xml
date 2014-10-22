@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+
+	<jobType>ParamSpectra</jobType>
+	<Logger>
+		<logLevel>info</logLevel>
+	</Logger>
+
+	<binning hide="true" >
+		<!--<pt>
+			0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55, 0.6, 0.65, 0.7, 0.75, 0.8, 0.85, 0.9, 0.95, 1.0, 1.05, 1.1, 1.15, 1.2, 1.25, 1.3, 1.35, 1.4, 1.45, 1.5, 1.55, 1.6, 1.65, 1.7, 1.75, 1.8, 1.85, 1.9, 1.95, 2.0, 2.1, 2.2, 2.3, 2.4, 2.5, 2.6, 2.7, 2.8, 2.9, 3.0, 3.25, 3.5, 3.75, 4.0
+		</pt>-->
+		<pt width="0.05" min="0.2" max="4.0" />
+		
+		<eta>0.0, 0.2, 0.4, 0.6, 0.8, 1.0 </eta>
+		
+		<charge> -1.5, -0.5, 0.5, 1.5</charge>
+
+	</binning>
+
+	<RefMultHelper>
+		<Logger>
+			<logLevel>info</logLevel>
+		</Logger>	
+		
+		<input>
+			<dst treeName="tree" maxFiles="5" url="/Users/danielbrandenburg/bnl/local/data/BBCMB14_015/"/>
+		</input>
+		
+		<central min="0.0" max="0.05"/>
+		<peripheral min="0.6" max="0.8"/>
+		<eventCuts>
+			<vertexZ min="-75" max="75" />
+			<vertexR min="0.0" max="1.0" />
+			<vertexROffset x="0" y="0.86" />
+			<nTZero min="20" max="10000"/>
+		</eventCuts>
+		<output>
+			<data>refMult.root</data>
+			<report>rpRefMult.pdf</report>
+		</output>
+
+		<histograms>
+			<refMult title="Centrality Selection; refMult; #"   nBinsX="400" minX="0" maxX="400"/>
+			<vertexZ title="Z Vertex" widthX="1" minX="-200" maxX="200" />
+			<vertexR title="#sigma" nBinsX="200" minX="0" maxX="10" />
+
+			<preVertexZ title="Z Vertex" widthX="1" minX="-200" maxX="200" />
+			<preVertexR title="#sigma" nBinsX="200" minX="0" maxX="10" />
+			<preRefMult title="Centrality Selection; refMult; #"   nBinsX="400" minX="0" maxX="400"/>
+			
+
+			<tofMatch title="tofMatch" widthX="1" minX="0" maxX="4" />
+			<yLocal title="yLocal" widthX=".1" minX="-3" maxX="3" />
+			<dca title="DCA" nBinsX="500" minX="0" maxX="10" />
+			<nHits title="# Hits" nBinsX="100" minX="0" maxX="100" />
+			<nHitsDedx title="# Hits dEdx" nBinsX="100" minX="0" maxX="100" />
+			<nHitsFit title="# Hits Fit / Possible" nBinsX="100" minX="0" maxX="100" />
+			<nHitsPossible title="# Hits Fit / Possible" nBinsX="100" minX="0" maxX="100" />
+			<nHitsFitOverPossible title="# Hits Fit / Possible" widthX="0.01" minX="0" maxX="1" />
+
+			<preTofMatch title="tofMatch" widthX="1" minX="0" maxX="4" />
+			<preYLocal title="yLocal" widthX=".1" minX="-3" maxX="3" />
+			<preDca title="DCA" nBinsX="500" minX="0" maxX="10" />
+			<preNHits title="# Hits" nBinsX="100" minX="0" maxX="100" />
+			<preNHitsDedx title="# Hits dEdx" nBinsX="100" minX="0" maxX="100" />
+			<preNHitsFit title="# Hits Fit / Possible" nBinsX="100" minX="0" maxX="100" />
+			<preNHitsPossible title="# Hits Fit / Possible" nBinsX="100" minX="0" maxX="100" />
+			<preNHitsFitOverPossible title="# Hits Fit / Possible" widthX="0.01" minX="0" maxX="1" />
+		</histograms>
+
+	</RefMultHelper>
+
+	<InclusiveSpectra>
+		<Logger>
+			<logLevel>info</logLevel>
+		</Logger>	
+		
+		<input>
+			<dst treeName="tree" maxFiles="100" url="/Users/danielbrandenburg/bnl/local/data/BBCMB14_015/"/>
+		</input>
+
+		<output>
+			<data>inclusiveSpectra.root</data>
+			<report>rpInclusiveSpectra.pdf</report>
+		</output>
+
+		<centrality>
+			<0to5 min="235" max="400" />
+			<60to80 min="10" max="20" />
+		</centrality>
+
+		<histograms>
+			<ptBase type="1D" title="p_{T} [GeV]; p_{T} [GeV]; #Events"  xBins="binning.pt"/>
+			<ptAll type="1D" title="p_{T} [GeV]; p_{T} [GeV]; #Events"  xBins="binning.pt"/>
+			<ptPos type="1D" title="p_{T} [GeV]; p_{T} [GeV]; #Events"  xBins="binning.pt"/>
+			<ptNeg type="1D" title="p_{T} [GeV]; p_{T} [GeV]; #Events"  xBins="binning.pt"/>
+	
+		</histograms>
+
+		<eventCuts>
+			<vertexZ min="-75" max="75" />
+			<vertexR min="0.0" max="1.0" />
+			<vertexROffset x="0" y="0.86" />
+
+			<triggers>440005, 440015</triggers>
+		</eventCuts>
+		<trackCuts>
+			<dca min="0" max="1.0" />
+			<nHits min="15" />
+			<nHitsDedx min="10"  />
+			<nHitsFitOverPossible min="0.52" />
+			<yLocal min="-1.8" max="1.8" />
+			<tofMatch min="1" max="3"/>
+		</trackCuts>
+
+	</InclusiveSpectra>
+
+	<ParamSpectra>
+		<Logger>
+			<logLevel>info</logLevel>
+		</Logger>	
+		
+		<input>
+			<dst treeName="tree" maxFiles="5" url="/Users/danielbrandenburg/bnl/local/data/BBCMB14_015/"/>
+		</input>
+
+		<output>
+			<data>paramSpectra.root</data>
+			<report>rpParamSpectra.pdf</report>
+		</output>
+
+		<Bichsel>
+			<table>dedxBichsel.root</table>
+			<method>0</method>
+		</Bichsel>
+
+		<PhaseSpaceRecentering>
+			<centerSpecies>K</centerSpecies>
+			<sigma tof="0.012" dedx="0.033"/>
+			<method>nonlinear</method>
+		</PhaseSpaceRecentering>
+
+		<PidSpecies>Pi, K, P</PidSpecies>
+
+		<nSigmaCut tof="1.0" dedx="1.0"/>
+
+		<centrality>
+			<0to5 min="235" max="400" />
+			<60to80 min="10" max="20" />
+		</centrality>
+
+		<eventCuts>
+			<vertexZ min="-75" max="75" />
+			<vertexR min="0.0" max="1.0" />
+			<vertexROffset x="0" y="0.86" />
+		</eventCuts>
+		<trackCuts>
+			<dca min="0" max="1.0" />
+			<nHits min="15" />
+			<nHitsDedx min="10"  />
+			<nHitsFitOverPossible min="0.52" />
+			<yLocal min="-1.8" max="1.8" />
+			<tofMatch min="1" max="3"/>
+		</trackCuts>
+
+		<TofPidParams>
+			<Pi>
+				<mean t="0.00303021" p="0.328878" ep="-0.476803"/>
+				<sigma t="-0.0109769" p="-0.0174848" ep="-0.0000516795"/>
+			</Pi>
+			<K>
+				<mean t="-0.00730177" p="-0.0676805" ep="0.00140494"/>
+				<sigma t="0.0114231" p="0.137087" ep="0.00333969"/>
+			</K>
+			<P>
+				<mean t="-0.0100537" p="-0.0908703" ep="0.306089"/>
+				<sigma t="0.012303" p="0.524039" ep="0.0077849"/>
+			</P>
+		</TofPidParams>
+		<DedxPidParams>
+			<Pi>
+				<sigma p0="0.0332619" p1="0.000423775" p2="0.000122086" p3="0.0150777" />
+			</Pi>
+			<K>
+				<sigma p0="0.0341419" p1="0" p2="0.0000874152" p3="0.0063817"/>
+			</K>
+			<P>
+				<sigma p0="0.0330171" p1="0.258738" p2="0" p3="0.00412973"/>
+			</P>
+		</DedxPidParams>
+
+		<histograms>
+			
+
+			<tof type="1D" title="" widthX="0.0012" minX="-1.0" maxX="1.0" />
+			<dedx type="1D" title="" widthX="0.006" minX="-2" maxX="2" />
+			
+			<ptBase type="1D" title="p_{T} [GeV]; p_{T} [GeV]; #Events"  xBins="binning.pt"/>
+			<pt type="1D" title="p_{T} [GeV]; p_{T} [GeV]; #Events"  xBins="binning.pt"/>
+
+			<mean type="1D" title="#mu" xBins="binning.pt" />
+			<sigma type="1D" title="#sigma" xBins="binning.pt" />
+			<dedxSigma type="1D" title="#sigma" xBins="binning.pt" />
+
+
+		</histograms>
+
+	</ParamSpectra>
+
+</config>

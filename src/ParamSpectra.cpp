@@ -28,6 +28,9 @@ ParamSpectra::ParamSpectra( XmlConfig * config, string np)
 
 		TofPidParams * tpp = new TofPidParams( cfg, np + "TofPidParams." + species[ i ] + "." );
 		tofParams.push_back( tpp );
+
+		DedxPidParams * dpp = new DedxPidParams( cfg, np + "DedxPidParams." + species[ i ] + "." );
+		dedxParams.push_back( dpp );
 	}
 
 	// Initialize the Phase Space Recentering Object
@@ -98,6 +101,8 @@ void ParamSpectra::preLoop(){
 		book->clone( "mean", "mean" + species[ iS ] );
 		book->clone( "sigma", "sigma" + species[ iS ] );
 
+		book->clone( "dedxSigma", "dedxSigma" + species[ iS ] );
+
 		for ( int iC = 0; iC < cuts.size(); iC ++ )
 			book->clone( "pt", cuts[iC] + "Pt" + species[ iS ] );
 	}
@@ -112,10 +117,12 @@ void ParamSpectra::preLoop(){
 		for ( int iS = 0; iS < species.size(); iS ++ ){
 			double tofMean = tofParams[ iS ]->mean( ip, psr->mass( species[ iS ] ), psr->mass( centerSpecies ) ) ;
 			double tofSigma = tofParams[ iS ]->sigma( ip, psr->mass( species[ iS ] ), psr->mass( centerSpecies ) ) ;
+			double dedxSigma = dedxParams[ iS ]->sigma( ip ) ;
 			//if ( "Pi" == species[ iS ] )
 			//	tofMean *= -1;
 			book->get( "mean" + species[ iS ] )->SetBinContent( binsPt->findBin( ip ) + 1, tofMean );
 			book->get( "sigma" + species[ iS ] )->SetBinContent( binsPt->findBin( ip ) + 1, tofSigma );
+			book->get( "dedxSigma" + species[ iS ] )->SetBinContent( binsPt->findBin( ip ) + 1, dedxSigma );
 		}	
 	}
 	
@@ -297,12 +304,6 @@ vector<string> ParamSpectra::pidTof( double p, double tof ){
 		if ( tof >= tofMean - tofSigma * nSigmaTof && tof <= tofMean + tofSigma * nSigmaTof ){
 			res.push_back( species[ iS ] );
 		}
-		/*double km = psr->tofGenerator()->mean( p, psr->mass( centerSpecies ) );
-		double m = psr->tofGenerator()->mean( p, psr->mass( species[ iS ] ) );
-		double rcTof = (tof + km  - m) / 0.0012;
-		if (  rcTof <= nSigmaTof && rcTof >= -nSigmaTof )
-			res.push_back( species[ iS ]);
-		*/
 	}
 
 	return res;
@@ -316,7 +317,7 @@ vector<string> ParamSpectra::pidDedx( double p, double dedx ){
 	for ( int iS = 0; iS < species.size(); iS ++ ){
 		
 		double rcDedx = psr->rDedx( species[ iS ], dedx, p );
-		double sigma = 0.06;
+		double sigma = dedxParams[ iS ]->sigma( p );
 
 		if (	dedx >= means[ iS ] -sigma * nSigmaDedx && dedx <=  means[ iS ] + sigma * nSigmaDedx ){
 			res.push_back( species[ iS ] );
@@ -351,21 +352,19 @@ vector<string> ParamSpectra::pidEllipse( double p, double dedx, double tof, doub
 		
 		double tofMean = tofParams[ iS ]->mean( avgP, psr->mass( species[ iS ] ), psr->mass( centerSpecies ) ) ;
 		double tofSigma = tofParams[ iS ]->sigma( avgP, psr->mass( species[ iS ]), psr->mass( centerSpecies ) );
+		double dedxSigma = dedxParams[ iS ]->sigma( avgP );
 
-		double sigma = dedxSigmaIdeal;
 		double rcDedx = dedx - dedxMeans[ iS ];
-		double nsDedx = (rcDedx / sigma );
+		double nsDedx = (rcDedx / dedxSigma );
 
 		double rcTof = (tof - tofMean);
 		double nsTof = (rcTof / tofSigma);
 
 		double cut = TMath::Power((nsTof / nSigmaTof), 2) + TMath::Power((nsDedx / nSigmaDedx), 2);
 		if ( cut <= 1 ){
-			//lg->info(__FUNCTION__) << "Ellipse:" << endl;
-			//lg->info(__FUNCTION__) << species[ iS ] << " : " << cut << endl;
 			res.push_back( species[ iS ] );
 		}
-		//lg->info( __FUNCTION__ ) << "nSig dEdx = " << nSigDedx << ", nSig Tof = " << nSigTof << endl; 
+		
 
 	}
 
