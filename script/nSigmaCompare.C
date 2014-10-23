@@ -1,6 +1,6 @@
 
 
-void nSigmaCompare( string fname = "paramSpectra.root", string s = "Pi"){
+void nSigmaCompare( string fname = "paramSpectra.root", string s = "K"){
 
 	TCanvas * c = new TCanvas( "c", "Rcp", 800, 600 );
 	TFile * f = new TFile( fname.c_str(), "READ" );

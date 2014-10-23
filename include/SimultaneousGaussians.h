@@ -19,6 +19,8 @@ using namespace jdb;
 #include "TH1D.h"
 
 
+#include "RooExtendPdf.h"
+
 class SimultaneousGaussians
 {
 protected:
@@ -61,6 +63,7 @@ public:
 protected:
 
 	GaussianFitResult fitThreeSpecies( TH1D* h, vector<double> x1, vector<double> x2 );
+	RooExtendPdf fitSingleSpecies( TH1D* h, double x1, double x2, string dropt, int c );
 	
 };
 

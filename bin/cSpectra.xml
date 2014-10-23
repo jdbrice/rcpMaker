@@ -122,7 +122,7 @@
 		</Logger>	
 		
 		<input>
-			<dst treeName="tree" maxFiles="5" url="/Users/danielbrandenburg/bnl/local/data/BBCMB14_015/"/>
+			<dst treeName="tree" maxFiles="5000" url="/Users/danielbrandenburg/bnl/local/data/BBCMB14_015/"/>
 		</input>
 
 		<output>

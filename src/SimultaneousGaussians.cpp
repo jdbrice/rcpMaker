@@ -6,6 +6,7 @@
 #include "RooProdPdf.h"
 #include "RooAbsReal.h"
 #include "RooAddPdf.h"
+#include "RooExtendPdf.h"
 #include "RooDataHist.h"
 #include "RooConstVar.h"
 #include "RooPlot.h"
@@ -29,7 +30,7 @@ SimultaneousGaussians::SimultaneousGaussians( XmlConfig * config, string np ){
     lg->info(__FUNCTION__) << " Creating book "<< endl;
     book = new HistoBook( config->getString( np + "output.data" ), config );
 
-    reporter = new Reporter( config->getString( np + "output.report" ) );
+    reporter = new Reporter( config->getString( np + "output.report" ), 400, 400 );
 
 
     // Initialize the Phase Space Recentering Object
@@ -57,6 +58,7 @@ SimultaneousGaussians::SimultaneousGaussians( XmlConfig * config, string np ){
 	muRoi 		= 2.5;
 	sigmaRoi 	= 3.5;
 	roi 		= 2.5;
+
 }
 
 SimultaneousGaussians::~SimultaneousGaussians(){
@@ -76,7 +78,7 @@ void SimultaneousGaussians::make(){
 	book->makeAll( nodePath + "histograms" );
 	vector<string> species = PidPhaseSpace::species;
 		
-	for ( int i = 0; i < binsPt->nBins(); i++ ){
+	for ( int i = 0; i < 18 /*binsPt->nBins()*/; i++ ){
 
 			double avgP = ((*binsPt)[i] + (*binsPt)[i+1] ) / 2.0;
 
@@ -85,18 +87,26 @@ void SimultaneousGaussians::make(){
 
 			vector<double> tofSigmas = {0.012, 0.012, 0.012};
 
-			if ( (*binsPt)[ i ] > 1.2 ){
+			/*if ( (*binsPt)[ i ] > 1.2 ){
 				sigmaRoi = 1.0;
 				muRoi = .1;
-			}
+			}*/
 		for ( int iS = 0; iS < species.size(); iS ++ ){
 			string mName = "tofMean" + species[iS];
 			string sName = "tofSigma" + species[iS];
 
 			string name = "tof/" + PidPhaseSpace::tofName( centerSpecies, 0, i, 0 );
-			TH1D* tofAll = (TH1D*)inFile->Get( name.c_str() );
+			TH1D* tofAll = (TH1D*)inFile->Get( name.c_str() ); 
 		
-			GaussianFitResult tofGfr =  fitThreeSpecies( tofAll, tofMus, tofSigmas );
+			//GaussianFitResult tofGfr =  fitThreeSpecies( tofAll, tofMus, tofSigmas );
+
+			string draw = "";
+			if ( iS >= 1 )
+				draw ="SAME";
+
+			RooExtendPdf tofGfr =  fitSingleSpecies( tofAll, tofMus[iS], tofSigmas[iS], draw, iS+1 );
+
+
 
 			/*book->get( mName )->SetBinContent( i, tofGfr.mu );
 			book->get( sName )->SetBinContent( i, tofGfr.sigma );
@@ -185,7 +195,7 @@ SimultaneousGaussians::GaussianFitResult SimultaneousGaussians::fitThreeSpecies(
 	}
 
 	RooAddPdf *model = new RooAddPdf( "model", "model", *ralGauss, *ralYield ); 
-	model->fitTo( *rdh );
+	model->fitTo( *rdh /*, Range( "roiPi,roiK,roiP" )*/ );
 
 	/**
 	 * Report the data + gauss
@@ -196,9 +206,9 @@ SimultaneousGaussians::GaussianFitResult SimultaneousGaussians::fitThreeSpecies(
 	rdh->plotOn( frame );
 	
 	model->plotOn( frame, Range( "Full" ) );
-	//model->plotOn( frame, Range( "Full" ), Components( "gaussK" ), LineColor( kGreen ) );
-	//model->plotOn( frame, Range( "Full" ), Components( "gaussPi" ), LineColor( kRed ) );
-	//model->plotOn( frame, Range( "Full" ), Components( "gaussP" ), LineColor( kBlack ) );
+	model->plotOn( frame, Range( "Full" ), Components( "gaussK" ), LineColor( kGreen ) );
+	model->plotOn( frame, Range( "Full" ), Components( "gaussPi" ), LineColor( kRed ) );
+	model->plotOn( frame, Range( "Full" ), Components( "gaussP" ), LineColor( kBlack ) );
 	
 	
 	gPad->SetLogy();
@@ -213,6 +223,64 @@ SimultaneousGaussians::GaussianFitResult SimultaneousGaussians::fitThreeSpecies(
 	return gfr;
 
 }
+
+
+RooExtendPdf SimultaneousGaussians::fitSingleSpecies( TH1D* h, double iMu, double iSigma, string drOpt, int color ){
+
+	using namespace RooFit;
+	RooMsgService::instance().setGlobalKillBelow(ERROR);
+
+	/**
+	 * Make the data hist for RooFit
+	 */
+	// get some histogram limits
+	double x1 = h->GetXaxis()->GetXmin();
+	double x2 = h->GetXaxis()->GetXmax();
+	RooRealVar x( "x", "x", x1, x2 );
+	RooDataHist * rdh = new RooDataHist( "data", "data", RooArgSet( x ), h  );
+
+	/**
+	 * Create the parameters and the gaussian
+	 */
+	RooRealVar mu( "mu", "mu", iMu, iMu - muRoi * iSigma, iMu + muRoi * iSigma );
+	RooRealVar sigma( "sig", "sig", iSigma, iSigma / sigmaRoi, sigmaRoi * iSigma );
+	RooGaussian gauss( "gauss", "gauss", x, mu, sigma );
+
+	RooRealVar n( "n", "n", 100000, 0, 20000000000000);
+	RooExtendPdf eGauss( "eGauss", "eGauss", gauss, n );
+
+	/**
+	 * Set the region of interest for fitting
+	 */
+	x.setRange( "roi", iMu - roi * iSigma, iMu + roi * iSigma );
+	eGauss.fitTo( *rdh, Range( "roi" ), RooFit::PrintLevel(-1) );
+	cout << " N = "<< n.getVal() << endl;
+
+
+	/**
+	 * Report the data + gauss
+	 */
+	reporter->newPage();
+
+	RooPlot * frame = x.frame( Title( h->GetTitle() ) );
+	rdh->plotOn( frame );
+	eGauss.plotOn( frame, Range( "Full" ), LineColor( color ) );
+	
+	gPad->SetLogy();
+	frame->Draw( "same" );
+	frame->SetMinimum( 1 );
+
+	reporter->savePage();
+
+	GaussianFitResult gfr;
+
+	gfr.mu = mu.getVal();
+	gfr.sigma = sigma.getVal();
+
+	return eGauss;
+
+}
+
 
 
 
