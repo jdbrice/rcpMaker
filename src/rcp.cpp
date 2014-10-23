@@ -7,7 +7,6 @@ using namespace jdb;
 #include <iostream>
 #include "InclusiveSpectra.h"
 #include "ParamSpectra.h"
-#include "RefMultHelper.h"
 #include "PidPhaseSpace.h"
 #include "PidParamMaker.h"
 #include "SimultaneousGaussians.h"
@@ -32,10 +31,7 @@ int main( int argc, char* argv[] ) {
 
 			string job = config.getString( "jobType" );
 
-			if ( "RefMultHelper" == job ){
-				RefMultHelper rmh( &config, "RefMultHelper." );
-				rmh.eventLoop();
-			} else if ( "InclusiveSpectra" == job ){
+			if ( "InclusiveSpectra" == job ){
 				InclusiveSpectra is( &config, "InclusiveSpectra.", fileList, jobPrefix );
 				is.make();
 			} else if ( "ParamSpectra" == job ){

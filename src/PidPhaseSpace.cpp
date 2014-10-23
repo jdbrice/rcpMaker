@@ -54,6 +54,7 @@ void PidPhaseSpace::analyzeTrack( int iTrack ){
 
 	int ptBin = binsPt->findBin( pt );
 	int etaBin = binsEta->findBin( TMath::Abs( eta ) );
+	int charge = pico->trackCharge( iTrack );
 
 	if ( ptBin < 0 || etaBin < 0)
 		return;
@@ -87,7 +88,7 @@ void PidPhaseSpace::analyzeTrack( int iTrack ){
 	book->cd( "dedx_tof" );
 	book->fill( hName, dedx, tof );
 
-	enhanceDistributions(ptBin, etaBin, dedx, tof, pico->eventRefMult() );
+	enhanceDistributions(ptBin, etaBin, charge, dedx, tof, pico->eventRefMult() );
 
 	book->cd();
 }
@@ -249,7 +250,7 @@ void PidPhaseSpace::autoViewport( 	string pType, double p, PhaseSpaceRecentering
 
 
 
-void PidPhaseSpace::enhanceDistributions( int ptBin, int etaBin, double dedx, double tof, int refMult ){
+void PidPhaseSpace::enhanceDistributions( int ptBin, int etaBin, int charge, double dedx, double tof, int refMult ){
 
 	bool central = false;
 	bool peripheral = false;
@@ -271,40 +272,58 @@ void PidPhaseSpace::enhanceDistributions( int ptBin, int etaBin, double dedx, do
 	// unenhanced - all dedx
 	string dName = dedxName( centerSpecies, 0, ptBin, etaBin );
 	book->fill( dName, dedx );
-	if ( central )
-		book->fill( dName+"cen", dedx );
-	if ( peripheral )
-		book->fill( dName+"per", dedx );
+	book->fill( dedxName( centerSpecies, charge, ptBin, etaBin ), dedx );
+	if ( central ){
+		book->fill( dedxName( centerSpecies, 0, ptBin, etaBin )+"cen", dedx );
+		book->fill( dedxName( centerSpecies, charge, ptBin, etaBin )+"cen", dedx );
+	}
+	if ( peripheral ){
+		book->fill( dedxName( centerSpecies, 0, ptBin, etaBin )+"per", dedx );
+		book->fill( dedxName( centerSpecies, charge, ptBin, etaBin )+"per", dedx );
+	}
 	
 	for ( int iS = 0; iS < mSpecies.size(); iS++ ){
-		dName = dedxName( centerSpecies, 0, ptBin, etaBin, mSpecies[ iS ] );
 		if ( tof >= tMeans[ iS ] -tSigma && tof <= tMeans[ iS ] + tSigma ){
-			book->fill( dName, dedx );
-			if ( central )
-				book->fill( dName+"cen", dedx );
-			if ( peripheral )
-				book->fill( dName+"per", dedx );
+			book->fill( dedxName( centerSpecies, 0, ptBin, etaBin, mSpecies[ iS ] ), dedx );
+			book->fill( dedxName( centerSpecies, charge, ptBin, etaBin, mSpecies[ iS ] ), dedx );
+			if ( central ){
+				book->fill( dedxName( centerSpecies, 0, ptBin, etaBin, mSpecies[ iS ] )+"cen", dedx );
+				book->fill( dedxName( centerSpecies, charge, ptBin, etaBin, mSpecies[ iS ] )+"cen", dedx );
+			}
+			if ( peripheral ){
+				book->fill( dedxName( centerSpecies, 0, ptBin, etaBin, mSpecies[ iS ] )+"per", dedx );
+				book->fill( dedxName( centerSpecies, charge, ptBin, etaBin, mSpecies[ iS ] )+"per", dedx );
+			}
 		}
 	} // loop on species from centered means
 	
 
 	book->cd( "tof" );
 	// unenhanced - all tof tracks
-	string tName = tofName( centerSpecies, 0, ptBin, etaBin );
-	book->fill( tName, tof );
-	if ( central )
-		book->fill( tName+"cen", dedx );
-	if ( peripheral )
-		book->fill( tName+"per", dedx );
+	book->fill( tofName( centerSpecies, 0, ptBin, etaBin ), tof );
+	book->fill( tofName( centerSpecies, charge, ptBin, etaBin ), tof );
+
+	if ( central ){
+		book->fill( tofName( centerSpecies, 0, ptBin, etaBin )+"cen", tof );
+		book->fill( tofName( centerSpecies, charge, ptBin, etaBin )+"cen", tof );
+	}
+	if ( peripheral ){
+		book->fill( tofName( centerSpecies, 0, ptBin, etaBin )+"per", tof );
+		book->fill( tofName( centerSpecies, charge, ptBin, etaBin )+"per", tof );
+	}
 
 	for ( int iS = 0; iS < mSpecies.size(); iS++ ){
-		tName = tofName( centerSpecies, 0, ptBin, etaBin, mSpecies[ iS ] );
 		if ( dedx >= dMeans[ iS ] -dSigma && dedx <= dMeans[ iS ] + dSigma ){
-			book->fill( tName, tof );
-			if ( central )
-				book->fill( tName+"cen", dedx );
-			if ( peripheral )
-				book->fill( tName+"per", dedx );
+			book->fill( tofName( centerSpecies, 0, ptBin, etaBin, mSpecies[ iS ] ), tof );
+			book->fill( tofName( centerSpecies, charge, ptBin, etaBin, mSpecies[ iS ] ), tof );
+			if ( central ){
+				book->fill( tofName( centerSpecies, 0, ptBin, etaBin, mSpecies[ iS ] )+"cen", tof );
+				book->fill( tofName( centerSpecies, charge, ptBin, etaBin, mSpecies[ iS ] )+"cen", tof );
+			}
+			if ( peripheral ){
+				book->fill( tofName( centerSpecies, 0, ptBin, etaBin, mSpecies[ iS ] )+"per", tof );
+				book->fill( tofName( centerSpecies, charge, ptBin, etaBin, mSpecies[ iS ] )+"per", tof );
+			}
 		}
 	} // loop on species from centered means	
 }

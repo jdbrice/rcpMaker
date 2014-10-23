@@ -16,7 +16,7 @@ public:
 	 * Triggers
 	 */
 	virtual Int_t numEventTriggers() = 0;
-	virtual std::vector<UInt_t> eventTriggerIds() = 0;
+	//virtual std::vector<UInt_t> eventTriggerIds() = 0;
 
 	/**
 	 * Kinematics

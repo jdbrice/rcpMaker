@@ -50,7 +50,7 @@ public:
 	virtual void postLoop();
 	
 
-	void enhanceDistributions( int ptBin, int etaBin, double dedx, double tof, int refMult );
+	void enhanceDistributions( int ptBin, int etaBin, int charge, double dedx, double tof, int refMult );
 
 	static vector<string> species;
 	/**

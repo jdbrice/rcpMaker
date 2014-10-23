@@ -166,7 +166,7 @@ public :
    virtual Float_t eventBBC(){return 0;}
 
    virtual Int_t numEventTriggers() { return nTriggers; }
-   virtual std::vector<UInt_t> eventTriggerIds() { std::vector<UInt_t> v( std::begin(triggerIds), std::end(triggerIds) ); return v;}
+   //virtual std::vector<UInt_t> eventTriggerIds() { std::vector<UInt_t> v( std::begin(triggerIds), std::end(triggerIds) ); return v;}
 
 
 };

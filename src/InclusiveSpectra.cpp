@@ -181,7 +181,7 @@ bool InclusiveSpectra::eventCut(){
 
 	// if a trigger list is given then filter,
 	// if not don't worry about triggers
-	if ( cutTriggers.size() >= 1  ){
+	/*if ( cutTriggers.size() >= 1  ){
 		cout<<"trigger";
 		vector<UInt_t> triggerIds = pico->eventTriggerIds();
 		bool findTrigger = false;
@@ -191,7 +191,7 @@ bool InclusiveSpectra::eventCut(){
 		}
 		if ( !findTrigger )
 			return false;
-	}
+	}*/
 
 	UShort_t refMult = pico->eventRefMult();
 	book->fill( "preRefMult", refMult );
