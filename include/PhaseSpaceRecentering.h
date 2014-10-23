@@ -30,6 +30,10 @@ public:
 		tofGen = new TofGenerator();
 
 		species = { "Pi", "K", "P" };
+
+		piMass = 0.1395702;		//
+		kaonMass = 0.493667;	//
+		protonMass = 0.9382721;
 	}
 	~PhaseSpaceRecentering(){
 		delete dedxGen;
@@ -39,9 +43,9 @@ public:
 	/**
 	 * Static usage
 	 */
-	static constexpr double piMass = 0.1395702;		// [GeV]
-	static constexpr double kaonMass = 0.493667;	// [GeV]
-	static constexpr double protonMass = 0.9382721;	// [GeV]
+	double piMass;		// [GeV]
+	double kaonMass;	// [GeV]
+	double protonMass;	// [GeV]
 	
 	 /**
 	 * Get the expected mass from the string identifier
