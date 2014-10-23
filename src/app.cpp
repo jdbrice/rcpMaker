@@ -6,8 +6,11 @@
 #include "XmlConfig.h"
 #include "Utils.h"
 #include "LoggerConfig.h"
+#include "ChainLoader.h"
 
 using namespace jdb;
+
+#include "TChain.h"
 /* 
 *
 *	GUI Application
@@ -112,9 +115,18 @@ int main( int argc, char* argv[] ) {
 
 		unitTest_HistoBook( &config );
 		
+
+		if ( argc >= 4 ){
+
+			logger->info(__FUNCTION__) << " List File : " << argv[ 2 ] << ", job prefix " << argv[3] << endl;
+
+			TChain * chain = new TChain( "tree" );
+			ChainLoader::loadList( chain, (string)argv[2] );
+
+		}
 	   
 		
-	}
+	} 
 
 	unitTest_Utils();
 

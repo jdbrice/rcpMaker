@@ -12,6 +12,7 @@ namespace jdb{
 	public:
 		//static void load( TChain * chain, char* ntdir, uint maxFiles = 1000 );
 		static void load( TChain * chain, const char* ntdir, uint maxFiles = 1000 );
+		static void loadList( TChain * chain, string listFile, uint maxFiles = -1 );
 	};
 
 

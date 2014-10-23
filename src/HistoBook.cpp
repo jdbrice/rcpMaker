@@ -243,9 +243,9 @@ namespace jdb{
 			string hTitle = config->getString( nodeName + ":title", hName );
 
 
-			HistoBins* bx = NULL;
-			HistoBins* by = NULL;
-			HistoBins* bz = NULL;
+			HistoBins* bx;
+			HistoBins* by;
+			HistoBins* bz;
 			if ( config->nodeExists( nodeName + ":xBins" ) )
 				bx = new HistoBins( config, config->getString( nodeName + ":xBins" ) );
 			else 

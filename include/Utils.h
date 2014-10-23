@@ -131,11 +131,11 @@ namespace jdb{
 	 */
 	class TaskProgress{
 	protected:
-		int max = 100;
-		int barWidth = 60;
-		bool showTitle = true;
-		bool showElapsed = true;
-		string title = "";
+		int max;
+		int barWidth;
+		bool showTitle;
+		bool showElapsed;
+		string title;
 
 		TaskTimer tt;
 
@@ -149,6 +149,7 @@ namespace jdb{
 			barWidth = width;
 			showTitle = sTitle;
 			showElapsed = sElapse;
+			title = "";
 		}
 
 		void showProgress( int i ){

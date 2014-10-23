@@ -6,7 +6,7 @@
 #include "constants.h"
 #include "XmlConfig.h"
 #include "Utils.h"
-#include "reporter.h"
+#include "Reporter.h"
 
 using namespace jdb;
 
