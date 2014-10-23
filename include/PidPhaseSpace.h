@@ -38,7 +38,7 @@ protected:
 	double tofCut, dedxCut;
 
 public:
-	PidPhaseSpace( XmlConfig* config, string np );
+	PidPhaseSpace( XmlConfig* config, string np, string fl ="", string jp ="" );
 	~PidPhaseSpace(){}
 
 	/**
@@ -50,7 +50,7 @@ public:
 	virtual void postLoop();
 	
 
-	void enhanceDistributions( int ptBin, int etaBin, double dedx, double tof );
+	void enhanceDistributions( int ptBin, int etaBin, double dedx, double tof, int refMult );
 
 	static vector<string> species;
 	/**

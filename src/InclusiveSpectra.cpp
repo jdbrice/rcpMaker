@@ -7,7 +7,7 @@
 /**
  * Constructor
  */
-InclusiveSpectra::InclusiveSpectra( XmlConfig * config, string np){
+InclusiveSpectra::InclusiveSpectra( XmlConfig * config, string np, string fileList, string prefix ){
 
 	//Set the Root Output Level
 	gErrorIgnoreLevel=kSysError;
@@ -23,15 +23,19 @@ InclusiveSpectra::InclusiveSpectra( XmlConfig * config, string np){
 	lg->info( __FUNCTION__) << "Making Chain and PicoDataStore Interface " << endl;
 	//Create the chain
 	TChain * chain = new TChain( cfg->getString(np+"input.dst:treeName", "tof" ).c_str() );
-    ChainLoader::load( chain, cfg->getString( np+"input.dst:url" ).c_str(), cfg->getInt( np+"input.dst:maxFiles" ) );
+
+	if ( "" == fileList )
+    	ChainLoader::load( chain, cfg->getString( np+"input.dst:url" ).c_str(), cfg->getInt( np+"input.dst:maxFiles" ) );
+    else 
+    	ChainLoader::loadList( chain, fileList );
 
     pico = new AnaPicoDst( chain );
 
     // create the book
     lg->info(__FUNCTION__) << " Creating book "<< endl;
-    book = new HistoBook( config->getString( np + "output.data" ), config );
+    book = new HistoBook( prefix + config->getString( np + "output.data" ), config );
 
-    reporter = new Reporter( config->getString( np + "output.report" ) );
+    reporter = new Reporter( prefix + config->getString( np + "output.report" ) );
 
     /**
      * Setup the event cuts

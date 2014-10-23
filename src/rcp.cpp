@@ -22,19 +22,27 @@ int main( int argc, char* argv[] ) {
 			XmlConfig config( argv[ 1 ] );
 			//config.report();
 
+			string fileList = "";
+			string jobPrefix = "";
+
+			if ( argc >= 4 ){
+				fileList = argv[ 2 ];
+				jobPrefix = argv[ 3 ];
+			}
+
 			string job = config.getString( "jobType" );
 
 			if ( "RefMultHelper" == job ){
 				RefMultHelper rmh( &config, "RefMultHelper." );
 				rmh.eventLoop();
 			} else if ( "InclusiveSpectra" == job ){
-				InclusiveSpectra is( &config, "InclusiveSpectra.");
+				InclusiveSpectra is( &config, "InclusiveSpectra.", fileList, jobPrefix );
 				is.make();
 			} else if ( "ParamSpectra" == job ){
 				ParamSpectra ps( &config, "ParamSpectra.");
 				ps.make();
 			} else if ( "PidPhaseSpace" == job ){
-				PidPhaseSpace pps( &config, "PidPhaseSpace." );
+				PidPhaseSpace pps( &config, "PidPhaseSpace.", fileList, jobPrefix  );
 				pps.make();
 			} else if ( "MakePidParams" == job ){
 				PidParamMaker ppm( &config, "PidParamMaker." );

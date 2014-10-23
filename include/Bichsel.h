@@ -19,12 +19,17 @@ protected:
 
 	TH1D *hP, *hPi, *hK;
 
-	static constexpr double piMass = 0.1395702;
-	static constexpr double kaonMass = 0.493667;
-	static constexpr double protonMass = 0.9382721;
+
+	double piMass;
+	double kaonMass;
+	double protonMass;
 
 public:
 	Bichsel( string tableFile = "dedxBichsel.root", int method = 0 ){
+
+		piMass = 0.1395702;
+		kaonMass = 0.493667;
+		protonMass = 0.9382721;
 
 		this->tableFile = tableFile;
 		this->method = method;

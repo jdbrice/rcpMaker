@@ -8,7 +8,7 @@
 
 vector<string> PidPhaseSpace::species = { "Pi", "K", "P" };
 
-PidPhaseSpace::PidPhaseSpace( XmlConfig* config, string np ) : InclusiveSpectra( config, np ) {
+PidPhaseSpace::PidPhaseSpace( XmlConfig* config, string np, string fl, string jp ) : InclusiveSpectra( config, np, fl, jp ) {
 
  	tofPadding = cfg->getDouble( "binning.padding:tof", .2 );
 	dedxPadding = cfg->getDouble( "binning.padding:dedx", .25 );
@@ -87,7 +87,7 @@ void PidPhaseSpace::analyzeTrack( int iTrack ){
 	book->cd( "dedx_tof" );
 	book->fill( hName, dedx, tof );
 
-	enhanceDistributions(ptBin, etaBin, dedx, tof );
+	enhanceDistributions(ptBin, etaBin, dedx, tof, pico->eventRefMult() );
 
 	book->cd();
 }
@@ -157,23 +157,34 @@ void PidPhaseSpace::preparePhaseSpaceHistograms( string plc){
 					dedxBins.size()-1, dedxBins.data(),
 					tofBins.size()-1, tofBins.data() );
 
+				book->cd( "dedx" );
+				string dName = dedxName( plc, charge, ptBin, etaBin );
+				book->make1D( dName, "dEdx", dedxBins.size()-1, dedxBins.data() );
+				book->make1D( dName+"cen", "dEdx", dedxBins.size()-1, dedxBins.data() );
+				book->make1D( dName+"per", "dEdx", dedxBins.size()-1, dedxBins.data() );
+				for ( int iS = 0; iS < species.size(); iS++ ){
+					dName = dedxName( plc, charge, ptBin, etaBin, species[ iS ] );
+					book->make1D( dName, "dEdx", dedxBins.size()-1, dedxBins.data() );
+					book->make1D( dName+"cen", "dEdx", dedxBins.size()-1, dedxBins.data() );
+					book->make1D( dName+"per", "dEdx", dedxBins.size()-1, dedxBins.data() );
+				}
+
+				
+				
+
 				book->cd( "tof" );
 				string tName = tofName( plc, charge, ptBin, etaBin );
 				book->make1D( tName, "#beta^{-1}", tofBins.size()-1, tofBins.data() );
+				book->make1D( tName+"cen", "#beta^{-1}", tofBins.size()-1, tofBins.data() );
+				book->make1D( tName+"per", "#beta^{-1}", tofBins.size()-1, tofBins.data() );
 				for ( int iS = 0; iS < species.size(); iS++ ){
 					tName = tofName( plc, charge, ptBin, etaBin, species[ iS ] );
 					book->make1D( tName, "#beta^{-1}", tofBins.size()-1, tofBins.data() );
+					book->make1D( tName+"cen", "#beta^{-1}", tofBins.size()-1, tofBins.data() );
+					book->make1D( tName+"per", "#beta^{-1}", tofBins.size()-1, tofBins.data() );
 				} 
 
-				book->cd( "dedx" );
-				string dName = dedxName( plc, charge, ptBin, etaBin );
-				book->cd( "dedx" );
-				book->make1D( dName, "dEdx", dedxBins.size()-1, dedxBins.data() );
-				for ( int iS = 0; iS < species.size(); iS++ ){
-					book->cd( "dedx" );
-					dName = dedxName( plc, charge, ptBin, etaBin, species[ iS ] );
-					book->make1D( dName, "dEdx", dedxBins.size()-1, dedxBins.data() );
-				} 
+				 
 
 
 			}// loop on charge
@@ -238,7 +249,14 @@ void PidPhaseSpace::autoViewport( 	string pType, double p, PhaseSpaceRecentering
 
 
 
-void PidPhaseSpace::enhanceDistributions( int ptBin, int etaBin, double dedx, double tof ){
+void PidPhaseSpace::enhanceDistributions( int ptBin, int etaBin, double dedx, double tof, int refMult ){
+
+	bool central = false;
+	bool peripheral = false;
+	if ( refMult >= 10 && refMult <= 20 )
+		peripheral = true;
+	if (  refMult >= 235 && refMult < 400 )
+		central = true;
 
 	double avgP = ( binsPt->bins[ ptBin ] + binsPt->bins[ ptBin+1] ) / 2.0;
 	
@@ -253,10 +271,19 @@ void PidPhaseSpace::enhanceDistributions( int ptBin, int etaBin, double dedx, do
 	// unenhanced - all dedx
 	string dName = dedxName( centerSpecies, 0, ptBin, etaBin );
 	book->fill( dName, dedx );
+	if ( central )
+		book->fill( dName+"cen", dedx );
+	if ( peripheral )
+		book->fill( dName+"per", dedx );
+	
 	for ( int iS = 0; iS < mSpecies.size(); iS++ ){
 		dName = dedxName( centerSpecies, 0, ptBin, etaBin, mSpecies[ iS ] );
 		if ( tof >= tMeans[ iS ] -tSigma && tof <= tMeans[ iS ] + tSigma ){
 			book->fill( dName, dedx );
+			if ( central )
+				book->fill( dName+"cen", dedx );
+			if ( peripheral )
+				book->fill( dName+"per", dedx );
 		}
 	} // loop on species from centered means
 	
@@ -265,11 +292,19 @@ void PidPhaseSpace::enhanceDistributions( int ptBin, int etaBin, double dedx, do
 	// unenhanced - all tof tracks
 	string tName = tofName( centerSpecies, 0, ptBin, etaBin );
 	book->fill( tName, tof );
+	if ( central )
+		book->fill( tName+"cen", dedx );
+	if ( peripheral )
+		book->fill( tName+"per", dedx );
 
 	for ( int iS = 0; iS < mSpecies.size(); iS++ ){
 		tName = tofName( centerSpecies, 0, ptBin, etaBin, mSpecies[ iS ] );
 		if ( dedx >= dMeans[ iS ] -dSigma && dedx <= dMeans[ iS ] + dSigma ){
 			book->fill( tName, tof );
+			if ( central )
+				book->fill( tName+"cen", dedx );
+			if ( peripheral )
+				book->fill( tName+"per", dedx );
 		}
 	} // loop on species from centered means	
 }

@@ -66,7 +66,7 @@ protected:
 
 
 public:
-	InclusiveSpectra( XmlConfig * config, string nodePath );
+	InclusiveSpectra( XmlConfig * config, string nodePath, string fileList ="", string jobPrefix ="" );
 	~InclusiveSpectra();
 
 	void make() {

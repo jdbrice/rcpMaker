@@ -8,10 +8,11 @@ class TofPidParams
 {
 protected:
 	Double_t sigP, muP, sigEP, muEP, sigT, muT;
-	static constexpr Double_t minP = 175.5; 
+	Double_t minP; 
 public:
 	TofPidParams( Double_t mT, Double_t mP, Double_t mEP,
 				Double_t sT, Double_t sP, Double_t sEP ){
+		minP = 175.5;
 		muT = mT;
 		muP = mP;
 		muEP = mEP;
@@ -22,6 +23,7 @@ public:
 	}
 
 	TofPidParams( XmlConfig * config, string np ){
+		minP = 175.5;
 		muT = config->getDouble( np + "mean:t" );
 		muP = config->getDouble( np + "mean:p" );
 		muEP = config->getDouble( np + "mean:ep" );

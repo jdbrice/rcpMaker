@@ -8,13 +8,13 @@ void nSigmaCompare( string fname = "paramSpectra.root", string s = "K"){
 	vector<string> cuts;
 	cuts.push_back( "dedx" );
 	cuts.push_back( "tof" );
-	cuts.push_back( "square" );
+	//cuts.push_back( "square" );
 	cuts.push_back( "ellipse" );
 
 	TLegend *leg = new TLegend( 0.6, 0.6, 0.9, 0.9 );
 	for ( int i = 0; i < cuts.size(); i++  ){
 
-		string bName = "pt_" + cuts[ i ] + "_" + s + "_p_";
+		string bName = "pt_" + cuts[ i ] + "_" + s + "_n_";
 		string cName = bName + "0to5";
 		string pName = bName + "60to80";	
 

@@ -12,10 +12,10 @@
 		</pt>-->
 		<pt width="0.05" min="0.2" max="4.0" />
 		<eta>0.0, 0.2 </eta>
-		<charge> -0.5, 0.5 </charge>
+		<charge> -1.5, -0.5, 0.5, 1.5 </charge>
 
-		<tof width="0.011" min="-1" max="1" />
-		<dedx width="0.033" min="-0.75" max="0.75" />
+		<tof width="0.008" min="-1" max="1" />
+		<dedx width="0.022" min="-0.75" max="0.75" />
 		<tofRaw width="0.0024" min="0.9" max="3" />
 		<dedxRaw width="0.012" min="1" max="6cd" />
 
@@ -29,7 +29,7 @@
 		</Logger>	
 		
 		<input>
-			<dst treeName="tree" maxFiles="5" url="/Users/danielbrandenburg/bnl/local/data/BBCMB14_015/"/>
+			<dst treeName="tree" maxFiles="1" url="/Users/danielbrandenburg/bnl/local/data/BBCMB14_015/"/>
 		</input>
 
 		<output>
