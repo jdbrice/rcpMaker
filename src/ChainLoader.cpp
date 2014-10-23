@@ -45,4 +45,35 @@ namespace jdb{
 		}
 
 	}	
+
+
+
+	void ChainLoader::loadList(  TChain * chain, string listFile, uint maxFiles ){
+		
+		uint nFiles = 0;
+
+		string line;
+		ifstream fListFile( listFile.c_str());
+		if ( fListFile.is_open() ){
+
+			while ( getline( fListFile, line ) ){
+				chain->Add( line.c_str() );
+				nFiles++;
+
+				if ( maxFiles >= 1 && nFiles >= maxFiles ){
+					break;
+				}
+
+			}
+			fListFile.close();
+				
+
+		} else {
+			cout << " Could not open " << listFile << endl;
+		}
+
+		cout << "[ChainLoader] " << (nFiles) << " files loaded into chain" << endl;
+
+
+	}
 }
