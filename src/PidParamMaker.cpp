@@ -126,7 +126,7 @@ void PidParamMaker::make(){
 			string mName = "tofMean" + species[iS];
 			string sName = "tofSigma" + species[iS];
 
-			string name = "tof/" + PidPhaseSpace::tofName( centerSpecies, 0, i, 0, species[ iS ] );
+			string name = "tof/" + PidPhaseSpace::tofName( centerSpecies, 0, "TODO", i, 0, species[ iS ] );
 			TH1D* tofAll = (TH1D*)inFile->Get( name.c_str() );
 		
 			GaussianFitResult tofGfr =  fitSingleSpecies( tofAll, tofMus[ iS ], tofSigmaIdeal );
@@ -156,7 +156,7 @@ void PidParamMaker::make(){
 			mName = "dedxMean" + species[iS];
 			sName = "dedxSigma" + species[iS];
 
-			name = "dedx/" + PidPhaseSpace::dedxName( centerSpecies, 0, i, 0, species[ iS ] );
+			name = "dedx/" + PidPhaseSpace::dedxName( centerSpecies, 0, "TODO", i, 0, species[ iS ] );
 			TH1D* hDedx = (TH1D*)inFile->Get( name.c_str() );
 		
 			GaussianFitResult dedxGfr =  fitSingleSpecies( hDedx, dedxMus[ iS ], dedxSigmaIdeal );

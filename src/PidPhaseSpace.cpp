@@ -10,6 +10,7 @@ vector<string> PidPhaseSpace::species = { "Pi", "K", "P" };
 
 PidPhaseSpace::PidPhaseSpace( XmlConfig* config, string np, string fl, string jp ) : InclusiveSpectra( config, np, fl, jp ) {
 
+	// Phase space padding options
  	tofPadding = cfg->getDouble( "binning.padding:tof", .2 );
 	dedxPadding = cfg->getDouble( "binning.padding:dedx", .25 );
 	tofScalePadding = cfg->getDouble( "binning.padding.tofScale", .05 );
@@ -29,80 +30,15 @@ PidPhaseSpace::PidPhaseSpace( XmlConfig* config, string np, string fl, string jp
 	// alias the centered species for ease of use
 	centerSpecies = cfg->getString( np+"PhaseSpaceRecentering.centerSpecies", "K" );
 
+	// enhanced distro options
 	tofCut = cfg->getDouble( np+"enhanceDistributions:tof", 1.0 );
 	dedxCut = cfg->getDouble( np+"enhanceDistributions:dedx", 1.0 );
- }
-
-void PidPhaseSpace::preLoop() {
-
-	preparePhaseSpaceHistograms( centerSpecies );
-	book->cd();
-}
-
-void PidPhaseSpace::postLoop() {
-	lg->info(__FUNCTION__) << endl;
-}
 
 
-void PidPhaseSpace::analyzeTrack( int iTrack ){
-
-	book->cd();
-
-	double pt = pico->trackPt( iTrack );
-	double p = pico->trackP( iTrack );
-	double eta = pico->trackEta( iTrack );
-
-	int ptBin = binsPt->findBin( pt );
-	int etaBin = binsEta->findBin( TMath::Abs( eta ) );
-	int charge = pico->trackCharge( iTrack );
-
-	if ( ptBin < 0 || etaBin < 0)
-		return;
-
-	book->fill( "eta", eta );
-	double avgP = ( binsPt->bins[ ptBin ] + binsPt->bins[ ptBin+1] ) / 2.0;
-	//lg->info(__FUNCTION__) << "Pt: " << binsPt->bins[ ptBin ] << " -> " << binsPt->bins[ ptBin+1 ] <<  ", <P> = " << avgP << endl;
-
-	string hName = speciesName( centerSpecies, 0, ptBin, etaBin );
-
-	double tof=psr->rTof(centerSpecies, pico->trackBeta(iTrack), p );
-	double dedx=psr->rDedx(centerSpecies, pico->trackDedx(iTrack), p );
-
-	book->fill( "trBeta", p, tof );
-	book->fill( "beta", p, 1.0/pico->trackBeta( iTrack ) );
-
-	book->fill( "trDedx", p, dedx );
-	book->fill( "dedx", p, pico->trackDedx( iTrack ) );
-
-	double tofNL=psr->nlTof(centerSpecies, pico->trackBeta(iTrack), p, avgP );
-	double dedxNL=psr->nlDedx(centerSpecies, pico->trackDedx(iTrack), p, avgP );
-
-	book->fill( "nlBeta", p, tofNL );
-	book->fill( "nlDedx", p, dedxNL );
-
-	if ( "nonlinear" == psrMethod ){
-		tof = tofNL;
-		dedx = dedxNL;
-	} 
-
-	book->cd( "dedx_tof" );
-	book->fill( hName, dedx, tof );
-
-	enhanceDistributions(ptBin, etaBin, charge, dedx, tof, pico->eventRefMult() );
-
-	book->cd();
-}
-
-void PidPhaseSpace::preparePhaseSpaceHistograms( string plc){
-
-	lg->info(__FUNCTION__) << "Making Histograms with centering spceies: " << plc << endl;
-
-	book->cd();
 	/**
 	 * Make the dedx + tof binning 
 	 * Only the bin width is used for dynamic bins
 	 */
-	
 	dedxBinWidth = cfg->getDouble( "binning.dedx:width", 0.015 );
 	tofBinWidth = cfg->getDouble( "binning.tof:width", 0.006 );
 
@@ -120,74 +56,133 @@ void PidPhaseSpace::preparePhaseSpaceHistograms( string plc){
 	 * Make charge bins
 	 */
 	binsCharge = new HistoBins( cfg, "binning.charge" );
+ }
+
+void PidPhaseSpace::preLoop() {
+
+	preparePhaseSpaceHistograms( centerSpecies );
+	book->cd();
+}
+
+void PidPhaseSpace::postLoop() {
+	lg->info(__FUNCTION__) << endl;
+}
 
 
+void PidPhaseSpace::analyzeTrack( int iTrack ){
+
+	book->cd();
+
+	UInt_t refMult = pico->eventRefMult();
+	double pt = pico->trackPt( iTrack );
+	double p = pico->trackP( iTrack );
+	double eta = pico->trackEta( iTrack );
+
+	int ptBin = binsPt->findBin( pt );
+	int etaBin = binsEta->findBin( TMath::Abs( eta ) );
+	int charge = pico->trackCharge( iTrack );
+
+	double avgP = ( binsPt->bins[ ptBin ] + binsPt->bins[ ptBin+1] ) / 2.0;
+
+	if ( ptBin < 0 || etaBin < 0)
+		return;
+
+	double tof = psr->rTof(centerSpecies, pico->trackBeta(iTrack), p );
+	double dedx = psr->rDedx(centerSpecies, pico->trackDedx(iTrack), p );
+
+	double tofNL = psr->nlTof(centerSpecies, pico->trackBeta(iTrack), p, avgP );
+	double dedxNL = psr->nlDedx(centerSpecies, pico->trackDedx(iTrack), p, avgP );
+
+	book->fill( "trBeta", p, tof );
+	book->fill( "beta", p, 1.0/pico->trackBeta( iTrack ) );
+
+	book->fill( "trDedx", p, dedx );
+	book->fill( "dedx", p, pico->trackDedx( iTrack ) );
+	book->fill( "eta", eta );
+
+	book->fill( "nlBeta", p, tofNL );
+	book->fill( "nlDedx", p, dedxNL );
+
+	if ( "nonlinear" == psrMethod ){
+		tof = tofNL;
+		dedx = dedxNL;
+	} 
+
+	book->cd( "dedx_tof" );
+	// Loop over centralities and fill any corresponding histos
+	for ( int iCen = 0; iCen < centrals.size(); iCen ++  ){
 		
-	lg->info(__FUNCTION__) << "Made All Bins" << endl;
+		if ( refMult < cutCentrality[ centrals[ iCen ] ]->min || refMult > cutCentrality[ centrals[ iCen ] ]->max )
+			continue;
+
+		book->fill( speciesName( centerSpecies, 0, centrals[ iCen ], ptBin, etaBin ), dedx, tof );
+		book->fill( speciesName( centerSpecies, charge, centrals[ iCen ], ptBin, etaBin ), dedx, tof );
+	}
+
+	enhanceDistributions(ptBin, etaBin, charge, dedx, tof, refMult );
+
+	book->cd();
+}
+
+void PidPhaseSpace::preparePhaseSpaceHistograms( string plc ){
+
+	lg->info(__FUNCTION__) << "Making Histograms with centering spceies: " << plc << endl;
+
+	book->cd();
 
 	// Loop through pt, then eta then charge
-	for ( int ptBin = 0; ptBin < binsPt->size()-1; ptBin++ ){
+	for ( int ptBin = 0; ptBin < binsPt->nBins(); ptBin++ ){
 
 		double p = (binsPt->bins[ ptBin ] + binsPt->bins[ ptBin + 1 ]) / 2.0;
 
 		double tofLow, tofHigh, dedxLow, dedxHigh;
 		autoViewport( plc, p, psr, &tofLow, &tofHigh, &dedxLow, &dedxHigh, tofPadding, dedxPadding, tofScalePadding, dedxScalePadding );
 		
-		
-		vector<double> tofBins = HistoBook::makeFixedWidthBins( tofBinWidth, tofLow, tofHigh );
-		vector<double> dedxBins = HistoBook::makeFixedWidthBins( dedxBinWidth, dedxLow, dedxHigh );
+		vector<double> tofBins = HistoBins::makeFixedWidthBins( tofBinWidth, tofLow, tofHigh );
+		vector<double> dedxBins = HistoBins::makeFixedWidthBins( dedxBinWidth, dedxLow, dedxHigh );
 
 		for ( int etaBin = 0; etaBin < binsEta->size()-1; etaBin++ ){
+			// Loop over charge, skip if config doesnt include that charge bin
 			for ( int charge = -1; charge <= 1; charge++ ){
-
-				
 				int cBin = binsCharge->findBin( charge );
 				if ( cBin < 0 )
 					continue;
 
-				// the name of the histogram
-				string hName = speciesName( plc, charge, ptBin, etaBin );
+				for ( int iCen = 0; iCen < centrals.size(); iCen++ ){
 
-				//lg->info(__FUNCTION__) << "Making : " << hName << endl;
+					// the name of the 2D histogram
+					string hName = speciesName( plc, charge, centrals[ iCen ], ptBin, etaBin  );
 
-				string title = "dedx vs. tof; dedx; 1/#beta";
+					string title = "dE/dx Vs. #beta^{-1}; dE/dx; #beta^{-1}";
 
-				book->cd( "dedx_tof" );
-				// make it and keep it in the HistoBook
-				book->make2D( hName, title, 
-					dedxBins.size()-1, dedxBins.data(),
-					tofBins.size()-1, tofBins.data() );
+					// 2d dedx X tof 
+					book->cd( "dedx_tof" );
 
-				book->cd( "dedx" );
-				string dName = dedxName( plc, charge, ptBin, etaBin );
-				book->make1D( dName, "dEdx", dedxBins.size()-1, dedxBins.data() );
-				book->make1D( dName+"cen", "dEdx", dedxBins.size()-1, dedxBins.data() );
-				book->make1D( dName+"per", "dEdx", dedxBins.size()-1, dedxBins.data() );
-				for ( int iS = 0; iS < species.size(); iS++ ){
-					dName = dedxName( plc, charge, ptBin, etaBin, species[ iS ] );
-					book->make1D( dName, "dEdx", dedxBins.size()-1, dedxBins.data() );
-					book->make1D( dName+"cen", "dEdx", dedxBins.size()-1, dedxBins.data() );
-					book->make1D( dName+"per", "dEdx", dedxBins.size()-1, dedxBins.data() );
-				}
+					// 2D for NMF 
+					book->make2D( hName, title, dedxBins.size()-1, dedxBins.data(), tofBins.size()-1, tofBins.data() );
 
-				
-				
+					// dedx projections
+					book->cd( "dedx" );		
+					book->make1D( dedxName( plc, charge, centrals[ iCen ], ptBin, etaBin ), 
+									"dEdx", dedxBins.size()-1, dedxBins.data() );
+					// Enhanced
+					for ( int iS = 0; iS < species.size(); iS++ ){
+						book->make1D( dedxName( plc, charge, centrals[ iCen ], ptBin, etaBin, species[ iS ] ), 
+							"dEdx", dedxBins.size()-1, dedxBins.data() );
+					}
 
-				book->cd( "tof" );
-				string tName = tofName( plc, charge, ptBin, etaBin );
-				book->make1D( tName, "#beta^{-1}", tofBins.size()-1, tofBins.data() );
-				book->make1D( tName+"cen", "#beta^{-1}", tofBins.size()-1, tofBins.data() );
-				book->make1D( tName+"per", "#beta^{-1}", tofBins.size()-1, tofBins.data() );
-				for ( int iS = 0; iS < species.size(); iS++ ){
-					tName = tofName( plc, charge, ptBin, etaBin, species[ iS ] );
-					book->make1D( tName, "#beta^{-1}", tofBins.size()-1, tofBins.data() );
-					book->make1D( tName+"cen", "#beta^{-1}", tofBins.size()-1, tofBins.data() );
-					book->make1D( tName+"per", "#beta^{-1}", tofBins.size()-1, tofBins.data() );
-				} 
+					// tof projections
+					book->cd( "tof" );
+					book->make1D( tofName( plc, charge, centrals[ iCen ], ptBin, etaBin ), 
+						"#beta^{-1}", tofBins.size()-1, tofBins.data() );
+					
+					for ( int iS = 0; iS < species.size(); iS++ ){
+						book->make1D( tofName( plc, charge, centrals[ iCen ], ptBin, etaBin, species[ iS ] ), 
+							"#beta^{-1}", tofBins.size()-1, tofBins.data() );
+					} 
 
 				 
-
-
+				} // loop on centrality
 			}// loop on charge
 		}// loop on eta bins
 	} // loop on ptBins
@@ -250,82 +245,53 @@ void PidPhaseSpace::autoViewport( 	string pType, double p, PhaseSpaceRecentering
 
 
 
-void PidPhaseSpace::enhanceDistributions( int ptBin, int etaBin, int charge, double dedx, double tof, int refMult ){
-
-	bool central = false;
-	bool peripheral = false;
-	if ( refMult >= 10 && refMult <= 20 )
-		peripheral = true;
-	if (  refMult >= 235 && refMult < 400 )
-		central = true;
-
-	double avgP = ( binsPt->bins[ ptBin ] + binsPt->bins[ ptBin+1] ) / 2.0;
+void PidPhaseSpace::enhanceDistributions( double avgP, int ptBin, int etaBin, int charge, double dedx, double tof ){
 	
+	UInt_t refMult = pico->eventRefMult();
+
+	// get the cut values in terms of ideal sigma
 	double dSigma = dedxSigmaIdeal * dedxCut;
 	double tSigma = tofSigmaIdeal * tofCut;
 
+	// get the centered tof and dedx means
 	vector<double> tMeans = psr->centeredTofMeans( centerSpecies, avgP );
 	vector<double> dMeans = psr->centeredDedxMeans( centerSpecies, avgP );
 	vector<string> mSpecies = psr->allSpecies();
 
-	book->cd( "dedx" );
-	// unenhanced - all dedx
-	string dName = dedxName( centerSpecies, 0, ptBin, etaBin );
-	book->fill( dName, dedx );
-	book->fill( dedxName( centerSpecies, charge, ptBin, etaBin ), dedx );
-	if ( central ){
-		book->fill( dedxName( centerSpecies, 0, ptBin, etaBin )+"cen", dedx );
-		book->fill( dedxName( centerSpecies, charge, ptBin, etaBin )+"cen", dedx );
-	}
-	if ( peripheral ){
-		book->fill( dedxName( centerSpecies, 0, ptBin, etaBin )+"per", dedx );
-		book->fill( dedxName( centerSpecies, charge, ptBin, etaBin )+"per", dedx );
-	}
-	
-	for ( int iS = 0; iS < mSpecies.size(); iS++ ){
-		if ( tof >= tMeans[ iS ] -tSigma && tof <= tMeans[ iS ] + tSigma ){
-			book->fill( dedxName( centerSpecies, 0, ptBin, etaBin, mSpecies[ iS ] ), dedx );
-			book->fill( dedxName( centerSpecies, charge, ptBin, etaBin, mSpecies[ iS ] ), dedx );
-			if ( central ){
-				book->fill( dedxName( centerSpecies, 0, ptBin, etaBin, mSpecies[ iS ] )+"cen", dedx );
-				book->fill( dedxName( centerSpecies, charge, ptBin, etaBin, mSpecies[ iS ] )+"cen", dedx );
-			}
-			if ( peripheral ){
-				book->fill( dedxName( centerSpecies, 0, ptBin, etaBin, mSpecies[ iS ] )+"per", dedx );
-				book->fill( dedxName( centerSpecies, charge, ptBin, etaBin, mSpecies[ iS ] )+"per", dedx );
-			}
-		}
-	} // loop on species from centered means
-	
+	for ( int iCen = 0; iCen < centrals.size(); iCen ++  ){
+		if ( refMult < cutCentrality[ centrals[ iCen ] ]->min || refMult > cutCentrality[ centrals[ iCen ] ]->max )
+			continue;
 
-	book->cd( "tof" );
-	// unenhanced - all tof tracks
-	book->fill( tofName( centerSpecies, 0, ptBin, etaBin ), tof );
-	book->fill( tofName( centerSpecies, charge, ptBin, etaBin ), tof );
+		string cen = centrals[ iCen ];
 
-	if ( central ){
-		book->fill( tofName( centerSpecies, 0, ptBin, etaBin )+"cen", tof );
-		book->fill( tofName( centerSpecies, charge, ptBin, etaBin )+"cen", tof );
-	}
-	if ( peripheral ){
-		book->fill( tofName( centerSpecies, 0, ptBin, etaBin )+"per", tof );
-		book->fill( tofName( centerSpecies, charge, ptBin, etaBin )+"per", tof );
-	}
+		book->cd( "dedx" );
+		// unenhanced - all dedx
+		book->fill( dedxName( centerSpecies, 0, cen, ptBin, etaBin ), dedx );
+		book->fill( dedxName( centerSpecies, charge, cen, ptBin, etaBin ), dedx );
+		
+		// enhanced by species
+		for ( int iS = 0; iS < mSpecies.size(); iS++ ){
+			if ( tof >= tMeans[ iS ] -tSigma && tof <= tMeans[ iS ] + tSigma ){
+				book->fill( dedxName( centerSpecies, 0, cen, ptBin, etaBin, mSpecies[ iS ] ), dedx );
+				book->fill( dedxName( centerSpecies, charge, cen, ptBin, etaBin, mSpecies[ iS ] ), dedx );
+			}
+		} // loop on species from centered means
+		
 
-	for ( int iS = 0; iS < mSpecies.size(); iS++ ){
-		if ( dedx >= dMeans[ iS ] -dSigma && dedx <= dMeans[ iS ] + dSigma ){
-			book->fill( tofName( centerSpecies, 0, ptBin, etaBin, mSpecies[ iS ] ), tof );
-			book->fill( tofName( centerSpecies, charge, ptBin, etaBin, mSpecies[ iS ] ), tof );
-			if ( central ){
-				book->fill( tofName( centerSpecies, 0, ptBin, etaBin, mSpecies[ iS ] )+"cen", tof );
-				book->fill( tofName( centerSpecies, charge, ptBin, etaBin, mSpecies[ iS ] )+"cen", tof );
+		book->cd( "tof" );
+		// unenhanced - all tof tracks
+		book->fill( tofName( centerSpecies, 0, cen, ptBin, etaBin ), tof );
+		book->fill( tofName( centerSpecies, charge, cen, ptBin, etaBin ), tof );
+
+		// enhanced by species
+		for ( int iS = 0; iS < mSpecies.size(); iS++ ){
+			if ( dedx >= dMeans[ iS ] -dSigma && dedx <= dMeans[ iS ] + dSigma ){
+				book->fill( tofName( centerSpecies, 0, cen, ptBin, etaBin, mSpecies[ iS ] ), tof );
+				book->fill( tofName( centerSpecies, charge, cen, ptBin, etaBin, mSpecies[ iS ] ), tof );
 			}
-			if ( peripheral ){
-				book->fill( tofName( centerSpecies, 0, ptBin, etaBin, mSpecies[ iS ] )+"per", tof );
-				book->fill( tofName( centerSpecies, charge, ptBin, etaBin, mSpecies[ iS ] )+"per", tof );
-			}
-		}
-	} // loop on species from centered means	
+		} // loop on species from centered means
+
+	} // loop centralities
 }
 
 

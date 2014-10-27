@@ -33,14 +33,20 @@
 		</input>
 
 		<output>
-			<data>pidPhaseSpace.root</data>
-			<report>rpPidPhaseSpace.pdf</report>
+			<data>ps/data.root</data>
+			<report>ps/rp.pdf</report>
 		</output>
 
 		<Bichsel>
 			<table>dedxBichsel.root</table>
 			<method>0</method>
 		</Bichsel>
+
+		<centrality>
+			<all min="0" max="450" />
+			<0to5 min="235" max="400" />
+			<60to80 min="10" max="20" />
+		</centrality>
 
 		<enhanceDistributions tof="1.0" dedx="1.0"/>
 		
@@ -64,7 +70,8 @@
 			<yLocal min="-1.8" max="1.8" />
 		</trackCuts>
 
-		<histograms>
+		<makeQA event="false" track="false"/>
+		<histograms >
 
 			<beta title="#beta^{-1}" xBins="binning.pt" yBins="binning.tofRaw" />
 
@@ -90,9 +97,8 @@
 	</PidPhaseSpace>
 
 
-	<RefMultHelper>
-
-		<histograms>
+	<QAHistograms>
+		<event>
 			<refMult title="Centrality Selection; refMult; #"   nBinsX="400" minX="0" maxX="400"/>
 			<vertexZ title="Z Vertex" widthX="1" minX="-200" maxX="200" />
 			<vertexR title="#sigma" nBinsX="200" minX="0" maxX="10" />
@@ -100,8 +106,9 @@
 			<preVertexZ title="Z Vertex" widthX="1" minX="-200" maxX="200" />
 			<preVertexR title="#sigma" nBinsX="200" minX="0" maxX="10" />
 			<preRefMult title="Centrality Selection; refMult; #"   nBinsX="400" minX="0" maxX="400"/>
-			
+		</event>
 
+		<track>
 			<tofMatch title="tofMatch" widthX="1" minX="0" maxX="4" />
 			<yLocal title="yLocal" widthX=".1" minX="-3" maxX="3" />
 			<dca title="DCA" nBinsX="500" minX="0" maxX="10" />
@@ -119,7 +126,7 @@
 			<preNHitsFit title="# Hits Fit / Possible" nBinsX="100" minX="0" maxX="100" />
 			<preNHitsPossible title="# Hits Fit / Possible" nBinsX="100" minX="0" maxX="100" />
 			<preNHitsFitOverPossible title="# Hits Fit / Possible" widthX="0.01" minX="0" maxX="1" />
-		</histograms>
-	</RefMultHelper>
+		</track>
+	</QAHistograms>
 
 </config>

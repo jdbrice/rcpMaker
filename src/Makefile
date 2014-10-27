@@ -29,7 +29,7 @@ all: $(project)
 
 $(project): $(objects)
 		$(cxx) $(ldFlags) -o  $(project) $(objects) $(staticLibs) $(ROOTGLIBS) $(libraries)
-		@cp $(project) ../bin
+		@mv $(project) ../bin
 
 %.o: %$(source)
 		$(compile)  $<

@@ -50,7 +50,7 @@ public:
 	virtual void postLoop();
 	
 
-	void enhanceDistributions( int ptBin, int etaBin, int charge, double dedx, double tof, int refMult );
+	void enhanceDistributions( double avgP, int ptBin, int etaBin, int charge, double dedx, double tof );
 
 	static vector<string> species;
 	/**
@@ -72,23 +72,23 @@ public:
 	 * @param  charge        the charge, -1, 0, +1
 	 * @return               string for histogram name
 	 */
-	static string speciesName( string centerSpecies, int charge = 0 ){
-		return "dedx_tof_" + chargeString(charge) + "_" + centerSpecies;
+	static string speciesName( string centerSpecies, int charge = 0, string cen = "all" ){
+		return "dedx_tof_" + chargeString(charge) + "_" + centerSpecies + "_" + cen;
 	}
-	static string speciesName( string centerSpecies, int charge, int ptBin, int etaBin = 0 ){
-		return "dedx_tof_" + chargeString(charge) + "_" + centerSpecies + "_" + ts(ptBin) + "_" + ts(etaBin);
+	static string speciesName( string centerSpecies, int charge, string cen, int ptBin, int etaBin = 0 ){
+		return "dedx_tof_" + chargeString(charge) + "_" + centerSpecies + "_" + cen + "_" + ts(ptBin) + "_" + ts(etaBin);
 	}
-	static string tofName( string centerSpecies, int charge, int ptBin, int etaBin = 0, string eSpecies = "" ){
-		if ( "" == eSpecies )
-			return "tof_" + chargeString(charge) + "_" + centerSpecies + "_" + ts(ptBin) + "_" + ts(etaBin);
-		else
-			return "tof_" + chargeString(charge) + "_" + centerSpecies + "_" + ts(ptBin) + "_" + ts(etaBin) + "_" + eSpecies;
+	static string tofName( string centerSpecies, int charge, string cen, int ptBin, int etaBin = 0, string eSpecies = "" ){
+		string ePart = "";
+		if ( "" != eSpecies )
+			ePart = "_" + eSpecies;
+		return "tof_" + chargeString(charge) + "_" + centerSpecies + "_" + cen + "_" + ts(ptBin) + "_" + ts(etaBin) + ePart;
 	}
-	static string dedxName( string centerSpecies, int charge, int ptBin, int etaBin = 0, string eSpecies = "" ){
-		if ( "" == eSpecies )
-			return "dedx_" + chargeString(charge) + "_" + centerSpecies + "_" + ts(ptBin) + "_" + ts(etaBin);
-		else
-			return "dedx_" + chargeString(charge) + "_" + centerSpecies + "_" + ts(ptBin) + "_" + ts(etaBin) + "_" + eSpecies;
+	static string dedxName( string centerSpecies, int charge, string cen, int ptBin, int etaBin = 0, string eSpecies = "" ){
+		string ePart = "";
+		if ( "" != eSpecies )
+			ePart = "_" + eSpecies;
+		return "dedx_" + chargeString(charge) + "_" + centerSpecies + "_" + cen + "_" + ts(ptBin) + "_" + ts(etaBin) + ePart;
 	}
 
 	/**

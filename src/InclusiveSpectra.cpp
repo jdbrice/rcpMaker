@@ -2,7 +2,7 @@
 #include "InclusiveSpectra.h"
 #include "ChainLoader.h"
 #include "AnaPicoDst.h"
-#include "TofPicoDst.h"
+
 
 /**
  * Constructor
@@ -49,9 +49,11 @@ InclusiveSpectra::InclusiveSpectra( XmlConfig * config, string np, string fileLi
     vector<string> centralPaths = cfg->childrenOf( np + "centrality" );
 
     for ( int iC = 0; iC < centralPaths.size(); iC++ ){
+    	
     	centrals.push_back( cfg->tagName( centralPaths[ iC ] ) );
     	ConfigRange * cut = new ConfigRange( cfg, centralPaths[ iC ] );
     	cutCentrality[ centrals[ iC ] ] = cut;
+    	
     	lg->info(__FUNCTION__) << "Centrality Cut " << centrals[iC] << " ( " << cut->min << ", " << cut->max <<" )" << endl;
     }
 
@@ -65,18 +67,38 @@ InclusiveSpectra::InclusiveSpectra( XmlConfig * config, string np, string fileLi
     cutYLocal = new ConfigRange( cfg, np + "trackCuts.yLocal", -100, 100 );
     cutTofMatch = new ConfigRange( cfg, np + "trackCuts.tofMatch", 0, 3 );
 
+    makeEventQA = cfg->getBool( np + "makeQA:event", false );
+    makeTrackQA = cfg->getBool( np + "makeQA:track", false );
+
 }
 /**
  * Destructor
  */
 InclusiveSpectra::~InclusiveSpectra(){
 
-	/** 
-	 * DELETE CONFIGRNGES ETC.!!!
-	 */
+	// delete the config cuts
+	delete cutVertexZ;
+	delete cutVertexR;
+	delete cutVertexROffset;
+
+	delete cutNHits;
+	delete cutNHitsDedx;
+	delete cutNHitsFitOverPossible;
+
+	delete cutDca;
+	delete cutYLocal;
+	delete cutTofMatch;
+
+	for ( int iC = 0; iC < centrals.size(); iC++ ){
+		delete cutCentrality[ centrals[ iC ] ];
+	}
+
+
+	// delete the book and reporter
 	delete book;
 	delete reporter;
 
+	// delete the logger
 	lg->info(__FUNCTION__) << endl;
 	delete lg;
 }
@@ -115,9 +137,13 @@ void InclusiveSpectra::eventLoop(){
 	book->cd();
 	lg->info(__FUNCTION__) << "Making all histograms in : " << nodePath + "histograms" << endl;
 	book->makeAll( nodePath + "histograms" );
-	if ( cfg->nodeExists( "RefMultHelper.histograms" ) ){
-		lg->info(__FUNCTION__) << " Making histograms in RefMultHelper.histograms " << endl;
-		book->makeAll( "RefMultHelper.histograms" );
+	if ( cfg->nodeExists( "QAistograms.event" ) && makeEventQA ){
+		lg->info(__FUNCTION__) << " Making event QA histograms " << endl;
+		book->makeAll( "QAHistograms.event" );
+	} 
+	if ( cfg->nodeExists( "QAistograms.track" ) && makeTrackQA ){
+		lg->info(__FUNCTION__) << " Making track QA histograms " << endl;
+		book->makeAll( "QAHistograms.track" );
 	}
 
 	preLoop();
@@ -179,42 +205,38 @@ void InclusiveSpectra::analyzeTrack( Int_t iTrack ){
 
 bool InclusiveSpectra::eventCut(){
 
-	// if a trigger list is given then filter,
-	// if not don't worry about triggers
-	/*if ( cutTriggers.size() >= 1  ){
-		cout<<"trigger";
-		vector<UInt_t> triggerIds = pico->eventTriggerIds();
-		bool findTrigger = false;
-		for ( int iTrig = 0; iTrig < cutTriggers.size(); iTrig++ ){
-			if ( triggerIds.end() != find( triggerIds.begin(), triggerIds.end(), (UInt_t)cutTriggers[ iTrig ] ) )
-				findTrigger = true;
-		}
-		if ( !findTrigger )
-			return false;
-	}*/
-
 	UShort_t refMult = pico->eventRefMult();
-	book->fill( "preRefMult", refMult );
-
+	
 	double z = pico->eventVertexZ();
 	double x = pico->eventVertexX() + cutVertexROffset->x;
 	double y = pico->eventVertexY() + cutVertexROffset->y;
 	double r = TMath::Sqrt( x*x + y*y );
 
-	book->fill( "preVertexZ", z);
-	book->fill( "preVertexR", r);
+	/**
+	 * Pre Event Cut QA
+	 */
+	if ( makeEventQA  ) {
+		book->fill( "preRefMult", refMult );
+		book->fill( "preVertexZ", z);
+		book->fill( "preVertexR", r);
+	}
 	
+
 	if ( z < cutVertexZ->min || z > cutVertexZ->max )
 		return false;
 	if ( r < cutVertexR->min || r > cutVertexR->max )
 		return false;
-	book->fill( "vertexZ", z);
-	book->fill( "vertexR", r);
 
-	book->fill( "refMult", refMult );
-	
-	
 
+	/**
+	 * Post Event Cut QA
+	 */
+	if ( makeEventQA  ){
+		book->fill( "vertexZ", z);
+		book->fill( "vertexR", r);
+		book->fill( "refMult", refMult );
+	}
+	
 	return true;
 }
 
@@ -246,14 +268,20 @@ bool InclusiveSpectra::trackCut( Int_t iTrack ){
 
 	double yLocal = pico->trackYLocal( iTrack );
 
-	book->fill( "preTofMatch", tofMatch );
-	book->fill( "preYLocal", yLocal );
-	book->fill( "preDca", dca );
-	book->fill( "preNHits", nHits );
-	book->fill( "preNHitsDedx", nHitsDedx );
-	book->fill( "preNHitsFit", nHitsFit );
-	book->fill( "preNHitsPossible", nHitsPossible );
-	book->fill( "preNHitsFitOverPossible", fitPoss );
+	/**
+	 * Pre Track Cut QA
+	 */
+	if ( makeTrackQA ){
+		book->fill( "preTofMatch", tofMatch );
+		book->fill( "preYLocal", yLocal );
+		book->fill( "preDca", dca );
+		book->fill( "preNHits", nHits );
+		book->fill( "preNHitsDedx", nHitsDedx );
+		book->fill( "preNHitsFit", nHitsFit );
+		book->fill( "preNHitsPossible", nHitsPossible );
+		book->fill( "preNHitsFitOverPossible", fitPoss );	
+	}
+	
 	
 
 	if ( tofMatch < cutTofMatch->min || tofMatch > cutTofMatch->max )
@@ -269,14 +297,22 @@ bool InclusiveSpectra::trackCut( Int_t iTrack ){
 	if ( fitPoss < cutNHitsFitOverPossible->min || fitPoss > cutNHitsFitOverPossible->max )
 		return false; 
 
-	book->fill( "tofMatch", tofMatch );
-	book->fill( "yLocal", yLocal );
-	book->fill( "dca", dca );
-	book->fill( "nHits", nHits );
-	book->fill( "nHitsDedx", nHitsDedx );
-	book->fill( "nHitsFit", nHitsFit );
-	book->fill( "nHitsPossible", nHitsPossible );
-	book->fill( "nHitsFitOverPossible", fitPoss );
+
+
+
+	/**
+	 * Post Track Cut QA
+	 */
+	if ( makeTrackQA ){
+		book->fill( "tofMatch", tofMatch );
+		book->fill( "yLocal", yLocal );
+		book->fill( "dca", dca );
+		book->fill( "nHits", nHits );
+		book->fill( "nHitsDedx", nHitsDedx );
+		book->fill( "nHitsFit", nHitsFit );
+		book->fill( "nHitsPossible", nHitsPossible );
+		book->fill( "nHitsFitOverPossible", fitPoss );
+	}
 
 	return true;
 }

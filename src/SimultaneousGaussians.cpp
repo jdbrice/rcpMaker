@@ -96,7 +96,7 @@ SimultaneousGaussians::~SimultaneousGaussians(){
 
 
 void SimultaneousGaussians::make(){
-
+/*
 	book->cd();
 	book->makeAll( nodePath + "histograms" );
 	vector<string> species = PidPhaseSpace::species;
@@ -124,11 +124,6 @@ void SimultaneousGaussians::make(){
 			tofSigmas.push_back( tofParams[ iS ]->sigma( avgP, psr->mass( species[ iS ] ), psr->mass( centerSpecies ) ) );
 			dedxSigmas.push_back( dedxParams[ iS ]->sigma( avgP ) );
 		}
-
-		/*if ( (*binsPt)[ i ] > 1.2 ){
-			sigmaRoi = 1.0;
-			muRoi = .1;
-		}*/
 
 		vector<string> cen = { "per", "cen" };
 		vector<string> charge = { "p_", "n_" };
@@ -199,7 +194,7 @@ void SimultaneousGaussians::make(){
 		}
 		
 	}
-
+*/
 	
 
 }
@@ -615,7 +610,7 @@ SimultaneousGaussians::GaussianFitResult SimultaneousGaussians::fitTwoSpecies( T
 
 
 void SimultaneousGaussians::make2(){
-
+/*
 	book->cd();
 	book->makeAll( nodePath + "histograms" );
 	vector<string> species = PidPhaseSpace::species;
@@ -644,10 +639,7 @@ void SimultaneousGaussians::make2(){
 			tofSigmas.push_back( dedxParams[ iS ]->sigma( avgP ) );
 		}
 
-		/*if ( (*binsPt)[ i ] > 1.2 ){
-			sigmaRoi = 1.0;
-			muRoi = .1;
-		}*/
+		
 
 		vector<string> cen = { "per", "cen" };
 		vector<string> charge = { "p_", "n_" };
@@ -718,7 +710,7 @@ void SimultaneousGaussians::make2(){
 		
 	}
 
-	
+	*/
 
 }
 

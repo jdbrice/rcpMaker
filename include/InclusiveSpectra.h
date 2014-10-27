@@ -64,6 +64,8 @@ protected:
 	ConfigRange *cutNHitsFitOverPossible;
 	ConfigRange *cutDca;
 
+	bool makeEventQA, makeTrackQA;
+
 
 public:
 	InclusiveSpectra( XmlConfig * config, string nodePath, string fileList ="", string jobPrefix ="" );
