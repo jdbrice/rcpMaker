@@ -14,14 +14,16 @@ string ParamSpectra::SQUARE_CUT 	= "square";
 string ParamSpectra::ELLIPSE_CUT 	= "ellipse";
 
 
-ParamSpectra::ParamSpectra( XmlConfig * config, string np) 
-	: InclusiveSpectra( config, np ) {
+
+ParamSpectra::ParamSpectra( XmlConfig * config, string np, string fl, string jp ) 
+	: InclusiveSpectra( config, np, fl, jp ) {
 
 	species = cfg->getStringVector( np+"PidSpecies" );
 
 
 	lg->info(__FUNCTION__) << "Setting up Tof Pid Params for : " << endl;
-	// make the list of tofPidParams
+
+	// make the list of pid Params
 	for ( int i = 0; i < species.size(); i++ ){
 
 		lg->info(__FUNCTION__) << species[ i ] << endl;
@@ -33,14 +35,20 @@ ParamSpectra::ParamSpectra( XmlConfig * config, string np)
 		dedxParams.push_back( dpp );
 	}
 
-	// Initialize the Phase Space Recentering Object
+
+	// get the ideal plateau sigmas
 	tofSigmaIdeal = cfg->getDouble( np+"PhaseSpaceRecentering.sigma:tof", 0.0012);
-	dedxSigmaIdeal = cfg->getDouble( np+"PhaseSpaceRecentering.sigma:dedx", 0.06);
+	dedxSigmaIdeal = cfg->getDouble( np+"PhaseSpaceRecentering.sigma:dedx", 0.033);
+
+	// Initialize the Phase Space Recentering Object
 	psr = new PhaseSpaceRecentering( dedxSigmaIdeal,
 									 tofSigmaIdeal,
 									 cfg->getString( np+"Bichsel.table", "dedxBichsel.root"),
 									 cfg->getInt( np+"Bichsel.method", 0) );
+	
+	// get the recentering method for the phase space
 	psrMethod = config->getString( np+"PhaseSpaceRecentering.method", "traditional" );
+	
 	// alias the centered species for ease of use
 	centerSpecies = cfg->getString( np+"PhaseSpaceRecentering.centerSpecies", "K" );
 
@@ -53,12 +61,10 @@ ParamSpectra::ParamSpectra( XmlConfig * config, string np)
 	nSigmaTof = cfg->getDouble( np+"nSigmaCut:tof", 1.0 );
 	nSigmaDedx = cfg->getDouble( np+"nSigmaCut:dedx", 1.0 );
 	
+	// make a list of cuts we want to explore
 	cuts = { TOF_CUT, DEDX_CUT, SQUARE_CUT, ELLIPSE_CUT};
 
 	book->cd();
-
-	
-
 }
 
 ParamSpectra::~ParamSpectra(){

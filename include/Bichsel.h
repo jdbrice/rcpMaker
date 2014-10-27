@@ -93,9 +93,8 @@ public:
 		}
 	}
 
-	static constexpr double epsilon = 0.01;
 	TH1D* tableFor( double mass ){
-		
+		double epsilon = 0.01;		
 		if ( abs(mass - piMass) < epsilon  ){
 			return hPi;
 		}

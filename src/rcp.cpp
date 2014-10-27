@@ -35,7 +35,7 @@ int main( int argc, char* argv[] ) {
 				InclusiveSpectra is( &config, "InclusiveSpectra.", fileList, jobPrefix );
 				is.make();
 			} else if ( "ParamSpectra" == job ){
-				ParamSpectra ps( &config, "ParamSpectra.");
+				ParamSpectra ps( &config, "ParamSpectra.", fileList, jobPrefix );
 				ps.make();
 			} else if ( "PidPhaseSpace" == job ){
 				PidPhaseSpace pps( &config, "PidPhaseSpace.", fileList, jobPrefix  );

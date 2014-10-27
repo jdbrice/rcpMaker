@@ -40,7 +40,7 @@ protected:
 	vector<string> cuts;
 
 public:
-	ParamSpectra( XmlConfig * config, string np);
+	ParamSpectra( XmlConfig * config, string np, string fileList ="", string jobPrefix ="");
 	~ParamSpectra();
 
 protected:
