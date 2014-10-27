@@ -3,6 +3,7 @@
 #include "ChainLoader.h"
 #include "AnaPicoDst.h"
 
+#include <limits.h>
 
 /**
  * Constructor
