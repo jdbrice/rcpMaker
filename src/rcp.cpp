@@ -46,6 +46,7 @@ int main( int argc, char* argv[] ) {
 			} else if ( "SimultaneousGaussians" == job ){
 				SimultaneousGaussians sg( &config, "SimultaneousGaussians." );
 				sg.make();
+				//sg.make2();
 			}
 
 		} catch ( exception &e ){
