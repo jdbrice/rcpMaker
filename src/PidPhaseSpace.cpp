@@ -25,6 +25,8 @@ PidPhaseSpace::PidPhaseSpace( XmlConfig* config, string np, string fl, string jp
 									 tofSigmaIdeal,
 									 cfg->getString( np+"Bichsel.table", "dedxBichsel.root"),
 									 cfg->getInt( np+"Bichsel.method", 0) );
+
+	// method for phase space recentering
 	psrMethod = config->getString( np+"PhaseSpaceRecentering.method", "traditional" );
 
 	// alias the centered species for ease of use
@@ -34,6 +36,12 @@ PidPhaseSpace::PidPhaseSpace( XmlConfig* config, string np, string fl, string jp
 	tofCut = cfg->getDouble( np+"enhanceDistributions:tof", 1.0 );
 	dedxCut = cfg->getDouble( np+"enhanceDistributions:dedx", 1.0 );
 
+
+	/**
+	 * Flags to turn on and off certain histos
+	 */
+	make2D = cfg->getBool( np + "makePhaseSpace:2D", false );
+	makeEnhanced = cfg->getBool( np + "makePhaseSpace:enhanced", false );
 
 	/**
 	 * Make the dedx + tof binning 
@@ -60,8 +68,9 @@ PidPhaseSpace::PidPhaseSpace( XmlConfig* config, string np, string fl, string jp
 
 void PidPhaseSpace::preLoop() {
 
-	preparePhaseSpaceHistograms( centerSpecies );
 	book->cd();
+	preparePhaseSpaceHistograms( centerSpecies );
+	
 }
 
 void PidPhaseSpace::postLoop() {
@@ -94,10 +103,10 @@ void PidPhaseSpace::analyzeTrack( int iTrack ){
 	double dedxNL = psr->nlDedx(centerSpecies, pico->trackDedx(iTrack), p, avgP );
 
 	book->fill( "trBeta", p, tof );
-	book->fill( "beta", p, 1.0/pico->trackBeta( iTrack ) );
+	book->fill( "betaRaw", p, 1.0/pico->trackBeta( iTrack ) );
 
 	book->fill( "trDedx", p, dedx );
-	book->fill( "dedx", p, pico->trackDedx( iTrack ) );
+	book->fill( "dedxRaw", p, pico->trackDedx( iTrack ) );
 	book->fill( "eta", eta );
 
 	book->fill( "nlBeta", p, tofNL );
@@ -108,18 +117,20 @@ void PidPhaseSpace::analyzeTrack( int iTrack ){
 		dedx = dedxNL;
 	} 
 
-	book->cd( "dedx_tof" );
-	// Loop over centralities and fill any corresponding histos
-	for ( int iCen = 0; iCen < centrals.size(); iCen ++  ){
-		
-		if ( refMult < cutCentrality[ centrals[ iCen ] ]->min || refMult > cutCentrality[ centrals[ iCen ] ]->max )
-			continue;
+	if ( make2D ){
+		book->cd( "dedx_tof" );
+		// Loop over centralities and fill any corresponding histos
+		for ( int iCen = 0; iCen < centrals.size(); iCen ++  ){
+			
+			if ( refMult < cutCentrality[ centrals[ iCen ] ]->min || refMult > cutCentrality[ centrals[ iCen ] ]->max )
+				continue;
 
-		book->fill( speciesName( centerSpecies, 0, centrals[ iCen ], ptBin, etaBin ), dedx, tof );
-		book->fill( speciesName( centerSpecies, charge, centrals[ iCen ], ptBin, etaBin ), dedx, tof );
+			book->fill( speciesName( centerSpecies, 0, centrals[ iCen ], ptBin, etaBin ), dedx, tof );
+			book->fill( speciesName( centerSpecies, charge, centrals[ iCen ], ptBin, etaBin ), dedx, tof );
+		}	
 	}
-
-	enhanceDistributions(ptBin, etaBin, charge, dedx, tof, refMult );
+	
+	enhanceDistributions(avgP, ptBin, etaBin, charge, dedx, tof );
 
 	book->cd();
 }
@@ -156,19 +167,10 @@ void PidPhaseSpace::preparePhaseSpaceHistograms( string plc ){
 					string title = "dE/dx Vs. #beta^{-1}; dE/dx; #beta^{-1}";
 
 					// 2d dedx X tof 
-					book->cd( "dedx_tof" );
-
 					// 2D for NMF 
-					book->make2D( hName, title, dedxBins.size()-1, dedxBins.data(), tofBins.size()-1, tofBins.data() );
-
-					// dedx projections
-					book->cd( "dedx" );		
-					book->make1D( dedxName( plc, charge, centrals[ iCen ], ptBin, etaBin ), 
-									"dEdx", dedxBins.size()-1, dedxBins.data() );
-					// Enhanced
-					for ( int iS = 0; iS < species.size(); iS++ ){
-						book->make1D( dedxName( plc, charge, centrals[ iCen ], ptBin, etaBin, species[ iS ] ), 
-							"dEdx", dedxBins.size()-1, dedxBins.data() );
+					if ( make2D ){
+						book->cd( "dedx_tof" );
+						book->make2D( hName, title, dedxBins.size()-1, dedxBins.data(), tofBins.size()-1, tofBins.data() );
 					}
 
 					// tof projections
@@ -176,10 +178,27 @@ void PidPhaseSpace::preparePhaseSpaceHistograms( string plc ){
 					book->make1D( tofName( plc, charge, centrals[ iCen ], ptBin, etaBin ), 
 						"#beta^{-1}", tofBins.size()-1, tofBins.data() );
 					
-					for ( int iS = 0; iS < species.size(); iS++ ){
-						book->make1D( tofName( plc, charge, centrals[ iCen ], ptBin, etaBin, species[ iS ] ), 
-							"#beta^{-1}", tofBins.size()-1, tofBins.data() );
-					} 
+					if ( makeEnhanced ){ 
+						for ( int iS = 0; iS < species.size(); iS++ ){
+							book->make1D( tofName( plc, charge, centrals[ iCen ], ptBin, etaBin, species[ iS ] ), 
+								"#beta^{-1}", tofBins.size()-1, tofBins.data() );
+						} 
+					}
+
+					// dedx projections
+					book->cd( "dedx" );		
+					book->make1D( dedxName( plc, charge, centrals[ iCen ], ptBin, etaBin ), 
+									"dEdx", dedxBins.size()-1, dedxBins.data() );
+					
+					// Enhanced
+					if ( makeEnhanced ){ 
+						for ( int iS = 0; iS < species.size(); iS++ ){
+							book->make1D( dedxName( plc, charge, centrals[ iCen ], ptBin, etaBin, species[ iS ] ), 
+								"dEdx", dedxBins.size()-1, dedxBins.data() );
+						}
+					}
+
+					
 
 				 
 				} // loop on centrality
@@ -269,14 +288,16 @@ void PidPhaseSpace::enhanceDistributions( double avgP, int ptBin, int etaBin, in
 		book->fill( dedxName( centerSpecies, 0, cen, ptBin, etaBin ), dedx );
 		book->fill( dedxName( centerSpecies, charge, cen, ptBin, etaBin ), dedx );
 		
+
 		// enhanced by species
-		for ( int iS = 0; iS < mSpecies.size(); iS++ ){
-			if ( tof >= tMeans[ iS ] -tSigma && tof <= tMeans[ iS ] + tSigma ){
-				book->fill( dedxName( centerSpecies, 0, cen, ptBin, etaBin, mSpecies[ iS ] ), dedx );
-				book->fill( dedxName( centerSpecies, charge, cen, ptBin, etaBin, mSpecies[ iS ] ), dedx );
-			}
-		} // loop on species from centered means
-		
+		if ( makeEnhanced ){
+			for ( int iS = 0; iS < mSpecies.size(); iS++ ){
+				if ( tof >= tMeans[ iS ] -tSigma && tof <= tMeans[ iS ] + tSigma ){
+					book->fill( dedxName( centerSpecies, 0, cen, ptBin, etaBin, mSpecies[ iS ] ), dedx );
+					book->fill( dedxName( centerSpecies, charge, cen, ptBin, etaBin, mSpecies[ iS ] ), dedx );
+				}
+			} // loop on species from centered means	
+		}
 
 		book->cd( "tof" );
 		// unenhanced - all tof tracks
@@ -284,12 +305,14 @@ void PidPhaseSpace::enhanceDistributions( double avgP, int ptBin, int etaBin, in
 		book->fill( tofName( centerSpecies, charge, cen, ptBin, etaBin ), tof );
 
 		// enhanced by species
-		for ( int iS = 0; iS < mSpecies.size(); iS++ ){
-			if ( dedx >= dMeans[ iS ] -dSigma && dedx <= dMeans[ iS ] + dSigma ){
-				book->fill( tofName( centerSpecies, 0, cen, ptBin, etaBin, mSpecies[ iS ] ), tof );
-				book->fill( tofName( centerSpecies, charge, cen, ptBin, etaBin, mSpecies[ iS ] ), tof );
-			}
-		} // loop on species from centered means
+		if ( makeEnhanced ){
+			for ( int iS = 0; iS < mSpecies.size(); iS++ ){
+				if ( dedx >= dMeans[ iS ] -dSigma && dedx <= dMeans[ iS ] + dSigma ){
+					book->fill( tofName( centerSpecies, 0, cen, ptBin, etaBin, mSpecies[ iS ] ), tof );
+					book->fill( tofName( centerSpecies, charge, cen, ptBin, etaBin, mSpecies[ iS ] ), tof );
+				}
+			} // loop on species from centered means
+		}
 
 	} // loop centralities
 }

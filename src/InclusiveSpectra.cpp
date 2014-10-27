@@ -35,7 +35,8 @@ InclusiveSpectra::InclusiveSpectra( XmlConfig * config, string np, string fileLi
     lg->info(__FUNCTION__) << " Creating book "<< endl;
     book = new HistoBook( prefix + config->getString( np + "output.data" ), config );
 
-    reporter = new Reporter( prefix + config->getString( np + "output.report" ) );
+    if ( config->getString( np + "output.report", "" ).length() > 4 )
+    	reporter = new Reporter( prefix + config->getString( np + "output.report" ) );
 
     /**
      * Setup the event cuts
@@ -96,7 +97,8 @@ InclusiveSpectra::~InclusiveSpectra(){
 
 	// delete the book and reporter
 	delete book;
-	delete reporter;
+	if ( reporter )
+		delete reporter;
 
 	// delete the logger
 	lg->info(__FUNCTION__) << endl;
@@ -134,9 +136,10 @@ void InclusiveSpectra::eventLoop(){
 	/**
 	 * Make the Histograms
 	 */
-	book->cd();
-	lg->info(__FUNCTION__) << "Making all histograms in : " << nodePath + "histograms" << endl;
+	book->cd("/");
 	book->makeAll( nodePath + "histograms" );
+	lg->info(__FUNCTION__) << "Making all histograms in : " << nodePath + "histograms" << endl;
+	
 	if ( cfg->nodeExists( "QAistograms.event" ) && makeEventQA ){
 		lg->info(__FUNCTION__) << " Making event QA histograms " << endl;
 		book->makeAll( "QAHistograms.event" );
@@ -146,9 +149,13 @@ void InclusiveSpectra::eventLoop(){
 		book->makeAll( "QAHistograms.track" );
 	}
 
+
+	/**
+	 * Run preloop hooks
+	 */
 	preLoop();
 
-	TaskProgress tp( "Event Loop", nEvents );
+	TaskProgress tp( "Event Loop", nEventsToProcess );
 
 	for ( Int_t iEvent = 0; iEvent < nEventsToProcess; iEvent ++ ){
 		pico->GetEntry(iEvent);
@@ -251,7 +258,7 @@ bool InclusiveSpectra::trackCut( Int_t iTrack ){
 
 	double eta = pico->trackEta( iTrack );
 
-	if ( eta > .5 )
+	if ( eta > .6 )
 		return false;
 
 	double dcaX = pico->trackDcaX( iTrack );

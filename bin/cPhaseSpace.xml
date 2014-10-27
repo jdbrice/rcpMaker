@@ -14,8 +14,8 @@
 		<eta>0.0, 0.2 </eta>
 		<charge> -1.5, -0.5, 0.5, 1.5 </charge>
 
-		<tof width="0.008" min="-1" max="1" />
-		<dedx width="0.022" min="-0.75" max="0.75" />
+		<tof width="0.006" min="-1" max="1" />
+		<dedx width="0.015" min="-0.75" max="0.75" />
 		<tofRaw width="0.0024" min="0.9" max="3" />
 		<dedxRaw width="0.012" min="1" max="6cd" />
 
@@ -29,12 +29,12 @@
 		</Logger>	
 		
 		<input>
-			<dst treeName="tree" maxFiles="1" url="/Users/danielbrandenburg/bnl/local/data/BBCMB14_015/"/>
+			<dst treeName="tree" maxFiles="1" url="/Users/danielbrandenburg/bnl/local/data/BBCMB14_015/" nEvents="10000"/>
 		</input>
 
 		<output>
 			<data>ps/data.root</data>
-			<report>ps/rp.pdf</report>
+			<report></report>
 		</output>
 
 		<Bichsel>
@@ -71,14 +71,15 @@
 		</trackCuts>
 
 		<makeQA event="false" track="false"/>
+		<makePhaseSpace 2D="false" enhanced="true" /> 
 		<histograms >
 
-			<beta title="#beta^{-1}" xBins="binning.pt" yBins="binning.tofRaw" />
+			<betaRaw title="#beta^{-1}" xBins="binning.pt" yBins="binning.tofRaw" />
 
 			<trBeta title="" xBins="binning.pt" yBins="binning.tof" />
 			<nlBeta title="" xBins="binning.pt" yBins="binning.tof"/>
 
-			<dedx title="dEdx" xBins="binning.pt" yBins="binning.dedxRaw" />
+			<dedxRaw title="dEdx" xBins="binning.pt" yBins="binning.dedxRaw" />
 
 			<trDedx title="" xBins="binning.pt" yBins="binning.dedx" />
 			<nlDedx title="" xBins="binning.pt" yBins="binning.dedx"/>
@@ -90,8 +91,8 @@
 		</histograms>
 
 		<style hide="true">
-			<tof title="#beta^{-1}" logy="1"/>
-			<dedx title="dedx" logy="1"/>
+			<tof title="#beta^{-1}" logy="1" draw="pe"/>
+			<dedx title="dedx" logy="1" draw="pe"/>
 		</style>
 
 	</PidPhaseSpace>

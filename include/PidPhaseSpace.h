@@ -37,6 +37,8 @@ protected:
 
 	double tofCut, dedxCut;
 
+	bool make2D, makeEnhanced;
+
 public:
 	PidPhaseSpace( XmlConfig* config, string np, string fl ="", string jp ="" );
 	~PidPhaseSpace(){}
