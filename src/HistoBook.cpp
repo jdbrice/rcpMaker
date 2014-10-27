@@ -378,8 +378,8 @@ namespace jdb{
 		if ( sdir.compare("") == 0)
 			sdir = currentDir;
 
-		if ( NULL == book[ ( sdir  + name  ) ] )
-			log->warn(__FUNCTION__) << sdir + name  << " Does Not Exist " << endl;
+		if ( NULL == book[ ( sdir + name  ) ] )
+			log->warn(__FUNCTION__) << sdir + "/" + name  << " Does Not Exist " << endl; 
 
 		return book[ ( sdir  + name  ) ];
 	}	//get
