@@ -5,6 +5,8 @@
 #include "Reporter.h"
 #include "PhaseSpaceRecentering.h"
 
+#include <math>
+
 class PidPhaseSpace : public InclusiveSpectra
 {
 protected:
@@ -91,6 +93,24 @@ public:
 		if ( "" != eSpecies )
 			ePart = "_" + eSpecies;
 		return "dedx_" + chargeString(charge) + "_" + centerSpecies + "_" + cen + "_" + ts(ptBin) + "_" + ts(etaBin) + ePart;
+	}
+
+	static double p( double pt, double eta ){
+		return pt * cosh( eta );
+	}
+	double averageP( int ptBin, int etaBin ){
+		if ( ptBin < 0 || ptBin > binsPt->nBins() ){
+			return 0;
+		}
+		if ( etaBin < 0 || etaBin > binsEta->nBins() ){
+			return 0;
+		} 
+
+		double avgPt = ((*binsPt)[ ptBin ] + (*binsPt)[ ptBin + 1 ]) / 2.0;
+		double avgEta = ((*binsEta)[ etaBin ] + (*binsEta)[ etaBin + 1 ]) / 2.0;
+
+		return p( avgPt, avgEta );
+
 	}
 
 	/**

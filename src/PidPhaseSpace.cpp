@@ -91,9 +91,9 @@ void PidPhaseSpace::analyzeTrack( int iTrack ){
 	int etaBin = binsEta->findBin( TMath::Abs( eta ) );
 	int charge = pico->trackCharge( iTrack );
 
-	double avgP = ( binsPt->bins[ ptBin ] + binsPt->bins[ ptBin+1] ) / 2.0;
+	double avgP = averageP( ptBin, etaBin );
 
-	if ( ptBin < 0 || etaBin < 0)
+	if ( ptBin < 0 || etaBin < 0 )
 		return;
 
 	double tof = psr->rTof(centerSpecies, pico->trackBeta(iTrack), p );
