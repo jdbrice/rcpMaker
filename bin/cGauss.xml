@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+
+	<jobType>SimultaneousGaussians</jobType>
+	<Logger>
+		<logLevel>warning</logLevel>
+	</Logger>
+
+	<binning hide="true" >
+
+		<pt width="0.05" min="0.2" max="4.0" />
+		<eta>0.0, 0.2 </eta>
+		<charge> -0.5, 0.5 </charge>
+
+		<tof width="0.0012" min="-2" max="2" />
+		<dedx width="0.006" min="-2" max="2" />
+
+		<padding tof=".15" dedx=".15" tofScale="0.05" dedxScale="0.05" />
+
+	</binning>
+
+	<SimultaneousGaussians>
+		<Logger>
+			<logLevel>info</logLevel>
+		</Logger>	
+		
+		<input>
+			<data url="/Users/danielbrandenburg/bnl/local/data/Oct24/f7.root"/>
+		</input>
+
+		<output>
+			<data>simGauss.root</data>
+			<report>rpSimGauss.pdf</report>
+		</output>
+
+		<Bichsel>
+			<table>dedxBichsel.root</table>
+			<method>0</method>
+		</Bichsel>
+		
+		<PhaseSpaceRecentering>
+			<centerSpecies>K</centerSpecies>
+			<sigma tof="0.0115" dedx="0.033"/>
+			<method>nonlinear</method>
+		</PhaseSpaceRecentering>
+
+		<histograms>
+			<mean title="Mean For Species; p_{T} [GeV]" xBins="binning.pt" />
+			<sigma title="Sigma For Species; p_{T} [GeV]" xBins="binning.pt" />
+
+			<yield title="yield" xBins="binning.pt" />
+		</histograms>
+
+		<TofPidParams>
+			<Pi>
+				<mean t="0.00303021" p="0.328878" ep="-0.476803"/>
+				<sigma t="-0.0109769" p="-0.0174848" ep="-0.0000516795"/>
+			</Pi>
+			<K>
+				<mean t="-0.00730177" p="-0.0676805" ep="0.00140494"/>
+				<sigma t="0.0114231" p="0.137087" ep="0.00333969"/>
+			</K>
+			<P>
+				<mean t="-0.0100537" p="-0.0908703" ep="0.306089"/>
+				<sigma t="0.012303" p="0.524039" ep="0.0077849"/>
+			</P>
+		</TofPidParams>
+		<DedxPidParams>
+			<Pi>
+				<sigma p0="0.0332619" p1="0.000423775" p2="0.000122086" p3="0.0150777" />
+			</Pi>
+			<K>
+				<sigma p0="0.0341419" p1="0" p2="0.0000874152" p3="0.0063817"/>
+			</K>
+			<P>
+				<sigma p0="0.0330171" p1="0.258738" p2="0" p3="0.00412973"/>
+			</P>
+		</DedxPidParams>
+
+	</SimultaneousGaussians>
+
+</config>
