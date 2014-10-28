@@ -5,7 +5,7 @@
 #include "Reporter.h"
 #include "PhaseSpaceRecentering.h"
 
-#include <math>
+#include <math.h>
 
 class PidPhaseSpace : public InclusiveSpectra
 {
