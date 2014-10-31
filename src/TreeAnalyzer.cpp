@@ -18,9 +18,11 @@ TreeAnalyzer::TreeAnalyzer( XmlConfig * config, string np, string fileList, stri
 	
     // create the book
     logger->info(__FUNCTION__) << " Creating book " << config->getString( np + "output.data" ) << endl;
-    book = new HistoBook( config->getString( np + "output.data" ), config, "", "", logger->getLogLevel() );
+    book = new HistoBook( jobPrefix + config->getString( np + "output.data" ), config, "", "", logger->getLogLevel() );
     logger->info(__FUNCTION__) << " Creating report " << config->getString( np + "output.report" ) << endl;
-    reporter = new Reporter( cfg, np+"Reporter.", jobPrefix );
+    
+    if ( "" == jobPrefix && cfg->nodeExists( np+"Reporter.output:url" ) ) 
+	    reporter = new Reporter( cfg, np+"Reporter.", jobPrefix );
 
     chain = new TChain( cfg->getString( np+"input.dst:treeName" ).c_str() );
     if ( "" == fileList ){
@@ -36,6 +38,7 @@ TreeAnalyzer::TreeAnalyzer( XmlConfig * config, string np, string fileList, stri
 
 TreeAnalyzer::~TreeAnalyzer(){
 	delete book;
+	if ( reporter )
 	delete reporter;
 	delete logger;
 }
