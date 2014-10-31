@@ -40,6 +40,7 @@ public:
 	~TreeAnalyzer();
 
 	virtual void make();
+	virtual bool keepEvent();
 	virtual void preEventLoop();
 	virtual void postEventLoop(){}
 	virtual void analyzeEvent(){}

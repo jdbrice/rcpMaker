@@ -60,6 +60,9 @@ void TreeAnalyzer::make(){
 	for(Int_t i=0; i<nEvents; i++) {
     	chain->GetEntry(i);
 
+    	if ( !keepEvent() )
+    		continue;
+    	
     	analyzeEvent();
     	
     	
@@ -74,4 +77,14 @@ void TreeAnalyzer::preEventLoop(){
 	if ( cfg->nodeExists( nodePath+"histograms" ) )
 		book->makeAll( nodePath+"histograms" );
 
+}
+
+/**
+ * Reads data from the chain - cuts events
+ * @return true or false
+ */
+bool TreeAnalyzer::keepEvent() {
+
+
+	return true;
 }
