@@ -1,6 +1,5 @@
 
 #include <iostream>
-#include "allroot.h"
 #include "constants.h"
 #include "HistoBook.h"
 #include "XmlConfig.h"

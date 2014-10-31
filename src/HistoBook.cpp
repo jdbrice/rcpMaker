@@ -1,10 +1,15 @@
 
 
 #include "HistoBook.h"
-#include "TKey.h"
-#include "TObject.h"
 #include "Logger.h"
 #include "LoggerConfig.h"
+
+/**
+ * ROOT
+ */
+#include "TKey.h"
+#include "TObject.h"
+#include <TApplication.h>
 
 
 namespace jdb{
@@ -15,15 +20,11 @@ namespace jdb{
 	 * @param input input filename
 	 * @param inDir input starting directory
 	 */
-	HistoBook::HistoBook( string name, string input, string inDir, Logger * nLog ){
+	HistoBook::HistoBook( string name, string input, string inDir, int logLevel ){
 
-		if ( NULL == nLog ){
-			log = new Logger( Logger::llDefault, "HistoBook" );
-		}
-		else {
-			log = nLog;
-
-		}
+		// setup the logger
+		logger = new Logger( logLevel, "HistoBook" );
+		
 
 		if (name.find(  ".root") != std::string::npos){
 			filename = name;
@@ -35,7 +36,7 @@ namespace jdb{
 		file = new TFile( filename.c_str(), "recreate" );
 		file->cd();
 
-		log->info(__FUNCTION__) << "Output File : " << filename << " opened" << endl;
+		logger->info(__FUNCTION__) << "Output File : " << filename << " opened" << endl;
 
 
 		// make the legend and draw it once to apply styles etc.
@@ -49,7 +50,7 @@ namespace jdb{
 
 		// if an input was given merge it into the live record
 		if ( input.length() >= 5 ){
-			log->info(__FUNCTION__) << "Loading : " << inDir << " from " << input << endl;
+			logger->info(__FUNCTION__) << "Loading : " << inDir << " from " << input << endl;
 			TFile * fin = new TFile( input.c_str() );
 			cd ( inDir );
 			fin->cd( inDir.c_str() );
@@ -63,20 +64,16 @@ namespace jdb{
 	 * @param name name of file to use for saving root data
 	 * @param con  The config file to use for all config relates calls
 	 */
-	HistoBook::HistoBook( string name, XmlConfig * con, string input, string inDir, Logger * nLog){
+	HistoBook::HistoBook( string name, XmlConfig * con, string input, string inDir, int logLevel){
 
-
+		// set the configuration 
 		config = con;
 
-		if ( NULL == nLog ){
-			log = LoggerConfig::makeLogger( config, "Logger" );
-			log->setClassSpace("HistoBook" );
-		}
-		else {
-			log = nLog;
-		}
+		// make the logger
+		logger = new Logger( logLevel, "HistoBook" );
+		
 
-		log->info(__FUNCTION__) << "" << endl;
+		logger->info(__FUNCTION__) << "" << endl;
 
 		if (name.find(  ".root") != std::string::npos){
 			filename = name;
@@ -88,7 +85,7 @@ namespace jdb{
 		file = new TFile( filename.c_str(), "recreate" );
 		file->cd();
 
-		log->info(__FUNCTION__) << "Output File : " << filename << " opened" << endl;
+		logger->info(__FUNCTION__) << "Output File : " << filename << " opened" << endl;
 
 		// make the legend and draw it once to apply styles etc.
 		// for some reason needed to make styling work on the first draw
@@ -100,11 +97,11 @@ namespace jdb{
 		globalStyle();
 
 
-		log->info(__FUNCTION__) << " Set Configuration " << endl;
+		logger->info(__FUNCTION__) << " Set Configuration " << endl;
 
 		// if an input was given merge it into the live record
 		if ( input.length() >= 5 ){
-			log->info(__FUNCTION__) << "Loading : " << inDir << " from " << input << endl;
+			logger->info(__FUNCTION__) << "Loading : " << inDir << " from " << input << endl;
 			TFile * fin = new TFile( input.c_str() );
 			cd ( inDir );
 			fin->cd( inDir.c_str() );
@@ -118,16 +115,17 @@ namespace jdb{
 	 * and the file is closed properly
 	 */
 	HistoBook::~HistoBook(){
-		log->info(__FUNCTION__) << "" << endl;
+		logger->info(__FUNCTION__) << "" << endl;
 		delete legend;
 
 		save();
 		file->Close();
-		log->info(__FUNCTION__) << " Memory freed, data written, file closed " << endl;
+		logger->info(__FUNCTION__) << " Memory freed, data written, file closed " << endl;
+		delete logger;
 	}	// Destructor
 
 	void HistoBook::save() {
-		log->info(__FUNCTION__) << " Save to File " << filename << endl;
+		logger->info(__FUNCTION__) << " Save to File " << filename << endl;
 		file->Write();
 	}	// save
 
@@ -135,14 +133,14 @@ namespace jdb{
 	 * Loads a directory into the histobook
 	 */
 	void HistoBook::loadRootDir( TDirectory* tDir, string path ){
-		log->info(__FUNCTION__) << " Loading from directory " << path << endl;
+		logger->info(__FUNCTION__) << " Loading from directory " << path << endl;
 
 		TList* list;
 
 		if ( tDir ){
 			list = tDir->GetListOfKeys();
 		} else {
-			log->info(__FUNCTION__) << " Bad Directory " << path << endl;
+			logger->info(__FUNCTION__) << " Bad Directory " << path << endl;
 			return;
 		}
 
@@ -181,11 +179,11 @@ namespace jdb{
 
 	void HistoBook::add( string name, TH1* h ){
 
-		log->info(__FUNCTION__) << " Adding " << name << endl;
+		logger->info(__FUNCTION__) << " Adding " << name << endl;
 
 		string oName = name;
 		if ( name.length() <= 1 || !h ){
-			log->warn(__FUNCTION__) << " Cannot add " << name << " to dir " << currentDir << " : Invalid name" << endl;
+			logger->warn(__FUNCTION__) << " Cannot add " << name << " to dir " << currentDir << " : Invalid name" << endl;
 			return;
 		}
 
@@ -193,7 +191,7 @@ namespace jdb{
 
 		// dont allow duplicated name overites
 		if ( book[ name ] ){
-			log->warn(__FUNCTION__) << " Cannot add " << name << " to dir " << currentDir << " : Duplicate exists" << endl;
+			logger->warn(__FUNCTION__) << " Cannot add " << name << " to dir " << currentDir << " : Duplicate exists" << endl;
 			return;
 		}
 
@@ -204,7 +202,7 @@ namespace jdb{
 
 	string HistoBook::cd( string sdir  ){
 
-		log->info(__FUNCTION__) << " In Directory " << sdir << endl;
+		logger->info(__FUNCTION__) << " In Directory " << sdir << endl;
 		string old = currentDir;
 
 		char* csdir = (char*)sdir.c_str();
@@ -213,7 +211,7 @@ namespace jdb{
 		if ( file->GetDirectory( csdir ) ){
 			file->cd( csdir );
 		} else {
-			log->info(__FUNCTION__) << " Creating Directory " << sdir << endl;
+			logger->info(__FUNCTION__) << " Creating Directory " << sdir << endl;
 			file->mkdir( csdir );
 			file->cd( csdir );
 		}
@@ -264,7 +262,7 @@ namespace jdb{
 				if ( bx->nBins() >= 1 )
 					make1D( hName, hTitle, bx->nBins(), bx->bins.data() );
 				else 
-					log->warn(__FUNCTION__) << "Invalid Bins given for " << hName << endl;
+					logger->warn(__FUNCTION__) << "Invalid Bins given for " << hName << endl;
 
 			} else if ( "2D" == type || ( (bx->nBins() > 0) && (by->nBins() > 0) && (bz->nBins() <= 0) )){
 
@@ -272,10 +270,10 @@ namespace jdb{
 					make2D( hName, hTitle,
 						bx->nBins(), bx->bins.data(), by->nBins(), by->bins.data() );
 				else 
-					log->warn(__FUNCTION__) << "Invalid Bins given for " << hName << endl;
+					logger->warn(__FUNCTION__) << "Invalid Bins given for " << hName << endl;
 
 			} else {
-				log->warn(__FUNCTION__) << "Histogram " << hName << " was not made "<< endl;
+				logger->warn(__FUNCTION__) << "Histogram " << hName << " was not made "<< endl;
 			}
 
 
@@ -288,7 +286,7 @@ namespace jdb{
 		if ( !con )
 			return;
 		vector<string> paths = con->childrenOf( nodeName );
-		log->info(__FUNCTION__) << " Found " << paths.size() << " histogram paths " << endl;
+		logger->info(__FUNCTION__) << " Found " << paths.size() << " histogram paths " << endl;
 		for ( int i=0; i < paths.size(); i++ ){
 
 			make( paths[ i ] );
@@ -296,7 +294,7 @@ namespace jdb{
 	}	//makeAll
 	void HistoBook::makeAll( string nodeName ){
 		if ( !config ){
-			log->info( __FUNCTION__ ) << "No config" << endl;
+			logger->info( __FUNCTION__ ) << "No config" << endl;
 			return;
 		}
 
@@ -305,18 +303,18 @@ namespace jdb{
 
 	void HistoBook::clone( string existing, string create ){
 
-		log->info(__FUNCTION__) << " Cloning " << existing << " into " << create << endl;
+		logger->info(__FUNCTION__) << " Cloning " << existing << " into " << create << endl;
 		if ( get( existing ) ){
 			TH1* nHist = (TH1*)get( existing )->Clone( create.c_str() );
 			// add the new one
 			add( create, nHist );
 		} else {
-			log->warn(__FUNCTION__) << existing << " Does Not Exist " << endl;
+			logger->warn(__FUNCTION__) << existing << " Does Not Exist " << endl;
 		}
 	}	//clone
 
 	void HistoBook::make1F( string name, string title, uint nBins, double low, double hi  ){
-		log->info(__FUNCTION__) << "TH1F( " << name << ", " << title << ", " << nBins << ", " << low << ", " << hi << " )" << endl;
+		logger->info(__FUNCTION__) << "TH1F( " << name << ", " << title << ", " << nBins << ", " << low << ", " << hi << " )" << endl;
 		TH1F* h;
 		h = new TH1F( name.c_str(), title.c_str(), nBins, low, hi );
 
@@ -325,7 +323,7 @@ namespace jdb{
 
 	void HistoBook::make1D( string name, string title, uint nBins, double low, double hi  ){
 
-		log->info(__FUNCTION__) << "TH1D( " << name << ", " << title << ", " << nBins << ", " << low << ", " << hi << " )" << endl;
+		logger->info(__FUNCTION__) << "TH1D( " << name << ", " << title << ", " << nBins << ", " << low << ", " << hi << " )" << endl;
 		TH1D* h;
 		h = new TH1D( name.c_str(), title.c_str(), nBins, low, hi );
 
@@ -333,7 +331,7 @@ namespace jdb{
 	}	//make1D
 
 	void HistoBook::make1D( string name, string title, uint nBins, const Double_t* bins  ){
-		log->info(__FUNCTION__) << "TH1D( " << name << ", " << title << ", " << nBins << ", " << "[]" <<  " )" << endl;
+		logger->info(__FUNCTION__) << "TH1D( " << name << ", " << title << ", " << nBins << ", " << "[]" <<  " )" << endl;
 		TH1D* h;
 		h = new TH1D( name.c_str(), title.c_str(), nBins, bins );
 
@@ -342,7 +340,7 @@ namespace jdb{
 
 	void HistoBook::make2D( string name, string title, uint nBinsX, double lowX, double hiX, uint nBinsY, double lowY, double hiY ){
 
-		log->info(__FUNCTION__) << "TH2D( " << name << ", " << title << ", " << nBinsX << ", " << lowX << ", " << hiX << ", " << nBinsY << ", " << lowY << ", " << hiY << " )" << endl;
+		logger->info(__FUNCTION__) << "TH2D( " << name << ", " << title << ", " << nBinsX << ", " << lowX << ", " << hiX << ", " << nBinsY << ", " << lowY << ", " << hiY << " )" << endl;
 		TH2D* h;
 
 		h = new TH2D( name.c_str(), title.c_str(), nBinsX, lowX, hiX, nBinsY, lowY, hiY );
@@ -351,7 +349,7 @@ namespace jdb{
 	}	//make2D
 
 	void HistoBook::make2D( string name, string title, uint nBinsX, const Double_t* xBins, uint nBinsY, double lowY, double hiY ){
-		log->info(__FUNCTION__) << "TH2D( " << name << ", " << title << ", " << nBinsX << ", " << "[]" << ", " << nBinsY << ", " << lowY << ", " << hiY << " )" << endl;
+		logger->info(__FUNCTION__) << "TH2D( " << name << ", " << title << ", " << nBinsX << ", " << "[]" << ", " << nBinsY << ", " << lowY << ", " << hiY << " )" << endl;
 		TH2D* h;
 		h = new TH2D( name.c_str(), title.c_str(), nBinsX, xBins, nBinsY, lowY, hiY );
 
@@ -359,7 +357,7 @@ namespace jdb{
 	}	//make2D
 
 	void HistoBook::make2D( string name, string title, uint nBinsX, double lowX, double hiX, uint nBinsY, const Double_t* yBins  ){
-		log->info(__FUNCTION__) << "TH2D( " << name << ", " << title << ", " << nBinsX << ", " << lowX << ", " << hiX << ", " << nBinsY <<  "[] )" << endl;
+		logger->info(__FUNCTION__) << "TH2D( " << name << ", " << title << ", " << nBinsX << ", " << lowX << ", " << hiX << ", " << nBinsY <<  "[] )" << endl;
 		TH2D* h;
 		h = new TH2D( name.c_str(), title.c_str(), nBinsX, lowX, hiX, nBinsY, yBins );
 
@@ -367,7 +365,7 @@ namespace jdb{
 	}	//make2D
 
 	void HistoBook::make2D( string name, string title, uint nBinsX, const Double_t* xBins, uint nBinsY, const Double_t * yBins ){
-		log->info(__FUNCTION__) << "TH2D( " << name << ", " << title << ", " << nBinsX << ", " << "[]" << ", " << nBinsY << ", []" << " )" << endl;
+		logger->info(__FUNCTION__) << "TH2D( " << name << ", " << title << ", " << nBinsX << ", " << "[]" << ", " << nBinsY << ", []" << " )" << endl;
 		TH2D* h;
 		h = new TH2D( name.c_str(), title.c_str(), nBinsX, xBins, nBinsY, yBins );
 
@@ -379,7 +377,7 @@ namespace jdb{
 			sdir = currentDir;
 
 		if ( NULL == book[ ( sdir + name  ) ] )
-			log->warn(__FUNCTION__) << sdir + "/" + name  << " Does Not Exist " << endl; 
+			logger->warn(__FUNCTION__) << sdir + "/" + name  << " Does Not Exist " << endl; 
 
 		return book[ ( sdir  + name  ) ];
 	}	//get
@@ -394,7 +392,7 @@ namespace jdb{
 		if ( get( name ) != 0)
 			get( name )->Fill( bin, weight );
 		else
-			log->warn(__FUNCTION__) << name << " Does Not Exist, cannot fill " << endl;
+			logger->warn(__FUNCTION__) << name << " Does Not Exist, cannot fill " << endl;
 	}	//fill
 
 	HistoBook* HistoBook::exportAs( string filename ) {
@@ -403,7 +401,7 @@ namespace jdb{
 		if ( "" != filename )
 			outName = filename;
 
-		log->info(__FUNCTION__) << "Exporting Pad to " << outName << endl;
+		logger->info(__FUNCTION__) << "Exporting Pad to " << outName << endl;
 
 		gPad->SaveAs( outName.c_str() );
 		return this;
@@ -438,14 +436,14 @@ namespace jdb{
 	HistoBook* HistoBook::style( string histName ){
 		styling = histName;
 
-		log->info(__FUNCTION__) << " Styling " << histName << endl;
+		logger->info(__FUNCTION__) << " Styling " << histName << endl;
 
 		// set the default style if it is there
 		if ( config && config->nodeExists( configPath[ histName ] + ".style" ) ){
-			log->info(__FUNCTION__) << " Setting style from " << configPath[ histName ] << ".style" << endl;
+			logger->info(__FUNCTION__) << " Setting style from " << configPath[ histName ] << ".style" << endl;
 			set( configPath[histName] + ".style" );
 		} else if ( config && config->nodeExists( configPath[ histName ] + ":style" ) && config->nodeExists( config->getString( configPath[ histName ] + ":style" ) ) ){
-			log->info(__FUNCTION__) << " Setting Style from " << config->getString( configPath[ histName ] + ":style" ) << endl;
+			logger->info(__FUNCTION__) << " Setting Style from " << config->getString( configPath[ histName ] + ":style" ) << endl;
 			set( config->getString( configPath[ histName ] + ":style" ) );
 		}
 
@@ -642,16 +640,16 @@ namespace jdb{
 				// use the draw option set in its styling
 				h->Draw( drawOption.c_str() );
 				drawOption = "";
-				log->info(__FUNCTION__) << "Drawing " << styling << endl;
+				logger->info(__FUNCTION__) << "Drawing " << styling << endl;
 			} else
-				log->warn(__FUNCTION__) << styling << " does not exist " << endl;
+				logger->warn(__FUNCTION__) << styling << " does not exist " << endl;
 		} else {
 			TH1* h = get( name );
 			if ( h ){
 				h->Draw( opt );
-				log->info(__FUNCTION__) << "Drawing " << name << endl;
+				logger->info(__FUNCTION__) << "Drawing " << name << endl;
 			} else
-				log->warn(__FUNCTION__) << name << " does not exist " << endl;
+				logger->warn(__FUNCTION__) << name << " does not exist " << endl;
 		}
 
 		return this;
@@ -661,7 +659,7 @@ namespace jdb{
 	HistoBook* HistoBook::placeLegend( int alignmentX, int alignmentY, double width, double height ){
 
 
-		log->info(__FUNCTION__) << "Placing Legend" << endl;
+		logger->info(__FUNCTION__) << "Placing Legend" << endl;
 		double mR = 1 - gPad->GetRightMargin();
 		double mL = gPad->GetLeftMargin();
 		double mT = 1- gPad->GetTopMargin();

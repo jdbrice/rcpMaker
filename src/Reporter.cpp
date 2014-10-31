@@ -1,41 +1,63 @@
 
 #include "Reporter.h"
 #include "Utils.h"
-
+#include "LoggerConfig.h"
 
 namespace jdb{
 
 	int Reporter::instances = 0;
 
-	Reporter::Reporter( string filename, int w, int h, Logger * pLog ){
+	Reporter::Reporter( string filename, int w, int h, int logLevel ){
 
-		if ( NULL == pLog )
-			log = new Logger( Logger::llDefault, "HistoBook" );
-		else 
-			log = pLog;
+		
+		logger = new Logger( logLevel, "Reporter" );
+		
 
 		this->filename = filename;
 
 		canvas = new TCanvas( ("Reporter"+ts(instances)).c_str() , "canvas", w, h);
 		canvas->Print( ( filename + "[" ).c_str() );
-		log->info(__FUNCTION__) << " Opening " << filename << endl;
+		logger->info(__FUNCTION__) << " Opening " << filename << endl;
 		instances++;
 
-		log->info(__FUNCTION__) << " Instance #" << instances << endl;
+		logger->info(__FUNCTION__) << " Instance #" << instances << endl;
+	}
+	Reporter::Reporter( XmlConfig*config, string np, string prefix ){
+
+		cfg = config;
+		nodePath = np;
+
+		logger = LoggerConfig::makeLogger( config, np+"Logger" );
+		
+		this->filename = prefix + cfg->getString( np+"output:url" );
+
+		int w = cfg->getInt( np+"output:width", 400 );
+		int h = cfg->getInt( np+"output:height", 400 );
+
+		canvas = new TCanvas( ("Reporter"+ts(instances)).c_str() , "canvas", w, h);
+		canvas->Print( ( filename + "[" ).c_str() );
+		
+		logger->info(__FUNCTION__) << " Opening " << filename << endl;
+		
+		instances++;
+
+		logger->info(__FUNCTION__) << " Instance #" << instances << endl;
+
 	}
 
 	Reporter::~Reporter() {
 		// properly close the report file
-		log->info(__FUNCTION__) << " " << endl;
+		logger->info(__FUNCTION__) << " " << endl;
 		
 		canvas->Print( ( filename + "]" ).c_str() );
 		delete canvas;
 
-		log->info(__FUNCTION__) << filename << " Closed " << endl;
+		logger->info(__FUNCTION__) << filename << " Closed " << endl;
+		delete logger;
 	}
 
 	void Reporter::newPage( int dx, int dy){
-		log->info(__FUNCTION__) << " New Page ( " << dx << ", " << dy << " ) " << endl;
+		logger->info(__FUNCTION__) << " New Page ( " << dx << ", " << dy << " ) " << endl;
 
 		this->dx = dx;
 		this->dy = dy;
@@ -46,7 +68,7 @@ namespace jdb{
 	}
 
 	void Reporter::cd( int pad ){
-		log->info(__FUNCTION__) << " Current Pad " << pad << endl;
+		logger->info(__FUNCTION__) << " Current Pad " << pad << endl;
 		canvas->cd( pad );
 		currentPad = pad;
 	}
@@ -56,7 +78,7 @@ namespace jdb{
 	}
 
 	void Reporter::next(){
-		log->info(__FUNCTION__) << " Pushing to next pad " << endl;
+		logger->info(__FUNCTION__) << " Pushing to next pad " << endl;
 		currentPad++;
 		if ( currentPad > dx*dy){
 			savePage();
@@ -70,16 +92,16 @@ namespace jdb{
 
 		if ( "" == name ){
 			canvas->Print( ( filename ).c_str() );
-			log->info(__FUNCTION__) << " Saving Page to " << filename << endl;
+			logger->info(__FUNCTION__) << " Saving Page to " << filename << endl;
 		}
 		else {
 			canvas->Print( name.c_str() );
-			log->info(__FUNCTION__) << " Saving Page to " << name << endl;
+			logger->info(__FUNCTION__) << " Saving Page to " << name << endl;
 		}
 	}
 
 	void Reporter::saveImage( string name ){
-		log->info(__FUNCTION__) << " Saving Image to " << name << endl;
+		logger->info(__FUNCTION__) << " Saving Image to " << name << endl;
 		canvas->SaveAs( name.c_str() );
 	}
 	

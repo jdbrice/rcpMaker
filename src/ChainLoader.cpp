@@ -1,24 +1,27 @@
 
 
 #include "ChainLoader.h"
+#include <fstream>
+
+using namespace std;
 
 namespace jdb{
 
 	void ChainLoader::load( 
 							TChain * chain, 	// the chain object to fill
-							const char* ntdir, 	// the directory in which to look for ntuples
-							uint maxFiles 
+							string ntdir, 	// the directory in which to look for ntuples
+							int maxFiles 
 							) {
 		//cout << " [ChainLoader] searching " << ntdir << " for ntuples" << endl;
 
-		if (maxFiles == 0)
-			maxFiles = 1000;
+		if (maxFiles <= 0)
+			maxFiles = 100000;
 
 		uint nFiles = 0;
 		DIR *dir;
 		struct dirent *ent;
 		bool go = true;
-		if ( (dir = opendir ( ntdir ) ) != NULL) {
+		if ( (dir = opendir ( ntdir.c_str() ) ) != NULL) {
 			
 			while ( go && (ent = readdir ( dir) ) != NULL) {
 
@@ -30,7 +33,7 @@ namespace jdb{
 		    		}
 
 		    		char fn[ 1024 ];
-		    		sprintf( fn, "%s%s", ntdir, ent->d_name );
+		    		sprintf( fn, "%s%s", ntdir.c_str(), ent->d_name );
 		    		chain->Add( fn );
 
 		    		//cout << "[ChainLoader] Adding file " << fn << " to chain" << endl;
@@ -48,7 +51,7 @@ namespace jdb{
 
 
 
-	void ChainLoader::loadList(  TChain * chain, string listFile, uint maxFiles ){
+	void ChainLoader::loadList(  TChain * chain, string listFile, int maxFiles ){
 		
 		uint nFiles = 0;
 
