@@ -55,6 +55,8 @@ void TreeAnalyzer::make(){
 	logger->info(__FUNCTION__) << "Loaded: " << nEventsToProcess << " events " << endl;
 
 	book->cd( "" );
+
+	preEventLoop();
 	
 	// loop over all events
 	for(Int_t i=0; i<nEvents; i++) {
