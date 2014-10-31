@@ -22,13 +22,13 @@ TreeAnalyzer::TreeAnalyzer( XmlConfig * config, string np, string fileList, stri
     logger->info(__FUNCTION__) << " Creating report " << config->getString( np + "output.report" ) << endl;
     reporter = new Reporter( cfg, np+"Reporter.", jobPrefix );
 
-    
+    chain = new TChain( cfg->getString( np+"input.dst:treeName" ).c_str() );
     if ( "" == fileList ){
-    	logger->info(__FUNCTION__) << " Loading data from " << config->getString( np + "input.tree:url" ) << endl;
-    	ChainLoader::load( chain, cfg->getString( np+"input.tree:url" ), cfg->getInt( np+"input.tree:maxFiles", -1 ) );
+    	logger->info(__FUNCTION__) << " Loading data from " << config->getString( np + "input.dst:url" ) << endl;
+    	ChainLoader::load( chain, cfg->getString( np+"input.dst:url" ), cfg->getInt( np+"input.dst:maxFiles", -1 ) );
     } else {
     	logger->info(__FUNCTION__) << " Parallel Job From " << fileList << ", prefix : " << jobPrefix << endl;
-    	ChainLoader::loadList( chain, fileList, cfg->getInt( np+"input.tree:maxFiles", -1 ) );
+    	ChainLoader::loadList( chain, fileList, cfg->getInt( np+"input.dst:maxFiles", -1 ) );
     }
 
 
@@ -62,7 +62,7 @@ void TreeAnalyzer::make(){
 
     	if ( !keepEvent() )
     		continue;
-    	
+
     	analyzeEvent();
     	
     	
