@@ -18,7 +18,6 @@ using namespace jdb;
 /**
  * ROOT
  */
-#include "TROOT.h"
 #include "TFile.h"
 #include "TError.h"
 
