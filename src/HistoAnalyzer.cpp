@@ -5,7 +5,7 @@ HistoAnalyzer::HistoAnalyzer( XmlConfig * config, string np ){
 	
 
 	//Set the Root Output Level
-	gErrorIgnoreLevel=kSysError;
+	gErrorIgnoreLevel = kSysError;
 
 	// Save Class Members for config
 	cfg = config;
