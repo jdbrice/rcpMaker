@@ -20,10 +20,10 @@ namespace jdb{
 	 * @param input input filename
 	 * @param inDir input starting directory
 	 */
-	HistoBook::HistoBook( string name, string input, string inDir, int logLevel ){
+	HistoBook::HistoBook( string name, string input, string inDir ){
 
 		// setup the logger
-		logger = new Logger( logLevel, "HistoBook" );
+		logger = new Logger( Logger::getGlobalLogLevel(), "HistoBook" );
 		
 
 		if (name.find(  ".root") != std::string::npos){
@@ -64,13 +64,13 @@ namespace jdb{
 	 * @param name name of file to use for saving root data
 	 * @param con  The config file to use for all config relates calls
 	 */
-	HistoBook::HistoBook( string name, XmlConfig * con, string input, string inDir, int logLevel){
+	HistoBook::HistoBook( string name, XmlConfig * con, string input, string inDir){
 
 		// set the configuration 
 		config = con;
 
 		// make the logger
-		logger = new Logger( logLevel, "HistoBook" );
+		logger = new Logger( Logger::getGlobalLogLevel(), "HistoBook" );
 		
 
 		logger->info(__FUNCTION__) << "" << endl;

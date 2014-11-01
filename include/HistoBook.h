@@ -134,8 +134,8 @@ namespace jdb{
 		/**
 		 * Static Usage
 		 */
-		HistoBook( string name, string input = "", string inDir = "", int logLevel = Logger::llDefault );
-		HistoBook( string name, XmlConfig* config, string input = "", string inDir = "", int logLevel = Logger::llDefault );
+		HistoBook( string name, string input = "", string inDir = "" );
+		HistoBook( string name, XmlConfig* config, string input = "", string inDir = "");
 		~HistoBook();
 
 		

@@ -32,7 +32,17 @@ namespace jdb {
 
 	public:
 
-		
+		static const int llAll 		= 40;
+		static const int llInfo		= 30;
+		static const int llWarn 	= 20;
+		static const int llError 	= 10;
+		static const int llNone 	= 1;
+
+		static const int llDefault	= llWarn;
+		static int llGlobal;
+
+		inline static int getGlobalLogLevel() { return llDefault; }
+		inline static void setGlobalLogLevel( int ll ) { llGlobal = ll; }
 
 		/**
 		 * Logger - constructor
@@ -52,7 +62,7 @@ namespace jdb {
 		 * Description          
 		 * sets the output stream to stdout
 		 */
-		Logger( int ll = llWarn, string cs = "" ){
+		Logger( int ll = Logger::getGlobalLogLevel(), string cs = "" ){
 			logLevel = ll;
 			cSpace = cs;
 			os = &cout;
@@ -60,6 +70,7 @@ namespace jdb {
 
 		int getLogLevel() { return logLevel; }
 		void setLogLevel( int ll ) { logLevel = ll; }
+
 
 		string getClassSpace() { return cSpace; }
 		void setClassSpace(string cs ) { cSpace = cs; }
@@ -91,13 +102,7 @@ namespace jdb {
 			return (*os);
 		}
 
-		static const int llAll 		= 40;
-		static const int llInfo		= 30;
-		static const int llWarn 	= 20;
-		static const int llError 	= 10;
-		static const int llNone 	= 0;
-
-		static const int llDefault	= llWarn;
+		
 
 		static int logLevelFromString( string ll ){
 			if ( "info" == ll )

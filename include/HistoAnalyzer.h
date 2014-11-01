@@ -25,7 +25,7 @@ class HistoAnalyzer
 {
 // protected properties
 protected:
-	Logger 		*lg;
+	Logger 		*logger;
 	XmlConfig 	*cfg;
 	string 		nodePath;
 

@@ -12,7 +12,11 @@ namespace jdb{
 							string ntdir, 	// the directory in which to look for ntuples
 							int maxFiles 
 							) {
-		//cout << " [ChainLoader] searching " << ntdir << " for ntuples" << endl;
+		
+
+		Logger * logger = new Logger( Logger::llDefault, "ChainLoader" );
+
+		logger->info(__FUNCTION__) << "Searching " << ntdir << " for ntuples" << endl;
 
 		if (maxFiles <= 0)
 			maxFiles = 100000;
@@ -42,7 +46,8 @@ namespace jdb{
 		    	}
 		  	}
 		  	
-		  	cout << "[ChainLoader] " << (nFiles) << " files loaded into chain" << endl;
+		  	logger->info( __FUNCTION__ ) << nFiles << " files loaded into chain" << endl;
+		  	delete logger;
 
 		  	closedir (dir);
 		}
@@ -53,6 +58,10 @@ namespace jdb{
 
 	void ChainLoader::loadList(  TChain * chain, string listFile, int maxFiles ){
 		
+		Logger * logger = new Logger( Logger::llDefault, "ChainLoader" );
+
+		logger->info(__FUNCTION__) << "Opening " << listFile << " for list of ntuples" << endl;
+
 		uint nFiles = 0;
 
 		string line;
@@ -75,8 +84,9 @@ namespace jdb{
 			cout << " Could not open " << listFile << endl;
 		}
 
-		cout << "[ChainLoader] " << (nFiles) << " files loaded into chain" << endl;
+		logger->info( __FUNCTION__ ) << nFiles << " files loaded into chain" << endl;
 
+		delete logger;
 
 	}
 }

@@ -7,7 +7,7 @@
 	</Logger>
 
 	<Reporter>
-		<output url="qa.pdf" w="800" h="400">
+		<output url="qa.pdf" w="800" h="400"/>
 		<Logger>
 			<stream>stdout</stream>
 			<logLevel>all</logLevel>

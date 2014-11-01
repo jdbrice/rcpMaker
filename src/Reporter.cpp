@@ -7,10 +7,10 @@ namespace jdb{
 
 	int Reporter::instances = 0;
 
-	Reporter::Reporter( string filename, int w, int h, int logLevel ){
+	Reporter::Reporter( string filename, int w, int h ){
 
 		
-		logger = new Logger( logLevel, "Reporter" );
+		logger = new Logger( Logger::getGlobalLogLevel(), "Reporter" );
 		
 
 		this->filename = filename;

@@ -10,7 +10,7 @@ namespace jdb {
 	class Reporter
 	{
 	public:
-		Reporter( string filename, int w = 791, int h = 1024, int logLevel = Logger::llDefault  );
+		Reporter( string filename, int w = 791, int h = 1024 );
 		Reporter( XmlConfig * config, string np, string prefix = "" );
 		~Reporter();
 

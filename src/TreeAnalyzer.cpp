@@ -13,12 +13,13 @@ TreeAnalyzer::TreeAnalyzer( XmlConfig * config, string np, string fileList, stri
 	
 	// make the Logger
 	logger = LoggerConfig::makeLogger( cfg, np + "Logger" );
+	Logger::setGlobalLogLevel( logger->getLogLevel() );
 	logger->setClassSpace( "TreeAnalyzer" );
 	logger->info(__FUNCTION__) << "Got config with nodePath = " << np << endl;
 	
     // create the book
     logger->info(__FUNCTION__) << " Creating book " << config->getString( np + "output.data" ) << endl;
-    book = new HistoBook( jobPrefix + config->getString( np + "output.data" ), config, "", "", logger->getLogLevel() );
+    book = new HistoBook( jobPrefix + config->getString( np + "output.data" ), config, "", "" );
     logger->info(__FUNCTION__) << " Creating report " << config->getString( np + "output.report" ) << endl;
     
     if ( "" == jobPrefix && cfg->nodeExists( np+"Reporter.output:url" ) ) 
