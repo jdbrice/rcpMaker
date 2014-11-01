@@ -45,6 +45,12 @@ TreeAnalyzer::~TreeAnalyzer(){
 
 void TreeAnalyzer::make(){
 
+	/**
+	 * Run the pre event loop
+	 */
+	book->cd( "" );
+	preEventLoop();
+
 	TaskTimer t;
 	t.start();
 
@@ -56,10 +62,6 @@ void TreeAnalyzer::make(){
 	Int_t nEvents = (Int_t)chain->GetEntries();
 	nEventsToProcess = cfg->getInt( nodePath+"input.dst:nEvents", nEvents );
 	logger->info(__FUNCTION__) << "Loaded: " << nEventsToProcess << " events " << endl;
-
-	book->cd( "" );
-
-	preEventLoop();
 	
 	// loop over all events
 	for(Int_t i=0; i<nEvents; i++) {
@@ -72,8 +74,12 @@ void TreeAnalyzer::make(){
     	
     	
 	} // end loop on events
-
 	logger->info(__FUNCTION__) << "Completed in " << t.elapsed() << endl;
+
+	/**
+	 * Run the post event loop
+	 */
+	postEventLoop();
 }
 
 void TreeAnalyzer::preEventLoop(){
