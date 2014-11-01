@@ -22,7 +22,9 @@ namespace jdb{
 			}
 		}
 		~ConfigPoint(){}
-		
+		string toString(){
+			return ("( " + dts( x ) + ", " + dts( y ) + " )");
+		}
 	};
 
 }
