@@ -95,20 +95,28 @@ SimultaneousGaussians::~SimultaneousGaussians(){
 }
 
 
+//void 
+
+
 void SimultaneousGaussians::make(){
-/*
+
 	book->cd();
 	book->makeAll( nodePath + "histograms" );
 	vector<string> species = PidPhaseSpace::species;
 
-	vector<double> yields = { 180000, 100, 10};
+	vector<double> cYields = { 180000, 100, 10};
+	vector<double> pYields = { 180000, 100, 10};
+	vector<double> * yields;
+	vector< vector<vector<double> > > aYields(2, vector<vector<double>>(2, vector<double>( 3 )));
+	
+
 
 	for ( int iS = 0; iS < species.size(); iS ++ ){
-		book->clone( "yield", "yield_n_cen_"+species[ iS ] );
-		book->clone( "yield", "yield_n_per_"+species[ iS ] );
+		book->clone( "yield", "yield_n_0to5_"+species[ iS ] );
+		book->clone( "yield", "yield_n_60to80_"+species[ iS ] );
 
-		book->clone( "yield", "yield_p_cen_"+species[ iS ] );
-		book->clone( "yield", "yield_p_per_"+species[ iS ] );
+		book->clone( "yield", "yield_p_0to5_"+species[ iS ] );
+		book->clone( "yield", "yield_p_60to80_"+species[ iS ] );
 	}
 		
 	for ( int i = 0; i < binsPt->nBins(); i++ ){
@@ -125,17 +133,18 @@ void SimultaneousGaussians::make(){
 			dedxSigmas.push_back( dedxParams[ iS ]->sigma( avgP ) );
 		}
 
-		vector<string> cen = { "per", "cen" };
+		vector<string> cen = { "60to80", "0to5" };
 		vector<string> charge = { "p_", "n_" };
+		vector<int> intCharge = { 1, -1 };
 		for ( int iCharge = 0; iCharge < charge.size(); iCharge++ ){
 			for ( int iCen = 0; iCen < cen.size(); iCen++  ){
 
+				if ( iCen == 0 )
+					yields = &pYields;
+				else
+					yields = &cYields;
 
-				string tname = "tof/" + PidPhaseSpace::tofName( centerSpecies, 0, i, 0 )+cen[iCen];
-				if ( 0 == iCharge )
-					tname = "tof/" + PidPhaseSpace::tofName( centerSpecies, 1, i, 0 )+cen[iCen];
-				else 
-					tname = "tof/" + PidPhaseSpace::tofName( centerSpecies, -1, i, 0 )+cen[iCen];
+				string tname = "tof/" + PidPhaseSpace::tofName( centerSpecies, intCharge[iCharge], cen[iCen], i, 0 );
 
 				TH1D * tofAll = (TH1D*)inFile->Get( tname.c_str() );
 				string draw = "";
@@ -143,50 +152,66 @@ void SimultaneousGaussians::make(){
 					string mName = "tofMean" + species[iS];
 					string sName = "tofSigma" + species[iS];
 
-					if ( iS == 2){
-						
-						
+					if ( i < 300 ){
+						if ( iS == 2){
+							
 
-						if ( 0 == iCharge )
-							tname = "tof/" + PidPhaseSpace::tofName( centerSpecies, 1, i, 0, species[iS] )+cen[iCen];
-						else 
-							tname = "tof/" + PidPhaseSpace::tofName( centerSpecies, -1, i, 0, species[iS] )+cen[iCen];
+							tname = "tof/" + PidPhaseSpace::tofName( centerSpecies, intCharge[iCharge], cen[iCen], i, 0 );
+							TH1D * tofAll = (TH1D*)inFile->Get( tname.c_str() );
 
-						TH1D * tofAll = (TH1D*)inFile->Get( tname.c_str() );
-
-
-						GaussianFitResult gfr = fitSingleSpecies( tofAll, tofMus[ iS ], tofSigmas[iS], draw, iS+1);
-						//yields[ iS ] = yld;
-
-						book->get( "yield_"+charge[iCharge]+cen[iCen]+"_"+species[iS]  )->SetBinContent( i+1, gfr.mu );
-						book->get( "yield_"+charge[iCharge]+cen[iCen]+"_"+species[iS]  )->SetBinError( i+1, gfr.muError );
-					} else if ( iS <= 1) {
-
-						if ( i<= 10  ){
-
-							if ( 0 == iCharge )
-								tname = "tof/" + PidPhaseSpace::tofName( centerSpecies, 1, i, 0, species[iS] )+cen[iCen];
-							else 
-								tname = "tof/" + PidPhaseSpace::tofName( centerSpecies, -1, i, 0, species[iS] )+cen[iCen];
-
-							//TH1D * tofAll = (TH1D*)inFile->Get( tname.c_str() );
 
 							GaussianFitResult gfr = fitSingleSpecies( tofAll, tofMus[ iS ], tofSigmas[iS], draw, iS+1);
-							book->get( "yield_"+charge[iCharge]+cen[iCen]+"_"+species[iS]  )->SetBinContent( i+1, gfr.mu );
-						book->get( "yield_"+charge[iCharge]+cen[iCen]+"_"+species[iS]  )->SetBinError( i+1, gfr.muError );
-						} else if ( i > 10 && iS == 0 && i < 40 ){
-							string dr = "";
-							GaussianFitResult gfr = fitTwoSpecies( tofAll, tofMus, tofSigmas );
-							book->get("yield_"+charge[iCharge]+cen[iCen]+"_"+species[iS]  )->SetBinContent( i+1, gfr.mu );
-							book->get("yield_"+charge[iCharge]+cen[iCen]+"_"+species[iS]  )->SetBinError( i+1, gfr.muError );
-							if ( i < 40 ){
-								book->get( "yield_"+charge[iCharge]+cen[iCen]+"_"+species[iS+1] )->SetBinContent( i+1, gfr.sigma );
-							book->get( "yield_"+charge[iCharge]+cen[iCen]+"_"+species[iS+1] )->SetBinError( i+1, gfr.sigmaError );		
-							}
-							
-						} 
-						
+							aYields[iCen][iCharge][ iS ] = gfr.mu;
 
+							book->get( "yield_"+charge[iCharge]+cen[iCen]+"_"+species[iS]  )->SetBinContent( i+1, gfr.mu );
+							book->get( "yield_"+charge[iCharge]+cen[iCen]+"_"+species[iS]  )->SetBinError( i+1, gfr.muError );
+
+						} else if ( iS <= 1) {
+
+							if ( i<= 10  ){
+
+								tname = "tof/" + PidPhaseSpace::tofName( centerSpecies, 1, cen[iCen], i, 0 );
+								TH1D * tofAll = (TH1D*)inFile->Get( tname.c_str() );
+
+								GaussianFitResult gfr = fitSingleSpecies( tofAll, tofMus[ iS ], tofSigmas[iS], draw, iS+1);
+								
+								aYields[iCen][iCharge][ iS ] = gfr.mu;
+
+								book->get( "yield_"+charge[iCharge]+cen[iCen]+"_"+species[iS]  )->SetBinContent( i+1, gfr.mu );
+								book->get( "yield_"+charge[iCharge]+cen[iCen]+"_"+species[iS]  )->SetBinError( i+1, gfr.muError );
+							} else if ( i > 10 && iS == 0 ){
+								
+								string dr = "";
+								GaussianFitResult gfr = fitTwoSpecies( tofAll, tofMus, tofSigmas, aYields[iCen][iCharge] );
+								book->get("yield_"+charge[iCharge]+cen[iCen]+"_"+species[iS]  )->SetBinContent( i+1, gfr.mu );
+								book->get("yield_"+charge[iCharge]+cen[iCen]+"_"+species[iS]  )->SetBinError( i+1, gfr.muError );
+
+								aYields[iCen][iCharge][ 0 ] = gfr.mu;
+								
+								book->get( "yield_"+charge[iCharge]+cen[iCen]+"_"+species[iS+1] )->SetBinContent( i+1, gfr.sigma );
+								book->get( "yield_"+charge[iCharge]+cen[iCen]+"_"+species[iS+1] )->SetBinError( i+1, gfr.sigmaError );	
+								aYields[iCen][iCharge][ 1 ] = gfr.sigma;	
+							
+
+								
+							} 
+							
+
+						}
+					} // i < 	
+					else if ( iS == 0  ){
+								
+						string dr = "";
+						GaussianFitResult gfr = fitAllSpecies( tofAll, tofMus, tofSigmas, aYields[iCen][iCharge] );
+						book->get("yield_"+charge[iCharge]+cen[iCen]+"_"+species[iS]  )->SetBinContent( i+1, gfr.mu );
+						book->get("yield_"+charge[iCharge]+cen[iCen]+"_"+species[iS]  )->SetBinError( i+1, gfr.muError );
+
+						aYields[iCen][iCharge][ 0 ] = gfr.mu;
+						
+						book->get( "yield_"+charge[iCharge]+cen[iCen]+"_"+species[iS+1] )->SetBinContent( i+1, gfr.sigma );
+						book->get( "yield_"+charge[iCharge]+cen[iCen]+"_"+species[iS+1] )->SetBinError( i+1, gfr.sigmaError );	
+						aYields[iCen][iCharge][ 1 ] = gfr.sigma;	
+				
 					}
 				}
 				
@@ -194,7 +219,6 @@ void SimultaneousGaussians::make(){
 		}
 		
 	}
-*/
 	
 
 }
@@ -498,8 +522,103 @@ void SimultaneousGaussians::sim1( TH1D* tof, TH1D*dedx, double avgP, vector<doub
 
 }
 
+void SimultaneousGaussians::simSingle( 	string soi, double avgP,	
+										TH1D* tof, TH1D*dedx, // histos
+										vector<double> iYields, double roiMu, double roiSig ) { 
 
-SimultaneousGaussians::GaussianFitResult SimultaneousGaussians::fitTwoSpecies( TH1D* h, vector<double> iMu, vector<double> iSigma ){
+
+	using namespace RooFit;
+	RooMsgService::instance().setGlobalKillBelow(ERROR);
+
+	// get some histogram limits
+	double tx1 = tof->GetXaxis()->GetXmin();
+	double tx2 = tof->GetXaxis()->GetXmax();
+	double dx1 = dedx->GetXaxis()->GetXmin();
+	double dx2 = dedx->GetXaxis()->GetXmax();
+	
+	vector<double> tofMus = psr->centeredTofMeans( centerSpecies, avgP );
+	vector<double> dedxMus = psr->centeredDedxMeans( centerSpecies, avgP );
+	vector<double> tofSigmas;
+	vector<double> dedxSigmas;
+
+	double tMu, dMu, tSig, dSig;
+
+	vector<string> species = PidPhaseSpace::species;
+	int iCS = -1;
+	for ( int iS = 0; iS < species.size(); iS ++ ){
+		tofSigmas.push_back( tofParams[ iS ]->sigma( avgP, psr->mass( species[ iS ] ), psr->mass( centerSpecies ) ) );
+		dedxSigmas.push_back( dedxParams[ iS ]->sigma( avgP ) );
+		if ( species[ iS ] == soi )
+			iCS = iS;
+	}
+
+	tMu = tofMus[ iCS ];
+	dMu = dedxMus[ iCS ];
+	tSig = tofSigmas[ iCS ];
+	dSig = dedxSigmas[ iCS ];
+
+	/**
+	 * Make the data hist for RooFit
+	 */
+	RooRealVar x( "x", "x", tx1, tx2 );
+	RooDataHist * rdh1 = new RooDataHist( "dataTof", "dataTof", RooArgSet( x ), tof  );
+	RooRealVar y( "y", "y", dx1, dx2 );
+	RooDataHist * rdh2 = new RooDataHist( "dataDedx", "dataDedx", RooArgSet( y ), dedx  );
+
+
+	RooCategory sample("sample","sample") ;
+	sample.defineType("tof") ;
+	sample.defineType("dedx") ;
+	RooDataHist * rdh = new RooDataHist( "tofXdedx", "tofXdedx", RooArgSet( x, y), Index( sample ), Import( "tof", *rdh1), Import( "dedx", *rdh2) );
+
+	/**
+	 * The Simultaneous PDF 
+	 * uses the category to assign components
+	 */
+	RooSimultaneous simPdf("simPdf", "Simultaneous PDF", sample) ;
+
+	/**
+	 * Build the tof and dedx models
+	 */
+	RooRealVar *mu[2], *sig[2], *n;
+	RooGaussian * g[2];
+	RooExtendPdf * eg[2];
+
+	mu[0] = new RooRealVar( "tMu", "tMu", tMu, tMu - roiMu * tSig, tMu + roiMu * tSig );
+	mu[1] = new RooRealVar( "dMu", "dMu", dMu, dMu - roiMu * dSig, dMu + roiMu * dSig );
+
+	sig[0] = new RooRealVar( "tSig", "tSig", tSig, tSig /roiSig, roiSig * tSig );
+	sig[1] = new RooRealVar( "dSig", "dSig", dSig, dSig / roiSig, roiSig * dSig );
+
+	n = new RooRealVar( "tN", "tN", iYields[ iCS ] * 0.90, iYields[ iCS ] * .50, iYields[ iCS ] );
+
+	g[ 0 ] = new RooGaussian( "tG", "tG", x, *mu[0], *sig[0] );
+	g[ 1 ] = new RooGaussian( "dG", "dG", y, *mu[1], *sig[1] );
+
+	eg[ 0 ] = new RooExtendPdf( "tEG", "tEG", *g[0], *n );
+	eg[ 1 ] = new RooExtendPdf( "dEG", "dEG", *g[1], *n );
+
+
+	RooPlot * xFrame = x.frame( Title("#beta^{-1}") );
+	//RooPlot * yFrame = y.frame( Title("dE/dx") );
+
+	rdh1->plotOn( xFrame );
+	eg[0]->plotOn( xFrame );
+
+	reporter->newPage(1, 2);
+	reporter->cd(1, 1);
+	xFrame->Draw();
+
+	reporter->cd(1, 2);
+	//yFrame->Draw();
+
+	reporter->savePage();
+
+
+}
+
+
+SimultaneousGaussians::GaussianFitResult SimultaneousGaussians::fitTwoSpecies( TH1D* h, vector<double> iMu, vector<double> iSigma, vector<double> iYields ){
 
 	using namespace RooFit;
 	RooMsgService::instance().setGlobalKillBelow(ERROR);
@@ -551,7 +670,7 @@ SimultaneousGaussians::GaussianFitResult SimultaneousGaussians::fitTwoSpecies( T
 		
 
 		RooRealVar * y = new RooRealVar( 	("yield" + species[ i ]).c_str(), ("yield" + species[ i ]).c_str(), 
-										80000, 100, 1000000000000 );
+										iYields[ i ], iYields[ i ] * .20, iYields[ i ]*1.2 );
 		yield.push_back( y );
 		RooGaussian * g = new RooGaussian( 	("gauss" + species[ i ]).c_str(), ("gauss" + species[ i ]).c_str(), 
 										x, *m, *s );
@@ -583,6 +702,113 @@ SimultaneousGaussians::GaussianFitResult SimultaneousGaussians::fitTwoSpecies( T
 	model->plotOn( frame, Range( "Full" ) );
 	model->plotOn( frame, Range( "Full" ), Components( "gaussK" ), LineColor( kGreen ) );
 	model->plotOn( frame, Range( "Full" ), Components( "gaussPi" ), LineColor( kRed ) );
+	
+	
+	gPad->SetLogy();
+	frame->Draw();
+	frame->SetMinimum( 1 );
+
+	model->paramOn(frame, Format("NELU", AutoPrecision(2)), Layout(0.1, 0.4, 0.9) );
+
+
+	reporter->savePage();
+
+	GaussianFitResult gfr;
+	gfr.mu = yield[ 0 ]->getVal();
+	gfr.muError = yield[ 0 ]->getError();
+	gfr.sigma = yield[ 1 ]->getVal();
+	gfr.sigmaError = yield[ 1 ]->getError();
+
+
+	return gfr;
+
+}
+
+SimultaneousGaussians::GaussianFitResult SimultaneousGaussians::fitAllSpecies( TH1D* h, vector<double> iMu, vector<double> iSigma, vector<double> iYields ){
+
+	using namespace RooFit;
+	RooMsgService::instance().setGlobalKillBelow(ERROR);
+
+	// get some histogram limits
+	double x1 = h->GetXaxis()->GetXmin();
+	double x2 = h->GetXaxis()->GetXmax();
+	
+	/**
+	 * Make the data hist for RooFit
+	 */
+	RooRealVar x( "x", "x", x1, x2 );
+	RooDataHist * rdh = new RooDataHist( "data", "data", RooArgSet( x ), h  );
+
+	/**
+	 * Create the parameters and the gaussian
+	 */
+	
+
+	/**
+	 * Set the region of interest for fitting
+	 */
+	//x.setRange( "roi", iMu - roi * iSigma, iMu + roi * iSigma );
+	
+
+	// build a 3 gaussian model
+	vector<RooRealVar*> mean;
+	vector<RooRealVar*> sigma;
+	vector<RooRealVar*> yield;
+	vector<RooGaussian> gauss;
+
+	RooArgList *ralGauss = new RooArgList();
+	RooArgList *ralYield = new RooArgList();
+
+	vector<string> species = { "Pi", "K", "P"};
+	
+	for ( int i = 0; i < species.size(); i++ ){
+		lg->info( __FUNCTION__ ) << " Generating Gaussian for : " << species[ i ] << endl;
+		lg->info( __FUNCTION__ ) << species[ i ] << " : " << iMu[ i ] << endl;
+
+		RooRealVar * m = new RooRealVar( 	("mu" + species[ i ]).c_str(), ("mu" + species[ i ]).c_str(), 
+											iMu[ i ], iMu[ i ] - muRoi * iSigma[ i ], iMu[ i ] + muRoi * iSigma[ i ] );
+		mean.push_back( m );
+
+
+		RooRealVar * s = new RooRealVar( 	("sig" + species[ i ]).c_str(), ("sig" + species[ i ]).c_str(), 
+										iSigma[ i ]/*, iSigma[ i ] / sigmaRoi, iSigma[ i ] * sigmaRoi*/);
+		sigma.push_back( s );
+		
+
+		RooRealVar * y = new RooRealVar( 	("yield" + species[ i ]).c_str(), ("yield" + species[ i ]).c_str(), 
+										iYields[ i ], iYields[ i ] * .40, iYields[ i ]*1.2 );
+		yield.push_back( y );
+		RooGaussian * g = new RooGaussian( 	("gauss" + species[ i ]).c_str(), ("gauss" + species[ i ]).c_str(), 
+										x, *m, *s );
+
+
+		
+		ralYield->add( *y );
+		ralGauss->add( *g );
+
+		// set the cut Range
+		x.setRange( ("roi"+species[ i ]).c_str(), iMu[ i ] - iSigma[i] * roi, iMu[ i ] + iSigma[ i ] * roi  );
+
+
+	}
+
+	//x.setRange( "roi", iMu[0] - iSigma[0]*roi, iMu[1] + iSigma[1]*roi ); 
+
+	RooAddPdf *model = new RooAddPdf( "model", "model", *ralGauss, *ralYield ); 
+	model->fitTo( *rdh  );
+
+	/**
+	 * Report the data + gauss
+	 */
+	reporter->newPage();
+
+	RooPlot * frame = x.frame( Title( h->GetTitle() ) );
+	rdh->plotOn( frame );
+	
+	model->plotOn( frame, Range( "Full" ) );
+	model->plotOn( frame, Range( "Full" ), Components( "gaussK" ), LineColor( kGreen ) );
+	model->plotOn( frame, Range( "Full" ), Components( "gaussPi" ), LineColor( kRed ) );
+	model->plotOn( frame, Range( "Full" ), Components( "gaussP" ), LineColor( kYellow ) );
 	
 	
 	gPad->SetLogy();

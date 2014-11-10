@@ -69,10 +69,13 @@ public:
 protected:
 
 	GaussianFitResult fitThreeSpecies( TH1D* h, vector<double> x1, vector<double> x2 );
-	GaussianFitResult fitTwoSpecies( TH1D* h, vector<double> x1, vector<double> x2 );
+	GaussianFitResult fitTwoSpecies( TH1D* h, vector<double> x1, vector<double> x2, vector<double> x3 );
+	GaussianFitResult fitAllSpecies( TH1D* h, vector<double> x1, vector<double> x2, vector<double> x3 );
 	GaussianFitResult fitSingleSpecies( TH1D* h, double x1, double x2, string dropt, int c );
 	
 	void sim1( TH1D* tof, TH1D*dedx, double avgP, vector<double> iYields );
+
+	void simSingle(string soi, double avgP, TH1D* tof, TH1D*dedx, vector<double> iYields, double roiMu, double sigRoi );
 
 };
 

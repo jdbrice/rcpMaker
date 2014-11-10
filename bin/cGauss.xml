@@ -25,7 +25,7 @@
 		</Logger>	
 		
 		<input>
-			<data url="/Users/danielbrandenburg/bnl/local/data/Oct24/f7.root"/>
+			<data url="/Users/danielbrandenburg/bnl/local/data/pidPSOct29.root"/>
 		</input>
 
 		<output>

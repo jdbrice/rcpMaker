@@ -6,7 +6,7 @@ void gnRcp( string nName = "~/bnl/local/data/allSpectra.root", string gName = "s
 	TFile * nF = new TFile( nName.c_str(), "READ" );
 	TFile * gF = new TFile( gName.c_str(), "READ" );
 
-	TCanvas * c = new TCanvas( "c", "rcp", 800, 600 );
+	TCanvas * c = new TCanvas( "c", "rcp", 900, 600 );
 
 
 	
@@ -28,8 +28,8 @@ void gnRcp( string nName = "~/bnl/local/data/allSpectra.root", string gName = "s
 		for ( int iS = 0; iS < species.size(); iS++ ){
 			c->cd( 3*iC + iS + 1); 
 
-			TH1D* hC = ((TH1D*)gF->Get( ("yield_"+charge+"_cen_"+species[iS]).c_str() ))->Clone( species[iS].c_str() );
-			TH1D* hP = ((TH1D*)gF->Get( ("yield_"+charge+"_per_"+species[iS]).c_str() ))->Clone( ("per"+species[iS]).c_str() );;
+			TH1D* hC = ((TH1D*)gF->Get( ("yield_"+charge+"_0to5_"+species[iS]).c_str() ))->Clone( species[iS].c_str() );
+			TH1D* hP = ((TH1D*)gF->Get( ("yield_"+charge+"_60to80_"+species[iS]).c_str() ))->Clone( ("per"+species[iS]).c_str() );;
 			hC->Rebin(2);
 			hP->Rebin(2);
 
@@ -41,20 +41,20 @@ void gnRcp( string nName = "~/bnl/local/data/allSpectra.root", string gName = "s
 
 			hP->Scale( 790 );
 
-			hC->Divide( hP );
+			//hC->Divide( hP );
 			hC->SetLineColor( kRed );
 
-			hC->Scale(1.1);
+			hC->Scale(7.2111);
 
 			hC->Draw();
 			hC->SetLineWidth( 2 );
 
-			gPad->SetLogy();
-			hC->GetYaxis()->SetRangeUser( 0.06, 3 );
+			
+			//hC->GetYaxis()->SetRangeUser( 0.06, 3 );
 
 
 			
-			string bName = "pt_ellipse_" + species[ iS ] + "_" + charge + "_";
+			string bName = "pt_dedx_" + species[ iS ] + "_" + charge + "_";
 			string cName = bName + "0to5";
 			string pName = bName + "60to80";	
 
@@ -70,24 +70,28 @@ void gnRcp( string nName = "~/bnl/local/data/allSpectra.root", string gName = "s
 			TH1D* rcp = (TH1D*)central->Clone( ("rcp_ellipse"+species[iS]).c_str() );
 			
 			rcp->SetTitle( "" );
-			rcp->Divide( per );
+			//rcp->Divide( per );
 			rcp->SetLineWidth( 2 );
-			rcp->GetYaxis()->SetRangeUser( .06, 3 );
+			//rcp->GetYaxis()->SetRangeUser( .06, 3 );
 			rcp->GetXaxis()->SetTitle("");
 
 			//rcp->SetLineColor( 2 );
 			//rcp->SetBinContent( 1, -99 );
 
 			
-			//rcp->Draw("SAME");
+			rcp->Draw("SAME");
+			//rcp->Draw();
+			//hC->Draw("SAME");
+			gPad->SetLogy();
 
 			if ( iS == 0 && iC == 0  ){
 				leg = new TLegend( 0.1, 0.7, 0.6, 1.0 );
 				leg->SetFillColor( kWhite );
-				leg->AddEntry( rcp, "n#sigma Ellipse", "lpf" );
+				leg->AddEntry( rcp, "n#sigma dEdx", "lpf" );
 				leg->AddEntry( hC, "Sim Gaussians", "lpf" );
-			//	leg->Draw();
+				leg->Draw();
 			}
+			
 
 			
 			

@@ -146,9 +146,14 @@ void ParamSpectra::postLoop() {
 
 		reporter->newPage();
 		TH1D* h = (TH1D*)book->get( "tof_" + ts(i) );
-		gPad->SetLogy(1);
-		h->Draw();
+		h->Sumw2();
+		h->Scale( 1.0 / h->Integral() );
+		h->SetTitle(  dts(binsPt->bins[i]).c_str()  );
 
+		//gPad->SetLogy(1);
+
+		//h->Draw( "pe" );
+		book->style( "tof_" + ts(i) )->set( nodePath + "style.tof" )->draw();
 
 		vector<double> tofMus = psr->centeredTofMeans( centerSpecies, p );
 		for ( int iS = 0; iS < species.size(); iS ++ ){
@@ -157,9 +162,9 @@ void ParamSpectra::postLoop() {
 			double tofSigma = tofParams[ iS ]->sigma( p, psr->mass( species[ iS ] ), psr->mass( centerSpecies ) ) ;
 
 
-			if ( "Pi" == species[ iS ] && i < 15){
-				tofMean = tofMus[ iS ];
-			}
+			// if ( "Pi" == species[ iS ] && i < 1500){
+			// 	tofMean = tofMus[ iS ];
+			// }
 
 			lg->info(__FUNCTION__) << species[ iS ] << "p = " << p << " mu = " << tofMean << endl;
 			TLine * l1 = new TLine( tofMean - nSigmaTof*tofSigma , h->GetMinimum(), tofMean -nSigmaTof*tofSigma, h->GetMaximum() );
