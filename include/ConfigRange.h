@@ -2,6 +2,7 @@
 #define CONFIG_RANGE_H
 
 #include "XmlConfig.h"
+#include "Utils.h"
 
 namespace jdb{
 
@@ -22,6 +23,10 @@ namespace jdb{
 			}
 		}
 		~ConfigRange(){}
+
+		string toString(){
+			return ("( " + dts( min ) + " -> " + dts( max ) + " )");
+		}
 		
 	};
 

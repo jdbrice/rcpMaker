@@ -2,14 +2,58 @@
 #ifndef HISTOBOOK_H
 #define HISTOBOOK_H
 
-#include "allroot.h"
 #include <map>
 #include <string>
 #include <sstream>
 #include <stdarg.h>
+
+/**
+ * JDB
+ */
 #include "XmlConfig.h"
 #include "Logger.h"
 #include "HistoBins.h"
+
+/**
+ * ROOT
+ */
+#include "TROOT.h"
+#include "TH1.h"
+#include "TH2.h"
+#include "TH3.h"
+#include "TLegend.h"
+#include "TFile.h"
+#include "TStyle.h"
+#include "TPad.h"
+#include "TClass.h"
+
+
+//  #include "TROOT.h"
+// #include <TRandom1.h>
+// #include <TH1F.h>
+// #include <TApplication.h>
+// #include "Riostream.h"
+// #include "TFile.h"
+// #include "TChain.h"
+// #include "TH1.h"
+// #include "TH2.h"
+// #include "TH3.h"
+// #include "TStyle.h"
+// #include "TCanvas.h"
+// #include "TProfile.h"
+// #include "TTree.h"
+// #include "TNtuple.h"  
+// #include "TRandom.h"
+// #include "TF1.h"
+// #include "TMath.h"
+// #include "TGraph.h"
+// #include "TGraphErrors.h"
+// #include "TPostScript.h"
+// #include "TString.h"
+// #include "TLeaf.h"
+// #include "TLegend.h"
+// #include "Math/Interpolator.h"
+// #include "TLatex.h"
 
 using namespace std;
 
@@ -52,7 +96,7 @@ namespace jdb{
 
 	protected:
 
-		Logger * log;
+		Logger * logger;
 
 		string currentDir;
 
@@ -90,8 +134,8 @@ namespace jdb{
 		/**
 		 * Static Usage
 		 */
-		HistoBook( string name, string input = "", string inDir = "", Logger * nLog = NULL );
-		HistoBook( string name, XmlConfig* config, string input = "", string inDir = "", Logger * nLog = NULL );
+		HistoBook( string name, string input = "", string inDir = "" );
+		HistoBook( string name, XmlConfig* config, string input = "", string inDir = "");
 		~HistoBook();
 
 		

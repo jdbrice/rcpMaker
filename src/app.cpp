@@ -1,6 +1,5 @@
 
 #include <iostream>
-#include "allroot.h"
 #include "constants.h"
 #include "HistoBook.h"
 #include "XmlConfig.h"
@@ -67,17 +66,6 @@ int unitTest_HistoBook( XmlConfig * config ){
 	book->draw( "tommy" );
 	
 	logger->info() << " green is : " << book->color( "green" ) << endl;
-	
-	vector<double> bins = HistoBook::makeNBins( 10, 0, 10 );
-
-	for ( int i = -1; i< 12; i ++ ){
-		cout << " value " << i << " is in bin [ " << HistoBook::findBin( bins, i ) << " ] " << endl; 
-	}
-
-	vector<double> bins2 = HistoBook::makeFixedWidthBins( .25, 0, 10 );
-	for ( double i = -1; i< 12; i += .5 ){
-		cout << " value " << i << " is in bin [ " << HistoBook::findBin( bins2, i ) << " ] " << endl; 
-	}
 
 	// HistoBins helper class
 	HistoBins hbX( config, "h.histo1", "X" );

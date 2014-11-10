@@ -20,12 +20,13 @@ namespace jdb{
 		static Logger * makeLogger( XmlConfig * config, string nodePath ) {
 
 
-			if ( config && config->nodeExists( nodePath ) ){
-				string ll = config->getString( nodePath + ".logLevel" );
-				string outputStream = config->getString( nodePath + ".outputStream" );
-				return (new Logger( Logger::logLevelFromString( ll ) ) );
-			}
+			if ( 	config && config->nodeExists( nodePath ) &&
+					config->nodeExists( nodePath + ".logLevel" ) ){
 
+				string ll = config->getString( nodePath + ".logLevel" );
+				return (new Logger( Logger::logLevelFromString( ll ) ) );
+				
+			}
 			return (new Logger() );
 		}
 
