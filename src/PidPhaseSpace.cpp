@@ -10,15 +10,19 @@ vector<string> PidPhaseSpace::species = { "Pi", "K", "P" };
 
 PidPhaseSpace::PidPhaseSpace( XmlConfig* config, string np, string fl, string jp ) : InclusiveSpectra( config, np, fl, jp ) {
 
-	// Phase space padding options
+	/**
+	 * Phase space padding options
+	 */
  	tofPadding = cfg->getDouble( "binning.padding:tof", .2 );
 	dedxPadding = cfg->getDouble( "binning.padding:dedx", .25 );
 	tofScalePadding = cfg->getDouble( "binning.padding.tofScale", .05 );
 	dedxScalePadding = cfg->getDouble( "binning.padding.dedxScale", .05 );
 
-	lg->info(__FUNCTION__) << "Tof Padding ( " << tofPadding << ", " << tofScalePadding << " ) " << endl;
+	logger->info(__FUNCTION__) << "Tof Padding ( " << tofPadding << ", " << tofScalePadding << " ) " << endl;
 
-	// Initialize the Phase Space Recentering Object
+	/**
+	 * Initialize the Phase Space Recentering Object
+	 */
 	tofSigmaIdeal = cfg->getDouble( np+"PhaseSpaceRecentering.sigma:tof", 0.011);
 	dedxSigmaIdeal = cfg->getDouble( np+"PhaseSpaceRecentering.sigma:dedx", 0.033);
 	psr = new PhaseSpaceRecentering( dedxSigmaIdeal,
@@ -26,16 +30,13 @@ PidPhaseSpace::PidPhaseSpace( XmlConfig* config, string np, string fl, string jp
 									 cfg->getString( np+"Bichsel.table", "dedxBichsel.root"),
 									 cfg->getInt( np+"Bichsel.method", 0) );
 
-	// method for phase space recentering
+		// method for phase space recentering
 	psrMethod = config->getString( np+"PhaseSpaceRecentering.method", "traditional" );
-
-	// alias the centered species for ease of use
+		// alias the centered species for ease of use
 	centerSpecies = cfg->getString( np+"PhaseSpaceRecentering.centerSpecies", "K" );
-
-	// enhanced distro options
+		// enhanced distro options
 	tofCut = cfg->getDouble( np+"enhanceDistributions:tof", 1.0 );
 	dedxCut = cfg->getDouble( np+"enhanceDistributions:dedx", 1.0 );
-
 
 	/**
 	 * Flags to turn on and off certain histos
@@ -66,17 +67,15 @@ PidPhaseSpace::PidPhaseSpace( XmlConfig* config, string np, string fl, string jp
 	binsCharge = new HistoBins( cfg, "binning.charge" );
  }
 
-void PidPhaseSpace::preLoop() {
-
+void PidPhaseSpace::preEventLoop() {
+	logger->info(__FUNCTION__) << endl;
 	book->cd();
 	preparePhaseSpaceHistograms( centerSpecies );
-	
 }
 
-void PidPhaseSpace::postLoop() {
-	lg->info(__FUNCTION__) << endl;
+void PidPhaseSpace::postEventLoop() {
+	logger->info(__FUNCTION__) << endl;
 }
-
 
 void PidPhaseSpace::analyzeTrack( int iTrack ){
 
@@ -137,7 +136,7 @@ void PidPhaseSpace::analyzeTrack( int iTrack ){
 
 void PidPhaseSpace::preparePhaseSpaceHistograms( string plc ){
 
-	lg->info(__FUNCTION__) << "Making Histograms with centering spceies: " << plc << endl;
+	logger->info(__FUNCTION__) << "Making Histograms with centering spceies: " << plc << endl;
 
 	book->cd();
 

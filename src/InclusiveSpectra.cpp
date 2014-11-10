@@ -8,37 +8,12 @@
 /**
  * Constructor
  */
-InclusiveSpectra::InclusiveSpectra( XmlConfig * config, string np, string fileList, string prefix ){
+InclusiveSpectra::InclusiveSpectra( XmlConfig * config, string np, string fileList, string prefix ) : TreeAnalyzer( config, np, fileList, prefix  ){
 
-	//Set the Root Output Level
-	gErrorIgnoreLevel=kSysError;
-
-	// Save Class Members
-	cfg = config;
-	nodePath = np;
- 
-	// make the Logger
-	lg = LoggerConfig::makeLogger( cfg, np + "Logger" );
-
-	lg->info(__FUNCTION__) << "Got config with nodePath = " << np << endl;
-	lg->info( __FUNCTION__) << "Making Chain and PicoDataStore Interface " << endl;
-	//Create the chain
-	TChain * chain = new TChain( cfg->getString(np+"input.dst:treeName", "tof" ).c_str() );
-
-	if ( "" == fileList )
-    	ChainLoader::load( chain, cfg->getString( np+"input.dst:url" ).c_str(), cfg->getInt( np+"input.dst:maxFiles" ) );
-    else 
-    	ChainLoader::loadList( chain, fileList );
-
-    pico = new AnaPicoDst( chain );
-
-    // create the book
-    lg->info(__FUNCTION__) << " Creating book "<< endl;
-    book = new HistoBook( prefix + config->getString( np + "output.data" ), config );
-
-    if ( config->getString( np + "output.report", "" ).length() > 4 )
-    	reporter = new Reporter( prefix + config->getString( np + "output.report" ) );
-
+	/**
+	 * Make the desired PicoDataStore Interface
+	 */
+	pico = new AnaPicoDst( chain );
     /**
      * Setup the event cuts
      */
@@ -46,17 +21,17 @@ InclusiveSpectra::InclusiveSpectra( XmlConfig * config, string np, string fileLi
     cutVertexR = new ConfigRange( cfg, np + "eventCuts.vertexR", 0, 10 );
     cutVertexROffset = new ConfigPoint( cfg, np + "eventCuts.vertexROffset", 0.0, 0.0 );
 
-    
-    cutTriggers = cfg->getIntVector( np + "eventCuts.triggers" );
+   	/**
+   	 * Setup the centrality bins
+   	 */
     vector<string> centralPaths = cfg->childrenOf( np + "centrality" );
-
     for ( int iC = 0; iC < centralPaths.size(); iC++ ){
     	
     	centrals.push_back( cfg->tagName( centralPaths[ iC ] ) );
     	ConfigRange * cut = new ConfigRange( cfg, centralPaths[ iC ] );
     	cutCentrality[ centrals[ iC ] ] = cut;
     	
-    	lg->info(__FUNCTION__) << "Centrality Cut " << centrals[iC] << " ( " << cut->min << ", " << cut->max <<" )" << endl;
+    	logger->info(__FUNCTION__) << "Centrality Cut " << centrals[iC] << " ( " << cut->min << ", " << cut->max <<" )" << endl;
     }
 
     /**
@@ -69,6 +44,9 @@ InclusiveSpectra::InclusiveSpectra( XmlConfig * config, string np, string fileLi
     cutYLocal = new ConfigRange( cfg, np + "trackCuts.yLocal", -100, 100 );
     cutTofMatch = new ConfigRange( cfg, np + "trackCuts.tofMatch", 0, 3 );
 
+    /**
+     * Setup the options
+     */
     makeEventQA = cfg->getBool( np + "makeQA:event", false );
     makeTrackQA = cfg->getBool( np + "makeQA:track", false );
 
@@ -94,16 +72,6 @@ InclusiveSpectra::~InclusiveSpectra(){
 	for ( int iC = 0; iC < centrals.size(); iC++ ){
 		delete cutCentrality[ centrals[ iC ] ];
 	}
-
-
-	// delete the book and reporter
-	delete book;
-	if ( reporter )
-		delete reporter;
-
-	// delete the logger
-	lg->info(__FUNCTION__) << endl;
-	delete lg;
 }
 
 
@@ -115,75 +83,40 @@ void InclusiveSpectra::makeCentralityHistos() {
 	for ( int iC = 0; iC < centrals.size(); iC ++ ){
 
 		string hName = histoForCentrality( centrals[ iC ] );
-		lg->info( __FUNCTION__ ) << hName << endl;
+		logger->info( __FUNCTION__ ) << hName << endl;
 		book->clone( "ptBase", hName );
 	}
 }
 
 
-void InclusiveSpectra::preLoop(){
+void InclusiveSpectra::preEventLoop(){
+	TreeAnalyzer::preEventLoop();
+
 	makeCentralityHistos();
-}
 
-void InclusiveSpectra::eventLoop(){
-	lg->info(__FUNCTION__) << endl;
-
-	Int_t nEvents = (Int_t)pico->getTree()->GetEntries();
-	nEventsToProcess = cfg->getInt( nodePath+"input.dst:nEvents", nEvents );
-
-	lg->info(__FUNCTION__) << "Reading " << nEvents << " events from chain" << endl;
-
-
-	/**
-	 * Make the Histograms
-	 */
-	book->cd("/");
-	book->makeAll( nodePath + "histograms" );
-	lg->info(__FUNCTION__) << "Making all histograms in : " << nodePath + "histograms" << endl;
-	
 	if ( cfg->nodeExists( "QAistograms.event" ) && makeEventQA ){
-		lg->info(__FUNCTION__) << " Making event QA histograms " << endl;
+		logger->info(__FUNCTION__) << " Making event QA histograms " << endl;
 		book->makeAll( "QAHistograms.event" );
 	} 
 	if ( cfg->nodeExists( "QAistograms.track" ) && makeTrackQA ){
-		lg->info(__FUNCTION__) << " Making track QA histograms " << endl;
+		logger->info(__FUNCTION__) << " Making track QA histograms " << endl;
 		book->makeAll( "QAHistograms.track" );
 	}
+}
 
 
-	/**
-	 * Run preloop hooks
-	 */
-	preLoop();
+void InclusiveSpectra::analyzeEvent(){
 
-	TaskProgress tp( "Event Loop", nEventsToProcess );
+	Int_t nTracks = pico->eventNumTracks();
 
-	for ( Int_t iEvent = 0; iEvent < nEventsToProcess; iEvent ++ ){
-		pico->GetEntry(iEvent);
+	for ( Int_t iTrack = 0; iTrack < nTracks; iTrack ++ ){
 
-		tp.showProgress( iEvent );
-
-		
-		if ( !eventCut( ) )
+		if ( !keepTrack( iTrack ) )
 			continue;
 		
-		Int_t nTracks = pico->eventNumTracks();
-
-		for ( Int_t iTrack = 0; iTrack < nTracks; iTrack ++ ){
-
-			if ( !trackCut( iTrack ) )
-				continue;
-			
-			analyzeTrack( iTrack );	
-
-		}
+		analyzeTrack( iTrack );	
 
 	}
-
-	postLoop();
-
-	lg->info(__FUNCTION__) << "Complete" << endl;
-
 }
 
 
@@ -211,7 +144,7 @@ void InclusiveSpectra::analyzeTrack( Int_t iTrack ){
 	
 }
 
-bool InclusiveSpectra::eventCut(){
+bool InclusiveSpectra::keepEvent(){
 
 	UShort_t refMult = pico->eventRefMult();
 	
@@ -248,7 +181,7 @@ bool InclusiveSpectra::eventCut(){
 	return true;
 }
 
-bool InclusiveSpectra::trackCut( Int_t iTrack ){
+bool InclusiveSpectra::keepTrack( Int_t iTrack ){
 
 
 

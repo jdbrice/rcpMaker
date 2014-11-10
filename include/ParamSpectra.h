@@ -26,7 +26,6 @@ protected:
 	// Bins
 	HistoBins * binsPt;
 	HistoBins * binsEta;
-	HistoBins * binsCharge;
 
 	// Cutting
 	double nSigmaTof;
@@ -43,11 +42,10 @@ public:
 	ParamSpectra( XmlConfig * config, string np, string fileList ="", string jobPrefix ="");
 	~ParamSpectra();
 
-protected:
-
+	virtual void analyzeEvent();
 	virtual void analyzeTrack( Int_t iTrack );
-	virtual void preLoop();
-	virtual void postLoop();
+	virtual void preEventLoop();
+	virtual void postEventLoop();
 	string chargeName( int charge ) {
 		if ( 0 > charge  )
 			return "n";

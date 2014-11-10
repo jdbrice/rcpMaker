@@ -1,19 +1,10 @@
-#ifndef SPECTRA_MAKER_H
-#define SPECTRA_MAKER_H 
+#ifndef INCLUSIVE_SPECTRA_H
+#define INCLUSIVE_SPECTRA_H 
 
 /**
  * JDB 
  */
-
-#include "Utils.h"
-#include "XmlConfig.h"
-#include "Logger.h"
-#include "LoggerConfig.h"
-#include "HistoBook.h"
-#include "ConfigRange.h"
-#include "ConfigPoint.h"
-#include "Reporter.h"
-using namespace jdb;
+#include "TreeAnalyzer.h"
 
 /**
  * ROOT
@@ -29,21 +20,12 @@ using namespace jdb;
  */
 #include "PicoDataStore.h"
 
-class InclusiveSpectra
+class InclusiveSpectra : public TreeAnalyzer
 {
 protected:
 
-	Logger * lg;
-	XmlConfig * cfg;
-	string nodePath;
-
-	HistoBook * book;
-	Reporter * reporter;
-
-	TChain * chain;
 	PicoDataStore * pico;
-	Int_t nEventsToProcess;
-
+	
 	/**
 	 * Event cuts
 	 */
@@ -71,11 +53,7 @@ public:
 	InclusiveSpectra( XmlConfig * config, string nodePath, string fileList ="", string jobPrefix ="" );
 	~InclusiveSpectra();
 
-	void make() {
-		eventLoop();
-	}
-
-protected:
+	//virtual void make()
 
 	/**
 	 * Makes pt histograms for each centrality
@@ -84,21 +62,21 @@ protected:
 	virtual string histoForCentrality( string centralityCut ){
 		return ("pt_" + centralityCut );
 	}
-	/**
-	 * Loops the tree events and calculates the non-linear
-	 * recentering for use with unbinned methods
-	 */
-	void eventLoop();
 
 	/**
 	 * Before the event loop starts - for subclass init
 	 */
-	virtual void preLoop();
+	virtual void preEventLoop();
 
 	/**
 	 * After the event loop starts - for subclass reporting
 	 */
-	virtual void postLoop(){}
+	virtual void postEventLoop(){}
+
+	/**
+	 * Analyze an Event
+	 */
+	virtual void analyzeEvent( );
 
 	/**
 	 * Analyze a track in the current Event
@@ -111,14 +89,14 @@ protected:
 	 * @return 	True 	- Keep Event 
 	 *          False 	- Reject Event
 	 */
-	virtual bool eventCut();
+	virtual bool keepEvent();
 
 	/**
 	 * Performs track based cuts
 	 * @return 	True 	- Keep Track 
 	 *          False 	- Reject Track
 	 */
-	virtual bool trackCut( Int_t iTrack );
+	virtual bool keepTrack( Int_t iTrack );
 	
 
 

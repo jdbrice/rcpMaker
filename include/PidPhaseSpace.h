@@ -1,9 +1,9 @@
-#ifndef PID_PHASE_SPACE
-#define PID_PHASE_SPACE
+#ifndef PID_PHASE_SPACE_H
+#define PID_PHASE_SPACE_H
 
 #include "InclusiveSpectra.h"
-#include "Reporter.h"
 #include "PhaseSpaceRecentering.h"
+#include "PicoDataStore.h"
 
 #include <math.h>
 
@@ -50,8 +50,8 @@ public:
 	 * @param	iTrack 	- Track index 
 	 */
 	virtual void analyzeTrack( Int_t iTrack );
-	virtual void preLoop();
-	virtual void postLoop();
+	virtual void preEventLoop();
+	virtual void postEventLoop();
 	
 
 	void enhanceDistributions( double avgP, int ptBin, int etaBin, int charge, double dedx, double tof );

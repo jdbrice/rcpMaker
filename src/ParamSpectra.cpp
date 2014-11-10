@@ -21,12 +21,14 @@ ParamSpectra::ParamSpectra( XmlConfig * config, string np, string fl, string jp 
 	species = cfg->getStringVector( np+"PidSpecies" );
 
 
-	lg->info(__FUNCTION__) << "Setting up Tof Pid Params for : " << endl;
+	logger->info(__FUNCTION__) << "Setting up Tof Pid Params for : " << endl;
 
-	// make the list of pid Params
+	/**
+	 * Make the PID Parameters
+	 */
 	for ( int i = 0; i < species.size(); i++ ){
 
-		lg->info(__FUNCTION__) << species[ i ] << endl;
+		logger->info(__FUNCTION__) << species[ i ] << endl;
 
 		TofPidParams * tpp = new TofPidParams( cfg, np + "TofPidParams." + species[ i ] + "." );
 		tofParams.push_back( tpp );
@@ -36,43 +38,55 @@ ParamSpectra::ParamSpectra( XmlConfig * config, string np, string fl, string jp 
 	}
 
 
-	// get the ideal plateau sigmas
+	/**
+	 * Get the ideal large p sigmas 
+	 */
 	tofSigmaIdeal = cfg->getDouble( np+"PhaseSpaceRecentering.sigma:tof", 0.0012);
 	dedxSigmaIdeal = cfg->getDouble( np+"PhaseSpaceRecentering.sigma:dedx", 0.033);
 
-	// Initialize the Phase Space Recentering Object
+	/**
+	 * Setup the phase space recentering 
+	 */
 	psr = new PhaseSpaceRecentering( dedxSigmaIdeal,
 									 tofSigmaIdeal,
 									 cfg->getString( np+"Bichsel.table", "dedxBichsel.root"),
 									 cfg->getInt( np+"Bichsel.method", 0) );
-	
-	// get the recentering method for the phase space
+		// get the recentering method for the phase space
 	psrMethod = config->getString( np+"PhaseSpaceRecentering.method", "traditional" );
 	
-	// alias the centered species for ease of use
+		// alias the centered species for ease of use
 	centerSpecies = cfg->getString( np+"PhaseSpaceRecentering.centerSpecies", "K" );
 
-	// get the Bins for pt and eta
+	/**
+	 * Get the binning for pT and eta
+	 */
 	binsPt = new HistoBins( cfg, "binning.pt" );
 	binsEta = new HistoBins( cfg, "binning.eta" );
-	binsEta = new HistoBins( cfg, "binning.charge" );
+	
 
-	// initialize the pid cut
+	/**
+	 * Setup the cuts for nSigma PID
+	 */
 	nSigmaTof = cfg->getDouble( np+"nSigmaCut:tof", 1.0 );
 	nSigmaDedx = cfg->getDouble( np+"nSigmaCut:dedx", 1.0 );
 	
-	// make a list of cuts we want to explore
+	/**
+	 * Make a list of cuts we want to explore
+	 */
 	cuts = { TOF_CUT, DEDX_CUT, SQUARE_CUT, ELLIPSE_CUT};
 
 	book->cd();
 }
 
 ParamSpectra::~ParamSpectra(){
+
+	delete binsPt;
+	delete binsEta;
 }
 
 void ParamSpectra::makeCentralityHistos()  {
 	book->cd();
-	lg->info(__FUNCTION__) << endl;
+	logger->info(__FUNCTION__) << endl;
 	/**
 	 * Make centrality ptHistos
 	 */
@@ -81,15 +95,15 @@ void ParamSpectra::makeCentralityHistos()  {
 			string s = species[ iS ];
 			for ( int iC = 0; iC < centrals.size(); iC ++ ){
 				string hName = histoForCentrality( centrals[ iC ], s, cuts[ iCut ] );
-				lg->info( __FUNCTION__ ) << hName << endl;
+				logger->info( __FUNCTION__ ) << hName << endl;
 				book->clone( "ptBase", hName );
 
 				hName = histoForCentrality( centrals[ iC ], s, cuts[ iCut ], 1 );
-				lg->info( __FUNCTION__ ) << hName << endl;
+				logger->info( __FUNCTION__ ) << hName << endl;
 				book->clone( "ptBase", hName );
 
 				hName = histoForCentrality( centrals[ iC ], s, cuts[ iCut ], -1 );
-				lg->info( __FUNCTION__ ) << hName << endl;
+				logger->info( __FUNCTION__ ) << hName << endl;
 				book->clone( "ptBase", hName );
 			} //centralities
 		} // pid species
@@ -98,10 +112,10 @@ void ParamSpectra::makeCentralityHistos()  {
 }
 
 
-void ParamSpectra::preLoop(){
-	InclusiveSpectra::preLoop();
+void ParamSpectra::preEventLoop(){
+	InclusiveSpectra::preEventLoop();
 	
-	lg->info(__FUNCTION__) << endl;
+	logger->info(__FUNCTION__) << endl;
 	
 	for ( int iS = 0; iS < species.size(); iS ++ ){
 		book->clone( "mean", "mean" + species[ iS ] );
@@ -135,14 +149,14 @@ void ParamSpectra::preLoop(){
 
 }
 
-void ParamSpectra::postLoop() {
+void ParamSpectra::postEventLoop() {
 
 	gStyle->SetOptStat(0);
 	book->cd();
 	for (int i= 0; i < binsPt->nBins(); i++ ){
 		
 		double p = ( (*binsPt)[ i] + (*binsPt)[ i+1 ] )/2.0;
-		lg->info( __FUNCTION__ ) << "Saving Bin " << i << endl;
+		logger->info( __FUNCTION__ ) << "Saving Bin " << i << endl;
 
 		reporter->newPage();
 		TH1D* h = (TH1D*)book->get( "tof_" + ts(i) );
@@ -166,7 +180,7 @@ void ParamSpectra::postLoop() {
 			// 	tofMean = tofMus[ iS ];
 			// }
 
-			lg->info(__FUNCTION__) << species[ iS ] << "p = " << p << " mu = " << tofMean << endl;
+			logger->info(__FUNCTION__) << species[ iS ] << "p = " << p << " mu = " << tofMean << endl;
 			TLine * l1 = new TLine( tofMean - nSigmaTof*tofSigma , h->GetMinimum(), tofMean -nSigmaTof*tofSigma, h->GetMaximum() );
 			l1->SetLineColor( iS+1 );
 			l1->Draw();
@@ -188,7 +202,7 @@ void ParamSpectra::postLoop() {
 
 		for ( int iS = 0; iS < species.size(); iS ++ ){
 			
-			lg->info(__FUNCTION__) << species[ iS ] << "p = " << p << " mu = " << dedxMus[iS] << endl;
+			logger->info(__FUNCTION__) << species[ iS ] << "p = " << p << " mu = " << dedxMus[iS] << endl;
 			TLine * l1 = new TLine( dedxMus[ iS ] - nSigmaDedx*dedxSigmaIdeal , h->GetMinimum(), dedxMus[ iS ] -nSigmaDedx*dedxSigmaIdeal, h->GetMaximum() );
 			l1->SetLineColor( iS+1 );
 			l1->Draw();
@@ -207,6 +221,10 @@ void ParamSpectra::postLoop() {
 
 }
 
+void ParamSpectra::analyzeEvent(){
+	InclusiveSpectra::analyzeEvent();
+}
+
 
 void ParamSpectra::analyzeTrack( Int_t iTrack ){
 
@@ -223,13 +241,14 @@ void ParamSpectra::analyzeTrack( Int_t iTrack ){
 	Int_t refMult = pico->eventRefMult();
 	
 	/**
-	 * For now skip other eta bins
+	 * make sure we are in the binning bounds
 	 */
 	if ( ptBin < 0 || etaBin < 0)
 		return;
 
 	
 	if ( ptBin < binsPt->nBins() ){
+		// TODO
 		double avgP = ( binsPt->bins[ ptBin ] + binsPt->bins[ ptBin+1] ) / 2.0;
 
 		//double dedx = psr->nlDedx( centerSpecies, pico->trackDedx( iTrack ), 
@@ -262,7 +281,7 @@ void ParamSpectra::analyzeTrack( Int_t iTrack ){
 					 */
 					 for ( int iCent = 0; iCent < centrals.size(); iCent++ ){
 					 	string cent = centrals[ iCent ];
-					 	//lg->info( __FUNCTION__ ) << book->get( histoForCentrality( cent, "K" ) )<< endl;
+					 	//logger->info( __FUNCTION__ ) << book->get( histoForCentrality( cent, "K" ) )<< endl;
 					 	
 					 	string hName = histoForCentrality( cent, pidRes[ iP ], cuts[ iC ] );
 					 	string hcName = histoForCentrality( cent, pidRes[ iP ], cuts[ iC ], charge );
