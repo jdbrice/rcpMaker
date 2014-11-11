@@ -14,6 +14,7 @@
 #include "Reporter.h"
 using namespace jdb;
 
+#include "HistoAnalyzer.h"
 #include "TofPidParams.h"
 #include "DedxPidParams.h"
 #include "PhaseSpaceRecentering.h"
@@ -23,17 +24,9 @@ using namespace jdb;
 
 #include "RooExtendPdf.h"
 
-class SimultaneousGaussians
+class SimultaneousGaussians : public HistoAnalyzer
 {
 protected:
-	Logger * lg;
-	XmlConfig * cfg;
-	string nodePath;
-
-	HistoBook * book;
-	Reporter * reporter;
-
-	TFile * inFile;
 
 	HistoBins* binsPt;
 	HistoBins* binsEta;
@@ -57,7 +50,7 @@ public:
 	SimultaneousGaussians( XmlConfig * config, string np);
 	~SimultaneousGaussians();
 
-	void make();
+	virtual void make();
 	void make2();
 
 	class GaussianFitResult{

@@ -16,26 +16,8 @@
 #include "PidPhaseSpace.h"
 
 
-SimultaneousGaussians::SimultaneousGaussians( XmlConfig * config, string np ){
-	//Set the Root Output Level
-	gErrorIgnoreLevel=kSysError;
-
-	// Save Class Members
-	cfg = config;
-	nodePath = np;
-
-	// make the Logger
-	lg = LoggerConfig::makeLogger( cfg, np + "Logger" );
-
-	lg->info(__FUNCTION__) << "Got config with nodePath = " << np << endl;
-
-    // create the book
-    lg->info(__FUNCTION__) << " Creating book "<< endl;
-    book = new HistoBook( config->getString( np + "output.data" ), config );
-
-    reporter = new Reporter( config->getString( np + "output.report" ), 400, 400 );
-
-
+SimultaneousGaussians::SimultaneousGaussians( XmlConfig * config, string np ) : HistoAnalyzer( config, np ){
+	
     // Initialize the Phase Space Recentering Object
 	tofSigmaIdeal = cfg->getDouble( np+"PhaseSpaceRecentering.sigma:tof", 0.0012);
 	dedxSigmaIdeal = cfg->getDouble( np+"PhaseSpaceRecentering.sigma:dedx", 0.06);
@@ -71,7 +53,7 @@ SimultaneousGaussians::SimultaneousGaussians( XmlConfig * config, string np ){
 	vector<string> species = { "Pi", "K", "P" };
 	for ( int i = 0; i < species.size(); i++ ){
 
-		lg->info(__FUNCTION__) << species[ i ] << endl;
+		logger->info(__FUNCTION__) << species[ i ] << endl;
 
 		TofPidParams * tpp = new TofPidParams( cfg, np + "TofPidParams." + species[ i ] + "." );
 		tofParams.push_back( tpp );
@@ -85,10 +67,9 @@ SimultaneousGaussians::SimultaneousGaussians( XmlConfig * config, string np ){
 }
 
 SimultaneousGaussians::~SimultaneousGaussians(){
-	delete book;
-	delete reporter;
+	
 	delete psr;
-	delete lg;
+	
 	delete binsPt;
 	delete binsEta;
 	delete binsCharge;
@@ -266,8 +247,8 @@ SimultaneousGaussians::GaussianFitResult SimultaneousGaussians::fitThreeSpecies(
 	vector<string> species = PidPhaseSpace::species;
 	
 	for ( int i = 0; i < species.size(); i++ ){
-		lg->info( __FUNCTION__ ) << " Generating Gaussian for : " << species[ i ] << endl;
-		lg->info( __FUNCTION__ ) << species[ i ] << " : " << iMu[ i ] << endl;
+		logger->info( __FUNCTION__ ) << " Generating Gaussian for : " << species[ i ] << endl;
+		logger->info( __FUNCTION__ ) << species[ i ] << " : " << iMu[ i ] << endl;
 
 		RooRealVar * m = new RooRealVar( 	("mu" + species[ i ]).c_str(), ("mu" + species[ i ]).c_str(), 
 											iMu[ i ], iMu[ i ] - muRoi * iSigma[ i ], iMu[ i ] + muRoi * iSigma[ i ] );
@@ -656,8 +637,8 @@ SimultaneousGaussians::GaussianFitResult SimultaneousGaussians::fitTwoSpecies( T
 	vector<string> species = { "Pi", "K"};
 	
 	for ( int i = 0; i < species.size(); i++ ){
-		lg->info( __FUNCTION__ ) << " Generating Gaussian for : " << species[ i ] << endl;
-		lg->info( __FUNCTION__ ) << species[ i ] << " : " << iMu[ i ] << endl;
+		logger->info( __FUNCTION__ ) << " Generating Gaussian for : " << species[ i ] << endl;
+		logger->info( __FUNCTION__ ) << species[ i ] << " : " << iMu[ i ] << endl;
 
 		RooRealVar * m = new RooRealVar( 	("mu" + species[ i ]).c_str(), ("mu" + species[ i ]).c_str(), 
 											iMu[ i ], iMu[ i ] - muRoi * iSigma[ i ], iMu[ i ] + muRoi * iSigma[ i ] );
@@ -762,8 +743,8 @@ SimultaneousGaussians::GaussianFitResult SimultaneousGaussians::fitAllSpecies( T
 	vector<string> species = { "Pi", "K", "P"};
 	
 	for ( int i = 0; i < species.size(); i++ ){
-		lg->info( __FUNCTION__ ) << " Generating Gaussian for : " << species[ i ] << endl;
-		lg->info( __FUNCTION__ ) << species[ i ] << " : " << iMu[ i ] << endl;
+		logger->info( __FUNCTION__ ) << " Generating Gaussian for : " << species[ i ] << endl;
+		logger->info( __FUNCTION__ ) << species[ i ] << " : " << iMu[ i ] << endl;
 
 		RooRealVar * m = new RooRealVar( 	("mu" + species[ i ]).c_str(), ("mu" + species[ i ]).c_str(), 
 											iMu[ i ], iMu[ i ] - muRoi * iSigma[ i ], iMu[ i ] + muRoi * iSigma[ i ] );
