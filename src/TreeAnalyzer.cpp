@@ -40,7 +40,7 @@ TreeAnalyzer::TreeAnalyzer( XmlConfig * config, string np, string fileList, stri
 TreeAnalyzer::~TreeAnalyzer(){
 	delete book;
 	if ( reporter )
-	delete reporter;
+		delete reporter;
 	delete logger;
 }
 
@@ -65,7 +65,7 @@ void TreeAnalyzer::make(){
 	logger->info(__FUNCTION__) << "Loaded: " << nEventsToProcess << " events " << endl;
 	
 	// loop over all events
-	for(Int_t i=0; i<nEvents; i++) {
+	for(Int_t i=0; i<nEventsToProcess; i++) {
     	chain->GetEntry(i);
 
     	if ( !keepEvent() )
