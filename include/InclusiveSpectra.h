@@ -54,7 +54,7 @@ public:
 	~InclusiveSpectra();
 
 	//virtual void make()
-
+protected:
 	/**
 	 * Makes pt histograms for each centrality
 	 */

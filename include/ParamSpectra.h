@@ -42,6 +42,7 @@ public:
 	ParamSpectra( XmlConfig * config, string np, string fileList ="", string jobPrefix ="");
 	~ParamSpectra();
 
+protected:
 	virtual void analyzeEvent();
 	virtual void analyzeTrack( Int_t iTrack );
 	virtual void preEventLoop();
