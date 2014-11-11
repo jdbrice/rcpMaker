@@ -4,18 +4,28 @@
 #include "XmlConfig.h"
 #include "Utils.h"
 
+/*jdoc{
+"name" : "",
+"params" : [ ],
+"paramDesc" : [ ],
+"returns" : [  ],
+"desc" : ""
+}*/
+
 namespace jdb{
 	class HistoBins
 	{
 	public:
-
-		/**
-		 * Static makeNBins
-		 * @param nBins int number of bins
-		 * @param low double low end of bins
-		 * @param high double high end of bins
-		 * @return a vector containing the bin edges
-		 */
+		
+		/*jdoc{
+		"name" : "static vector<double> makeNBins( int nBins, double low, double high )",
+		"params" : ["int nBins", "double low", "double high" ],
+		"paramDesc" : [	"Number of Bins", 
+			"Lower edge of first bin", 
+			"Upper edge of last bin" ],
+		"returns" : [ "vector of bin edges" ],
+		"desc" : "Divides the range high - low into a fixed number of bins from low to high"
+		}*/
 		static vector<double> makeNBins( int nBins, double low, double high ){
 
 			vector<double> bins;
@@ -26,13 +36,15 @@ namespace jdb{
 			return bins;
 		}	// binsFrom
 		
-		/**
-		 * Static makeFixedWidthBins
-		 * @param binWidth double width of each bin
-		 * @param low double low end of bins
-		 * @param high double high end of bins
-		 * @return a vector containing the bin edges
-		 */
+		/*jdoc{
+		"name" : "static vector<double> makeFixedWidthBins( double binWidth, double low, double high )",
+		"params" : ["double binWidth", "double low", "double high" ],
+		"paramDesc" : [	"Nominal width of each bin", 
+			"Lower edge of first bin", 
+			"Upper edge of last bin" ],
+		"returns" : [ "vector of bin edges" ],
+		"desc" : "Divides the range high - low into a fixed number of bins from low to high"
+		}*/
 		static vector<double> makeFixedWidthBins( double binWidth, double low, double high ){
 
 			vector<double> bins;
@@ -67,7 +79,7 @@ namespace jdb{
 					return i;
 			}
 
-			return -1;
+			return -3;
 
 		}	// findBin
 
