@@ -46,6 +46,10 @@
 			<all min="0" max="450" />
 			<0to5 min="235" max="400" />
 			<60to80 min="10" max="20" />
+
+			<!-- prelim -->
+			<!--<0to5 min="228" max="500" />-->
+			<!--<60to80 min="14" max="37" />-->
 		</centrality>
 
 		<enhanceDistributions tof="1.0" dedx="1.0"/>

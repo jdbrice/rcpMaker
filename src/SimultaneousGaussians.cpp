@@ -26,12 +26,8 @@ SimultaneousGaussians::SimultaneousGaussians( XmlConfig * config, string np ) : 
 									 cfg->getString( np+"Bichsel.table", "dedxBichsel.root"),
 									 cfg->getInt( np+"Bichsel.method", 0) );
 	psrMethod = config->getString( np+"PhaseSpaceRecentering.method", "traditional" );
-
 	// alias the centered species for ease of use
 	centerSpecies = cfg->getString( np+"PhaseSpaceRecentering.centerSpecies", "K" );
-
-
-	inFile = new TFile( cfg->getString( np+"input.data:url" ).c_str(), "READ" );
 
 	/**
 	 * Make the momentum transverse, eta, charge binning
@@ -39,12 +35,6 @@ SimultaneousGaussians::SimultaneousGaussians( XmlConfig * config, string np ) : 
 	binsPt = new HistoBins( cfg, "binning.pt" );
 	binsEta = new HistoBins( cfg, "binning.eta" );
 	binsCharge = new HistoBins( cfg, "binning.charge" );
-
-	/*
-	muRoi 		= 1.5;
-	sigmaRoi 	= 1.5;
-	roi 		= 2.5;
-	*/
 
 	muRoi 		= 1.5;
 	sigmaRoi 	= 1.5;
@@ -60,8 +50,6 @@ SimultaneousGaussians::SimultaneousGaussians( XmlConfig * config, string np ) : 
 
 		DedxPidParams * dpp = new DedxPidParams( cfg, np + "DedxPidParams." + species[ i ] + "." );
 		dedxParams.push_back( dpp );
-
-
 	}
 
 }
