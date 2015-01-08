@@ -38,8 +38,10 @@ int main( int argc, char* argv[] ) {
 				ParamSpectra ps( &config, "ParamSpectra.", fileList, jobPrefix );
 				ps.make();
 			} else if ( "PidPhaseSpace" == job ){
-				PidPhaseSpace pps( &config, "PidPhaseSpace.", fileList, jobPrefix  );
-				pps.make();
+				//PidPhaseSpace pps( &config, "PidPhaseSpace.", fileList, jobPrefix  );
+				//pps.make();
+				//TreeAnalyzer ta( &config, "PidPhaseSpace.", fileList, jobPrefix  );
+				//ta.make();
 			} else if ( "MakePidParams" == job ){
 				PidParamMaker ppm( &config, "PidParamMaker." );
 				ppm.make();

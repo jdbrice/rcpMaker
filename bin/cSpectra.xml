@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
 
-	<jobType>ParamSpectra</jobType>
+	<jobType>InclusiveSpectra</jobType>
 	<Logger>
 		<logLevel>info</logLevel>
 	</Logger>
@@ -16,77 +16,32 @@
 
 	</binning>
 
-	<RefMultHelper>
-		<Logger>
-			<logLevel>info</logLevel>
-		</Logger>	
-		
-		<input>
-			<dst treeName="tree" maxFiles="5" url="/Users/danielbrandenburg/bnl/local/data/BBCMB14_015/"/>
-		</input>
-		
-		<central min="0.0" max="0.05"/>
-		<peripheral min="0.6" max="0.8"/>
-		<eventCuts>
-			<vertexZ min="-75" max="75" />
-			<vertexR min="0.0" max="1.0" />
-			<vertexROffset x="0" y="0.86" />
-			<nTZero min="20" max="10000"/>
-		</eventCuts>
-		<output>
-			<data>refMult.root</data>
-			<report>rpRefMult.pdf</report>
-		</output>
-
-		<histograms>
-			<refMult title="Centrality Selection; refMult; #"   nBinsX="400" minX="0" maxX="400"/>
-			<vertexZ title="Z Vertex" widthX="1" minX="-200" maxX="200" />
-			<vertexR title="#sigma" nBinsX="200" minX="0" maxX="10" />
-
-			<preVertexZ title="Z Vertex" widthX="1" minX="-200" maxX="200" />
-			<preVertexR title="#sigma" nBinsX="200" minX="0" maxX="10" />
-			<preRefMult title="Centrality Selection; refMult; #"   nBinsX="400" minX="0" maxX="400"/>
-			
-
-			<tofMatch title="tofMatch" widthX="1" minX="0" maxX="4" />
-			<yLocal title="yLocal" widthX=".1" minX="-3" maxX="3" />
-			<dca title="DCA" nBinsX="500" minX="0" maxX="10" />
-			<nHits title="# Hits" nBinsX="100" minX="0" maxX="100" />
-			<nHitsDedx title="# Hits dEdx" nBinsX="100" minX="0" maxX="100" />
-			<nHitsFit title="# Hits Fit / Possible" nBinsX="100" minX="0" maxX="100" />
-			<nHitsPossible title="# Hits Fit / Possible" nBinsX="100" minX="0" maxX="100" />
-			<nHitsFitOverPossible title="# Hits Fit / Possible" widthX="0.01" minX="0" maxX="1" />
-
-			<preTofMatch title="tofMatch" widthX="1" minX="0" maxX="4" />
-			<preYLocal title="yLocal" widthX=".1" minX="-3" maxX="3" />
-			<preDca title="DCA" nBinsX="500" minX="0" maxX="10" />
-			<preNHits title="# Hits" nBinsX="100" minX="0" maxX="100" />
-			<preNHitsDedx title="# Hits dEdx" nBinsX="100" minX="0" maxX="100" />
-			<preNHitsFit title="# Hits Fit / Possible" nBinsX="100" minX="0" maxX="100" />
-			<preNHitsPossible title="# Hits Fit / Possible" nBinsX="100" minX="0" maxX="100" />
-			<preNHitsFitOverPossible title="# Hits Fit / Possible" widthX="0.01" minX="0" maxX="1" />
-		</histograms>
-
-	</RefMultHelper>
+	
 
 	<InclusiveSpectra>
 		<Logger>
 			<logLevel>info</logLevel>
-		</Logger>	
+		</Logger>
+		<Reporter>
+			<output url="rpInclusiveSpectra.pdf" />
+		</Reporter>	
 		
 		<input>
-			<dst treeName="tree" maxFiles="100" url="/Users/danielbrandenburg/bnl/local/data/BBCMB14_015/"/>
+			<dst treeName="tree" maxFiles="5" url="/Users/danielbrandenburg/bnl/local/data/BBCMB14_015/"/>
 		</input>
 
 		<output>
 			<data>inclusiveSpectra.root</data>
-			<report>rpInclusiveSpectra.pdf</report>
 		</output>
 
 		<centrality>
-			<0to5 min="235" max="400" />
-			<60to80 min="10" max="20" />
+			<0to5 min="228" max="500" />
+			<60to80 min="14" max="37" />
 		</centrality>
+
+		<makeQA event="true" track="true" />
+
+		<RMCParams>StRMCParams.xml</RMCParams>
 
 		<histograms>
 			<ptBase type="1D" title="p_{T} [GeV]; p_{T} [GeV]; #Events"  xBins="binning.pt"/>
@@ -97,7 +52,7 @@
 		</histograms>
 
 		<eventCuts>
-			<vertexZ min="-75" max="75" />
+			<vertexZ min="-40" max="40" />
 			<vertexR min="0.0" max="1.0" />
 			<vertexROffset x="0" y="0.86" />
 
@@ -108,7 +63,7 @@
 			<nHits min="15" />
 			<nHitsDedx min="10"  />
 			<nHitsFitOverPossible min="0.52" />
-			<yLocal min="-1.8" max="1.8" />
+			<!--<yLocal min="-1.8" max="1.8" />-->
 			<tofMatch min="1" max="3"/>
 		</trackCuts>
 
@@ -208,5 +163,95 @@
 		</style>
 
 	</ParamSpectra>
+
+
+	<QAHistograms>
+		<event>
+			<refMult title="Centrality Selection; refMult; #"   nBinsX="400" minX="0" maxX="400"/>
+			<vertexZ title="Z Vertex" widthX="1" minX="-200" maxX="200" />
+			<vertexR title="#sigma" nBinsX="200" minX="0" maxX="10" />
+
+			<preVertexZ title="Z Vertex" widthX="1" minX="-200" maxX="200" />
+			<preVertexR title="#sigma" nBinsX="200" minX="0" maxX="10" />
+			<preRefMult title="Centrality Selection; refMult; #"   nBinsX="400" minX="0" maxX="400"/>
+		</event>
+
+
+		<track>
+			<tofMatch title="tofMatch" widthX="1" minX="0" maxX="4" />
+			<yLocal title="yLocal" widthX=".1" minX="-3" maxX="3" />
+			<dca title="DCA" nBinsX="500" minX="0" maxX="10" />
+			<nHits title="# Hits" nBinsX="100" minX="0" maxX="100" />
+			<nHitsDedx title="# Hits dEdx" nBinsX="100" minX="0" maxX="100" />
+			<nHitsFit title="# Hits Fit / Possible" nBinsX="100" minX="0" maxX="100" />
+			<nHitsPossible title="# Hits Fit / Possible" nBinsX="100" minX="0" maxX="100" />
+			<nHitsFitOverPossible title="# Hits Fit / Possible" widthX="0.01" minX="0" maxX="1" />
+
+			<preTofMatch title="tofMatch" widthX="1" minX="0" maxX="4" />
+			<preYLocal title="yLocal" widthX=".1" minX="-3" maxX="3" />
+			<preDca title="DCA" nBinsX="500" minX="0" maxX="10" />
+			<preNHits title="# Hits" nBinsX="100" minX="0" maxX="100" />
+			<preNHitsDedx title="# Hits dEdx" nBinsX="100" minX="0" maxX="100" />
+			<preNHitsFit title="# Hits Fit / Possible" nBinsX="100" minX="0" maxX="100" />
+			<preNHitsPossible title="# Hits Fit / Possible" nBinsX="100" minX="0" maxX="100" />
+			<preNHitsFitOverPossible title="# Hits Fit / Possible" widthX="0.01" minX="0" maxX="1" />	
+		</track>
+
+
+	</QAHistograms>
+
+
+	<RefMultHelper>
+		<Logger>
+			<logLevel>info</logLevel>
+		</Logger>	
+		
+		<input>
+			<dst treeName="tree" maxFiles="5" url="/Users/danielbrandenburg/bnl/local/data/BBCMB14_015/"/>
+		</input>
+		
+		<central min="0.0" max="0.05"/>
+		<peripheral min="0.6" max="0.8"/>
+		<eventCuts>
+			<vertexZ min="-75" max="75" />
+			<vertexR min="0.0" max="1.0" />
+			<vertexROffset x="0" y="0.86" />
+			<nTZero min="20" max="10000"/>
+		</eventCuts>
+		<output>
+			<data>refMult.root</data>
+			<report>rpRefMult.pdf</report>
+		</output>
+
+		<histograms>
+			<refMult title="Centrality Selection; refMult; #"   nBinsX="400" minX="0" maxX="400"/>
+			<vertexZ title="Z Vertex" widthX="1" minX="-200" maxX="200" />
+			<vertexR title="#sigma" nBinsX="200" minX="0" maxX="10" />
+
+			<preVertexZ title="Z Vertex" widthX="1" minX="-200" maxX="200" />
+			<preVertexR title="#sigma" nBinsX="200" minX="0" maxX="10" />
+			<preRefMult title="Centrality Selection; refMult; #"   nBinsX="400" minX="0" maxX="400"/>
+			
+
+			<tofMatch title="tofMatch" widthX="1" minX="0" maxX="4" />
+			<yLocal title="yLocal" widthX=".1" minX="-3" maxX="3" />
+			<dca title="DCA" nBinsX="500" minX="0" maxX="10" />
+			<nHits title="# Hits" nBinsX="100" minX="0" maxX="100" />
+			<nHitsDedx title="# Hits dEdx" nBinsX="100" minX="0" maxX="100" />
+			<nHitsFit title="# Hits Fit / Possible" nBinsX="100" minX="0" maxX="100" />
+			<nHitsPossible title="# Hits Fit / Possible" nBinsX="100" minX="0" maxX="100" />
+			<nHitsFitOverPossible title="# Hits Fit / Possible" widthX="0.01" minX="0" maxX="1" />
+
+			<preTofMatch title="tofMatch" widthX="1" minX="0" maxX="4" />
+			<preYLocal title="yLocal" widthX=".1" minX="-3" maxX="3" />
+			<preDca title="DCA" nBinsX="500" minX="0" maxX="10" />
+			<preNHits title="# Hits" nBinsX="100" minX="0" maxX="100" />
+			<preNHitsDedx title="# Hits dEdx" nBinsX="100" minX="0" maxX="100" />
+			<preNHitsFit title="# Hits Fit / Possible" nBinsX="100" minX="0" maxX="100" />
+			<preNHitsPossible title="# Hits Fit / Possible" nBinsX="100" minX="0" maxX="100" />
+			<preNHitsFitOverPossible title="# Hits Fit / Possible" widthX="0.01" minX="0" maxX="1" />
+		</histograms>
+
+	</RefMultHelper>
 
 </config>

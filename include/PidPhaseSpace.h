@@ -5,6 +5,7 @@
 #include "PhaseSpaceRecentering.h"
 #include "PicoDataStore.h"
 
+
 #include <math.h>
 
 class PidPhaseSpace : public InclusiveSpectra
@@ -39,11 +40,13 @@ protected:
 
 	double tofCut, dedxCut;
 
-	bool make2D, makeEnhanced;
+	bool make2D, makeEnhanced, correctZ;
+
+	RefMultCorrection *rmc;
 
 public:
 	PidPhaseSpace( XmlConfig* config, string np, string fl ="", string jp ="" );
-	~PidPhaseSpace(){}
+	~PidPhaseSpace();
 
 	/**
 	 * Analyze a track in the current Event

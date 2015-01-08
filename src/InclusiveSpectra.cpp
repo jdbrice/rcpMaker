@@ -10,6 +10,7 @@
  */
 InclusiveSpectra::InclusiveSpectra( XmlConfig * config, string np, string fileList, string prefix ) : TreeAnalyzer( config, np, fileList, prefix  ){
 
+	logger->setClassSpace( "InclusiveSpectra" );
 	/**
 	 * Make the desired PicoDataStore Interface
 	 */
@@ -41,7 +42,7 @@ InclusiveSpectra::InclusiveSpectra( XmlConfig * config, string np, string fileLi
     cutNHitsDedx = new ConfigRange( cfg, np + "trackCuts.nHitsDedx", 0, INT_MAX );
     cutNHitsFitOverPossible = new ConfigRange( cfg, np + "trackCuts.nHitsFitOverPossible", 0, INT_MAX );
     cutDca = new ConfigRange( cfg, np + "trackCuts.dca", 0, INT_MAX );
-    cutYLocal = new ConfigRange( cfg, np + "trackCuts.yLocal", -100, 100 );
+    cutYLocal = new ConfigRange( cfg, np + "trackCuts.yLocal", -1000, 1000 );
     cutTofMatch = new ConfigRange( cfg, np + "trackCuts.tofMatch", 0, 3 );
 
     /**
@@ -49,6 +50,13 @@ InclusiveSpectra::InclusiveSpectra( XmlConfig * config, string np, string fileLi
      */
     makeEventQA = cfg->getBool( np + "makeQA:event", false );
     makeTrackQA = cfg->getBool( np + "makeQA:track", false );
+    if ( makeEventQA )
+	    logger->info( __FUNCTION__ ) << "Making Event QA" << endl;
+	if( makeTrackQA )
+	    logger->info( __FUNCTION__ ) << "Making Track QA" << endl;
+
+	if ( cfg->exists(np + "RMCParams" ) )
+		rmc = new RefMultCorrection( config->getString( np + "RMCParams" ) );
 
 }
 /**
@@ -72,6 +80,8 @@ InclusiveSpectra::~InclusiveSpectra(){
 	for ( int iC = 0; iC < centrals.size(); iC++ ){
 		delete cutCentrality[ centrals[ iC ] ];
 	}
+
+	delete rmc;
 }
 
 
@@ -94,11 +104,11 @@ void InclusiveSpectra::preEventLoop(){
 
 	makeCentralityHistos();
 
-	if ( cfg->nodeExists( "QAistograms.event" ) && makeEventQA ){
+	if ( cfg->exists( "QAHistograms.event" ) && makeEventQA ){
 		logger->info(__FUNCTION__) << " Making event QA histograms " << endl;
 		book->makeAll( "QAHistograms.event" );
 	} 
-	if ( cfg->nodeExists( "QAistograms.track" ) && makeTrackQA ){
+	if ( cfg->exists( "QAHistograms.track" ) && makeTrackQA ){
 		logger->info(__FUNCTION__) << " Making track QA histograms " << endl;
 		book->makeAll( "QAHistograms.track" );
 	}
@@ -106,6 +116,12 @@ void InclusiveSpectra::preEventLoop(){
 
 
 void InclusiveSpectra::analyzeEvent(){
+
+	// get the corrected ref mult
+	if ( rmc )
+		correctedRefMult = rmc->refMult( pico->eventRefMult(), pico->eventVertexZ() );
+	else 
+		correctedRefMult = -1;
 
 	Int_t nTracks = pico->eventNumTracks();
 
@@ -124,7 +140,15 @@ void InclusiveSpectra::analyzeTrack( Int_t iTrack ){
 
 	double pt = pico->trackPt( iTrack );
 	int charge = pico->trackCharge( iTrack );
+	
 	Int_t refMult = pico->eventRefMult();
+	
+	if ( correctedRefMult >= 0 ){
+		if ( abs(pico->eventVertexZ()) > 20 )
+			cout << correctedRefMult << "co, old =  " << refMult << endl;
+		refMult = correctedRefMult;
+	}
+	
 
 	book->fill( "ptAll", pt );
 	if ( 1 == charge )
@@ -222,8 +246,6 @@ bool InclusiveSpectra::keepTrack( Int_t iTrack ){
 		book->fill( "preNHitsPossible", nHitsPossible );
 		book->fill( "preNHitsFitOverPossible", fitPoss );	
 	}
-	
-	
 
 	if ( tofMatch < cutTofMatch->min || tofMatch > cutTofMatch->max )
 		return false;

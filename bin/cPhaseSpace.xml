@@ -26,7 +26,10 @@
 	<PidPhaseSpace>
 		<Logger>
 			<logLevel>info</logLevel>
-		</Logger>	
+		</Logger>
+		<Reporter>
+			<output>ps/rp.pdf</output>
+		</Reporter>	
 		
 		<input>
 			<dst treeName="tree" maxFiles="1" url="/Users/danielbrandenburg/bnl/local/data/BBCMB14_015/" nEvents="10000"/>
@@ -34,13 +37,15 @@
 
 		<output>
 			<data>ps/data.root</data>
-			<report></report>
 		</output>
 
 		<Bichsel>
 			<table>dedxBichsel.root</table>
 			<method>0</method>
 		</Bichsel>
+
+		<RMCParams>StRMCParams.xml</RMCParams>
+		<correctRefMult zVertex="true" mcg="false" />
 
 		<centrality>
 			<all min="0" max="450" />

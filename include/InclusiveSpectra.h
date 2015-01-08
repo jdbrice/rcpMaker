@@ -5,6 +5,8 @@
  * JDB 
  */
 #include "TreeAnalyzer.h"
+ #include "RefMultCorrection.h"
+ using namespace jdb;
 
 /**
  * ROOT
@@ -47,6 +49,9 @@ protected:
 	ConfigRange *cutDca;
 
 	bool makeEventQA, makeTrackQA;
+
+	int correctedRefMult = -1;
+	RefMultCorrection *rmc;
 
 
 public:

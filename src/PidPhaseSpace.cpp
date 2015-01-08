@@ -65,6 +65,22 @@ PidPhaseSpace::PidPhaseSpace( XmlConfig* config, string np, string fl, string jp
 	 * Make charge bins
 	 */
 	binsCharge = new HistoBins( cfg, "binning.charge" );
+
+	/**
+	 * Make the refMultCorrection
+	 */
+	rmc = new RefMultCorrection( config->getString( np + "RMCParams" ) );
+	correctZ = cfg->getBool( np + "correctRefMult:zVertex" );
+ }
+
+ PidPhaseSpace::~PidPhaseSpace(){
+
+ 	/*delete psr;
+ 	delete binsPt;
+ 	delete binsEta;
+ 	delete binsCharge;
+ 	delete rmc;
+*/
  }
 
 void PidPhaseSpace::preEventLoop() {
@@ -81,7 +97,13 @@ void PidPhaseSpace::analyzeTrack( int iTrack ){
 
 	book->cd();
 
-	UInt_t refMult = pico->eventRefMult();
+	int refMult = pico->eventRefMult();
+	double vZ = pico->eventVertexZ();
+
+	//if ( correctZ ){
+	//	refMult = rmc->refMult( refMult, vZ );
+	//}
+
 	double pt = pico->trackPt( iTrack );
 	double p = pico->trackP( iTrack );
 	double eta = pico->trackEta( iTrack );
