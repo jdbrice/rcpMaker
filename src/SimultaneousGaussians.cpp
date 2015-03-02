@@ -18,7 +18,7 @@
 
 SimultaneousGaussians::SimultaneousGaussians( XmlConfig * config, string np ) : HistoAnalyzer( config, np ){
 	
-    // Initialize the Phase Space Recentering Object
+  	// Initialize the Phase Space Recentering Object
 	tofSigmaIdeal = cfg->getDouble( np+"PhaseSpaceRecentering.sigma:tof", 0.0012);
 	dedxSigmaIdeal = cfg->getDouble( np+"PhaseSpaceRecentering.sigma:dedx", 0.06);
 	psr = new PhaseSpaceRecentering( dedxSigmaIdeal,
@@ -40,6 +40,9 @@ SimultaneousGaussians::SimultaneousGaussians( XmlConfig * config, string np ) : 
 	sigmaRoi 	= 1.5;
 	roi 		= 4.5;
 
+	/**
+	 * Setup the PID Params
+	 */
 	vector<string> species = { "Pi", "K", "P" };
 	for ( int i = 0; i < species.size(); i++ ){
 
@@ -64,10 +67,78 @@ SimultaneousGaussians::~SimultaneousGaussians(){
 }
 
 
-//void 
+void SimultaneousGaussians::gateway() {
+
+	logger->info( __FUNCTION__ ) << endl;
+	vector<string> species = PidPhaseSpace::species;
+
+	for ( int i = 1; i < binsPt->nBins(); i++ ){
+
+		double avgP = ((*binsPt)[i] + (*binsPt)[i+1] ) / 2.0;
+
+		vector<double> tofMus = psr->centeredTofMeans( centerSpecies, avgP );
+		vector<double> dedxMus = psr->centeredDedxMeans( centerSpecies, avgP );
+		vector<double> tofSigmas;
+		vector<double> dedxSigmas;
+
+		for ( int iS = 0; iS < species.size(); iS ++ ){
+			tofSigmas.push_back( tofParams[ iS ]->sigma( avgP, psr->mass( species[ iS ] ), psr->mass( centerSpecies ) ) );
+			dedxSigmas.push_back( dedxParams[ iS ]->sigma( avgP ) );
+		}
+		
+		// get the histo paths
+		TH1D* tofAll = (TH1D*)inFile->Get( ("tof/" + PidPhaseSpace::tofName( centerSpecies, 0, "0to5", i, 0 )).c_str() );
+		TH1D* tofPi = (TH1D*)inFile->Get( ("tof/" + PidPhaseSpace::tofName( centerSpecies, 0, "0to5", i, 0, "Pi" )).c_str() );
+		TH1D* tofK = (TH1D*)inFile->Get( ("tof/" + PidPhaseSpace::tofName( centerSpecies, 0, "0to5", i, 0, "K" )).c_str() );
+		TH1D* tofP = (TH1D*)inFile->Get( ("tof/" + PidPhaseSpace::tofName( centerSpecies, 0, "0to5", i, 0, "P" )).c_str() );
+		
+		TH1D* dedxAll = (TH1D*)inFile->Get( ("dedx/" + PidPhaseSpace::dedxName( centerSpecies, 0, "0to5", i, 0 )).c_str() );
+		TH1D* dedxPi = (TH1D*)inFile->Get( ("dedx/" + PidPhaseSpace::dedxName( centerSpecies, 0, "0to5", i, 0, "Pi" )).c_str() );
+		TH1D* dedxK = (TH1D*)inFile->Get( ("dedx/" + PidPhaseSpace::dedxName( centerSpecies, 0, "0to5", i, 0, "K" )).c_str() );
+		TH1D* dedxP = (TH1D*)inFile->Get( ("dedx/" + PidPhaseSpace::dedxName( centerSpecies, 0, "0to5", i, 0, "P" )).c_str() );
+
+		reporter->newPage( 2, 2 );
+		gPad->SetLogy(1);
+		tofAll->Draw();
+		reporter->next();
+		gPad->SetLogy(1);
+		tofPi->Draw();
+		reporter->next();
+		gPad->SetLogy(1);
+		tofK->Draw();
+		reporter->next();
+		gPad->SetLogy(1);
+		tofP->Draw();
+		reporter->savePage();
+
+		reporter->newPage( 2, 2 );
+		gPad->SetLogy(1);
+		dedxAll->Draw();
+		reporter->next();
+		gPad->SetLogy(1);
+		dedxPi->Draw();
+		reporter->next();
+		gPad->SetLogy(1);
+		dedxK->Draw();
+		reporter->next();
+		gPad->SetLogy(1);
+		dedxP->Draw();
+		reporter->savePage();
+
+		simSingle( "Pi", avgP, tofPi, dedxPi, 3, 3);
+		
+	}
+
+}
+
+
+
 
 
 void SimultaneousGaussians::make(){
+
+	
+	return;
 
 	book->cd();
 	book->makeAll( nodePath + "histograms" );
@@ -310,6 +381,7 @@ SimultaneousGaussians::GaussianFitResult SimultaneousGaussians::fitSingleSpecies
 	RooRealVar x( "x", "x", x1, x2 );
 	RooDataHist * rdh = new RooDataHist( "data", "data", RooArgSet( x ), h  );
 
+
 	/**
 	 * Create the parameters and the gaussian
 	 */
@@ -331,6 +403,7 @@ SimultaneousGaussians::GaussianFitResult SimultaneousGaussians::fitSingleSpecies
 	/**
 	 * Report the data + gauss
 	 */
+	 
 	reporter->newPage();
 
 	RooPlot * frame = x.frame( Title( h->GetTitle() ) );
@@ -493,11 +566,11 @@ void SimultaneousGaussians::sim1( TH1D* tof, TH1D*dedx, double avgP, vector<doub
 
 void SimultaneousGaussians::simSingle( 	string soi, double avgP,	
 										TH1D* tof, TH1D*dedx, // histos
-										vector<double> iYields, double roiMu, double roiSig ) { 
+										double roiMu, double roiSig ) { 
 
 
 	using namespace RooFit;
-	RooMsgService::instance().setGlobalKillBelow(ERROR);
+	//RooMsgService::instance().setGlobalKillBelow(ERROR);
 
 	// get some histogram limits
 	double tx1 = tof->GetXaxis()->GetXmin();
@@ -559,7 +632,8 @@ void SimultaneousGaussians::simSingle( 	string soi, double avgP,
 	sig[0] = new RooRealVar( "tSig", "tSig", tSig, tSig /roiSig, roiSig * tSig );
 	sig[1] = new RooRealVar( "dSig", "dSig", dSig, dSig / roiSig, roiSig * dSig );
 
-	n = new RooRealVar( "tN", "tN", iYields[ iCS ] * 0.90, iYields[ iCS ] * .50, iYields[ iCS ] );
+	//n = new RooRealVar( "tN", "tN", iYields[ iCS ] * 0.90, iYields[ iCS ] * .50, iYields[ iCS ] );
+	n = new RooRealVar( "tN", "tN", 10000, 0, 100000000000 );
 
 	g[ 0 ] = new RooGaussian( "tG", "tG", x, *mu[0], *sig[0] );
 	g[ 1 ] = new RooGaussian( "dG", "dG", y, *mu[1], *sig[1] );
@@ -567,19 +641,26 @@ void SimultaneousGaussians::simSingle( 	string soi, double avgP,
 	eg[ 0 ] = new RooExtendPdf( "tEG", "tEG", *g[0], *n );
 	eg[ 1 ] = new RooExtendPdf( "dEG", "dEG", *g[1], *n );
 
+	simPdf.addPdf( *(eg[ 0 ]), "tof" );
+	simPdf.addPdf( *(eg[ 1 ]), "dedx" );
+
+	simPdf.fitTo( *rdh );
 
 	RooPlot * xFrame = x.frame( Title("#beta^{-1}") );
-	//RooPlot * yFrame = y.frame( Title("dE/dx") );
+	RooPlot * yFrame = y.frame( Title("dE/dx") );
 
-	rdh1->plotOn( xFrame );
-	eg[0]->plotOn( xFrame );
+	rdh->plotOn(xFrame, Cut("sample==sample::tof"));
+	simPdf.plotOn( xFrame, Slice(sample,"tof"), ProjWData(sample,*rdh) );
 
 	reporter->newPage(1, 2);
 	reporter->cd(1, 1);
 	xFrame->Draw();
 
 	reporter->cd(1, 2);
-	//yFrame->Draw();
+	
+	rdh->plotOn(xFrame, Cut("sample==sample::dedx"));
+	simPdf.plotOn( xFrame, Slice(sample,"dedx"), ProjWData(sample,*rdh) );
+	yFrame->Draw();
 
 	reporter->savePage();
 

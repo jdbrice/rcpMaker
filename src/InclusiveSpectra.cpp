@@ -2,6 +2,7 @@
 #include "InclusiveSpectra.h"
 #include "ChainLoader.h"
 #include "AnaPicoDst.h"
+#include "DataSourceWrapper.h"
 
 #include <limits.h>
 
@@ -14,7 +15,10 @@ InclusiveSpectra::InclusiveSpectra( XmlConfig * config, string np, string fileLi
 	/**
 	 * Make the desired PicoDataStore Interface
 	 */
-	pico = new AnaPicoDst( chain );
+	if (ds )
+		pico = new DataSourceWrapper( ds );
+	else 
+		pico = new AnaPicoDst( chain );
     /**
      * Setup the event cuts
      */
@@ -58,6 +62,7 @@ InclusiveSpectra::InclusiveSpectra( XmlConfig * config, string np, string fileLi
 	if ( cfg->exists(np + "RMCParams" ) )
 		rmc = new RefMultCorrection( config->getString( np + "RMCParams" ) );
 
+
 }
 /**
  * Destructor
@@ -90,6 +95,7 @@ void InclusiveSpectra::makeCentralityHistos() {
 	/**
 	 * Make centrality ptHistos
 	 */
+	book->cd();
 	for ( int iC = 0; iC < centrals.size(); iC ++ ){
 
 		string hName = histoForCentrality( centrals[ iC ] );
@@ -100,10 +106,13 @@ void InclusiveSpectra::makeCentralityHistos() {
 
 
 void InclusiveSpectra::preEventLoop(){
+	
 	TreeAnalyzer::preEventLoop();
 
+	book->cd();
 	makeCentralityHistos();
 
+	book->cd();
 	if ( cfg->exists( "QAHistograms.event" ) && makeEventQA ){
 		logger->info(__FUNCTION__) << " Making event QA histograms " << endl;
 		book->makeAll( "QAHistograms.event" );
@@ -119,7 +128,7 @@ void InclusiveSpectra::analyzeEvent(){
 
 	// get the corrected ref mult
 	if ( rmc )
-		correctedRefMult = rmc->refMult( pico->eventRefMult(), pico->eventVertexZ() );
+		correctedRefMult = rmc->refMult( pico->eventRefMult(), pico->vZ() );
 	else 
 		correctedRefMult = -1;
 
@@ -140,16 +149,18 @@ void InclusiveSpectra::analyzeTrack( Int_t iTrack ){
 
 	double pt = pico->trackPt( iTrack );
 	int charge = pico->trackCharge( iTrack );
+
+	//cout << "nHitsFit : " << ds->getInt("Tracks.mNHitsFit", iTrack) << endl; 
 	
 	Int_t refMult = pico->eventRefMult();
 	
 	if ( correctedRefMult >= 0 ){
-		if ( abs(pico->eventVertexZ()) > 20 )
-			cout << correctedRefMult << "co, old =  " << refMult << endl;
+		//if ( abs(pico->vZ()) > 20 )
+			//cout << correctedRefMult << "co, old =  " << refMult << endl;
 		refMult = correctedRefMult;
 	}
 	
-
+	book->cd();
 	book->fill( "ptAll", pt );
 	if ( 1 == charge )
 		book->fill( "ptPos", pt );
@@ -172,15 +183,16 @@ bool InclusiveSpectra::keepEvent(){
 
 	UShort_t refMult = pico->eventRefMult();
 	
-	double z = pico->eventVertexZ();
-	double x = pico->eventVertexX() + cutVertexROffset->x;
-	double y = pico->eventVertexY() + cutVertexROffset->y;
+	double z = pico->vZ();
+	double x = pico->vX() + cutVertexROffset->x;
+	double y = pico->vY() + cutVertexROffset->y;
 	double r = TMath::Sqrt( x*x + y*y );
 
 	/**
 	 * Pre Event Cut QA
 	 */
 	if ( makeEventQA  ) {
+		book->cd();
 		book->fill( "preRefMult", refMult );
 		book->fill( "preVertexZ", z);
 		book->fill( "preVertexR", r);
@@ -197,6 +209,7 @@ bool InclusiveSpectra::keepEvent(){
 	 * Post Event Cut QA
 	 */
 	if ( makeEventQA  ){
+		book->cd();
 		book->fill( "vertexZ", z);
 		book->fill( "vertexR", r);
 		book->fill( "refMult", refMult );
@@ -222,7 +235,8 @@ bool InclusiveSpectra::keepTrack( Int_t iTrack ){
 	double dcaX = pico->trackDcaX( iTrack );
 	double dcaY = pico->trackDcaY( iTrack );
 	double dcaZ = pico->trackDcaZ( iTrack );
-	double dca = TMath::Sqrt( dcaX*dcaX + dcaY*dcaY + dcaZ*dcaZ );
+	double dca = pico->trackDca( iTrack );
+	//TMath::Sqrt( dcaX*dcaX + dcaY*dcaY + dcaZ*dcaZ );
 
 	int tofMatch = pico->trackTofMatch( iTrack );
 	int nHits = pico->trackNHits( iTrack );
@@ -237,6 +251,7 @@ bool InclusiveSpectra::keepTrack( Int_t iTrack ){
 	 * Pre Track Cut QA
 	 */
 	if ( makeTrackQA ){
+		book->cd();
 		book->fill( "preTofMatch", tofMatch );
 		book->fill( "preYLocal", yLocal );
 		book->fill( "preDca", dca );
@@ -267,6 +282,7 @@ bool InclusiveSpectra::keepTrack( Int_t iTrack ){
 	 * Post Track Cut QA
 	 */
 	if ( makeTrackQA ){
+		book->cd();
 		book->fill( "tofMatch", tofMatch );
 		book->fill( "yLocal", yLocal );
 		book->fill( "dca", dca );

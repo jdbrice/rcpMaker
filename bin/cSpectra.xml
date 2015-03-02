@@ -26,17 +26,39 @@
 			<output url="rpInclusiveSpectra.pdf" />
 		</Reporter>	
 		
-		<input>
-			<dst treeName="tree" maxFiles="5" url="/Users/danielbrandenburg/bnl/local/data/BBCMB14_015/"/>
-		</input>
+		<!--<input>
+			<dst treeName="tree" maxFiles="75" url="/Users/danielbrandenburg/bnl/local/data/Run14/MB14_015/"/>
+		</input>-->
+		<DataSource treeName="PicoDst" url="/Users/danielbrandenburg/bnl/local/data/Run14/LBNL/" maxFiles="200">
+			
+			<!-- Set all branches off -->
+			<BranchStatus status="0">*</BranchStatus>
+			<!-- Turn on only the ones you need -->
+			<BranchStatus status="1">
+				Event*,
+				Track*
+			</BranchStatus>
+
+			<!-- Alias branches -->
+			<Alias name="vX" pointsTo="Event.mPrimaryVertex.mX1" />
+			<Alias name="vZ" pointsTo="Event.mPrimaryVertex.mX3" />
+			<Alias name="vertexX" pointsTo="vX" />
+
+			<!-- Make evaluated leaves to provide variables at runtime -->
+			<EvaluatedLeaf name="vY" value="[0] + 0.9" p0="Event.mPrimaryVertex.mX2" />
+			<EvaluatedLeaf name="vR" value="TMath::Sqrt( [0]*[0] + [1]*[1] )" p0="vX" p1="vY" />
+			<EvaluatedLeaf name="vR2" value="[0]*[0] + [1]*[1]" p0="vX" p1="vY" />
+			
+		</DataSource>
+
 
 		<output>
 			<data>inclusiveSpectra.root</data>
 		</output>
 
 		<centrality>
-			<0to5 min="228" max="500" />
-			<60to80 min="14" max="37" />
+			<0to5 min="239" max="500" />
+			<60to80 min="5" max="16" />
 		</centrality>
 
 		<makeQA event="true" track="true" />
@@ -52,11 +74,11 @@
 		</histograms>
 
 		<eventCuts>
-			<vertexZ min="-40" max="40" />
+			<vertexZ min="-75" max="75" />
 			<vertexR min="0.0" max="1.0" />
 			<vertexROffset x="0" y="0.86" />
 
-			<triggers>440005, 440015</triggers>
+			
 		</eventCuts>
 		<trackCuts>
 			<dca min="0" max="1.0" />

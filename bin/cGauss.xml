@@ -1,54 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
 
-	<jobType>SimultaneousGaussians</jobType>
-	<Logger>
-		<logLevel>warning</logLevel>
-	</Logger>
+	<jobType>SimultaneousPid</jobType>
 
-	<binning hide="true" >
-
-		<pt width="0.05" min="0.2" max="4.0" />
-		<eta>0.0, 0.2 </eta>
-		<charge> -0.5, 0.5 </charge>
-
-		<tof width="0.0012" min="-2" max="2" />
-		<dedx width="0.006" min="-2" max="2" />
-
-		<padding tof=".15" dedx=".15" tofScale="0.05" dedxScale="0.05" />
-
-	</binning>
-
-	<SimultaneousGaussians>
-		<Logger>
-			<logLevel>info</logLevel>
-		</Logger>	
+	<SimultaneousPid>
 		
-		<input>
-			<data url="/Users/danielbrandenburg/bnl/local/data/pidPSOct29.root"/>
-		</input>
 
-		<output>
-			<data>simGauss.root</data>
-			<report>rpSimGauss.pdf</report>
-		</output>
 
-		<Bichsel>
-			<table>dedxBichsel.root</table>
-			<method>0</method>
-		</Bichsel>
-		
-		<PhaseSpaceRecentering>
-			<centerSpecies>K</centerSpecies>
-			<sigma tof="0.0115" dedx="0.033"/>
-			<method>nonlinear</method>
-		</PhaseSpaceRecentering>
+
 
 		<histograms>
-			<mean title="Mean For Species; p_{T} [GeV]" xBins="binning.pt" />
-			<sigma title="Sigma For Species; p_{T} [GeV]" xBins="binning.pt" />
-
-			<yield title="yield" xBins="binning.pt" />
 		</histograms>
 
 		<TofPidParams>
@@ -77,6 +38,44 @@
 			</P>
 		</DedxPidParams>
 
-	</SimultaneousGaussians>
+		<Logger>
+			<logLevel>info</logLevel>
+		</Logger>	
+		<Reporter>
+			<output url="rpSimGauss.pdf" />
+		</Reporter>	
+		<input>
+			<data url="/Users/danielbrandenburg/bnl/local/data/Run14/pidPSOct29.root"/>
+		</input>
+
+		<output>
+			<data>simGauss.root</data>
+		</output>
+
+		<Bichsel>
+			<table>dedxBichsel.root</table>
+			<method>0</method>
+		</Bichsel>
+		
+		<PhaseSpaceRecentering>
+			<centerSpecies>K</centerSpecies>
+			<sigma tof="0.0115" dedx="0.033"/>
+			<method>nonlinear</method>
+		</PhaseSpaceRecentering>
+
+	</SimultaneousPid>
+
+	<binning hide="true" >
+
+		<pt width="0.05" min="0.2" max="4.0" />
+		<eta>0.0, 0.2 </eta>
+		<charge> -0.5, 0.5 </charge>
+
+		<tof width="0.0012" min="-2" max="2" />
+		<dedx width="0.006" min="-2" max="2" />
+
+		<padding tof=".15" dedx=".15" tofScale="0.05" dedxScale="0.05" />
+
+	</binning>
 
 </config>

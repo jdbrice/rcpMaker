@@ -14,8 +14,8 @@ void rcpFromSpectra( string fname = "inclusiveSpectra.root", string bName = "pt_
 
 	c->Divide( 2, 1 );
 	c->cd(1 );
-	central->Scale( 19 );
-	per->Scale( 790 );
+	central->Scale( 25 );
+	per->Scale( 275 );
 
 	per->SetTitle( "0%-5% (Blue), 60%-80% (Red)" );
 	per->Sumw2();

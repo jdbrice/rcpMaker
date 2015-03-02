@@ -25,14 +25,14 @@
 
 	<PidPhaseSpace>
 		<Logger>
-			<logLevel>info</logLevel>
+			<logLevel>warning</logLevel>
 		</Logger>
 		<Reporter>
-			<output>ps/rp.pdf</output>
+			<output url="ps/rp.pdf"/>
 		</Reporter>	
 		
 		<input>
-			<dst treeName="tree" maxFiles="1" url="/Users/danielbrandenburg/bnl/local/data/BBCMB14_015/" nEvents="10000"/>
+			<dst treeName="tree" maxFiles="10" url="/Users/danielbrandenburg/bnl/local/data/Run14/MB14_015/" />
 		</input>
 
 		<output>
@@ -45,7 +45,7 @@
 		</Bichsel>
 
 		<RMCParams>StRMCParams.xml</RMCParams>
-		<correctRefMult zVertex="true" mcg="false" />
+		<correctRefMult zVertex="false" mcg="false" />
 
 		<centrality>
 			<all min="0" max="450" />
@@ -76,25 +76,25 @@
 			<nHits min="15" />
 			<nHitsDedx min="10"  />
 			<nHitsFitOverPossible min="0.52" />
-			<yLocal min="-1.8" max="1.8" />
+			<yLocal min="-10000" max="1000000" />
 		</trackCuts>
 
-		<makeQA event="false" track="false"/>
+		<makeQA event="true" track="true"/>
 		<makePhaseSpace 2D="false" enhanced="true" /> 
 		<histograms >
 
-			<betaRaw title="#beta^{-1}" xBins="binning.pt" yBins="binning.tofRaw" />
+			<Histo name="betaRaw" title="#beta^{-1}" xBins="binning.pt" yBins="binning.tofRaw" />
 
-			<trBeta title="" xBins="binning.pt" yBins="binning.tof" />
-			<nlBeta title="" xBins="binning.pt" yBins="binning.tof"/>
+			<Histo name="trBeta" title="" xBins="binning.pt" yBins="binning.tof" />
+			<Histo name="nlBeta" title="" xBins="binning.pt" yBins="binning.tof"/>
 
-			<dedxRaw title="dEdx" xBins="binning.pt" yBins="binning.dedxRaw" />
+			<Histo name="dedxRaw" title="dEdx" xBins="binning.pt" yBins="binning.dedxRaw" />
 
-			<trDedx title="" xBins="binning.pt" yBins="binning.dedx" />
-			<nlDedx title="" xBins="binning.pt" yBins="binning.dedx"/>
+			<Histo name="trDedx" title="" xBins="binning.pt" yBins="binning.dedx" />
+			<Histo name="nlDedx" title="" xBins="binning.pt" yBins="binning.dedx"/>
 
 
-			<eta type="1D" title="eta" nBinsX="200" minX="-2" maxX="2" />
+			<Histo name="eta" type="1D" title="eta" nBinsX="200" minX="-2" maxX="2" />
 
 
 		</histograms>

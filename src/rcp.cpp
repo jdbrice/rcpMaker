@@ -3,13 +3,15 @@
 #include "XmlConfig.h"
 using namespace jdb;
 
+#include "DataSourceWrapper.h"
+
 
 #include <iostream>
 #include "InclusiveSpectra.h"
 #include "ParamSpectra.h"
 #include "PidPhaseSpace.h"
 #include "PidParamMaker.h"
-#include "SimultaneousGaussians.h"
+#include "SimultaneousPid.h"
 
 #include <exception>
 
@@ -38,17 +40,29 @@ int main( int argc, char* argv[] ) {
 				ParamSpectra ps( &config, "ParamSpectra.", fileList, jobPrefix );
 				ps.make();
 			} else if ( "PidPhaseSpace" == job ){
-				//PidPhaseSpace pps( &config, "PidPhaseSpace.", fileList, jobPrefix  );
-				//pps.make();
+				PidPhaseSpace pps( &config, "PidPhaseSpace.", fileList, jobPrefix  );
+				pps.make();
 				//TreeAnalyzer ta( &config, "PidPhaseSpace.", fileList, jobPrefix  );
 				//ta.make();
 			} else if ( "MakePidParams" == job ){
 				PidParamMaker ppm( &config, "PidParamMaker." );
 				ppm.make();
-			} else if ( "SimultaneousGaussians" == job ){
-				SimultaneousGaussians sg( &config, "SimultaneousGaussians." );
+			} else if ( "SimultaneousPid" == job ){
+				SimultaneousPid sg( &config, "SimultaneousPid." );
 				sg.make();
-				//sg.make2();
+			} else if ( "test" == job ){
+				//TreeAnalyzer ta( &config, "" );
+				DataSource * ds = new DataSource( &config, "DataSource" );
+				DataSourceWrapper dsw(ds );
+
+				for ( int i = 0; i < 100; i++  ){
+					dsw.GetEntry(i);
+					cout << "#Tracks  " << dsw.eventNumTracks() << endl;;
+					for ( int j = 0; j < dsw.eventNumTracks(); j++ ){
+						if ( dsw.trackTofMatch( j ) )
+							cout << "beta " << dsw.trackBeta( j ) << endl;
+					}
+				}
 			}
 
 		} catch ( exception &e ){

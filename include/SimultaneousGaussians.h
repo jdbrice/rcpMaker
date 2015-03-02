@@ -59,6 +59,8 @@ public:
 		double sigma, sigmaError;
 	};
 
+	void gateway();
+
 protected:
 
 	GaussianFitResult fitThreeSpecies( TH1D* h, vector<double> x1, vector<double> x2 );
@@ -68,7 +70,9 @@ protected:
 	
 	void sim1( TH1D* tof, TH1D*dedx, double avgP, vector<double> iYields );
 
-	void simSingle(string soi, double avgP, TH1D* tof, TH1D*dedx, vector<double> iYields, double roiMu, double sigRoi );
+	void simSingle(string soi, double avgP, TH1D* tof, TH1D*dedx, double roiMu, double sigRoi );
+
+	
 
 };
 

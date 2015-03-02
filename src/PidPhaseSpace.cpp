@@ -85,8 +85,13 @@ PidPhaseSpace::PidPhaseSpace( XmlConfig* config, string np, string fl, string jp
 
 void PidPhaseSpace::preEventLoop() {
 	logger->info(__FUNCTION__) << endl;
+	
+	book->cd();
+	InclusiveSpectra::preEventLoop();
+
 	book->cd();
 	preparePhaseSpaceHistograms( centerSpecies );
+	
 }
 
 void PidPhaseSpace::postEventLoop() {
@@ -98,7 +103,7 @@ void PidPhaseSpace::analyzeTrack( int iTrack ){
 	book->cd();
 
 	int refMult = pico->eventRefMult();
-	double vZ = pico->eventVertexZ();
+	double vZ = pico->vZ();
 
 	//if ( correctZ ){
 	//	refMult = rmc->refMult( refMult, vZ );

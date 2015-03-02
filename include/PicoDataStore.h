@@ -32,9 +32,10 @@ public:
 	virtual Int_t trackTofMatch( Int_t iHit ){ return 0; }
 
 
-	virtual Double_t eventVertexX(  ){ return -999; }
-	virtual Double_t eventVertexY(  ){ return -999; }
-	virtual Double_t eventVertexZ(  ){ return -999; }
+	virtual Double_t vX(  ){ return -999; }
+	virtual Double_t vY(  ){ return -999; }
+	virtual Double_t vZ(  ){ return -999; }
+	virtual Double_t vR(  ){ return -999; }
 
 	virtual Double_t trackDcaX( Int_t iHit ){ return -999; }
 	virtual Double_t trackDcaY( Int_t iHit ){ return -999; }
