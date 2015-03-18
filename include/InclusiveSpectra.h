@@ -16,6 +16,8 @@
 /**
  * STD
  */
+#include <memory>
+#include <vector>
 
 /**
  * Local
@@ -26,32 +28,56 @@ class InclusiveSpectra : public TreeAnalyzer
 {
 protected:
 
-	PicoDataStore * pico;
+	unique_ptr<PicoDataStore> pico;
+
+	/**
+	 * Common configs
+	 */
+	unique_ptr<XmlConfig> qaCfg;
+	unique_ptr<XmlConfig> cutsCfg;
 	
 	/**
 	 * Event cuts
 	 */
-	ConfigRange *cutVertexZ;
-	ConfigRange *cutVertexR;
-	ConfigPoint *cutVertexROffset;
-	ConfigRange *cutTofMatch;
-	vector<int> cutTriggers;
-	vector<string> centrals;
-	map< string, ConfigRange* > cutCentrality;
-
+	unique_ptr<ConfigRange> cutVertexZ;
+	unique_ptr<ConfigRange> cutVertexR;
+	unique_ptr<ConfigPoint> cutVertexROffset;
+	unique_ptr<ConfigRange> cutNTofMatchedTracks;
+	vector<int> triggerMasks;
+	
 	/**
 	 * Track Cuts
 	 */
-	ConfigRange *cutYLocal;
-	ConfigRange *cutNHits;
-	ConfigRange *cutNHitsDedx;
-	ConfigRange *cutNHitsFitOverPossible;
-	ConfigRange *cutDca;
+	unique_ptr<ConfigRange> cutNHitsFit;
+	unique_ptr<ConfigRange> cutDca;
+	unique_ptr<ConfigRange> cutNHitsFitOverPossible;
+	unique_ptr<ConfigRange> cutNHitsDedx;
+	unique_ptr<ConfigRange> cutPt;
+	unique_ptr<ConfigRange> cutPtGlobalOverPrimary;
+	unique_ptr<ConfigRange> cutYLocal;
+	unique_ptr<ConfigRange> cutZLocal;
 
+
+	map<int, int> centralityBinMap;
+
+	/**
+	 * Make QA
+	 */
 	bool makeEventQA, makeTrackQA;
 
-	int correctedRefMult = -1;
-	RefMultCorrection *rmc;
+	/**
+	 * RefMult Correction
+	 */	
+	unique_ptr<RefMultCorrection> rmc;
+
+	/**
+	 * Current Event Info
+	 */
+	int refMult = -1;
+	int cBin;
+
+
+
 
 
 public:
@@ -64,6 +90,35 @@ protected:
 	 * Makes pt histograms for each centrality
 	 */
 	virtual void makeCentralityHistos();
+	virtual int centralityBin( int refMult ) {
+		if ( rmc ){
+			int bin9 = rmc->bin9( refMult);
+			//if ( bin9 > 8 || bin9 < 0 )
+			//	return -1;
+			map<int, int>::iterator mit = centralityBinMap.find( bin9 );
+			if ( mit != centralityBinMap.end() )
+				return centralityBinMap[ rmc->bin9( refMult) ];
+		}
+		
+		return -1;
+	}
+	int nCentralityBins(){
+		
+		bool found[ 10 ];
+		for ( int i = 0; i < 10; i++ )
+			found[ i ] = false;
+		for ( map<int, int>::iterator mit = centralityBinMap.begin(); mit != centralityBinMap.end(); mit++){
+			found[ mit->second ] = true;
+
+		}
+		int n = 0;
+		for ( int i = 0; i < 10; i++ ){
+			if ( found[ i ] )
+				n++;
+		}
+		return n;
+	}
+
 	virtual string histoForCentrality( string centralityCut ){
 		return ("pt_" + centralityCut );
 	}

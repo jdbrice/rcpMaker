@@ -1,0 +1,53 @@
+
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<QAHistograms>
+	<Event>
+		<Histo name="eventCuts" title="eventCuts" nBinsX="6" minX="0" maxX="6" />
+		<refMult title="Centrality Selection; refMult; #"   nBinsX="400" minX="0" maxX="400"/>
+		<refMultBins title="Centrality Selection; refMult Bin; #"   nBinsX="10" minX="-0.5" maxX="9.5"/>
+		<mappedRefMultBins title="Mapped Centrality Selection; refMult Bin; #"   nBinsX="10" minX="-0.5" maxX="9.5"/>
+		<vertexZ title="Z Vertex" widthX="1" minX="-200" maxX="200" />
+		<vertexR title="#sigma" nBinsX="200" minX="0" maxX="10" />
+		<nTofMatch title="nTofMatch; refMult; #"   nBinsX="400" minX="0" maxX="400"/>
+
+		<preVertexZ title="Z Vertex" widthX="1" minX="-200" maxX="200" />
+		<preVertexR title="#sigma" nBinsX="200" minX="0" maxX="10" />
+		<preRefMult title="Centrality Selection; refMult; #"   nBinsX="400" minX="0" maxX="400"/>
+		<preNTofMatch title="nTofMatch; refMult; #"   nBinsX="400" minX="0" maxX="400"/>
+	</Event>
+
+
+	<Track>
+		<Histo name="trackCuts" title="trackCuts" nBinsX="10" minX="0" maxX="10" />
+
+		<nHitsFit title="# Hits Fit / Possible" nBinsX="100" minX="0" maxX="100" />
+		<dca title="DCA" nBinsX="500" minX="0" maxX="10" />
+		<nHitsFitOverPossible title="# Hits Fit / Possible" widthX="0.01" minX="0" maxX="1" />
+		<nHitsPossible title="# Hits Fit / Possible" nBinsX="100" minX="0" maxX="100" />
+		<nHitsFitVsPossible title="# Hits Fit vs. # Hits Possible" nBinsX="100" minX="0" maxX="100" nBinsY="100" minY="0" maxY="100" />
+		<nHitsDedx title="# Hits dEdx" nBinsX="100" minX="0" maxX="100" />
+		<ptPrimary title="ptPrimary" widthX=".1" minX="0.0" maxX="5.0" />
+		<ptGlobal title="ptGlobal" widthX=".1" minX="0.0" maxX="5.0" />
+		<ptGlobalVsPrimary title="ptGlobal / ptPrimary; ptPrimary; ptGlobal" widthX=".1" minX="0.0" maxX="5.0" widthY=".1" minY="0.0" maxY="5.0"/>
+		<ptGlobalOverPrimary title="ptGlobal / ptPrimary" widthX="0.01" minX="0" maxX="2" />
+		<yLocal title="yLocal" widthX=".1" minX="-2" maxX="2" />
+		<zLocal title="zLocal" widthX=".1" minX="-3" maxX="3" />
+
+		
+		<preDca title="DCA" nBinsX="500" minX="0" maxX="10" />
+		<preNHitsDedx title="# Hits dEdx" nBinsX="100" minX="0" maxX="100" />
+		<preNHitsFit title="# Hits Fit / Possible" nBinsX="100" minX="0" maxX="100" />
+		<preNHitsPossible title="# Hits Fit / Possible" nBinsX="100" minX="0" maxX="100" />
+		<preNHitsFitOverPossible title="# Hits Fit / Possible" widthX="0.01" minX="0" maxX="1" />	
+		<preNHitsFitVsPossible title="# Hits Fit vs. # Hits Possible; # HitsFit; # HitsPossilbe" nBinsX="100" minX="0" maxX="100" nBinsY="100" minY="0" maxY="100" />
+		<prePtPrimary title="ptPrimary" widthX=".1" minX="0.0" maxX="5.0" />
+		<prePtGlobal title="ptGlobal" widthX=".1" minX="0.0" maxX="5.0" />
+		<prePtGlobalVsPrimary title="ptGlobal / ptPrimary; ptPrimary; ptGlobal" widthX=".1" minX="0.0" maxX="5.0" widthY=".1" minY="0.0" maxY="5.0"/>
+		<prePtGlobalOverPrimary title="ptGlobal / ptPrimary" widthX="0.01" minX="0" maxX="2" />
+		<preYLocal title="yLocal" widthX=".1" minX="-2" maxX="2" />
+		<preZLocal title="zLocal" widthX=".1" minX="-3" maxX="3" />
+	</Track>
+
+</QAHistograms>

@@ -31,8 +31,9 @@ public:
 
 		species = { "Pi", "K", "P" };
 
-		piMass = 0.1395702;		//
-		kaonMass = 0.493667;	//
+		// in GeV / c^2
+		piMass = 0.1395702;
+		kaonMass = 0.493667;
 		protonMass = 0.9382721;
 	}
 	~PhaseSpaceRecentering(){
@@ -218,16 +219,18 @@ public:
 		// mean for this species
 		//const double mu =  tofGen->mean( p, mass( centerSpecies ) );
 		const double muAvg =  tofGen->mean( avgP, mass( centerSpecies ) );
-
+		
 		double n1 = 0;
 		double d1 = 0;
 
 		for ( int i = 0; i < species.size(); i++ ){
-
+			
 			double iMu =  tofGen->mean( p, mass( species[ i ] ) ) ;
 			double iMuAvg =  tofGen->mean( avgP, mass( species[ i ] ) ) ;
 			
+			
 			double iL = lh( tof, iMu, sigma );
+			
 			
 			double w = tof + iMuAvg - iMu;
 			
@@ -241,17 +244,17 @@ public:
 		}
 		
 		double nTof = (n1/d1) - ( muAvg );
-
+		
 		return nTof;
 
 	}
 
-	/**
-	 * Likelihood function
+	/* Likelihood function
+	 * 
 	 * A gauss around the expected value with expected sigma
-	 * @param  x     measured value
-	 * @param  mu    expected mean
-	 * @param  sigma expected sigma
+	 * @x     measured value
+	 * @mu    expected mean
+	 * @sigma expected sigma
 	 * @return       the unnormalized likelihood
 	 */
 	static double lh( double x, double mu, double sigma ){

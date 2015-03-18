@@ -2,7 +2,7 @@
 #include "InclusiveSpectra.h"
 #include "ChainLoader.h"
 #include "AnaPicoDst.h"
-#include "DataSourceWrapper.h"
+#include "LBNLPicoDst.h"
 
 #include <limits.h>
 
@@ -15,52 +15,70 @@ InclusiveSpectra::InclusiveSpectra( XmlConfig * config, string np, string fileLi
 	/**
 	 * Make the desired PicoDataStore Interface
 	 */
-	if (ds )
-		pico = new DataSourceWrapper( ds );
-	else 
-		pico = new AnaPicoDst( chain );
-    /**
-     * Setup the event cuts
-     */
-    cutVertexZ = new ConfigRange( cfg, np + "eventCuts.vertexZ", -200, 200 );
-    cutVertexR = new ConfigRange( cfg, np + "eventCuts.vertexR", 0, 10 );
-    cutVertexROffset = new ConfigPoint( cfg, np + "eventCuts.vertexROffset", 0.0, 0.0 );
+	if ( ds )
+		pico = unique_ptr<PicoDataStore>( new LBNLPicoDst( ds ) );
+	//else 
+	//	pico = new AnaPicoDst( chain );
+
+	/**
+	 * Load in the common configs
+	 */
+	if ( cfg->exists( np + "MakeQA:config" ) )
+		qaCfg = unique_ptr<XmlConfig>(new XmlConfig( cfg->getString( np + "MakeQA:config" ) ) );
+	if ( cfg->exists( np + "Cuts:config" ) )
+		cutsCfg = unique_ptr<XmlConfig>(new XmlConfig( cfg->getString( np + "Cuts:config" ) ) );
+	if ( cfg->exists( np + "RMCParams:config" ) )
+		rmc = unique_ptr<RefMultCorrection> (new RefMultCorrection( config->getString( np + "RMCParams:config" ) ) );
+
+
+	/**
+	 * Event and Track Cuts
+	 */
+    // Events
+    triggerMasks 			= cutsCfg->getIntVector( "EventCuts.triggerMasks" );
+    cutVertexZ 				= unique_ptr<ConfigRange>(new ConfigRange( cutsCfg.get(), "EventCuts.vertexZ", 				-200, 	200 ) );
+    cutVertexR 				= unique_ptr<ConfigRange>(new ConfigRange( cutsCfg.get(), "EventCuts.vertexR", 				0, 		10 ) );
+    cutVertexROffset 		= unique_ptr<ConfigPoint>(new ConfigPoint( cutsCfg.get(), "EventCuts.vertexROffset", 		0.0, 	0.0 )  );
+    cutNTofMatchedTracks 	= unique_ptr<ConfigRange>(new ConfigRange( cutsCfg.get(), "EventCuts.nTofMatchedTracks", 	2, 		1000 ) );
+    // Tracks
+    cutNHitsFit				= unique_ptr<ConfigRange>(new ConfigRange( cutsCfg.get(), "TrackCuts.nHitsFit", 			0, 		INT_MAX ) );
+    cutDca 					= unique_ptr<ConfigRange>(new ConfigRange( cutsCfg.get(), "TrackCuts.dca", 					0, 		INT_MAX ) );
+	cutNHitsFitOverPossible = unique_ptr<ConfigRange>(new ConfigRange( cutsCfg.get(), "TrackCuts.nHitsFitOverPossible", 0, 		INT_MAX ) );
+    cutNHitsDedx 			= unique_ptr<ConfigRange>(new ConfigRange( cutsCfg.get(), "TrackCuts.nHitsDedx", 			0, 		INT_MAX ) );
+    cutPt 					= unique_ptr<ConfigRange>(new ConfigRange( cutsCfg.get(), "TrackCuts.pt", 					0, 		INT_MAX ) );
+    cutPtGlobalOverPrimary 	= unique_ptr<ConfigRange>(new ConfigRange( cutsCfg.get(), "TrackCuts.ptGlobalOverPrimary", 	0.7, 	1.42 ) );
+    cutYLocal 				= unique_ptr<ConfigRange>(new ConfigRange( cutsCfg.get(), "TrackCuts.yLocal", 				-1.6, 	1.6 ) );
+    cutZLocal 				= unique_ptr<ConfigRange>(new ConfigRange( cutsCfg.get(), "TrackCuts.zLocal", 				-2.8, 	2.8 ) );
+
+
+
 
    	/**
    	 * Setup the centrality bins
    	 */
-    vector<string> centralPaths = cfg->childrenOf( np + "centrality" );
-    for ( int iC = 0; iC < centralPaths.size(); iC++ ){
-    	
-    	centrals.push_back( cfg->tagName( centralPaths[ iC ] ) );
-    	ConfigRange * cut = new ConfigRange( cfg, centralPaths[ iC ] );
-    	cutCentrality[ centrals[ iC ] ] = cut;
-    	
-    	logger->info(__FUNCTION__) << "Centrality Cut " << centrals[iC] << " ( " << cut->min << ", " << cut->max <<" )" << endl;
-    }
+   	logger->info( __FUNCTION__ ) << "Loading Centrality Map" << endl; 
+    centralityBinMap = cfg->getIntMap( np + "CentralityMap" );
+    
 
-    /**
-     * Setup the Track Cuts
-     */
-    cutNHits = new ConfigRange( cfg, np + "trackCuts.nHits", 0, INT_MAX );
-    cutNHitsDedx = new ConfigRange( cfg, np + "trackCuts.nHitsDedx", 0, INT_MAX );
-    cutNHitsFitOverPossible = new ConfigRange( cfg, np + "trackCuts.nHitsFitOverPossible", 0, INT_MAX );
-    cutDca = new ConfigRange( cfg, np + "trackCuts.dca", 0, INT_MAX );
-    cutYLocal = new ConfigRange( cfg, np + "trackCuts.yLocal", -1000, 1000 );
-    cutTofMatch = new ConfigRange( cfg, np + "trackCuts.tofMatch", 0, 3 );
-
+    
     /**
      * Setup the options
      */
-    makeEventQA = cfg->getBool( np + "makeQA:event", false );
-    makeTrackQA = cfg->getBool( np + "makeQA:track", false );
+    if ( qaCfg ){
+    	logger->info(__FUNCTION__) << "GOT QA CONFIG " << endl;
+	    makeEventQA = cfg->getBool( np + "MakeQA:event", false );
+	    makeTrackQA = cfg->getBool( np + "MakeQA:track", false );
+    } else {
+    	makeEventQA = false;
+    	makeTrackQA = false;
+    }
     if ( makeEventQA )
 	    logger->info( __FUNCTION__ ) << "Making Event QA" << endl;
 	if( makeTrackQA )
 	    logger->info( __FUNCTION__ ) << "Making Track QA" << endl;
 
-	if ( cfg->exists(np + "RMCParams" ) )
-		rmc = new RefMultCorrection( config->getString( np + "RMCParams" ) );
+
+	
 
 
 }
@@ -68,25 +86,7 @@ InclusiveSpectra::InclusiveSpectra( XmlConfig * config, string np, string fileLi
  * Destructor
  */
 InclusiveSpectra::~InclusiveSpectra(){
-
-	// delete the config cuts
-	delete cutVertexZ;
-	delete cutVertexR;
-	delete cutVertexROffset;
-
-	delete cutNHits;
-	delete cutNHitsDedx;
-	delete cutNHitsFitOverPossible;
-
-	delete cutDca;
-	delete cutYLocal;
-	delete cutTofMatch;
-
-	for ( int iC = 0; iC < centrals.size(); iC++ ){
-		delete cutCentrality[ centrals[ iC ] ];
-	}
-
-	delete rmc;
+	
 }
 
 
@@ -96,11 +96,15 @@ void InclusiveSpectra::makeCentralityHistos() {
 	 * Make centrality ptHistos
 	 */
 	book->cd();
-	for ( int iC = 0; iC < centrals.size(); iC ++ ){
-
-		string hName = histoForCentrality( centrals[ iC ] );
+	logger->info(__FUNCTION__) << "Making " << nCentralityBins() << " centralities" << endl; 
+	for ( int iC = 0; iC < nCentralityBins(); iC ++ ){
+		string hName = "pt_" + ts(iC);
 		logger->info( __FUNCTION__ ) << hName << endl;
 		book->clone( "ptBase", hName );
+	}
+	for ( int iB = 0; iB < 11; iB++ ){
+		if( centralityBinMap.find( iB ) != centralityBinMap.end() )
+			logger->info( __FUNCTION__ ) << "[" << iB << "] = " << centralityBinMap[ iB ] << endl;
 	}
 }
 
@@ -112,27 +116,39 @@ void InclusiveSpectra::preEventLoop(){
 	book->cd();
 	makeCentralityHistos();
 
-	book->cd();
-	if ( cfg->exists( "QAHistograms.event" ) && makeEventQA ){
+	
+	if ( qaCfg->exists( "Event" ) && makeEventQA ){
+		book->cd("EventQA");
 		logger->info(__FUNCTION__) << " Making event QA histograms " << endl;
-		book->makeAll( "QAHistograms.event" );
+		book->makeAll( qaCfg.get(), "Event" );
 	} 
-	if ( cfg->exists( "QAHistograms.track" ) && makeTrackQA ){
+	if ( qaCfg->exists( "Track" ) && makeTrackQA ){
+		book->cd("TrackQA");
 		logger->info(__FUNCTION__) << " Making track QA histograms " << endl;
-		book->makeAll( "QAHistograms.track" );
+		book->makeAll( qaCfg.get(), "Track" );
 	}
 }
 
 
 void InclusiveSpectra::analyzeEvent(){
 
+	// give the event vars a default
+	refMult = -1;
+	cBin = -1;
+
 	// get the corrected ref mult
 	if ( rmc )
-		correctedRefMult = rmc->refMult( pico->eventRefMult(), pico->vZ() );
+		refMult = rmc->refMult( pico->refMult(), pico->vZ() );
 	else 
-		correctedRefMult = -1;
+		refMult = -1;
+	
+	//logger->info(__FUNCTION__) << "bin9 " << rmc->bin9(refMult ) << endl;
+	cBin = centralityBin( refMult );
+	//logger->info(__FUNCTION__) << "cBin " << cBin << endl;
+	
+	
 
-	Int_t nTracks = pico->eventNumTracks();
+	Int_t nTracks = pico->numTracks();
 
 	for ( Int_t iTrack = 0; iTrack < nTracks; iTrack ++ ){
 
@@ -149,70 +165,91 @@ void InclusiveSpectra::analyzeTrack( Int_t iTrack ){
 
 	double pt = pico->trackPt( iTrack );
 	int charge = pico->trackCharge( iTrack );
-
-	//cout << "nHitsFit : " << ds->getInt("Tracks.mNHitsFit", iTrack) << endl; 
-	
-	Int_t refMult = pico->eventRefMult();
-	
-	if ( correctedRefMult >= 0 ){
-		//if ( abs(pico->vZ()) > 20 )
-			//cout << correctedRefMult << "co, old =  " << refMult << endl;
-		refMult = correctedRefMult;
-	}
-	
+	 
 	book->cd();
 	book->fill( "ptAll", pt );
 	if ( 1 == charge )
 		book->fill( "ptPos", pt );
 	else if ( -1 == charge  )
 		book->fill( "ptNeg", pt );
-	/**
-	 * Centrality cuts
-	 */
-	 for ( int iC = 0; iC < centrals.size(); iC++ ){
-	 	string cent = centrals[ iC ];
-	 	string hName = histoForCentrality( cent );
-	 	if ( 	refMult >= cutCentrality[ cent ]->min && refMult <= cutCentrality[ cent ]->max ){
-	 		book->fill( hName, pt );
-	 	}
-	 }
+	
+	if ( cBin >= 0 ){
+		string cName = "pt_" + ts( cBin );
+		book->fill( cName, pt );		
+	}
 	
 }
 
 bool InclusiveSpectra::keepEvent(){
 
-	UShort_t refMult = pico->eventRefMult();
+
+	if ( makeEventQA ){
+		book->cd( "EventQA" );
+		book->get( "eventCuts" )->Fill( "All", 1 );
+	}
+
+	/**
+	 * Trigger Selection
+	 */
+	bool foundTrigger = false;
+	uint tword = pico->triggerWord();
+	for ( int i = 0; i < triggerMasks.size(); i++ ){
+		if ( tword & triggerMasks[ i ] ){
+			foundTrigger = true;
+			break;
+		}
+	}
+	if ( !foundTrigger )
+		return false;
+	if ( makeEventQA )
+		book->get( "eventCuts" )->Fill( "Triggered", 1 );
+
+
+	UShort_t refMult = pico->refMult();
 	
 	double z = pico->vZ();
 	double x = pico->vX() + cutVertexROffset->x;
 	double y = pico->vY() + cutVertexROffset->y;
 	double r = TMath::Sqrt( x*x + y*y );
 
+	int nTofMatchedTracks = pico->numTofMatchedTracks();
+
+
 	/**
 	 * Pre Event Cut QA
 	 */
 	if ( makeEventQA  ) {
-		book->cd();
 		book->fill( "preRefMult", refMult );
+		book->fill( "preNTofMatch", nTofMatchedTracks );
 		book->fill( "preVertexZ", z);
 		book->fill( "preVertexR", r);
 	}
 	
-
+	
 	if ( z < cutVertexZ->min || z > cutVertexZ->max )
 		return false;
+	if ( makeEventQA )
+		book->get( "eventCuts" )->Fill( "vZ", 1 );
 	if ( r < cutVertexR->min || r > cutVertexR->max )
 		return false;
+	if ( makeEventQA )
+		book->get( "eventCuts" )->Fill( "vR", 1 );
+	if ( nTofMatchedTracks < cutNTofMatchedTracks->min || nTofMatchedTracks > cutNTofMatchedTracks->max )
+		return false;
+	if ( makeEventQA )
+		book->get( "eventCuts" )->Fill( "nTofMatched", 1 );
 
 
 	/**
 	 * Post Event Cut QA
 	 */
 	if ( makeEventQA  ){
-		book->cd();
 		book->fill( "vertexZ", z);
 		book->fill( "vertexR", r);
 		book->fill( "refMult", refMult );
+		book->fill( "refMultBins", rmc->bin9( refMult ) );
+		book->fill( "mappedRefMultBins", centralityBin( refMult ) );
+		book->fill( "nTofMatch", nTofMatchedTracks );
 	}
 	
 	return true;
@@ -220,60 +257,76 @@ bool InclusiveSpectra::keepEvent(){
 
 bool InclusiveSpectra::keepTrack( Int_t iTrack ){
 
-
-
-	double beta = pico->trackBeta( iTrack );
-
-	if ( (1.0 / beta) < 0.5 )
-		return false; 
-
-	double eta = pico->trackEta( iTrack );
-
-	if ( eta > .6 )
+	// skip non-primary tracks
+	double ptPrimary = pico->trackPt( iTrack );
+	if ( 0 == ptPrimary  )
 		return false;
-
-	double dcaX = pico->trackDcaX( iTrack );
-	double dcaY = pico->trackDcaY( iTrack );
-	double dcaZ = pico->trackDcaZ( iTrack );
+	
 	double dca = pico->trackDca( iTrack );
-	//TMath::Sqrt( dcaX*dcaX + dcaY*dcaY + dcaZ*dcaZ );
-
-	int tofMatch = pico->trackTofMatch( iTrack );
-	int nHits = pico->trackNHits( iTrack );
 	int nHitsDedx = pico->trackNHitsDedx( iTrack );
 	int nHitsFit = pico->trackNHitsFit( iTrack );
 	int nHitsPossible = pico->trackNHitsPossible( iTrack );
 	double fitPoss = ( (double)nHitsFit /  (double)nHitsPossible);
 
 	double yLocal = pico->trackYLocal( iTrack );
+	double zLocal = pico->trackZLocal( iTrack );
+
+	
+	double ptGlobal = pico->globalPt( iTrack );
 
 	/**
 	 * Pre Track Cut QA
 	 */
 	if ( makeTrackQA ){
-		book->cd();
-		book->fill( "preTofMatch", tofMatch );
-		book->fill( "preYLocal", yLocal );
-		book->fill( "preDca", dca );
-		book->fill( "preNHits", nHits );
-		book->fill( "preNHitsDedx", nHitsDedx );
-		book->fill( "preNHitsFit", nHitsFit );
-		book->fill( "preNHitsPossible", nHitsPossible );
-		book->fill( "preNHitsFitOverPossible", fitPoss );	
+		book->cd( "TrackQA" );
+		book->fill( "preYLocal", 				yLocal );
+		book->fill( "preZLocal", 				zLocal );
+		book->fill( "preDca", 					dca );
+		book->fill( "preNHitsDedx", 			nHitsDedx );
+		book->fill( "preNHitsFit", 				nHitsFit );
+		book->fill( "preNHitsPossible", 		nHitsPossible );
+		book->fill( "preNHitsFitOverPossible", 	fitPoss );
+		book->fill( "preNHitsFitVsPossible", 	nHitsPossible, nHitsFit );
+		book->fill( "prePtPrimary", 			ptPrimary );
+		book->fill( "prePtGlobal", 				ptGlobal );
+		book->fill( "prePtGlobalOverPrimary", 	ptGlobal / ptPrimary );
+		book->fill( "prePtGlobalVsPrimary", 	ptPrimary, ptGlobal );
 	}
 
-	if ( tofMatch < cutTofMatch->min || tofMatch > cutTofMatch->max )
-		return false;
+	if ( makeTrackQA )
+		book->get( "trackCuts" )->Fill( "All", 1 );
 	if ( yLocal < cutYLocal->min || yLocal > cutYLocal->max )
 		return false;
+	if ( makeTrackQA )
+		book->get( "trackCuts" )->Fill( "yLocal", 1 );
+	if ( zLocal < cutZLocal->min || zLocal > cutZLocal->max )
+		return false;
+	if ( makeTrackQA )
+		book->get( "trackCuts" )->Fill( "zLocal", 1 );
+	if ( ptPrimary < cutPt->min || ptPrimary > cutPt->max )
+		return false;
+	if ( makeTrackQA )
+		book->get( "trackCuts" )->Fill( "ptPrimary", 1 );
+	if ( (ptGlobal / ptPrimary) < cutPtGlobalOverPrimary->min || (ptGlobal / ptPrimary) > cutPtGlobalOverPrimary->max )
+		return false;
+	if ( makeTrackQA )
+		book->get( "trackCuts" )->Fill( "ptRatio", 1 );
 	if ( dca < cutDca->min || dca > cutDca->max )
 		return false;
+	if ( makeTrackQA )
+		book->get( "trackCuts" )->Fill( "dca", 1 );
 	if ( nHitsDedx < cutNHitsDedx->min || nHitsDedx > cutNHitsDedx->max )
 		return false;
-	if ( nHits < cutNHits->min || nHits > cutNHits->max )
+	if ( makeTrackQA )
+		book->get( "trackCuts" )->Fill( "nHitsDedx", 1 );
+	if ( nHitsFit < cutNHitsFit->min || nHitsFit > cutNHitsFit->max )
 		return false;
+	if ( makeTrackQA )
+		book->get( "trackCuts" )->Fill( "nHitsFit", 1 );
 	if ( fitPoss < cutNHitsFitOverPossible->min || fitPoss > cutNHitsFitOverPossible->max )
 		return false; 
+	if ( makeTrackQA )
+		book->get( "trackCuts" )->Fill( "nHitsRatio", 1 );
 
 
 
@@ -282,15 +335,19 @@ bool InclusiveSpectra::keepTrack( Int_t iTrack ){
 	 * Post Track Cut QA
 	 */
 	if ( makeTrackQA ){
-		book->cd();
-		book->fill( "tofMatch", tofMatch );
-		book->fill( "yLocal", yLocal );
-		book->fill( "dca", dca );
-		book->fill( "nHits", nHits );
-		book->fill( "nHitsDedx", nHitsDedx );
-		book->fill( "nHitsFit", nHitsFit );
-		book->fill( "nHitsPossible", nHitsPossible );
+		book->cd( "TrackQA" );
+		book->fill( "yLocal", 				yLocal );
+		book->fill( "zLocal", 				zLocal );
+		book->fill( "dca", 					dca );
+		book->fill( "nHitsDedx", 			nHitsDedx );
+		book->fill( "nHitsFit", 			nHitsFit );
+		book->fill( "nHitsPossible", 		nHitsPossible );
 		book->fill( "nHitsFitOverPossible", fitPoss );
+		book->fill( "nHitsFitVsPossible", 	nHitsPossible, nHitsFit );
+		book->fill( "ptPrimary", 			ptPrimary );
+		book->fill( "ptGlobal", 			ptGlobal );
+		book->fill( "ptGlobalOverPrimary", 	ptGlobal / ptPrimary );
+		book->fill( "ptGlobalVsPrimary", 	ptPrimary, ptGlobal );
 	}
 
 	return true;

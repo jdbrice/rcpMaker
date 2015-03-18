@@ -90,6 +90,7 @@ void ParamSpectra::makeCentralityHistos()  {
 	/**
 	 * Make centrality ptHistos
 	 */
+	/*
 	for (int iCut = 0; iCut < cuts.size(); iCut++ ){
 		for ( int iS = 0; iS < species.size(); iS ++ ){
 			string s = species[ iS ];
@@ -108,7 +109,7 @@ void ParamSpectra::makeCentralityHistos()  {
 			} //centralities
 		} // pid species
 	} // pid Cuts
-	
+	*/
 }
 
 
@@ -238,7 +239,7 @@ void ParamSpectra::analyzeTrack( Int_t iTrack ){
 	int etaBin = binsEta->findBin( TMath::Abs( eta ) );
 	int charge = pico->trackCharge( iTrack  );
 	
-	Int_t refMult = pico->eventRefMult();
+	Int_t refMult = pico->refMult();
 	
 	/**
 	 * make sure we are in the binning bounds
@@ -278,7 +279,7 @@ void ParamSpectra::analyzeTrack( Int_t iTrack ){
 
 					/**
 					 * Centrality cuts
-					 */
+					 
 					 for ( int iCent = 0; iCent < centrals.size(); iCent++ ){
 					 	string cent = centrals[ iCent ];
 					 	//logger->info( __FUNCTION__ ) << book->get( histoForCentrality( cent, "K" ) )<< endl;
@@ -291,6 +292,9 @@ void ParamSpectra::analyzeTrack( Int_t iTrack ){
 					 	}
 
 					 } // loop on centrality cuts
+					 */
+
+
 				} // loop in Pid results
 			} // Pid exists for this track
 		} // loop on cuts

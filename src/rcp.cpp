@@ -3,7 +3,7 @@
 #include "XmlConfig.h"
 using namespace jdb;
 
-#include "DataSourceWrapper.h"
+#include "LBNLPicoDst.h"
 
 
 #include <iostream>
@@ -37,30 +37,29 @@ int main( int argc, char* argv[] ) {
 				InclusiveSpectra is( &config, "InclusiveSpectra.", fileList, jobPrefix );
 				is.make();
 			} else if ( "ParamSpectra" == job ){
-				ParamSpectra ps( &config, "ParamSpectra.", fileList, jobPrefix );
-				ps.make();
+				//ParamSpectra ps( &config, "ParamSpectra.", fileList, jobPrefix );
+				//ps.make();
 			} else if ( "PidPhaseSpace" == job ){
 				PidPhaseSpace pps( &config, "PidPhaseSpace.", fileList, jobPrefix  );
 				pps.make();
-				//TreeAnalyzer ta( &config, "PidPhaseSpace.", fileList, jobPrefix  );
-				//ta.make();
 			} else if ( "MakePidParams" == job ){
 				PidParamMaker ppm( &config, "PidParamMaker." );
 				ppm.make();
 			} else if ( "SimultaneousPid" == job ){
-				SimultaneousPid sg( &config, "SimultaneousPid." );
-				sg.make();
+				//SimultaneousPid sg( &config, "SimultaneousPid." );
+				//sg.make();
 			} else if ( "test" == job ){
 				//TreeAnalyzer ta( &config, "" );
 				DataSource * ds = new DataSource( &config, "DataSource" );
-				DataSourceWrapper dsw(ds );
+				LBNLPicoDst dsw(ds );
 
-				for ( int i = 0; i < 100; i++  ){
+				for ( int i = 0; i < ds->getEntries(); i++  ){
 					dsw.GetEntry(i);
-					cout << "#Tracks  " << dsw.eventNumTracks() << endl;;
-					for ( int j = 0; j < dsw.eventNumTracks(); j++ ){
-						if ( dsw.trackTofMatch( j ) )
-							cout << "beta " << dsw.trackBeta( j ) << endl;
+					cout << "#Tracks  " << dsw.numTracks() << endl;;
+					for ( int j = 0; j < dsw.numTracks(); j++ ){
+							cout << "charge " << dsw.trackCharge( j ) << endl;
+							cout << "hits fit " << dsw.trackNHitsFit( j ) << endl;
+							cout << " hits fit " << ds->get( "Tracks.mNHitsFit", j ) << endl;
 					}
 				}
 			}

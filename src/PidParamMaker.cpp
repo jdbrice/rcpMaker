@@ -29,9 +29,11 @@ PidParamMaker::PidParamMaker( XmlConfig * config, string np ){
     lg->info(__FUNCTION__) << " Creating book "<< endl;
     book = new HistoBook( config->getString( np + "output.data" ), config );
 
+    lg->info(__FUNCTION__) << " Creating reporter "<< endl;
     reporter = new Reporter( config->getString( np + "output.report" ) );
 
 
+    lg->info(__FUNCTION__) << " Creating PhaseSpaceRecentering "<< endl;
     // Initialize the Phase Space Recentering Object
 	tofSigmaIdeal = cfg->getDouble( np+"PhaseSpaceRecentering.sigma:tof", 0.0012);
 	dedxSigmaIdeal = cfg->getDouble( np+"PhaseSpaceRecentering.sigma:dedx", 0.06);
@@ -41,15 +43,17 @@ PidParamMaker::PidParamMaker( XmlConfig * config, string np ){
 									 cfg->getInt( np+"Bichsel.method", 0) );
 	psrMethod = config->getString( np+"PhaseSpaceRecentering.method", "traditional" );
 
+	lg->info(__FUNCTION__) << " Getting Center Species "<< endl;
 	// alias the centered species for ease of use
 	centerSpecies = cfg->getString( np+"PhaseSpaceRecentering.centerSpecies", "K" );
 
-
+	lg->info(__FUNCTION__) << " Opening input "<< endl;
 	inFile = new TFile( cfg->getString( np+"input.data:url" ).c_str(), "READ" );
 
 	/**
 	 * Make the momentum transverse, eta, charge binning
 	 */
+	lg->info(__FUNCTION__) << " Creating pt, eta, charge binning "<< endl;
 	binsPt = new HistoBins( cfg, "binning.pt" );
 	binsEta = new HistoBins( cfg, "binning.eta" );
 	binsCharge = new HistoBins( cfg, "binning.charge" );
@@ -57,6 +61,7 @@ PidParamMaker::PidParamMaker( XmlConfig * config, string np ){
 	muRoi 		= 2.5;
 	sigmaRoi 	= 3.5;
 	roi 		= 2.5;
+	lg->info(__FUNCTION__) << " Setup Complete "<< endl;
 }
 
 PidParamMaker::~PidParamMaker(){
@@ -71,6 +76,7 @@ PidParamMaker::~PidParamMaker(){
 
 
 void PidParamMaker::make(){
+	lg->info(__FUNCTION__) << endl;
 
 	book->cd();
 	book->makeAll( nodePath + "histograms" );
@@ -113,6 +119,8 @@ void PidParamMaker::make(){
 		dPlotSigma.push_back( sName + "Error = { ");
 	}
 
+	int centralityBin = 1;
+	lg->info(__FUNCTION__) << "Starting fit loop "<< endl;
 
 		
 	for ( int i = 0; i < binsPt->nBins(); i++ ){
@@ -126,9 +134,11 @@ void PidParamMaker::make(){
 			string mName = "tofMean" + species[iS];
 			string sName = "tofSigma" + species[iS];
 
-			string name = "tof/" + PidPhaseSpace::tofName( centerSpecies, 0, "TODO", i, 0, species[ iS ] );
+			string name = "tof/" + PidPhaseSpace::tofName( centerSpecies, 0, centralityBin, i, 0, species[ iS ] );
 			TH1D* tofAll = (TH1D*)inFile->Get( name.c_str() );
 		
+			lg->info(__FUNCTION__) << "tofAll " << tofAll <<  endl;
+
 			GaussianFitResult tofGfr =  fitSingleSpecies( tofAll, tofMus[ iS ], tofSigmaIdeal );
 
 			book->get( mName )->SetBinContent( i, tofGfr.mu );
@@ -156,7 +166,7 @@ void PidParamMaker::make(){
 			mName = "dedxMean" + species[iS];
 			sName = "dedxSigma" + species[iS];
 
-			name = "dedx/" + PidPhaseSpace::dedxName( centerSpecies, 0, "TODO", i, 0, species[ iS ] );
+			name = "dedx/" + PidPhaseSpace::dedxName( centerSpecies, 0, centralityBin, i, 0, species[ iS ] );
 			TH1D* hDedx = (TH1D*)inFile->Get( name.c_str() );
 		
 			GaussianFitResult dedxGfr =  fitSingleSpecies( hDedx, dedxMus[ iS ], dedxSigmaIdeal );

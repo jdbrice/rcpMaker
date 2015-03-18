@@ -20,6 +20,7 @@ public:
 	virtual Double_t trackNHitsFit( Int_t iHit ){ return 0; }
 	virtual Double_t trackNHitsPossible( Int_t iHit ){ return 0; }
 
+	virtual Double_t globalPt( Int_t iHit ){ return 0; }
 	virtual Double_t trackPt( Int_t iHit ){ return 0; }
 	virtual Double_t trackP( Int_t iHit ){ return 0; }
 	virtual Double_t trackEta( Int_t iHit ){ return -100; }
@@ -44,24 +45,28 @@ public:
 
 		// TOF
 	virtual Double_t trackYLocal( Int_t iHit ){ return -999; }
+	virtual Double_t trackZLocal( Int_t iHit ){ return -999; }
 
 	/**
 	 * Event properties
 	 */	
-	virtual UInt_t eventRunId(){ return 0; }
-	virtual UInt_t eventEventId(){ return 0; }
+	virtual UInt_t runId(){ return 0; }
+	virtual UInt_t eventId(){ return 0; }
 	virtual UInt_t eventDay(){ return 0; }
 	virtual UInt_t eventYear(){ return 0; }
 
-	virtual Int_t eventNTZero(  ){ return 0; }
-	virtual Short_t eventTofMult(){ return 0; }
-	virtual UShort_t eventRefMult(){ return 0; }
-	virtual Int_t eventNumTracks(){ return 0; }
-	virtual Short_t eventNumPrimary(){ return 0; }
-	virtual Short_t eventNumGlobal(){ return 0; }
+	virtual UInt_t triggerWord(){ return 0; }
 
-	virtual Float_t eventZDC(){ return 0; }
-	virtual Float_t eventBBC(){ return 0; }
+	virtual Int_t nTZero(  ){ return 0; }
+	virtual Short_t tofMult(){ return 0; }
+	virtual UShort_t refMult(){ return 0; }
+	virtual Int_t numTracks(){ return 0; }
+	virtual Short_t numPrimary(){ return 0; }
+	virtual Short_t numGlobal(){ return 0; }
+	virtual Int_t numTofMatchedTracks(){ return 0; }
+
+	virtual Float_t zdc(){ return 0; }
+	virtual Float_t bbc(){ return 0; }
 
 };
 

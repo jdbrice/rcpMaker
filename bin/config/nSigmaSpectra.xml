@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+
+	<jobType>InclusiveSpectra</jobType>
+
+
+	<ParamSpectra>
+		<Logger>
+			<logLevel>info</logLevel>
+		</Logger>	
+		
+		<DataSource treeName="PicoDst" url="/Users/danielbrandenburg/bnl/local/data/Run14/LBNL/" maxFiles="4">
+			
+			<!-- Set all branches off -->
+			<BranchStatus status="0">*</BranchStatus>
+			<!-- Turn on only the ones you need -->
+			<BranchStatus status="1">
+				Event*,
+				Track*
+			</BranchStatus>
+			
+		</DataSource>
+
+		<output>
+			<data>paramSpectra.root</data>
+			<report>rpParamSpectra.pdf</report>
+		</output>
+
+		<Bichsel>
+			<table>dedxBichsel.root</table>
+			<method>0</method>
+		</Bichsel>
+
+		<PhaseSpaceRecentering>
+			<centerSpecies>K</centerSpecies>
+			<sigma tof="0.012" dedx="0.033"/>
+			<method>nonlinear</method>
+		</PhaseSpaceRecentering>
+
+		<PidSpecies>Pi, K, P</PidSpecies>
+
+		<nSigmaCut tof="1.0" dedx="1.0"/>
+
+		<centrality>
+			<0to5 min="235" max="400" />
+			<60to80 min="10" max="20" />
+		</centrality>
+
+
+		<TofPidParams>
+			<Pi>
+				<mean t="0.00303021" p="0.328878" ep="-0.476803"/>
+				<sigma t="-0.0109769" p="-0.0174848" ep="-0.0000516795"/>
+			</Pi>
+			<K>
+				<mean t="-0.00730177" p="-0.0676805" ep="0.00140494"/>
+				<sigma t="0.0114231" p="0.137087" ep="0.00333969"/>
+			</K>
+			<P>
+				<mean t="-0.0100537" p="-0.0908703" ep="0.306089"/>
+				<sigma t="0.012303" p="0.524039" ep="0.0077849"/>
+			</P>
+		</TofPidParams>
+		<DedxPidParams>
+			<Pi>
+				<sigma p0="0.0332619" p1="0.000423775" p2="0.000122086" p3="0.0150777" />
+			</Pi>
+			<K>
+				<sigma p0="0.0341419" p1="0" p2="0.0000874152" p3="0.0063817"/>
+			</K>
+			<P>
+				<sigma p0="0.0330171" p1="0.258738" p2="0" p3="0.00412973"/>
+			</P>
+		</DedxPidParams>
+
+		<histograms>
+			
+
+			<tof type="1D" widthX="0.006" minX="-0.2" maxX="0.2" />
+			<dedx type="1D" title="" widthX="0.006" minX="-2" maxX="2" />
+			
+			<ptBase type="1D" title="p_{T} [GeV]; p_{T} [GeV]; #Events"  xBins="binning.pt"/>
+			<pt type="1D" title="p_{T} [GeV]; p_{T} [GeV]; #Events"  xBins="binning.pt"/>
+
+			<mean type="1D" title="#mu" xBins="binning.pt" />
+			<sigma type="1D" title="#sigma" xBins="binning.pt" />
+			<dedxSigma type="1D" title="#sigma" xBins="binning.pt" />
+
+
+		</histograms>
+		<style>
+			<tof numberOfTicks="5, 0, 1" lineWidth="2" lineColor="blue" logY="1" draw="pe"/>
+		</style>
+
+	</ParamSpectra>
+
+	<binning hide="true" >
+		
+		<pt width="0.05" min="0.2" max="4.0" />
+		
+		<eta>0.0, 0.2, 0.4, 0.6, 0.8, 1.0 </eta>
+		
+		<charge> -1.5, -0.5, 0.5, 1.5</charge>
+
+	</binning>
+
+
+</config>

@@ -1,12 +1,12 @@
 
 
-void rcpFromSpectra( string fname = "inclusiveSpectra.root", string bName = "pt_" ){
+void rcpFromSpectra( string fname = "../products/inclusive/inclusiveSpectra.root", string bName = "pt_" ){
 
 	TCanvas * c = new TCanvas( "c", "R_{CP}", 800, 600 );
 	TFile * f = new TFile( fname.c_str(), "READ" );
 
-	string cName = bName + "0to5";
-	string pName = bName + "60to80";
+	string cName = bName + "1";
+	string pName = bName + "0";
 	TH1D * central = (TH1D*)f->Get( cName.c_str() );
 	TH1D * per = (TH1D*)f->Get( pName.c_str() );
 
@@ -14,8 +14,8 @@ void rcpFromSpectra( string fname = "inclusiveSpectra.root", string bName = "pt_
 
 	c->Divide( 2, 1 );
 	c->cd(1 );
-	central->Scale( 25 );
-	per->Scale( 275 );
+	central->Scale( 19 );
+	per->Scale( 719 );
 
 	per->SetTitle( "0%-5% (Blue), 60%-80% (Red)" );
 	per->Sumw2();

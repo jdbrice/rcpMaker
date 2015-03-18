@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+
+	<jobType>MakePidParams</jobType>
+
+	<PidParamMaker>
+		<Logger color="true">
+			<logLevel>info</logLevel>
+		</Logger>	
+
+		<input>
+			<data url="../products/phaseSpace/pid.root"/>
+		</input>
+
+		<output>
+			<data>../products/pidParams/paramsForPid.root</data>
+			<report>../products/pidParams/report.pdf</report>
+		</output>
+
+		<Bichsel>
+			<table>dedxBichsel.root</table>
+			<method>0</method>
+		</Bichsel>
+
+		<enhanceDistributions tof="1.0" dedx="1.0"/>
+		
+		<PhaseSpaceRecentering>
+			<centerSpecies>K</centerSpecies>
+			<sigma tof="0.012" dedx="0.06"/>
+			<method>nonlinear</method>
+		</PhaseSpaceRecentering>
+
+		<histograms>
+			<mean title="Mean For Species; p_{T} [GeV]" xBins="binning.pt" />
+			<sigma title="Sigma For Species; p_{T} [GeV]" xBins="binning.pt" />
+		</histograms>
+
+	</PidParamMaker>
+
+	<binning hide="true" >
+
+		<pt width="0.05" min="0.2" max="4.0" />
+		<eta>0.0, 0.2 </eta>
+		<charge> -0.5, 0.5 </charge>
+
+		<tof width="0.0012" min="-2" max="2" />
+		<dedx width="0.006" min="-2" max="2" />
+
+		<padding tof=".15" dedx=".15" tofScale="0.05" dedxScale="0.05" />
+
+	</binning>
+
+</config>

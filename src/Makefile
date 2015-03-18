@@ -4,7 +4,8 @@ project = rcp
 # source suffix
 source = .cpp 
 # object files to make
-objects = rcp.o InclusiveSpectra.o ParamSpectra.o PidPhaseSpace.o PidParamMaker.o AnaPicoDst.o SimultaneousPid.o
+objects = rcp.o InclusiveSpectra.o AnaPicoDst.o PidPhaseSpace.o PidParamMaker.o
+# ParamSpectra.o  PidParamMaker.o SimultaneousPid.o
 
 sources = $(wildcard *.cpp)
 headers = $(wildcard ../include/*.h)
@@ -21,9 +22,9 @@ libraries 		= 	$(ROOTLIBS) -lRooFitCore -lRooFit $(CERNLIBS) $(SYSLIBS)
 staticLibs 		= $(JDB_LIB)/lib/libJDB.a
 
 cxx 		= g++ -std=c++0x
-flags 		= -Wall -g $(ROOTCFLAGS) $(includes) -Wno-write-strings -fno-inline 
+flags 		= -Wall -O3 $(ROOTCFLAGS) $(includes)
 compile 	= $(cxx) $(flags) -c 
-ldFlags  	= $(ROOTLDFLAGS) -g
+ldFlags  	= $(ROOTLDFLAGS) 
 
 all: $(project)
 

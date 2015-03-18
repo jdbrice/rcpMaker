@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+
+	<jobType>InclusiveSpectra</jobType>
+
+	<InclusiveSpectra>
+
+		<Logger color="true">
+			<logLevel>info</logLevel>
+		</Logger>
+		
+		<DataSource treeName="PicoDst" url="/Users/danielbrandenburg/bnl/local/data/Run14/LBNL/" maxFiles="5">
+			
+			<!-- Set all branches off -->
+			<BranchStatus status="0">*</BranchStatus>
+			<!-- Turn on only the ones you need -->
+			<BranchStatus status="1">
+				Event*,
+				Track*
+			</BranchStatus>
+			
+		</DataSource>
+
+		<output>
+			<data>../products/inclusive/inclusiveSpectra.root</data>
+		</output>
+
+		<!-- the bins into which the 9 centrality bins are mapped. -->
+		<CentralityMap>
+			0 :: 0,
+			1 :: 0,
+			8 :: 1
+		</CentralityMap>
+
+		<!-- Common Resources -->
+		<MakeQA config="config/qaHistograms.xml" event="true" track="true" />
+		<Cuts config="config/cuts.xml" />
+		<RMCParams config="config/StRMCParams.xml" />
+
+		<!-- histograms to auto-make -->
+		<histograms>
+			<ptBase type="1D" title="p_{T} [GeV]; p_{T} [GeV]; #Events"  xBins="binning.pt"/>
+			<ptAll type="1D" title="p_{T} [GeV]; p_{T} [GeV]; #Events"  xBins="binning.pt"/>
+			<ptPos type="1D" title="p_{T} [GeV]; p_{T} [GeV]; #Events"  xBins="binning.pt"/>
+			<ptNeg type="1D" title="p_{T} [GeV]; p_{T} [GeV]; #Events"  xBins="binning.pt"/>
+		</histograms>
+
+	</InclusiveSpectra>
+
+
+	<binning hide="true" >
+		<pt width="0.05" min="0.2" max="4.0" />
+		<eta>0.0, 0.2, 0.4, 0.6, 0.8, 1.0 </eta>
+		<charge> -1.5, -0.5, 0.5, 1.5</charge>
+	</binning>
+
+
+</config>

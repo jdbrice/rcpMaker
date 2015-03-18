@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+
+	<!-- Cuts applied to Events -->
+	<EventCuts>
+		<triggerMasks> 4, 32 </triggerMasks> <!-- BBC_MB -->
+		<vertexZ min="-30" max="30" />
+		<vertexR min="0.0" max="1.0" />
+		<vertexROffset x="0" y="0.89" />
+		<nTofMatchedTracks min="3" max="10000"/>
+	</EventCuts>
+
+	<!-- Cuts applied to Tracks -->
+	<TrackCuts>
+		<nHitsFit min="16" />
+		<dca min="0" max="1.0" />
+		<nHitsFitOverPossible min="0.52" />
+		<nHitsDedx min="11"  />
+		<pt min="0.1" max="100" />
+		<ptGlobalOverPrimary min="0.7" max="1.42857" />
+		<yLocal min="-1.6" max="1.6" />
+		<zLocal min="-2.8" max="2.8" />
+	</TrackCuts>
+
+
+</config>
