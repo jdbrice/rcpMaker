@@ -15,10 +15,10 @@ public:
 	/**
 	 * Track properties
 	 */
-	virtual Double_t trackNHits( Int_t iHit ){ return 0; }
-	virtual Double_t trackNHitsDedx( Int_t iHit ){ return 0; }
-	virtual Double_t trackNHitsFit( Int_t iHit ){ return 0; }
-	virtual Double_t trackNHitsPossible( Int_t iHit ){ return 0; }
+	virtual Int_t trackNHits( Int_t iHit ){ return 0; }
+	virtual Int_t trackNHitsDedx( Int_t iHit ){ return 0; }
+	virtual Int_t trackNHitsFit( Int_t iHit ){ return 0; }
+	virtual Int_t trackNHitsPossible( Int_t iHit ){ return 0; }
 
 	virtual Double_t globalPt( Int_t iHit ){ return 0; }
 	virtual Double_t trackPt( Int_t iHit ){ return 0; }

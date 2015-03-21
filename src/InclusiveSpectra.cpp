@@ -1,7 +1,6 @@
 
 #include "InclusiveSpectra.h"
 #include "ChainLoader.h"
-#include "AnaPicoDst.h"
 #include "LBNLPicoDst.h"
 
 #include <limits.h>
@@ -17,8 +16,6 @@ InclusiveSpectra::InclusiveSpectra( XmlConfig * config, string np, string fileLi
 	 */
 	if ( ds )
 		pico = unique_ptr<PicoDataStore>( new LBNLPicoDst( ds ) );
-	//else 
-	//	pico = new AnaPicoDst( chain );
 
 	/**
 	 * Load in the common configs

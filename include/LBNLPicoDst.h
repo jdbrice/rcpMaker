@@ -60,10 +60,10 @@ public:
 	}
 
 	// same as nHitsFit for primary track
-	virtual Double_t trackNHits( Int_t iHit ){ return TMath::Abs( ds->get<Float_t>("Tracks.mNHitsFit", iHit) ); }
-	virtual Double_t trackNHitsDedx( Int_t iHit ){ return ds->get("Tracks.mNHitsDedx", iHit); }
-	virtual Double_t trackNHitsFit( Int_t iHit ){ return TMath::Abs( ds->get<Float_t>("Tracks.mNHitsFit", iHit) ); }
-	virtual Double_t trackNHitsPossible( Int_t iHit ){ return ds->get<Float_t>("Tracks.mNHitsMax", iHit); }
+	virtual Int_t trackNHits( Int_t iHit ){ return TMath::Abs( ds->get<Char_t>("Tracks.mNHitsFit", iHit) ); }
+	virtual Int_t trackNHitsDedx( Int_t iHit ){ return ds->get<UChar_t>("Tracks.mNHitsDedx", iHit); }
+	virtual Int_t trackNHitsFit( Int_t iHit ){ return TMath::Abs( ds->get<Char_t>("Tracks.mNHitsFit", iHit) ); }
+	virtual Int_t trackNHitsPossible( Int_t iHit ){ return ds->get<UChar_t>("Tracks.mNHitsMax", iHit); }
 
 	virtual Double_t trackDedx( Int_t iHit ){ return ds->get<Float_t>("Tracks.mDedx", iHit) / 1000.0; }
 	
