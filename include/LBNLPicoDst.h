@@ -65,14 +65,14 @@ public:
 	virtual Int_t trackNHitsFit( Int_t iHit ){ return TMath::Abs( ds->get<Char_t>("Tracks.mNHitsFit", iHit) ); }
 	virtual Int_t trackNHitsPossible( Int_t iHit ){ return ds->get<UChar_t>("Tracks.mNHitsMax", iHit); }
 
-	virtual Double_t trackDedx( Int_t iHit ){ return ds->get<Float_t>("Tracks.mDedx", iHit) / 1000.0; }
+	virtual Double_t trackDedx( Int_t iHit ){ return ds->get<UShort_t>("Tracks.mDedx", iHit) / 1000.0; }
 	
-	virtual Double_t trackBeta( Int_t iHit ){ return (ds->get<Float_t>("Tracks.mBTofBeta", iHit) / 20000.0); }
+	virtual Double_t trackBeta( Int_t iHit ){ return (ds->get<UShort_t>("Tracks.mBTofBeta", iHit) / 20000.0); }
 	virtual Int_t trackTofMatch( Int_t iHit ){ return ds->get<Float_t>("Tracks.mBTofMatchFlag", iHit); }
-	virtual Double_t trackYLocal( Int_t iHit ){ return (ds->get<Float_t>("Tracks.mBTofYLocal", iHit) / 1000.0); }
-	virtual Double_t trackZLocal( Int_t iHit ){ return (ds->get<Float_t>("Tracks.mBTofZLocal", iHit) / 1000.0); }
+	virtual Double_t trackYLocal( Int_t iHit ){ return (ds->get<Short_t>("Tracks.mBTofYLocal", iHit) / 1000.0); }
+	virtual Double_t trackZLocal( Int_t iHit ){ return (ds->get<Short_t>("Tracks.mBTofZLocal", iHit) / 1000.0); }
 
-	virtual Double_t trackDca( Int_t iHit ){ return ds->get<Float_t>("Tracks.mGDca", iHit) / 1000.0; }
+	virtual Double_t trackDca( Int_t iHit ){ return ds->get<UShort_t>("Tracks.mGDca", iHit) / 1000.0; }
 
 };
 
