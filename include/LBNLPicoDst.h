@@ -16,63 +16,63 @@ public:
 	LBNLPicoDst( DataSource *_ds ){
 		ds = _ds;
 	}
-	virtual UInt_t triggerWord(){ return ds->getUInt( "Event.mTriggerWord" ); }
-	virtual UInt_t runId(){ return ds->getUInt( "Event.mRunId" ); }
-	virtual UInt_t eventId(){ return ds->getUInt( "Event.mEventId" );; }
+	virtual UInt_t triggerWord(){ return ds->get<UInt_t>( "Event.mTriggerWord" ); }
+	virtual UInt_t runId(){ return ds->get<UInt_t>( "Event.mRunId" ); }
+	virtual UInt_t eventId(){ return ds->get<UInt_t>( "Event.mEventId" );; }
 
-	virtual Double_t vX(  ){ return ds->get("Event.mPrimaryVertex.mX1"); }
-	virtual Double_t vY(  ){ return ds->get("Event.mPrimaryVertex.mX2"); }
-	virtual Double_t vZ(  ){ return ds->get("Event.mPrimaryVertex.mX3"); }
+	virtual Double_t vX(  ){ return ds->get<Float_t>("Event.mPrimaryVertex.mX1"); }
+	virtual Double_t vY(  ){ return ds->get<Float_t>("Event.mPrimaryVertex.mX2"); }
+	virtual Double_t vZ(  ){ return ds->get<Float_t>("Event.mPrimaryVertex.mX3"); }
 	virtual Double_t vR(  ){ return TMath::Sqrt( vX()*vX() + vY()*vY() ); }
 
-	virtual UShort_t refMult(){ return (ds->getInt("Event.mRefMultPos") + ds->getInt("Event.mRefMultNeg")); }
-	virtual Int_t numTracks(){ return ds->getInt("Event.mNumberOfGlobalTracks"); }
-	virtual Int_t numTofMatchedTracks(){ return ds->getInt("Event.mNBTOFMatch"); }
+	virtual UShort_t refMult(){ return (ds->get<Int_t>("Event.mRefMultPos") + ds->get<Int_t>("Event.mRefMultNeg")); }
+	virtual Int_t numTracks(){ return ds->get<Int_t>("Event.mNumberOfGlobalTracks"); }
+	virtual Int_t numTofMatchedTracks(){ return ds->get<Int_t>("Event.mNBTOFMatch"); }
 	
 
 	virtual Double_t trackPt( Int_t iHit ){ 
-		double px = ds->get("Tracks.mPMomentum.mX1", iHit);
-		double py = ds->get("Tracks.mPMomentum.mX2", iHit);
+		double px = ds->get<Float_t>("Tracks.mPMomentum.mX1", iHit);
+		double py = ds->get<Float_t>("Tracks.mPMomentum.mX2", iHit);
 		return TMath::Sqrt( px*px + py*py ); 
 	}
 	virtual Double_t trackP( Int_t iHit ){ 
-		double px = ds->get("Tracks.mPMomentum.mX1", iHit);
-		double py = ds->get("Tracks.mPMomentum.mX2", iHit);
-		double pz = ds->get("Tracks.mPMomentum.mX3", iHit);
+		double px = ds->get<Float_t>("Tracks.mPMomentum.mX1", iHit);
+		double py = ds->get<Float_t>("Tracks.mPMomentum.mX2", iHit);
+		double pz = ds->get<Float_t>("Tracks.mPMomentum.mX3", iHit);
 		return TMath::Sqrt( px*px + py*py + pz*pz ); 
 	}
 	virtual Double_t globalPt( Int_t iHit ){ 
-		double px = ds->get("Tracks.mGMomentum.mX1", iHit);
-		double py = ds->get("Tracks.mGMomentum.mX2", iHit);
+		double px = ds->get<Float_t>("Tracks.mGMomentum.mX1", iHit);
+		double py = ds->get<Float_t>("Tracks.mGMomentum.mX2", iHit);
 		return TMath::Sqrt( px*px + py*py ); 
 	}
 	virtual Int_t trackCharge( Int_t iHit ){ 
-		if ( ds->getInt("Tracks.mNHitsFit", iHit) > 0 )
+		if ( ds->get<Int_t>("Tracks.mNHitsFit", iHit) > 0 )
 			return 1;
-		else if ( ds->getInt("Tracks.mNHitsFit", iHit) < 0 )
+		else if ( ds->get<Int_t>("Tracks.mNHitsFit", iHit) < 0 )
 			return -1;
 		else
 			return 0; 
 	}
 	virtual Double_t trackEta( Int_t iHit ){ 
-		double pz = ds->get("Tracks.mPMomentum.mX3", iHit);
+		double pz = ds->get<Float_t>("Tracks.mPMomentum.mX3", iHit);
 		return TMath::ASinH( pz / trackPt( iHit ) ); 
 	}
 
 	// same as nHitsFit for primary track
-	virtual Double_t trackNHits( Int_t iHit ){ return TMath::Abs( ds->get("Tracks.mNHitsFit", iHit) ); }
+	virtual Double_t trackNHits( Int_t iHit ){ return TMath::Abs( ds->get<Float_t>("Tracks.mNHitsFit", iHit) ); }
 	virtual Double_t trackNHitsDedx( Int_t iHit ){ return ds->get("Tracks.mNHitsDedx", iHit); }
-	virtual Double_t trackNHitsFit( Int_t iHit ){ return TMath::Abs( ds->get("Tracks.mNHitsFit", iHit) ); }
-	virtual Double_t trackNHitsPossible( Int_t iHit ){ return ds->get("Tracks.mNHitsMax", iHit); }
+	virtual Double_t trackNHitsFit( Int_t iHit ){ return TMath::Abs( ds->get<Float_t>("Tracks.mNHitsFit", iHit) ); }
+	virtual Double_t trackNHitsPossible( Int_t iHit ){ return ds->get<Float_t>("Tracks.mNHitsMax", iHit); }
 
-	virtual Double_t trackDedx( Int_t iHit ){ return ds->get("Tracks.mDedx", iHit) / 1000.0; }
+	virtual Double_t trackDedx( Int_t iHit ){ return ds->get<Float_t>("Tracks.mDedx", iHit) / 1000.0; }
 	
-	virtual Double_t trackBeta( Int_t iHit ){ return (ds->get("Tracks.mBTofBeta", iHit) / 20000.0); }
-	virtual Int_t trackTofMatch( Int_t iHit ){ return ds->get("Tracks.mBTofMatchFlag", iHit); }
-	virtual Double_t trackYLocal( Int_t iHit ){ return (ds->get("Tracks.mBTofYLocal", iHit) / 1000.0); }
-	virtual Double_t trackZLocal( Int_t iHit ){ return (ds->get("Tracks.mBTofZLocal", iHit) / 1000.0); }
+	virtual Double_t trackBeta( Int_t iHit ){ return (ds->get<Float_t>("Tracks.mBTofBeta", iHit) / 20000.0); }
+	virtual Int_t trackTofMatch( Int_t iHit ){ return ds->get<Float_t>("Tracks.mBTofMatchFlag", iHit); }
+	virtual Double_t trackYLocal( Int_t iHit ){ return (ds->get<Float_t>("Tracks.mBTofYLocal", iHit) / 1000.0); }
+	virtual Double_t trackZLocal( Int_t iHit ){ return (ds->get<Float_t>("Tracks.mBTofZLocal", iHit) / 1000.0); }
 
-	virtual Double_t trackDca( Int_t iHit ){ return ds->get("Tracks.mGDca", iHit) / 1000.0; }
+	virtual Double_t trackDca( Int_t iHit ){ return ds->get<Float_t>("Tracks.mGDca", iHit) / 1000.0; }
 
 };
 
