@@ -2,6 +2,11 @@
 #define PID_PARAM_MAKER_H
 
 /**
+ * STL
+ */
+#include <memory>
+
+/**
  * JDB 
  */
 #include "Utils.h"
@@ -22,12 +27,13 @@ using namespace jdb;
 class PidParamMaker
 {
 protected:
-	Logger * lg;
-	XmlConfig * cfg;
+	Logger * lg = nullptr;
+	XmlConfig * cfg = nullptr;
 	string nodePath;
 
-	HistoBook * book;
-	Reporter * reporter;
+	HistoBook * book = nullptr;
+	vector< unique_ptr<Reporter> > tofReport;
+	vector< unique_ptr<Reporter> > dedxReport;
 
 	TFile * inFile;
 
@@ -35,13 +41,22 @@ protected:
 	HistoBins* binsEta;
 	HistoBins* binsCharge;
 
-	double muRoi, sigmaRoi, roi;
+	// 
+	double 	muRoi 		= 2.5, 
+			sigmaRoi 	= 3.5, 
+			roi 		= 2.5, 
+			window 		= 1.5;
+
 
 	string centerSpecies;
 	string psrMethod;
 	double dedxSigmaIdeal, tofSigmaIdeal;
 	PhaseSpaceRecentering * psr;
 	vector<string> species;
+
+	vector<double> mmtms;
+	
+
 
 	
 
@@ -58,10 +73,19 @@ public:
 		double sigma, sigmaError;
 	};
 
+	static double meanFunction( double * x, double * pars );
+	static double sigmaFunction( double * x, double * pars );
+
 protected:
 
-	GaussianFitResult fitSingleSpecies( TH1D* h, double x1, double x2 );
-	
+	GaussianFitResult fitSingleSpecies( TH1D* h, double x1, double x2, Reporter &rp, string title = "" );
+	void reportTofFitResult( string s, Reporter &rp );
+	void reportDedxFitResult( string s, Reporter &rp );
+	map< string, vector<GaussianFitResult> > tofFit;
+	map< string, vector<GaussianFitResult> > dedxFit;
+
+
+
 };
 
 

@@ -14,7 +14,7 @@
 
 		<output>
 			<data>../products/pidParams/paramsForPid.root</data>
-			<report>../products/pidParams/report.pdf</report>
+			<report>../products/pidParams/</report>
 		</output>
 
 		<Bichsel>
@@ -26,7 +26,7 @@
 		
 		<PhaseSpaceRecentering>
 			<centerSpecies>K</centerSpecies>
-			<sigma tof="0.012" dedx="0.06"/>
+			<sigma tof="0.012" dedx="0.03"/>
 			<method>nonlinear</method>
 		</PhaseSpaceRecentering>
 

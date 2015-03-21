@@ -12,13 +12,59 @@
 
 #include "PidPhaseSpace.h"
 
+
+double PidParamMaker::meanFunction( double *x, double *p ){
+
+	double uT = p[ 0 ]; 	// timing offsets
+	double uP = p[ 1 ]; 	// momentum
+	double ueP = p[ 2 ]; 	// momentum
+	double m = p[ 3 ]; 		// mass of species
+	double mr = p[ 4 ]; 	// mass of centering species
+
+	double mmtm = x[ 0 ];
+	// characteristic determined by B field and Tof radius
+	double x0 = 175.5 / mmtm;
+
+	double a = 1 - x0 / ( TMath::ASin( x0 ) * TMath::Sqrt( 1 - x0*x0 ) ) * uP;
+	double b = m*m / (mmtm * TMath::Sqrt( mmtm * mmtm + m * m ) ) * ueP;
+	double c = mr*mr / (mmtm * TMath::Sqrt( mmtm * mmtm + mr * mr ) ) * ueP;
+
+	return uT + a + b + c; 
+
+}
+
+double PidParamMaker::sigmaFunction( double *x, double *p ){
+
+	double uT = p[ 0 ]; 	// timing offsets
+	double uP = p[ 1 ]; 	// momentum
+	double ueP = p[ 2 ]; 	// momentum
+	double m = p[ 3 ]; 		// mass of species
+	double mr = p[ 4 ]; 	// mass of centering species
+
+	double mmtm = x[ 0 ];
+	// characteristic determined by B field and Tof radius
+	double x0 = 175.5 / mmtm;
+
+	double a = 1 - x0 / ( TMath::ASin( x0 ) * TMath::Sqrt( 1 - x0*x0 ) ) * uP;
+	double b = m*m / (mmtm * TMath::Sqrt( mmtm * mmtm + m * m ) ) * ueP;
+	double c = mr*mr / (mmtm * TMath::Sqrt( mmtm * mmtm + mr * mr ) ) * ueP;
+
+	return TMath::Sqrt(uT*uT + a*a + b*b + c*c );  
+
+}
+
+
+
 PidParamMaker::PidParamMaker( XmlConfig * config, string np ){
 	//Set the Root Output Level
 	gErrorIgnoreLevel=kSysError;
 
+
 	// Save Class Members
 	cfg = config;
 	nodePath = np;
+
+	assert( cfg );
 
 	// make the Logger
 	lg = LoggerConfig::makeLogger( cfg, np + "Logger" );
@@ -28,9 +74,6 @@ PidParamMaker::PidParamMaker( XmlConfig * config, string np ){
     // create the book
     lg->info(__FUNCTION__) << " Creating book "<< endl;
     book = new HistoBook( config->getString( np + "output.data" ), config );
-
-    lg->info(__FUNCTION__) << " Creating reporter "<< endl;
-    reporter = new Reporter( config->getString( np + "output.report" ) );
 
 
     lg->info(__FUNCTION__) << " Creating PhaseSpaceRecentering "<< endl;
@@ -61,12 +104,12 @@ PidParamMaker::PidParamMaker( XmlConfig * config, string np ){
 	muRoi 		= 2.5;
 	sigmaRoi 	= 3.5;
 	roi 		= 2.5;
+	window 		= 1.5;
 	lg->info(__FUNCTION__) << " Setup Complete "<< endl;
 }
 
 PidParamMaker::~PidParamMaker(){
 	delete book;
-	delete reporter;
 	delete psr;
 	delete lg;
 	delete binsPt;
@@ -82,6 +125,7 @@ void PidParamMaker::make(){
 	book->makeAll( nodePath + "histograms" );
 	vector<string> species = PidPhaseSpace::species;
 
+
 	/**
 	 * Less than lovely mathematica export
 	 */
@@ -94,11 +138,12 @@ void PidParamMaker::make(){
 	vector<string> dPlotMu;
 	vector<string> dSigma;
 	vector<string> dPlotSigma;
-	for ( int iS = 0; iS < species.size(); iS ++ ){
+	//for ( int iS = 0; iS < species.size(); iS ++ ){
+	for ( string plc : species ){
 
 		// For tof
-		string mName = "tofMean" + species[iS];
-		string sName = "tofSigma" + species[iS];
+		string mName = "tofMean" + plc;
+		string sName = "tofSigma" + plc;
 		book->clone( "mean", mName );
 		book->clone( "sigma", sName );
 
@@ -108,8 +153,8 @@ void PidParamMaker::make(){
 		mdPlotSigma.push_back( sName + "Error = { ");
 
 		// For Dedx
-		mName = "dedxMean" + species[iS];
-		sName = "dedxSigma" + species[iS];
+		mName = "dedxMean" + plc;
+		sName = "dedxSigma" + plc;
 		book->clone( "mean", mName );
 		book->clone( "sigma", sName );
 
@@ -117,6 +162,16 @@ void PidParamMaker::make(){
 		dSigma.push_back( sName + " = { ");
 		dPlotMu.push_back( (mName + "Error = { ") );
 		dPlotSigma.push_back( sName + "Error = { ");
+
+		// make a reporter for this species
+		tofReport.push_back( 
+			unique_ptr<Reporter>( 
+				new Reporter( 	cfg->getString( nodePath + "output.report" ) + "tof_" + plc + ".pdf",
+								800, 500 ) ) );
+		dedxReport.push_back( 
+			unique_ptr<Reporter>( 
+				new Reporter( 	cfg->getString( nodePath + "output.report" ) + "dedx_" + plc + ".pdf",
+								800, 500 ) ) );
 	}
 
 	int centralityBin = 1;
@@ -126,6 +181,8 @@ void PidParamMaker::make(){
 	for ( int i = 0; i < binsPt->nBins(); i++ ){
 
 			double avgP = ((*binsPt)[i] + (*binsPt)[i+1] ) / 2.0;
+			string title = "<p> = " + dts( avgP ) + " [GeV]";
+			mmtms.push_back( avgP*1000 );
 
 			vector<double> tofMus = psr->centeredTofMeans( centerSpecies, avgP );
 			vector<double> dedxMus = psr->centeredDedxMeans( centerSpecies, avgP );
@@ -137,9 +194,10 @@ void PidParamMaker::make(){
 			string name = "tof/" + PidPhaseSpace::tofName( centerSpecies, 0, centralityBin, i, 0, species[ iS ] );
 			TH1D* tofAll = (TH1D*)inFile->Get( name.c_str() );
 		
-			lg->info(__FUNCTION__) << "tofAll " << tofAll <<  endl;
 
-			GaussianFitResult tofGfr =  fitSingleSpecies( tofAll, tofMus[ iS ], tofSigmaIdeal );
+			GaussianFitResult tofGfr =  fitSingleSpecies( tofAll, tofMus[ iS ], tofSigmaIdeal, (*tofReport[ iS ]), "#beta^{-1} : " + title );
+			tofFit[ species[ iS ] ].push_back( tofGfr );
+
 
 			book->get( mName )->SetBinContent( i, tofGfr.mu );
 			book->get( sName )->SetBinContent( i, tofGfr.sigma );
@@ -169,7 +227,9 @@ void PidParamMaker::make(){
 			name = "dedx/" + PidPhaseSpace::dedxName( centerSpecies, 0, centralityBin, i, 0, species[ iS ] );
 			TH1D* hDedx = (TH1D*)inFile->Get( name.c_str() );
 		
-			GaussianFitResult dedxGfr =  fitSingleSpecies( hDedx, dedxMus[ iS ], dedxSigmaIdeal );
+			GaussianFitResult dedxGfr =  fitSingleSpecies( hDedx, dedxMus[ iS ], dedxSigmaIdeal, (*dedxReport[ iS ]), "dEdx : " + title );
+			dedxFit[ species[ iS ] ].push_back( dedxGfr );
+
 
 			book->get( mName )->SetBinContent( i, dedxGfr.mu );
 			book->get( sName )->SetBinContent( i, dedxGfr.sigma );
@@ -217,11 +277,146 @@ void PidParamMaker::make(){
 		cout << dPlotSigma[ iS ] << endl << endl << endl;
 	}
 
-	
+	for ( int i = 0; i < species.size(); i++ ){
+		reportTofFitResult( species[ i ], (*tofReport[ i ]) );
+		reportDedxFitResult( species[ i ], (*dedxReport[ i ]) );
+	}
+
 
 }
 
-PidParamMaker::GaussianFitResult PidParamMaker::fitSingleSpecies( TH1D* h, double iMu, double iSigma ){
+void PidParamMaker::reportTofFitResult( string s, Reporter &rp ){
+
+
+	// convert the vector of GFR to vectors of mean / sigma
+	vector<double> means, sigmas;
+	double maxM = -100, minM = 1000;
+	double maxS = -100, minS = 1000;
+	for ( int i; i < tofFit[ s ].size(); i++ ){
+		means.push_back( tofFit[ s ][ i ].mu );
+		sigmas.push_back( tofFit[ s ][ i ].sigma );
+
+		if ( means[ i ] > maxM )
+			maxM = means[ i ];
+		if ( means[ i ] < minM )
+			minM = means[ i ];
+		if ( sigmas[ i ] > maxS )
+			maxS = sigmas[ i ];
+		if ( sigmas[ i ] < minS )
+			minS = sigmas[ i ];
+	
+	}
+
+	TF1 * mfn = new TF1( "mfn", PidParamMaker::meanFunction, 0, 5000, 5 );
+	mfn->FixParameter( 3, psr->mass( s ) );
+	mfn->FixParameter( 4, psr->mass( centerSpecies ) );
+
+	TF1 * sfn = new TF1( "sfn", PidParamMaker::sigmaFunction, 0, 5000, 5 );
+	sfn->FixParameter( 3, psr->mass( s ) );
+	sfn->FixParameter( 4, psr->mass( centerSpecies ) );
+
+	/**
+	 * Plot means
+	 */
+	gStyle->SetOptStat( 0 );
+	TH1F * mFrame = new TH1F( ("tof_" + s + "_mean").c_str(), ("Mean of " + s).c_str(), 10, mmtms[ 0 ], mmtms[ mmtms.size() -1 ] );
+	TGraph * mGraph = new TGraph( means.size(), mmtms.data(), means.data() );
+
+	rp.newPage();
+	mFrame->Draw();
+	mFrame->GetYaxis()->SetRangeUser( minM * 1.1, maxM * 1.1 );
+	mGraph->Draw( "same" );
+	mGraph->Fit( mfn );
+	rp.savePage();
+
+
+
+	/**
+	 * Plot Sigmas
+	 */
+	
+	TH1F * sFrame = new TH1F( ("tof_" + s + "_sigma").c_str(), ("Sigma of " + s).c_str(), 10, mmtms[ 0 ], mmtms[ mmtms.size() -1 ] );
+	TGraph * sGraph = new TGraph( sigmas.size(), mmtms.data(), sigmas.data() );
+
+	rp.newPage();
+	sFrame->Draw();
+	sFrame->GetYaxis()->SetRangeUser( minS * 1.1, maxS * 1.1 );
+	sGraph->Draw( "same" );
+	sGraph->Fit( sfn );
+	rp.savePage();
+
+
+	/**
+	 * Export the parameters as an XML tree
+	 */
+	
+	cout << "<" << s << ">" << endl;
+	cout << "\t<mean t=\"" << mfn->GetParameter( 0 ) << "\" p=\"" << mfn->GetParameter( 1 ) << "\" ep=\"" << mfn->GetParameter( 2 ) << "\" />" << endl;
+	cout << "\t<sigma t=\"" << sfn->GetParameter( 0 ) << "\" p=\"" << sfn->GetParameter( 1 ) << "\" ep=\"" << sfn->GetParameter( 2 ) << "\" />" << endl;
+	cout << "</" << s << ">" << endl;
+
+
+	vector<double> dv = { 1.0, 3.0, 5.0, 7.0 };
+	double ta[] = { 1.0, 3.0, 5.0, 7.0 };
+
+	for_each( begin(ta), end(ta), [](double i){ cout << "i = " << i << endl; } );
+
+}
+
+
+void PidParamMaker::reportDedxFitResult( string s, Reporter &rp ){
+
+
+	// convert the vector of GFR to vectors of mean / sigma
+	vector<double> means, sigmas;
+	double maxM = -100, minM = 1000;
+	double maxS = -100, minS = 1000;
+	for ( int i; i < dedxFit[ s ].size(); i++ ){
+		means.push_back( dedxFit[ s ][ i ].mu );
+		sigmas.push_back( dedxFit[ s ][ i ].sigma );
+
+		if ( means[ i ] > maxM )
+			maxM = means[ i ];
+		if ( means[ i ] < minM )
+			minM = means[ i ];
+		if ( sigmas[ i ] > maxS )
+			maxS = sigmas[ i ];
+		if ( sigmas[ i ] < minS )
+			minS = sigmas[ i ];
+	
+	}
+
+	/**
+	 * Plot means
+	 */
+	gStyle->SetOptStat( 0 );
+	TH1F * mFrame = new TH1F( ("dedx_" + s + "_mean").c_str(), ("Mean of " + s).c_str(), 10, mmtms[ 0 ], mmtms[ mmtms.size() -1 ] );
+	TGraph * mGraph = new TGraph( means.size(), mmtms.data(), means.data() );
+
+	rp.newPage();
+	mFrame->Draw();
+	mFrame->GetYaxis()->SetRangeUser( minM * 1.1, maxM * 1.1 );
+	mGraph->Draw( "same" );
+	rp.savePage();
+
+	/**
+	 * Plot Sigmas
+	 */
+	
+	TH1F * sFrame = new TH1F( ("dedx_" + s + "_sigma").c_str(), ("Sigma of " + s).c_str(), 10, mmtms[ 0 ], mmtms[ mmtms.size() -1 ] );
+	TGraph * sGraph = new TGraph( sigmas.size(), mmtms.data(), sigmas.data() );
+
+	rp.newPage();
+	sFrame->Draw();
+	sFrame->GetYaxis()->SetRangeUser( minS * 1.1, maxS * 1.1 );
+	sGraph->Draw( "same" );
+	rp.savePage();
+
+}
+
+
+
+PidParamMaker::GaussianFitResult PidParamMaker::fitSingleSpecies( TH1D* h, double iMu, double iSigma, Reporter &rp, string title ){
 
 	using namespace RooFit;
 	RooMsgService::instance().setGlobalKillBelow(ERROR);
@@ -253,15 +448,15 @@ PidParamMaker::GaussianFitResult PidParamMaker::fitSingleSpecies( TH1D* h, doubl
 	x.setRange( "roi", iMu - roi * iSigma, iMu + roi * iSigma );
 	gauss.fitTo( *rdh, Range( "roi" ), RooFit::PrintLevel(-1) );
 
-	x.setRange( "roiError", iMu - 2.0*roi * iSigma, iMu + 2.0* roi * iSigma );
+	x.setRange( "roiError", iMu - window*roi * iSigma, iMu + window* roi * iSigma );
 	egauss.fitTo( *rdh, Range( "roiError" ), RooFit::PrintLevel(-1) );
 
 	/**
 	 * Report the data + gauss
 	 */
-	reporter->newPage();
+	rp.newPage();
 
-	RooPlot * frame = x.frame( Title( h->GetTitle() ) );
+	RooPlot * frame = x.frame( Title( title.c_str() ) );
 	rdh->plotOn( frame );
 	gauss.plotOn( frame );
 	egauss.plotOn( frame, LineColor(kRed) );
@@ -270,7 +465,7 @@ PidParamMaker::GaussianFitResult PidParamMaker::fitSingleSpecies( TH1D* h, doubl
 	frame->Draw();
 	frame->SetMinimum( 1 );
 
-	reporter->savePage();
+	rp.savePage();
 
 	GaussianFitResult gfr;
 

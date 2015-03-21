@@ -21,7 +21,7 @@ includes		= -I../include -I. -I$(ROOTSYS)/include -I$(JDB_LIB)/include/jdb -I$(J
 libraries 		= 	$(ROOTLIBS) -lRooFitCore -lRooFit $(CERNLIBS) $(SYSLIBS)
 staticLibs 		= $(JDB_LIB)/lib/libJDB.a
 
-cxx 		= g++ -std=c++0x
+cxx 		= g++ -std=c++11
 flags 		= -Wall -O3 $(ROOTCFLAGS) $(includes)
 compile 	= $(cxx) $(flags) -c 
 ldFlags  	= $(ROOTLDFLAGS) 
