@@ -63,6 +63,7 @@ void SimultaneousPid::make(){
 
 
 	int charge = -1;
+	int centrality = 0;
 	logger->info( __FUNCTION__ ) << endl;
 	vector<string> species = PidPhaseSpace::species;
 
@@ -81,15 +82,15 @@ void SimultaneousPid::make(){
 		}
 		
 		// get the histo paths
-		TH1D* tofAll = (TH1D*)inFile->Get( ("tof/" + PidPhaseSpace::tofName( centerSpecies, charge, "0to5", i, 0 )).c_str() );
-		TH1D* tofPi = (TH1D*)inFile->Get( ("tof/" + PidPhaseSpace::tofName( centerSpecies, charge, "0to5", i, 0, "Pi" )).c_str() );
-		TH1D* tofK = (TH1D*)inFile->Get( ("tof/" + PidPhaseSpace::tofName( centerSpecies, charge, "0to5", i, 0, "K" )).c_str() );
-		TH1D* tofP = (TH1D*)inFile->Get( ("tof/" + PidPhaseSpace::tofName( centerSpecies, charge, "0to5", i, 0, "P" )).c_str() );
+		TH1D* tofAll = (TH1D*)inFile->Get( ("tof/" + PidPhaseSpace::tofName( centerSpecies, charge, centrality, i, 0 )).c_str() );
+		TH1D* tofPi = (TH1D*)inFile->Get( ("tof/" + PidPhaseSpace::tofName( centerSpecies, charge, centrality, i, 0, "Pi" )).c_str() );
+		TH1D* tofK = (TH1D*)inFile->Get( ("tof/" + PidPhaseSpace::tofName( centerSpecies, charge, centrality, i, 0, "K" )).c_str() );
+		TH1D* tofP = (TH1D*)inFile->Get( ("tof/" + PidPhaseSpace::tofName( centerSpecies, charge, centrality, i, 0, "P" )).c_str() );
 		
-		TH1D* dedxAll = (TH1D*)inFile->Get( ("dedx/" + PidPhaseSpace::dedxName( centerSpecies, charge, "0to5", i, 0 )).c_str() );
-		TH1D* dedxPi = (TH1D*)inFile->Get( ("dedx/" + PidPhaseSpace::dedxName( centerSpecies, charge, "0to5", i, 0, "Pi" )).c_str() );
-		TH1D* dedxK = (TH1D*)inFile->Get( ("dedx/" + PidPhaseSpace::dedxName( centerSpecies, charge, "0to5", i, 0, "K" )).c_str() );
-		TH1D* dedxP = (TH1D*)inFile->Get( ("dedx/" + PidPhaseSpace::dedxName( centerSpecies, charge, "0to5", i, 0, "P" )).c_str() );
+		TH1D* dedxAll = (TH1D*)inFile->Get( ("dedx/" + PidPhaseSpace::dedxName( centerSpecies, charge, centrality, i, 0 )).c_str() );
+		TH1D* dedxPi = (TH1D*)inFile->Get( ("dedx/" + PidPhaseSpace::dedxName( centerSpecies, charge, centrality, i, 0, "Pi" )).c_str() );
+		TH1D* dedxK = (TH1D*)inFile->Get( ("dedx/" + PidPhaseSpace::dedxName( centerSpecies, charge, centrality, i, 0, "K" )).c_str() );
+		TH1D* dedxP = (TH1D*)inFile->Get( ("dedx/" + PidPhaseSpace::dedxName( centerSpecies, charge, centrality, i, 0, "P" )).c_str() );
 
 		reporter->newPage( 2, 2 );
 		gPad->SetLogy(1);

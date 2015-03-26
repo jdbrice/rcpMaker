@@ -1,13 +1,13 @@
 
 
 
-void gRcp( string cen = "../bin/simGauss.root" ){
+void gRcp( string cen = "simGauss.root" ){
 
 
 	TFile * fc = new TFile( cen.c_str(), "READ" );
 
-	TH1D* hC = fc->Get( "yield_n_0to5_K" );
-	TH1D* hP = fc->Get( "yield_n_60to80_K" );
+	TH1D* hC = fc->Get( "yield_p_1_P" );
+	TH1D* hP = fc->Get( "yield_p_0_P" );
 
 	hC->Sumw2();
 	hP->Sumw2();

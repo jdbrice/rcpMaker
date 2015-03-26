@@ -11,7 +11,11 @@ using namespace jdb;
 #include "ParamSpectra.h"
 #include "PidPhaseSpace.h"
 #include "PidParamMaker.h"
+#include "SimultaneousGaussians.h"
 #include "SimultaneousPid.h"
+
+#include "XmlRooRealVar.h"
+#include "SGFSchema.h"
 
 #include <exception>
 
@@ -46,23 +50,85 @@ int main( int argc, char* argv[] ) {
 				PidParamMaker ppm( &config, "PidParamMaker." );
 				ppm.make();
 			} else if ( "SimultaneousPid" == job ){
-				//SimultaneousPid sg( &config, "SimultaneousPid." );
-				//sg.make();
+				SimultaneousPid sg( &config, "SimultaneousPid." );
+				sg.make();
 			} else if ( "test" == job ){
-				//TreeAnalyzer ta( &config, "" );
-				DataSource * ds = new DataSource( &config, "DataSource" );
-				LBNLPicoDst dsw(ds );
+				
+				Logger::setGlobalColor( true );
+				Logger::setGlobalLogLevel( Logger::llAll );
+				
+				TFile * inFile = new TFile(config.getString( "input:url").c_str(), "READ" );
 
-				for ( int i = 0; i < ds->getEntries(); i++  ){
-					dsw.GetEntry(i);
-					cout << "#Tracks  " << dsw.numTracks() << endl;;
-					for ( int j = 0; j < dsw.numTracks(); j++ ){
-							cout << "charge " << dsw.trackCharge( j ) << endl;
-							cout << "hits fit " << dsw.trackNHitsFit( j ) << endl;
-							cout << " hits fit " << ds->get( "Tracks.mNHitsFit", j ) << endl;
-					}
-				}
+				SGFSchema sgfs( &config, "Schema" );
+				
+				int ptBin = 4;
+				// get the histo paths
+				map< string, TH1D* > zb;
+				map< string, TH1D* > zd;
+				zb[ "zb_All" ] = (TH1D*)inFile->Get( ("tof/" + PidPhaseSpace::tofName( "K", 0, 1, ptBin, 0 )).c_str() );
+				zd[ "zd_All" ] = (TH1D*)inFile->Get( ("dedx/" + PidPhaseSpace::dedxName( "K", 0, 1, ptBin, 0 )).c_str() );
+				
+				sgfs.updateData( zb, "zb" );
+				sgfs.updateData( zd, "zd" );
+				
+				sgfs.combineData();
+
+				RooDataHist * d = sgfs.data( "" );
+				RooCategory * cat = sgfs.cat();
+
+				Reporter rp( "rpTest.pdf", 600, 600 );
+				rp.newPage();
+					RooRealVar * rrv = sgfs.var( "zd" ); 
+					RooPlot * f = rrv->frame( );
+
+					
+					
+					sgfs.simModel->fitTo( *d );
+					
+					d->plotOn(f, Cut("sample==sample::zd_All"));
+					//sgfs.models[ "zb_All"]->plotOn( f, Range("All") );
+					
+					
+					sgfs.simModel->plotOn( f, Slice(*cat,"zd_All"), ProjWData(*cat,*d) );
+					sgfs.simModel->plotOn( f, Slice(*cat,"zd_All"), ProjWData(*cat,*d), Components( "zd_All_gauss_Pi" ), LineColor( kRed ) );
+					sgfs.simModel->plotOn( f, Slice(*cat,"zd_All"), ProjWData(*cat,*d), Components( "zd_All_gauss_K" ), LineColor( kBlack ) );
+					f->SetMinimum( 10 );
+					f->SetMaximum( 1000000 );
+
+					gPad->SetLogy(1);
+					 
+					f->Draw(); 
+				rp.savePage();
+				rp.newPage();
+					rrv = sgfs.var( "zb" ); 
+					f = rrv->frame( );
+					
+					d->plotOn(f, Cut("sample==sample::zb_All"));
+					sgfs.simModel->plotOn( f, Slice(*cat,"zb_All"), ProjWData(*cat,*d) );
+					sgfs.simModel->plotOn( f, Slice(*cat,"zb_All"), ProjWData(*cat,*d), Components( "zb_All_gauss_Pi" ), LineColor( kRed ) );
+					sgfs.simModel->plotOn( f, Slice(*cat,"zb_All"), ProjWData(*cat,*d), Components( "zb_All_gauss_K" ), LineColor( kBlack ) );
+
+					f->SetMinimum( 10 );
+					f->SetMaximum( 1000000 );
+					gPad->SetLogy(1);
+					 
+
+					f->Draw(); 
+
+
+
+				rp.savePage();
+
+				rp.newPage();
+				((TH1D*)inFile->Get( ("dedx/" + PidPhaseSpace::dedxName( "K", 0, 1, ptBin, 0, "K" )).c_str() ))->Draw();;
+				rp.savePage();
+				inFile->Close();
+
 			}
+
+
+
+
 
 		} catch ( exception &e ){
 			cout << e.what() << endl;

@@ -87,15 +87,15 @@ void SimultaneousGaussians::gateway() {
 		}
 		
 		// get the histo paths
-		TH1D* tofAll = (TH1D*)inFile->Get( ("tof/" + PidPhaseSpace::tofName( centerSpecies, 0, "0to5", i, 0 )).c_str() );
-		TH1D* tofPi = (TH1D*)inFile->Get( ("tof/" + PidPhaseSpace::tofName( centerSpecies, 0, "0to5", i, 0, "Pi" )).c_str() );
-		TH1D* tofK = (TH1D*)inFile->Get( ("tof/" + PidPhaseSpace::tofName( centerSpecies, 0, "0to5", i, 0, "K" )).c_str() );
-		TH1D* tofP = (TH1D*)inFile->Get( ("tof/" + PidPhaseSpace::tofName( centerSpecies, 0, "0to5", i, 0, "P" )).c_str() );
+		TH1D* tofAll = (TH1D*)inFile->Get( ("tof/" + PidPhaseSpace::tofName( centerSpecies, 0, 1, i, 0 )).c_str() );
+		TH1D* tofPi = (TH1D*)inFile->Get( ("tof/" + PidPhaseSpace::tofName( centerSpecies, 0, 1, i, 0, "Pi" )).c_str() );
+		TH1D* tofK = (TH1D*)inFile->Get( ("tof/" + PidPhaseSpace::tofName( centerSpecies, 0, 1, i, 0, "K" )).c_str() );
+		TH1D* tofP = (TH1D*)inFile->Get( ("tof/" + PidPhaseSpace::tofName( centerSpecies, 0, 1, i, 0, "P" )).c_str() );
 		
-		TH1D* dedxAll = (TH1D*)inFile->Get( ("dedx/" + PidPhaseSpace::dedxName( centerSpecies, 0, "0to5", i, 0 )).c_str() );
-		TH1D* dedxPi = (TH1D*)inFile->Get( ("dedx/" + PidPhaseSpace::dedxName( centerSpecies, 0, "0to5", i, 0, "Pi" )).c_str() );
-		TH1D* dedxK = (TH1D*)inFile->Get( ("dedx/" + PidPhaseSpace::dedxName( centerSpecies, 0, "0to5", i, 0, "K" )).c_str() );
-		TH1D* dedxP = (TH1D*)inFile->Get( ("dedx/" + PidPhaseSpace::dedxName( centerSpecies, 0, "0to5", i, 0, "P" )).c_str() );
+		TH1D* dedxAll = (TH1D*)inFile->Get( ("dedx/" + PidPhaseSpace::dedxName( centerSpecies, 0, 1, i, 0 )).c_str() );
+		TH1D* dedxPi = (TH1D*)inFile->Get( ("dedx/" + PidPhaseSpace::dedxName( centerSpecies, 0, 1, i, 0, "Pi" )).c_str() );
+		TH1D* dedxK = (TH1D*)inFile->Get( ("dedx/" + PidPhaseSpace::dedxName( centerSpecies, 0, 1, i, 0, "K" )).c_str() );
+		TH1D* dedxP = (TH1D*)inFile->Get( ("dedx/" + PidPhaseSpace::dedxName( centerSpecies, 0, 1, i, 0, "P" )).c_str() );
 
 		reporter->newPage( 2, 2 );
 		gPad->SetLogy(1);
@@ -138,7 +138,7 @@ void SimultaneousGaussians::gateway() {
 void SimultaneousGaussians::make(){
 
 	
-	return;
+	//return;
 
 	book->cd();
 	book->makeAll( nodePath + "histograms" );
@@ -152,11 +152,11 @@ void SimultaneousGaussians::make(){
 
 
 	for ( int iS = 0; iS < species.size(); iS ++ ){
-		book->clone( "yield", "yield_n_0to5_"+species[ iS ] );
-		book->clone( "yield", "yield_n_60to80_"+species[ iS ] );
+		book->clone( "yield", "yield_n_0_"+species[ iS ] );
+		book->clone( "yield", "yield_n_1_"+species[ iS ] );
 
-		book->clone( "yield", "yield_p_0to5_"+species[ iS ] );
-		book->clone( "yield", "yield_p_60to80_"+species[ iS ] );
+		book->clone( "yield", "yield_p_0_"+species[ iS ] );
+		book->clone( "yield", "yield_p_1_"+species[ iS ] );
 	}
 		
 	for ( int i = 0; i < binsPt->nBins(); i++ ){
@@ -173,18 +173,18 @@ void SimultaneousGaussians::make(){
 			dedxSigmas.push_back( dedxParams[ iS ]->sigma( avgP ) );
 		}
 
-		vector<string> cen = { "60to80", "0to5" };
+		vector<int> cen = { 0, 1 };
 		vector<string> charge = { "p_", "n_" };
 		vector<int> intCharge = { 1, -1 };
 		for ( int iCharge = 0; iCharge < charge.size(); iCharge++ ){
-			for ( int iCen = 0; iCen < cen.size(); iCen++  ){
+			for ( int iCen : cen ){
 
 				if ( iCen == 0 )
 					yields = &pYields;
 				else
 					yields = &cYields;
 
-				string tname = "tof/" + PidPhaseSpace::tofName( centerSpecies, intCharge[iCharge], cen[iCen], i, 0 );
+				string tname = "tof/" + PidPhaseSpace::tofName( centerSpecies, intCharge[iCharge], iCen, i, 0 );
 
 				TH1D * tofAll = (TH1D*)inFile->Get( tname.c_str() );
 				string draw = "";
@@ -196,40 +196,40 @@ void SimultaneousGaussians::make(){
 						if ( iS == 2){
 							
 
-							tname = "tof/" + PidPhaseSpace::tofName( centerSpecies, intCharge[iCharge], cen[iCen], i, 0 );
+							tname = "tof/" + PidPhaseSpace::tofName( centerSpecies, intCharge[iCharge], iCen, i, 0 );
 							TH1D * tofAll = (TH1D*)inFile->Get( tname.c_str() );
 
 
 							GaussianFitResult gfr = fitSingleSpecies( tofAll, tofMus[ iS ], tofSigmas[iS], draw, iS+1);
 							aYields[iCen][iCharge][ iS ] = gfr.mu;
 
-							book->get( "yield_"+charge[iCharge]+cen[iCen]+"_"+species[iS]  )->SetBinContent( i+1, gfr.mu );
-							book->get( "yield_"+charge[iCharge]+cen[iCen]+"_"+species[iS]  )->SetBinError( i+1, gfr.muError );
+							book->get( "yield_"+charge[iCharge]+ts(iCen)+"_"+species[iS]  )->SetBinContent( i+1, gfr.mu );
+							book->get( "yield_"+charge[iCharge]+ts(iCen)+"_"+species[iS]  )->SetBinError( i+1, gfr.muError );
 
 						} else if ( iS <= 1) {
 
 							if ( i<= 10  ){
 
-								tname = "tof/" + PidPhaseSpace::tofName( centerSpecies, 1, cen[iCen], i, 0 );
+								tname = "tof/" + PidPhaseSpace::tofName( centerSpecies, 1, iCen, i, 0 );
 								TH1D * tofAll = (TH1D*)inFile->Get( tname.c_str() );
 
 								GaussianFitResult gfr = fitSingleSpecies( tofAll, tofMus[ iS ], tofSigmas[iS], draw, iS+1);
 								
 								aYields[iCen][iCharge][ iS ] = gfr.mu;
 
-								book->get( "yield_"+charge[iCharge]+cen[iCen]+"_"+species[iS]  )->SetBinContent( i+1, gfr.mu );
-								book->get( "yield_"+charge[iCharge]+cen[iCen]+"_"+species[iS]  )->SetBinError( i+1, gfr.muError );
+								book->get( "yield_"+charge[iCharge]+ts(iCen)+"_"+species[iS]  )->SetBinContent( i+1, gfr.mu );
+								book->get( "yield_"+charge[iCharge]+ts(iCen)+"_"+species[iS]  )->SetBinError( i+1, gfr.muError );
 							} else if ( i > 10 && iS == 0 ){
 								
 								string dr = "";
 								GaussianFitResult gfr = fitTwoSpecies( tofAll, tofMus, tofSigmas, aYields[iCen][iCharge] );
-								book->get("yield_"+charge[iCharge]+cen[iCen]+"_"+species[iS]  )->SetBinContent( i+1, gfr.mu );
-								book->get("yield_"+charge[iCharge]+cen[iCen]+"_"+species[iS]  )->SetBinError( i+1, gfr.muError );
+								book->get("yield_"+charge[iCharge]+ts(iCen)+"_"+species[iS]  )->SetBinContent( i+1, gfr.mu );
+								book->get("yield_"+charge[iCharge]+ts(iCen)+"_"+species[iS]  )->SetBinError( i+1, gfr.muError );
 
 								aYields[iCen][iCharge][ 0 ] = gfr.mu;
 								
-								book->get( "yield_"+charge[iCharge]+cen[iCen]+"_"+species[iS+1] )->SetBinContent( i+1, gfr.sigma );
-								book->get( "yield_"+charge[iCharge]+cen[iCen]+"_"+species[iS+1] )->SetBinError( i+1, gfr.sigmaError );	
+								book->get( "yield_"+charge[iCharge]+ts(iCen)+"_"+species[iS+1] )->SetBinContent( i+1, gfr.sigma );
+								book->get( "yield_"+charge[iCharge]+ts(iCen)+"_"+species[iS+1] )->SetBinError( i+1, gfr.sigmaError );	
 								aYields[iCen][iCharge][ 1 ] = gfr.sigma;	
 							
 
@@ -243,13 +243,13 @@ void SimultaneousGaussians::make(){
 								
 						string dr = "";
 						GaussianFitResult gfr = fitAllSpecies( tofAll, tofMus, tofSigmas, aYields[iCen][iCharge] );
-						book->get("yield_"+charge[iCharge]+cen[iCen]+"_"+species[iS]  )->SetBinContent( i+1, gfr.mu );
-						book->get("yield_"+charge[iCharge]+cen[iCen]+"_"+species[iS]  )->SetBinError( i+1, gfr.muError );
+						book->get("yield_"+charge[iCharge]+ts(iCen)+"_"+species[iS]  )->SetBinContent( i+1, gfr.mu );
+						book->get("yield_"+charge[iCharge]+ts(iCen)+"_"+species[iS]  )->SetBinError( i+1, gfr.muError );
 
 						aYields[iCen][iCharge][ 0 ] = gfr.mu;
 						
-						book->get( "yield_"+charge[iCharge]+cen[iCen]+"_"+species[iS+1] )->SetBinContent( i+1, gfr.sigma );
-						book->get( "yield_"+charge[iCharge]+cen[iCen]+"_"+species[iS+1] )->SetBinError( i+1, gfr.sigmaError );	
+						book->get( "yield_"+charge[iCharge]+ts(iCen)+"_"+species[iS+1] )->SetBinContent( i+1, gfr.sigma );
+						book->get( "yield_"+charge[iCharge]+ts(iCen)+"_"+species[iS+1] )->SetBinError( i+1, gfr.sigmaError );	
 						aYields[iCen][iCharge][ 1 ] = gfr.sigma;	
 				
 					}

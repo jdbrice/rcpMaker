@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+
+	<!-- Indep Vars -->
+	<RooRealVar name="zb" min="-.2" max=".2" />
+	<RooRealVar name="zd" min="-.2" max=".2" />
+
+	<!-- 1/beta -->
+	<RooRealVar name="zb_mu_Pi" value=".01" min="-.2" max=".2" />
+	<RooRealVar name="zb_mu_K" value=".01" min="-.2" max=".2" />
+	<RooRealVar name="zb_mu_P" value=".01" min="-.2" max=".2" />
+	<RooRealVar name="zb_sigma_Pi" value=".01" min="-.2" max=".2" />
+	<RooRealVar name="zb_sigma_K" value=".01" min="-.2" max=".2" />
+	<RooRealVar name="zb_sigma_P" value=".01" min="-.2" max=".2" />
+
+	<!-- dEdx -->
+	<RooRealVar name="zd_mu_Pi" value=".01" min="-.2" max=".2" />
+	<RooRealVar name="zd_mu_K" value=".01" min="-.2" max=".2" />
+	<RooRealVar name="zd_mu_P" value=".01" min="-.2" max=".2" />
+	<RooRealVar name="zd_sigma_Pi" value=".01" min="-.2" max=".2" />
+	<RooRealVar name="zd_sigma_K" value=".01" min="-.2" max=".2" />
+	<RooRealVar name="zd_sigma_P" value=".01" min="-.2" max=".2" />
+
+	<!-- 1/beta and dEdx shared yields -->
+	<RooRealVar name="yield_Pi" value="100" min="-.2" max=".2" />
+	<RooRealVar name="yield_K" value="100" min="-.2" max=".2" />
+	<RooRealVar name="yield_P" value="100" min="-.2" max=".2" />
+	
+
+	<!-- Samples -->
+	<Samples>
+		zb_All,
+		zd_All
+	</Samples>
+
+	<!-- Models -->
+	<Model name="zb_All" sample="zb_All" >
+		<RooGaussian name="gauss_Pi" var="zb" mu="zb_mu_Pi" sigma="zb_sigma_Pi" yield="yield_Pi" />
+		<RooGaussian name="gauss_K" var="zb" mu="zb_mu_K" sigma="zb_sigma_K" yield="yield_K" />
+		<RooGaussian name="gauss_P" var="zb" mu="zb_mu_P" sigma="zb_sigma_P" yield="yield_P" />
+	</Model>
+
+	<Model name="zd_All" sample="zd_All" >
+		<RooGaussian name="gauss_Pi" var="zd" mu="zd_mu_Pi" sigma="zd_sigma_Pi" yield="yield_Pi" />
+		<RooGaussian name="gauss_K" var="zd" mu="zd_mu_K" sigma="zd_sigma_K" yield="yield_K" />
+		<RooGaussian name="gauss_P" var="zd" mu="zd_mu_P" sigma="zd_sigma_P" yield="yield_P" />
+	</Model>
+
+
+</config>

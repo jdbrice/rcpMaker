@@ -9,7 +9,7 @@
 		</Logger>	
 
 		<input>
-			<data url="../products/phaseSpace/pid.root"/>
+			<data url="../products/phaseSpace/pidAll.root"/>
 		</input>
 
 		<output>
@@ -34,6 +34,19 @@
 			<mean title="Mean For Species; p_{T} [GeV]" xBins="binning.pt" />
 			<sigma title="Sigma For Species; p_{T} [GeV]" xBins="binning.pt" />
 		</histograms>
+
+		<FitRange>
+			<Pi min=".2" max="1.2" />
+			<K min=".3" max="1.2" />
+			<P min=".4" max="2.0" />
+		</FitRange>
+		<PlotRange>
+			<muPi min="-0.02" max="0.02" />
+			<muK min="-0.01" max="0.01" />
+			<sigmaK min="-0.035" max="0.025" />
+			<muP min="-0.02" max="0.8" />
+		</PlotRange>
+
 
 	</PidParamMaker>
 

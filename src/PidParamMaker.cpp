@@ -11,6 +11,82 @@
 #include "RooPlot.h"
 
 #include "PidPhaseSpace.h"
+#include "TGraphErrors.h"
+
+
+void PidParamMaker::mathematicaExport( string prefix, string s, vector<GaussianFitResult> vals ){
+
+	double min = cfg->getDouble( nodePath+"FitRange."+s+":min", 0 );
+	double max = cfg->getDouble( nodePath+"FitRange."+s+":max", 5000 );
+
+
+	/*Export Mu*/
+	ofstream out( ( cfg->getString( nodePath+"output.report" ) + prefix + s + "Mu.dat").c_str() );
+	out << prefix << "Mean" << s << " = { ";
+	int i = 0;
+	for ( GaussianFitResult gfr : vals ){
+
+		if ( mmtms[ i ]/1000.0 < min || mmtms[ i ]/1000.0 > max ){
+			i++;
+			continue;
+		}
+
+		out << "{";
+		out << mmtms[ i ] << ", " << gfr.mu << "}";
+		if ( gfr.mu != vals[ vals.size()-1].mu
+			&& i+1 < mmtms.size() && mmtms[ i + 1] / 1000.0 <= max )
+			out << ", ";
+		i++;
+	}
+	out << " };" << endl;
+	out << endl << endl << prefix << "Mean" << s << "Error = { ";
+	i = 0;
+	for ( GaussianFitResult gfr : vals ){
+
+		out << "{{";
+		out << mmtms[ i ] << ", " << gfr.mu << "}, ";
+		out << "ErrorBar[ " << gfr.muError << " ] }";
+		if ( gfr.mu != vals[ tofFit[s].size()-1].mu )
+			out << ", ";
+		i++;
+	}
+	out << " };" << endl;
+	out.close();
+
+
+	/*Export Sigma*/
+	ofstream outS( ( cfg->getString( nodePath+"output.report" ) +prefix + s + "Sigma.dat").c_str() );
+	outS << prefix << "Sigma" << s << " = { ";
+	i = 0;
+	for ( GaussianFitResult gfr : vals ){
+
+		if ( mmtms[ i ]/1000.0 < min || mmtms[ i ]/1000.0 > max ){
+			i++;
+			continue;
+		}
+
+		outS << "{";
+		outS << mmtms[ i ] << ", " << gfr.sigma << "}";
+		if ( gfr.sigma != vals[ tofFit[s].size()-1].mu
+			&& i+1 < mmtms.size() && mmtms[ i + 1] / 1000.0 <= max )
+			outS << ", ";
+		i++;
+	}
+	outS << " };" << endl;
+	outS << endl << endl << prefix << "Sigma" << s << "Error = { ";
+	i = 0;
+	for ( GaussianFitResult gfr : vals ){
+
+		outS << "{{";
+		outS << mmtms[ i ] << ", " << gfr.sigma << "}, ";
+		outS << "ErrorBar[ " << gfr.sigmaError << " ] }";
+		if ( gfr.sigma != vals[ tofFit[s].size()-1].mu )
+			outS << ", ";
+		i++;
+	}
+	outS << " };" << endl;
+	outS.close();
+}
 
 
 double PidParamMaker::meanFunction( double *x, double *p ){
@@ -25,9 +101,9 @@ double PidParamMaker::meanFunction( double *x, double *p ){
 	// characteristic determined by B field and Tof radius
 	double x0 = 175.5 / mmtm;
 
-	double a = 1 - x0 / ( TMath::ASin( x0 ) * TMath::Sqrt( 1 - x0*x0 ) ) * uP;
-	double b = m*m / (mmtm * TMath::Sqrt( mmtm * mmtm + m * m ) ) * ueP;
-	double c = mr*mr / (mmtm * TMath::Sqrt( mmtm * mmtm + mr * mr ) ) * ueP;
+	double a = 1.0 - x0 / ( TMath::ASin( x0 ) * TMath::Sqrt( 1 - x0*x0 ) ) * uP;
+	double b = m*m / ( mmtm * TMath::Sqrt( mmtm * mmtm + m * m ) ) * ueP;
+	double c = mr*mr / ( mmtm * TMath::Sqrt( mmtm * mmtm + mr * mr ) ) * ueP;
 
 	return uT + a + b + c; 
 
@@ -45,11 +121,11 @@ double PidParamMaker::sigmaFunction( double *x, double *p ){
 	// characteristic determined by B field and Tof radius
 	double x0 = 175.5 / mmtm;
 
-	double a = 1 - x0 / ( TMath::ASin( x0 ) * TMath::Sqrt( 1 - x0*x0 ) ) * uP;
+	double a = 1.0 - x0 / ( TMath::ASin( x0 ) * TMath::Sqrt( 1.0 - x0*x0 ) ) * uP;
 	double b = m*m / (mmtm * TMath::Sqrt( mmtm * mmtm + m * m ) ) * ueP;
 	double c = mr*mr / (mmtm * TMath::Sqrt( mmtm * mmtm + mr * mr ) ) * ueP;
 
-	return TMath::Sqrt(uT*uT + a*a + b*b + c*c );  
+	return TMath::Sqrt( uT*uT + a*a + b*b + c*c );  
 
 }
 
@@ -125,43 +201,15 @@ void PidParamMaker::make(){
 	book->makeAll( nodePath + "histograms" );
 	vector<string> species = PidPhaseSpace::species;
 
-
 	/**
-	 * Less than lovely mathematica export
+	 * Make the histograms and the reporters
 	 */
-	vector<string> mdMu;
-	vector<string> mdPlotMu;
-	vector<string> mdSigma;
-	vector<string> mdPlotSigma;
-
-	vector<string> dMu;
-	vector<string> dPlotMu;
-	vector<string> dSigma;
-	vector<string> dPlotSigma;
-	//for ( int iS = 0; iS < species.size(); iS ++ ){
 	for ( string plc : species ){
 
-		// For tof
-		string mName = "tofMean" + plc;
-		string sName = "tofSigma" + plc;
-		book->clone( "mean", mName );
-		book->clone( "sigma", sName );
-
-		mdMu.push_back( (mName + " = { ") );
-		mdSigma.push_back( sName + " = { ");
-		mdPlotMu.push_back( (mName + "Error = { ") );
-		mdPlotSigma.push_back( sName + "Error = { ");
-
-		// For Dedx
-		mName = "dedxMean" + plc;
-		sName = "dedxSigma" + plc;
-		book->clone( "mean", mName );
-		book->clone( "sigma", sName );
-
-		dMu.push_back( (mName + " = { ") );
-		dSigma.push_back( sName + " = { ");
-		dPlotMu.push_back( (mName + "Error = { ") );
-		dPlotSigma.push_back( sName + "Error = { ");
+		book->clone( "mean", "tofMean" + plc );
+		book->clone( "sigma", "tofSigma" + plc );
+		book->clone( "mean", "dedxMean" + plc );
+		book->clone( "sigma", "dedxSigma" + plc );
 
 		// make a reporter for this species
 		tofReport.push_back( 
@@ -175,10 +223,10 @@ void PidParamMaker::make(){
 	}
 
 	int centralityBin = 1;
-	lg->info(__FUNCTION__) << "Starting fit loop "<< endl;
 
-		
+	TaskProgress tp( "Fitting Species", binsPt->nBins() * species.size() );
 	for ( int i = 0; i < binsPt->nBins(); i++ ){
+
 
 			double avgP = ((*binsPt)[i] + (*binsPt)[i+1] ) / 2.0;
 			string title = "<p> = " + dts( avgP ) + " [GeV]";
@@ -188,35 +236,24 @@ void PidParamMaker::make(){
 			vector<double> dedxMus = psr->centeredDedxMeans( centerSpecies, avgP );
 
 		for ( int iS = 0; iS < species.size(); iS ++ ){
+
+			tp.showProgress( i * (iS+1) );
+
 			string mName = "tofMean" + species[iS];
 			string sName = "tofSigma" + species[iS];
 
 			string name = "tof/" + PidPhaseSpace::tofName( centerSpecies, 0, centralityBin, i, 0, species[ iS ] );
 			TH1D* tofAll = (TH1D*)inFile->Get( name.c_str() );
 		
-
 			GaussianFitResult tofGfr =  fitSingleSpecies( tofAll, tofMus[ iS ], tofSigmaIdeal, (*tofReport[ iS ]), "#beta^{-1} : " + title );
 			tofFit[ species[ iS ] ].push_back( tofGfr );
-
-
+			
+			/* Fill Histos */
 			book->get( mName )->SetBinContent( i, tofGfr.mu );
 			book->get( sName )->SetBinContent( i, tofGfr.sigma );
 			book->get( mName )->SetBinError( i, tofGfr.muError );
 			book->get( sName )->SetBinError( i, tofGfr.sigmaError );	
 
-			mdMu[ iS ] += ("{ " + dts(avgP*1000) + ", " + dts(tofGfr.mu) + " }" );
-			mdPlotMu[ iS ] += ("{{ " + dts(avgP*1000) + ", " + dts(tofGfr.mu) + " }, ErrorBar[" + dts( tofGfr.muError ) + " ] }" );
-			if ( i != binsPt->nBins() - 1 )
-				mdMu[ iS ] += ", ";
-			if ( i != binsPt->nBins() - 1 )
-				mdPlotMu[ iS ] += ", ";
-
-			mdSigma[ iS ] += ("{ " + dts(avgP*1000) + ", " + dts(tofGfr.sigma) + " }" );
-			if ( i != binsPt->nBins() - 1 )
-				mdSigma[ iS ] += ", ";
-			mdPlotSigma[ iS ] += ("{{ " + dts(avgP*1000) + ", " + dts(tofGfr.sigma) + " }, ErrorBar[" + dts( tofGfr.sigmaError ) + " ] }" );
-			if ( i != binsPt->nBins() - 1 )
-				mdPlotSigma[ iS ] += ", ";
 
 			/**
 			 * Fit dedx now
@@ -229,57 +266,23 @@ void PidParamMaker::make(){
 		
 			GaussianFitResult dedxGfr =  fitSingleSpecies( hDedx, dedxMus[ iS ], dedxSigmaIdeal, (*dedxReport[ iS ]), "dEdx : " + title );
 			dedxFit[ species[ iS ] ].push_back( dedxGfr );
-
-
+			/* Fill Histos */
 			book->get( mName )->SetBinContent( i, dedxGfr.mu );
 			book->get( sName )->SetBinContent( i, dedxGfr.sigma );
 			book->get( mName )->SetBinError( i, dedxGfr.muError );
 			book->get( sName )->SetBinError( i, dedxGfr.sigmaError );
-
-			dMu[ iS ] += ("{ " + dts(avgP*1000) + ", " + ts( dedxGfr.mu ) + " }" );
-			dPlotMu[ iS ] += ("{{ " + dts(avgP*1000) + ", " + dts(dedxGfr.mu) + " }, ErrorBar[" + dts( dedxGfr.muError ) + " ] }" );
-			if ( i != binsPt->nBins() - 1 )
-				dMu[ iS ] += ", ";
-			if ( i != binsPt->nBins() - 1 )
-				dPlotMu[ iS ] += ", ";
-
-			dSigma[ iS ] += ("{ " + dts(avgP*1000) + ", " + dts(dedxGfr.sigma) + " }" );
-			if ( i != binsPt->nBins() - 1 )
-				dSigma[ iS ] += ", ";
-			dPlotSigma[ iS ] += ("{{ " + dts(avgP*1000) + ", " + dts(dedxGfr.sigma) + " }, ErrorBar[" + dts( dedxGfr.sigmaError ) + " ] }" );
-			if ( i != binsPt->nBins() - 1 )
-				dPlotSigma[ iS ] += ", ";	
 			
-		}
-		
-		
-		
-	}
+		} // loop species
+			
+	} // loop pt bins
 
-	for ( int iS = 0; iS < species.size(); iS++ ){
-		mdMu[ iS ] += " };";
-		mdPlotMu[ iS ] += " };";
-		mdSigma[ iS ] += " };";
-		mdPlotSigma[ iS ] += " };";
-		cout << mdMu[ iS ] << endl << endl << endl;
-		cout << mdPlotMu[ iS ] << endl << endl << endl;
-		cout << mdSigma[ iS ] << endl << endl << endl;
-		cout << mdPlotSigma[ iS ] << endl << endl << endl;
-
-		dMu[ iS ] += " };";
-		dPlotMu[ iS ] += " };";
-		dSigma[ iS ] += " };";
-		dPlotSigma[ iS ] += " };";
-
-		cout << dMu[ iS ] << endl << endl << endl;
-		cout << dPlotMu[ iS ] << endl << endl << endl;
-		cout << dSigma[ iS ] << endl << endl << endl;
-		cout << dPlotSigma[ iS ] << endl << endl << endl;
-	}
 
 	for ( int i = 0; i < species.size(); i++ ){
 		reportTofFitResult( species[ i ], (*tofReport[ i ]) );
 		reportDedxFitResult( species[ i ], (*dedxReport[ i ]) );
+		
+		mathematicaExport( "tof", species[ i ], tofFit[ species[ i ] ] );
+		mathematicaExport( "dedx", species[ i ], dedxFit[ species[ i ] ] );
 	}
 
 
@@ -290,11 +293,14 @@ void PidParamMaker::reportTofFitResult( string s, Reporter &rp ){
 
 	// convert the vector of GFR to vectors of mean / sigma
 	vector<double> means, sigmas;
+	vector<double> mE, sE;
 	double maxM = -100, minM = 1000;
 	double maxS = -100, minS = 1000;
-	for ( int i; i < tofFit[ s ].size(); i++ ){
+	for ( int i = 0; i < tofFit[ s ].size(); i++ ){
 		means.push_back( tofFit[ s ][ i ].mu );
+		mE.push_back( tofFit[ s ][ i ].muError );
 		sigmas.push_back( tofFit[ s ][ i ].sigma );
+		sE.push_back( tofFit[ s ][ i ].sigmaError );
 
 		if ( means[ i ] > maxM )
 			maxM = means[ i ];
@@ -307,25 +313,38 @@ void PidParamMaker::reportTofFitResult( string s, Reporter &rp ){
 	
 	}
 
-	TF1 * mfn = new TF1( "mfn", PidParamMaker::meanFunction, 0, 5000, 5 );
+
+	double min = cfg->getDouble( nodePath+"FitRange."+s+":min", 0 );
+	double max = cfg->getDouble( nodePath+"FitRange."+s+":max", 5000 );
+	double plotMin = cfg->getDouble( nodePath+"PlotRange.mu"+s+":min", 0 );
+	double plotMax = cfg->getDouble( nodePath+"PlotRange.mu"+s+":max", 5000 );
+
+	TF1 * mfn = new TF1( "mfn", PidParamMaker::meanFunction, min, max, 5 );
 	mfn->FixParameter( 3, psr->mass( s ) );
 	mfn->FixParameter( 4, psr->mass( centerSpecies ) );
+	mfn->SetParameters( -0.00575185, -0.0037288, 0.00355843 );
+	//mfn->SetParLimits( 1, 0.0, 0.99 );
+	//mfn->SetParLimits( 2, 0.0, 0.990 );
 
-	TF1 * sfn = new TF1( "sfn", PidParamMaker::sigmaFunction, 0, 5000, 5 );
+	TF1 * sfn = new TF1( "sfn", PidParamMaker::sigmaFunction, 200, 1200, 5 );
 	sfn->FixParameter( 3, psr->mass( s ) );
 	sfn->FixParameter( 4, psr->mass( centerSpecies ) );
+	sfn->SetParameters( 0.0111876, 0.113247, 0.00408183 );
+	sfn->SetParLimits( 0, 0.01, 0.019 );
+	//sfn->SetParLimits( 1, 0.10, 0.15 );
+	//sfn->SetParLimits( 2, 0.00006, 0.20 );
 
 	/**
 	 * Plot means
 	 */
 	gStyle->SetOptStat( 0 );
 	TH1F * mFrame = new TH1F( ("tof_" + s + "_mean").c_str(), ("Mean of " + s).c_str(), 10, mmtms[ 0 ], mmtms[ mmtms.size() -1 ] );
-	TGraph * mGraph = new TGraph( means.size(), mmtms.data(), means.data() );
+	TGraphErrors * mGraph = new TGraphErrors( means.size(), mmtms.data(), means.data(), 0, mE.data() );
 
 	rp.newPage();
 	mFrame->Draw();
-	mFrame->GetYaxis()->SetRangeUser( minM * 1.1, maxM * 1.1 );
-	mGraph->Draw( "same" );
+	mFrame->GetYaxis()->SetRangeUser( plotMin, plotMax );
+	mGraph->Draw( "same pe" );
 	mGraph->Fit( mfn );
 	rp.savePage();
 
@@ -334,32 +353,19 @@ void PidParamMaker::reportTofFitResult( string s, Reporter &rp ){
 	/**
 	 * Plot Sigmas
 	 */
-	
+	plotMin = cfg->getDouble( nodePath+"PlotRange.simga"+s+":min", 0 );
+	plotMax = cfg->getDouble( nodePath+"PlotRange.sigma"+s+":max", 5000 );
+
 	TH1F * sFrame = new TH1F( ("tof_" + s + "_sigma").c_str(), ("Sigma of " + s).c_str(), 10, mmtms[ 0 ], mmtms[ mmtms.size() -1 ] );
-	TGraph * sGraph = new TGraph( sigmas.size(), mmtms.data(), sigmas.data() );
+	TGraphErrors * sGraph = new TGraphErrors( sigmas.size(), mmtms.data(), sigmas.data(), 0, sE.data() );
 
 	rp.newPage();
 	sFrame->Draw();
-	sFrame->GetYaxis()->SetRangeUser( minS * 1.1, maxS * 1.1 );
-	sGraph->Draw( "same" );
+	sFrame->GetYaxis()->SetRangeUser( plotMin, plotMax );
+	sGraph->Draw( "same pe" );
 	sGraph->Fit( sfn );
-	rp.savePage();
-
-
-	/**
-	 * Export the parameters as an XML tree
-	 */
 	
-	cout << "<" << s << ">" << endl;
-	cout << "\t<mean t=\"" << mfn->GetParameter( 0 ) << "\" p=\"" << mfn->GetParameter( 1 ) << "\" ep=\"" << mfn->GetParameter( 2 ) << "\" />" << endl;
-	cout << "\t<sigma t=\"" << sfn->GetParameter( 0 ) << "\" p=\"" << sfn->GetParameter( 1 ) << "\" ep=\"" << sfn->GetParameter( 2 ) << "\" />" << endl;
-	cout << "</" << s << ">" << endl;
-
-
-	vector<double> dv = { 1.0, 3.0, 5.0, 7.0 };
-	double ta[] = { 1.0, 3.0, 5.0, 7.0 };
-
-	for_each( begin(ta), end(ta), [](double i){ cout << "i = " << i << endl; } );
+	rp.savePage();
 
 }
 
@@ -371,7 +377,7 @@ void PidParamMaker::reportDedxFitResult( string s, Reporter &rp ){
 	vector<double> means, sigmas;
 	double maxM = -100, minM = 1000;
 	double maxS = -100, minS = 1000;
-	for ( int i; i < dedxFit[ s ].size(); i++ ){
+	for ( int i = 0; i < dedxFit[ s ].size(); i++ ){
 		means.push_back( dedxFit[ s ][ i ].mu );
 		sigmas.push_back( dedxFit[ s ][ i ].sigma );
 

@@ -55,6 +55,8 @@ protected:
 	vector<string> species;
 
 	vector<double> mmtms;
+
+
 	
 
 
@@ -84,6 +86,7 @@ protected:
 	map< string, vector<GaussianFitResult> > tofFit;
 	map< string, vector<GaussianFitResult> > dedxFit;
 
+	void mathematicaExport( string prefix, string s, vector<GaussianFitResult> vals );
 
 
 };
