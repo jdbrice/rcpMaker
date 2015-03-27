@@ -4,7 +4,11 @@
 #include "InclusiveSpectra.h"
 #include "PhaseSpaceRecentering.h"
 #include "PicoDataStore.h"
-
+#include "TofPidParams.h"
+#include "DedxPidParams.h"
+#include <algorithm>    // std::find
+#include <vector>
+using namespace std;
 
 #include <math.h>
 
@@ -41,6 +45,14 @@ protected:
 	double tofCut, dedxCut;
 
 	bool make2D, makeEnhanced;
+
+	/**
+	 * After first pass
+	 */
+	vector<TofPidParams*> tofParams;
+	vector<DedxPidParams*> dedxParams;
+	bool useTofParams = false;
+	bool useDedxParams = false;
 
 public:
 	PidPhaseSpace( XmlConfig* config, string np, string fl ="", string jp ="" );
@@ -136,6 +148,12 @@ public:
 protected:
 
 	void preparePhaseSpaceHistograms( string plc );
+
+	double getTofMean( string plc, double p );
+	double getTofSigma( string plc, double p );
+
+	double getDedxMean( string plc, double p );
+	double getDedxSigma( string plc, double p );
 
 	
 	

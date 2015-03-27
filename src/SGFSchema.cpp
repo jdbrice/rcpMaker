@@ -6,6 +6,8 @@ SGFSchema::SGFSchema( XmlConfig * _cfg, string _np ){
 	np = _np;
 	cfg = _cfg;
 	initialize();
+
+	allData = nullptr;
 }
 
 SGFSchema::~SGFSchema(){
@@ -147,13 +149,33 @@ void SGFSchema::updateData( map<string, TH1D * > &dataHist, string var ) {
 
 void SGFSchema::combineData(){
 
-	//if ( nullptr != allData )
-	//	delete allData;
+	if ( nullptr != allData )
+		delete allData;
 	allData = new RooDataHist( "allData", "combined Data", RooArgSet( (*rrv[ "zb" ]->rrv), (*rrv[ "zd" ]->rrv) ),
 								Index( *rSample ), Import( rdhSingle ) );
 
 
 }
+
+
+void SGFSchema::setInitial( string var, string plc, double _mu, double _sigma ){
+
+	// variable name 
+	const string sMu = "_mu_";
+	const string sSigma = "_sigma_";
+	string muName = var + sMu + plc;	// like zb_mu_Pi
+	string sigmaName = var + sSigma + plc;
+
+	rrv[ muName ]->rrv->setVal( _mu );
+	rrv[ muName ]->rrv->setMin( _mu - _sigma * 2 );
+	rrv[ muName ]->rrv->setMax( _mu + _sigma * 2 );
+	
+	rrv[ sigmaName ]->rrv->setVal( _sigma );
+	rrv[ sigmaName ]->rrv->setMin( _sigma * .75 );
+	rrv[ sigmaName ]->rrv->setMax( _sigma * 1.25 );
+
+}
+
 
 
 void SGFSchema::forceROI(){
@@ -163,8 +185,5 @@ void SGFSchema::forceROI(){
 		// second 	= indep var name 
 
 	}
-
-
-
 }
 

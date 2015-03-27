@@ -63,18 +63,14 @@ public:
 		return rdhSingle[ name ];
 	}
 
-	void fit(){
+	RooSimultaneous * model() { return simModel; }
+	RooCategory * category() { return rSample; }
 
-		simModel->fitTo( *allData );
-
-	}
-
-	RooSimultaneous * sim() { return simModel; }
-	RooCategory * cat() { return rSample; }
+	void setInitial( string var, string plc, double _mu, double _sigma );
 
 	
 
-//protected:
+protected:
 
 	void initialize();
 	void makeVariables();

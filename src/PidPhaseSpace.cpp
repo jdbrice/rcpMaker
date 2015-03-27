@@ -66,6 +66,26 @@ PidPhaseSpace::PidPhaseSpace( XmlConfig* config, string np, string fl, string jp
 	 */
 	binsCharge = unique_ptr<HistoBins>(new HistoBins( cfg, "bin.charge" ));
 
+	/**
+	 * Pid params
+	 */
+	for ( int i = 0; i < species.size(); i++ ){
+
+		logger->info(__FUNCTION__) << species[ i ] << endl;
+
+		if ( cfg->exists( np + "TofPidParams." + species[ i ] ) ){
+			TofPidParams * tpp = new TofPidParams( cfg, np + "TofPidParams." + species[ i ] + "." );
+			tofParams.push_back( tpp );	
+			useTofParams = true;
+		}
+		
+		if ( cfg->exists( np + "DedxPidParams." + species[ i ] ) ){
+			DedxPidParams * dpp = new DedxPidParams( cfg, np + "DedxPidParams." + species[ i ] + "." );
+			dedxParams.push_back( dpp );
+			useDedxParams = true;
+		}
+	}
+
  }
 
  PidPhaseSpace::~PidPhaseSpace(){
@@ -300,7 +320,9 @@ void PidPhaseSpace::enhanceDistributions( double avgP, int ptBin, int etaBin, in
 	// enhanced by species
 	if ( makeEnhanced ){
 		for ( int iS = 0; iS < mSpecies.size(); iS++ ){
-			if ( tof >= tMeans[ iS ] - tSigma && tof <= tMeans[ iS ] + tSigma ){
+			double ttMean = getTofMean( mSpecies[ iS ], avgP );
+			double ttSigma = getTofSigma( mSpecies[ iS ], avgP );
+			if ( tof >= ttMean - ttSigma && tof <= ttMean + ttSigma ){
 				book->fill( dedxName( centerSpecies, 0, cBin, ptBin, etaBin, mSpecies[ iS ] ), dedx, eventWeight );
 				book->fill( dedxName( centerSpecies, charge, cBin, ptBin, etaBin, mSpecies[ iS ] ), dedx, eventWeight );
 			}
@@ -315,7 +337,8 @@ void PidPhaseSpace::enhanceDistributions( double avgP, int ptBin, int etaBin, in
 	// enhanced by species
 	if ( makeEnhanced ){
 		for ( int iS = 0; iS < mSpecies.size(); iS++ ){
-			if ( dedx >= dMeans[ iS ] -dSigma && dedx <= dMeans[ iS ] + dSigma ){
+			double ddSigma = getDedxSigma( mSpecies[ iS ], avgP );
+			if ( dedx >= dMeans[ iS ] - ddSigma && dedx <= dMeans[ iS ] + ddSigma ){
 				book->fill( tofName( centerSpecies, 0, cBin, ptBin, etaBin, mSpecies[ iS ] ), tof, eventWeight );
 				book->fill( tofName( centerSpecies, charge, cBin, ptBin, etaBin, mSpecies[ iS ] ), tof, eventWeight );
 			}
@@ -395,6 +418,54 @@ void PidPhaseSpace::reportAll() {
 }
 
 
+double PidPhaseSpace::getTofMean( string plc, double p ){
+	vector<double> tMeans = psr->centeredTofMeans( centerSpecies, p );
+	if ( std::find( species.begin(), species.end(), plc ) != species.end() ){
+		int index = distance( species.begin(), std::find( species.begin(), species.end(), plc ) );
+
+		if ( useTofParams )
+			return tofParams[ index ]->mean( p, psr->mass( plc ), psr->mass( centerSpecies ) );
+		else
+			return tMeans[ index ];
+	}
+	assert( false );
+}
+
+double PidPhaseSpace::getTofSigma( string plc, double p ){
+	
+	if ( std::find( species.begin(), species.end(), plc ) != species.end() ){
+		int index = distance( species.begin(), std::find( species.begin(), species.end(), plc ) );
+		if ( useTofParams )
+			return tofParams[ index ]->sigma( p, psr->mass( plc ), psr->mass( centerSpecies ) );
+		else
+			return tofSigmaIdeal;
+	}
+
+	assert( false );
+}
+
+double PidPhaseSpace::getDedxMean( string plc, double p ){
+	vector<double> dMeans = psr->centeredDedxMeans( centerSpecies, p );
+	if ( std::find( species.begin(), species.end(), plc ) != species.end() ){
+		int index = distance( species.begin(), std::find( species.begin(), species.end(), plc ) );
+		return dMeans[ index ];
+	}
+	assert(false);
+}
+
+double PidPhaseSpace::getDedxSigma( string plc, double p ){
+	
+	if ( std::find( species.begin(), species.end(), plc ) != species.end() ){
+		int index = distance( species.begin(), std::find( species.begin(), species.end(), plc ) );
+
+		if ( useDedxParams )
+			return dedxParams[ index ]->sigma( p );
+		else
+			return dedxSigmaIdeal;
+	}
+
+	assert( false );
+}
 
 
 
