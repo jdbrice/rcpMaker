@@ -284,34 +284,40 @@ void PidPhaseSpace::enhanceDistributions( double avgP, int ptBin, int etaBin, in
 	vector<double> dMeans = psr->centeredDedxMeans( centerSpecies, avgP );
 	vector<string> mSpecies = psr->allSpecies();
 
+	// 3 sigma below pi to reject electrons
+	// and 3 sigma above proton to reject deuteron
+	if ( 	tof < tMeans[ 0 ] - tSigma * 3.0 
+			|| tof > tMeans[ 2 ] + tSigma * 3.0 )
+		return;
+
 
 	book->cd( "dedx" );
 	// unenhanced - all dedx
-	book->fill( dedxName( centerSpecies, 0, cBin, ptBin, etaBin ), dedx );
-	book->fill( dedxName( centerSpecies, charge, cBin, ptBin, etaBin ), dedx );
+	book->fill( dedxName( centerSpecies, 0, cBin, ptBin, etaBin ), dedx, eventWeight );
+	book->fill( dedxName( centerSpecies, charge, cBin, ptBin, etaBin ), dedx, eventWeight );
 	
 
 	// enhanced by species
 	if ( makeEnhanced ){
 		for ( int iS = 0; iS < mSpecies.size(); iS++ ){
-			if ( tof >= tMeans[ iS ] -tSigma && tof <= tMeans[ iS ] + tSigma ){
-				book->fill( dedxName( centerSpecies, 0, cBin, ptBin, etaBin, mSpecies[ iS ] ), dedx );
-				book->fill( dedxName( centerSpecies, charge, cBin, ptBin, etaBin, mSpecies[ iS ] ), dedx );
+			if ( tof >= tMeans[ iS ] - tSigma && tof <= tMeans[ iS ] + tSigma ){
+				book->fill( dedxName( centerSpecies, 0, cBin, ptBin, etaBin, mSpecies[ iS ] ), dedx, eventWeight );
+				book->fill( dedxName( centerSpecies, charge, cBin, ptBin, etaBin, mSpecies[ iS ] ), dedx, eventWeight );
 			}
 		} // loop on species from centered means	
 	}
 
 	book->cd( "tof" );
 	// unenhanced - all tof tracks
-	book->fill( tofName( centerSpecies, 0, cBin, ptBin, etaBin ), tof );
-	book->fill( tofName( centerSpecies, charge, cBin, ptBin, etaBin ), tof );
+	book->fill( tofName( centerSpecies, 0, cBin, ptBin, etaBin ), tof, eventWeight );
+	book->fill( tofName( centerSpecies, charge, cBin, ptBin, etaBin ), tof, eventWeight );
 
 	// enhanced by species
 	if ( makeEnhanced ){
 		for ( int iS = 0; iS < mSpecies.size(); iS++ ){
 			if ( dedx >= dMeans[ iS ] -dSigma && dedx <= dMeans[ iS ] + dSigma ){
-				book->fill( tofName( centerSpecies, 0, cBin, ptBin, etaBin, mSpecies[ iS ] ), tof );
-				book->fill( tofName( centerSpecies, charge, cBin, ptBin, etaBin, mSpecies[ iS ] ), tof );
+				book->fill( tofName( centerSpecies, 0, cBin, ptBin, etaBin, mSpecies[ iS ] ), tof, eventWeight );
+				book->fill( tofName( centerSpecies, charge, cBin, ptBin, etaBin, mSpecies[ iS ] ), tof, eventWeight );
 			}
 		} // loop on species from centered means
 	}

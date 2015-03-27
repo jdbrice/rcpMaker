@@ -74,6 +74,7 @@ protected:
 	 * Current Event Info
 	 */
 	int refMult = -1;
+	double eventWeight = 1.0;
 	int cBin;
 
 

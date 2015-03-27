@@ -6,6 +6,7 @@
 	<Event>
 		<Histo name="eventCuts" title="eventCuts" nBinsX="6" minX="0" maxX="6" />
 		<refMult title="Centrality Selection; refMult; #"   nBinsX="400" minX="0" maxX="400"/>
+		<eventWeight title="Event weights; refMult; weight"   nBinsX="400" minX="0" maxX="400" nBinsY="20" minY="0" maxY="10"/>
 		<refMultBins title="Centrality Selection; refMult Bin; #"   nBinsX="10" minX="-0.5" maxX="9.5"/>
 		<mappedRefMultBins title="Mapped Centrality Selection; refMult Bin; #"   nBinsX="10" minX="-0.5" maxX="9.5"/>
 		<vertexZ title="Z Vertex" widthX="1" minX="-200" maxX="200" />

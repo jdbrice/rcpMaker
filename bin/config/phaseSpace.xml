@@ -11,7 +11,7 @@
 			<output url="../products/phaseSpace/rp.pdf"/>
 		</Reporter>	
 		
-		<DataSource treeName="PicoDst" url="/Users/danielbrandenburg/bnl/local/data/Run14/LBNL/">
+		<DataSource treeName="PicoDst" url="/Users/danielbrandenburg/bnl/local/data/Run14/LBNL/" >
 			
 			<!-- Set all branches off -->
 			<BranchStatus status="0">*</BranchStatus>

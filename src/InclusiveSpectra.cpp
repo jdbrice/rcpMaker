@@ -129,21 +129,6 @@ void InclusiveSpectra::preEventLoop(){
 
 void InclusiveSpectra::analyzeEvent(){
 
-	// give the event vars a default
-	refMult = -1;
-	cBin = -1;
-
-	// get the corrected ref mult
-	if ( rmc )
-		refMult = rmc->refMult( pico->refMult(), pico->vZ() );
-	else 
-		refMult = -1;
-	
-	//logger->info(__FUNCTION__) << "bin9 " << rmc->bin9(refMult ) << endl;
-	cBin = centralityBin( refMult );
-	//logger->info(__FUNCTION__) << "cBin " << cBin << endl;
-	
-	
 
 	Int_t nTracks = pico->numTracks();
 
@@ -164,15 +149,15 @@ void InclusiveSpectra::analyzeTrack( Int_t iTrack ){
 	int charge = pico->trackCharge( iTrack );
 	 
 	book->cd();
-	book->fill( "ptAll", pt );
+	book->fill( "ptAll", pt, eventWeight );
 	if ( 1 == charge )
-		book->fill( "ptPos", pt );
+		book->fill( "ptPos", pt, eventWeight );
 	else if ( -1 == charge  )
-		book->fill( "ptNeg", pt );
+		book->fill( "ptNeg", pt, eventWeight );
 	
 	if ( cBin >= 0 ){
 		string cName = "pt_" + ts( cBin );
-		book->fill( cName, pt );		
+		book->fill( cName, pt, eventWeight );		
 	}
 	
 }
@@ -201,8 +186,21 @@ bool InclusiveSpectra::keepEvent(){
 	if ( makeEventQA )
 		book->get( "eventCuts" )->Fill( "Triggered", 1 );
 
+	// give the event vars a default
+	refMult = -1;
+	cBin = -1;
+	eventWeight = 1.0;
 
-	UShort_t refMult = pico->refMult();
+	// get the corrected ref mult
+	if ( rmc )
+		refMult = rmc->refMult( pico->refMult(), pico->vZ() );
+	else 
+		refMult = -1;
+	
+	// define the member centrality bin and event weight for the analysis functions to use	
+	cBin = centralityBin( refMult );
+	eventWeight = rmc->eventWeight( refMult, pico->vZ() );
+
 	
 	double z = pico->vZ();
 	double x = pico->vX() + cutVertexROffset->x;
@@ -244,8 +242,9 @@ bool InclusiveSpectra::keepEvent(){
 		book->fill( "vertexZ", z);
 		book->fill( "vertexR", r);
 		book->fill( "refMult", refMult );
-		book->fill( "refMultBins", rmc->bin9( refMult ) );
-		book->fill( "mappedRefMultBins", centralityBin( refMult ) );
+		book->fill( "refMultBins", rmc->bin9( refMult ), eventWeight );
+		book->fill( "mappedRefMultBins", centralityBin( refMult ), eventWeight );
+		book->fill( "eventWeight", refMult, eventWeight );
 		book->fill( "nTofMatch", nTofMatchedTracks );
 	}
 	

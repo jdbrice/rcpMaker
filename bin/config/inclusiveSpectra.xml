@@ -9,7 +9,7 @@
 			<logLevel>info</logLevel>
 		</Logger>
 		
-		<DataSource treeName="PicoDst" url="/Users/danielbrandenburg/bnl/local/data/Run14/LBNL/" maxFiles="5">
+		<DataSource treeName="PicoDst" url="/Users/danielbrandenburg/bnl/local/data/Run14/LBNL/" maxFiles="10">
 			
 			<!-- Set all branches off -->
 			<BranchStatus status="0">*</BranchStatus>

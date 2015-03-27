@@ -30,6 +30,8 @@ protected:
 	ConfigRange * runRange;
 	HistoBins * centralityBins;
 	vector<double> zParameters;
+	vector<double> wParameters;
+	double weightStop;		// maximum M for which the weighing applies
 	vector<int> badRuns;
 
 
@@ -49,6 +51,8 @@ public:
 		zVertexRange= new ConfigRange( cfg, "zVertex" );
 		runRange	= new ConfigRange( cfg, "runRange" );
 		zParameters = cfg->getDoubleVector( "zParameters" );
+		wParameters = cfg->getDoubleVector( "wParameters" );
+		weightStop 	= cfg->getDouble( "wParameters:stop" );
 		badRuns 	= cfg->getIntVector( "badRuns" );
 
 		centralityBins = new HistoBins( cfg, "bins" );
@@ -83,6 +87,14 @@ public:
 		logger->debug( __FUNCTION__ ) << "Run 15047004 is Bad (BAD): " << isBad(15047004) << endl;
 		logger->debug( __FUNCTION__ ) << "Run 15057050 is Bad (GOOD): " << isBad(15057050) << endl;
 		logger->debug( __FUNCTION__ ) << endl;
+
+		logger->debug( __FUNCTION__ ) << "Bad Run Sanity Check" << endl;
+		logger->debug( __FUNCTION__ ) << "M=5 event weight : " << eventWeight( 5, 0 ) << endl;
+		logger->debug( __FUNCTION__ ) << "M=10 event weight : " << eventWeight( 10, 0 ) << endl;
+		logger->debug( __FUNCTION__ ) << "M=20 event weight : " << eventWeight( 20, 0 ) << endl;
+		logger->debug( __FUNCTION__ ) << "M=29 event weight : " << eventWeight( 29, 0 ) << endl;
+		logger->debug( __FUNCTION__ ) << endl;
+
 
 		rGen = new TRandom3( );
 
@@ -159,6 +171,33 @@ public:
 			r += zParameters[ i ] * TMath::Power( z, i );
 		}
 		return r;
+	}
+	// gets the event weight
+	// @corrRefMult 	the corrected ref mult
+	// @z 				z vertex
+	// @return 			event weight
+	double eventWeight( double corrRefMult, double z ){
+		
+		if ( wParameters.size() < 6 )
+			return 1.0;
+		if ( corrRefMult >= weightStop )
+			return 1.0;
+		// reference them individually as a pedigogical and verbose step
+		const double p0 = wParameters[ 0 ];
+		const double p1 = wParameters[ 1 ];
+		const double p2 = wParameters[ 2 ];
+		const double p3 = wParameters[ 3 ];
+		const double p4 = wParameters[ 4 ];
+		const double A 	= wParameters[ 5 ];
+
+		if ( corrRefMult == -(p3/p2) )
+			return 1.0;
+
+		double weight = p0 + p1/(p2*corrRefMult + p3) + p4*(p2*corrRefMult + p3);
+		weight = weight + ( weight - 1.0 ) * A * z * z;
+		return weight;
+
+
 	}
 	
 };
