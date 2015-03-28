@@ -355,7 +355,8 @@ void PidPhaseSpace::reportAll() {
 	int nChargeBins = binsCharge->nBins();
 	int nEtaBins = binsEta->nBins();
 	vector< unique_ptr<Reporter> > rps;
-	string baseURL = cfg->getString(  nodePath + "output.Reports" );
+	string baseURL = cfg->getString(  nodePath + "output:path", "./" );
+	string baseName= cfg->getString(  nodePath + "output.Reports", "" );
 	// Make the slew of reporters
 	for ( int etaBin = 0; etaBin < nEtaBins; etaBin++ ){
 		// Loop over charge, skip if config doesnt include that charge bin
@@ -366,12 +367,9 @@ void PidPhaseSpace::reportAll() {
 			for ( int iCen = 0; iCen < nCenBins; iCen++ ){
 			
 				int index = iCen + (charge + 1 ) * nCenBins + etaBin * nChargeBins * nCenBins;
-				cout << "iCen " << iCen << endl;
-				cout << "etaBin " << etaBin << endl;
-				cout << "charge " << charge << endl;
 				string sn = tofName( centerSpecies, charge, iCen, 0, etaBin );
 				
-				rps.push_back( unique_ptr<Reporter>(new Reporter( baseURL + sn + ".pdf", 800, 500 )) );
+				rps.push_back( unique_ptr<Reporter>(new Reporter( baseURL + jobPrefix + baseName + sn + ".pdf", 800, 500 )) );
 
 
 			} // loop centralities
@@ -389,6 +387,8 @@ void PidPhaseSpace::reportAll() {
 					continue;
 				for ( int iCen = 0; iCen < nCentralityBins(); iCen++ ){
 				
+					double avgP = averageP( ptBin, etaBin );					
+
 					int index = iCen + (charge + 1 ) * nCenBins + etaBin * nChargeBins * nCenBins;
 					string n = tofName( centerSpecies, charge, iCen, ptBin, etaBin );
 
@@ -405,6 +405,15 @@ void PidPhaseSpace::reportAll() {
 					set( "y", "events / " + dts( tofBinWidth ) )->
 					set( "draw", "pe" )->
 					draw();
+
+					for ( string plc : species ){
+						double ttMean = getTofMean( plc, avgP );
+						double ttSigma = getTofSigma( plc, avgP );
+						TLine * line = new TLine( ttMean, 1, ttMean, 10000 );
+						line->Draw("same");
+					}
+
+
 					rps[ index ]->savePage();
 
 

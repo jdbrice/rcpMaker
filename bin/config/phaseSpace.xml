@@ -7,9 +7,6 @@
 		<Logger color="true">
 			<logLevel>info</logLevel>
 		</Logger>
-		<Reporter>
-			<output url="../products/phaseSpace/rp.pdf"/>
-		</Reporter>	
 		
 		<DataSource treeName="PicoDst" url="/Users/danielbrandenburg/bnl/local/data/Run14/LBNL/" >
 			
@@ -23,9 +20,9 @@
 			
 		</DataSource>
 
-		<output>
-			<data>../products/phaseSpace/pid.root</data>
-			<Reports>../products/phaseSpace/</Reports>
+		<output path="../products/phaseSpace/">
+			<data>pid.root</data>
+			<Reports></Reports>
 		</output>
 
 		<Bichsel>

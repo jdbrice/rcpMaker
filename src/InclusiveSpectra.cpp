@@ -129,7 +129,6 @@ void InclusiveSpectra::preEventLoop(){
 
 void InclusiveSpectra::analyzeEvent(){
 
-
 	Int_t nTracks = pico->numTracks();
 
 	for ( Int_t iTrack = 0; iTrack < nTracks; iTrack ++ ){
@@ -169,6 +168,16 @@ bool InclusiveSpectra::keepEvent(){
 		book->cd( "EventQA" );
 		book->get( "eventCuts" )->Fill( "All", 1 );
 	}
+
+	/**
+	 * Bad Run Rejection
+	 */
+	if ( rmc->isBad( pico->runId() ) ){
+		logger->warn( __FUNCTION__ ) << "Rejecting Run : " << pico->runId() << endl;
+		return false;
+	} 
+	if ( makeEventQA )
+		book->get( "eventCuts" )->Fill( "GoodRuns", 1 );
 
 	/**
 	 * Trigger Selection

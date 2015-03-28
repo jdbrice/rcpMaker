@@ -17,8 +17,8 @@ public:
 		ds = _ds;
 	}
 	virtual UInt_t triggerWord(){ return ds->get<UInt_t>( "Event.mTriggerWord" ); }
-	virtual UInt_t runId(){ return ds->get<UInt_t>( "Event.mRunId" ); }
-	virtual UInt_t eventId(){ return ds->get<UInt_t>( "Event.mEventId" );; }
+	virtual Int_t runId(){ return ds->get<Int_t>( "Event.mRunId" ); }
+	virtual Int_t eventId(){ return ds->get<Int_t>( "Event.mEventId" );; }
 
 	virtual Double_t vX(  ){ return ds->get<Float_t>("Event.mPrimaryVertex.mX1"); }
 	virtual Double_t vY(  ){ return ds->get<Float_t>("Event.mPrimaryVertex.mX2"); }
