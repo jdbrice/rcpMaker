@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+
+	<jobType>PidPhaseSpace</jobType>
+
+	<PidPhaseSpace>
+		<Logger color="true">
+			<logLevel>debug</logLevel>
+		</Logger>
+		
+		<DataSource treeName="PicoDst" url="/Users/danielbrandenburg/bnl/local/data/Run14/LBNL/19GeV/" >
+			
+			<!-- Set all branches off -->
+			<BranchStatus status="0">*</BranchStatus>
+			<!-- Turn on only the ones you need -->
+			<BranchStatus status="1">
+				Event*,
+				Track*
+			</BranchStatus>
+			
+		</DataSource>
+
+		<output path="../products/phaseSpace/19GeV/">
+			<data>pid.root</data>
+			<Reports></Reports>
+		</output>
+
+		<Bichsel>
+			<table>dedxBichsel.root</table>
+			<method>0</method>
+		</Bichsel>
+
+		<!-- Common Resources -->
+		<MakeQA config="config/19GeV/qaHistograms.xml" event="true" track="true" />
+		<Cuts config="config/19GeV/cuts.xml" />
+		<RMCParams config="config/19GeV/StRMCParams.xml" />
+
+		<!-- the bins into which the 9 centrality bins are mapped. -->
+		<CentralityMap>
+			0 :: 0,
+			1 :: 0,
+			8 :: 1
+		</CentralityMap>
+
+
+		<enhanceDistributions tof="1.0" dedx="1.0"/>
+		
+		<PhaseSpaceRecentering>
+			<centerSpecies>K</centerSpecies>
+			<sigma tof="0.012" dedx="0.033"/>
+			<method>nonlinear</method>
+		</PhaseSpaceRecentering>
+
+		<makePhaseSpace 2D="false" enhanced="true" /> 
+
+		<histograms >
+
+			<Histo name="betaRaw" title="#beta^{-1}" xBins="bin.pt" yBins="bin.tofRaw" />
+			<Histo name="trBeta" title="" xBins="bin.pt" yBins="bin.tof" />
+			<Histo name="nlBeta" title="" xBins="bin.pt" yBins="bin.tof"/>
+			<Histo name="dedxRaw" title="dEdx" xBins="bin.pt" yBins="bin.dedxRaw" />
+			<Histo name="trDedx" title="" xBins="bin.pt" yBins="bin.dedx" />
+			<Histo name="nlDedx" title="" xBins="bin.pt" yBins="bin.dedx"/>
+			<Histo name="eta" type="1D" title="eta" nBinsX="200" minX="-2" maxX="2" />
+
+		</histograms>
+
+		<style hide="true">
+			<tof title="#beta^{-1}" logy="1" draw="pe"/>
+			<dedx title="dedx" logy="1" draw="pe"/>
+		</style>
+
+
+	</PidPhaseSpace>
+
+
+	<bin hide="true" >
+		
+		<pt>0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55, 0.6, 0.65, 0.7, 0.75, 0.8, 0.85, 0.9, 0.95, 1.0, 1.05, 1.1, 1.15, 1.2, 1.25, 1.3, 1.35, 1.4, 1.45, 1.5, 1.6, 1.7, 1.8, 1.9, 2.0, 2.2, 2.4, 2.6, 2.8, 3.0, 3.5, 4.0</pt>
+		<eta>0.0, 0.2, 0.4, 0.6 </eta>
+		<charge> -1.5, -0.5, 0.5, 1.5 </charge>
+
+		<tof width="0.006" min="-1" max="1" />
+		<dedx width="0.015" min="-0.75" max="0.75" />
+		<tofRaw width="0.0024" min="0.9" max="3" />
+		<dedxRaw width="0.012" min="1" max="6cd" />
+
+		<padding tof=".15" dedx=".15" tofScale="0.05" dedxScale="0.05" />
+
+	</bin>
+
+</config>
