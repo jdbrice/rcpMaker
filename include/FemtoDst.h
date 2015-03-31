@@ -53,7 +53,7 @@ public:
    Float_t         Tracks_mDedx[kMaxFDSTTracks];   //[Event.mNumberOfPrimaryTracks]
    virtual Double_t trackDedx( Int_t iHit ){ return Tracks_mDedx[ iHit ]; }
    Float_t         Tracks_mBTofBeta[kMaxFDSTTracks];   //[Event.mNumberOfPrimaryTracks]
-   virtual Double_t trackBeta( Int_t iHit ){ return (Doublt_t)Tracks_mBTofBeta[ iHit ]; }
+   virtual Double_t trackBeta( Int_t iHit ){ return Tracks_mBTofBeta[ iHit ]; }
    Float_t         Tracks_mBTofYLocal[kMaxFDSTTracks];   //[Event.mNumberOfPrimaryTracks]
    Float_t         Tracks_mBTofZLocal[kMaxFDSTTracks];   //[Event.mNumberOfPrimaryTracks]
    virtual Double_t trackYLocal( Int_t iHit ){ return Tracks_mBTofYLocal[ iHit ]; }
