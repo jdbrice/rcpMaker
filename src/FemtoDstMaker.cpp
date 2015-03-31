@@ -103,8 +103,9 @@ void FemtoDstMaker::analyzeTrack( Int_t iTrack ) {
 void FemtoDstMaker::postEventLoop(){
 	InclusiveSpectra::postEventLoop();
 
-	output->Write();
-	//output->Close();
+	TFile * cFile = tree->GetCurrentFile();
+	cFile->Write();
+	cFile->Close();
 
 }
 

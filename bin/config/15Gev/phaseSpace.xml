@@ -9,7 +9,7 @@
 		</Logger>
 		
 		<!--<DataSource treeName="PicoDst" url="/Users/danielbrandenburg/bnl/local/data/Run14/LBNL/" maxFiles="10">-->
-		<DataSource treeName="FemtoDst" url="femtoDst.root" maxFiles="1">
+		<DataSource treeName="FemtoDst" url="/Users/danielbrandenburg/bnl/local/data/Run14/rcp/femtoDst/" maxFiles="5">
 			
 			<!-- Set all branches off -->
 			<BranchStatus status="0">*</BranchStatus>
@@ -32,9 +32,9 @@
 		</Bichsel>
 
 		<!-- Common Resources -->
-		<MakeQA config="config/qaHistograms.xml" event="true" track="true" />
-		<Cuts config="config/nullCuts.xml" />
-		<RMCParams config="config/StRMCParams.xml" />
+		<MakeQA config="config/15Gev/qaHistograms.xml" event="false" track="false" />
+		<Cuts config="config/15Gev/nullCuts.xml" />
+		<RMCParams config="config/15Gev/StRMCParams.xml" />
 
 		<!-- the bins into which the 9 centrality bins are mapped. -->
 		<CentralityMap>
