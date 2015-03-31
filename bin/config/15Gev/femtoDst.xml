@@ -21,8 +21,9 @@
 			
 		</DataSource>
 
-		<output>
-			<data>../products/inclusive/FemtoDst.root</data>
+		<output path="../products/inclusive/">
+			<data>FemtoDst.root</data>
+			<tree suffix="data_femtoDst.root" splitSize="10000"/>
 		</output>
 
 		<!-- the bins into which the 9 centrality bins are mapped. -->
@@ -33,9 +34,9 @@
 		</CentralityMap>
 
 		<!-- Common Resources -->
-		<MakeQA config="config/qaHistograms.xml" event="false" track="false" />
-		<Cuts config="config/cuts.xml" />
-		<RMCParams config="config/StRMCParams.xml" />
+		<MakeQA config="config/15Gev/qaHistograms.xml" event="false" track="false" />
+		<Cuts config="config/15Gev/cuts.xml" />
+		<RMCParams config="config/15Gev/StRMCParams.xml" />
 
 		<!-- histograms to auto-make -->
 		<histograms>

@@ -21,7 +21,7 @@ FemtoDstMaker::~FemtoDstMaker(){
 void FemtoDstMaker::preEventLoop(){
 	InclusiveSpectra::preEventLoop();
 
-	output = new TFile( "femtoDst.root", "RECREATE" );
+	output = new TFile( (outputPath + jobPrefix + cfg->getString( nodePath + "output.tree:suffix", "_femtoDst.root" )).c_str(), "RECREATE" );
 	tree = new TTree( "FemtoDst", "A subset of the PicoDst" );
 	tree->Branch( "Event.mTriggerWord", &event.mTriggerWord, "Event.mTriggerWord/i" );
 	tree->Branch( "Event.mRunId", &event.mRunId, "Event.mRunId/I" );
@@ -49,7 +49,8 @@ void FemtoDstMaker::preEventLoop(){
 	tree->Branch( "Tracks.mPMomentum.mX1", tracks.mPMomentumX1, "Tracks.mPMomentum.mX1[Event.mNumberOfPrimaryTracks]/F" );
 	tree->Branch( "Tracks.mPMomentum.mX2", tracks.mPMomentumX2, "Tracks.mPMomentum.mX2[Event.mNumberOfPrimaryTracks]/F" );
 	tree->Branch( "Tracks.mPMomentum.mX3", tracks.mPMomentumX3, "Tracks.mPMomentum.mX3[Event.mNumberOfPrimaryTracks]/F" );
-	tree->SetAutoSave( 100000000 );
+	tree->SetAutoSave( cfg->getInt( nodePath + "output.tree:autoSaveSize", 250000000 ) );
+	tree->SetMaxTreeSize( cfg->getInt( nodePath + "output.tree:splitSize", 250000000 ) );
 
 }
 
