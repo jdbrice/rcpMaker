@@ -86,6 +86,13 @@ PidPhaseSpace::PidPhaseSpace( XmlConfig* config, string np, string fl, string jp
 		}
 	}
 
+	/**
+	 * Cuts below Pion to remove electrons
+	 * And above P to remove deuterons
+	 */
+	double nSigBelow = cfg->getDouble( nodePath + "enhanceDistributions:nSigBelow", 3.0 );
+	double nSigAbove = cfg->getDouble( nodePath + "enhanceDistributions:nSigAbove", 3.0 );
+
  }
 
  PidPhaseSpace::~PidPhaseSpace(){
@@ -109,7 +116,7 @@ void PidPhaseSpace::postEventLoop() {
 }
 
 void PidPhaseSpace::analyzeTrack( int iTrack ){
-
+	
 	book->cd();
 
 	double vZ = pico->vZ();
@@ -134,6 +141,7 @@ void PidPhaseSpace::analyzeTrack( int iTrack ){
 	double tofNL = psr->nlTof(centerSpecies, pico->trackBeta(iTrack), p, avgP );
 	double dedxNL = psr->nlDedx(centerSpecies, pico->trackDedx(iTrack), p, avgP );
 
+	
 	book->fill( "trBeta", p, tof );
 	book->fill( "betaRaw", p, 1.0/pico->trackBeta( iTrack ) );
 
@@ -306,8 +314,11 @@ void PidPhaseSpace::enhanceDistributions( double avgP, int ptBin, int etaBin, in
 
 	// 3 sigma below pi to reject electrons
 	// and 3 sigma above proton to reject deuteron
-	if ( 	tof < tMeans[ 0 ] - tSigma * 3.0 
-			|| tof > tMeans[ 2 ] + tSigma * 3.0 )
+	double tofPSigma = getTofSigma( "P", avgP );
+	double tofPiSigma = getTofSigma( "Pi", avgP );
+
+	if ( 	tof < tMeans[ 0 ] - tofPiSigma * nSigBelow 
+			|| tof > tMeans[ 2 ] + tofPSigma * nSigAbove )
 		return;
 
 

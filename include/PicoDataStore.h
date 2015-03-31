@@ -23,6 +23,9 @@ public:
 	virtual Double_t globalPt( Int_t iHit ){ return 0; }
 	virtual Double_t trackPt( Int_t iHit ){ return 0; }
 	virtual Double_t trackP( Int_t iHit ){ return 0; }
+	virtual Double_t trackPx( Int_t iHit ){ return 0; }
+	virtual Double_t trackPy( Int_t iHit ){ return 0; }
+	virtual Double_t trackPz( Int_t iHit ){ return 0; }
 	virtual Double_t trackEta( Int_t iHit ){ return -100; }
 	virtual Int_t trackCharge( Int_t iHit ){ return 0; }
 

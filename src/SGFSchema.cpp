@@ -158,7 +158,7 @@ void SGFSchema::combineData(){
 }
 
 
-void SGFSchema::setInitial( string var, string plc, double _mu, double _sigma ){
+void SGFSchema::setInitial( string var, string plc, double _mu, double _sigma, double _dmu, double _dsigma ){
 
 	// variable name 
 	const string sMu = "_mu_";
@@ -167,12 +167,26 @@ void SGFSchema::setInitial( string var, string plc, double _mu, double _sigma ){
 	string sigmaName = var + sSigma + plc;
 
 	rrv[ muName ]->rrv->setVal( _mu );
-	rrv[ muName ]->rrv->setMin( _mu - _sigma * 2 );
-	rrv[ muName ]->rrv->setMax( _mu + _sigma * 2 );
+	rrv[ muName ]->rrv->setMin( _mu - _sigma * _dmu );
+	rrv[ muName ]->rrv->setMax( _mu + _sigma * _dmu );
 	
 	rrv[ sigmaName ]->rrv->setVal( _sigma );
-	rrv[ sigmaName ]->rrv->setMin( _sigma * .75 );
-	rrv[ sigmaName ]->rrv->setMax( _sigma * 1.25 );
+	rrv[ sigmaName ]->rrv->setMin( _sigma * ( 1.0 - _dsigma ) );
+	rrv[ sigmaName ]->rrv->setMax( _sigma * ( 1.0 + _dsigma ) );
+
+}
+
+void SGFSchema::resetYield( string plc, double _yield ){
+	if ( var("yield_" + plc ) )
+		var("yield_" + plc )->setVal( _yield );
+}
+
+void SGFSchema::fixSigma( string var, string plc, double _sigma ){
+
+	const string sSigma = "_sigma_";
+	string sigmaName = var + sSigma + plc;
+	rrv[ sigmaName ]->rrv->setVal( _sigma );
+	rrv[ sigmaName ]->rrv->setConstant( kTRUE );
 
 }
 

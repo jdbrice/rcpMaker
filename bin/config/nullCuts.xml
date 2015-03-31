@@ -17,9 +17,9 @@
 		<nHitsFitOverPossible min="0.52" />
 		<nHitsDedx min="11"  />
 		<pt min="0.1" max="100" />
-		<ptGlobalOverPrimary min="0.7" max="1.42857" />
-		<yLocal min="-1.6" max="1.6" />
-		<zLocal min="-2.8" max="2.8" />
+		<ptGlobalOverPrimary min="-0.7" max="1.42857" />
+		<yLocal min="-10.6" max="10.6" />
+		<zLocal min="-20.8" max="20.8" />
 	</TrackCuts>
 
 

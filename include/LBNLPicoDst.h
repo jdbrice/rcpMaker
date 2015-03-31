@@ -27,13 +27,36 @@ public:
 
 	virtual UShort_t refMult(){ return (ds->get<Int_t>("Event.mRefMultPos") + ds->get<Int_t>("Event.mRefMultNeg")); }
 	virtual Int_t numTracks(){ return ds->get<Int_t>("Event.mNumberOfGlobalTracks"); }
-	virtual Int_t numTofMatchedTracks(){ return ds->get<Int_t>("Event.mNBTOFMatch"); }
+	virtual Int_t numTofMatchedTracks(){ 
+		
+		Int_t nMatched = 0;
+		Int_t nT = numTracks();
+		
+		for ( int iTrack = 0; iTrack < nT; iTrack++ ){
+			// only look at primary tracks
+			if ( trackPt( iTrack) == 0 )
+				continue;
+			
+			if ( ds->get<UChar_t>( "Tracks.mBTofMatchFlag", iTrack ) > 0 )
+				nMatched++;
+		}
+		return nMatched;
+	}
 	
 
 	virtual Double_t trackPt( Int_t iHit ){ 
 		double px = ds->get<Float_t>("Tracks.mPMomentum.mX1", iHit);
 		double py = ds->get<Float_t>("Tracks.mPMomentum.mX2", iHit);
 		return TMath::Sqrt( px*px + py*py ); 
+	}
+	virtual Double_t trackPx( Int_t iHit ){
+		return ds->get<Float_t>("Tracks.mPMomentum.mX1", iHit); 
+	}
+	virtual Double_t trackPy( Int_t iHit ){
+		return ds->get<Float_t>("Tracks.mPMomentum.mX2", iHit); 
+	}
+	virtual Double_t trackPz( Int_t iHit ){
+		return ds->get<Float_t>("Tracks.mPMomentum.mX3", iHit); 
 	}
 	virtual Double_t trackP( Int_t iHit ){ 
 		double px = ds->get<Float_t>("Tracks.mPMomentum.mX1", iHit);
@@ -47,12 +70,14 @@ public:
 		return TMath::Sqrt( px*px + py*py ); 
 	}
 	virtual Int_t trackCharge( Int_t iHit ){ 
-		if ( ds->get<Int_t>("Tracks.mNHitsFit", iHit) > 0 )
+
+		Int_t nhitsfit = ds->get<Char_t>("Tracks.mNHitsFit", iHit);
+		if ( nhitsfit > 0 )
 			return 1;
-		else if ( ds->get<Int_t>("Tracks.mNHitsFit", iHit) < 0 )
+		else if ( nhitsfit < 0 )
 			return -1;
-		else
-			return 0; 
+		
+		return 0; 
 	}
 	virtual Double_t trackEta( Int_t iHit ){ 
 		double pz = ds->get<Float_t>("Tracks.mPMomentum.mX3", iHit);

@@ -54,6 +54,8 @@ protected:
 	bool useTofParams = false;
 	bool useDedxParams = false;
 
+	double nSigBelow, nSigAbove;
+
 public:
 	PidPhaseSpace( XmlConfig* config, string np, string fl ="", string jp ="" );
 	~PidPhaseSpace();

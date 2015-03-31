@@ -3,10 +3,10 @@
 
 	<!-- Cuts applied to Events -->
 	<EventCuts>
-		<triggerMask> 36 </triggerMask> <!-- BBC_MB -->
+		<triggerMask> 7 </triggerMask> <!-- MB -->
 		<vertexZ min="-30" max="30" />
-		<vertexR min="0.0" max="1.0" />
-		<vertexROffset x="0" y="0.89" />
+		<vertexR min="0.0" max="2.0" />
+		<vertexROffset x="0" y="0.0" />
 		<nTofMatchedTracks min="3" max="10000"/>
 	</EventCuts>
 

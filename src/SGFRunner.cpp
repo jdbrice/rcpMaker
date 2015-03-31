@@ -49,53 +49,107 @@ SGFRunner::~SGFRunner(){
 
 void SGFRunner::make(){
 
+	RooMsgService::instance().setGlobalKillBelow(ERROR);
+
+	// temp inputs tht I haven't automated yet
+	int etaBin = 0;
+	int cenBin = 0;
+	int charge = 0;
+
+	//
+	double zbDeltaMu = cfg->getDouble( nodePath + "ParameterFixing.deltaMu:zb", 1.5 );
+	double zdDeltaMu = cfg->getDouble( nodePath + "ParameterFixing.deltaMu:zd", 1.5 );
+
+	double zbDeltaSigma = cfg->getDouble( nodePath + "ParameterFixing.deltaSigma:zb", 0.25 );
+	double zdDeltaSigma = cfg->getDouble( nodePath + "ParameterFixing.deltaSigma:zd", 0.25 );
+
 	book->cd();
 	book->makeAll( nodePath + "histograms" );
-	for ( string plc : PidPhaseSpace::species ){
-		book->clone( "yield", "yield_"+plc );
+	for ( int iCen = 0; iCen < 2; iCen++ ){
+		for ( int iCharge = -1; iCharge < 2; iCharge++ ){
+			for ( int iEta = 0; iEta < binsEta->nBins(); iEta++ ){
+				for ( string plc : PidPhaseSpace::species ){
+					string name = "yield_" + plc + "_" + ts(iCen) + "_" + PidPhaseSpace::chargeString( iCharge ) + "_" + ts(iEta);
+					book->clone( "yield", name );
+				}
+			}
+		}
 	}
 
 	SGF sgf( schema, inFile );
 
 	int firstPtBin = cfg->getInt( nodePath + "FitPtBins:min", 0 );
 	int lastPtBin = cfg->getInt( nodePath + "FitPtBins:max", 1 );
-	if ( lastPtBin > binsPt->nBins() )
-		lastPtBin = binsPt->nBins();
+	if ( lastPtBin >= binsPt->nBins() )
+		lastPtBin = binsPt->nBins() - 1;
 
-	for ( int iPt = firstPtBin; iPt <= lastPtBin; iPt++ ){
+	//for ( int iCen = 0; iCen < 2; iCen++ ){
+	//	for ( int iCharge = -1; iCharge < 2; iCharge++ ){
+	//		for ( int iEta = 0; iEta < binsEta->nBins(); iEta++ ){
+	{
+		{
+			{
+				int iCen = 1;
+				int iCharge = 0;
+				int iEta = 0;
+				// reset yields here but need to reset all yields
+				// the zb and zd yields also
+				// TODO
+				for ( int iPt = firstPtBin; iPt <= lastPtBin; iPt++ ){
 
-		double avgP = ((*binsPt)[iPt] + (*binsPt)[iPt+1] ) / 2.0;
-		// set initals
-		int iPlc = 0;
-		vector<double> dedxMeans = psr->centeredDedxMeans( centerSpecies, avgP );
-		logger->info(__FUNCTION__) << "pt Bin : " << iPt << endl;
-		for ( string plc : PidPhaseSpace::species ){
+					cout << "PtBin : " << iPt << endl;
 
-			double m = psr->mass( plc );
-			double mr = psr->mass( centerSpecies );
-			double zbMean = tofParams[ plc ]->mean( avgP, m, mr );
-			double zbSigma = tofParams[ plc ]->sigma( avgP, m, mr );
+					double avgP = averageP( iPt, etaBin );
+					// set initals
+					int iPlc = 0;
+					vector<double> dedxMeans = psr->centeredDedxMeans( centerSpecies, avgP );
+					logger->info(__FUNCTION__) << "pt Bin : " << iPt << endl;
+					for ( string plc : PidPhaseSpace::species ){
 
-			double zdMean = dedxMeans[ iPlc ];
-			double zdSigma = dedxParams[ plc ]->sigma( avgP );
+						double m = psr->mass( plc );
+						double mr = psr->mass( centerSpecies );
+						double zbMean = tofParams[ plc ]->mean( avgP, m, mr );
+						double zbSigma = tofParams[ plc ]->sigma( avgP, m, mr );
 
-			// update the schema
-			logger->trace(__FUNCTION__) << plc << " : zb mu=" << zbMean << ", sig=" << zbSigma << endl;
-			logger->trace(__FUNCTION__) << plc << " : zd mu=" << zdMean << ", sig=" << zdSigma << endl; 
-			schema->setInitial( "zb", plc, zbMean, zbSigma );
-			schema->setInitial( "zd", plc, zdMean, zdSigma );
+						double zdMean = dedxMeans[ iPlc ];
+						double zdSigma = dedxParams[ plc ]->sigma( avgP );
 
-			iPlc++;
+						// update the schema
+						logger->trace(__FUNCTION__) << plc << " : zb mu=" << zbMean << ", sig=" << zbSigma << endl;
+						logger->trace(__FUNCTION__) << plc << " : zd mu=" << zdMean << ", sig=" << zdSigma << endl; 
+						schema->setInitial( "zb", plc, zbMean, zbSigma, zbDeltaMu, zbDeltaSigma );
+						schema->setInitial( "zd", plc, zdMean, zdSigma, zdDeltaMu, zdDeltaSigma );
+
+						// check if the sigmas should be fixed
+						double zbMinParP = cfg->getDouble( nodePath + "ParameterFixing." + plc + ":zbSigma", 0 );
+						double zdMinParP = cfg->getDouble( nodePath + "ParameterFixing." + plc + ":zdSigma", 0 );
+
+						if ( zbMinParP > 0 && avgP >= zbMinParP)
+							schema->fixSigma( "zb", plc, zbSigma );
+						if ( zdMinParP > 0 && avgP >= zdMinParP )
+							schema->fixSigma( "zd", plc, zdSigma );
+
+						iPlc++;
+					}
+
+					sgf.fit( centerSpecies, charge, cenBin, iPt, etaBin );
+					sgf.report( reporter );
+
+					for ( string plc : PidPhaseSpace::species ){
+						string name = "yield_" + plc + "_" + ts(iCen) + "_" + PidPhaseSpace::chargeString( iCharge ) + "_" + ts(iEta);
+						book->cd();
+						double sC = schema->var( "yield_"+plc )->getVal() / book->get( name )->GetBinWidth( iPt + 1 );
+
+						double sE = schema->var( "yield_"+plc )->getError() / book->get( name )->GetBinWidth( iPt + 1 );
+						cout << "averageP = " << avgP << endl;
+						cout << "Bin Width : " << book->get( name )->GetBinWidth( iPt + 1 ) << endl;
+						book->fill( name, avgP, sC );
+						book->get(  name )->SetBinError( iPt, sE );
+					}
+
+				}// loop pt Bins
+			}
 		}
-
-		sgf.fit( centerSpecies, 0, 1, iPt, 0 );
-		sgf.report( reporter );
-
-		for ( string plc : PidPhaseSpace::species ){
-			book->cd();
-			book->fill( "yield_"+plc, avgP, schema->var( "yield_"+plc )->getVal() );
-		}
-
 	}
 
 

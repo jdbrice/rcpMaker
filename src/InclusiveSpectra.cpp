@@ -2,6 +2,7 @@
 #include "InclusiveSpectra.h"
 #include "ChainLoader.h"
 #include "LBNLPicoDst.h"
+#include "FemtoDst.h"
 
 #include <limits.h>
 
@@ -14,8 +15,12 @@ InclusiveSpectra::InclusiveSpectra( XmlConfig * config, string np, string fileLi
 	/**
 	 * Make the desired PicoDataStore Interface
 	 */
-	if ( ds )
+	assert( ds );
+	if ( ds && ds->getTreeName() == "FemtoDst" )
+		pico = unique_ptr<PicoDataStore>( new FemtoDst( ds->getChain() ) );
+	else if ( ds && ds->getTreeName() == "PicoDst" )
 		pico = unique_ptr<PicoDataStore>( new LBNLPicoDst( ds ) );
+
 
 	/**
 	 * Load in the common configs
@@ -32,7 +37,7 @@ InclusiveSpectra::InclusiveSpectra( XmlConfig * config, string np, string fileLi
 	 * Event and Track Cuts
 	 */
     // Events
-    triggerMasks 			= cutsCfg->getIntVector( "EventCuts.triggerMasks" );
+    triggerMask 			= cutsCfg->getInt( "EventCuts.triggerMask" );
     cutVertexZ 				= unique_ptr<ConfigRange>(new ConfigRange( cutsCfg.get(), "EventCuts.vertexZ", 				-200, 	200 ) );
     cutVertexR 				= unique_ptr<ConfigRange>(new ConfigRange( cutsCfg.get(), "EventCuts.vertexR", 				0, 		10 ) );
     cutVertexROffset 		= unique_ptr<ConfigPoint>(new ConfigPoint( cutsCfg.get(), "EventCuts.vertexROffset", 		0.0, 	0.0 )  );
@@ -129,6 +134,7 @@ void InclusiveSpectra::preEventLoop(){
 
 void InclusiveSpectra::analyzeEvent(){
 
+	nTofMatchedTracks = 0;
 	Int_t nTracks = pico->numTracks();
 
 	for ( Int_t iTrack = 0; iTrack < nTracks; iTrack ++ ){
@@ -172,29 +178,30 @@ bool InclusiveSpectra::keepEvent(){
 	/**
 	 * Bad Run Rejection
 	 */
+	logger->debug(__FUNCTION__) << "Rejecting Bad Runs " << endl;
 	if ( rmc->isBad( pico->runId() ) ){
 		logger->warn( __FUNCTION__ ) << "Rejecting Run : " << pico->runId() << endl;
 		return false;
 	} 
 	if ( makeEventQA )
 		book->get( "eventCuts" )->Fill( "GoodRuns", 1 );
-
+	logger->debug(__FUNCTION__) << "Trigger Selection" << endl;
 	/**
 	 * Trigger Selection
 	 */
-	bool foundTrigger = false;
-	uint tword = pico->triggerWord();
-	for ( int i = 0; i < triggerMasks.size(); i++ ){
-		if ( tword & triggerMasks[ i ] ){
-			foundTrigger = true;
-			break;
-		}
-	}
-	if ( !foundTrigger )
+	
+	logger->debug(__FUNCTION__) << "Rejecting Bad Runs " << endl;
+	UInt_t tword = pico->triggerWord();
+	logger->debug(__FUNCTION__) << "Trigger Mask " << triggerMask << endl;
+	logger->debug(__FUNCTION__) << "Trigger Word " << tword << endl;
+	logger->debug(__FUNCTION__) << "Trigger Mask & tword" << (triggerMask & tword) << endl;
+
+	if ( !(tword & triggerMask) )
 		return false;
 	if ( makeEventQA )
 		book->get( "eventCuts" )->Fill( "Triggered", 1 );
 
+	logger->debug(__FUNCTION__) << "Applying RMC " << endl;
 	// give the event vars a default
 	refMult = -1;
 	cBin = -1;
@@ -216,7 +223,7 @@ bool InclusiveSpectra::keepEvent(){
 	double y = pico->vY() + cutVertexROffset->y;
 	double r = TMath::Sqrt( x*x + y*y );
 
-	int nTofMatchedTracks = pico->numTofMatchedTracks();
+	nTofMatchedTracks = pico->numTofMatchedTracks();
 
 
 	/**

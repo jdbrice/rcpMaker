@@ -43,7 +43,7 @@ protected:
 	unique_ptr<ConfigRange> cutVertexR;
 	unique_ptr<ConfigPoint> cutVertexROffset;
 	unique_ptr<ConfigRange> cutNTofMatchedTracks;
-	vector<int> triggerMasks;
+	Int_t triggerMask;
 	
 	/**
 	 * Track Cuts
@@ -77,6 +77,7 @@ protected:
 	double eventWeight = 1.0;
 	int cBin;
 
+	Int_t nTofMatchedTracks;
 
 
 

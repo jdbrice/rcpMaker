@@ -66,7 +66,9 @@ public:
 	RooSimultaneous * model() { return simModel; }
 	RooCategory * category() { return rSample; }
 
-	void setInitial( string var, string plc, double _mu, double _sigma );
+	void resetYield( string plc, double _yield );
+	void setInitial( string var, string plc, double _mu, double _sigma, double _dmu = 1.5, double _dsigma = .25 );
+	void fixSigma( string var, string plc, double sigma );
 
 	
 

@@ -18,6 +18,7 @@ using namespace jdb;
 #include "SGFSchema.h"
 #include "SGF.h"
 #include "SGFRunner.h"
+#include "FemtoDstMaker.h"
 
 #include <exception>
 
@@ -56,7 +57,11 @@ int main( int argc, char* argv[] ) {
 				SGFRunner sgfr( &config, "SimultaneousPid." );
 				sgfr.make();
 
-			} else if ( "test" == job ){
+			} else if ( "FemtoDst" == job ){
+				FemtoDstMaker fdst( &config, "FemtoDstMaker.", fileList, jobPrefix );
+				fdst.make();
+
+			}else if ( "test" == job ){
 				
 				Logger::setGlobalColor( true );
 				Logger::setGlobalLogLevel( Logger::llAll );
@@ -78,10 +83,6 @@ int main( int argc, char* argv[] ) {
 				inFile->Close();
 
 			}
-
-
-
-
 
 		} catch ( exception &e ){
 			cout << e.what() << endl;
