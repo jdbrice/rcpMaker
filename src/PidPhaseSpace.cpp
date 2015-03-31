@@ -19,7 +19,7 @@ PidPhaseSpace::PidPhaseSpace( XmlConfig* config, string np, string fl, string jp
 	dedxScalePadding = cfg->getDouble( "binning.padding.dedxScale", .05 );
 
 	logger->info(__FUNCTION__) << "Tof Padding ( " << tofPadding << ", " << tofScalePadding << " ) " << endl;
-
+	book->setLogLevel( "none" );
 	/**
 	 * Initialize the Phase Space Recentering Object
 	 */
@@ -85,13 +85,16 @@ PidPhaseSpace::PidPhaseSpace( XmlConfig* config, string np, string fl, string jp
 			useDedxParams = true;
 		}
 	}
+	tofParamsMinP = cfg->getDouble( np + "TofPidParams:minP", 0.4 );
+
 
 	/**
 	 * Cuts below Pion to remove electrons
 	 * And above P to remove deuterons
 	 */
-	double nSigBelow = cfg->getDouble( nodePath + "enhanceDistributions:nSigBelow", 3.0 );
-	double nSigAbove = cfg->getDouble( nodePath + "enhanceDistributions:nSigAbove", 3.0 );
+	nSigBelow = cfg->getDouble( nodePath + "enhanceDistributions:nSigBelow", 3.0 );
+	nSigAbove = cfg->getDouble( nodePath + "enhanceDistributions:nSigAbove", 3.0 );
+	logger->info(__FUNCTION__) << "nSig cuts for e, d : " << nSigBelow << ", " << nSigAbove << endl;
 
  }
 
@@ -112,7 +115,8 @@ void PidPhaseSpace::preEventLoop() {
 void PidPhaseSpace::postEventLoop() {
 	logger->info(__FUNCTION__) << endl;
 
-	reportAll();
+	reportAllTof();
+	reportAllDedx();
 }
 
 void PidPhaseSpace::analyzeTrack( int iTrack ){
@@ -359,7 +363,7 @@ void PidPhaseSpace::enhanceDistributions( double avgP, int ptBin, int etaBin, in
 }
 
 
-void PidPhaseSpace::reportAll() {
+void PidPhaseSpace::reportAllTof() {
 
 	book->cd();
 	int nCenBins = nCentralityBins();
@@ -380,7 +384,7 @@ void PidPhaseSpace::reportAll() {
 				int index = iCen + (charge + 1 ) * nCenBins + etaBin * nChargeBins * nCenBins;
 				string sn = tofName( centerSpecies, charge, iCen, 0, etaBin );
 				
-				rps.push_back( unique_ptr<Reporter>(new Reporter( baseURL + jobPrefix + baseName + sn + ".pdf", 800, 500 )) );
+				rps.push_back( unique_ptr<Reporter>(new Reporter( baseURL + jobPrefix + baseName + sn + ".pdf", 1000, 500 )) );
 
 
 			} // loop centralities
@@ -417,18 +421,126 @@ void PidPhaseSpace::reportAll() {
 					set( "draw", "pe" )->
 					draw();
 
+					map<string, int> colors;
+					colors[ "Pi" ] = kBlue;
+					colors[ "K" ] = kGreen;
+					colors[ "P" ] = kBlack;
 					for ( string plc : species ){
-						double ttMean = getTofMean( plc, avgP );
+						
 						double ttSigma = getTofSigma( plc, avgP );
-						TLine * line = new TLine( ttMean, 1, ttMean, 10000 );
-						line->Draw("same");
+						double ttMean = getTofMean( plc, avgP );
+						TLine * l1 = new TLine( ttMean - ttSigma * tofCut, 0, ttMean - ttSigma* tofCut, 10 );
+						TLine * l2 = new TLine( ttMean + ttSigma* tofCut, 0, ttMean + ttSigma* tofCut, 10 );
+						l1->SetLineColor( colors[ plc ] );
+						l2->SetLineColor( colors[ plc ] );
+
+						l1->Draw("same");
+						l2->Draw("same");
 					}
+					double ttSigma = getTofSigma( "Pi", avgP );
+					double ttMean = getTofMean( "Pi", avgP );
+					logger->info(__FUNCTION__) << "PiMu = " << ttMean << ", sigma = " << ttSigma << ", nSigma = " << nSigBelow << endl; 
+					logger->info(__FUNCTION__) << "ptBin = " << ptBin << " electron cut : " << ttMean - ttSigma * nSigBelow <<  endl;
+					TLine * l1 = new TLine( ttMean - ttSigma * nSigBelow, 0, ttMean - ttSigma * nSigBelow, 100 );
+					l1->SetLineStyle( 2 );
+					l1->SetLineColor( kRed );
+					l1->Draw( "same" );
 
-
+					ttSigma = getTofSigma( "P", avgP );
+					ttMean = getTofMean( "P", avgP );
+					TLine * l2 = new TLine( ttMean + ttSigma * nSigAbove, 0, ttMean + ttSigma * nSigAbove, 100 );
+					l2->SetLineStyle( 2 );
+					l2->SetLineColor( kRed );
+					l2->Draw("same" );
+					
 					rps[ index ]->savePage();
+				
+				} // loop centralities
+			} // loop charges 
+		} // loop eta bins
+	} // loop pt bins
+}
+
+void PidPhaseSpace::reportAllDedx() {
+
+	book->cd();
+	int nCenBins = nCentralityBins();
+	int nChargeBins = binsCharge->nBins();
+	int nEtaBins = binsEta->nBins();
+
+	vector< unique_ptr<Reporter> > rps;
+	
+	string baseURL = cfg->getString(  nodePath + "output:path", "./" );
+	string baseName= cfg->getString(  nodePath + "output.Reports", "" );
+	
+	// Make the slew of reporters
+	for ( int etaBin = 0; etaBin < nEtaBins; etaBin++ ){
+		// Loop over charge, skip if config doesnt include that charge bin
+		for ( int charge = -1; charge <= 1; charge++ ){
+			int chargeBin = binsCharge->findBin( charge );
+			if ( chargeBin < 0 )
+				continue;
+			for ( int iCen = 0; iCen < nCenBins; iCen++ ){
+			
+				int index = iCen + (charge + 1 ) * nCenBins + etaBin * nChargeBins * nCenBins;
+				string sn = dedxName( centerSpecies, charge, iCen, 0, etaBin );
+				
+				rps.push_back( unique_ptr<Reporter>(new Reporter( baseURL + jobPrefix + baseName + sn + ".pdf", 1000, 500 )) );
 
 
+			} // loop centralities
+		} // loop charges 
+	} // loop eta bins
 
+	book->cd( "dedx" );
+	// Loop through pt, then eta then charge
+	for ( int ptBin = 0; ptBin < binsPt->nBins(); ptBin++ ){
+		for ( int etaBin = 0; etaBin < binsEta->size()-1; etaBin++ ){
+			// Loop over charge, skip if config doesnt include that charge bin
+			for ( int charge = -1; charge <= 1; charge++ ){
+				int chargeBin = binsCharge->findBin( charge );
+				if ( chargeBin < 0 )
+					continue;
+				for ( int iCen = 0; iCen < nCentralityBins(); iCen++ ){
+				
+					double avgP = averageP( ptBin, etaBin );					
+
+					int index = iCen + (charge + 1 ) * nCenBins + etaBin * nChargeBins * nCenBins;
+					string n = dedxName( centerSpecies, charge, iCen, ptBin, etaBin );
+
+					string ptLowEdge = dts(binsPt->getBins()[ ptBin ]);
+					string ptHiEdge = dts(binsPt->getBins()[ ptBin + 1 ]);
+					string etaLowEdge = dts(binsEta->getBins()[ etaBin ]);
+					string etaHiEdge = dts(binsEta->getBins()[ etaBin + 1 ]);
+					//string range = dts(binsPt->getBins()[ ptBin ]) + " < Pt < " + dts(binsPt->getBins()[ ptBin ]) + " : #eta = " << dts(binsEta->getBins()[ etaBin ])
+
+					rps[ index ]->newPage();
+					book->style( n )->set( "logY", 1 )->
+					set( "title", ptLowEdge + " < Pt < " + ptHiEdge + " : " + etaLowEdge + " < |#eta| < " + etaHiEdge )->
+					set( "x", "z_{dEdx}" )->
+					set( "y", "events / " + dts( tofBinWidth ) )->
+					set( "draw", "pe" )->
+					draw();
+
+					map<string, int> colors;
+					colors[ "Pi" ] = kBlue;
+					colors[ "K" ] = kGreen;
+					colors[ "P" ] = kBlack;
+					for ( string plc : species ){
+						
+						double ttSigma = getDedxSigma( plc, avgP );
+						double ttMean = getDedxMean( plc, avgP );
+						TLine * l1 = new TLine( ttMean - ttSigma * dedxCut, 0, ttMean - ttSigma * dedxCut, 10 );
+						TLine * l2 = new TLine( ttMean + ttSigma * dedxCut, 0, ttMean + ttSigma * dedxCut, 10 );
+						l1->SetLineColor( colors[ plc ] );
+						l2->SetLineColor( colors[ plc ] );
+
+						l1->Draw("same");
+						l2->Draw("same");
+					}
+					
+					rps[ index ]->savePage();
+				
 				} // loop centralities
 			} // loop charges 
 		} // loop eta bins
@@ -438,12 +550,12 @@ void PidPhaseSpace::reportAll() {
 }
 
 
-double PidPhaseSpace::getTofMean( string plc, double p ){
+double PidPhaseSpace::getTofMean( string plc, double p, bool _useTofParams ){
 	vector<double> tMeans = psr->centeredTofMeans( centerSpecies, p );
 	if ( std::find( species.begin(), species.end(), plc ) != species.end() ){
 		int index = distance( species.begin(), std::find( species.begin(), species.end(), plc ) );
 
-		if ( useTofParams )
+		if ( useTofParams && _useTofParams && p >= tofParamsMinP )
 			return tofParams[ index ]->mean( p, psr->mass( plc ), psr->mass( centerSpecies ) );
 		else
 			return tMeans[ index ];
@@ -451,12 +563,14 @@ double PidPhaseSpace::getTofMean( string plc, double p ){
 	assert( false );
 }
 
-double PidPhaseSpace::getTofSigma( string plc, double p ){
+double PidPhaseSpace::getTofSigma( string plc, double p, bool _useTofParams ){
 	
 	if ( std::find( species.begin(), species.end(), plc ) != species.end() ){
 		int index = distance( species.begin(), std::find( species.begin(), species.end(), plc ) );
-		if ( useTofParams )
+		if ( useTofParams && _useTofParams && p >= tofParamsMinP )
 			return tofParams[ index ]->sigma( p, psr->mass( plc ), psr->mass( centerSpecies ) );
+		else if ( useTofParams && _useTofParams && p < tofParamsMinP )
+			return tofParams[ index ]->sigma( tofParamsMinP, psr->mass( plc ), psr->mass( centerSpecies ) );
 		else
 			return tofSigmaIdeal;
 	}

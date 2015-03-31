@@ -15,7 +15,12 @@
 			<Histo name="yield" title="yield" xBins="bin.pt" />
 		</histograms>
 		<!-- fit bins -->
-		<FitPtBins min="2" max="35" />
+		<FitRange>
+			<ptBins min="2" max="35" />
+			<centralityBins>1</centralityBins>
+			<etaBins>0</etaBins>
+			<charges>0</charges>
+		</FitRange>
 		<!-- Guiding parameters -->
 
 		<ParameterFixing>
@@ -28,6 +33,8 @@
 			<Pi zbSigma="1.2" zdSigma="1.2" />
 			<K zbSigma="1.0" zdSigma="0.6" />
 			<P zbSigma="2.0" zdSigma="1.4" />
+
+			
 		</ParameterFixing>
 
 
@@ -69,6 +76,9 @@
 		</PhaseSpaceRecentering>
 
 		<SGFSchema>
+			<!-- Yield Defaults -->
+			<Yield Pi="10000" K="1000" P="1000" />
+
 			<!-- Indep Vars -->
 			<RooRealVar name="zb" min="-10.6" max="10.0" />
 			<RooRealVar name="zd" min="-0.4" max="0.5" />
@@ -94,9 +104,9 @@
 			<RooRealVar name="zd_sigma_P" value=".01" min=".001" max=".2" />
 
 			<!-- 1/beta and dEdx shared yields -->
-			<RooRealVar name="yield_Pi" value="100000" min="10" max="100000000" />
-			<RooRealVar name="yield_K" value="10000" min="10" max="1000000000" />
-			<RooRealVar name="yield_P" value="10000" min="10" max="1000000000" />
+			<RooRealVar name="yield_Pi" value="10000" min="10" max="100000000" />
+			<RooRealVar name="yield_K" value="1000" min="10" max="1000000000" />
+			<RooRealVar name="yield_P" value="1000" min="10" max="1000000000" />
 
 			<!-- dEdx Kaon enhanced -->
 			<RooRealVar name="zd_K_yield_Pi" value="100000" min="0" max="100000000" />

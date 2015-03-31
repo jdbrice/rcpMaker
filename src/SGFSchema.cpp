@@ -1,5 +1,5 @@
 #include "SGFSchema.h"
-
+#include "PidPhaseSpace.h"
 
 SGFSchema::SGFSchema( XmlConfig * _cfg, string _np ){
 
@@ -19,6 +19,12 @@ void SGFSchema::initialize() {
 	makeVariables();
 	makeModels();
 	makeSimultaneous();
+
+	for ( string plc : PidPhaseSpace::species ){
+		defaultYield[ plc ] = cfg->getDouble( np + ".Yield:" + plc, 1000 );
+	}
+
+
 }
 
 void SGFSchema::makeVariables(){
@@ -176,9 +182,19 @@ void SGFSchema::setInitial( string var, string plc, double _mu, double _sigma, d
 
 }
 
-void SGFSchema::resetYield( string plc, double _yield ){
-	if ( var("yield_" + plc ) )
-		var("yield_" + plc )->setVal( _yield );
+void SGFSchema::resetYield( string sVar ){
+		
+	for ( string ePlc : PidPhaseSpace::species ){
+
+		if ( var("yield_" + ePlc ) )
+			var("yield_" + ePlc )->setVal( defaultYield[ ePlc ] );
+
+		for ( string plc : PidPhaseSpace::species ){
+			if ( var( sVar + "_" + ePlc + "_yield_" + plc ) )
+				var(sVar + "_" + ePlc + "_yield_" + plc )->setVal( defaultYield[ plc ] );		
+		}
+	}
+	
 }
 
 void SGFSchema::fixSigma( string var, string plc, double _sigma ){

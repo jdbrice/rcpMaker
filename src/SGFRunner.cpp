@@ -35,10 +35,7 @@ SGFRunner::SGFRunner( XmlConfig * _cfg, string _np)
 
 	}
 
-	/**
-	 * Create the schema
-	 */
-	schema = shared_ptr<SGFSchema>(new SGFSchema( cfg, nodePath + "SGFSchema" ));
+	
 
 }
 
@@ -76,25 +73,28 @@ void SGFRunner::make(){
 		}
 	}
 
-	SGF sgf( schema, inFile );
+	
 
-	int firstPtBin = cfg->getInt( nodePath + "FitPtBins:min", 0 );
-	int lastPtBin = cfg->getInt( nodePath + "FitPtBins:max", 1 );
+	vector<int> centralityFitBins = cfg->getIntVector( nodePath + "FitRange.centralityBins" );
+	vector<int> etaFitBins = cfg->getIntVector( nodePath + "FitRange.etaBins" );
+	vector<int> chargeFit = cfg->getIntVector( nodePath + "FitRange.charges" );
+
+	int firstPtBin = cfg->getInt( nodePath + "FitRange.ptBins:min", 0 );
+	int lastPtBin = cfg->getInt( nodePath + "FitRange.ptBins:max", 1 );
 	if ( lastPtBin >= binsPt->nBins() )
 		lastPtBin = binsPt->nBins() - 1;
 
-	//for ( int iCen = 0; iCen < 2; iCen++ ){
-	//	for ( int iCharge = -1; iCharge < 2; iCharge++ ){
-	//		for ( int iEta = 0; iEta < binsEta->nBins(); iEta++ ){
-	{
-		{
-			{
-				int iCen = 1;
-				int iCharge = 0;
-				int iEta = 0;
-				// reset yields here but need to reset all yields
-				// the zb and zd yields also
-				// TODO
+	 for ( int iCen : centralityFitBins ){
+		for ( int iCharge : chargeFit ){
+			for ( int iEta : etaFitBins ){
+						
+				/**
+				 * Create the schema
+				 * and fitter
+				 */
+				schema = shared_ptr<SGFSchema>(new SGFSchema( cfg, nodePath + "SGFSchema" ));
+				SGF sgf( schema, inFile );
+
 				for ( int iPt = firstPtBin; iPt <= lastPtBin; iPt++ ){
 
 					cout << "PtBin : " << iPt << endl;
@@ -132,7 +132,7 @@ void SGFRunner::make(){
 						iPlc++;
 					}
 
-					sgf.fit( centerSpecies, charge, cenBin, iPt, etaBin );
+					sgf.fit( centerSpecies, charge, iCen, iPt, etaBin );
 					sgf.report( reporter );
 
 					for ( string plc : PidPhaseSpace::species ){
@@ -146,12 +146,13 @@ void SGFRunner::make(){
 						book->fill( name, avgP, sC );
 						book->get(  name )->SetBinError( iPt, sE );
 					}
+					// just makes it so that the RooFit Frames aren't saved into HistoBook File
+					inFile->cd();
 
 				}// loop pt Bins
-			}
-		}
-	}
-
+			} // loop eta bins
+		} // loop charge bins
+	} // loop centrality bins
 
 }
 

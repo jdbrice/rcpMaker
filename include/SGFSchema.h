@@ -66,7 +66,7 @@ public:
 	RooSimultaneous * model() { return simModel; }
 	RooCategory * category() { return rSample; }
 
-	void resetYield( string plc, double _yield );
+	void resetYield( string sVar );
 	void setInitial( string var, string plc, double _mu, double _sigma, double _dmu = 1.5, double _dsigma = .25 );
 	void fixSigma( string var, string plc, double sigma );
 
@@ -93,9 +93,11 @@ protected:
 	map< string, RooAddPdf * > models;
 	map< string, string > modelSample;
 	map< string, RooDataHist * > rdhSingle;
+	map< string, double> defaultYield;
 	RooCategory * rSample;
 	RooSimultaneous * simModel;
 	RooDataHist * allData;
+
 	
 
 	Logger l;

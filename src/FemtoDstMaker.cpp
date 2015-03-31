@@ -11,9 +11,16 @@ FemtoDstMaker::FemtoDstMaker( XmlConfig * _cfg, string _np, string _fileList, st
 }
 
 FemtoDstMaker::~FemtoDstMaker(){
-
+	logger->info(__FUNCTION__) << "Shutting down" << endl;
 
 	delete tree;
+
+	logger->info(__FUNCTION__) << "Closing File" << endl;
+	TFile * cFile = tree->GetCurrentFile();
+	if ( cFile != nullptr ){
+		cFile->Write();
+		cFile->Close();	
+	}
 
 }
 
@@ -49,7 +56,7 @@ void FemtoDstMaker::preEventLoop(){
 	tree->Branch( "Tracks.mPMomentum.mX1", tracks.mPMomentumX1, "Tracks.mPMomentum.mX1[Event.mNumberOfPrimaryTracks]/F" );
 	tree->Branch( "Tracks.mPMomentum.mX2", tracks.mPMomentumX2, "Tracks.mPMomentum.mX2[Event.mNumberOfPrimaryTracks]/F" );
 	tree->Branch( "Tracks.mPMomentum.mX3", tracks.mPMomentumX3, "Tracks.mPMomentum.mX3[Event.mNumberOfPrimaryTracks]/F" );
-	tree->SetAutoSave( cfg->getInt( nodePath + "output.tree:autoSaveSize", 250000000 ) );
+	tree->SetAutoSave( cfg->getInt( nodePath + "output.tree:autoSaveSize", 25000000 ) );
 	tree->SetMaxTreeSize( cfg->getInt( nodePath + "output.tree:splitSize", 250000000 ) );
 
 }
@@ -101,11 +108,8 @@ void FemtoDstMaker::analyzeTrack( Int_t iTrack ) {
 
 
 void FemtoDstMaker::postEventLoop(){
+	logger->info(__FUNCTION__) << endl;
 	InclusiveSpectra::postEventLoop();
-
-	TFile * cFile = tree->GetCurrentFile();
-	cFile->Write();
-	cFile->Close();
 
 }
 

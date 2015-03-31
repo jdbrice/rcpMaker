@@ -4,12 +4,10 @@
 	<jobType>PidPhaseSpace</jobType>
 
 	<PidPhaseSpace>
-		<Logger color="true">
-			<logLevel>info</logLevel>
-		</Logger>
+		<Logger color="true" logLevel="warning" />
 		
 		<!--<DataSource treeName="PicoDst" url="/Users/danielbrandenburg/bnl/local/data/Run14/LBNL/" maxFiles="10">-->
-		<DataSource treeName="FemtoDst" url="/Users/danielbrandenburg/bnl/local/data/Run14/rcp/femtoDst/" maxFiles="5">
+		<DataSource treeName="FemtoDst" url="/Users/danielbrandenburg/bnl/local/data/Run14/rcp/femtoDst/" >
 			
 			<!-- Set all branches off -->
 			<BranchStatus status="0">*</BranchStatus>
@@ -72,7 +70,7 @@
 		</style>
 
 
-		<TofPidParams>
+		<TofPidParams minP="0.4">
 			<Pi>
 				<mean t="-0.00198432" p="1.52356" ep="-0.38614"/>
 				<sigma t="0.010814" p="0.0" ep="0.0"/>

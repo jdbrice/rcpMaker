@@ -52,6 +52,7 @@ protected:
 	vector<TofPidParams*> tofParams;
 	vector<DedxPidParams*> dedxParams;
 	bool useTofParams = false;
+	double tofParamsMinP;
 	bool useDedxParams = false;
 
 	double nSigBelow, nSigAbove;
@@ -145,14 +146,15 @@ public:
 								double tofPadding = 1, double dedxPadding = 1, double tofScaledPadding = 0, double dedxScaledPadding = 0 );
 
 
-	void reportAll(  );
+	void reportAllTof(  );
+	void reportAllDedx(  );
 
 protected:
 
 	void preparePhaseSpaceHistograms( string plc );
 
-	double getTofMean( string plc, double p );
-	double getTofSigma( string plc, double p );
+	double getTofMean( string plc, double p, bool useParams = true );
+	double getTofSigma( string plc, double p, bool useParams = true );
 
 	double getDedxMean( string plc, double p );
 	double getDedxSigma( string plc, double p );
