@@ -48,36 +48,59 @@ void SGFRunner::make(){
 
 	RooMsgService::instance().setGlobalKillBelow(ERROR);
 
-	// temp inputs tht I haven't automated yet
-	int etaBin = 0;
-	int cenBin = 0;
-	int charge = 0;
-
-	//
+	/**
+	 * Constraints on the mu 
+	 */
 	double zbDeltaMu = cfg->getDouble( nodePath + "ParameterFixing.deltaMu:zb", 1.5 );
 	double zdDeltaMu = cfg->getDouble( nodePath + "ParameterFixing.deltaMu:zd", 1.5 );
-
+	/**
+	 * Constraints on the sigma 
+	 */
 	double zbDeltaSigma = cfg->getDouble( nodePath + "ParameterFixing.deltaSigma:zb", 0.25 );
 	double zdDeltaSigma = cfg->getDouble( nodePath + "ParameterFixing.deltaSigma:zd", 0.25 );
 
+	/**
+	 * The bins to fit over
+	 */
+	vector<int> centralityFitBins = cfg->getIntVector( nodePath + "FitRange.centralityBins" );
+	vector<int> etaFitBins = cfg->getIntVector( nodePath + "FitRange.etaBins" );
+	vector<int> chargeFit = cfg->getIntVector( nodePath + "FitRange.charges" );
+
 	book->cd();
 	book->makeAll( nodePath + "histograms" );
-	for ( int iCen = 0; iCen < 2; iCen++ ){
-		for ( int iCharge = -1; iCharge < 2; iCharge++ ){
-			for ( int iEta = 0; iEta < binsEta->nBins(); iEta++ ){
+	for ( int iCen : centralityFitBins ){
+		for ( int iCharge : chargeFit ){
+			for ( int iEta : etaFitBins ){
+				
 				for ( string plc : PidPhaseSpace::species ){
+					// yield Histos
+					book->cd( plc + "_yield" );
 					string name = "yield_" + plc + "_" + ts(iCen) + "_" + PidPhaseSpace::chargeString( iCharge ) + "_" + ts(iEta);
-					book->clone( "yield", name );
+					book->clone( "/", "yield", plc+"_yield", name );
+
+					// Mean Histos
+					book->cd( plc + "_zbMu" );
+					name = "mu_" + plc + "_" + ts(iCen) + "_" + PidPhaseSpace::chargeString( iCharge ) + "_" + ts(iEta);
+					book->clone( "/", "yield", plc+"_zbMu", name );
+
+					book->cd( plc + "_zdMu" );
+					name = "mu_" + plc + "_" + ts(iCen) + "_" + PidPhaseSpace::chargeString( iCharge ) + "_" + ts(iEta);
+					book->clone( "/", "yield", plc+"_zdMu", name );
+
+					// Sigma Histos
+					book->cd( plc + "_zbSigma" );
+					name = "sigma_" + plc + "_" + ts(iCen) + "_" + PidPhaseSpace::chargeString( iCharge ) + "_" + ts(iEta);
+					book->clone( "/", "yield", plc+"_zbSigma", name );
+					book->cd( plc + "_zdSigma" );
+					name = "sigma_" + plc + "_" + ts(iCen) + "_" + PidPhaseSpace::chargeString( iCharge ) + "_" + ts(iEta);
+					book->clone( "/", "yield", plc+"_zdSigma", name );
 				}
+
 			}
 		}
 	}
 
-	
 
-	vector<int> centralityFitBins = cfg->getIntVector( nodePath + "FitRange.centralityBins" );
-	vector<int> etaFitBins = cfg->getIntVector( nodePath + "FitRange.etaBins" );
-	vector<int> chargeFit = cfg->getIntVector( nodePath + "FitRange.charges" );
 
 	int firstPtBin = cfg->getInt( nodePath + "FitRange.ptBins:min", 0 );
 	int lastPtBin = cfg->getInt( nodePath + "FitRange.ptBins:max", 1 );
@@ -99,7 +122,7 @@ void SGFRunner::make(){
 
 					cout << "PtBin : " << iPt << endl;
 
-					double avgP = averageP( iPt, etaBin );
+					double avgP = averageP( iPt, iEta );
 					// set initals
 					int iPlc = 0;
 					vector<double> dedxMeans = psr->centeredDedxMeans( centerSpecies, avgP );
@@ -132,19 +155,36 @@ void SGFRunner::make(){
 						iPlc++;
 					}
 
-					sgf.fit( centerSpecies, charge, iCen, iPt, etaBin );
+					sgf.fit( centerSpecies, iCharge, iCen, iPt, iEta );
 					sgf.report( reporter );
 
 					for ( string plc : PidPhaseSpace::species ){
+						// Yield
 						string name = "yield_" + plc + "_" + ts(iCen) + "_" + PidPhaseSpace::chargeString( iCharge ) + "_" + ts(iEta);
-						book->cd();
+						book->cd( plc+"_yield");
 						double sC = schema->var( "yield_"+plc )->getVal() / book->get( name )->GetBinWidth( iPt + 1 );
-
 						double sE = schema->var( "yield_"+plc )->getError() / book->get( name )->GetBinWidth( iPt + 1 );
-						cout << "averageP = " << avgP << endl;
-						cout << "Bin Width : " << book->get( name )->GetBinWidth( iPt + 1 ) << endl;
+						
 						book->fill( name, avgP, sC );
 						book->get(  name )->SetBinError( iPt, sE );
+
+						//Mu
+						name = "mu_" + plc + "_" + ts(iCen) + "_" + PidPhaseSpace::chargeString( iCharge ) + "_" + ts(iEta);
+						book->cd( plc+"_zbMu");
+						sC = schema->var( "zb_mu_"+plc )->getVal() / book->get( name )->GetBinWidth( iPt + 1 );
+						sE = schema->var( "zb_mu_"+plc )->getError() / book->get( name )->GetBinWidth( iPt + 1 );
+						
+						book->fill( name, avgP, sC );
+						book->get(  name )->SetBinError( iPt, sE );
+
+						name = "mu_" + plc + "_" + ts(iCen) + "_" + PidPhaseSpace::chargeString( iCharge ) + "_" + ts(iEta);
+						book->cd( plc+"_zdMu");
+						sC = schema->var( "zd_mu_"+plc )->getVal() / book->get( name )->GetBinWidth( iPt + 1 );
+						sE = schema->var( "zd_mu_"+plc )->getError() / book->get( name )->GetBinWidth( iPt + 1 );
+						
+						book->fill( name, avgP, sC );
+						book->get(  name )->SetBinError( iPt, sE );
+
 					}
 					// just makes it so that the RooFit Frames aren't saved into HistoBook File
 					inFile->cd();

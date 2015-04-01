@@ -7,7 +7,7 @@
 		<Logger color="true" logLevel="warning" />
 		
 		<!--<DataSource treeName="PicoDst" url="/Users/danielbrandenburg/bnl/local/data/Run14/LBNL/" maxFiles="10">-->
-		<DataSource treeName="FemtoDst" url="/Users/danielbrandenburg/bnl/local/data/Run14/rcp/femtoDst/" >
+		<DataSource treeName="FemtoDst" url="../products/femtoDst/15GeV/" >
 			
 			<!-- Set all branches off -->
 			<BranchStatus status="0">*</BranchStatus>
@@ -30,9 +30,9 @@
 		</Bichsel>
 
 		<!-- Common Resources -->
-		<MakeQA config="config/15Gev/qaHistograms.xml" event="false" track="false" />
-		<Cuts config="config/15Gev/nullCuts.xml" />
-		<RMCParams config="config/15Gev/StRMCParams.xml" />
+		<MakeQA config="config/15GeV/qaHistograms.xml" event="false" track="false" />
+		<Cuts config="config/15GeV/nullCuts.xml" />
+		<RMCParams config="config/15GeV/StRMCParams.xml" />
 
 		<!-- the bins into which the 9 centrality bins are mapped. -->
 		<CentralityMap>
@@ -46,7 +46,7 @@
 		
 		<PhaseSpaceRecentering>
 			<centerSpecies>K</centerSpecies>
-			<sigma tof="0.012" dedx="0.033"/>
+			<sigma tof="0.011" dedx="0.033"/>
 			<method>nonlinear</method>
 		</PhaseSpaceRecentering>
 
