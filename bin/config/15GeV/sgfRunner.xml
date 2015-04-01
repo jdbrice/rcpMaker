@@ -16,10 +16,10 @@
 		</histograms>
 		<!-- fit bins -->
 		<FitRange>
-			<ptBins min="2" max="50" />
+			<ptBins min="2" max="37" />
 			<centralityBins>1</centralityBins>
 			<etaBins>0</etaBins>
-			<charges>-1, 1</charges>
+			<charges>1</charges>
 		</FitRange>
 		<!-- Guiding parameters -->
 

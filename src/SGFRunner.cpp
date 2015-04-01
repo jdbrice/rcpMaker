@@ -143,6 +143,9 @@ void SGFRunner::make(){
 						schema->setInitial( "zb", plc, zbMean, zbSigma, zbDeltaMu, zbDeltaSigma );
 						schema->setInitial( "zd", plc, zdMean, zdSigma, zdDeltaMu, zdDeltaSigma );
 
+						/*if ( iPt != firstPtBin )
+							schema->limitYield( plc );*/
+
 						// check if the sigmas should be fixed
 						double zbMinParP = cfg->getDouble( nodePath + "ParameterFixing." + plc + ":zbSigma", 0 );
 						double zdMinParP = cfg->getDouble( nodePath + "ParameterFixing." + plc + ":zdSigma", 0 );

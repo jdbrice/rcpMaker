@@ -164,13 +164,20 @@ void SGFSchema::combineData(){
 }
 
 
-void SGFSchema::setInitial( string var, string plc, double _mu, double _sigma, double _dmu, double _dsigma ){
+void SGFSchema::limitYield( string plc ){
+	// also update the yield limits
+	double cYield = var( "yield_" + plc )->getVal();
+	var( "yield_" + plc )->setMax( cYield );
+	var( "yield_" + plc )->setMin( cYield * .5 );
+}
+
+void SGFSchema::setInitial( string sVar, string plc, double _mu, double _sigma, double _dmu, double _dsigma ){
 
 	// variable name 
 	const string sMu = "_mu_";
 	const string sSigma = "_sigma_";
-	string muName = var + sMu + plc;	// like zb_mu_Pi
-	string sigmaName = var + sSigma + plc;
+	string muName = sVar + sMu + plc;	// like zb_mu_Pi
+	string sigmaName = sVar + sSigma + plc;
 
 	rrv[ muName ]->rrv->setVal( _mu );
 	rrv[ muName ]->rrv->setMin( _mu - _sigma * _dmu );
@@ -182,20 +189,6 @@ void SGFSchema::setInitial( string var, string plc, double _mu, double _sigma, d
 
 }
 
-void SGFSchema::resetYield( string sVar ){
-		
-	for ( string ePlc : PidPhaseSpace::species ){
-
-		if ( var("yield_" + ePlc ) )
-			var("yield_" + ePlc )->setVal( defaultYield[ ePlc ] );
-
-		for ( string plc : PidPhaseSpace::species ){
-			if ( var( sVar + "_" + ePlc + "_yield_" + plc ) )
-				var(sVar + "_" + ePlc + "_yield_" + plc )->setVal( defaultYield[ plc ] );		
-		}
-	}
-	
-}
 
 void SGFSchema::fixSigma( string var, string plc, double _sigma ){
 
