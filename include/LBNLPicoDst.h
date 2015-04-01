@@ -27,6 +27,9 @@ public:
 
 	virtual UShort_t refMult(){ return (ds->get<Int_t>("Event.mRefMultPos") + ds->get<Int_t>("Event.mRefMultNeg")); }
 	virtual Int_t numTracks(){ return ds->get<Int_t>("Event.mNumberOfGlobalTracks"); }
+	virtual Int_t trackTofMatch( Int_t iHit ){ 
+		return ds->get<UChar_t>( "Tracks.mBTofMatchFlag", iHit ); 
+	}
 	virtual Int_t numTofMatchedTracks(){ 
 		
 		Int_t nMatched = 0;
@@ -93,7 +96,6 @@ public:
 	virtual Double_t trackDedx( Int_t iHit ){ return ds->get<UShort_t>("Tracks.mDedx", iHit) / 1000.0; }
 	
 	virtual Double_t trackBeta( Int_t iHit ){ return (ds->get<UShort_t>("Tracks.mBTofBeta", iHit) / 20000.0); }
-	virtual Int_t trackTofMatch( Int_t iHit ){ return ds->get<Float_t>("Tracks.mBTofMatchFlag", iHit); }
 	virtual Double_t trackYLocal( Int_t iHit ){ return (ds->get<Short_t>("Tracks.mBTofYLocal", iHit) / 1000.0); }
 	virtual Double_t trackZLocal( Int_t iHit ){ return (ds->get<Short_t>("Tracks.mBTofZLocal", iHit) / 1000.0); }
 

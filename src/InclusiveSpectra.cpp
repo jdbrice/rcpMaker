@@ -131,6 +131,25 @@ void InclusiveSpectra::preEventLoop(){
 	}
 }
 
+void InclusiveSpectra::postEventLoop(){
+	if ( 1 >= nCentralityBins() )
+		return;
+	
+
+	book->cd();
+	vector<double> nPartWeight = { 18, 51, 97, 170, 284, 455, 635, 785 };
+	for ( int i = 1; i < nCentralityBins()-1; i++ ){
+
+		book->clone( "pt_" + ts(i), "ratio_"+ts(i) );
+
+		TH1D * per = (TH1D*)book->get( "pt_0" )->Clone( ("per_"+ts(i)).c_str() );
+		per->Scale( nPartWeight[ i ] );
+		book->get( "ratio_"+ts(i) )->Scale( nPartWeight[ 0 ] );
+		book->get( "ratio_"+ts(i) )->Divide( per );
+	}
+
+}
+
 
 void InclusiveSpectra::analyzeEvent(){
 
@@ -185,12 +204,12 @@ bool InclusiveSpectra::keepEvent(){
 	} 
 	if ( makeEventQA )
 		book->get( "eventCuts" )->Fill( "GoodRuns", 1 );
-	logger->debug(__FUNCTION__) << "Trigger Selection" << endl;
+	
 	/**
 	 * Trigger Selection
 	 */
 	
-	logger->debug(__FUNCTION__) << "Rejecting Bad Runs " << endl;
+	logger->debug(__FUNCTION__) << "Trigger Selection" << endl;
 	UInt_t tword = pico->triggerWord();
 	logger->debug(__FUNCTION__) << "Trigger Mask " << triggerMask << endl;
 	logger->debug(__FUNCTION__) << "Trigger Word " << tword << endl;
@@ -210,8 +229,10 @@ bool InclusiveSpectra::keepEvent(){
 	// get the corrected ref mult
 	if ( rmc )
 		refMult = rmc->refMult( pico->refMult(), pico->vZ() );
-	else 
-		refMult = -1;
+	else {
+		logger->error(__FUNCTION__) << "No RMC Parameters" << endl;
+		return false;
+	}
 	
 	// define the member centrality bin and event weight for the analysis functions to use	
 	cBin = centralityBin( refMult );
@@ -230,10 +251,11 @@ bool InclusiveSpectra::keepEvent(){
 	 * Pre Event Cut QA
 	 */
 	if ( makeEventQA  ) {
-		book->fill( "preRefMult", refMult );
-		book->fill( "preNTofMatch", nTofMatchedTracks );
-		book->fill( "preVertexZ", z);
-		book->fill( "preVertexR", r);
+		book->fill( "pre_nTof_corrRefMult", refMult, nTofMatchedTracks );
+		book->fill( "pre_vZ", z );
+		book->fill( "pre_vR", r );
+		book->fill( "pre_vY_vX", x, y );
+		book->fill( "pre_refMult", pico->refMult() );
 	}
 	
 	
@@ -245,7 +267,7 @@ bool InclusiveSpectra::keepEvent(){
 		return false;
 	if ( makeEventQA )
 		book->get( "eventCuts" )->Fill( "vR", 1 );
-	if ( nTofMatchedTracks < cutNTofMatchedTracks->min || nTofMatchedTracks > cutNTofMatchedTracks->max )
+	if ( nTofMatchedTracks < cutNTofMatchedTracks->min )
 		return false;
 	if ( makeEventQA )
 		book->get( "eventCuts" )->Fill( "nTofMatched", 1 );
@@ -255,13 +277,17 @@ bool InclusiveSpectra::keepEvent(){
 	 * Post Event Cut QA
 	 */
 	if ( makeEventQA  ){
-		book->fill( "vertexZ", z);
-		book->fill( "vertexR", r);
-		book->fill( "refMult", refMult );
-		book->fill( "refMultBins", rmc->bin9( refMult ), eventWeight );
-		book->fill( "mappedRefMultBins", centralityBin( refMult ), eventWeight );
-		book->fill( "eventWeight", refMult, eventWeight );
-		book->fill( "nTofMatch", nTofMatchedTracks );
+		book->fill( "nTof_corrRefMult", refMult, nTofMatchedTracks );
+		book->fill( "vZ", z );
+		book->fill( "vR", r );
+		book->fill( "vY_vX", x, y );
+
+		book->fill( "refMult", pico->refMult() );
+		book->fill( "corrRefMult", refMult );
+		book->fill( "refMultBin9", rmc->bin9( refMult ) );
+		book->fill( "refMultBin16", rmc->bin16( refMult ) );
+		book->fill( "mappedRefMultBins", cBin );
+		book->fill( "refMultBin9_corrRefMult", refMult, rmc->bin9( refMult ) );
 	}
 	
 	return true;
@@ -271,7 +297,7 @@ bool InclusiveSpectra::keepTrack( Int_t iTrack ){
 
 	// skip non-primary tracks
 	double ptPrimary = pico->trackPt( iTrack );
-	if ( 0 == ptPrimary  )
+	if ( 0 == ptPrimary || 0 >= pico->trackTofMatch( iTrack ) )
 		return false;
 	
 	double dca = pico->trackDca( iTrack );

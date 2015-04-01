@@ -4,19 +4,29 @@
 
 <QAHistograms>
 	<Event>
-		<Histo name="eventCuts" title="eventCuts" nBinsX="6" minX="0" maxX="6" />
-		<refMult title="Centrality Selection; refMult; #"   nBinsX="400" minX="0" maxX="400"/>
-		<eventWeight title="Event weights; refMult; weight"   nBinsX="400" minX="0" maxX="400" nBinsY="20" minY="0" maxY="10"/>
-		<refMultBins title="Centrality Selection; refMult Bin; #"   nBinsX="10" minX="-0.5" maxX="9.5"/>
-		<mappedRefMultBins title="Mapped Centrality Selection; refMult Bin; #"   nBinsX="10" minX="-0.5" maxX="9.5"/>
-		<vertexZ title="Z Vertex" widthX="1" minX="-200" maxX="200" />
-		<vertexR title="#sigma" nBinsX="200" minX="0" maxX="10" />
-		<nTofMatch title="nTofMatch; refMult; #"   nBinsX="400" minX="0" maxX="400"/>
+		<!-- Tof Matches versus corrected RefMult -->
+		<Histo name="pre_nTof_corrRefMult" title="; Corrected Ref Mult; nTofMatch" xBins="Bins.refMult" yBins="Bins.refMult" />
+		<Histo name="nTof_corrRefMult" title="; Corrected Ref Mult; nTofMatch" xBins="Bins.refMult" yBins="Bins.refMult" />
 
-		<preVertexZ title="Z Vertex" widthX="1" minX="-200" maxX="200" />
-		<preVertexR title="#sigma" nBinsX="200" minX="0" maxX="10" />
-		<preRefMult title="Centrality Selection; refMult; #"   nBinsX="400" minX="0" maxX="400"/>
-		<preNTofMatch title="nTofMatch; refMult; #"   nBinsX="400" minX="0" maxX="400"/>
+		<!-- Vertex Distributions -->
+		<Histo name="pre_vZ" title="Z Vertex [cm]; [cm]" xBins="Bins.vZ" />
+		<Histo name="vZ" title="Z Vertex [cm]; [cm]" xBins="Bins.vZ" />
+		<Histo name="pre_vR" title="Z Vertex [cm]; [cm]" xBins="Bins.vR" />
+		<Histo name="vR" title="Z Vertex [cm]; [cm]" xBins="Bins.vR" />
+		<Histo name="pre_vY_vX" title="Vertex Y versus Vertex X [cm]; [cm]" xBins="Bins.vPerp" yBins="Bins.vPerp" />
+		<Histo name="vY_vX" title="Vertex Y versus Vertex X [cm]; [cm]" xBins="Bins.vPerp" yBins="Bins.vPerp" />
+
+		<!-- RefMult Inspection -->
+		<Histo name="pre_refMult" title="Raw RefMult" xBins="Bins.refMult" />
+		<Histo name="refMult" title="Raw RefMult" xBins="Bins.refMult" />
+		<Histo name="corrRefMult" title="Corrected RefMult" xBins="Bins.refMult" />
+		<Histo name="refMultBin9" title="Corrected refMult in Bin9" xBins="Bins.rm9" />
+		<Histo name="refMultBin9_corrRefMult" title="Corrected refMult in Bin9" xBins="Bins.refMult" yBins="Bins.rm9" />
+		<Histo name="refMultBin16" title="Corrected refMult in Bin16" xBins="Bins.rm16" />
+		<Histo name="mappedRefMultBins" title="Mapped RefMult Bins; refMult Bin; #"   xBins="Bins.rm9" />
+
+		<!-- Event Cuts -->
+		<Histo name="eventCuts" title="eventCuts" nBinsX="6" minX="0" maxX="10" />
 	</Event>
 
 
@@ -50,5 +60,14 @@
 		<preYLocal title="yLocal" widthX=".1" minX="-2" maxX="2" />
 		<preZLocal title="zLocal" widthX=".1" minX="-3" maxX="3" />
 	</Track>
+
+	<Bins>
+		<refMult width="1.0" min="-0.5" max="400.5" />
+		<vZ width="1.0" min="-200" max="200" />
+		<vR width="0.1" min="0.0" max="3.0" />
+		<vPerp width="0.05" min="-1.5" max="1.5" />
+		<rm9 width="1.0" min="-0.5" max="10.5" />
+		<rm16 width="1.0" min="-0.5" max="20.5" />
+	</Bins>
 
 </QAHistograms>

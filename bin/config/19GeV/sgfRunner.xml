@@ -5,10 +5,10 @@
 
 	<SimultaneousPid>
 		<Logger color="true" logLevel="all"/>
-		<Reporter> <output url="rpSGF.pdf" width="800" height="800" /> </Reporter>	
+		<Reporter> <output url="rpSGF19GeV.pdf" width="800" height="800" /> </Reporter>	
 		<!--<input> <data url="/Users/danielbrandenburg/bnl/local/data/Run14/rcp/phaseSpace/pid.root"/> </input>-->
-		<input> <data url="../products/phaseSpace/15GeV/d53to62.pid"/> </input>
-		<output> <data>sgf.root</data> </output>
+		<input> <data url="../products/phaseSpace/19GeV/d114to117_pid.root"/> </input>
+		<output> <data>sgf19GeV.root</data> </output>
 		
 
 		<histograms>
@@ -18,8 +18,8 @@
 		<FitRange>
 			<ptBins min="2" max="45" />
 			<centralityBins>0, 1</centralityBins>
-			<etaBins>0, 1, 2, 3, 4</etaBins>
-			<charges>1, -1</charges>
+			<etaBins>0</etaBins>
+			<charges>1</charges>
 		</FitRange>
 		<!-- Guiding parameters -->
 

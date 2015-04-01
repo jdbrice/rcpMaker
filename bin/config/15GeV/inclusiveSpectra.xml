@@ -9,7 +9,7 @@
 			<logLevel>info</logLevel>
 		</Logger>
 		
-		<DataSource treeName="PicoDst" url="/Users/danielbrandenburg/bnl/local/data/Run14/LBNL/" maxFiles="10">
+		<DataSource treeName="PicoDst" url="/Users/danielbrandenburg/bnl/local/data/Run14/LBNL/" maxFiles="20">
 			
 			<!-- Set all branches off -->
 			<BranchStatus status="0">*</BranchStatus>
@@ -28,14 +28,20 @@
 		<!-- the bins into which the 9 centrality bins are mapped. -->
 		<CentralityMap>
 			0 :: 0,
-			1 :: 0,
-			8 :: 1
+			1 :: 1,
+			2 :: 2,
+			3 :: 3,
+			4 :: 4,
+			5 :: 5,
+			6 :: 6,
+			7 :: 7,
+			8 :: 8
 		</CentralityMap>
 
 		<!-- Common Resources -->
-		<MakeQA config="config/qaHistograms.xml" event="true" track="true" />
-		<Cuts config="config/cuts.xml" />
-		<RMCParams config="config/StRMCParams.xml" />
+		<MakeQA config="config/15GeV/qaHistograms.xml" event="true" track="true" />
+		<Cuts config="config/15GeV/cuts.xml" />
+		<RMCParams config="config/15GeV/StRMCParams.xml" />
 
 		<!-- histograms to auto-make -->
 		<histograms>

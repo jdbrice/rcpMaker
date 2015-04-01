@@ -167,8 +167,8 @@ void SGFSchema::combineData(){
 void SGFSchema::limitYield( string plc ){
 	// also update the yield limits
 	double cYield = var( "yield_" + plc )->getVal();
-	var( "yield_" + plc )->setMax( cYield );
-	var( "yield_" + plc )->setMin( cYield * .5 );
+	var( "yield_" + plc )->setMax( cYield * 10 );
+	var( "yield_" + plc )->setMin( cYield * .1 );
 }
 
 void SGFSchema::setInitial( string sVar, string plc, double _mu, double _sigma, double _dmu, double _dsigma ){
@@ -191,11 +191,15 @@ void SGFSchema::setInitial( string sVar, string plc, double _mu, double _sigma, 
 
 
 void SGFSchema::fixSigma( string var, string plc, double _sigma ){
+	Logger::log.info( __FUNCTION__ ) << "Fixing " << plc << " sigma to " << _sigma << endl;
 
 	const string sSigma = "_sigma_";
 	string sigmaName = var + sSigma + plc;
-	rrv[ sigmaName ]->rrv->setVal( _sigma );
-	rrv[ sigmaName ]->rrv->setConstant( kTRUE );
+	rrv[ sigmaName ]->rrv->setConstant( kFALSE );
+	rrv[ sigmaName ]->rrv->setRange( _sigma - .01, _sigma + .01 ); // just ensure bounds aren't causing a problem
+	rrv[ sigmaName ]->rrv->setVal( _sigma );	// set the value
+	rrv[ sigmaName ]->rrv->setConstant( kTRUE );	// fix the sigma again
+	
 
 }
 

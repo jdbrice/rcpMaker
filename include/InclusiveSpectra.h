@@ -133,7 +133,7 @@ protected:
 	/**
 	 * After the event loop starts - for subclass reporting
 	 */
-	virtual void postEventLoop(){}
+	virtual void postEventLoop();
 
 	/**
 	 * Analyze an Event
