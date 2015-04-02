@@ -5,11 +5,12 @@
 
 	<InclusiveSpectra>
 
-		<Logger color="true">
-			<logLevel>info</logLevel>
-		</Logger>
+		<Logger color="true" logLevel="warning" />
 		
-		<DataSource treeName="PicoDst" url="/Users/danielbrandenburg/bnl/local/data/Run14/LBNL/" maxFiles="20">
+		<input>
+			<dst treeName="PicoDst" url="/Users/danielbrandenburg/bnl/local/data/Run14/LBNL/"/>
+		</input>
+		<DataSource1 treeName="PicoDst" url="/Users/danielbrandenburg/bnl/local/data/Run14/LBNL/">
 			
 			<!-- Set all branches off -->
 			<BranchStatus status="0">*</BranchStatus>
@@ -19,7 +20,7 @@
 				Track*
 			</BranchStatus>
 			
-		</DataSource>
+		</DataSource1>
 
 		<output>
 			<data>../products/inclusive/inclusiveSpectra.root</data>
@@ -28,14 +29,14 @@
 		<!-- the bins into which the 9 centrality bins are mapped. -->
 		<CentralityMap>
 			0 :: 0,
-			1 :: 1,
-			2 :: 2,
-			3 :: 3,
-			4 :: 4,
-			5 :: 5,
-			6 :: 6,
-			7 :: 7,
-			8 :: 8
+			1 :: 0,
+			2 :: 1,
+			3 :: 2,
+			4 :: 3,
+			5 :: 4,
+			6 :: 5,
+			7 :: 6,
+			8 :: 7
 		</CentralityMap>
 
 		<!-- Common Resources -->
@@ -55,8 +56,8 @@
 
 
 	<binning hide="true" >
-		<pt width="0.05" min="0.2" max="4.0" />
-		<eta>0.0, 0.2, 0.4, 0.6, 0.8, 1.0 </eta>
+		<pt>0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55, 0.6, 0.65, 0.7, 0.75, 0.8, 0.85, 0.9, 0.95, 1.0, 1.05, 1.1, 1.15, 1.2, 1.25, 1.3, 1.35, 1.4, 1.45, 1.5, 1.6, 1.7, 1.8, 1.9, 2.0, 2.2, 2.4, 2.6, 2.8, 3.0, 3.25, 3.5, 3.75, 4.0, 4.25, 4.5, 4.75, 5.0, 5.5, 6.0</pt>
+		<eta>0.0, 0.2, 0.4, 0.5 </eta>
 		<charge> -1.5, -0.5, 0.5, 1.5</charge>
 	</binning>
 

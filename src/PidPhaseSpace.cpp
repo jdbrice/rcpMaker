@@ -109,19 +109,50 @@ void PidPhaseSpace::preEventLoop() {
 
 	book->cd();
 	preparePhaseSpaceHistograms( centerSpecies );
+
+/*
+	book->cd();
+	logger->info(__FUNCTION__) << "Making " << nCentralityBins() << " centralities" << endl; 
+	for ( int iC = 0; iC < nCentralityBins(); iC ++ ){
+		string hName = "pt_" + ts(iC);
+		logger->info( __FUNCTION__ ) << hName << endl;
+		book->clone( "ptBase", hName );
+	}*/
 	
 }
 
 void PidPhaseSpace::postEventLoop() {
 	logger->info(__FUNCTION__) << endl;
 
-	reportAllTof();
-	reportAllDedx();
+	if ( cfg->getBool( nodePath+"MakeQA:tof", false ) )
+		reportAllTof();
+	if ( cfg->getBool( nodePath+"MakeQA:dedx", false ) )
+		reportAllDedx();
+
+	book->cd();
+	for ( int i = 0; i < nCentralityBins(); i++ ){
+
+		for ( int iB = 1; iB < book->get( "pt_"+ts(i) )->GetNbinsX()+1; iB++ ){
+
+			double v = book->get( "pt_"+ts(i) )->GetBinContent( iB );
+			double vE = book->get( "pt_"+ts(i) )->GetBinError( iB );
+			double pt = book->get( "pt_"+ts(i) )->GetBinCenter( iB );
+
+			v = v * 1.0 / ( normEvents * 2.0 * pt * 3.14159 );
+			vE = vE * 1.0 / ( normEvents * 2.0 * pt * 3.14159 );
+
+			book->get( "pt_"+ts(i) )->SetBinContent( iB, v );
+			book->get( "pt_"+ts(i) )->SetBinError( iB, vE );
+		}
+
+	}
+
 }
 
 void PidPhaseSpace::analyzeTrack( int iTrack ){
 	
 	book->cd();
+
 
 	double vZ = pico->vZ();
 
@@ -138,6 +169,12 @@ void PidPhaseSpace::analyzeTrack( int iTrack ){
 	if ( ptBin < 0 || etaBin < 0 || cBin < 0 )
 		return;
 
+	// fill the dN/dPt plots
+	if ( cBin >= 0 ){
+		string cName = "pt_" + ts( cBin );
+		book->fill( cName, pt, eventWeight );		
+	}
+
 
 	double tof = psr->rTof(centerSpecies, pico->trackBeta(iTrack), p );
 	double dedx = psr->rDedx(centerSpecies, pico->trackDedx(iTrack), p );
@@ -146,15 +183,17 @@ void PidPhaseSpace::analyzeTrack( int iTrack ){
 	double dedxNL = psr->nlDedx(centerSpecies, pico->trackDedx(iTrack), p, avgP );
 
 	
-	book->fill( "trBeta", p, tof );
+	
 	book->fill( "betaRaw", p, 1.0/pico->trackBeta( iTrack ) );
 
-	book->fill( "trDedx", p, dedx );
+
 	book->fill( "dedxRaw", p, pico->trackDedx( iTrack ) );
 	book->fill( "eta", eta );
 
-	book->fill( "nlBeta", p, tofNL );
-	book->fill( "nlDedx", p, dedxNL );
+	//book->fill( "trBeta", p, tof );
+	//book->fill( "trDedx", p, dedx );
+	//book->fill( "nlBeta", p, tofNL );
+	//book->fill( "nlDedx", p, dedxNL );
 
 	if ( "nonlinear" == psrMethod ){
 		tof = tofNL;
@@ -164,7 +203,7 @@ void PidPhaseSpace::analyzeTrack( int iTrack ){
 	if ( make2D ){
 		book->cd( "dedx_tof" );
 
-		book->fill( speciesName( centerSpecies, 0, cBin, ptBin, etaBin ), dedx, tof );
+		// combined charge book->fill( speciesName( centerSpecies, 0, cBin, ptBin, etaBin ), dedx, tof );
 		book->fill( speciesName( centerSpecies, charge, cBin, ptBin, etaBin ), dedx, tof );
 			
 	}
@@ -193,7 +232,7 @@ void PidPhaseSpace::preparePhaseSpaceHistograms( string plc ){
 
 		for ( int etaBin = 0; etaBin < binsEta->size()-1; etaBin++ ){
 			// Loop over charge, skip if config doesnt include that charge bin
-			for ( int charge = -1; charge <= 1; charge++ ){
+			for ( int charge = -1; charge <= 1; charge+=2 ){
 				int chargeBin = binsCharge->findBin( charge );
 				if ( chargeBin < 0 )
 					continue;
@@ -305,8 +344,6 @@ void PidPhaseSpace::autoViewport( 	string pType, double p, PhaseSpaceRecentering
 
 void PidPhaseSpace::enhanceDistributions( double avgP, int ptBin, int etaBin, int charge, double dedx, double tof ){
 	
-	UInt_t refMult = pico->refMult();
-
 	// get the cut values in terms of ideal sigma
 	double dSigma = dedxSigmaIdeal * dedxCut;
 	double tSigma = tofSigmaIdeal * tofCut;
@@ -328,7 +365,7 @@ void PidPhaseSpace::enhanceDistributions( double avgP, int ptBin, int etaBin, in
 
 	book->cd( "dedx" );
 	// unenhanced - all dedx
-	book->fill( dedxName( centerSpecies, 0, cBin, ptBin, etaBin ), dedx, eventWeight );
+	// combined charge book->fill( dedxName( centerSpecies, 0, cBin, ptBin, etaBin ), dedx, eventWeight );
 	book->fill( dedxName( centerSpecies, charge, cBin, ptBin, etaBin ), dedx, eventWeight );
 	
 
@@ -346,7 +383,7 @@ void PidPhaseSpace::enhanceDistributions( double avgP, int ptBin, int etaBin, in
 
 	book->cd( "tof" );
 	// unenhanced - all tof tracks
-	book->fill( tofName( centerSpecies, 0, cBin, ptBin, etaBin ), tof, eventWeight );
+	// combined charge book->fill( tofName( centerSpecies, 0, cBin, ptBin, etaBin ), tof, eventWeight );
 	book->fill( tofName( centerSpecies, charge, cBin, ptBin, etaBin ), tof, eventWeight );
 
 	// enhanced by species
@@ -364,6 +401,8 @@ void PidPhaseSpace::enhanceDistributions( double avgP, int ptBin, int etaBin, in
 
 
 void PidPhaseSpace::reportAllTof() {
+
+	logger->info( __FUNCTION__ ) << endl;
 
 	book->cd();
 	int nCenBins = nCentralityBins();
@@ -462,7 +501,7 @@ void PidPhaseSpace::reportAllTof() {
 }
 
 void PidPhaseSpace::reportAllDedx() {
-
+	logger->info( __FUNCTION__ ) << endl;
 	book->cd();
 	int nCenBins = nCentralityBins();
 	int nChargeBins = binsCharge->nBins();

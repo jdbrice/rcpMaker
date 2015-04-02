@@ -4,7 +4,7 @@ project = rcp
 # source suffix
 source = .cpp 
 # object files to make
-objects = rcp.o InclusiveSpectra.o PidPhaseSpace.o PidParamMaker.o SimultaneousGaussians.o SimultaneousPid.o SGFSchema.o SGFRunner.o FemtoDstMaker.o FemtoDst.o
+objects = rcp.o InclusiveSpectra.o PidPhaseSpace.o PidParamMaker.o SimultaneousGaussians.o SimultaneousPid.o SGFSchema.o SGFRunner.o FemtoDstMaker.o FemtoDst.o ProdPicoDst.o
 # ParamSpectra.o  PidParamMaker.o SimultaneousPid.o
 
 sources = $(wildcard *.cpp)

@@ -3,6 +3,7 @@
 #include "ChainLoader.h"
 #include "LBNLPicoDst.h"
 #include "FemtoDst.h"
+#include "ProdPicoDst.h"
 
 #include <limits.h>
 
@@ -12,16 +13,21 @@
 InclusiveSpectra::InclusiveSpectra( XmlConfig * config, string np, string fileList, string prefix ) : TreeAnalyzer( config, np, fileList, prefix  ){
 
 	logger->setClassSpace( "InclusiveSpectra" );
+	logger->info(__FUNCTION__) << endl;
 	/**
 	 * Make the desired PicoDataStore Interface
 	 */
-	assert( ds );
+	
 	if ( ds && ds->getTreeName() == "FemtoDst" )
 		pico = unique_ptr<PicoDataStore>( new FemtoDst( ds->getChain() ) );
 	else if ( ds && ds->getTreeName() == "PicoDst" )
-		pico = unique_ptr<PicoDataStore>( new LBNLPicoDst( ds ) );
+		pico = unique_ptr<PicoDataStore>( new ProdPicoDst( ds->getChain() ) );
+	else if ( chain ){
+		logger->info(__FUNCTION__) << "ProdPico" << endl;
+		pico = unique_ptr<PicoDataStore>( new ProdPicoDst( chain ) );
+	}
 
-
+	logger->info(__FUNCTION__) << endl;
 	/**
 	 * Load in the common configs
 	 */
@@ -80,7 +86,7 @@ InclusiveSpectra::InclusiveSpectra( XmlConfig * config, string np, string fileLi
 	    logger->info( __FUNCTION__ ) << "Making Track QA" << endl;
 
 
-	
+	normEvents = 0;
 
 
 }
@@ -132,27 +138,43 @@ void InclusiveSpectra::preEventLoop(){
 }
 
 void InclusiveSpectra::postEventLoop(){
-	if ( 1 >= nCentralityBins() )
-		return;
 	
-
 	book->cd();
-	vector<double> nPartWeight = { 18, 51, 97, 170, 284, 455, 635, 785 };
-	for ( int i = 1; i < nCentralityBins()-1; i++ ){
+	for ( int i = 0; i < nCentralityBins()-1; i++ ){
 
-		book->clone( "pt_" + ts(i), "ratio_"+ts(i) );
+		for ( int iB = 1; iB < book->get( "pt_"+ts(i) )->GetNbinsX()+1; iB++ ){
 
-		TH1D * per = (TH1D*)book->get( "pt_0" )->Clone( ("per_"+ts(i)).c_str() );
-		per->Scale( nPartWeight[ i ] );
-		book->get( "ratio_"+ts(i) )->Scale( nPartWeight[ 0 ] );
-		book->get( "ratio_"+ts(i) )->Divide( per );
+			double v = book->get( "pt_"+ts(i) )->GetBinContent( iB );
+			double vE = book->get( "pt_"+ts(i) )->GetBinError( iB );
+			double pt = book->get( "pt_"+ts(i) )->GetBinCenter( iB );
+
+			v = v * 1.0 / ( normEvents * 2.0 * pt * 3.14159 );
+			vE = vE * 1.0 / ( normEvents * 2.0 * pt * 3.14159 );
+
+			book->get( "pt_"+ts(i) )->SetBinContent( iB, v );
+			book->get( "pt_"+ts(i) )->SetBinError( iB, vE );
+		}
+
 	}
+
+	/*reporter->newPage();
+	vector<int> color = { kRed, kGreen, kBlue, kCyan, kSpring, kOrange, kPink, kBlack };
+	for ( int i = 0; i < nCentralityBins()-1; i++ ){
+		if ( i == 0 )
+			book->style( "yield_"+ts(i) )->set( "range", 10e-5, 1 )->set( "linecolor", color[i] )->draw();
+		else 
+			book->style( "yield_"+ts(i) )->set( "range", 10e-5, 1 )->set( "linecolor", color[i] )->set( "draw", "same" )->draw();
+	}
+	gPad->SetLogy(1);
+	reporter->savePage();*/
+
 
 }
 
 
 void InclusiveSpectra::analyzeEvent(){
 
+	normEvents++;
 	nTofMatchedTracks = 0;
 	Int_t nTracks = pico->numTracks();
 
@@ -197,7 +219,6 @@ bool InclusiveSpectra::keepEvent(){
 	/**
 	 * Bad Run Rejection
 	 */
-	logger->debug(__FUNCTION__) << "Rejecting Bad Runs " << endl;
 	if ( rmc->isBad( pico->runId() ) ){
 		logger->warn( __FUNCTION__ ) << "Rejecting Run : " << pico->runId() << endl;
 		return false;
@@ -208,19 +229,13 @@ bool InclusiveSpectra::keepEvent(){
 	/**
 	 * Trigger Selection
 	 */
-	
-	logger->debug(__FUNCTION__) << "Trigger Selection" << endl;
 	UInt_t tword = pico->triggerWord();
-	logger->debug(__FUNCTION__) << "Trigger Mask " << triggerMask << endl;
-	logger->debug(__FUNCTION__) << "Trigger Word " << tword << endl;
-	logger->debug(__FUNCTION__) << "Trigger Mask & tword" << (triggerMask & tword) << endl;
 
 	if ( !(tword & triggerMask) )
 		return false;
 	if ( makeEventQA )
 		book->get( "eventCuts" )->Fill( "Triggered", 1 );
 
-	logger->debug(__FUNCTION__) << "Applying RMC " << endl;
 	// give the event vars a default
 	refMult = -1;
 	cBin = -1;
@@ -272,6 +287,8 @@ bool InclusiveSpectra::keepEvent(){
 	if ( makeEventQA )
 		book->get( "eventCuts" )->Fill( "nTofMatched", 1 );
 
+	if ( refMult < 5 )
+		return false;
 
 	/**
 	 * Post Event Cut QA
@@ -286,7 +303,7 @@ bool InclusiveSpectra::keepEvent(){
 		book->fill( "corrRefMult", refMult );
 		book->fill( "refMultBin9", rmc->bin9( refMult ) );
 		book->fill( "refMultBin16", rmc->bin16( refMult ) );
-		book->fill( "mappedRefMultBins", cBin );
+		book->fill( "mappedRefMultBins", cBin, eventWeight );
 		book->fill( "refMultBin9_corrRefMult", refMult, rmc->bin9( refMult ) );
 	}
 	
@@ -295,9 +312,14 @@ bool InclusiveSpectra::keepEvent(){
 
 bool InclusiveSpectra::keepTrack( Int_t iTrack ){
 
-	// skip non-primary tracks
+	if ( makeTrackQA ){
+		book->cd( "TrackQA" );
+		book->get( "trackCuts" )->Fill( "All", 1 );
+	}
+	
 	double ptPrimary = pico->trackPt( iTrack );
-	if ( 0 == ptPrimary || 0 >= pico->trackTofMatch( iTrack ) )
+	// skip non-primary tracks
+	if ( 0.2 > ptPrimary || 0 >= pico->trackTofMatch( iTrack ) )
 		return false;
 	
 	double dca = pico->trackDca( iTrack );
@@ -329,10 +351,11 @@ bool InclusiveSpectra::keepTrack( Int_t iTrack ){
 		book->fill( "prePtGlobal", 				ptGlobal );
 		book->fill( "prePtGlobalOverPrimary", 	ptGlobal / ptPrimary );
 		book->fill( "prePtGlobalVsPrimary", 	ptPrimary, ptGlobal );
+		book->fill( "pre_refMult", 				refMult );
 	}
 
 	if ( makeTrackQA )
-		book->get( "trackCuts" )->Fill( "All", 1 );
+		book->get( "trackCuts" )->Fill( "tofMatch", 1 );
 	if ( yLocal < cutYLocal->min || yLocal > cutYLocal->max )
 		return false;
 	if ( makeTrackQA )
@@ -386,6 +409,8 @@ bool InclusiveSpectra::keepTrack( Int_t iTrack ){
 		book->fill( "ptGlobal", 			ptGlobal );
 		book->fill( "ptGlobalOverPrimary", 	ptGlobal / ptPrimary );
 		book->fill( "ptGlobalVsPrimary", 	ptPrimary, ptGlobal );
+
+		book->fill( "refMult", 				refMult );
 	}
 
 	return true;
