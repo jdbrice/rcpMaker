@@ -4,25 +4,14 @@
 	<jobType>PidPhaseSpace</jobType>
 
 	<PidPhaseSpace>
-		<Logger color="true" logLevel="all" />
+		<Logger color="true" logLevel="warning" />
 		
 		<!--<DataSource treeName="PicoDst" url="/Users/danielbrandenburg/bnl/local/data/Run14/LBNL/" maxFiles="10">-->
 		<input>
-			<dst treeName="PicoDst" url="/Users/danielbrandenburg/bnl/local/data/Run14/LBNL/" maxFiles="5"/>
+			<dst treeName="PicoDst" url="/Users/danielbrandenburg/bnl/local/data/Run14/LBNL/"/>
 		</input>
-		<DataSource1 treeName="FemtoDst" url="../products/femtoDst/15GeV/" >
-			
-			<!-- Set all branches off -->
-			<BranchStatus status="0">*</BranchStatus>
-			<!-- Turn on only the ones you need -->
-			<BranchStatus status="1">
-				Event*,
-				Track*
-			</BranchStatus>
-			
-		</DataSource1>
 
-		<output path="../products/phaseSpace/">
+		<output path="../products/phaseSpace/15GeV">
 			<data>pid.root</data>
 			<Reports></Reports>
 		</output>
