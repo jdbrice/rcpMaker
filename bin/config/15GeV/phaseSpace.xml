@@ -11,7 +11,7 @@
 			<dst treeName="PicoDst" url="/Users/danielbrandenburg/bnl/local/data/Run14/LBNL/"/>
 		</input>
 
-		<output path="../products/phaseSpace/15GeV">
+		<output path="../products/phaseSpace/15GeV/">
 			<data>pid.root</data>
 			<Reports></Reports>
 		</output>
