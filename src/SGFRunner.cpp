@@ -75,24 +75,29 @@ void SGFRunner::make(){
 				for ( string plc : PidPhaseSpace::species ){
 					// yield Histos
 					book->cd( plc + "_yield" );
-					string name = "yield_" + plc + "_" + ts(iCen) + "_" + PidPhaseSpace::chargeString( iCharge ) + "_" + ts(iEta);
+					string name = yieldName( plc, iCen, iCharge, iEta );
+					//"yield_" + plc + "_" + ts(iCen) + "_" + PidPhaseSpace::chargeString( iCharge ) + "_" + ts(iEta);
 					book->clone( "/", "yield", plc+"_yield", name );
 
 					// Mean Histos
 					book->cd( plc + "_zbMu" );
-					name = "mu_" + plc + "_" + ts(iCen) + "_" + PidPhaseSpace::chargeString( iCharge ) + "_" + ts(iEta);
+					name = muName( plc, iCen, iCharge, iEta );
+					//"mu_" + plc + "_" + ts(iCen) + "_" + PidPhaseSpace::chargeString( iCharge ) + "_" + ts(iEta);
 					book->clone( "/", "yield", plc+"_zbMu", name );
 
 					book->cd( plc + "_zdMu" );
-					name = "mu_" + plc + "_" + ts(iCen) + "_" + PidPhaseSpace::chargeString( iCharge ) + "_" + ts(iEta);
+					name = muName( plc, iCen, iCharge, iEta );
+					//"mu_" + plc + "_" + ts(iCen) + "_" + PidPhaseSpace::chargeString( iCharge ) + "_" + ts(iEta);
 					book->clone( "/", "yield", plc+"_zdMu", name );
 
 					// Sigma Histos
 					book->cd( plc + "_zbSigma" );
-					name = "sigma_" + plc + "_" + ts(iCen) + "_" + PidPhaseSpace::chargeString( iCharge ) + "_" + ts(iEta);
+					name = sigmaName( plc, iCen, iCharge, iEta );
+					//"sigma_" + plc + "_" + ts(iCen) + "_" + PidPhaseSpace::chargeString( iCharge ) + "_" + ts(iEta);
 					book->clone( "/", "yield", plc+"_zbSigma", name );
 					book->cd( plc + "_zdSigma" );
-					name = "sigma_" + plc + "_" + ts(iCen) + "_" + PidPhaseSpace::chargeString( iCharge ) + "_" + ts(iEta);
+					name = sigmaName( plc, iCen, iCharge, iEta );
+					//"sigma_" + plc + "_" + ts(iCen) + "_" + PidPhaseSpace::chargeString( iCharge ) + "_" + ts(iEta);
 					book->clone( "/", "yield", plc+"_zdSigma", name );
 				}
 
@@ -159,12 +164,16 @@ void SGFRunner::make(){
 						iPlc++;
 					}
 
+					if ( iPt - firstPtBin < 2 ){ // fit more times to help convergence
+						sgf.fit( centerSpecies, iCharge, iCen, iPt, iEta );
+						sgf.fit( centerSpecies, iCharge, iCen, iPt, iEta );	
+					}
 					sgf.fit( centerSpecies, iCharge, iCen, iPt, iEta );
 					sgf.report( reporter );
 
 					for ( string plc : PidPhaseSpace::species ){
 						// Yield
-						string name = "yield_" + plc + "_" + ts(iCen) + "_" + PidPhaseSpace::chargeString( iCharge ) + "_" + ts(iEta);
+						string name = yieldName( plc, iCen, iCharge, iEta );
 						book->cd( plc+"_yield");
 						double sC = schema->var( "yield_"+plc )->getVal() / book->get( name )->GetBinWidth( iPt + 1 );
 						double sE = schema->var( "yield_"+plc )->getError() / book->get( name )->GetBinWidth( iPt + 1 );
@@ -173,7 +182,7 @@ void SGFRunner::make(){
 						book->get( name )->SetBinError( iPt, sE );
 
 						//Mu
-						name = "mu_" + plc + "_" + ts(iCen) + "_" + PidPhaseSpace::chargeString( iCharge ) + "_" + ts(iEta);
+						name = muName( plc, iCen, iCharge, iEta );
 						book->cd( plc+"_zbMu");
 						sC = schema->var( "zb_mu_"+plc )->getVal() / book->get( name )->GetBinWidth( iPt + 1 );
 						sE = schema->var( "zb_mu_"+plc )->getError() / book->get( name )->GetBinWidth( iPt + 1 );
@@ -181,7 +190,7 @@ void SGFRunner::make(){
 						book->get( name )->SetBinContent( iPt, sC );
 						book->get( name )->SetBinError( iPt, sE );
 
-						name = "mu_" + plc + "_" + ts(iCen) + "_" + PidPhaseSpace::chargeString( iCharge ) + "_" + ts(iEta);
+						name = muName( plc, iCen, iCharge, iEta );
 						book->cd( plc+"_zdMu");
 						sC = schema->var( "zd_mu_"+plc )->getVal() / book->get( name )->GetBinWidth( iPt + 1 );
 						sE = schema->var( "zd_mu_"+plc )->getError() / book->get( name )->GetBinWidth( iPt + 1 );
@@ -190,7 +199,7 @@ void SGFRunner::make(){
 						book->get( name )->SetBinError( iPt, sE );
 
 						//Mu
-						name = "sigma_" + plc + "_" + ts(iCen) + "_" + PidPhaseSpace::chargeString( iCharge ) + "_" + ts(iEta);
+						name = sigmaName( plc, iCen, iCharge, iEta );;
 						book->cd( plc+"_zbSigma");
 						sC = schema->var( "zb_sigma_"+plc )->getVal() / book->get( name )->GetBinWidth( iPt + 1 );
 						sE = schema->var( "zb_sigma_"+plc )->getError() / book->get( name )->GetBinWidth( iPt + 1 );
@@ -198,7 +207,7 @@ void SGFRunner::make(){
 						book->get( name )->SetBinContent( iPt, sC );
 						book->get( name )->SetBinError( iPt, sE );
 
-						name = "sigma_" + plc + "_" + ts(iCen) + "_" + PidPhaseSpace::chargeString( iCharge ) + "_" + ts(iEta);
+						name = sigmaName( plc, iCen, iCharge, iEta );
 						book->cd( plc+"_zdSigma");
 						sC = schema->var( "zd_sigma_"+plc )->getVal() / book->get( name )->GetBinWidth( iPt + 1 );
 						sE = schema->var( "zd_sigma_"+plc )->getError() / book->get( name )->GetBinWidth( iPt + 1 );
@@ -218,6 +227,17 @@ void SGFRunner::make(){
 }
 
 
+
+
+string SGFRunner::yieldName( string plc, int iCen, int charge, int iEta ){
+	return "yield_" + plc + "_" + ts(iCen) + "_" + PidPhaseSpace::chargeString( charge ) + "_" + ts(iEta);
+}
+string SGFRunner::sigmaName( string plc, int iCen, int charge, int iEta ){
+	return "sigma_" + plc + "_" + ts(iCen) + "_" + PidPhaseSpace::chargeString( charge ) + "_" + ts(iEta);
+}
+string SGFRunner::muName( string plc, int iCen, int charge, int iEta ){
+	return "mu_" + plc + "_" + ts(iCen) + "_" + PidPhaseSpace::chargeString( charge ) + "_" + ts(iEta);
+}
 
 
 

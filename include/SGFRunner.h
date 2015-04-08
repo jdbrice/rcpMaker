@@ -41,6 +41,11 @@ public:
 	virtual void make();
 
 
+	static string yieldName( string plc, int iCen, int charge, int iEta );
+	static string sigmaName( string plc, int iCen, int charge, int iEta );
+	static string muName( string plc, int iCen, int charge, int iEta );
+
+
 protected:
 
 

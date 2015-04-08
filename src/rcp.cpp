@@ -19,6 +19,7 @@ using namespace jdb;
 #include "SGF.h"
 #include "SGFRunner.h"
 #include "FemtoDstMaker.h"
+#include "PidYieldPresenter.h"
 
 #include <exception>
 
@@ -61,7 +62,22 @@ int main( int argc, char* argv[] ) {
 				FemtoDstMaker fdst( &config, "FemtoDstMaker.", fileList, jobPrefix );
 				fdst.make();
 
-			}else if ( "test" == job ){
+			} else if ( "PresentPidYield" == job ){
+				//cout << "making presenter" << endl;
+ 
+				PidYieldPresenter pyp( &config, "PidYieldPresenter." );
+				pyp.integrateEta();
+				pyp.normalizeYield();
+				pyp.compareYields( "Pi", 1);
+
+				pyp.rcp( "Pi", 1, 0, 6 );
+				pyp.rcp( "K", 1, 0, 6 );
+				pyp.rcp( "P", 1, 0, 6 );
+
+				pyp.rcpPannel();
+				
+
+			} else if ( "test" == job ){
 				
 				Logger::setGlobalColor( true );
 				Logger::setGlobalLogLevel( Logger::llAll );
