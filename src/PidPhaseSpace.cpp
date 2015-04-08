@@ -130,22 +130,6 @@ void PidPhaseSpace::postEventLoop() {
 		reportAllDedx();
 
 	book->cd();
-	for ( int i = 0; i < nCentralityBins(); i++ ){
-
-		for ( int iB = 1; iB < book->get( "pt_"+ts(i) )->GetNbinsX()+1; iB++ ){
-
-			double v = book->get( "pt_"+ts(i) )->GetBinContent( iB );
-			double vE = book->get( "pt_"+ts(i) )->GetBinError( iB );
-			double pt = book->get( "pt_"+ts(i) )->GetBinCenter( iB );
-
-			v = v * 1.0 / ( normEvents * 2.0 * pt * 3.14159 );
-			vE = vE * 1.0 / ( normEvents * 2.0 * pt * 3.14159 );
-
-			book->get( "pt_"+ts(i) )->SetBinContent( iB, v );
-			book->get( "pt_"+ts(i) )->SetBinError( iB, vE );
-		}
-
-	}
 
 }
 

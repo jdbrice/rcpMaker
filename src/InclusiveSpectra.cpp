@@ -86,8 +86,6 @@ InclusiveSpectra::InclusiveSpectra( XmlConfig * config, string np, string fileLi
 	    logger->info( __FUNCTION__ ) << "Making Track QA" << endl;
 
 
-	normEvents = 0;
-
 
 }
 /**
@@ -138,43 +136,12 @@ void InclusiveSpectra::preEventLoop(){
 }
 
 void InclusiveSpectra::postEventLoop(){
-	
-	book->cd();
-	for ( int i = 0; i < nCentralityBins()-1; i++ ){
-
-		for ( int iB = 1; iB < book->get( "pt_"+ts(i) )->GetNbinsX()+1; iB++ ){
-
-			double v = book->get( "pt_"+ts(i) )->GetBinContent( iB );
-			double vE = book->get( "pt_"+ts(i) )->GetBinError( iB );
-			double pt = book->get( "pt_"+ts(i) )->GetBinCenter( iB );
-
-			v = v * 1.0 / ( normEvents * 2.0 * pt * 3.14159 );
-			vE = vE * 1.0 / ( normEvents * 2.0 * pt * 3.14159 );
-
-			book->get( "pt_"+ts(i) )->SetBinContent( iB, v );
-			book->get( "pt_"+ts(i) )->SetBinError( iB, vE );
-		}
-
-	}
-
-	/*reporter->newPage();
-	vector<int> color = { kRed, kGreen, kBlue, kCyan, kSpring, kOrange, kPink, kBlack };
-	for ( int i = 0; i < nCentralityBins()-1; i++ ){
-		if ( i == 0 )
-			book->style( "yield_"+ts(i) )->set( "range", 10e-5, 1 )->set( "linecolor", color[i] )->draw();
-		else 
-			book->style( "yield_"+ts(i) )->set( "range", 10e-5, 1 )->set( "linecolor", color[i] )->set( "draw", "same" )->draw();
-	}
-	gPad->SetLogy(1);
-	reporter->savePage();*/
-
 
 }
 
 
 void InclusiveSpectra::analyzeEvent(){
 
-	normEvents++;
 	nTofMatchedTracks = 0;
 	Int_t nTracks = pico->numTracks();
 
@@ -223,16 +190,16 @@ bool InclusiveSpectra::keepEvent(){
 		logger->warn( __FUNCTION__ ) << "Rejecting Run : " << pico->runId() << endl;
 		return false;
 	} 
+
 	if ( makeEventQA )
 		book->get( "eventCuts" )->Fill( "GoodRuns", 1 );
 	
 	/**
 	 * Trigger Selection
 	 */
-	UInt_t tword = pico->triggerWord();
-
-	if ( !(tword & triggerMask) )
+	if ( !(pico->triggerWord() & triggerMask) )
 		return false;
+	
 	if ( makeEventQA )
 		book->get( "eventCuts" )->Fill( "Triggered", 1 );
 
@@ -250,7 +217,7 @@ bool InclusiveSpectra::keepEvent(){
 	}
 	
 	// define the member centrality bin and event weight for the analysis functions to use	
-	cBin = centralityBin( refMult );
+	cBin 		= centralityBin( refMult );
 	eventWeight = rmc->eventWeight( refMult, pico->vZ() );
 
 	
@@ -300,11 +267,10 @@ bool InclusiveSpectra::keepEvent(){
 		book->fill( "vY_vX", x, y );
 
 		book->fill( "refMult", pico->refMult() );
-		book->fill( "corrRefMult", refMult );
-		book->fill( "refMultBin9", rmc->bin9( refMult ) );
-		book->fill( "refMultBin16", rmc->bin16( refMult ) );
+		book->fill( "corrRefMult", refMult, eventWeight );
+		book->fill( "refMultBin9", rmc->bin9( refMult ), eventWeight );
+		book->fill( "refMultBin16", rmc->bin16( refMult ), eventWeight );
 		book->fill( "mappedRefMultBins", cBin, eventWeight );
-		book->fill( "refMultBin9_corrRefMult", refMult, rmc->bin9( refMult ) );
 	}
 	
 	return true;
@@ -318,42 +284,45 @@ bool InclusiveSpectra::keepTrack( Int_t iTrack ){
 	}
 	
 	double ptPrimary = pico->trackPt( iTrack );
-	// skip non-primary tracks
-	if ( 0.2 > ptPrimary || 0 >= pico->trackTofMatch( iTrack ) )
+	if ( 0.01 > ptPrimary )
 		return false;
-	
-	double dca = pico->trackDca( iTrack );
-	int nHitsDedx = pico->trackNHitsDedx( iTrack );
-	int nHitsFit = pico->trackNHitsFit( iTrack );
-	int nHitsPossible = pico->trackNHitsPossible( iTrack );
-	double fitPoss = ( (double)nHitsFit /  (double)nHitsPossible);
-
-	double yLocal = pico->trackYLocal( iTrack );
-	double zLocal = pico->trackZLocal( iTrack );
+	if ( makeTrackQA )
+		book->get( "trackCuts" )->Fill( "primaryTracks", 1 );
 
 	
-	double ptGlobal = pico->globalPt( iTrack );
+	
+	// alias
+	double 	dca 			= pico->trackDca( iTrack );
+	int 	nHitsDedx 		= pico->trackNHitsDedx( iTrack );
+	int 	nHitsFit 		= pico->trackNHitsFit( iTrack );
+	int 	nHitsPossible 	= pico->trackNHitsPossible( iTrack );
+	double 	fitPoss 		= ( (double)nHitsFit /  (double)nHitsPossible);
+	double 	yLocal 			= pico->trackYLocal( iTrack );
+	double 	zLocal 			= pico->trackZLocal( iTrack );
+	double 	ptGlobal 		= pico->globalPt( iTrack );
 
 	/**
 	 * Pre Track Cut QA
 	 */
 	if ( makeTrackQA ){
-		book->cd( "TrackQA" );
-		book->fill( "preYLocal", 				yLocal );
-		book->fill( "preZLocal", 				zLocal );
-		book->fill( "preDca", 					dca );
-		book->fill( "preNHitsDedx", 			nHitsDedx );
-		book->fill( "preNHitsFit", 				nHitsFit );
-		book->fill( "preNHitsPossible", 		nHitsPossible );
-		book->fill( "preNHitsFitOverPossible", 	fitPoss );
-		book->fill( "preNHitsFitVsPossible", 	nHitsPossible, nHitsFit );
-		book->fill( "prePtPrimary", 			ptPrimary );
-		book->fill( "prePtGlobal", 				ptGlobal );
-		book->fill( "prePtGlobalOverPrimary", 	ptGlobal / ptPrimary );
-		book->fill( "prePtGlobalVsPrimary", 	ptPrimary, ptGlobal );
+
+		book->fill( "pre_yLocal", 				yLocal );
+		book->fill( "pre_zLocal", 				zLocal );
+		book->fill( "pre_dca", 					dca );
+		book->fill( "pre_nHitsDedx", 			nHitsDedx );
+		book->fill( "pre_nHitsFit", 			nHitsFit );
+		book->fill( "pre_nHitsPossible", 		nHitsPossible );
+		book->fill( "pre_nHitsFitOverPossible", fitPoss );
+		book->fill( "pre_nHitsFitVsPossible", 	nHitsPossible, nHitsFit );
+		book->fill( "pre_ptPrimary", 			ptPrimary );
+		book->fill( "pre_ptGlobal", 			ptGlobal );
+		book->fill( "pre_ptGlobalOverPrimary", 	ptGlobal / ptPrimary );
+		book->fill( "pre_ptGlobalVsPrimary", 	ptPrimary, ptGlobal );
 		book->fill( "pre_refMult", 				refMult );
 	}
 
+	if ( 0 >= pico->trackTofMatch( iTrack ) )
+		return false;
 	if ( makeTrackQA )
 		book->get( "trackCuts" )->Fill( "tofMatch", 1 );
 	if ( yLocal < cutYLocal->min || yLocal > cutYLocal->max )
@@ -396,7 +365,7 @@ bool InclusiveSpectra::keepTrack( Int_t iTrack ){
 	 * Post Track Cut QA
 	 */
 	if ( makeTrackQA ){
-		book->cd( "TrackQA" );
+
 		book->fill( "yLocal", 				yLocal );
 		book->fill( "zLocal", 				zLocal );
 		book->fill( "dca", 					dca );
@@ -409,7 +378,6 @@ bool InclusiveSpectra::keepTrack( Int_t iTrack ){
 		book->fill( "ptGlobal", 			ptGlobal );
 		book->fill( "ptGlobalOverPrimary", 	ptGlobal / ptPrimary );
 		book->fill( "ptGlobalVsPrimary", 	ptPrimary, ptGlobal );
-
 		book->fill( "refMult", 				refMult );
 	}
 

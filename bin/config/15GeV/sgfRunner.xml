@@ -7,7 +7,7 @@
 		<Logger color="true" logLevel="all"/>
 		<Reporter> <output url="rpSGF.pdf" width="800" height="800" /> </Reporter>	
 		<!--<input> <data url="/Users/danielbrandenburg/bnl/local/data/Run14/rcp/phaseSpace/pid.root"/> </input>-->
-		<input> <data url="../products/phaseSpace/15GeV/d53to62.pid"/> </input>
+		<input> <data url="/Users/danielbrandenburg/bnl/local/data/Run14/rcp/phaseSpace/15GeV/mega.root"/> </input>
 		<output> <data>sgf.root</data> </output>
 		
 
@@ -16,10 +16,10 @@
 		</histograms>
 		<!-- fit bins -->
 		<FitRange>
-			<ptBins min="2" max="45" />
-			<centralityBins>0, 1</centralityBins>
-			<etaBins>0, 1, 2, 3, 4</etaBins>
-			<charges>1, -1</charges>
+			<ptBins min="2" max="35" />
+			<centralityBins>0, 7</centralityBins>
+			<etaBins>0</etaBins>
+			<charges>1</charges>
 		</FitRange>
 		<!-- Guiding parameters -->
 

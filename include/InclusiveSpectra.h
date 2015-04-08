@@ -79,8 +79,6 @@ protected:
 
 	Int_t nTofMatchedTracks;
 
-	Int_t normEvents;
-
 
 
 public:
