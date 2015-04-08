@@ -16,8 +16,8 @@
 		</histograms>
 		<!-- fit bins -->
 		<FitRange>
-			<ptBins min="2" max="35" />
-			<centralityBins>0, 6</centralityBins>
+			<ptBins min="2" max="65" />
+			<centralityBins>0</centralityBins>
 			<etaBins>0</etaBins>
 			<charges>1</charges>
 		</FitRange>

@@ -1,7 +1,7 @@
 #include "PidYieldPresenter.h"
 #include "TMath.h"
 
-#include "Tlegend.h"
+#include "TLegend.h"
 
 PidYieldPresenter::PidYieldPresenter( XmlConfig * _cfg, string _nodePath ){
 
