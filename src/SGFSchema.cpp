@@ -164,11 +164,29 @@ void SGFSchema::combineData(){
 }
 
 
-void SGFSchema::limitYield( string plc ){
+void SGFSchema::limitYield( string plc, string var1, string var2 ){
+	
+	double yMax = 1.0;
+	double yMin = 0.05;
 	// also update the yield limits
 	double cYield = var( "yield_" + plc )->getVal();
-	var( "yield_" + plc )->setMax( cYield * 10 );
-	var( "yield_" + plc )->setMin( cYield * .1 );
+	var( "yield_" + plc )->setMax( cYield * yMax );
+	var( "yield_" + plc )->setMin( cYield * yMin );
+
+	for ( string ePlc : PidPhaseSpace::species ){
+
+		cYield = var( var1 + "_" + ePlc + "_yield_" + plc )->getVal();
+		
+		var( var1 + "_" + ePlc + "_yield_" + plc )->setMax( cYield );
+		var( var1 + "_" + ePlc + "_yield_" + plc )->setMin( cYield * yMin );
+
+		cYield = var( var2 + "_" + ePlc + "_yield_" + plc )->getVal();
+		
+		var( var2 + "_" + ePlc + "_yield_" + plc )->setMax( cYield );
+		var( var2 + "_" + ePlc + "_yield_" + plc )->setMin( cYield * yMin );
+	}
+
+
 }
 
 void SGFSchema::setInitial( string sVar, string plc, double _mu, double _sigma, double _dmu, double _dsigma ){
@@ -200,9 +218,19 @@ void SGFSchema::fixSigma( string var, string plc, double _sigma ){
 	rrv[ sigmaName ]->rrv->setVal( _sigma );	// set the value
 	rrv[ sigmaName ]->rrv->setConstant( kTRUE );	// fix the sigma again
 	
-
 }
 
+void SGFSchema::fixMu( string var, string plc, double _mu ){
+	Logger::log.info( __FUNCTION__ ) << "Fixing " << plc << " mu to " << _mu << endl;
+
+	const string sMu = "_mu_";
+	string muName = var + sMu + plc;
+	rrv[ muName ]->rrv->setConstant( kFALSE );
+	rrv[ muName ]->rrv->setRange( _mu - .01, _mu + .01 ); // just ensure bounds aren't causing a problem
+	rrv[ muName ]->rrv->setVal( _mu );	// set the value
+	rrv[ muName ]->rrv->setConstant( kTRUE );	// fix the val again
+	
+}
 
 
 void SGFSchema::forceROI(){

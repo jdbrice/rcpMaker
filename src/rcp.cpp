@@ -68,6 +68,12 @@ int main( int argc, char* argv[] ) {
 				PidYieldPresenter pyp( &config, "PidYieldPresenter." );
 				pyp.integrateEta();
 				pyp.normalizeYield();
+				
+				pyp.chargeRatio( "Pi", 0 );
+				pyp.chargeRatio( "K", 0 );
+				pyp.chargeRatio( "P", 0 );
+
+				
 				pyp.compareYields( "Pi", -1);
 				pyp.compareYields( "Pi", 1);
 
@@ -86,6 +92,11 @@ int main( int argc, char* argv[] ) {
 				pyp.rcp( "P", -1, 0, 6 );
 
 				pyp.rcpPannel();
+				
+
+
+
+				
 				
 
 			} else if ( "test" == job ){

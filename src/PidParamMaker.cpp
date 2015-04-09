@@ -21,7 +21,7 @@ void PidParamMaker::mathematicaExport( string prefix, string s, vector<GaussianF
 
 
 	/*Export Mu*/
-	ofstream out( ( cfg->getString( nodePath+"output.report" ) + prefix + s + "Mu.dat").c_str() );
+	ofstream out( ( cfg->getString( nodePath+"output:path" ) + prefix + s + "Mu.dat").c_str() );
 	out << prefix << "Mean" << s << " = { ";
 	int i = 0;
 	for ( GaussianFitResult gfr : vals ){
@@ -55,7 +55,7 @@ void PidParamMaker::mathematicaExport( string prefix, string s, vector<GaussianF
 
 
 	/*Export Sigma*/
-	ofstream outS( ( cfg->getString( nodePath+"output.report" ) +prefix + s + "Sigma.dat").c_str() );
+	ofstream outS( ( cfg->getString( nodePath+"output:path" ) +prefix + s + "Sigma.dat").c_str() );
 	outS << prefix << "Sigma" << s << " = { ";
 	i = 0;
 	for ( GaussianFitResult gfr : vals ){
@@ -149,7 +149,7 @@ PidParamMaker::PidParamMaker( XmlConfig * config, string np ){
 
     // create the book
     lg->info(__FUNCTION__) << " Creating book "<< endl;
-    book = new HistoBook( config->getString( np + "output.data" ), config );
+    book = new HistoBook( cfg->getString( nodePath+"output:path" ) + config->getString( np + "output.data" ), config );
 
 
     lg->info(__FUNCTION__) << " Creating PhaseSpaceRecentering "<< endl;
@@ -177,10 +177,10 @@ PidParamMaker::PidParamMaker( XmlConfig * config, string np ){
 	binsEta = new HistoBins( cfg, "binning.eta" );
 	binsCharge = new HistoBins( cfg, "binning.charge" );
 
-	muRoi 		= 2.5;
-	sigmaRoi 	= 3.5;
-	roi 		= 2.5;
-	window 		= 1.5;
+	muRoi 		= 2.0;
+	sigmaRoi 	= 3.0;
+	roi 		= 2.0;
+	window 		= 1.0;
 	lg->info(__FUNCTION__) << " Setup Complete "<< endl;
 }
 
@@ -214,11 +214,11 @@ void PidParamMaker::make(){
 		// make a reporter for this species
 		tofReport.push_back( 
 			unique_ptr<Reporter>( 
-				new Reporter( 	cfg->getString( nodePath + "output.report" ) + "tof_" + plc + ".pdf",
+				new Reporter( 	cfg->getString( nodePath+"output:path" ) + cfg->getString( nodePath + "output.report" ) + "tof_" + plc + ".pdf",
 								800, 500 ) ) );
 		dedxReport.push_back( 
 			unique_ptr<Reporter>( 
-				new Reporter( 	cfg->getString( nodePath + "output.report" ) + "dedx_" + plc + ".pdf",
+				new Reporter( 	cfg->getString( nodePath+"output:path" ) + cfg->getString( nodePath + "output.report" ) + "dedx_" + plc + ".pdf",
 								800, 500 ) ) );
 	}
 
@@ -226,7 +226,6 @@ void PidParamMaker::make(){
 
 	TaskProgress tp( "Fitting Species", binsPt->nBins() * species.size() );
 	for ( int i = 0; i < binsPt->nBins(); i++ ){
-
 
 			double avgP = ((*binsPt)[i] + (*binsPt)[i+1] ) / 2.0;
 			string title = "<p> = " + dts( avgP ) + " [GeV]";
@@ -236,13 +235,12 @@ void PidParamMaker::make(){
 			vector<double> dedxMus = psr->centeredDedxMeans( centerSpecies, avgP );
 
 		for ( int iS = 0; iS < species.size(); iS ++ ){
-
 			tp.showProgress( i * (iS+1) );
 
 			string mName = "tofMean" + species[iS];
 			string sName = "tofSigma" + species[iS];
 
-			string name = "tof/" + PidPhaseSpace::tofName( centerSpecies, 0, centralityBin, i, 0, species[ iS ] );
+			string name = "tof/" + PidPhaseSpace::tofName( centerSpecies, 1, centralityBin, i, 0, species[ iS ] );
 			TH1D* tofAll = (TH1D*)inFile->Get( name.c_str() );
 		
 			GaussianFitResult tofGfr =  fitSingleSpecies( tofAll, tofMus[ iS ], tofSigmaIdeal, (*tofReport[ iS ]), "#beta^{-1} : " + title );
@@ -261,7 +259,7 @@ void PidParamMaker::make(){
 			mName = "dedxMean" + species[iS];
 			sName = "dedxSigma" + species[iS];
 
-			name = "dedx/" + PidPhaseSpace::dedxName( centerSpecies, 0, centralityBin, i, 0, species[ iS ] );
+			name = "dedx/" + PidPhaseSpace::dedxName( centerSpecies, 1, centralityBin, i, 0, species[ iS ] );
 			TH1D* hDedx = (TH1D*)inFile->Get( name.c_str() );
 		
 			GaussianFitResult dedxGfr =  fitSingleSpecies( hDedx, dedxMus[ iS ], dedxSigmaIdeal, (*dedxReport[ iS ]), "dEdx : " + title );

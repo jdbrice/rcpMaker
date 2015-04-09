@@ -79,9 +79,14 @@ public:
 	void rcpPannel();
 
 	void compareYields( string plc, int charge );
+	void chargeRatio( string plc, int iCen );
+
 
 	string rcpName( string plc, int charge ){
 		return "rcp_" + plc + "_" + PidPhaseSpace::chargeString( charge );
+	}
+	string chargeRatioName( string plc, int iCen ){
+		return "chargeRatio_" + plc + "_" + ts( iCen );
 	}
 
 	string chargeString( int charge ){

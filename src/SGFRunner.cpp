@@ -149,12 +149,12 @@ void SGFRunner::make(){
 						schema->setInitial( "zb", plc, zbMean, zbSigma, zbDeltaMu, zbDeltaSigma );
 						schema->setInitial( "zd", plc, zdMean, zdSigma, zdDeltaMu, zdDeltaSigma );
 
-						/*if ( iPt != firstPtBin )
-							schema->limitYield( plc );*/
+						if ( iPt - firstPtBin > 2 )
+							schema->limitYield( plc, "zb", "zd" );
 
 						// check if the sigmas should be fixed
-						double zbMinParP = cfg->getDouble( nodePath + "ParameterFixing." + plc + ":zbSigma", 0 );
-						double zdMinParP = cfg->getDouble( nodePath + "ParameterFixing." + plc + ":zdSigma", 0 );
+						double zbMinParP = cfg->getDouble( nodePath + "ParameterFixing." + plc + ":zbSigma", 5.0 );
+						double zdMinParP = cfg->getDouble( nodePath + "ParameterFixing." + plc + ":zdSigma", 5.0 );
 
 						if ( zbMinParP > 0 && avgP >= zbMinParP)
 							schema->fixSigma( "zb", plc, zbSigma );
@@ -164,11 +164,14 @@ void SGFRunner::make(){
 						iPlc++;
 					}
 
-					if ( iPt - firstPtBin < 2 ){ // fit more times to help convergence
-						sgf.fit( centerSpecies, iCharge, iCen, iPt, iEta );
-						sgf.fit( centerSpecies, iCharge, iCen, iPt, iEta );	
-					}
+					//if ( iPt - firstPtBin < 2 ){ // fit more times to help convergence
+					
+
 					sgf.fit( centerSpecies, iCharge, iCen, iPt, iEta );
+					sgf.fit( centerSpecies, iCharge, iCen, iPt, iEta );	
+					sgf.fit( centerSpecies, iCharge, iCen, iPt, iEta );
+
+
 					sgf.report( reporter );
 
 					for ( string plc : PidPhaseSpace::species ){
@@ -184,33 +187,33 @@ void SGFRunner::make(){
 						//Mu
 						name = muName( plc, iCen, iCharge, iEta );
 						book->cd( plc+"_zbMu");
-						sC = schema->var( "zb_mu_"+plc )->getVal() / book->get( name )->GetBinWidth( iPt + 1 );
-						sE = schema->var( "zb_mu_"+plc )->getError() / book->get( name )->GetBinWidth( iPt + 1 );
+						sC = schema->var( "zb_mu_"+plc )->getVal();
+						sE = schema->var( "zb_mu_"+plc )->getError();
 						
 						book->get( name )->SetBinContent( iPt, sC );
 						book->get( name )->SetBinError( iPt, sE );
 
 						name = muName( plc, iCen, iCharge, iEta );
 						book->cd( plc+"_zdMu");
-						sC = schema->var( "zd_mu_"+plc )->getVal() / book->get( name )->GetBinWidth( iPt + 1 );
-						sE = schema->var( "zd_mu_"+plc )->getError() / book->get( name )->GetBinWidth( iPt + 1 );
+						sC = schema->var( "zd_mu_"+plc )->getVal();
+						sE = schema->var( "zd_mu_"+plc )->getError();
 						
 						book->get( name )->SetBinContent( iPt, sC );
 						book->get( name )->SetBinError( iPt, sE );
 
-						//Mu
+						//Sigma
 						name = sigmaName( plc, iCen, iCharge, iEta );;
 						book->cd( plc+"_zbSigma");
-						sC = schema->var( "zb_sigma_"+plc )->getVal() / book->get( name )->GetBinWidth( iPt + 1 );
-						sE = schema->var( "zb_sigma_"+plc )->getError() / book->get( name )->GetBinWidth( iPt + 1 );
+						sC = schema->var( "zb_sigma_"+plc )->getVal();
+						sE = schema->var( "zb_sigma_"+plc )->getError();
 						
 						book->get( name )->SetBinContent( iPt, sC );
 						book->get( name )->SetBinError( iPt, sE );
 
 						name = sigmaName( plc, iCen, iCharge, iEta );
 						book->cd( plc+"_zdSigma");
-						sC = schema->var( "zd_sigma_"+plc )->getVal() / book->get( name )->GetBinWidth( iPt + 1 );
-						sE = schema->var( "zd_sigma_"+plc )->getError() / book->get( name )->GetBinWidth( iPt + 1 );
+						sC = schema->var( "zd_sigma_"+plc )->getVal();
+						sE = schema->var( "zd_sigma_"+plc )->getError();
 						
 						book->get( name )->SetBinContent( iPt, sC );
 						book->get( name )->SetBinError( iPt, sE );

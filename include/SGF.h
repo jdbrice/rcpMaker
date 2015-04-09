@@ -51,7 +51,7 @@ public:
 		RooDataHist * d = schema->data( "" );
 		// do the simultaneous fit
 		RooSimultaneous * sim = schema->model();
-		sim->fitTo( *d, PrintLevel(-1), Verbose( kFALSE ) );
+		sim->fitTo( *d /*, PrintLevel(-1), Verbose( kFALSE )*/ );
 	}
 
 	void showSample( string var, string sample ){

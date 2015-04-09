@@ -292,7 +292,35 @@ void PidYieldPresenter::rcpPannel(){
 }
 
 
+void PidYieldPresenter::chargeRatio( string plc, int iCen ){
 
+	book->cd("yield");
+
+	if ( 	!book->exists( SGFRunner::yieldName( plc, iCen, 1, 0 ) ) ||
+			!book->exists( SGFRunner::yieldName( plc, iCen, -1, 0 ) )  ){
+		logger->error( __FUNCTION__ ) << "+/- yield missing" << endl;
+		return;
+	}
+
+	TH1D * plus = (TH1D*)book->get( SGFRunner::yieldName( plc, iCen, 1, 0 ) );
+	TH1D * minus = (TH1D*)book->get( SGFRunner::yieldName( plc, iCen, -1, 0 ) );
+
+	book->cd( "chargeRatio" );
+
+	plus = (TH1D *) plus->Clone( chargeRatioName( plc, iCen ).c_str() );
+	plus->Divide( minus );
+	book->add( chargeRatioName( plc, iCen ), plus );
+	reporter->newPage();
+
+	book->style( chargeRatioName( plc, iCen ) )->
+		set( np + "Style.chargeRatio_" + plc )->
+		set( "title", "Charge Ratio : " + plc )->draw();
+
+
+	reporter->savePage();
+
+
+}
 
 
 

@@ -9,12 +9,12 @@
 		</Logger>	
 
 		<input>
-			<data url="../products/phaseSpace/pidAll.root"/>
+			<data url="/Users/danielbrandenburg/bnl/local/data/Run14/rcp/phaseSpace/15GeV/preview_2.root"/>
 		</input>
 
-		<output>
-			<data>../products/pidParams/paramsForPid.root</data>
-			<report>../products/pidParams/</report>
+		<output path="../products/pidParams/">
+			<data>paramsForPid.root</data>
+			<report></report>
 		</output>
 
 		<Bichsel>
@@ -36,9 +36,9 @@
 		</histograms>
 
 		<FitRange>
-			<Pi min=".2" max="1.2" />
-			<K min=".3" max="1.2" />
-			<P min=".4" max="2.0" />
+			<Pi min=".5" max="1.2" />
+			<K min=".5" max="1.2" />
+			<P min=".5" max="2.0" />
 		</FitRange>
 		<PlotRange>
 			<muPi min="-0.02" max="0.02" />
@@ -52,12 +52,29 @@
 
 	<binning hide="true" >
 
-		<pt width="0.05" min="0.2" max="4.0" />
-		<eta>0.0, 0.2 </eta>
-		<charge> -0.5, 0.5 </charge>
+		<!-- Based on Evan's thesis.v5.pdf -->
+		<!-- .1 from .5 to 2.5 => 15 bins -->
+		<!-- .2 from 2.0 to 3.0 => 5 bins -->
+		<pt>
+			0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2.0, 
+			2.2, 2.4, 2.6, 2.8, 3.0, 	
+			3.4,						
+			4.4,					
+			5.0
+		</pt>
+		
+		<eta>0.0, 0.2, 0.4, 0.5 </eta>
 
-		<tof width="0.0012" min="-2" max="2" />
-		<dedx width="0.006" min="-2" max="2" />
+		<charge> -1.5, -0.5, 0.5, 1.5 </charge>
+
+		<tof width="0.006" min="-1" max="1" />
+		<dedx width="0.03" min="-0.75" max="0.75" />
+		<!--
+		<tof width="0.006" min="-1" max="1" />
+		<dedx width="0.015" min="-0.75" max="0.75" />
+		-->
+		<tofRaw width="0.0024" min="0.9" max="3" />
+		<dedxRaw width="0.012" min="1" max="6cd" />
 
 		<padding tof=".15" dedx=".15" tofScale="0.05" dedxScale="0.05" />
 
