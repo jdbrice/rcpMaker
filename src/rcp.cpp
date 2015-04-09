@@ -68,11 +68,22 @@ int main( int argc, char* argv[] ) {
 				PidYieldPresenter pyp( &config, "PidYieldPresenter." );
 				pyp.integrateEta();
 				pyp.normalizeYield();
+				pyp.compareYields( "Pi", -1);
 				pyp.compareYields( "Pi", 1);
+
+				pyp.compareYields( "K", -1);
+				pyp.compareYields( "K", 1);
+
+				pyp.compareYields( "P", -1);
+				pyp.compareYields( "P", 1);
 
 				pyp.rcp( "Pi", 1, 0, 6 );
 				pyp.rcp( "K", 1, 0, 6 );
 				pyp.rcp( "P", 1, 0, 6 );
+
+				pyp.rcp( "Pi", -1, 0, 6 );
+				pyp.rcp( "K", -1, 0, 6 );
+				pyp.rcp( "P", -1, 0, 6 );
 
 				pyp.rcpPannel();
 				

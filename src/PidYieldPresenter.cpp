@@ -99,9 +99,9 @@ void PidYieldPresenter::integrateEta() {
 			for ( int iCen : cenBins ){
 				integrateEta( plc, charge, iCen );
 				
-				string name = SGFRunner::yieldName( plc, iCen, charge, 0 );
-				book->style( name )->set( "title", "#eta Integrated : " + name )->set( "logY", 1 )->draw();
-				reporter->next();
+				//string name = SGFRunner::yieldName( plc, iCen, charge, 0 );
+				//book->style( name )->set( "title", "#eta Integrated : " + name )->set( "logY", 1 )->draw();
+				//reporter->next();
 
 			} //centralitiy bins
 		} //charges
@@ -147,10 +147,10 @@ void PidYieldPresenter::normalizeYield() {
 				normalizeYield( plc, charge, iCen );
 				
 				string name = SGFRunner::yieldName( plc, iCen, charge, 0 );
-				book->style( name )->set("lineWidth", 2)->
-					set( "title", "Normalized Yield : " + name )->
-					set( "logY", 1 )->set( "domain", 0, 5 )->draw();
-				reporter->next();
+				// book->style( name )->set("lineWidth", 2)->
+				// 	set( "title", "Normalized Yield : " + name )->
+				// 	set( "logY", 1 )->set( "domain", 0, 5 )->draw();
+				// reporter->next();
 
 			} //centralitiy bins
 		} //charges
@@ -261,7 +261,7 @@ void PidYieldPresenter::rcp( string plc, int charge, int iCen, int iPer ){
 		book->style( rcpName( plc, charge ) )->
 		set("logY", 1)->draw();
 
-	reporter->savePage();
+	//reporter->savePage();
 
 }
 
@@ -279,7 +279,8 @@ void PidYieldPresenter::rcpPannel(){
 		for ( int charge : charges ){
 
 			book->style( rcpName( plc, charge ) )->
-			set("range", .2, 10 )->set( "logY", 1 )->
+			set("range", .1, 10 )->set( "logY", 1 )->
+			set( "domain", 0, 7 )->set( "numberofticks", 7, 5 )->
 			set( "title", "R_{CP} : " + plc + chargeString( charge ) )->
 			set( "y", "(0-5%) / (60-80%)" )->draw();
 			gPad->SetGrid(1);
