@@ -1,27 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
 
-	<jobType>PidPhaseSpace</jobType>
+	<jobType>InclusiveSpectra</jobType>
 
-	<PidPhaseSpace>
-		<Logger color="true" logLevel="all" />
+	<InclusiveSpectra>
+
+		<Logger color="true" logLevel="warning" />
 		
 		<input>
-			<dst treeName="rcpPicoDst" url="/Users/danielbrandenburg/bnl/local/data/BES/11GeV/tofMatch3/" maxFiles="400"/>
+			<dst treeName="PicoDst" url="/Users/danielbrandenburg/bnl/local/data/Run14/LBNL/11GeVCompare/"/>
 		</input>
 
-		<output path="../products/phaseSpace/11GeV/">
-			<data>pid.root</data>
-			<Reports></Reports>
+		<output>
+			<data>../products/inclusive/11GeV/inclusiveSpectra.root</data>
 		</output>
 
-		<Bichsel>
-			<table>dedxBichsel.root</table>
-			<method>0</method>
-		</Bichsel>
-
 		<!-- Common Resources -->
-		<MakeQA config="config/11GeV/qaHistograms.xml" event="true" track="false" tof="false" dedx="false" />
+		<MakeQA config="config/11GeV/qaHistograms.xml" event="true" track="true" tof="false" dedx="false" />
 		<Cuts config="config/11GeV/cuts.xml" />
 		<RMCParams config="config/11GeV/StRMCParams.xml" />
 
@@ -38,32 +33,15 @@
 			8 :: 0
 		</CentralityMap>
 
-
-		<enhanceDistributions tof="1.0" dedx="1.0" nSigBelow="3.0" nSigAbove="3.0"/>
-		
-		<PhaseSpaceRecentering>
-			<centerSpecies>K</centerSpecies>
-			<sigma tof="0.011" dedx="0.033"/>
-			<method>nonlinear</method>
-		</PhaseSpaceRecentering>
-
-		<makePhaseSpace 2D="false" enhanced="true" /> 
-
-		<histograms >
-
-			<Histo name="betaRaw" title="#beta^{-1}" xBins="bin.pt" yBins="bin.tofRaw" />
-			<Histo name="dedxRaw" title="dEdx" xBins="bin.pt" yBins="bin.dedxRaw" />
-			<Histo name="eta" type="1D" title="eta" nBinsX="200" minX="-2" maxX="2" />
+		<!-- histograms to auto-make -->
+		<histograms>
 			<ptBase type="1D" title="p_{T} [GeV]; p_{T} [GeV]; #Events"  xBins="bin.pt"/>
-
+			<ptAll type="1D" title="p_{T} [GeV]; p_{T} [GeV]; #Events"  xBins="bin.pt"/>
+			<ptPos type="1D" title="p_{T} [GeV]; p_{T} [GeV]; #Events"  xBins="bin.pt"/>
+			<ptNeg type="1D" title="p_{T} [GeV]; p_{T} [GeV]; #Events"  xBins="bin.pt"/>
 		</histograms>
 
-		<style hide="true">
-			<tof title="#beta^{-1}" logy="1" draw="pe"/>
-			<dedx title="dedx" logy="1" draw="pe"/>
-		</style>
-
-	</PidPhaseSpace>
+	</InclusiveSpectra>
 
 
 	<bin hide="true" >
@@ -95,5 +73,6 @@
 		<padding tof=".15" dedx=".15" tofScale="0.05" dedxScale="0.05" />
 
 	</bin>
+
 
 </config>

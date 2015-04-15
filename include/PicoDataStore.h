@@ -55,6 +55,7 @@ public:
 	 */	
 	virtual Int_t runId(){ return 0; }
 	virtual Int_t eventId(){ return 0; }
+	virtual Float_t eventWeight(){ return 0; }
 	virtual UInt_t eventDay(){ return 0; }
 	virtual UInt_t eventYear(){ return 0; }
 

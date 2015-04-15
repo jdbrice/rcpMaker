@@ -4,6 +4,7 @@
 #include "LBNLPicoDst.h"
 #include "FemtoDst.h"
 #include "ProdPicoDst.h"
+#include "RcpPicoDst.h"
 
 #include <limits.h>
 
@@ -22,9 +23,12 @@ InclusiveSpectra::InclusiveSpectra( XmlConfig * config, string np, string fileLi
 		pico = unique_ptr<PicoDataStore>( new FemtoDst( ds->getChain() ) );
 	else if ( ds && ds->getTreeName() == "PicoDst" )
 		pico = unique_ptr<PicoDataStore>( new ProdPicoDst( ds->getChain() ) );
-	else if ( chain ){
+	else if ( chain && "PicoDst" == cfg->getString( np + "input.dst:treeName" ) ){
 		logger->info(__FUNCTION__) << "ProdPico" << endl;
 		pico = unique_ptr<PicoDataStore>( new ProdPicoDst( chain ) );
+	} else if ( chain && "rcpPicoDst" == cfg->getString( np + "input.dst:treeName" ) ){
+		logger->info(__FUNCTION__) << "Rcp Pico" << endl;
+		pico = unique_ptr<PicoDataStore>( new RcpPicoDst( chain ) );
 	}
 
 	logger->info(__FUNCTION__) << endl;
@@ -177,6 +181,20 @@ void InclusiveSpectra::analyzeTrack( Int_t iTrack ){
 
 bool InclusiveSpectra::keepEvent(){
 
+	if ( "rcpPicoDst" == cfg->getString( nodePath + "input.dst:treeName" ) ){
+
+		eventWeight = pico->eventWeight();
+		refMult 	= pico->refMult();
+		cBin 		= centralityBin( refMult );
+		
+		// needed for other things
+		if ( makeEventQA ){
+			book->cd( "EventQA" );
+			book->fill( "mappedRefMultBins", cBin, eventWeight );
+		}
+
+		return true;
+	}
 
 	if ( makeEventQA ){
 		book->cd( "EventQA" );
@@ -209,17 +227,22 @@ bool InclusiveSpectra::keepEvent(){
 	eventWeight = 1.0;
 
 	// get the corrected ref mult
-	if ( rmc )
+	if ( rmc ){
 		refMult = rmc->refMult( pico->refMult(), pico->vZ() );
+	}
 	else {
 		logger->error(__FUNCTION__) << "No RMC Parameters" << endl;
 		return false;
 	}
 	
+	
 	// define the member centrality bin and event weight for the analysis functions to use	
 	cBin 		= centralityBin( refMult );
 	eventWeight = rmc->eventWeight( refMult, pico->vZ() );
-
+	// has it already
+	if ( "rcpPicoDst" == cfg->getString( nodePath + "input.dst:treeName" ) ){
+		
+	}
 	
 	double z = pico->vZ();
 	double x = pico->vX() + cutVertexROffset->x;
@@ -238,6 +261,7 @@ bool InclusiveSpectra::keepEvent(){
 		book->fill( "pre_vR", r );
 		book->fill( "pre_vY_vX", x, y );
 		book->fill( "pre_refMult", pico->refMult() );
+		book->fill( "pre_nTofMatch", nTofMatchedTracks );
 	}
 	
 	
@@ -254,7 +278,7 @@ bool InclusiveSpectra::keepEvent(){
 	if ( makeEventQA )
 		book->get( "eventCuts" )->Fill( "nTofMatched", 1 );
 
-	if ( refMult < 5 )
+	if ( refMult < 6 )
 		return false;
 
 	/**
@@ -271,12 +295,16 @@ bool InclusiveSpectra::keepEvent(){
 		book->fill( "refMultBin9", rmc->bin9( refMult ), eventWeight );
 		book->fill( "refMultBin16", rmc->bin16( refMult ), eventWeight );
 		book->fill( "mappedRefMultBins", cBin, eventWeight );
+		book->fill( "nTofMatch", nTofMatchedTracks );
 	}
 	
 	return true;
 }
 
 bool InclusiveSpectra::keepTrack( Int_t iTrack ){
+
+	if ( "rcpPicoDst" == cfg->getString( nodePath + "input.dst:treeName" ) )
+		return true;
 
 	if ( makeTrackQA ){
 		book->cd( "TrackQA" );

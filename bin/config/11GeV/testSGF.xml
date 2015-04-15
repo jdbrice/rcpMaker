@@ -7,18 +7,18 @@
 		<Logger color="true" logLevel="all"/>
 		<Reporter> <output url="rpSgfTest.pdf" width="800" height="800" /> </Reporter>	
 		<!--<input> <data url="/Users/danielbrandenburg/bnl/local/data/Run14/rcp/phaseSpace/pid.root"/> </input>-->
-		<input> <data url="/Users/danielbrandenburg/bnl/local/data/Run14/rcp/phaseSpace/15GeV/pid_15GeV_04_09.root"/> </input>
-		<output path=""> <data>sgf_test.root</data> </output>
+		<input> <data url="../products/phaseSpace/11GeV/pid.root"/> </input>
+		<output path="../products/sgf/11GeV/"> <data>sgf_0.root</data> </output>
 	
 		<histograms>
 			<Histo name="yield" title="yield" xBins="bin.pt" />
 		</histograms>
 		<!-- fit bins -->
 		<FitRange>
-			<ptBins min="0" max="25" />
+			<ptBins min="0" max="3" />
 			<centralityBins>0</centralityBins>
-			<etaBins>0</etaBins>
-			<charges>1</charges>
+			<etaBins>1</etaBins>
+			<charges>-1</charges>
 		</FitRange>
 		<!-- Guiding parameters -->
 

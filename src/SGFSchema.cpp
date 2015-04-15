@@ -166,8 +166,9 @@ void SGFSchema::combineData(){
 
 void SGFSchema::limitYield( string plc, string var1, string var2 ){
 	
+	double eyMax = 100.0;
 	double yMax = 1.0;
-	double yMin = 0.05;
+	double yMin = 0.01;
 	// also update the yield limits
 	double cYield = var( "yield_" + plc )->getVal();
 	var( "yield_" + plc )->setMax( cYield * yMax );
@@ -177,12 +178,12 @@ void SGFSchema::limitYield( string plc, string var1, string var2 ){
 
 		cYield = var( var1 + "_" + ePlc + "_yield_" + plc )->getVal();
 		
-		var( var1 + "_" + ePlc + "_yield_" + plc )->setMax( cYield );
+		var( var1 + "_" + ePlc + "_yield_" + plc )->setMax( cYield * eyMax );
 		var( var1 + "_" + ePlc + "_yield_" + plc )->setMin( cYield * yMin );
 
 		cYield = var( var2 + "_" + ePlc + "_yield_" + plc )->getVal();
 		
-		var( var2 + "_" + ePlc + "_yield_" + plc )->setMax( cYield );
+		var( var2 + "_" + ePlc + "_yield_" + plc )->setMax( cYield * eyMax );
 		var( var2 + "_" + ePlc + "_yield_" + plc )->setMin( cYield * yMin );
 	}
 
@@ -233,12 +234,9 @@ void SGFSchema::fixMu( string var, string plc, double _mu ){
 }
 
 
-void SGFSchema::forceROI(){
+void SGFSchema::setROI( string var, double low, double high ){
 
-	for ( auto p : gaussIndVar ){
-		// first 	= gauss model name
-		// second 	= indep var name 
+	
 
-	}
 }
 

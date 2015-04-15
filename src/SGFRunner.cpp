@@ -166,10 +166,10 @@ void SGFRunner::make(){
 
 					//if ( iPt - firstPtBin < 2 ){ // fit more times to help convergence
 					
-
 					sgf.fit( centerSpecies, iCharge, iCen, iPt, iEta );
-					sgf.fit( centerSpecies, iCharge, iCen, iPt, iEta );	
-					sgf.fit( centerSpecies, iCharge, iCen, iPt, iEta );
+					//sgf.fit( centerSpecies, iCharge, iCen, iPt, iEta, true );
+					//sgf.fit( centerSpecies, iCharge, iCen, iPt, iEta );	
+					//sgf.fit( centerSpecies, iCharge, iCen, iPt, iEta );
 
 
 					sgf.report( reporter );

@@ -8,6 +8,9 @@
 		<Histo name="pre_nTof_corrRefMult" title="; Corrected Ref Mult; nTofMatch" xBins="Bins.refMult" yBins="Bins.refMult" />
 		<Histo name="nTof_corrRefMult" title="; Corrected Ref Mult; nTofMatch" xBins="Bins.refMult" yBins="Bins.refMult" />
 
+		<Histo name="nTofMatch" title="nTofMatch; nTofMatch" xBins="Bins.refMult"  />
+		<Histo name="pre_nTofMatch" title="nTofMatch; nTofMatch" xBins="Bins.refMult"  />
+
 		<!-- Vertex Distributions -->
 		<Histo name="pre_vZ" title="Z Vertex [cm]; [cm]" xBins="Bins.vZ" />
 		<Histo name="vZ" title="Z Vertex [cm]; [cm]" xBins="Bins.vZ" />
@@ -66,7 +69,10 @@
 		<Histo name="pre_yLocal" title="yLocal" widthX=".1" minX="-2.5" maxX="2.5" />
 
 		<Histo name="zLocal" title="zLocal" widthX=".1" minX="-3.5" maxX="3.5" />
-		<Histo name="pre_zLocal" title="zLocal" widthX=".1" minX="-3.5" maxX="3.5" />		
+		<Histo name="pre_zLocal" title="zLocal" widthX=".1" minX="-3.5" maxX="3.5" />	
+
+		<Histo name="pre_refMult" title="Tracks vs. RefMult" xBins="Bins.refMult" />
+		<Histo name="refMult" title="Tracks vs. RefMult" xBins="Bins.refMult" />	
 		
 		
 	</Track>

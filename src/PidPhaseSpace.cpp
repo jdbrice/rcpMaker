@@ -138,8 +138,6 @@ void PidPhaseSpace::analyzeTrack( int iTrack ){
 	book->cd();
 
 
-	double vZ = pico->vZ();
-
 	double pt = pico->trackPt( iTrack );
 	double p = pico->trackP( iTrack );
 	double eta = pico->trackEta( iTrack );

@@ -155,7 +155,7 @@ public:
 			return TMath::Nint( refMultRnd * corRefMult );
 		}
 
-		logger->warn( __FUNCTION__ ) << "Ref Mult not corrected " << endl;
+		logger->warn( __FUNCTION__ ) << "Ref Mult not corrected : zPol = " << rmZ << endl;
 		return rawRefMult;
 	}
 

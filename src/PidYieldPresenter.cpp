@@ -35,6 +35,13 @@ PidYieldPresenter::PidYieldPresenter( XmlConfig * _cfg, string _nodePath ){
 
 	gStyle->SetOptStat( 0 );
 
+	cenBins = cfg->getIntVector( np + "FitRange.centralityBins" );
+	cenLabels = cfg->getStringVector( np+"centralityLabels" );
+	charges = cfg->getIntVector( np + "FitRange.charges" );
+	colors = cfg->getIntVector( np+"colors" );
+
+	nColl = cfg->getDoubleVector( np + "nColl" );
+	nPart = cfg->getDoubleVector( np + "nPart" );
 }
 
 
@@ -79,21 +86,14 @@ void PidYieldPresenter::integrateEta( string plc, int charge, int iCen ) {
 
 			book->get( name )->Add( h[ i ] );
 		}
-
-		
-			
 	}
-
-
-
 }
 
 
 void PidYieldPresenter::integrateEta() {
 
 	reporter->newPage(1, 2);
-	vector<int> cenBins = cfg->getIntVector( np + "FitRange.centralityBins" );
-	vector<int> charges = cfg->getIntVector( np + "FitRange.charges" );
+
 	for ( string plc : PidPhaseSpace::species ){
 		for ( int charge : charges ){
 			for ( int iCen : cenBins ){
@@ -139,8 +139,7 @@ void PidYieldPresenter::normalizeYield( string plc, int charge, int iCen ){
 void PidYieldPresenter::normalizeYield() {
 
 	reporter->newPage(1, 2);
-	vector<int> cenBins = cfg->getIntVector( np + "FitRange.centralityBins" );
-	vector<int> charges = cfg->getIntVector( np + "FitRange.charges" );
+
 	for ( string plc : PidPhaseSpace::species ){
 		for ( int charge : charges ){
 			for ( int iCen : cenBins ){
@@ -159,15 +158,28 @@ void PidYieldPresenter::normalizeYield() {
 }
 
 
+
+void PidYieldPresenter::compareYields(){
+
+	reporter->newPage( 2, 1 );
+	compareYields( "Pi", -1);
+	compareYields( "Pi", 1);
+
+	compareYields( "K", -1);
+	compareYields( "K", 1);
+
+	compareYields( "P", -1);
+	compareYields( "P", 1);
+
+
+}
+
 void PidYieldPresenter::compareYields( string plc, int charge ){
 
-	vector<int> colors = cfg->getIntVector( np+"colors" );
-	vector<string> cLabels = cfg->getStringVector( np+"centralityLabels" );
-	reporter->newPage( 1, 1 );
-	book->cd( "yield" );
-	vector<int> cenBins = cfg->getIntVector( np + "FitRange.centralityBins" );
 
-	TLegend *leg = new TLegend(0.7,0.6,0.9,0.9);
+	book->cd( "yield" );
+
+	TLegend *leg = new TLegend(0.65,0.6,0.9,0.9);
 	for ( int iCen : cenBins ){
 
 
@@ -186,23 +198,45 @@ void PidYieldPresenter::compareYields( string plc, int charge ){
 		if ( iCen > 0 )
 			drawOpt = "same pe";
 
-		y->SetTitle( (plc + "^{" + chargeString( charge )+ "} Yields" ).c_str() );
+
+		y->SetTitle( ( plcName( plc, charge ) + " : Raw Spectra; pT [GeV] ;d^{2}N / ( N_{evt} 2 #pi pT dpT dy )" ).c_str() );
+		y->GetYaxis()->SetTitleOffset( 1.6 );
 		y->Scale( scale );
 		y->SetLineColor( colors[ iCen ] );
-		y->GetYaxis()->SetRangeUser( 10e-16, 100 );
+		y->SetMarkerColor( colors[ iCen ] );
+		y->GetYaxis()->SetRangeUser( 10e-16, 1000 );
+		y->SetLineWidth( 2 );
+		y->SetMarkerStyle( 20 + iCen );
+
 		y->Draw( drawOpt.c_str() );
 		gPad->SetLogy(1);
 
 
-		string label = cLabels[ iCen ] + " x 10e-" + ts(pow10);
+		string label = cenLabels[ iCen ] + " x 10^{-" + ts(pow10) +"}";
 		if ( 0 == iCen  )
-			label = cLabels[ iCen ];
+			label = cenLabels[ iCen ];
 		leg->AddEntry( y, label.c_str(), "lep" );
 	}
 	leg->Draw();
-	reporter->savePage();
+	reporter->saveImage( cfg->getString( np + "output:path" ) + "export_yields_" + plc + ".pdf" );
+	reporter->next();
+	
 
 
+}
+
+void PidYieldPresenter::rcp( int iPer ){
+
+	for ( int iCen : cenBins ){
+
+		rcp( "Pi", 1, iCen, iPer );
+		rcp( "K", 1, iCen, iPer );
+		rcp( "P", 1, iCen, iPer );
+
+		rcp( "Pi", -1, iCen, iPer );
+		rcp( "K", -1, iCen, iPer );
+		rcp( "P", -1, iCen, iPer );
+	}
 }
 
 
@@ -217,7 +251,7 @@ void PidYieldPresenter::rcp( string plc, int charge, int iCen, int iPer ){
 	}
 
 	// get the vector of ncolls mapped to centrality bins
-	vector<double> nColl = cfg->getDoubleVector( np + "nColl" );
+	
 	if ( nColl.size() <= iCen || nColl.size() <= iPer ){
 		logger->error(__FUNCTION__) << "nColl doesnt contain value for this bin" << endl;
 		return;
@@ -255,10 +289,10 @@ void PidYieldPresenter::rcp( string plc, int charge, int iCen, int iPer ){
 
 	reporter->cd( 1, 2);
 
-		TH1D * hRcp = (TH1D*)cen->Clone( rcpName( plc, charge ).c_str() );
-		book->add( rcpName( plc, charge ), hRcp );
+		TH1D * hRcp = (TH1D*)cen->Clone( rcpName( plc, charge, iCen, iPer ).c_str() );
+		book->add( rcpName( plc, charge, iCen, iPer ), hRcp );
 		hRcp->Divide( per );
-		book->style( rcpName( plc, charge ) )->
+		book->style( rcpName( plc, charge, iCen, iPer ) )->
 		set("logY", 1)->draw();
 
 	//reporter->savePage();
@@ -266,31 +300,38 @@ void PidYieldPresenter::rcp( string plc, int charge, int iCen, int iPer ){
 }
 
 
-void PidYieldPresenter::rcpPannel(){
+void PidYieldPresenter::rcpPanel( int iCen, int iPer ){
 
 	book->cd( "rcp" );
-	vector<int> charges = cfg->getIntVector( np + "FitRange.charges" );
-	vector<string> cLabels = cfg->getStringVector( np+"centralityLabels" );
 
-	reporter->newPage( charges.size(), 3 );
+	reporter->newPage( 3, charges.size() );
 
+	for ( int charge : charges ){
+		for ( string plc : PidPhaseSpace::species ){
+		
 
-	for ( string plc : PidPhaseSpace::species ){
-		for ( int charge : charges ){
-
-			book->style( rcpName( plc, charge ) )->
-			set("range", .1, 10 )->set( "logY", 1 )->
-			set( "domain", 0, 7 )->set( "numberofticks", 7, 5 )->
-			set( "title", "R_{CP} : " + plc + chargeString( charge ) )->
-			set( "y", "(0-5%) / (60-80%)" )->draw();
+			book->style( rcpName( plc, charge, iCen, iPer ) )->
+				set( "title", plcName( plc, charge ) + " R_{CP} " )->
+				set( np + "Style.rcp" )->
+				set( "title", "R_{CP} (" + cenLabels[iCen] + " ) / ( " + cenLabels[iPer] + " )"  )->
+				draw();
 			gPad->SetGrid(1);
+			reporter->saveImage( cfg->getString( np + "output:path" ) + "export_" + rcpName( plc, charge, iCen, iPer ) + ".pdf" );
 			reporter->next();
 		}
 	}
-
-	//reporter->savePage();
 }
 
+
+void PidYieldPresenter::chargeRatio( ){
+
+	for ( int iCen : cenBins ){
+		reporter->newPage( 3, 1 );
+		chargeRatio( "Pi", iCen );
+		chargeRatio( "K", iCen );
+		chargeRatio( "P", iCen );
+	}
+}
 
 void PidYieldPresenter::chargeRatio( string plc, int iCen ){
 
@@ -307,21 +348,151 @@ void PidYieldPresenter::chargeRatio( string plc, int iCen ){
 
 	book->cd( "chargeRatio" );
 
-	plus = (TH1D *) plus->Clone( chargeRatioName( plc, iCen ).c_str() );
-	plus->Divide( minus );
-	book->add( chargeRatioName( plc, iCen ), plus );
-	reporter->newPage();
+	minus = (TH1D *) minus->Clone( chargeRatioName( plc, iCen ).c_str() );
+	minus->Divide( plus );
+	book->add( chargeRatioName( plc, iCen ), minus );
 
 	book->style( chargeRatioName( plc, iCen ) )->
+		set( np + "Style.chargeRatio" )->
 		set( np + "Style.chargeRatio_" + plc )->
-		set( "title", "Charge Ratio : " + plc )->draw();
+		set( "title", "Charge Ratio : " + plc + "( " + cenLabels[ iCen ] + " )" )->draw();
 
 
-	reporter->savePage();
+	reporter->next();
 
 
 }
 
+void PidYieldPresenter::chargeRatioCompare( string plc ) {
+
+	book->cd( "chargeRatio" );
+
+	TLegend *leg = new TLegend(0.5,0.6,0.9,0.9);
+	leg->SetFillColor( kWhite );
+	leg->SetFillStyle( 1001 ); // solid
+	for ( int iCen : cenBins ){
+		string dOpt = "";
+		if ( iCen != cenBins[ 0 ] )
+			dOpt = "same";
+		book->style( chargeRatioName( plc, iCen ) )->
+			set( np + "Style.chargeRatio" )->
+			set( np + "Style.chargeRatio_" + plc )->
+			set( "title", "Charge Ratio : " + plc )->
+			set( "lineColor", colors[ iCen ] )->
+			set( "markerColor", colors[ iCen ] )->
+			set( "MarkerStyle", 20 + iCen )->
+			set( "draw", dOpt )->
+			draw();
+		string label = cenLabels[ iCen ];
+		leg->AddEntry( book->get( chargeRatioName( plc, iCen ) ), label.c_str(), "lep" );
+	}
+	leg->Draw();
+	reporter->saveImage( cfg->getString( np + "output:path" ) + "export_chargeRatioCen.pdf" );
+	reporter->next();
+
+	
+}
+
+void PidYieldPresenter::chargeRatioCompare( ) {
+
+	reporter->newPage( 3, 1 );
+	chargeRatioCompare( "Pi" );
+	chargeRatioCompare( "K" );
+	chargeRatioCompare( "P" );	
+
+}
+
+
+void PidYieldPresenter::rcpVsNPart( int ptBin, int iPer ){
+
+	reporter->newPage();
+	rcpVsNPart( "Pi", 1, ptBin );
+	rcpVsNPart( "Pi", -1, ptBin );
+
+	rcpVsNPart( "K", 1, ptBin );
+	rcpVsNPart( "K", -1, ptBin );
+
+	rcpVsNPart( "P", 1, ptBin );
+	rcpVsNPart( "P", -1, ptBin );
+}
+
+
+void PidYieldPresenter::rcpVsNPart( string plc, int charge, int ptBin, int iPer  ){
+
+
+	book->cd( "rcp" );
+
+	HistoBins nPartBins( 0, 460, 5 );
+	book->make1D( 	nPartName( plc, charge, ptBin ), 
+					nPartName( plc, charge, ptBin ),
+					nPartBins.nBins(),
+					nPartBins.bins.data()
+		 		);
+
+	TH1 * h = book->get( nPartName( plc, charge, ptBin ) );  
+	for ( int iCen : cenBins ){
+
+		TH1* hC = book->get( rcpName( plc, charge, iCen, iPer ) );
+
+		double ncPart = nPart[ iCen ];
+
+		h->SetBinContent( nPartBins.findBin( ncPart ), hC->GetBinContent( ptBin ) );		
+		h->SetBinError( nPartBins.findBin( ncPart ), hC->GetBinError( ptBin ) );		
+
+	}
+
+	book->get( nPartName( plc, charge, ptBin ) )->GetYaxis()->SetTitleOffset( 0.5 );
+	book->style( nPartName( plc, charge, ptBin ) )->
+	set( "lineColor", "red" )->
+	set( "draw", "pe" )->
+	set( "title", plcName( plc, charge ) + " R_{CP} @ pT = " + dts(binsPt->bins[ ptBin ]) )->
+	set( np + "Style.nPart" )->
+	draw();
+
+	reporter->next();
+
+
+}
+
+
+void PidYieldPresenter::rcpVsNPartCompare( int ptBin, int iPer ){
+
+	TLegend *leg = new TLegend(0.75,0.6,0.9,0.9);
+	leg->SetFillColor( kWhite );
+	leg->SetFillStyle( 1001 ); // solid
+
+	reporter->newPage( 1, 1);
+	int drawing = 0;
+	for ( string plc : PidPhaseSpace::species ){
+		for ( int charge : charges ){
+
+			string dOpt = "";
+			if ( 0 < drawing )
+				dOpt = "same";
+
+			book->style( nPartName( plc, charge, ptBin ) )->
+				
+				set( "title", "R_{CP} @ pT = " + dts(binsPt->bins[ ptBin ]) )->
+				set( np + "Style.nPart" )->
+				set( "draw", dOpt )->
+				set( "linecolor", colors[ drawing ] )->
+				set( "markercolor", colors[ drawing ] )->
+				set( "markerStyle", 20 + drawing )->
+				draw();
+				
+				string label = plcName( plc, charge );
+				leg->AddEntry( 	book->get( nPartName( plc, charge, ptBin ) ), 
+								label.c_str(), 
+								"lep" );
+
+			drawing++;
+		}
+	} 
+	leg->Draw();
+
+	reporter->saveImage( cfg->getString( np + "output:path" ) + "export_rcp_nPart_pt_" + ts( ptBin ) + ".pdf" );
+	reporter->savePage();
+}
 
 
 

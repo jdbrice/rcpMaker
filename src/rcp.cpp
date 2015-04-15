@@ -68,30 +68,22 @@ int main( int argc, char* argv[] ) {
 				PidYieldPresenter pyp( &config, "PidYieldPresenter." );
 				pyp.integrateEta();
 				pyp.normalizeYield();
-				
-				pyp.chargeRatio( "Pi", 0 );
-				pyp.chargeRatio( "K", 0 );
-				pyp.chargeRatio( "P", 0 );
+				pyp.compareYields();
+				pyp.rcp( 6 );
 
-				
-				pyp.compareYields( "Pi", -1);
-				pyp.compareYields( "Pi", 1);
+				pyp.rcpPanel( 0, 6);
+				pyp.rcpPanel( 1, 6);
+				pyp.rcpPanel( 2, 6);
+				pyp.rcpPanel( 3, 6);
+				pyp.rcpPanel( 4, 6);
+				pyp.rcpPanel( 5, 6);
+				pyp.rcpPanel( 6, 6);
 
-				pyp.compareYields( "K", -1);
-				pyp.compareYields( "K", 1);
+				pyp.chargeRatio();
+				pyp.chargeRatioCompare( );
 
-				pyp.compareYields( "P", -1);
-				pyp.compareYields( "P", 1);
-
-				pyp.rcp( "Pi", 1, 0, 6 );
-				pyp.rcp( "K", 1, 0, 6 );
-				pyp.rcp( "P", 1, 0, 6 );
-
-				pyp.rcp( "Pi", -1, 0, 6 );
-				pyp.rcp( "K", -1, 0, 6 );
-				pyp.rcp( "P", -1, 0, 6 );
-
-				pyp.rcpPannel();
+				pyp.rcpVsNPart( config.getInt( "PidYieldPresenter.nPart:ptBin" ) );
+				pyp.rcpVsNPartCompare( config.getInt( "PidYieldPresenter.nPart:ptBin" ) );
 				
 
 

@@ -71,6 +71,7 @@ public:
 	void fixSigma( string var, string plc, double sigma );
 	void fixMu( string var, string plc, double mu );
 
+	void setROI( string var, double low, double high );
 	
 
 protected:
@@ -82,7 +83,7 @@ protected:
 	void makeModel( string mnp );
 	void makeSimultaneous();
 
-	void forceROI();
+	
 
 	XmlConfig * cfg;
 	string np;

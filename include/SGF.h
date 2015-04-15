@@ -20,7 +20,7 @@ public:
 	}
 	~SGF(){}
 
-	void fit( string cs, int charge, int cenBin, int ptBin, int etaBin ){
+	void fit( string cs, int charge, int cenBin, int ptBin, int etaBin, bool fitRange = false ){
 
 		title = cs + 	"_" + PidPhaseSpace::chargeString( charge ) + 
 						"_" + ts(cenBin) + "_" + ts(ptBin) + "_" + ts(etaBin); 
@@ -51,7 +51,22 @@ public:
 		RooDataHist * d = schema->data( "" );
 		// do the simultaneous fit
 		RooSimultaneous * sim = schema->model();
-		sim->fitTo( *d /*, PrintLevel(-1), Verbose( kFALSE )*/ );
+		if ( !fitRange )
+			sim->fitTo( *d /*, PrintLevel(-1), Verbose( kFALSE )*/ );
+		else {
+
+			//double zbMin = schema->var( "zb_mu_Pi" )->getVal() - schema->var( "zb_sigma_Pi" )->getVal() * 4;
+			//double zbMax = schema->var( "zb_mu_P" )->getVal() + schema->var( "zb_sigma_Pi" )->getVal() * 4;
+
+			//schema->var( "zb" )->setRange( "roi", zbMin, zbMax  );
+
+			//double zdMin = schema->var( "zd_mu_Pi" )->getVal() - schema->var( "zd_sigma_Pi" )->getVal() * 4;
+			//double zdMax = schema->var( "zd_mu_P" )->getVal() + schema->var( "zd_sigma_Pi" )->getVal() * 4;
+
+			//schema->var( "zd" )->setRange( "roi", zdMin, zdMax  );
+
+			//sim->fitTo( *d, Range( "roi" ) );
+		}
 	}
 
 	void showSample( string var, string sample ){

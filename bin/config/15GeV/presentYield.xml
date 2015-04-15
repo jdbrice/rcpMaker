@@ -5,13 +5,11 @@
 
 	<PidYieldPresenter>
 		<Logger color="true" logLevel="info" globalLogLevel="warning" />
-		<Reporter> <output url="../products/presentation/15GeV/present.pdf" width="600" height="800" /> </Reporter>	
+		<Reporter> <output url="../products/presentation/15GeV/present.pdf" width="800" height="500" /> </Reporter>	
 
 		<input>
-			<!--<fit url="/Users/danielbrandenburg/bnl/local/data/Run14/rcp/allFitResult.root" />
-			<ps url="/Users/danielbrandenburg/bnl/local/data/Run14/rcp/phaseSpace/15GeV/pid_53_70.root" />-->
-			<fit url="/Users/danielbrandenburg/bnl/local/work/rcpMaker/bin/sgf.root" />
-			<ps url="/Users/danielbrandenburg/bnl/local/data/Run14/rcp/phaseSpace/15GeV/preview_2.root" />
+			<fit url="../products/sgf/15GeV/sgf_all.root" />
+			<ps url="/Users/danielbrandenburg/bnl/local/data/Run14/rcp/phaseSpace/15GeV/pid_15GeV_04_09.root" />
 		</input>
 
 		<output path="../products/presentation/15GeV/">
@@ -20,28 +18,28 @@
 
 		<!-- fit bins : FROM sgfRunner.xml-->
 		<FitRange>
-			<ptBins min="2" max="35" />
-			<centralityBins>0, 6</centralityBins>
-			<etaBins>0</etaBins>
+			<ptBins min="0" max="25" />
+			<centralityBins>0, 1, 2, 3, 4, 5, 6</centralityBins>
+			<etaBins>0, 1, 2</etaBins>
 			<charges>-1, 1</charges>
 		</FitRange>
 
-		<nColl> 
-			790, 639, 455, 284, 171, 75, 19
-		</nColl>
+		<nColl> 790, 639, 455, 284, 171, 75, 19 </nColl>
+		<nPart ptBin="15" > 338, 291, 226, 159, 109, 58, 20 </nPart>
+		<colors>632, 416, 600, 616, 800, 880, 820, 840, 860, 900</colors>
 
-		<colors>
-			632, 416, 600, 616, 800, 880, 820, 840, 860, 900
-		</colors>
 
-		<centralityLabels>
-			0-5%, 5-10%, 10-20%, 20-30%, 30-40%, 40-60%, 60-80%  
-		</centralityLabels>
+		<centralityLabels>0-5%, 5-10%, 10-20%, 20-30%, 30-40%, 40-60%, 60-80% </centralityLabels>
+
 
 		<Style>
-			<chargeRatio_Pi range="0.9, 1.1" y="#pi^{+} / #pi^{-}" domain="0, 3"/>
-			<chargeRatio_K range="1.7, 3.0" y="k^{+} / k^{-}" domain="0, 3"/>
-			<chargeRatio_P range="15.0, 30.2" y="p / pbar" domain="0, 3"/>
+			<chargeRatio lineWidth="2" lineColor="red" domain="0.5, 3.4"/>
+			<chargeRatio_Pi range="0.8, 1.4" y="#pi^{-} / #pi^{+}" />
+			<chargeRatio_K range="0.2, 0.8" y="K^{-} / K^{+}" />
+			<chargeRatio_P  range="0.01, 0.2" y="Pbar / P" />
+
+			<rcp domain="0.0, 7" range=".1, 10" logY="1" numberofTicks="7, 5"/>
+			<nPart range=".5, 4" logY="1" linewidth="2" markerStyle="20" markerColor="red" x="<nPart>" y="R_{CP}" />
 
 		</Style>
 
