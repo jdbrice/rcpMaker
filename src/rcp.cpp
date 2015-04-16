@@ -72,18 +72,18 @@ int main( int argc, char* argv[] ) {
 				pyp.rcp( 6 );
 
 				pyp.rcpPanel( 0, 6);
-				pyp.rcpPanel( 1, 6);
+				/*pyp.rcpPanel( 1, 6);
 				pyp.rcpPanel( 2, 6);
 				pyp.rcpPanel( 3, 6);
 				pyp.rcpPanel( 4, 6);
 				pyp.rcpPanel( 5, 6);
-				pyp.rcpPanel( 6, 6);
+				pyp.rcpPanel( 6, 6);*/
 
 				pyp.chargeRatio();
 				pyp.chargeRatioCompare( );
 
-				pyp.rcpVsNPart( config.getInt( "PidYieldPresenter.nPart:ptBin" ) );
-				pyp.rcpVsNPartCompare( config.getInt( "PidYieldPresenter.nPart:ptBin" ) );
+				//pyp.rcpVsNPart( config.getInt( "PidYieldPresenter.nPart:ptBin" ) );
+				//pyp.rcpVsNPartCompare( config.getInt( "PidYieldPresenter.nPart:ptBin" ) );
 				
 
 

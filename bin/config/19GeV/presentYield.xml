@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+
+	<jobType>PresentPidYield</jobType>
+
+	<PidYieldPresenter>
+		<Logger color="true" logLevel="info" globalLogLevel="warning" />
+		<Reporter> <output url="../products/presentation/19GeV/present.pdf" width="800" height="500" /> </Reporter>	
+
+		<input>
+			<fit url="../products/sgf/19GeV/sgf_all.root" />
+			<ps url="../products/phaseSpace/19GeV/pid.root" />
+		</input>
+
+		<output path="../products/presentation/19GeV/">
+			<data url="data.root"/>
+		</output>
+
+		<!-- fit bins : FROM sgfRunner.xml-->
+		<FitRange>
+			<ptBins min="0" max="25" />
+			<centralityBins>0, 1, 2, 3, 4, 5, 6</centralityBins>
+			<etaBins>0, 1, 2</etaBins>
+			<charges>-1, 1</charges>
+		</FitRange>
+
+		<nColl> 800, 643, 458, 285, 170, 74, 18 </nColl>
+		<nPart ptBin="12" > 338, 290, 225, 158, 108, 58, 20 </nPart>
+		<colors>632, 416, 600, 616, 800, 880, 820, 840, 860, 900</colors>
+
+
+		<centralityLabels>0-5%, 5-10%, 10-20%, 20-30%, 30-40%, 40-60%, 60-80% </centralityLabels>
+
+
+		<Style>
+			<chargeRatio lineWidth="2" lineColor="red" domain="0.5, 3.4"/>
+			<chargeRatio_Pi range="0.8, 1.4" y="#pi^{-} / #pi^{+}" />
+			<chargeRatio_K range="0.2, 0.8" y="K^{-} / K^{+}" />
+			<chargeRatio_P  range="0.01, 0.2" y="Pbar / P" />
+
+			<rcp domain="0.0, 7" range=".1, 10" logY="1" numberofTicks="7, 5"/>
+			<nPart range=".5, 4" logY="1" linewidth="2" markerStyle="20" markerColor="red" x="<nPart>" y="R_{CP}" />
+
+		</Style>
+
+
+	</PidYieldPresenter>
+
+
+	<bin hide="true" >
+		
+		<pt>
+			0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2.0, 
+			2.2, 2.4, 2.6, 2.8, 3.0, 	
+			3.4,						
+			4.4,					
+			5.0
+		</pt>
+		<eta>0.0, 0.2, 0.4, 0.5 </eta>
+		<charge> -1.5, -0.5, 0.5, 1.5 </charge>
+
+	</bin>
+
+</config>

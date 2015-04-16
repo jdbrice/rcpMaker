@@ -167,7 +167,7 @@ void SGFSchema::combineData(){
 void SGFSchema::limitYield( string plc, string var1, string var2 ){
 	
 	double eyMax = 100.0;
-	double yMax = 1.0;
+	double yMax = 10.0;
 	double yMin = 0.01;
 	// also update the yield limits
 	double cYield = var( "yield_" + plc )->getVal();

@@ -7,11 +7,11 @@
 		<Logger color="true" logLevel="all" />
 		
 		<input>
-			<dst treeName="rcpPicoDst" url="/Users/danielbrandenburg/bnl/local/data/BES/11GeV/tofMatch3/" maxFiles="400"/>
+			<dst treeName="rcpPicoDst" url="/Users/danielbrandenburg/bnl/local/data/BES/11GeV/tofMatch3/" maxFiles="4000"/>
 		</input>
 
 		<output path="../products/phaseSpace/11GeV/">
-			<data>pid.root</data>
+			<data>pid_all.root</data>
 			<Reports></Reports>
 		</output>
 
