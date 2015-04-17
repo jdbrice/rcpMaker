@@ -4,6 +4,8 @@
 #include "Bichsel.h"
 #include "TofGenerator.h"
 
+#include <map>
+
 using namespace TMath;
 
 class PhaseSpaceRecentering
@@ -102,6 +104,20 @@ public:
 
 		return res;
 	}
+	map<string, double> centeredTofMap( string center, double p ){
+
+		double cMean = tofGen->mean( p, mass( center ) );
+		
+		map<string, double> res;
+		for ( int i = 0; i < species.size(); i++ ){
+			double m = (tofGen->mean( p, mass( species[ i ] ) ) - cMean);
+			res[ species[ i ] ] = m;
+		}
+
+		return res;
+	}
+
+
 	vector<double> centeredDedxMeans( string center, double p, vector<string> others ){
 		
 		const double cMean = dedxGen->mean10( p, mass( center ), -1, 1000 );
@@ -122,6 +138,18 @@ public:
 		for ( int i = 0; i < species.size(); i++ ){
 			double m = dedxGen->mean10( p, mass( species[ i ] ), -1, 1000 ) - cMean;
 			res.push_back( m );
+		}
+		return res;
+	}
+
+	map<string, double> centeredDedxMap( string center, double p ){
+		
+		const double cMean = dedxGen->mean10( p, mass( center ), -1, 1000 );
+		
+		map<string, double> res;
+		for ( int i = 0; i < species.size(); i++ ){
+			double m = dedxGen->mean10( p, mass( species[ i ] ), -1, 1000 ) - cMean;
+			res[species[ i ] ] = m ;
 		}
 		return res;
 	}

@@ -193,6 +193,14 @@ bool InclusiveSpectra::keepEvent(){
 			book->fill( "mappedRefMultBins", cBin, eventWeight );
 		}
 
+		/**
+		 * Bad Run Rejection
+		 */
+		if ( rmc->isBad( pico->runId() ) ){
+			logger->warn( __FUNCTION__ ) << "Rejecting Run : " << pico->runId() << endl;
+			return false;
+		} 
+
 		return true;
 	}
 

@@ -2,23 +2,14 @@
 #
 #########
 
+getenv = true
 Executable 	= /Users/danielbrandenburg/bnl/local/work/rcpMaker/bin/rcp
 initialdir 	= /Users/danielbrandenburg/bnl/local/work/rcpMaker/bin/
 log 		= sgf_log_$(Process).log
 output 		= sgf_out_$(Process).log
 error      	= sgf_err_$(Process).log
-Environment = LD_LIBRARY_PATH=/Users/danielbrandenburg/bnl/local/work/boiler/lib:$LD_LIBRARY_PATH
 
-Arguments	= config/11GeV/sgf/sgf_0.xml
-Queue
-Arguments	= config/11GeV/sgf/sgf_1.xml
 
-Arguments	= config/11GeV/sgf/sgf_2.xml
 
-Arguments	= config/11GeV/sgf/sgf_3.xml
-
-Arguments	= config/11GeV/sgf/sgf_4.xml
-
-Arguments	= config/11GeV/sgf/sgf_5.xml
-
-Arguments	= config/11GeV/sgf/sgf_6.xml
+Arguments	= alpha
+Queue 20

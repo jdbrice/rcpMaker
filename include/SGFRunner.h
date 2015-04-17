@@ -19,6 +19,7 @@ class SGFRunner : public HistoAnalyzer
 {
 protected:
 	
+	bool useParams = false;
 	map< string, unique_ptr<TofPidParams> > tofParams;
 	map<string, unique_ptr<DedxPidParams> > dedxParams;
 
@@ -48,6 +49,9 @@ public:
 
 protected:
 
+	void makeHistograms();
+	void fillFitHistograms(int iPt, int iCen, int iCharge, int iEta );
+
 
 	double p( double pt, double eta ){
 		return pt * cosh( eta );
@@ -65,6 +69,40 @@ protected:
 
 		return p( avgPt, avgEta );
 
+	}
+
+	double zbSigma( string plc, double p ){
+		
+		double m = psr->mass( plc );
+		double mr = psr->mass( centerSpecies );
+
+		if ( useParams && tofParams[plc]  )
+			return tofParams[ plc ]->sigma( p, m, mr );
+		
+		return tofSigmaIdeal;
+	}
+	double zbMean( string plc, double p ){
+
+		double m = psr->mass( plc );
+		double mr = psr->mass( centerSpecies );
+
+		if ( useParams && tofParams[plc]  )
+			return tofParams[ plc ]->mean( p, m, mr );
+
+		map< string, double> means = psr->centeredTofMap( centerSpecies, p );
+
+		return means[ plc ];
+	}
+	double zdMean( string plc, double p ){
+		map< string, double> means = psr->centeredDedxMap( centerSpecies, p );
+		return means[ plc ];
+	}
+	double zdSigma( string plc, double p ){
+
+		if ( useParams && dedxParams[plc]  )
+			return dedxParams[ plc ]->sigma( p );
+
+		return dedxSigmaIdeal;
 	}
 
 	
