@@ -35,7 +35,7 @@ public:
 	void fit( string cs, int charge, int cenBin, int ptBin, int etaBin, bool fitRange = false );
 
 	void showSample( string var, string sample );
-	void report( Reporter* rp );
+	void report( Reporter* rp, double ptLow, double ptHi );
 
 
 protected:

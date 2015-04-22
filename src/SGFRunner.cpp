@@ -159,12 +159,24 @@ void SGFRunner::make(){
 						logger->trace(__FUNCTION__) << plc << " : zb mu=" << zbMu << ", sig=" << zbSig << endl;
 						logger->trace(__FUNCTION__) << plc << " : zd mu=" << zdMu << ", sig=" << zdSig << endl; 
 						
-						schema->setInitial( "zb", plc, zbMu, zbSig, zbDeltaMu, zbDeltaSigma );
-						schema->setInitial( "zd", plc, zdMu, zdSig, zdDeltaMu, zdDeltaSigma );
-
 						// check if the sigmas should be fixed
 						double zbMinParP = cfg->getDouble( nodePath + "ParameterFixing." + plc + ":zbSigma", 5.0 );
 						double zdMinParP = cfg->getDouble( nodePath + "ParameterFixing." + plc + ":zdSigma", 5.0 );
+
+						double zbSigmaModifier = ( zbMinParP - avgP );
+						if ( zbSigmaModifier < 0 )
+							zbSigmaModifier = .05;
+						double zdMuModifier = ( zdMinParP - avgP );
+						if ( zdMuModifier < 0 )
+							zdMuModifier = .10;
+
+						logger->trace( __FUNCTION__ ) << "sigMod : " << zbSigmaModifier << endl;
+						logger->trace( __FUNCTION__ ) << "muMod : " << zdMuModifier << endl;
+
+						schema->setInitial( "zb", plc, zbMu, zbSig, zbDeltaMu * zbSigmaModifier, zbDeltaSigma * zbSigmaModifier );
+						schema->setInitial( "zd", plc, zdMu, zdSig, zdDeltaMu * zdMuModifier, zdDeltaSigma );
+
+
 
 						if ( zbMinParP > 0 && avgP >= zbMinParP)
 							schema->fixSigma( "zb", plc, zbSig );
@@ -174,7 +186,7 @@ void SGFRunner::make(){
 
 					sgf.fit( centerSpecies, iCharge, iCen, iPt, iEta );
 				
-					sgf.report( reporter );
+					sgf.report( reporter, binsPt->bins[ iPt ], binsPt->bins[ iPt + 1 ] );
 
 					fillFitHistograms(iPt, iCen, iCharge, iEta );
 

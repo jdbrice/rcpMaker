@@ -24,6 +24,12 @@
 			<charges>-1, 1</charges>
 		</FitRange>
 
+		<LastYieldBin>
+			<Pi p="20" n="20" />
+			<K p="18" n="17"/> 
+			<P p="21" n="17"/> 
+		</LastYieldBin>
+
 		<nColl> 790, 639, 455, 284, 171, 75, 19 </nColl>
 		<nPart ptBin="15" > 338, 291, 226, 159, 109, 58, 20 </nPart>
 		<colors>632, 416, 600, 616, 800, 880, 820, 840, 860, 900</colors>

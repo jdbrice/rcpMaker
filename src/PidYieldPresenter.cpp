@@ -119,6 +119,10 @@ void PidYieldPresenter::normalizeYield( string plc, int charge, int iCen ){
 	}
 	TH1D * y = (TH1D*)book->get( name );
 
+	// find out which bin is the last with a good fit
+	int lastGoodBin = cfg->getInt( np + "LastYieldBin."+plc+":"+PidPhaseSpace::chargeString( charge ), 1000 );
+	logger->info(__FUNCTION__) << "Last Good Bin : " << lastGoodBin << endl;
+
 	book->cd( "/" );
 	double nEvents = book->get( "eventNorms" )->GetBinContent( iCen+1 );
 
@@ -128,8 +132,14 @@ void PidYieldPresenter::normalizeYield( string plc, int charge, int iCen ){
 	TH1D * ny = (TH1D*)book->get( name );
 	for ( int iBin = 1; iBin < y->GetNbinsX() + 1; iBin++ ){
 
+	
 		double pt = ny->GetBinCenter( iBin );
 		double sc = 1.0 / ( nEvents * 2 * pt * 3.1415926 );
+
+		if ( iBin > lastGoodBin ){
+			sc = 0;	
+		}
+
 		ny->SetBinContent( iBin, ny->GetBinContent( iBin ) * sc );
 		ny->SetBinError( iBin, ny->GetBinError( iBin ) * sc );
 	}

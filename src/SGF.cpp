@@ -42,7 +42,7 @@ void SGF::fit( string cs, int charge, int cenBin, int ptBin, int etaBin, bool fi
 	RooSimultaneous * sim = schema->model();
 
 	if ( !fitRange ) // Do not constrain fit range
-		sim->fitTo( *d /*, PrintLevel(-1), Verbose( kFALSE )*/ );
+		sim->fitTo( *d, NumCPU(4) /*, PrintLevel(-1), Verbose( kFALSE )*/ );
 	else { // constrain fit Range
 
 		//double zbMin = schema->var( "zb_mu_Pi" )->getVal() - schema->var( "zb_sigma_Pi" )->getVal() * 4;
@@ -69,11 +69,12 @@ void SGF::showSample( string var, string sample ){
 	RooDataHist * d 		= schema->data( "" );
 	RooSimultaneous * sim 	= schema->model();
 
-	d->plotOn(f, Cut( ( cutStr + sample).c_str()  ));
+	d->plotOn(f, Cut( ( cutStr + sample).c_str()  ), MarkerStyle( 1 ), DrawOption( "pe" ) );
 	
-	sim->plotOn( f, Slice(*cat, sample.c_str() ), ProjWData(*cat,*d) );
-	sim->plotOn( f, Slice(*cat, sample.c_str() ), ProjWData(*cat,*d), Components( (sample + "_gauss_Pi").c_str() ), LineColor( kRed ) );
-	sim->plotOn( f, Slice(*cat, sample.c_str() ), ProjWData(*cat,*d), Components( (sample + "_gauss_K").c_str() ), LineColor( kBlack ) );
+	sim->plotOn( f, Slice(*cat, sample.c_str() ), ProjWData(*cat,*d), LineWidth( 1 ) );
+	sim->plotOn( f, Slice(*cat, sample.c_str() ), ProjWData(*cat,*d), Components( (sample + "_gauss_Pi").c_str() ), LineColor( kRed ), LineWidth( 1 ) );
+	sim->plotOn( f, Slice(*cat, sample.c_str() ), ProjWData(*cat,*d), Components( (sample + "_gauss_K").c_str() ), LineColor( kBlack ), LineWidth( 1 ) );
+	sim->plotOn( f, Slice(*cat, sample.c_str() ), ProjWData(*cat,*d), Components( (sample + "_gauss_P").c_str() ), LineColor( kGreen ), LineWidth( 1 ) );
 	
 	f->SetMinimum( .1 );
 	f->SetMaximum( 1000000 );
@@ -84,7 +85,9 @@ void SGF::showSample( string var, string sample ){
 }
 
 
-void SGF::report( Reporter* rp ){
+void SGF::report( Reporter* rp, double ptLow, double ptHi ){
+
+	title += " : " + dts(ptLow) + "<pT<" + dts(ptHi);
 
 	rp->newPage(2, 2);
 		rp->cd( 1, 1 );

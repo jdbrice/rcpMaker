@@ -15,23 +15,23 @@
 		</histograms>
 		<!-- fit bins -->
 		<FitRange>
-			<ptBins min="0" max="25" />
-			<centralityBins>0</centralityBins>
-			<etaBins>0</etaBins>
-			<charges>1</charges>
+			<ptBins min="0" max="23" />
+			<centralityBins>0, 6</centralityBins>
+			<etaBins>0, 1, 2</etaBins>
+			<charges>-1, 1</charges>
 		</FitRange>
 		<!-- Guiding parameters -->
 
 		<ParameterFixing>
 			<!-- mu can vary +/- nSigma -->
-			<deltaMu zb="1.5" zd="1.5" />
+			<deltaMu zb="0.5" zd="0.5" />
 			<!-- sigma can vary +/- n percent (between 0 and 1) -->
-			<deltaSigma zb="0.25" zd=".25" />
+			<deltaSigma zb="0.25" zd="0.25" />
 
 			<!-- the minimum momentum at which the value is fixed -->
-			<Pi zbSigma="1.0" zdSigma="0.6" />
-			<K zbSigma="1.0" zdSigma="0.6" />
-			<P zbSigma="1.0" zdSigma="0.6" />
+			<Pi zbSigma="1.0" zdSigma="0.7" />
+			<K zbSigma="1.2" zdSigma="0.7" />
+			<P zbSigma="1.4" zdSigma="0.7" />
 
 			
 		</ParameterFixing>
@@ -108,29 +108,29 @@
 			<RooRealVar name="yield_P" value="1000" min="10" max="1000000000" />
 
 			<!-- dEdx Kaon enhanced -->
-			<RooRealVar name="zd_K_yield_Pi" value="100000" min="0" max="100000000" />
+			<RooRealVar name="zd_K_yield_Pi" value="100000" min="1" max="100000000" />
 			<RooRealVar name="zd_K_yield_K" value="10000" min="10" max="1000000000" />
-			<RooRealVar name="zd_K_yield_P" value="10000" min="0" max="1000000000" />	
+			<RooRealVar name="zd_K_yield_P" value="10000" min="1" max="1000000000" />	
 			<!-- dEdx Pion enhanced -->
 			<RooRealVar name="zd_Pi_yield_Pi" value="100000" min="10" max="100000000" />
-			<RooRealVar name="zd_Pi_yield_K" value="10000" min="0" max="1000000000" />
-			<RooRealVar name="zd_Pi_yield_P" value="10000" min="0" max="1000000000" />	
+			<RooRealVar name="zd_Pi_yield_K" value="10000" min="1" max="1000000000" />
+			<RooRealVar name="zd_Pi_yield_P" value="10000" min="1" max="1000000000" />	
 			<!-- dEdx Proton enhanced -->
-			<RooRealVar name="zd_P_yield_Pi" value="100000" min="0" max="100000000" />
-			<RooRealVar name="zd_P_yield_K" value="10000" min="0" max="1000000000" />
+			<RooRealVar name="zd_P_yield_Pi" value="100000" min="1" max="100000000" />
+			<RooRealVar name="zd_P_yield_K" value="10000" min="1" max="1000000000" />
 			<RooRealVar name="zd_P_yield_P" value="10000" min="10" max="1000000000" />	
 
 			<!-- 1/beta Kaon enhanced -->
-			<RooRealVar name="zb_K_yield_Pi" value="100000" min="0" max="100000000" />
+			<RooRealVar name="zb_K_yield_Pi" value="100000" min="1" max="100000000" />
 			<RooRealVar name="zb_K_yield_K" value="10000" min="10" max="1000000000" />
-			<RooRealVar name="zb_K_yield_P" value="10000" min="0" max="1000000000" />	
+			<RooRealVar name="zb_K_yield_P" value="10000" min="1" max="1000000000" />	
 			<!-- 1/beta Pion enhanced -->
 			<RooRealVar name="zb_Pi_yield_Pi" value="100000" min="10" max="100000000" />
-			<RooRealVar name="zb_Pi_yield_K" value="10000" min="0" max="1000000000" />
-			<RooRealVar name="zb_Pi_yield_P" value="10000" min="0" max="1000000000" />	
+			<RooRealVar name="zb_Pi_yield_K" value="10000" min="1" max="1000000000" />
+			<RooRealVar name="zb_Pi_yield_P" value="10000" min="1" max="1000000000" />	
 			<!-- 1/beta Proton enhanced -->
-			<RooRealVar name="zb_P_yield_Pi" value="100000" min="0" max="100000000" />
-			<RooRealVar name="zb_P_yield_K" value="10000" min="0" max="1000000000" />
+			<RooRealVar name="zb_P_yield_Pi" value="100000" min="1" max="100000000" />
+			<RooRealVar name="zb_P_yield_K" value="10000" min="1" max="1000000000" />
 			<RooRealVar name="zb_P_yield_P" value="10000" min="10" max="1000000000" />	
 
 
