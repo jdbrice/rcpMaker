@@ -35,19 +35,20 @@ namespace TSF{
 		/**
 		 * Setup the PID Params
 		 */
-		if ( cfg->exists( nodePath + "TofPidParams"  ) ){
+		if ( cfg->exists( nodePath +  "PidParameters:url" ) ){
+			string fnPidParams = cfg->getString( nodePath + "PidParameters:url" );
 			useParams = true;
-			for ( string plc : PidPhaseSpace::species ){
-
-				logger->info(__FUNCTION__) << "Preparing PID params for : " << plc << endl;
-
-				tofParams[ plc ] = unique_ptr<TofPidParams>(new TofPidParams( cfg, nodePath + "TofPidParams." + plc + "." ));
-				dedxParams[ plc ] = unique_ptr<DedxPidParams>( new DedxPidParams( cfg, nodePath + "DedxPidParams." + plc + "." ));
-
-			}
-		} else {
-			useParams = false;
+			
+			logger->info(__FUNCTION__) << "Loading PID parameters from : " << fnPidParams << endl;
+			paramsConfig = shared_ptr<XmlConfig>( new XmlConfig( fnPidParams ) );
+			
+			logger->info(__FUNCTION__) << "Making zbParams" << endl;
+			zbParams = unique_ptr<ZbPidParameters>( new ZbPidParameters( paramsConfig.get(), "TofPidParams", psr ) );
+			zdParams = unique_ptr<ZdPidParameters>( new ZdPidParameters( paramsConfig.get(), "DedxPidParams" ) );	
 		}
+		
+		
+		
 	}
 
 	FitRunner::~FitRunner(){
@@ -159,12 +160,12 @@ namespace TSF{
 						for ( string plc : PidPhaseSpace::species ){
 
 							// zb Parameters
-							double zbMu = zbMean( plc, avgP );
-							double zbSig = zbSigma( plc, avgP );
+							double zbMu = zbMean( plc, avgP, iCen );
+							double zbSig = zbSigma( plc, avgP, iCen );
 
 							// zd Parameters
 							double zdMu = zdMean( plc, avgP );
-							double zdSig = zdSigma( plc, avgP );
+							double zdSig = zdSigma( plc, avgP, iCen );
 
 							// update the schema
 							logger->trace(__FUNCTION__) << plc << " : zb mu=" << zbMu << ", sig=" << zbSig << endl;

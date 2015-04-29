@@ -12,12 +12,14 @@ using namespace std;
 #include "HistoBins.h"
 using namespace jdb;
 
-
+// Local
 #include "TSF/FitSchema.h"
 #include "TSF/Fitter.h"
 #include "TofPidParams.h"
 #include "DedxPidParams.h"
 #include "PhaseSpaceRecentering.h"
+#include "ZbPidParameters.h"
+#include "ZdPidParameters.h"
 
 
 
@@ -27,11 +29,14 @@ namespace TSF{
 	{
 	protected:
 		
-		
+		shared_ptr<XmlConfig> paramsConfig;
 
 		bool useParams = false;
-		map< string, unique_ptr<TofPidParams> > tofParams;
+		
 		map<string, unique_ptr<DedxPidParams> > dedxParams;
+
+		unique_ptr< ZbPidParameters > zbParams;
+		unique_ptr< ZdPidParameters > zdParams;
 
 		string centerSpecies;
 		string psrMethod;
@@ -86,23 +91,16 @@ namespace TSF{
 
 		}
 
-		double zbSigma( string plc, double p ){
-			
-			double m = psr->mass( plc );
-			double mr = psr->mass( centerSpecies );
+		double zbSigma( string plc, double p, int iCen ){
 
-			if ( useParams && tofParams[plc]  )
-				return tofParams[ plc ]->sigma( p, m, mr );
+			if ( useParams   )
+				return zbParams->sigma( plc, p, iCen );
 			
 			return tofSigmaIdeal;
 		}
-		double zbMean( string plc, double p ){
-
-			double m = psr->mass( plc );
-			double mr = psr->mass( centerSpecies );
-
-			if ( useParams && tofParams[plc]  )
-				return tofParams[ plc ]->mean( p, m, mr );
+		double zbMean( string plc, double p, int iCen ){
+			if ( useParams )
+				return zbParams->mean( plc, p, iCen );
 
 			map< string, double> means = psr->centeredTofMap( centerSpecies, p );
 
@@ -112,10 +110,10 @@ namespace TSF{
 			map< string, double> means = psr->centeredDedxMap( centerSpecies, p );
 			return means[ plc ];
 		}
-		double zdSigma( string plc, double p ){
+		double zdSigma( string plc, double p, int iCen ){
 
 			if ( useParams && dedxParams[plc]  )
-				return dedxParams[ plc ]->sigma( p );
+				return zdParams->sigma( plc, p, iCen );
 
 			return dedxSigmaIdeal;
 		}

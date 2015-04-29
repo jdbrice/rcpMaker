@@ -8,7 +8,7 @@
 		<Reporter> <output url="../products/presentation/15GeV/present.pdf" width="800" height="500" /> </Reporter>	
 
 		<input>
-			<fit url="tsf_test.root" />
+			<fit url="../products/pidFit/15GeV/test.root" />
 			<ps url="/Users/danielbrandenburg/bnl/local/data/Run14/rcp/phaseSpace/15GeV/pid_15GeV_04_09.root" />
 		</input>
 
@@ -25,9 +25,9 @@
 		</FitRange>
 
 		<LastYieldBin>
-			<Pi p="20" n="20" />
-			<K p="18" n="17"/> 
-			<P p="21" n="17"/> 
+			<Pi p="30" n="30" />
+			<K p="38" n="37"/> 
+			<P p="31" n="37"/> 
 		</LastYieldBin>
 
 		<nColl> 790, 639, 455, 284, 171, 75, 19 </nColl>

@@ -49,12 +49,17 @@ map<string, double> PidProbabilityMapper::pidWeights( int charge, int iCen, doub
 
 	string model = "zd";
 
+	double eVal = zd;
+
+	if ( "zb" == model )
+		eVal = zb;
+
 	for ( string plc : PidPhaseSpace::species ){
 		string name = TSF::FitRunner::sigmaName(plc, iCen, charge, iEta);
 		string fName = plc + "_" + model + "Sigma/" + name;
 		TH1D * h = ( TH1D * )inFile->Get( fName.c_str()   );
 		if ( !h ){
-			logger->error( __FUNCTION__ ) << fName << " not found " << endl;
+			//logger->error( __FUNCTION__ ) << fName << " not found " << endl;
 			return weights;
 		}
 		sigmas.push_back( h->GetBinContent( iPt+1 ) );
@@ -78,8 +83,8 @@ map<string, double> PidProbabilityMapper::pidWeights( int charge, int iCen, doub
 	int i = 0;
 	for ( string plc : PidPhaseSpace::species ){
 
-		double v = evaluateGauss( zd, yields[ i ], mus[ i ], sigmas[ i ] );
-		if ( (zd - mus[ i ]) / sigmas[ i ] > 5 )
+		double v = evaluateGauss( eVal, yields[ i ], mus[ i ], sigmas[ i ] );
+		if ( (eVal - mus[ i ]) / sigmas[ i ] > 5 )
 			v = 0;
 
 		total += v;

@@ -14,10 +14,10 @@
 		</histograms>
 		<!-- fit bins -->
 		<FitRange>
-			<ptBins min="6" max="25" />
-			<centralityBins>6</centralityBins>
-			<etaBins>0</etaBins>
-			<charges>1</charges>
+			<ptBins min="6" max="35" />
+			<centralityBins>0, 6</centralityBins>
+			<etaBins>0, 1, 2</etaBins>
+			<charges>-1, 1</charges>
 		</FitRange>
 		<!-- Guiding parameters -->
 
@@ -34,7 +34,7 @@
 		</ParameterFixing>
 
 
-		<PidParameters url="PidParameters.xml" />
+		<PidParameters url="config/15GeV/PidParameters.xml" />
 
 
 		<Bichsel>
