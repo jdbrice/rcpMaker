@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
 
-	<jobType>PidPhaseSpace</jobType>
+	<jobType>PidSpectraMaker</jobType>
 
-	<PidPhaseSpace>
-		<Logger color="true" logLevel="all" />
+	<PidSpectraMaker>
+		<Logger color="true" logLevel="warning" globalLogLevel="info"/>
 		
 		<input>
-			<dst treeName="rcpPicoDst" url="/Users/danielbrandenburg/bnl/local/data/BES/15GeV/" maxFiles="500"/>
+			<dst treeName="rcpPicoDst" url="/Users/danielbrandenburg/bnl/local/data/BES/15GeV/" maxFiles="50"/>
 		</input>
 
-		<output path="../products/phaseSpace/15GeV/">
-			<data>pidParamPS_April_21.root</data>
+		<output path="">
+			<data>spectra.root</data>
 			<Reports></Reports>
 		</output>
 
@@ -27,6 +27,14 @@
 
 		<!-- the bins into which the 9 centrality bins are mapped. -->
 		<CentralityMap>
+			0 :: 6,
+			1 :: 6,
+			2 :: 5,
+			3 :: 5,
+			4 :: 4,
+			5 :: 3,
+			6 :: 2,
+			7 :: 1,
 			8 :: 0
 		</CentralityMap>
 
@@ -35,12 +43,11 @@
 		
 		<PhaseSpaceRecentering>
 			<centerSpecies>K</centerSpecies>
-			<sigma tof="0.012" dedx="0.033"/>
+			<sigma tof="0.011" dedx="0.033"/>
 			<method>nonlinear</method>
 		</PhaseSpaceRecentering>
 
-		<makePhaseSpace 2D="false" enhanced="true" /> 
-
+		
 		<histograms >
 
 			<Histo name="betaRaw" title="#beta^{-1}" xBins="bin.pt" yBins="bin.tofRaw" />
@@ -54,33 +61,46 @@
 			<tof title="#beta^{-1}" logy="1" draw="pe"/>
 			<dedx title="dedx" logy="1" draw="pe"/>
 		</style>
-	</PidPhaseSpace>
+
+		<PidProbabilityMapper>
+			<Logger color="true" logLevel="info" globalLogLevel="info" />
+			<input> <data url="tsf_test.root"/> </input>
+			<output> <data url="mapTest.root" /> </output>
+
+			<PSBinning>
+				<pt>
+				0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2.0, 
+				2.2, 2.4, 2.6, 2.8, 3.0, 	
+				3.4,						
+				4.4,					
+				5.0
+				</pt>
+				<eta>0.0, 0.2, 0.4, 0.6 </eta>
+				<charge> -1.5, -0.5, 0.5, 1.5 </charge>
+			</PSBinning>
+		</PidProbabilityMapper>
+
+
+	</PidSpectraMaker>
 
 
 	<bin hide="true" >
 		
 		<!-- Based on Evan's thesis.v5.pdf -->
+		<!-- .05 from .2 to .5 => 6 bins -->
 		<!-- .1 from .5 to 2.5 => 15 bins -->
 		<!-- .2 from 2.0 to 3.0 => 5 bins -->
 		<pt>
-			0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55, 0.6, 0.65, 0.7, 0.75, 0.8, 0.85, 0.9, 0.95, 1.0,
-			1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2.0 
+			0.2, 0.25, 0.3, 0.35, 0.4, 0.45,
+			0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2.0, 
+			2.2, 2.4, 2.6, 2.8, 3.0, 	
+			3.5,						
+			4.5
 		</pt>
 		
-		<eta>0.0, 0.5 </eta>
+		<eta>0.0, 0.2, 0.4, 0.6 </eta>
 
 		<charge> -1.5, -0.5, 0.5, 1.5 </charge>
-
-		<tof width="0.006" min="-1" max="1" />
-		<dedx width="0.03" min="-0.75" max="0.75" />
-		<!--
-		<tof width="0.006" min="-1" max="1" />
-		<dedx width="0.015" min="-0.75" max="0.75" />
-		-->
-		<tofRaw width="0.0024" min="0.9" max="3" />
-		<dedxRaw width="0.012" min="1" max="6" />
-
-		<padding tof=".15" dedx=".15" tofScale="0.05" dedxScale="0.05" />
 
 	</bin>
 

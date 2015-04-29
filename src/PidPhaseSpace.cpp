@@ -341,6 +341,7 @@ void PidPhaseSpace::enhanceDistributions( double avgP, int ptBin, int etaBin, in
 	double tofPSigma = getTofSigma( "P", avgP );
 	double tofPiSigma = getTofSigma( "Pi", avgP );
 
+	// TODO - remove tof PID params
 	if ( 	tof < tMeans[ 0 ] - tofPiSigma * nSigBelow 
 			|| tof > tMeans[ 2 ] + tofPSigma * nSigAbove )
 		return;

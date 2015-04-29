@@ -4,7 +4,8 @@ project = rcp
 # source suffix
 source = .cpp 
 # object files to make
-objects = rcp.o InclusiveSpectra.o PidPhaseSpace.o PidParamMaker.o SimultaneousGaussians.o SimultaneousPid.o SGFSchema.o SGFRunner.o FemtoDstMaker.o FemtoDst.o ProdPicoDst.o PidYieldPresenter.o RcpPicoDst.o SGF.o
+objects = rcp.o InclusiveSpectra.o PidPhaseSpace.o PidParamMaker.o SimultaneousGaussians.o SimultaneousPid.o SGFSchema.o SGFRunner.o FemtoDstMaker.o FemtoDst.o ProdPicoDst.o PidYieldPresenter.o RcpPicoDst.o SGF.o FitSchema.o Fitter.o FitRunner.o \
+PidProbabilityMapper.o PidSpectraMaker.o
 # ParamSpectra.o  PidParamMaker.o SimultaneousPid.o
 
 sources = $(wildcard *.cpp)
@@ -18,7 +19,7 @@ ROOTGLIBS     	= $(shell root-config --glibs)
 
 # Custom Project includes and libs
 includes		= -I../include -I. -I$(ROOTSYS)/include -I$(JDB_LIB)/include/jdb -I$(JDB_LIB)/include 
-libraries 		= 	$(ROOTLIBS) -lRooFitCore -lRooFit $(CERNLIBS) $(SYSLIBS)
+libraries 		= 	$(ROOTLIBS) -lRooFitCore -lRooFit -lMinuit $(CERNLIBS) $(SYSLIBS)
 staticLibs 		= $(JDB_LIB)/lib/libJDB.a
 
 cxx 		= g++ -std=c++11

@@ -13,16 +13,22 @@ using namespace jdb;
 #include "PidParamMaker.h"
 #include "SimultaneousGaussians.h"
 #include "SimultaneousPid.h"
+#include "PidSpectraMaker.h"
 
-#include "XmlRooRealVar.h"
-#include "SGFSchema.h"
-#include "SGF.h"
+
+
 #include "SGFRunner.h"
 #include "FemtoDstMaker.h"
 #include "PidYieldPresenter.h"
 
 #include <exception>
 
+
+#include "TSF/FitRunner.h"
+
+#include "PidProbabilityMapper.h"
+
+using namespace TSF;
 
 int main( int argc, char* argv[] ) {
 
@@ -55,8 +61,10 @@ int main( int argc, char* argv[] ) {
 				PidParamMaker ppm( &config, "PidParamMaker." );
 				ppm.make();
 			} else if ( "SimultaneousPid" == job ){
-				SGFRunner sgfr( &config, "SimultaneousPid." );
-				sgfr.make();
+				//SGFRunner sgfr( &config, "SimultaneousPid." );
+				//sgfr.make();
+				FitRunner fr( &config, "SimultaneousPid." );
+				fr.make();
 
 			} else if ( "FemtoDst" == job ){
 				FemtoDstMaker fdst( &config, "FemtoDstMaker.", fileList, jobPrefix );
@@ -72,47 +80,32 @@ int main( int argc, char* argv[] ) {
 				pyp.rcp( 6 );
 
 				pyp.rcpPanel( 0, 6);
-				/*pyp.rcpPanel( 1, 6);
+				pyp.rcpPanel( 1, 6);
 				pyp.rcpPanel( 2, 6);
 				pyp.rcpPanel( 3, 6);
 				pyp.rcpPanel( 4, 6);
 				pyp.rcpPanel( 5, 6);
-				pyp.rcpPanel( 6, 6);*/
+				pyp.rcpPanel( 6, 6);
 
 				pyp.chargeRatio();
 				pyp.chargeRatioCompare( );
 
-				//pyp.rcpVsNPart( config.getInt( "PidYieldPresenter.nPart:ptBin" ) );
-				//pyp.rcpVsNPartCompare( config.getInt( "PidYieldPresenter.nPart:ptBin" ) );
+				pyp.rcpVsNPart( config.getInt( "PidYieldPresenter.nPart:ptBin" ) );
+				pyp.rcpVsNPartCompare( config.getInt( "PidYieldPresenter.nPart:ptBin" ) );
 				
-
-
-
 				
 				
 
-			} else if ( "test" == job ){
-				
-				Logger::setGlobalColor( true );
-				Logger::setGlobalLogLevel( Logger::llAll );
-				
-				TFile * inFile = new TFile(config.getString( "input:url").c_str(), "READ" );
-
-				shared_ptr<SGFSchema> sgfs = shared_ptr<SGFSchema>(new SGFSchema( &config, "Schema" ));
-				SGF sgf( sgfs, inFile );
-				shared_ptr<Reporter> rp = shared_ptr<Reporter>( new Reporter( "rpTest.pdf", 600, 600 ) );
-
-				for ( int i = 4; i < 10; i++ ){
-					// update limits
-					sgf.fit( "K", 0, 1, i, 0 );
-					//sgf.report( rp );	
-				}
-				
-				
-
-				inFile->Close();
-
+			} else if ( "PidSpectraMaker" == job ){
+				PidSpectraMaker psm( &config, "PidSpectraMaker." );
+				psm.make();
 			}
+			else if ( "test" == job ){
+				
+				PidProbabilityMapper ppm( &config, "MapTest." );
+				ppm.pidWeights( -1, 0, 0.91, 0.0, 0.1, 0.09 );
+
+			} 
 
 		} catch ( exception &e ){
 			cout << e.what() << endl;

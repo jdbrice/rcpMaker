@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PidParams>
+
+
+	<TofPidParameters>
+		<Mean>
+			<Pi>
+				<t>  </t>
+				<p>  </p>
+				<ep>  </ep>	
+			</Pi>
+		</Mean>
+		<Sigma>
+			
+		</Sigma>
+	</TofPidParameters>
+
+
+		<DedxPidParams>
+			<Pi>
+				<sigma p0="0.0308674" p1="0.0020604" p2="-0.0243658" p3="3.07746" />
+			</Pi>
+			<K>
+				<sigma p0="0.0327377" p1="1.7758e-12" p2="0.206589" p3="10.2718" />
+			</K>
+			<P>
+				<sigma p0="0.0322632" p1="2.4668e-10" p2="0.0904821" p3="5.07523" />
+			</P>
+		</DedxPidParams>
+</PidParams>

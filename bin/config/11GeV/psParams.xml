@@ -7,10 +7,10 @@
 		<Logger color="true" logLevel="all" />
 		
 		<input>
-			<dst treeName="rcpPicoDst" url="/Users/danielbrandenburg/bnl/local/data/BES/15GeV/" maxFiles="500"/>
+			<dst treeName="rcpPicoDst" url="/Users/danielbrandenburg/bnl/local/data/BES/11GeV/" maxFiles="500"/>
 		</input>
 
-		<output path="../products/phaseSpace/15GeV/">
+		<output path="../products/phaseSpace/11GeV/">
 			<data>pidParamPS_April_21.root</data>
 			<Reports></Reports>
 		</output>
@@ -21,9 +21,9 @@
 		</Bichsel>
 
 		<!-- Common Resources -->
-		<MakeQA config="config/15GeV/qaHistograms.xml" event="true" track="false" tof="false" dedx="false" />
-		<Cuts config="config/15GeV/cuts.xml" />
-		<RMCParams config="config/15GeV/StRMCParams.xml" />
+		<MakeQA config="config/11GeV/qaHistograms.xml" event="true" track="false" tof="false" dedx="false" />
+		<Cuts config="config/11GeV/cuts.xml" />
+		<RMCParams config="config/11GeV/StRMCParams.xml" />
 
 		<!-- the bins into which the 9 centrality bins are mapped. -->
 		<CentralityMap>
