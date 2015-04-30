@@ -57,6 +57,8 @@ protected:
 
 	double nSigBelow, nSigAbove;
 
+	bool binByMomentum;
+
 public:
 	PidPhaseSpace( XmlConfig* config, string np, string fl ="", string jp ="" );
 	~PidPhaseSpace();

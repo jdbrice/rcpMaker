@@ -5,9 +5,9 @@
 
 	<SimultaneousPid>
 		<Logger color="true" logLevel="info"/>
-		<Reporter> <output url="../products/pidFit/15GeV/rpSgfTest.pdf" width="800" height="800" /> </Reporter>	
-		<input> <data url="../products/phaseSpace/15GeV/pid_all_pt_nSigma_3.root"/> </input>
-		<output path="../products/pidFit/15GeV/cen6"> <data>fit.root</data> </output>
+		<Reporter> <output url="../products/pidFit/19GeV/rpSgfTest.pdf" width="800" height="800" /> </Reporter>	
+		<input> <data url="../products/phaseSpace/19GeV/pid_all_pt.root"/> </input>
+		<output path="../products/pidFit/19GeV/"> <data>fit.root</data> </output>
 	
 		<histograms>
 			<Histo name="yield" title="yield" xBins="bin.pt" />
@@ -15,7 +15,7 @@
 		<!-- fit bins -->
 		<FitRange>
 			<ptBins min="6" max="30" />
-			<centralityBins>6</centralityBins>
+			<centralityBins>0, 1, 2, 3, 4, 5, 6</centralityBins>
 			<etaBins>0, 1, 2</etaBins>
 			<charges>-1, 1</charges>
 		</FitRange>
@@ -25,16 +25,16 @@
 			<!-- mu can vary +/- nSigma -->
 			<deltaMu zb="0.33" zd="0.33" />
 			<!-- sigma can vary +/- n percent (between 0 and 1) -->
-			<deltaSigma zb="0.025" zd="0.05" />
+			<deltaSigma zb="0.25" zd="0.50" />
 
 			<!-- the minimum momentum at which the value is fixed -->
-			<Pi zbSigma="0.6" zdSigma="0.5" />
-			<K zbSigma="0.6" zdSigma="0.5" />
-			<P zbSigma="0.6" zdSigma="0.5" />			
+			<Pi zbSigma="1.2" zdSigma="0.7" />
+			<K zbSigma="1.2" zdSigma="0.7" />
+			<P zbSigma="1.6" zdSigma="0.7" />			
 		</ParameterFixing>
 
 
-		<PidParameters url="config/15GeV/PidParameters.xml" />
+		<PidParameters url="config/19GeV/PidParameters.xml" />
 
 
 		<Bichsel>

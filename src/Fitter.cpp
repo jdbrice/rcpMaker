@@ -141,9 +141,6 @@ namespace TSF{
       		schema->reportFitRanges();
       	}
 
-      	arglist[ 0 ] = 2; // set minuit to value percison over speed
-      	//minuit->mnexcm( "SET STR", arglist, 1, iFlag );
-
       	logger->info(__FUNCTION__) << "Fit Method : " << self->schema->getMethod() << endl;
       	if ( "nll" != self->schema->getMethod() )
       		arglist[ 0 ] = 1.0; 
@@ -154,7 +151,7 @@ namespace TSF{
       	int tries = 0;
 
       	iFlag = 4;
-      	while ( iFlag > 0 && tries < 3 ){
+      	while ( iFlag > 0 && tries < 9 ){
       		logger->info(__FUNCTION__) << "Running MINI" << endl;
       		arglist[ 0 ] = -1;
 			arglist[ 1 ] = 1.0;
@@ -162,17 +159,17 @@ namespace TSF{
 			tries++;
       	}
 
-      	if ( iFlag > 0 ){
-      		logger->info(__FUNCTION__) << "Poor convergence -> Calling MINOS" << endl;
+      	if ( iFlag > 0 )
       		minuit->mnexcm( "MINOS", arglist, 1, iFlag );
-      	}
+      	else
+      		minuit->mnexcm( "HESSE", arglist, 1, iFlag ); // get errors
 
 		cout << "iFlag " << iFlag << endl;
-		if ( 0 == iFlag )
-			fitIsGood = true;
+		//if ( 0 == iFlag )
+		fitIsGood = true;
 
-		logger->info(__FUNCTION__) << "Calculating errors with HESE" << endl;
-		minuit->mnexcm( "HESSE", arglist, 1, iFlag );
+		//logger->info(__FUNCTION__) << "Calculating errors with HESE" << endl;
+		//minuit->mnexcm( "HESSE", arglist, 1, iFlag );
 
 		//minuit->mnexcm( "MINOS", arglist, 1, iFlag );
 

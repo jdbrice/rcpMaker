@@ -46,9 +46,6 @@ namespace TSF{
 			zbParams = unique_ptr<ZbPidParameters>( new ZbPidParameters( paramsConfig.get(), "TofPidParams", psr ) );
 			zdParams = unique_ptr<ZdPidParameters>( new ZdPidParameters( paramsConfig.get(), "DedxPidParams" ) );	
 		}
-		
-		
-		
 	}
 
 	FitRunner::~FitRunner(){
@@ -153,9 +150,11 @@ namespace TSF{
 
 						schema->clearRanges();
 
-						if ( avgP > 2.0 ){
-							schema->setMethod( "nll" );
-						}
+						//if ( avgP > 1.4 ){
+						//	schema->setMethod( "nll" );
+						//}
+						//
+						
 
 						for ( string plc : PidPhaseSpace::species ){
 
@@ -177,6 +176,7 @@ namespace TSF{
 
 
 							if ( true == paramFixing && iPt != 0 ){ // if 1st bin let schema settings stick
+								
 								schema->setInitialMu( "zb_mu_"+plc, zbMu, zbSig, zbDeltaMu );
 								schema->setInitialSigma( "zb_sigma_"+plc, zbSig, zbDeltaSigma );
 							
@@ -201,14 +201,15 @@ namespace TSF{
 							//if ( true == paramFixing  ){
 								if ( zbMinParP > 0 && avgP >= zbMinParP)
 								schema->fixParameter( "zb_sigma_" + plc, zbSig );
-								else if ( roi > 0 ){
+								
+								if ( zdMinParP > 0 && avgP >= zdMinParP )
+									schema->fixParameter( "zd_sigma_" + plc, zdSig );
+								if ( roi > 0 ){
 									schema->addRange( "zb_All", zbMu - zbSig * roi, zbMu + zbSig * roi );
 									schema->addRange( "zb_Pi", zbMu - zbSig * roi, zbMu + zbSig * roi );
 									schema->addRange( "zb_K", zbMu - zbSig * roi, zbMu + zbSig * roi );
 									schema->addRange( "zb_P", zbMu - zbSig * roi, zbMu + zbSig * roi );	
 								}
-								if ( zdMinParP > 0 && avgP >= zdMinParP )
-									schema->fixParameter( "zd_sigma_" + plc, zdSig );
 							//}
 						
 						} // loop on plc to set config

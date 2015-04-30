@@ -47,7 +47,7 @@ map<string, double> PidProbabilityMapper::pidWeights( int charge, int iCen, doub
 	vector<double> mus;
 	vector<double> yields;
 
-	string model = "zd";
+	string model = "zb";
 
 	double eVal = zd;
 

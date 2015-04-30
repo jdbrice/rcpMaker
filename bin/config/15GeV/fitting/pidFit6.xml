@@ -7,7 +7,7 @@
 		<Logger color="true" logLevel="info"/>
 		<Reporter> <output url="../products/pidFit/15GeV/rpSgfTest.pdf" width="800" height="800" /> </Reporter>	
 		<input> <data url="../products/phaseSpace/15GeV/pid_all_pt_nSigma_3.root"/> </input>
-		<output path="../products/pidFit/15GeV/cen6"> <data>fit.root</data> </output>
+		<output path="../products/pidFit/15GeV/cen6/"> <data>fit.root</data> </output>
 	
 		<histograms>
 			<Histo name="yield" title="yield" xBins="bin.pt" />
@@ -28,9 +28,9 @@
 			<deltaSigma zb="0.025" zd="0.05" />
 
 			<!-- the minimum momentum at which the value is fixed -->
-			<Pi zbSigma="0.6" zdSigma="0.5" />
-			<K zbSigma="0.6" zdSigma="0.5" />
-			<P zbSigma="0.6" zdSigma="0.5" />			
+			<Pi zbSigma="4.6" zdSigma="4.7" />
+			<K zbSigma="4.6" zdSigma="4.7" />
+			<P zbSigma="4.6" zdSigma="4.7" />			
 		</ParameterFixing>
 
 
@@ -48,7 +48,7 @@
 			<method>nonlinear</method>
 		</PhaseSpaceRecentering>
 
-		<FitSchema method="nll" roi="3.0">
+		<FitSchema method="nll" roi="5.0">
 
 			<!-- 1/beta -->
 			<!-- Mus -->

@@ -148,14 +148,9 @@ void PidSpectraMaker::analyzeTrack( int iTrack ){
 
 
 		book->cd( plc );
-		string cName = "pt_" + ts( cBin );
+		string cName = "pt_" + ts( cBin ) + "_" + PidPhaseSpace::chargeString( charge );
 		int bin = book->get( cName )->GetXaxis()->FindBin( pt );
 		double bWidth = book->get( cName )->GetXaxis()->GetBinWidth( bin );
-		// cout << "Filling : " << plc << "/" << cName << "( " << pt << ", " << (weights[ plc ]) << " ) " << endl;
-		// cout << "H " << book->get( cName )<< endl;
-		book->fill( cName, pt, eventWeight * weights[ plc ] / bWidth );
-
-		cName = "pt_" + ts( cBin ) + "_" + PidPhaseSpace::chargeString( charge );
 		book->fill( cName, pt, eventWeight * weights[ plc ] / bWidth );
 
 		i++;
@@ -175,7 +170,6 @@ void PidSpectraMaker::prepareHistograms(  ){
 	for ( string plc : PidPhaseSpace::species ){
 		book->cd( plc );
 		for ( int iCen = 0; iCen < nCentralityBins(); iCen++ ){
-			book->clone( "/", "ptBase", plc, "pt_"+ts(iCen) );
 			book->clone( "/", "ptBase", plc, "pt_"+ts(iCen)+"_p" );
 			book->clone( "/", "ptBase", plc, "pt_"+ts(iCen)+"_n" );
 		}	

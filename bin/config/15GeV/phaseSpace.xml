@@ -7,11 +7,11 @@
 		<Logger color="true" logLevel="warning" />
 		
 		<input>
-			<dst treeName="rcpPicoDst" url="/Users/danielbrandenburg/bnl/local/data/BES/15GeV/" maxFiles="5000"/>
+			<dst treeName="rcpPicoDst" url="/Users/danielbrandenburg/bnl/local/data/BES/15GeV/" maxFiles="100"/>
 		</input>
 
 		<output path="../products/phaseSpace/15GeV/">
-			<data>pid_all_pt_nSigma_3.root</data>
+			<data>pid_04_29_15.root</data>
 			<Reports></Reports>
 		</output>
 
@@ -43,7 +43,7 @@
 		
 		<PhaseSpaceRecentering>
 			<centerSpecies>K</centerSpecies>
-			<sigma tof="0.011" dedx="0.033"/>
+			<sigma tof="0.011" dedx="0.07"/>
 			<method>nonlinear</method>
 		</PhaseSpaceRecentering>
 
@@ -80,7 +80,7 @@
 			4.5
 		</pt>
 		
-		<eta>0.0, 0.2, 0.4, 0.6 </eta>
+		<eta>0.0, 0.6 </eta>
 
 		<charge> -1.5, -0.5, 0.5, 1.5 </charge>
 

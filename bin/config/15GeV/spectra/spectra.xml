@@ -7,10 +7,10 @@
 		<Logger color="true" logLevel="warning" globalLogLevel="info"/>
 		
 		<input>
-			<dst treeName="rcpPicoDst" url="/Users/danielbrandenburg/bnl/local/data/BES/15GeV/" maxFiles="500"/>
+			<dst treeName="rcpPicoDst" url="/Users/danielbrandenburg/bnl/local/data/BES/15GeV/" maxFiles="5000"/>
 		</input>
 
-		<output path="">
+		<output path="../products/spectra/15GeV/">
 			<data>spectra.root</data>
 			<Reports></Reports>
 		</output>
@@ -64,7 +64,7 @@
 
 		<PidProbabilityMapper>
 			<Logger color="true" logLevel="info" globalLogLevel="info" />
-			<input> <data url="../products/pidFit/15GeV/test.root"/> </input>
+			<input> <data url="../products/pidFit/15GeV/allFit.root"/> </input>
 			<output> <data url="mapTest.root" /> </output>
 
 			<PSBinning>
@@ -97,7 +97,7 @@
 			4.5
 		</pt>
 		
-		<eta>0.0, 0.2, 0.4, 0.6 </eta>
+		<eta>0.0,  0.6 </eta>
 
 		<charge> -1.5, -0.5, 0.5, 1.5 </charge>
 

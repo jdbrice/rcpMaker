@@ -8,8 +8,9 @@
 		<Reporter> <output url="../products/presentation/15GeV/present.pdf" width="800" height="500" /> </Reporter>	
 
 		<input>
-			<fit url="../products/pidFit/15GeV/test.root" />
-			<ps url="/Users/danielbrandenburg/bnl/local/data/Run14/rcp/phaseSpace/15GeV/pid_15GeV_04_09.root" />
+			<!--<fit url="../products/sgf/15GeV/april_20_15/sgf_test.root" />-->
+			<fit url="../products/pidFit/15GeV/allFit.root" />
+			<ps url="../products/phaseSpace/15GeV/pid_all_pt_nSigma_3.root" />
 		</input>
 
 		<output path="../products/presentation/15GeV/">
@@ -20,7 +21,7 @@
 		<FitRange>
 			<ptBins min="0" max="25" />
 			<centralityBins>0, 6</centralityBins>
-			<etaBins>0</etaBins>
+			<etaBins>0 </etaBins>
 			<charges>-1, 1</charges>
 		</FitRange>
 
