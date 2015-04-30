@@ -61,10 +61,10 @@ int main( int argc, char* argv[] ) {
 				PidParamMaker ppm( &config, "PidParamMaker." );
 				ppm.make();
 			} else if ( "SimultaneousPid" == job ){
-				//SGFRunner sgfr( &config, "SimultaneousPid." );
-				//sgfr.make();
-				FitRunner fr( &config, "SimultaneousPid." );
-				fr.make();
+				SGFRunner sgfr( &config, "SimultaneousPid." );
+				sgfr.make();
+				//FitRunner fr( &config, "SimultaneousPid." );
+				//fr.make();
 
 			} else if ( "FemtoDst" == job ){
 				FemtoDstMaker fdst( &config, "FemtoDstMaker.", fileList, jobPrefix );

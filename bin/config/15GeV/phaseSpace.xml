@@ -43,7 +43,7 @@
 		
 		<PhaseSpaceRecentering>
 			<centerSpecies>K</centerSpecies>
-			<sigma tof="0.011" dedx="0.07"/>
+			<sigma tof="0.011" dedx="0.033"/>
 			<method>nonlinear</method>
 		</PhaseSpaceRecentering>
 
@@ -80,7 +80,7 @@
 			4.5
 		</pt>
 		
-		<eta>0.0, 0.6 </eta>
+		<eta>0.0, 0.2, 0.4, 0.6 </eta>
 
 		<charge> -1.5, -0.5, 0.5, 1.5 </charge>
 
