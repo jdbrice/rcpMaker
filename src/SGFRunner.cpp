@@ -26,6 +26,21 @@ SGFRunner::SGFRunner( XmlConfig * _cfg, string _np)
 	/**
 	 * Setup the PID Params
 	 */
+	if ( cfg->exists( nodePath +  "PidParameters:url" ) ){
+		string fnPidParams = cfg->getString( nodePath + "PidParameters:url" );
+		useParams = true;
+		
+		logger->info(__FUNCTION__) << "Loading PID parameters from : " << fnPidParams << endl;
+		paramsConfig = shared_ptr<XmlConfig>( new XmlConfig( fnPidParams ) );
+		
+		logger->info(__FUNCTION__) << "Making zbParams" << endl;
+		zbParams = unique_ptr<ZbPidParameters>( new ZbPidParameters( paramsConfig.get(), "TofPidParams", psr ) );
+		zdParams = unique_ptr<ZdPidParameters>( new ZdPidParameters( paramsConfig.get(), "DedxPidParams" ) );	
+	}
+	
+	/**
+	 * Setup the PID Params
+	 
 	if ( cfg->exists( nodePath + "TofPidParams"  ) ){
 		useParams = true;
 		for ( string plc : PidPhaseSpace::species ){
@@ -38,7 +53,7 @@ SGFRunner::SGFRunner( XmlConfig * _cfg, string _np)
 		}
 	} else {
 		useParams = false;
-	}
+	}*/
 
 	
 
@@ -139,21 +154,18 @@ void SGFRunner::make(){
 
 					double avgP = averageP( iPt, iEta );
 					
-					logger->info(__FUNCTION__) << "pt Bin : " << iPt << endl;
-					logger->info(__FUNCTION__) << "Cen Bin : " << iCen << endl;
-					logger->info(__FUNCTION__) << "Charge Bin : " << iCharge << endl;
-					logger->info(__FUNCTION__) << "Eta Bin : " << iEta << endl;
+					
 					
 
 					for ( string plc : PidPhaseSpace::species ){
 
 						// zb Parameters
-						double zbMu = zbMean( plc, avgP );
-						double zbSig = zbSigma( plc, avgP );
+						double zbMu = zbMean( plc, avgP, iCen );
+						double zbSig = zbSigma( plc, avgP, iCen );
 
 						// zd Parameters
 						double zdMu = zdMean( plc, avgP );
-						double zdSig = zdSigma( plc, avgP );
+						double zdSig = zdSigma( plc, avgP, iCen );
 
 						// update the schema
 						logger->trace(__FUNCTION__) << plc << " : zb mu=" << zbMu << ", sig=" << zbSig << endl;
@@ -173,8 +185,8 @@ void SGFRunner::make(){
 						logger->trace( __FUNCTION__ ) << "sigMod : " << zbSigmaModifier << endl;
 						logger->trace( __FUNCTION__ ) << "muMod : " << zdMuModifier << endl;
 
-						schema->setInitial( "zb", plc, zbMu, zbSig, zbDeltaMu * zbSigmaModifier, zbDeltaSigma * zbSigmaModifier );
-						schema->setInitial( "zd", plc, zdMu, zdSig, zdDeltaMu * zdMuModifier, zdDeltaSigma );
+						schema->setInitial( "zb", plc, zbMu, zbSig, zbDeltaMu, zbDeltaSigma * zbSigmaModifier );
+						schema->setInitial( "zd", plc, zdMu, zdSig, zdDeltaMu, zdDeltaSigma );
 
 
 
@@ -184,6 +196,10 @@ void SGFRunner::make(){
 							schema->fixSigma( "zd", plc, zdSig );
 					} // loop on plc to set config
 
+					logger->info(__FUNCTION__) << "pt Bin : " << iPt << endl;
+					logger->info(__FUNCTION__) << "Cen Bin : " << iCen << endl;
+					logger->info(__FUNCTION__) << "Charge Bin : " << iCharge << endl;
+					logger->info(__FUNCTION__) << "Eta Bin : " << iEta << endl;
 					sgf.fit( centerSpecies, iCharge, iCen, iPt, iEta );
 				
 					sgf.report( reporter, binsPt->bins[ iPt ], binsPt->bins[ iPt + 1 ] );

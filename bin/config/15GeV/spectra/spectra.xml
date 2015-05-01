@@ -64,7 +64,7 @@
 
 		<PidProbabilityMapper>
 			<Logger color="true" logLevel="info" globalLogLevel="info" />
-			<input> <data url="../products/sgf/15GeV/sgf_all.root"/> </input>
+			<input> <data url="../products/sgf/15GeV/april_30_15/f0/sgf_full.root"/> </input>
 			<output> <data url="mapTest.root" /> </output>
 
 			<PSBinning>

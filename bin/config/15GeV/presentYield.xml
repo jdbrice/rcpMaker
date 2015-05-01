@@ -8,7 +8,7 @@
 		<Reporter> <output url="../products/presentation/15GeV/present.pdf" width="800" height="500" /> </Reporter>	
 
 		<input>
-			<fit url="../products/sgf/15GeV/sgf_all.root" />
+			<fit url="../products/sgf/15GeV/sgf_test.root" />
 			<!--<fit url="../products/pidFit/15GeV/allFit.root" />-->
 			<ps url="../products/phaseSpace/15GeV/pid_all_pt_nSigma_3.root" />
 		</input>
@@ -19,9 +19,9 @@
 
 		<!-- fit bins : FROM sgfRunner.xml-->
 		<FitRange>
-			<ptBins min="0" max="25" />
-			<centralityBins>0, 6</centralityBins>
-			<etaBins>0, 1, 2 </etaBins>
+			<ptBins min="0" max="35" />
+			<centralityBins>0,  6</centralityBins>
+			<etaBins>0 </etaBins>
 			<charges>-1, 1</charges>
 		</FitRange>
 

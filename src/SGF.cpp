@@ -41,9 +41,10 @@ void SGF::fit( string cs, int charge, int cenBin, int ptBin, int etaBin, bool fi
 	// do the simultaneous fit with the full simultaneous model
 	RooSimultaneous * sim = schema->model();
 
-	if ( !fitRange ) // Do not constrain fit range
-		sim->fitTo( *d, NumCPU(4) /*, PrintLevel(-1), Verbose( kFALSE )*/ );
-	else { // constrain fit Range
+	if ( !fitRange ){ // Do not constrain fit range
+		sim->fitTo( *d, NumCPU(4) , PrintLevel(-1), Verbose( kFALSE ) );
+		sim->fitTo( *d, NumCPU(4) , PrintLevel(-1), Verbose( kFALSE ) );
+	}else { // constrain fit Range
 
 		//double zbMin = schema->var( "zb_mu_Pi" )->getVal() - schema->var( "zb_sigma_Pi" )->getVal() * 4;
 		//double zbMax = schema->var( "zb_mu_P" )->getVal() + schema->var( "zb_sigma_Pi" )->getVal() * 4;
