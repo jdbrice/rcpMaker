@@ -7,11 +7,11 @@
 		<Logger color="true" logLevel="warning" />
 		
 		<input>
-			<dst treeName="rcpPicoDst" url="/Users/danielbrandenburg/bnl/local/data/BES/15GeV/" maxFiles="10000"/>
+			<dst treeName="rcpPicoDst" url="/Users/danielbrandenburg/bnl/local/data/BES/15GeV/" maxFiles="50"/>
 		</input>
 
 		<output path="../products/phaseSpace/15GeV/">
-			<data>pid_04_29_15.root</data>
+			<data>pid_nl_tr.root</data>
 			<Reports></Reports>
 		</output>
 
@@ -47,7 +47,7 @@
 			<method>nonlinear</method>
 		</PhaseSpaceRecentering>
 
-		<makePhaseSpace 2D="false" enhanced="true" /> 
+		<makePhaseSpace 2D="true" enhanced="true" /> 
 
 		<histograms >
 
@@ -55,6 +55,13 @@
 			<Histo name="dedxRaw" title="dEdx" xBins="bin.pt" yBins="bin.dedxRaw" />
 			<Histo name="eta" type="1D" title="eta" nBinsX="200" minX="-2" maxX="2" />
 			<ptBase type="1D" title="p_{T} [GeV]; p_{T} [GeV]; #Events"  xBins="bin.pt"/>
+
+			
+			<Histo name="trBeta" title="" xBins="bin.pt" yBins="bin.tof" />
+			<Histo name="trDedx" title="" xBins="bin.pt" yBins="bin.dedx" />
+			<Histo name="nlBeta" title="" xBins="bin.pt" yBins="bin.tof"/>
+			<Histo name="nlDedx" title="" xBins="bin.pt" yBins="bin.dedx"/>
+			
 
 		</histograms>
 
@@ -80,16 +87,16 @@
 			4.5
 		</pt>
 		
-		<eta>0.0, 0.2, 0.4, 0.6 </eta>
+		<eta>0.0, 0.1 </eta>
 
 		<charge> -1.5, -0.5, 0.5, 1.5 </charge>
 
 		<tof width="0.006" min="-1" max="1" />
 		<dedx width="0.03" min="-0.75" max="0.75" />
-		<!--
+		
 		<tof width="0.006" min="-1" max="1" />
 		<dedx width="0.015" min="-0.75" max="0.75" />
-		-->
+		
 		<tofRaw width="0.0024" min="0.9" max="3" />
 		<dedxRaw width="0.012" min="1" max="6cd" />
 

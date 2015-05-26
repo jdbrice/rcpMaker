@@ -8,8 +8,8 @@
 		<Reporter> <output url="../products/presentation/11GeV/present.pdf" width="800" height="500" /> </Reporter>	
 
 		<input>
-			<fit url="../products/sgf/11GeV/sgf_all_0to6.root" />
-			<ps url="../products/phaseSpace/11GeV/pid.root" />
+			<fit url="../products/sgf/11GeV/sgf_all.root" />
+			<ps url="../products/phaseSpace/11GeV/pid_all_pt.root" />
 		</input>
 
 		<output path="../products/presentation/11GeV/">
@@ -31,6 +31,11 @@
 
 		<centralityLabels>0-5%, 5-10%, 10-20%, 20-30%, 30-40%, 40-60%, 60-80% </centralityLabels>
 
+		<LastYieldBin>
+			<Pi p="27" n="27" />
+			<K p="25" n="22"/> 
+			<P p="31" n="24"/> 
+		</LastYieldBin>
 
 		<Style>
 			<chargeRatio lineWidth="2" lineColor="red" domain="0.5, 3.4"/>

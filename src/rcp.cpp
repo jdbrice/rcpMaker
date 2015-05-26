@@ -66,6 +66,12 @@ int main( int argc, char* argv[] ) {
 				//FitRunner fr( &config, "SimultaneousPid." );
 				//fr.make();
 
+			} else if ( "SimultaneousTPid" == job ){
+				//SGFRunner sgfr( &config, "SimultaneousPid." );
+				//sgfr.make();
+				FitRunner fr( &config, "SimultaneousPid." );
+				fr.make();
+
 			} else if ( "FemtoDst" == job ){
 				FemtoDstMaker fdst( &config, "FemtoDstMaker.", fileList, jobPrefix );
 				fdst.make();

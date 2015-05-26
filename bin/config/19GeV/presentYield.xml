@@ -19,8 +19,8 @@
 		<!-- fit bins : FROM sgfRunner.xml-->
 		<FitRange>
 			<ptBins min="0" max="25" />
-			<centralityBins>0, 1, 2, 3, 4, 5, 6</centralityBins>
-			<etaBins>0, 1, 2</etaBins>
+			<centralityBins>0, 6</centralityBins>
+			<etaBins>0</etaBins>
 			<charges>-1, 1</charges>
 		</FitRange>
 

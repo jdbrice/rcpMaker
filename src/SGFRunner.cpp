@@ -185,15 +185,17 @@ void SGFRunner::make(){
 						logger->trace( __FUNCTION__ ) << "sigMod : " << zbSigmaModifier << endl;
 						logger->trace( __FUNCTION__ ) << "muMod : " << zdMuModifier << endl;
 
-						schema->setInitial( "zb", plc, zbMu, zbSig, zbDeltaMu, zbDeltaSigma * zbSigmaModifier );
-						schema->setInitial( "zd", plc, zdMu, zdSig, zdDeltaMu, zdDeltaSigma );
-
-
-
-						if ( zbMinParP > 0 && avgP >= zbMinParP)
+						if ( zbMinParP > 0 && avgP >= zbMinParP){
 							schema->fixSigma( "zb", plc, zbSig );
-						if ( zdMinParP > 0 && avgP >= zdMinParP )
-							schema->fixSigma( "zd", plc, zdSig );
+							zbDeltaMu = zbDeltaMu / 3.0;
+						}
+						if ( zdMinParP > 0 && avgP >= zdMinParP ){
+							//schema->fixSigma( "zd", plc, zdSig );
+							zdDeltaMu = zdDeltaMu / 3.0;
+						}
+
+						schema->setInitial( "zb", plc, zbMu, zbSig, zbDeltaMu, zbDeltaSigma );
+						schema->setInitial( "zd", plc, zdMu, zdSig, zdDeltaMu, zdDeltaSigma );
 					} // loop on plc to set config
 
 					logger->info(__FUNCTION__) << "pt Bin : " << iPt << endl;

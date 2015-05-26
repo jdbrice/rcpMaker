@@ -180,10 +180,10 @@ void PidPhaseSpace::analyzeTrack( int iTrack ){
 	book->fill( "dedxRaw", p, pico->trackDedx( iTrack ) );
 	book->fill( "eta", eta );
 
-	//book->fill( "trBeta", p, tof );
-	//book->fill( "trDedx", p, dedx );
-	//book->fill( "nlBeta", p, tofNL );
-	//book->fill( "nlDedx", p, dedxNL );
+	book->fill( "trBeta", p, tof );
+	book->fill( "trDedx", p, dedx );
+	book->fill( "nlBeta", p, tofNL );
+	book->fill( "nlDedx", p, dedxNL );
 
 	if ( "nonlinear" == psrMethod ){
 		tof = tofNL;
