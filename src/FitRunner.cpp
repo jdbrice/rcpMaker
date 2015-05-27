@@ -224,7 +224,7 @@ namespace TSF{
 								double zbMu2 = zbMean( plc2, avgP, iCen );
 								double zbNd = ( zbMu - zbMu2 ) / zbSig;
 
-								if ( abs( zbNd ) < 2.0 )
+								if ( abs( zbNd ) < 3.0 )
 									activePlayers.push_back( "zd_" + plc + "_g" + plc2 );
 
 								double zdMu2 = zdMean( plc2, avgP );
