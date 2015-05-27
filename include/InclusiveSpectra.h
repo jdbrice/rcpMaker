@@ -22,7 +22,7 @@
 /**
  * Local
  */
-#include "PicoDataStore.h"
+#include "Adapter/PicoDataStore.h"
 
 class InclusiveSpectra : public TreeAnalyzer
 {

@@ -74,6 +74,10 @@ public:
 		return TMath::Log10( mean(p, m, method ) * scale );
 	}
 
+	double meanLog( double p, double m, int method = -1, double scale = 1 ){
+		return TMath::Log( mean(p, m, method ) * scale );
+	}
+
 	double getFromTable( string plc, double p );
 	
 	void getTables(){

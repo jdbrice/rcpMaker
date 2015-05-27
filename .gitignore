@@ -18,10 +18,11 @@
 /bin/*.pdf
 /bin/*.xml
 /bin/rcp
+
 # but keep the sample config
 !/bin/config.xml
 
 /products/*
 
 /ParamFits
-/bin/ps
+

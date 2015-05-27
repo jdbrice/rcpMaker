@@ -1,16 +1,17 @@
 #ifndef PID_PHASE_SPACE_H
 #define PID_PHASE_SPACE_H
 
+// RcpMaker
 #include "InclusiveSpectra.h"
 #include "PhaseSpaceRecentering.h"
-#include "PicoDataStore.h"
-#include "TofPidParams.h"
-#include "DedxPidParams.h"
-#include <algorithm>    // std::find
+#include "Adapter/PicoDataStore.h"
+
+// STL
+#include <algorithm> 
 #include <vector>
+#include <math.h>
 using namespace std;
 
-#include <math.h>
 
 class PidPhaseSpace : public InclusiveSpectra
 {
@@ -46,15 +47,7 @@ protected:
 
 	bool make2D, makeEnhanced;
 
-	/**
-	 * After first pass
-	 */
-	vector<TofPidParams*> tofParams;
-	vector<DedxPidParams*> dedxParams;
-	bool useTofParams = false;
-	double tofParamsMinP;
-	bool useDedxParams = false;
-
+	
 	double nSigBelow, nSigAbove;
 
 	bool binByMomentum;
@@ -172,13 +165,6 @@ public:
 protected:
 
 	void preparePhaseSpaceHistograms( string plc );
-
-	double getTofMean( string plc, double p, bool useParams = true );
-	double getTofSigma( string plc, double p, bool useParams = true );
-
-	double getDedxMean( string plc, double p );
-	double getDedxSigma( string plc, double p );
-
 	
 	
 };

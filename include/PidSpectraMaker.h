@@ -1,12 +1,15 @@
 #ifndef PID_SPECTRA_MAKER_H
 #define PID_SPECTRA_MAKER_H
 
+
+// RcpMaker
 #include "InclusiveSpectra.h"
 #include "PhaseSpaceRecentering.h"
-#include "PicoDataStore.h"
+#include "Adapter/PicoDataStore.h"
 #include "PidPhaseSpace.h"
 #include "PidProbabilityMapper.h"
 
+// STL
 #include <math.h>
 #include <algorithm>    // std::find
 #include <vector>

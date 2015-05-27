@@ -63,7 +63,7 @@ void PidYieldPresenter::integrateEta( string plc, int charge, int iCen ) {
 	for ( int iEta : etaFitBins ){
 
 		string dir = "/" + plc + "_yield/";
-		string name = SGFRunner::yieldName( plc, iCen, charge, iEta );
+		string name = TSF::FitRunner::yieldName( plc, iCen, charge, iEta );
 		logger->info( __FUNCTION__ ) << "Looking for " << dir+name << endl;
 
 		TH1D * tmp = (TH1D*)fPidFit->Get( (dir+name).c_str() );
@@ -79,7 +79,7 @@ void PidYieldPresenter::integrateEta( string plc, int charge, int iCen ) {
 
 	if ( h.size() >= 1  ){
 		book->cd("raw");
-		string name = SGFRunner::yieldName( plc, iCen, charge, 0 );
+		string name = TSF::FitRunner::yieldName( plc, iCen, charge, 0 );
 		book->add( name, (TH1D*) h[ 0 ]->Clone( name.c_str() ) );	
 
 		for ( int i = 1; i < h.size(); i++ ){
@@ -99,7 +99,7 @@ void PidYieldPresenter::integrateEta() {
 			for ( int iCen : cenBins ){
 				integrateEta( plc, charge, iCen );
 				
-				//string name = SGFRunner::yieldName( plc, iCen, charge, 0 );
+				//string name = TSF::FitRunner::yieldName( plc, iCen, charge, 0 );
 				//book->style( name )->set( "title", "#eta Integrated : " + name )->set( "logY", 1 )->draw();
 				//reporter->next();
 
@@ -113,7 +113,7 @@ void PidYieldPresenter::integrateEta() {
 void PidYieldPresenter::normalizeYield( string plc, int charge, int iCen ){
 
 	book->cd( "raw" );
-	string name = SGFRunner::yieldName( plc, iCen, charge, 0 );
+	string name = TSF::FitRunner::yieldName( plc, iCen, charge, 0 );
 	if ( !book->exists( name ) ){
 		logger->error(__FUNCTION__) << name << " does not exists" << endl;
 	}
@@ -155,7 +155,7 @@ void PidYieldPresenter::normalizeYield() {
 			for ( int iCen : cenBins ){
 				normalizeYield( plc, charge, iCen );
 				
-				string name = SGFRunner::yieldName( plc, iCen, charge, 0 );
+				string name = TSF::FitRunner::yieldName( plc, iCen, charge, 0 );
 				// book->style( name )->set("lineWidth", 2)->
 				// 	set( "title", "Normalized Yield : " + name )->
 				// 	set( "logY", 1 )->set( "domain", 0, 5 )->draw();
@@ -193,7 +193,7 @@ void PidYieldPresenter::compareYields( string plc, int charge ){
 	for ( int iCen : cenBins ){
 
 
-		string name = SGFRunner::yieldName( plc, iCen, charge, 0 );
+		string name = TSF::FitRunner::yieldName( plc, iCen, charge, 0 );
 		TH1D * y = (TH1D*)book->get( name )->Clone( "tmp" );
 		y->SetDirectory( 0 );
 
@@ -254,8 +254,8 @@ void PidYieldPresenter::rcp( string plc, int charge, int iCen, int iPer ){
 
 	book->cd("yield");
 
-	if ( 	!book->exists( SGFRunner::yieldName( plc, iCen, charge, 0 ) ) ||
-			!book->exists( SGFRunner::yieldName( plc, iPer, charge, 0 ) )  ){
+	if ( 	!book->exists( TSF::FitRunner::yieldName( plc, iCen, charge, 0 ) ) ||
+			!book->exists( TSF::FitRunner::yieldName( plc, iPer, charge, 0 ) )  ){
 		logger->error( __FUNCTION__ ) << "central or peripheral yield missing" << endl;
 		return;
 	}
@@ -273,8 +273,8 @@ void PidYieldPresenter::rcp( string plc, int charge, int iCen, int iPer ){
 	logger->info( __FUNCTION__ ) << "Scale Central Bin : " << nColl[ iPer ] << endl;
 	logger->info( __FUNCTION__ ) << "Scale Periferal Bin : " << nColl[ iCen ] << endl;
 
-	TH1D * cen = (TH1D*)book->get( SGFRunner::yieldName( plc, iCen, charge, 0 ) );
-	TH1D * per = (TH1D*)book->get( SGFRunner::yieldName( plc, iPer, charge, 0 ) );
+	TH1D * cen = (TH1D*)book->get( TSF::FitRunner::yieldName( plc, iCen, charge, 0 ) );
+	TH1D * per = (TH1D*)book->get( TSF::FitRunner::yieldName( plc, iPer, charge, 0 ) );
 
 	book->cd( "rcp" );
 	cen = (TH1D*) cen->Clone( "cen" );
@@ -347,14 +347,14 @@ void PidYieldPresenter::chargeRatio( string plc, int iCen ){
 
 	book->cd("yield");
 
-	if ( 	!book->exists( SGFRunner::yieldName( plc, iCen, 1, 0 ) ) ||
-			!book->exists( SGFRunner::yieldName( plc, iCen, -1, 0 ) )  ){
+	if ( 	!book->exists( TSF::FitRunner::yieldName( plc, iCen, 1, 0 ) ) ||
+			!book->exists( TSF::FitRunner::yieldName( plc, iCen, -1, 0 ) )  ){
 		logger->error( __FUNCTION__ ) << "+/- yield missing" << endl;
 		return;
 	}
 
-	TH1D * plus = (TH1D*)book->get( SGFRunner::yieldName( plc, iCen, 1, 0 ) );
-	TH1D * minus = (TH1D*)book->get( SGFRunner::yieldName( plc, iCen, -1, 0 ) );
+	TH1D * plus = (TH1D*)book->get( TSF::FitRunner::yieldName( plc, iCen, 1, 0 ) );
+	TH1D * minus = (TH1D*)book->get( TSF::FitRunner::yieldName( plc, iCen, -1, 0 ) );
 
 	book->cd( "chargeRatio" );
 

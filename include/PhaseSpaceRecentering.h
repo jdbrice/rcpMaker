@@ -2,7 +2,7 @@
 #define PHASE_SPACE_RECENTERING_H
 
 #include "Bichsel.h"
-#include "TofGenerator.h"
+#include "Params/TofGenerator.h"
 
 #include <map>
 
@@ -163,8 +163,8 @@ public:
 	 */
 	double rDedx( string centerSpecies, double dedx, double p ){ 
 
-		double mean = dedxGen->mean10( p, mass( centerSpecies ), -1, 1000 );
-		double nDedx = Log10( dedx);
+		double mean = dedxGen->meanLog( p, mass( centerSpecies ), -1, 1000 );
+		double nDedx = Log( dedx );
 		double nSig = nDedx - mean ;
 
 		return nSig;
@@ -181,25 +181,25 @@ public:
 	 */
 	double nlDedx( string centerSpecies, double dedx, double p, double avgP ){
 
-		double dedx10 = Log10( dedx );
+		double dedxLog = Log( dedx );
 
 		// mean for this species
 		//double mu = dedxGen->mean10( p, mass( centerSpecies ), -1, 1000 );
-		const double muAvg = dedxGen->mean10( avgP, mass( centerSpecies ), -1, 1000 );
+		const double muAvg = dedxGen->meanLog( avgP, mass( centerSpecies ), -1, 1000 );
 
 		double n1 = 0;
 		double d1 = 0;
 
 		for ( int i = 0; i < species.size(); i++ ){
 
-			const double iMu = dedxGen->mean10( p, mass( species[ i ] ), -1, 1000 );
-			const double iMuAvg = dedxGen->mean10( avgP, mass( species[ i ] ), -1, 1000 );
+			const double iMu = dedxGen->meanLog( p, mass( species[ i ] ), -1, 1000 );
+			const double iMuAvg = dedxGen->meanLog( avgP, mass( species[ i ] ), -1, 1000 );
 			
 			// may change to a functional dependance 
 			double sigma = dedxSigma; 
 
-			double iL = lh( dedx10, iMu, sigma );
-			double w = dedx10 + iMuAvg - iMu;
+			double iL = lh( dedxLog, iMu, sigma );
+			double w = dedxLog + iMuAvg - iMu;
 			
 
 			n1 += (iL * w);
@@ -208,7 +208,7 @@ public:
 		}
 
 		if ( 0 == n1 || 0 == d1){
-			return dedx10 - muAvg;
+			return dedxLog - muAvg;
 		}
 
 		double nDedx = (n1/d1) - (muAvg);

@@ -7,11 +7,11 @@
 		<Logger color="true" logLevel="warning" globalLogLevel="info" />
 		
 		<input>
-			<dst treeName="rcpPicoDst" url="/Users/danielbrandenburg/bnl/local/data/BES/15GeV/rcpPicoDst_preRefMultFix/" maxFiles="10"/>
+			<dst treeName="rcpPicoDst" url="/Users/danielbrandenburg/bnl/local/data/BES/15GeV/rcpPicoDst/" maxFiles="200"/>
 		</input>
 
-		<output path="../products/15GeV/phaseSpace/">
-			<data>pid_pbin.root</data>
+		<output path="../products/15/phaseSpace/">
+			<data>pid_pbin_3Sig.root</data>
 			<Reports></Reports>
 		</output>
 
@@ -43,7 +43,7 @@
 		
 		<PhaseSpaceRecentering>
 			<centerSpecies>K</centerSpecies>
-			<sigma tof="0.011" dedx="0.033"/>
+			<sigma tof="0.012" dedx="0.080"/>
 			<method>nonlinear</method>
 		</PhaseSpaceRecentering>
 
@@ -87,15 +87,15 @@
 			4.5
 		</pt>
 		
-		<eta>0.0, 0.1 </eta>
+		<eta>0.0, 1.0 </eta>
 
 		<charge> -1.5, -0.5, 0.5, 1.5 </charge>
 
 		<tof width="0.006" min="-1" max="1" />
 		<dedx width="0.03" min="-0.75" max="0.75" />
 		
-		<tof width="0.006" min="-1" max="1" />
-		<dedx width="0.015" min="-0.75" max="0.75" />
+		<!--<tof width="0.006" min="-1" max="1" />
+		<dedx width="0.015" min="-0.75" max="0.75" />-->
 		
 		<tofRaw width="0.0024" min="0.9" max="3" />
 		<dedxRaw width="0.012" min="1" max="6cd" />

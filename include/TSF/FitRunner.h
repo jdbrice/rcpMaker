@@ -15,11 +15,9 @@ using namespace jdb;
 // Local
 #include "TSF/FitSchema.h"
 #include "TSF/Fitter.h"
-#include "TofPidParams.h"
-#include "DedxPidParams.h"
 #include "PhaseSpaceRecentering.h"
-#include "ZbPidParameters.h"
-#include "ZdPidParameters.h"
+#include "Params/ZbPidParameters.h"
+#include "Params/ZdPidParameters.h"
 
 
 
@@ -32,8 +30,6 @@ namespace TSF{
 		shared_ptr<XmlConfig> paramsConfig;
 
 		bool useParams = false;
-		
-		map<string, unique_ptr<DedxPidParams> > dedxParams;
 
 		unique_ptr< ZbPidParameters > zbParams;
 		unique_ptr< ZdPidParameters > zdParams;
@@ -93,7 +89,7 @@ namespace TSF{
 
 		double zbSigma( string plc, double p, int iCen ){
 
-			if ( useParams   )
+			if ( useParams )
 				return zbParams->sigma( plc, p, iCen );
 			
 			return tofSigmaIdeal;
@@ -112,7 +108,7 @@ namespace TSF{
 		}
 		double zdSigma( string plc, double p, int iCen ){
 
-			if ( useParams && dedxParams[plc]  )
+			if ( useParams )
 				return zdParams->sigma( plc, p, iCen );
 
 			return dedxSigmaIdeal;

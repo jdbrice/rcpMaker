@@ -1,10 +1,8 @@
 
 #include "InclusiveSpectra.h"
 #include "ChainLoader.h"
-#include "LBNLPicoDst.h"
-#include "FemtoDst.h"
-#include "ProdPicoDst.h"
-#include "RcpPicoDst.h"
+#include "Adapter/ProdPicoDst.h"
+#include "Adapter/RcpPicoDst.h"
 
 #include <limits.h>
 
@@ -19,9 +17,7 @@ InclusiveSpectra::InclusiveSpectra( XmlConfig * config, string np, string fileLi
 	 * Make the desired PicoDataStore Interface
 	 */
 	
-	if ( ds && ds->getTreeName() == "FemtoDst" )
-		pico = unique_ptr<PicoDataStore>( new FemtoDst( ds->getChain() ) );
-	else if ( ds && ds->getTreeName() == "PicoDst" )
+	if ( ds && ds->getTreeName() == "PicoDst" )
 		pico = unique_ptr<PicoDataStore>( new ProdPicoDst( ds->getChain() ) );
 	else if ( chain && "PicoDst" == cfg->getString( np + "input.dst:treeName" ) ){
 		logger->info(__FUNCTION__) << "ProdPico" << endl;

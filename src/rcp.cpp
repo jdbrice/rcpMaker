@@ -1,32 +1,30 @@
 
+// STL
+#include <iostream>
+#include <exception>
 
+// RooBarb
 #include "XmlConfig.h"
 using namespace jdb;
 
-#include "LBNLPicoDst.h"
-
-
-#include <iostream>
+// Rcp Maker
 #include "InclusiveSpectra.h"
-#include "ParamSpectra.h"
 #include "PidPhaseSpace.h"
-#include "PidParamMaker.h"
-#include "SimultaneousGaussians.h"
-#include "SimultaneousPid.h"
 #include "PidSpectraMaker.h"
-
-
-
-#include "SGFRunner.h"
-#include "FemtoDstMaker.h"
 #include "PidYieldPresenter.h"
-
-#include <exception>
-
 
 #include "TSF/FitRunner.h"
 
-#include "PidProbabilityMapper.h"
+
+//#include "PidParamMaker.h"
+//#include "SimultaneousGaussians.h"
+//#include "SimultaneousPid.h"
+
+
+
+
+
+
 
 using namespace TSF;
 
@@ -51,30 +49,12 @@ int main( int argc, char* argv[] ) {
 			if ( "InclusiveSpectra" == job ){
 				InclusiveSpectra is( &config, "InclusiveSpectra.", fileList, jobPrefix );
 				is.make();
-			} else if ( "ParamSpectra" == job ){
-				//ParamSpectra ps( &config, "ParamSpectra.", fileList, jobPrefix );
-				//ps.make();
 			} else if ( "PidPhaseSpace" == job ){
 				PidPhaseSpace pps( &config, "PidPhaseSpace.", fileList, jobPrefix  );
 				pps.make();
-			} else if ( "MakePidParams" == job ){
-				PidParamMaker ppm( &config, "PidParamMaker." );
-				ppm.make();
-			} else if ( "SimultaneousPid" == job ){
-				SGFRunner sgfr( &config, "SimultaneousPid." );
-				sgfr.make();
-				//FitRunner fr( &config, "SimultaneousPid." );
-				//fr.make();
-
 			} else if ( "SimultaneousTPid" == job ){
-				//SGFRunner sgfr( &config, "SimultaneousPid." );
-				//sgfr.make();
 				FitRunner fr( &config, "SimultaneousPid." );
 				fr.make();
-
-			} else if ( "FemtoDst" == job ){
-				FemtoDstMaker fdst( &config, "FemtoDstMaker.", fileList, jobPrefix );
-				fdst.make();
 
 			} else if ( "PresentPidYield" == job ){
 				//cout << "making presenter" << endl;
@@ -108,8 +88,8 @@ int main( int argc, char* argv[] ) {
 			}
 			else if ( "test" == job ){
 				
-				PidProbabilityMapper ppm( &config, "MapTest." );
-				ppm.pidWeights( -1, 0, 0.91, 0.0, 0.1, 0.09 );
+				//PidProbabilityMapper ppm( &config, "MapTest." );
+				//ppm.pidWeights( -1, 0, 0.91, 0.0, 0.1, 0.09 );
 
 			} 
 

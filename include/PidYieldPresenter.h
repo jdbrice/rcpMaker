@@ -26,7 +26,7 @@ using namespace jdb;
 /**
  * Local
  */
-#include "SGFRunner.h"
+#include "TSF/FitRunner.h"
 #include "PidPhaseSpace.h"
 
 class PidYieldPresenter

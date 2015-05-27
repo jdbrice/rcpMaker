@@ -65,27 +65,6 @@ PidPhaseSpace::PidPhaseSpace( XmlConfig* config, string np, string fl, string jp
 	 */
 	binsCharge = unique_ptr<HistoBins>(new HistoBins( cfg, "bin.charge" ));
 
-	/**
-	 * Pid params
-	 */
-	for ( int i = 0; i < species.size(); i++ ){
-
-		logger->info(__FUNCTION__) << species[ i ] << endl;
-
-		if ( cfg->exists( np + "TofPidParams." + species[ i ] ) ){
-			TofPidParams * tpp = new TofPidParams( cfg, np + "TofPidParams." + species[ i ] + "." );
-			tofParams.push_back( tpp );	
-			useTofParams = true;
-		}
-		
-		if ( cfg->exists( np + "DedxPidParams." + species[ i ] ) ){
-			DedxPidParams * dpp = new DedxPidParams( cfg, np + "DedxPidParams." + species[ i ] + "." );
-			dedxParams.push_back( dpp );
-			useDedxParams = true;
-		}
-	}
-	tofParamsMinP = cfg->getDouble( np + "TofPidParams:minP", 0.4 );
-
 
 	/**
 	 * Cuts below Pion to remove electrons
@@ -281,14 +260,14 @@ void PidPhaseSpace::autoViewport( 	string pType, double p, PhaseSpaceRecentering
 	Bichsel * dedxGen = lpsr->dedxGenerator();
 
 	double tofCenter = tofGen->mean( p, lpsr->mass( pType ) );
-	double dedxCenter = dedxGen->mean10( p, lpsr->mass( pType ), -1, 1000 );
+	double dedxCenter = dedxGen->meanLog( p, lpsr->mass( pType ), -1, 1000 );
 
 	vector<double> tofMean;
 	vector<double> dedxMean;
 
 	for ( int i = 0; i < species.size(); i ++ ){
 		tofMean.push_back(  tofGen->mean( p, lpsr->mass( species[ i ] ) ) );
-		dedxMean.push_back( dedxGen->mean10( p, lpsr->mass( species[ i ] ), -1, 1000 ) );
+		dedxMean.push_back( dedxGen->meanLog( p, lpsr->mass( species[ i ] ), -1, 1000 ) );
 	}
 
 
@@ -333,14 +312,15 @@ void PidPhaseSpace::autoViewport( 	string pType, double p, PhaseSpaceRecentering
 
 void PidPhaseSpace::enhanceDistributions( double avgP, int ptBin, int etaBin, int charge, double dedx, double tof ){
 	
-	// get the cut values in terms of ideal sigma
-	double dSigma = dedxSigmaIdeal * dedxCut;
-	double tSigma = tofSigmaIdeal * tofCut;
+	double tSigma = tofSigmaIdeal;
+	double dSigma = dedxSigmaIdeal;
 
 	// get the centered tof and dedx means
 	vector<double> tMeans = psr->centeredTofMeans( centerSpecies, avgP );
 	vector<double> dMeans = psr->centeredDedxMeans( centerSpecies, avgP );
 	vector<string> mSpecies = psr->allSpecies();
+
+	
 
 	book->cd( "tof" );
 	// unenhanced - all tof tracks
@@ -350,22 +330,17 @@ void PidPhaseSpace::enhanceDistributions( double avgP, int ptBin, int etaBin, in
 	// enhanced by species
 	if ( makeEnhanced ){
 		for ( int iS = 0; iS < mSpecies.size(); iS++ ){
-			double ddSigma = getDedxSigma( mSpecies[ iS ], avgP );
-			if ( dedx >= dMeans[ iS ] - ddSigma && dedx <= dMeans[ iS ] + ddSigma ){
+			if ( dedx >= dMeans[ iS ] - dSigma && dedx <= dMeans[ iS ] + dSigma ){
 				//book->fill( tofName( centerSpecies, 0, cBin, ptBin, etaBin, mSpecies[ iS ] ), tof, eventWeight );
 				book->fill( tofName( centerSpecies, charge, cBin, ptBin, etaBin, mSpecies[ iS ] ), tof, eventWeight );
 			}
 		} // loop on species from centered means
 	}
 
+	
 	// 3 sigma below pi to reject electrons
 	// and 3 sigma above proton to reject deuteron
-	double tofPSigma = getTofSigma( "P", avgP );
-	double tofPiSigma = getTofSigma( "Pi", avgP );
-
-	// TODO - remove tof PID params
-	if ( 	tof < tMeans[ 0 ] - tofPiSigma * nSigBelow 
-			|| tof > tMeans[ 2 ] + tofPSigma * nSigAbove )
+	if ( 	tof < tMeans[ 0 ] - tSigma * nSigBelow || tof > tMeans[ 2 ] + tSigma * nSigAbove )
 		return;
 
 
@@ -373,14 +348,14 @@ void PidPhaseSpace::enhanceDistributions( double avgP, int ptBin, int etaBin, in
 	// unenhanced - all dedx
 	// combined charge book->fill( dedxName( centerSpecies, 0, cBin, ptBin, etaBin ), dedx, eventWeight );
 	book->fill( dedxName( centerSpecies, charge, cBin, ptBin, etaBin ), dedx, eventWeight );
-	
 
 	// enhanced by species
 	if ( makeEnhanced ){
 		for ( int iS = 0; iS < mSpecies.size(); iS++ ){
-			double ttMean = getTofMean( mSpecies[ iS ], avgP );
-			double ttSigma = getTofSigma( mSpecies[ iS ], avgP );
-			if ( tof >= ttMean - ttSigma && tof <= ttMean + ttSigma ){
+			
+			double ttMean = tMeans[ iS ];
+
+			if ( tof >= ttMean - tSigma && tof <= ttMean + tSigma ){
 				//book->fill( dedxName( centerSpecies, 0, cBin, ptBin, etaBin, mSpecies[ iS ] ), dedx, eventWeight );
 				book->fill( dedxName( centerSpecies, charge, cBin, ptBin, etaBin, mSpecies[ iS ] ), dedx, eventWeight );
 			}
@@ -395,6 +370,7 @@ void PidPhaseSpace::enhanceDistributions( double avgP, int ptBin, int etaBin, in
 void PidPhaseSpace::reportAllTof() {
 
 	logger->info( __FUNCTION__ ) << endl;
+	double tSigma = tofSigmaIdeal;
 
 	book->cd();
 	int nCenBins = nCentralityBins();
@@ -412,8 +388,8 @@ void PidPhaseSpace::reportAllTof() {
 				continue;
 			for ( int iCen = 0; iCen < nCenBins; iCen++ ){
 			
-				int index = iCen + (charge + 1 ) * nCenBins + etaBin * nChargeBins * nCenBins;
-				string sn = tofName( centerSpecies, charge, iCen, 0, etaBin );
+				
+				string sn = tofName( centerSpecies, charge, iCen, 1, etaBin );
 				
 				rps.push_back( unique_ptr<Reporter>(new Reporter( baseURL + jobPrefix + baseName + sn + ".pdf", 1000, 500 )) );
 
@@ -433,7 +409,10 @@ void PidPhaseSpace::reportAllTof() {
 					continue;
 				for ( int iCen = 0; iCen < nCentralityBins(); iCen++ ){
 				
-					double avgP = averageP( ptBin, etaBin );					
+					double avgP = averageP( ptBin, etaBin );	
+
+					vector<double> tMeans = psr->centeredTofMeans( centerSpecies, avgP );
+					vector<double> dMeans = psr->centeredDedxMeans( centerSpecies, avgP );				
 
 					int index = iCen + (charge + 1 ) * nCenBins + etaBin * nChargeBins * nCenBins;
 					string n = tofName( centerSpecies, charge, iCen, ptBin, etaBin );
@@ -456,30 +435,30 @@ void PidPhaseSpace::reportAllTof() {
 					colors[ "Pi" ] = kBlue;
 					colors[ "K" ] = kGreen;
 					colors[ "P" ] = kBlack;
+					int i = 0;
 					for ( string plc : species ){
 						
-						double ttSigma = getTofSigma( plc, avgP );
-						double ttMean = getTofMean( plc, avgP );
-						TLine * l1 = new TLine( ttMean - ttSigma * tofCut, 0, ttMean - ttSigma* tofCut, 10 );
-						TLine * l2 = new TLine( ttMean + ttSigma* tofCut, 0, ttMean + ttSigma* tofCut, 10 );
+						double ttMean = tMeans[ i ];
+						TLine * l1 = new TLine( ttMean - tSigma * tofCut, 0, ttMean - tSigma* tofCut, 10 );
+						TLine * l2 = new TLine( ttMean + tSigma* tofCut, 0, ttMean + tSigma* tofCut, 10 );
 						l1->SetLineColor( colors[ plc ] );
 						l2->SetLineColor( colors[ plc ] );
 
 						l1->Draw("same");
 						l2->Draw("same");
+						i++;
 					}
-					double ttSigma = getTofSigma( "Pi", avgP );
-					double ttMean = getTofMean( "Pi", avgP );
-					logger->info(__FUNCTION__) << "PiMu = " << ttMean << ", sigma = " << ttSigma << ", nSigma = " << nSigBelow << endl; 
-					logger->info(__FUNCTION__) << "ptBin = " << ptBin << " electron cut : " << ttMean - ttSigma * nSigBelow <<  endl;
-					TLine * l1 = new TLine( ttMean - ttSigma * nSigBelow, 0, ttMean - ttSigma * nSigBelow, 100 );
+					
+					double ttMean = tMeans[ 0 ];
+					logger->info(__FUNCTION__) << "PiMu = " << ttMean << ", sigma = " << tSigma << ", nSigma = " << nSigBelow << endl; 
+					logger->info(__FUNCTION__) << "ptBin = " << ptBin << " electron cut : " << ttMean - tSigma * nSigBelow <<  endl;
+					TLine * l1 = new TLine( ttMean - tSigma * nSigBelow, 0, ttMean - tSigma * nSigBelow, 100 );
 					l1->SetLineStyle( 2 );
 					l1->SetLineColor( kRed );
 					l1->Draw( "same" );
 
-					ttSigma = getTofSigma( "P", avgP );
-					ttMean = getTofMean( "P", avgP );
-					TLine * l2 = new TLine( ttMean + ttSigma * nSigAbove, 0, ttMean + ttSigma * nSigAbove, 100 );
+					ttMean = tMeans[ 2 ];
+					TLine * l2 = new TLine( ttMean + tSigma * nSigAbove, 0, ttMean + tSigma * nSigAbove, 100 );
 					l2->SetLineStyle( 2 );
 					l2->SetLineColor( kRed );
 					l2->Draw("same" );
@@ -513,9 +492,7 @@ void PidPhaseSpace::reportAllDedx() {
 				continue;
 			for ( int iCen = 0; iCen < nCenBins; iCen++ ){
 			
-				int index = iCen + (charge + 1 ) * nCenBins + etaBin * nChargeBins * nCenBins;
-				string sn = dedxName( centerSpecies, charge, iCen, 0, etaBin );
-				
+				string sn = dedxName( centerSpecies, charge, iCen, 1, etaBin );	
 				rps.push_back( unique_ptr<Reporter>(new Reporter( baseURL + jobPrefix + baseName + sn + ".pdf", 1000, 500 )) );
 
 
@@ -534,7 +511,10 @@ void PidPhaseSpace::reportAllDedx() {
 					continue;
 				for ( int iCen = 0; iCen < nCentralityBins(); iCen++ ){
 				
-					double avgP = averageP( ptBin, etaBin );					
+					double avgP = averageP( ptBin, etaBin );
+
+					vector<double> tMeans = psr->centeredTofMeans( centerSpecies, avgP );
+					vector<double> dMeans = psr->centeredDedxMeans( centerSpecies, avgP );									
 
 					int index = iCen + (charge + 1 ) * nCenBins + etaBin * nChargeBins * nCenBins;
 					string n = dedxName( centerSpecies, charge, iCen, ptBin, etaBin );
@@ -557,10 +537,11 @@ void PidPhaseSpace::reportAllDedx() {
 					colors[ "Pi" ] = kBlue;
 					colors[ "K" ] = kGreen;
 					colors[ "P" ] = kBlack;
+					int i = 0;
 					for ( string plc : species ){
 						
-						double ttSigma = getDedxSigma( plc, avgP );
-						double ttMean = getDedxMean( plc, avgP );
+						double ttSigma = dedxSigmaIdeal;
+						double ttMean = dMeans[ i ];
 						TLine * l1 = new TLine( ttMean - ttSigma * dedxCut, 0, ttMean - ttSigma * dedxCut, 10 );
 						TLine * l2 = new TLine( ttMean + ttSigma * dedxCut, 0, ttMean + ttSigma * dedxCut, 10 );
 						l1->SetLineColor( colors[ plc ] );
@@ -568,6 +549,7 @@ void PidPhaseSpace::reportAllDedx() {
 
 						l1->Draw("same");
 						l2->Draw("same");
+						i++;
 					}
 					
 					rps[ index ]->savePage();
@@ -579,60 +561,6 @@ void PidPhaseSpace::reportAllDedx() {
 
 
 }
-
-
-double PidPhaseSpace::getTofMean( string plc, double p, bool _useTofParams ){
-	vector<double> tMeans = psr->centeredTofMeans( centerSpecies, p );
-	if ( std::find( species.begin(), species.end(), plc ) != species.end() ){
-		int index = distance( species.begin(), std::find( species.begin(), species.end(), plc ) );
-
-		if ( useTofParams && _useTofParams && p >= tofParamsMinP )
-			return tofParams[ index ]->mean( p, psr->mass( plc ), psr->mass( centerSpecies ) );
-		else
-			return tMeans[ index ];
-	}
-	assert( false );
-}
-
-double PidPhaseSpace::getTofSigma( string plc, double p, bool _useTofParams ){
-	
-	if ( std::find( species.begin(), species.end(), plc ) != species.end() ){
-		int index = distance( species.begin(), std::find( species.begin(), species.end(), plc ) );
-		if ( useTofParams && _useTofParams && p >= tofParamsMinP )
-			return tofParams[ index ]->sigma( p, psr->mass( plc ), psr->mass( centerSpecies ) );
-		else if ( useTofParams && _useTofParams && p < tofParamsMinP )
-			return tofParams[ index ]->sigma( tofParamsMinP, psr->mass( plc ), psr->mass( centerSpecies ) );
-		else
-			return tofSigmaIdeal;
-	}
-
-	assert( false );
-}
-
-double PidPhaseSpace::getDedxMean( string plc, double p ){
-	vector<double> dMeans = psr->centeredDedxMeans( centerSpecies, p );
-	if ( std::find( species.begin(), species.end(), plc ) != species.end() ){
-		int index = distance( species.begin(), std::find( species.begin(), species.end(), plc ) );
-		return dMeans[ index ];
-	}
-	assert(false);
-}
-
-double PidPhaseSpace::getDedxSigma( string plc, double p ){
-	
-	if ( std::find( species.begin(), species.end(), plc ) != species.end() ){
-		int index = distance( species.begin(), std::find( species.begin(), species.end(), plc ) );
-
-		if ( useDedxParams )
-			return dedxParams[ index ]->sigma( p );
-		else
-			return dedxSigmaIdeal;
-	}
-
-	assert( false );
-}
-
-
 
 
 
