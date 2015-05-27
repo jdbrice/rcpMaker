@@ -19,7 +19,6 @@ PidPhaseSpace::PidPhaseSpace( XmlConfig* config, string np, string fl, string jp
 	dedxScalePadding = cfg->getDouble( "binning.padding.dedxScale", .05 );
 
 	logger->info(__FUNCTION__) << "Tof Padding ( " << tofPadding << ", " << tofScalePadding << " ) " << endl;
-	book->setLogLevel( "none" );
 	/**
 	 * Initialize the Phase Space Recentering Object
 	 */
@@ -148,12 +147,12 @@ void PidPhaseSpace::analyzeTrack( int iTrack ){
 
 	double avgP = averageP( ptBin, etaBin );
 
-	/*binByMomentum = true;
+	binByMomentum = true;
 	if ( true == binByMomentum  ){
 		ptBin = binsPt->findBin( p );
 		etaBin = 0;
 		avgP = averagePt( ptBin );
-	}*/
+	}
 
 	if ( ptBin < 0 || etaBin < 0 || cBin < 0 )
 		return;
@@ -353,7 +352,7 @@ void PidPhaseSpace::enhanceDistributions( double avgP, int ptBin, int etaBin, in
 		for ( int iS = 0; iS < mSpecies.size(); iS++ ){
 			double ddSigma = getDedxSigma( mSpecies[ iS ], avgP );
 			if ( dedx >= dMeans[ iS ] - ddSigma && dedx <= dMeans[ iS ] + ddSigma ){
-				book->fill( tofName( centerSpecies, 0, cBin, ptBin, etaBin, mSpecies[ iS ] ), tof, eventWeight );
+				//book->fill( tofName( centerSpecies, 0, cBin, ptBin, etaBin, mSpecies[ iS ] ), tof, eventWeight );
 				book->fill( tofName( centerSpecies, charge, cBin, ptBin, etaBin, mSpecies[ iS ] ), tof, eventWeight );
 			}
 		} // loop on species from centered means
@@ -382,7 +381,7 @@ void PidPhaseSpace::enhanceDistributions( double avgP, int ptBin, int etaBin, in
 			double ttMean = getTofMean( mSpecies[ iS ], avgP );
 			double ttSigma = getTofSigma( mSpecies[ iS ], avgP );
 			if ( tof >= ttMean - ttSigma && tof <= ttMean + ttSigma ){
-				book->fill( dedxName( centerSpecies, 0, cBin, ptBin, etaBin, mSpecies[ iS ] ), dedx, eventWeight );
+				//book->fill( dedxName( centerSpecies, 0, cBin, ptBin, etaBin, mSpecies[ iS ] ), dedx, eventWeight );
 				book->fill( dedxName( centerSpecies, charge, cBin, ptBin, etaBin, mSpecies[ iS ] ), dedx, eventWeight );
 			}
 		} // loop on species from centered means	

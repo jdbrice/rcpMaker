@@ -197,7 +197,7 @@ bool InclusiveSpectra::keepEvent(){
 		 * Bad Run Rejection
 		 */
 		if ( rmc->isBad( pico->runId() ) ){
-			logger->warn( __FUNCTION__ ) << "Rejecting Run : " << pico->runId() << endl;
+			logger->debug( __FUNCTION__ ) << "Rejecting Run : " << pico->runId() << endl;
 			return false;
 		} 
 
@@ -213,7 +213,7 @@ bool InclusiveSpectra::keepEvent(){
 	 * Bad Run Rejection
 	 */
 	if ( rmc->isBad( pico->runId() ) ){
-		logger->warn( __FUNCTION__ ) << "Rejecting Run : " << pico->runId() << endl;
+		logger->debug( __FUNCTION__ ) << "Rejecting Run : " << pico->runId() << endl;
 		return false;
 	} 
 

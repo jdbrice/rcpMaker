@@ -65,19 +65,25 @@ namespace TSF{
 					continue;
 
 
-				if ( "nll" != self->schema->getMethod() ){
+				if ( "chi2" != self->schema->getMethod() ){
 					// Minimize by chi^2
 					if ( 0 == d.ey  )
 						continue;
 					double modelVal = modelEval( ds, d.x );
 					fnVal += chi2( d.y, modelVal, d.ey );	
-				} else {
+				} else if ( "nll" == self->schema->getMethod() ){
 					// Minimize by negative log likelihood
 					double modelVal = modelEval( ds, d.x );
-					//cout << "Model = " << modelVal << endl;
-					//cout << "nllModel = " << nll( d.y, modelVal ) << endl;
+					
 					fnVal += nll( d.y, modelVal );
-					//cout << "nll = " << nll( d.y, modelVal ) << endl; 
+				} else if ( "poisson" == self->schema->getMethod() ){
+					// Minimize by chi^2
+					if ( 0 == d.ey  )
+						continue;
+					double modelVal = modelEval( ds, d.x );
+					fnVal += poisson( d.y, modelVal, d.ey );	
+				} else {
+					cout << "No Fit method" << endl;
 				}
 			} // loop on data points
 
@@ -117,12 +123,45 @@ namespace TSF{
 		dataHists[ "zb_K" ] 	= (TH1D*)dataFile->Get( ("tof/" + PidPhaseSpace::tofName( cs, charge, cenBin, ptBin, etaBin, "K" )).c_str() );
 		dataHists[ "zb_P" ] 	= (TH1D*)dataFile->Get( ("tof/" + PidPhaseSpace::tofName( cs, charge, cenBin, ptBin, etaBin, "P" )).c_str() );
 		
+		// always include the all stuff
+		addPlayer( "zb_All_gPi" );
+		addPlayer( "zb_All_gK" );
+		addPlayer( "zb_All_gP" );
+		addPlayer( "zd_All_gPi" );
+		addPlayer( "zd_All_gK" );
+		addPlayer( "zd_All_gP" );
 
 		for ( auto k : dataHists ){
 			schema->loadDataset( k.first, k.second );
 		}
 	}
 
+	void Fitter::fixedFit( string cs, int charge, int cenBin, int ptBin, int etaBin ){
+
+		for ( int i = 0; i < parNames.size(); i++ ){
+
+			bool shouldFix = false;
+			if ( string::npos != parNames[ i ].find( "sig" ) || string::npos != parNames[ i ].find( "mu" ) )
+				shouldFix = true;
+
+			if ( schema->vars[ parNames[ i ] ]->fixed || shouldFix )
+				minuit->FixParameter( i );
+		}
+
+		fit( cs, charge, cenBin, ptBin, etaBin );
+
+		for ( int i = 0; i < parNames.size(); i++ ){
+
+			bool shouldFix = false;
+			if ( string::npos != parNames[ i ].find( "sig" ) || string::npos != parNames[ i ].find( "mu" ) )
+				shouldFix = true;
+
+			if ( !schema->vars[ parNames[ i ] ]->fixed )
+				minuit->Release( i );
+		}
+
+	}
+	
 	void Fitter::fit( string cs, int charge, int cenBin, int ptBin, int etaBin ){
 		logger->info(__FUNCTION__) << endl;
 
@@ -151,7 +190,7 @@ namespace TSF{
       	int tries = 0;
 
       	iFlag = 4;
-      	while ( iFlag > 0 && tries < 9 ){
+      	while ( iFlag > 0 && tries < 3 ){
       		logger->info(__FUNCTION__) << "Running MINI" << endl;
       		arglist[ 0 ] = -1;
 			arglist[ 1 ] = 1.0;
@@ -159,9 +198,9 @@ namespace TSF{
 			tries++;
       	}
 
-      	if ( iFlag > 0 )
-      		minuit->mnexcm( "MINOS", arglist, 1, iFlag );
-      	else
+      	//if ( iFlag > 0 )
+      	//	minuit->mnexcm( "MINOS", arglist, 1, iFlag );
+      	//else
       		minuit->mnexcm( "HESSE", arglist, 1, iFlag ); // get errors
 
 		cout << "iFlag " << iFlag << endl;
@@ -189,9 +228,10 @@ namespace TSF{
 		double bw = self->schema->datasets[ dataset ].pointNear( x ).bw;
 		double val = 0.0;
 		for ( auto k : self->schema->models ){
-						
-			if ( k.second->dataset == dataset ){
+			//cout << "name : " << k.first << endl;
+			if ( k.second->dataset == dataset && self->players[ k.first ] ){ // second part is looking for active
 				val += k.second->eval( x, bw );
+			} else if ( !self->players[ k.first ] ){
 			}
 		}
 		return val;
@@ -264,6 +304,25 @@ namespace TSF{
 
 		TGraph * graph = new TGraph( vx.size(), vx.data(), vy.data() );
 		return graph;
+	}
+
+
+	void Fitter::updateParameters( int npar, double * pars){
+			
+		// update the variables
+		for ( int i = 0; i < self->parNames.size(); i++ ){
+			
+			if ( npar >= self->parNames.size() ){
+				double val = pars[ i ];
+				self->schema->vars[ self->parNames[ i ] ]->val = val;
+			} else {
+				double val = 0, err = 0;
+				self->minuit->GetParameter( i, val, err );
+				self->schema->vars[ self->parNames[ i ] ]->val = val;
+				self->schema->vars[ self->parNames[ i ] ]->error = err;
+			}
+		}
+		self->schema->updateModels( self->players );		
 	}
 
 

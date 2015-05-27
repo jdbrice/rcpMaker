@@ -4,14 +4,14 @@
 	<jobType>PidPhaseSpace</jobType>
 
 	<PidPhaseSpace>
-		<Logger color="true" logLevel="warning" />
+		<Logger color="true" logLevel="warning" globalLogLevel="info" />
 		
 		<input>
-			<dst treeName="rcpPicoDst" url="/Users/danielbrandenburg/bnl/local/data/BES/15GeV/" maxFiles="50"/>
+			<dst treeName="rcpPicoDst" url="/Users/danielbrandenburg/bnl/local/data/BES/15GeV/rcpPicoDst_preRefMultFix/" maxFiles="10"/>
 		</input>
 
-		<output path="../products/phaseSpace/15GeV/">
-			<data>pid_nl_tr.root</data>
+		<output path="../products/15GeV/phaseSpace/">
+			<data>pid_pbin.root</data>
 			<Reports></Reports>
 		</output>
 
@@ -47,7 +47,7 @@
 			<method>nonlinear</method>
 		</PhaseSpaceRecentering>
 
-		<makePhaseSpace 2D="true" enhanced="true" /> 
+		<makePhaseSpace 2D="false" enhanced="true" /> 
 
 		<histograms >
 

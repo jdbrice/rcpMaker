@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
 
-	<jobType>SimultaneousPid</jobType>
+	<jobType>SimultaneousTPid</jobType>
 
 	<SimultaneousPid>
 		<Logger color="true" logLevel="all"/>
@@ -16,7 +16,7 @@
 		<!-- fit bins -->
 		<FitRange>
 			<ptBins min="0" max="25" />
-			<centralityBins>0</centralityBins>
+			<centralityBins>0, 6</centralityBins>
 			<etaBins>0</etaBins>
 			<charges>1</charges>
 		</FitRange>
@@ -74,7 +74,7 @@
 			<method>nonlinear</method>
 		</PhaseSpaceRecentering>
 
-		<FitSchema method="nll" roi="-1">
+		<FitSchema method="poisson" roi="2">
 
 			<!-- 1/beta -->
 			<!-- Mus -->

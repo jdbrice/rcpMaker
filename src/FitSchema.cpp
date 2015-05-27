@@ -90,11 +90,13 @@ namespace TSF{
 
 	}
 
-	void FitSchema::updateModels(){
+	void FitSchema::updateModels( map<string, bool> &act  ){
 
 		for ( auto k : models ){
 
 			k.second->setVars( vars ); 
+			if ( !act[ k.first ] )
+				k.second->y = 1;
 		}
 	}
 

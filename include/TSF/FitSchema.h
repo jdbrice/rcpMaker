@@ -54,7 +54,7 @@ namespace TSF{
 		void makeFitVars();
 		void makeModels();
 		void makeGauss( string path );
-		void updateModels();
+		void updateModels( map<string, bool> &act);
 
 		void loadDataset( string ds, TH1 * h );
 

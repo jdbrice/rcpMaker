@@ -5,14 +5,14 @@
 
 	<PidYieldPresenter>
 		<Logger color="true" logLevel="info" globalLogLevel="warning" />
-		<Reporter> <output url="../products/presentation/11GeV/present.pdf" width="800" height="500" /> </Reporter>	
+		<Reporter> <output url="../products/11GeV/presentation/present.pdf" width="800" height="500" /> </Reporter>	
 
 		<input>
-			<fit url="../products/sgf/11GeV/sgf_all.root" />
+			<fit url="tsf_test.root" />
 			<ps url="../products/phaseSpace/11GeV/pid_all_pt.root" />
 		</input>
 
-		<output path="../products/presentation/11GeV/">
+		<output path="../products/11GeV/presentation/">
 			<data url="data.root"/>
 		</output>
 
