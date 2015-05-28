@@ -33,7 +33,7 @@ namespace TSF{
 
 		map<string, bool> players;
 
-
+		double norm;
 
 	public:
 		Fitter( shared_ptr<FitSchema> _schema, TFile * dataFile );
@@ -51,8 +51,8 @@ namespace TSF{
 			return q*q;
 		};
 
-		static double poisson( double data, double pred, double ey ){
-			double q = (data - pred) * (data - pred) / ey;
+		static double poisson( double data, double pred){
+			double q = (data - pred) * (data - pred) / data;
 			return q;
 		};
 
@@ -84,6 +84,8 @@ namespace TSF{
 			}
 		}
 
+
+		double getNorm() { return norm; }
 
 	};
 }

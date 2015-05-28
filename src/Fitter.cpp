@@ -35,7 +35,7 @@ namespace TSF{
 
 		}
 
-		minuit->SetPrintLevel( -1 );
+		minuit->SetPrintLevel( 0 );
 		minuit->SetFCN( tminuitFCN );
 
 		logger->info(__FUNCTION__) << endl;
@@ -52,6 +52,7 @@ namespace TSF{
 		updateParameters( npar, par );
 
 		bool useRange = self->schema->constrainFitRange();
+		string method = self->schema->getMethod();
 
 		// loop on datasets
 		for ( auto k : self->schema->datasets ){
@@ -65,31 +66,29 @@ namespace TSF{
 					continue;
 
 
-				if ( "chi2" != self->schema->getMethod() ){
+				if ( "chi2" == method ){
 					// Minimize by chi^2
 					if ( 0 == d.ey  )
 						continue;
 					double modelVal = modelEval( ds, d.x );
 					fnVal += chi2( d.y, modelVal, d.ey );	
-				} else if ( "nll" == self->schema->getMethod() ){
+				} else if ( "nll" == method ){
 					// Minimize by negative log likelihood
 					double modelVal = modelEval( ds, d.x );
 					
 					fnVal += nll( d.y, modelVal );
-				} else if ( "poisson" == self->schema->getMethod() ){
-					// Minimize by chi^2
-					if ( 0 == d.ey  )
+				} else if ( "poisson" == method ){
+					// Minimize by poisson errors ie error = sqrt( N )
+					if ( 0 >= d.y || 0 >= d.ey )
 						continue;
 					double modelVal = modelEval( ds, d.x );
-					fnVal += poisson( d.y, modelVal, d.ey );	
+					fnVal += poisson( d.y, modelVal );	
 				} else {
 					cout << "No Fit method" << endl;
 				}
 			} // loop on data points
 
-			if ( "nll" != self->schema->getMethod() ){
-				// nothing needed here for chi2
-			} else {
+			if ( "nll" == method ){
 				double mYield = modelYield( ds );
 				double dsYield = k.second.yield();
 
@@ -99,7 +98,7 @@ namespace TSF{
 
 		}
 
-		convergence.push_back( fnVal );
+		//convergence.push_back( fnVal );
 		//cout << " nll = " << fnVal << endl;
 		f = fnVal;		
 	}
@@ -123,15 +122,15 @@ namespace TSF{
 		dataHists[ "zb_K" ] 	= (TH1D*)dataFile->Get( ("tof/" + PidPhaseSpace::tofName( cs, charge, cenBin, ptBin, etaBin, "K" )).c_str() );
 		dataHists[ "zb_P" ] 	= (TH1D*)dataFile->Get( ("tof/" + PidPhaseSpace::tofName( cs, charge, cenBin, ptBin, etaBin, "P" )).c_str() );
 		
-		// always include the all stuff
-		addPlayer( "zb_All_gPi" );
-		addPlayer( "zb_All_gK" );
-		addPlayer( "zb_All_gP" );
-		addPlayer( "zd_All_gPi" );
-		addPlayer( "zd_All_gK" );
-		addPlayer( "zd_All_gP" );
+		
+		norm = dataHists[ "zd_All"]->Integral();
 
 		for ( auto k : dataHists ){
+
+			// normalize
+			k.second->Sumw2();
+			k.second->Scale( 100.0 / norm );
+			
 			schema->loadDataset( k.first, k.second );
 		}
 	}
@@ -168,19 +167,22 @@ namespace TSF{
 		// load the current datasets
 		loadDatasets( cs, charge, cenBin, ptBin, etaBin );
 
-		convergence.clear();
+		//updateParameters();
+		//return;
+
 
 		//return;
 		double arglist[10];
       	arglist[0] = -1;
       	int iFlag = 0;
-      	fitIsGood = false;
+      	fitIsGood = false; 
 
       	if ( schema->constrainFitRange() ){
       		schema->reportFitRanges();
       	}
 
       	logger->info(__FUNCTION__) << "Fit Method : " << self->schema->getMethod() << endl;
+      	logger->info(__FUNCTION__) << "OK Starting for ( " << cs << ", " << charge << ", " << cenBin << ", " << ptBin << ", " << etaBin << " ) " << endl;
       	if ( "nll" != self->schema->getMethod() )
       		arglist[ 0 ] = 1.0; 
       	else 
@@ -198,14 +200,14 @@ namespace TSF{
 			tries++;
       	}
 
-      	//if ( iFlag > 0 )
-      	//	minuit->mnexcm( "MINOS", arglist, 1, iFlag );
-      	//else
-      		minuit->mnexcm( "HESSE", arglist, 1, iFlag ); // get errors
+      	// if ( iFlag > 0 )
+      	// 	minuit->mnexcm( "MINOS", arglist, 1, iFlag );
+      	// else
+      	minuit->mnexcm( "HESSE", arglist, 1, iFlag ); // get errors
 
 		cout << "iFlag " << iFlag << endl;
 		//if ( 0 == iFlag )
-		fitIsGood = true;
+			fitIsGood = true;
 
 		//logger->info(__FUNCTION__) << "Calculating errors with HESE" << endl;
 		//minuit->mnexcm( "HESSE", arglist, 1, iFlag );
@@ -250,7 +252,7 @@ namespace TSF{
 
 
 	TGraph * Fitter::plotResult( string datasetOrModel ){
-		logger->info(__FUNCTION__) << "Plotting : " << datasetOrModel << endl;
+		logger->debug(__FUNCTION__) << "Plotting : " << datasetOrModel << endl;
 
 		string datasetName = "";
 		string modelName = "";
@@ -276,9 +278,14 @@ namespace TSF{
 			return new TGraph();
 		}
 
+		if ( "" != modelName && !self->players[ modelName ] ){
+			logger->info(__FUNCTION__) << "Skipping inactive Player" << endl;
+			return new TGraph();
+		}
+
 		pair<double, double> xBounds = schema->datasets[ datasetName ].rangeX(  );
 
-		cout << "Plotting from ( " << xBounds.first << ", " << xBounds.second <<" ) "<< endl;	
+		logger->debug(__FUNCTION__) << "Plotting from ( " << xBounds.first << ", " << xBounds.second <<" ) "<< endl;	
 		double stepsize = (xBounds.second - xBounds.first) / 500.0;
 		vector<double> vx, vy;
 

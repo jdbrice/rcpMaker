@@ -120,11 +120,11 @@ public:
 
 	vector<double> centeredDedxMeans( string center, double p, vector<string> others ){
 		
-		const double cMean = dedxGen->mean10( p, mass( center ), -1, 1000 );
+		const double cMean = dedxGen->meanLog( p, mass( center ), -1, 1000 );
 
 		vector<double> res;
 		for ( int i = 0; i < others.size(); i++ ){
-			double m = dedxGen->mean10( p, mass( others[ i ] ), -1, 1000 ) - cMean;
+			double m = dedxGen->meanLog( p, mass( others[ i ] ), -1, 1000 ) - cMean;
 			res.push_back( m );
 		}
 
@@ -132,11 +132,11 @@ public:
 	}
 	vector<double> centeredDedxMeans( string center, double p ){
 		
-		const double cMean = dedxGen->mean10( p, mass( center ), -1, 1000 );
+		const double cMean = dedxGen->meanLog( p, mass( center ), -1, 1000 );
 		
 		vector<double> res;
 		for ( int i = 0; i < species.size(); i++ ){
-			double m = dedxGen->mean10( p, mass( species[ i ] ), -1, 1000 ) - cMean;
+			double m = dedxGen->meanLog( p, mass( species[ i ] ), -1, 1000 ) - cMean;
 			res.push_back( m );
 		}
 		return res;
@@ -144,11 +144,11 @@ public:
 
 	map<string, double> centeredDedxMap( string center, double p ){
 		
-		const double cMean = dedxGen->mean10( p, mass( center ), -1, 1000 );
+		const double cMean = dedxGen->meanLog( p, mass( center ), -1, 1000 );
 		
 		map<string, double> res;
 		for ( int i = 0; i < species.size(); i++ ){
-			double m = dedxGen->mean10( p, mass( species[ i ] ), -1, 1000 ) - cMean;
+			double m = dedxGen->meanLog( p, mass( species[ i ] ), -1, 1000 ) - cMean;
 			res[species[ i ] ] = m ;
 		}
 		return res;
@@ -184,7 +184,7 @@ public:
 		double dedxLog = Log( dedx );
 
 		// mean for this species
-		//double mu = dedxGen->mean10( p, mass( centerSpecies ), -1, 1000 );
+		//double mu = dedxGen->meanLog( p, mass( centerSpecies ), -1, 1000 );
 		const double muAvg = dedxGen->meanLog( avgP, mass( centerSpecies ), -1, 1000 );
 
 		double n1 = 0;

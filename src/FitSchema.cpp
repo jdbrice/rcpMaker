@@ -76,6 +76,10 @@ namespace TSF{
 
 		datasets[ ds ].clear();
 
+		// // normalize h first
+		//h->Sumw2();
+		//h->Scale( 100.0 / h->Integral() );
+
 		for ( int i = 1; i <= h->GetNbinsX(); i++ ){
 
 			double center = h->GetBinCenter( i );
@@ -95,8 +99,8 @@ namespace TSF{
 		for ( auto k : models ){
 
 			k.second->setVars( vars ); 
-			if ( !act[ k.first ] )
-				k.second->y = 1;
+			//if ( !act[ k.first ] )
+			//	k.second->y = 0.0001;
 		}
 	}
 
@@ -114,8 +118,8 @@ namespace TSF{
 			vars[ var ]->min = 0;
 			vars[ var ]->max = 0;
 		} else { // set the range
-			vars[ var ]->min = _mu - _sigma * _dmu;
-			vars[ var ]->max = _mu + _sigma * _dmu;
+			vars[ var ]->min = 0; //_mu - _sigma * _dmu;
+			vars[ var ]->max = 0; //_mu + _sigma * _dmu;
 		}
 
 		logger->info(__FUNCTION__) <<  vars[ var ]->toString() << endl;

@@ -102,18 +102,7 @@ namespace TSF{
 
 	void FitRunner::make(){
 
-		//Constraints on the mu 	 
-		double zbDeltaMu = cfg->getDouble( nodePath + "ParameterFixing.deltaMu:zb", 1.5 );
-		double zdDeltaMu = cfg->getDouble( nodePath + "ParameterFixing.deltaMu:zd", 1.5 );
 		
-		//Constraints on the sigma  
-		double zbDeltaSigma = cfg->getDouble( nodePath + "ParameterFixing.deltaSigma:zb", -1 );
-		double zdDeltaSigma = cfg->getDouble( nodePath + "ParameterFixing.deltaSigma:zd", -1 );
-
-		bool paramFixing = cfg->getBool( nodePath + "ParameterFixing:apply", true );
-
-		// fit roi
-		double roi = cfg->getDouble( nodePath + "FitSchema:roi", -1 );
 
 		//The bins to fit over
 		vector<int> centralityFitBins = cfg->getIntVector( nodePath + "FitRange.centralityBins" );
@@ -142,104 +131,25 @@ namespace TSF{
 
 						double avgP = averageP( iPt, iEta );
 						
+						logger->warn(__FUNCTION__) << "<p> = " << avgP << endl;
 						logger->info(__FUNCTION__) << "pt Bin : " << iPt << endl;
 						logger->info(__FUNCTION__) << "Cen Bin : " << iCen << endl;
 						logger->info(__FUNCTION__) << "Charge Bin : " << iCharge << endl;
 						logger->info(__FUNCTION__) << "Eta Bin : " << iEta << endl;
-						logger->info(__FUNCTION__) << "ParameterFixing : " << paramFixing << endl;
 
 						schema->clearRanges();
+
+						prepare( avgP, iCen );
 
 						//if ( avgP > 1.4 ){
 						//	schema->setMethod( "nll" );
 						//}
 						//
 						
-						vector<string> activePlayers;
-						for ( string plc : PidPhaseSpace::species ){
-
-							// zb Parameters
-							double zbMu = zbMean( plc, avgP, iCen );
-							double zbSig = zbSigma( plc, avgP, iCen );
-
-							// zd Parameters
-							double zdMu = zdMean( plc, avgP );
-							double zdSig = zdSigma( plc, avgP, iCen );
-
-							// update the schema
-							logger->trace(__FUNCTION__) << plc << " : zb mu=" << zbMu << ", sig=" << zbSig << endl;
-							logger->trace(__FUNCTION__) << plc << " : zd mu=" << zdMu << ", sig=" << zdSig << endl; 
-							
-							// check if the sigmas should be fixed
-							double zbMinParP = cfg->getDouble( nodePath + "ParameterFixing." + plc + ":zbSigma", 5.0 );
-							double zdMinParP = cfg->getDouble( nodePath + "ParameterFixing." + plc + ":zdSigma", 5.0 );
-
-
-							if ( true == paramFixing && iPt != 0 ){ // if 1st bin let schema settings stick
-								
-								schema->setInitialMu( "zb_mu_"+plc, zbMu, zbSig, zbDeltaMu );
-								schema->setInitialSigma( "zb_sigma_"+plc, zbSig, zbDeltaSigma );
-							
-								schema->setInitialMu( "zd_mu_"+plc, zdMu, zdSig, zdDeltaMu );
-								schema->setInitialSigma( "zd_sigma_"+plc, zdSig, zdDeltaSigma );
-							}
-
-								
-							if ( false == paramFixing ){
-								schema->setInitialMu( "zb_mu_"+plc, zbMu, zbSig, zbDeltaMu );
-								schema->setInitialMu( "zd_mu_"+plc, zdMu, zdSig, zdDeltaMu );
-
-								schema->setInitialSigma( "zb_sigma_"+plc, zbSig, tofSigmaIdeal * .25, tofSigmaIdeal * 4 );
-								schema->setInitialSigma( "zd_sigma_"+plc, zdSig,dedxSigmaIdeal * .25 , dedxSigmaIdeal * 4 );
-							}
-			
-							//if ( true == paramFixing  ){
-								if ( zbMinParP > 0 && avgP >= zbMinParP)
-								schema->fixParameter( "zb_sigma_" + plc, zbSig );
-								
-								if ( zdMinParP > 0 && avgP >= zdMinParP )
-									schema->fixParameter( "zd_sigma_" + plc, zdSig );
-								if ( roi > 0 ){
-									schema->addRange( "zb_All", zbMu - zbSig * roi, zbMu + zbSig * roi );
-									schema->addRange( "zb_Pi", zbMu - zbSig * roi, zbMu + zbSig * roi );
-									schema->addRange( "zb_K", zbMu - zbSig * roi, zbMu + zbSig * roi );
-									schema->addRange( "zb_P", zbMu - zbSig * roi, zbMu + zbSig * roi );	
-
-									schema->addRange( "zd_All", zdMu - zdSig * roi, zdMu + zdSig * roi );
-									schema->addRange( "zd_Pi", zdMu - zdSig * roi, zdMu + zdSig * roi );
-									schema->addRange( "zd_K", zdMu - zdSig * roi, zdMu + zdSig * roi );
-									schema->addRange( "zd_P", zdMu - zdSig * roi, zdMu + zdSig * roi );	
-								}
-							//}
-						
-
-							// decide which models to include
-							activePlayers.push_back( "zb_All" );
-							activePlayers.push_back( "zd_All" );
-							for ( auto plc2 : PidPhaseSpace::species ){
-								activePlayers.push_back( "zb_" + plc2 + "_g" + plc2 );
-								activePlayers.push_back( "zd_" + plc2 + "_g" + plc2 );
-								if ( plc == plc2 ) continue;
-
-								double zbMu2 = zbMean( plc2, avgP, iCen );
-								double zbNd = ( zbMu - zbMu2 ) / zbSig;
-
-								if ( abs( zbNd ) < 3.0 )
-									activePlayers.push_back( "zd_" + plc + "_g" + plc2 );
-
-								double zdMu2 = zdMean( plc2, avgP );
-								double zdNd = ( zdMu - zdMu2 ) / zdSig;
-
-								if ( abs( zdNd ) < 3.0 )
-									activePlayers.push_back( "zb_" + plc + "_g" + plc2 );
-
-							}
-
-						} // loop on plc to set config
 
 						Fitter fitter( schema, inFile );
 						fitter.addPlayers( activePlayers );
-						fitter.fixedFit( centerSpecies, iCharge, iCen, iPt, iEta );
+						//fitter.fixedFit( centerSpecies, iCharge, iCen, iPt, iEta );
 						fitter.fit( centerSpecies, iCharge, iCen, iPt, iEta );
 
 						// fill info about fit convergence
@@ -259,7 +169,7 @@ namespace TSF{
 						reportFit( &fitter, iPt );
 
 						if ( fitter.isFitGood() )
-							fillFitHistograms(iPt, iCen, iCharge, iEta );
+							fillFitHistograms(iPt, iCen, iCharge, iEta, fitter.getNorm() / 100.0 );
 
 					}// loop pt Bins
 				} // loop eta bins
@@ -295,8 +205,25 @@ namespace TSF{
 		gPad->SetLogy(1);
 
 	}
-/*
-	void setupFixedFit( float avgP, int iCen ){
+
+	void FitRunner::prepare( double avgP, int iCen ){
+
+		//Constraints on the mu 	 
+		double zbDeltaMu = cfg->getDouble( nodePath + "ParameterFixing.deltaMu:zb", 1.5 );
+		double zdDeltaMu = cfg->getDouble( nodePath + "ParameterFixing.deltaMu:zd", 1.5 );
+		
+		//Constraints on the sigma  
+		double zbDeltaSigma = cfg->getDouble( nodePath + "ParameterFixing.deltaSigma:zb", -1 );
+		double zdDeltaSigma = cfg->getDouble( nodePath + "ParameterFixing.deltaSigma:zd", -1 );
+
+		bool paramFixing = cfg->getBool( nodePath + "ParameterFixing:apply", true );
+
+		// fit roi
+		double roi = cfg->getDouble( nodePath + "FitSchema:roi", -1 );
+
+
+
+		activePlayers.clear();
 		for ( string plc : PidPhaseSpace::species ){
 
 			// zb Parameters
@@ -316,16 +243,19 @@ namespace TSF{
 			double zdMinParP = cfg->getDouble( nodePath + "ParameterFixing." + plc + ":zdSigma", 5.0 );
 
 
-			if ( true == paramFixing && iPt != 0 ){ // if 1st bin let schema settings stick
+			if ( true /*== paramFixing && iPt != 0*/ ){ // if 1st bin let schema settings stick
 				
 				schema->setInitialMu( "zb_mu_"+plc, zbMu, zbSig, zbDeltaMu );
-				schema->setInitialSigma( "zb_sigma_"+plc, zbSig, zbDeltaSigma );
-			
 				schema->setInitialMu( "zd_mu_"+plc, zdMu, zdSig, zdDeltaMu );
-				schema->setInitialSigma( "zd_sigma_"+plc, zdSig, zdDeltaSigma );
+
+				//if ( avgP < 0. ){
+					schema->setInitialSigma( "zb_sigma_"+plc, zbSig, 0.0, 0.0 );
+					schema->setInitialSigma( "zd_sigma_"+plc, zdSig, 0.0, 0.0 );	
+				//}
+				
 			}
 
-				
+				/*
 			if ( false == paramFixing ){
 				schema->setInitialMu( "zb_mu_"+plc, zbMu, zbSig, zbDeltaMu );
 				schema->setInitialMu( "zd_mu_"+plc, zdMu, zdSig, zdDeltaMu );
@@ -340,17 +270,56 @@ namespace TSF{
 				
 				if ( zdMinParP > 0 && avgP >= zdMinParP )
 					schema->fixParameter( "zd_sigma_" + plc, zdSig );
-				if ( roi > 0 ){
-					schema->addRange( "zb_All", zbMu - zbSig * roi, zbMu + zbSig * roi );
-					schema->addRange( "zb_Pi", zbMu - zbSig * roi, zbMu + zbSig * roi );
-					schema->addRange( "zb_K", zbMu - zbSig * roi, zbMu + zbSig * roi );
-					schema->addRange( "zb_P", zbMu - zbSig * roi, zbMu + zbSig * roi );	
-				}
-			//}
+				
+			//}*/
 		
+			if ( roi > 0 ){
+				schema->addRange( "zb_All", zbMu - zbSig * roi, zbMu + zbSig * roi );
+				schema->addRange( "zb_Pi", zbMu - zbSig * roi, zbMu + zbSig * roi );
+				schema->addRange( "zb_K", zbMu - zbSig * roi, zbMu + zbSig * roi );
+				schema->addRange( "zb_P", zbMu - zbSig * roi, zbMu + zbSig * roi );	
+
+				schema->addRange( "zd_All", zdMu - zdSig * roi, zdMu + zdSig * roi );
+				schema->addRange( "zd_Pi", zdMu - zdSig * roi, zdMu + zdSig * roi );
+				schema->addRange( "zd_K", zdMu - zdSig * roi, zdMu + zdSig * roi );
+				schema->addRange( "zd_P", zdMu - zdSig * roi, zdMu + zdSig * roi );	
+			}
+
+			// decide which models to include
+			
+			for ( auto plc2 : PidPhaseSpace::species ){
+
+				if ( plc2 != "P" || avgP > 0.8  )
+					activePlayers.push_back( "zb_" + plc2 + "_g" + plc2 );
+				activePlayers.push_back( "zd_" + plc2 + "_g" + plc2 );
+				if ( plc == plc2 ) continue;
+
+				double zbMu2 = zbMean( plc2, avgP, iCen );
+				double zbNd = ( zbMu - zbMu2 ) / zbSig;
+
+				if ( abs( zbNd ) < 3.0 )
+					activePlayers.push_back( "zd_" + plc + "_g" + plc2 );
+
+				double zdMu2 = zdMean( plc2, avgP );
+				double zdNd = ( zdMu - zdMu2 ) / zdSig;
+
+				if ( abs( zdNd ) < 3.0 )
+					activePlayers.push_back( "zb_" + plc + "_g" + plc2 );
+
+			}
+
+			// always include the all stuff
+			activePlayers.push_back( "zb_All_gPi" );
+			activePlayers.push_back( "zb_All_gK" );
+			activePlayers.push_back( "zd_All_gPi" );
+			activePlayers.push_back( "zd_All_gK" );
+			if ( avgP > 0.4 ){
+				activePlayers.push_back( "zb_All_gP" );
+				activePlayers.push_back( "zd_All_gP" );
+			}
+
 		} // loop on plc to set config
 	}
-*/
 
 
 	void FitRunner::reportFit( Fitter * fitter, int iPt ){
@@ -387,7 +356,7 @@ namespace TSF{
 	}
 
 
-	void FitRunner::fillFitHistograms(int iPt, int iCen, int iCharge, int iEta ){
+	void FitRunner::fillFitHistograms(int iPt, int iCen, int iCharge, int iEta, double norm ){
 
 		for ( string plc : PidPhaseSpace::species ){
 
@@ -400,8 +369,8 @@ namespace TSF{
 				logger->info(__FUNCTION__) << "Filling Yield for " << plc << endl;
 				string name = yieldName( plc, iCen, iCharge, iEta );
 				book->cd( plc+"_yield");
-				double sC = schema->vars[ "yield_"+plc ]->val / book->get( name )->GetBinWidth( iiPt );
-				double sE = schema->vars[ "yield_"+plc ]->error / book->get( name )->GetBinWidth( iiPt );
+				double sC = schema->vars[ "yield_"+plc ]->val * norm / book->get( name )->GetBinWidth( iiPt );
+				double sE = schema->vars[ "yield_"+plc ]->error * norm / book->get( name )->GetBinWidth( iiPt );
 				
 				book->get( name )->SetBinContent( iiPt, sC );
 				book->get( name )->SetBinError( iiPt, sE );

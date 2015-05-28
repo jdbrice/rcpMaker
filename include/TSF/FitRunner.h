@@ -47,6 +47,8 @@ namespace TSF{
 
 		unique_ptr<Reporter> zbReporter, zdReporter;
 
+		vector<string> activePlayers;
+
 	public:
 		FitRunner( XmlConfig * _cfg, string _np  );
 
@@ -64,9 +66,11 @@ namespace TSF{
 	protected:
 
 		void makeHistograms();
-		void fillFitHistograms(int iPt, int iCen, int iCharge, int iEta );
+		void fillFitHistograms(int iPt, int iCen, int iCharge, int iEta, double norm );
 		void reportFit( Fitter * fitter, int iPt );
 		void drawSet( string v, Fitter * fitter, int iPt );
+
+		void prepare( double avgP, int iCen );
 
 
 		double p( double pt, double eta ){
@@ -83,7 +87,7 @@ namespace TSF{
 			double avgPt = ((*binsPt)[ ptBin ] + (*binsPt)[ ptBin + 1 ]) / 2.0;
 			double avgEta = ((*binsEta)[ etaBin ] + (*binsEta)[ etaBin + 1 ]) / 2.0;
 
-			return p( avgPt, avgEta );
+			return avgPt;//p( avgPt, avgEta );
 
 		}
 
