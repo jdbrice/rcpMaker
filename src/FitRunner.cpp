@@ -2,6 +2,7 @@
 #include "TSF/FitRunner.h"
 #include "PidPhaseSpace.h"
 
+#include "TGraph.h"
 
 namespace TSF{
 	FitRunner::FitRunner( XmlConfig * _cfg, string _np) 
@@ -46,6 +47,7 @@ namespace TSF{
 			zbParams = unique_ptr<ZbPidParameters>( new ZbPidParameters( paramsConfig.get(), "TofPidParams", psr ) );
 			zdParams = unique_ptr<ZdPidParameters>( new ZdPidParameters( paramsConfig.get(), "DedxPidParams" ) );	
 		}
+
 	}
 
 	FitRunner::~FitRunner(){
@@ -249,8 +251,8 @@ namespace TSF{
 				schema->setInitialMu( "zd_mu_"+plc, zdMu, zdSig, zdDeltaMu );
 
 				//if ( avgP < 0. ){
-					schema->setInitialSigma( "zb_sigma_"+plc, zbSig, 0.0, 0.0 );
-					schema->setInitialSigma( "zd_sigma_"+plc, zdSig, 0.0, 0.0 );	
+					schema->setInitialSigma( "zb_sigma_"+plc, zbSig, 0, 0);//0.006, 0.025 );
+					schema->setInitialSigma( "zd_sigma_"+plc, zdSig, 0, 0);//0.04, 0.16 );	
 				//}
 				
 			}
@@ -288,23 +290,37 @@ namespace TSF{
 			// decide which models to include
 			
 			for ( auto plc2 : PidPhaseSpace::species ){
-
-				if ( plc2 != "P" || avgP > 0.8  )
+				
+				if ( plc2 != "P" || avgP > 0.8  ){
 					activePlayers.push_back( "zb_" + plc2 + "_g" + plc2 );
+					schema->vars[ "zb_P_yield_P" ]->exclude = false;
+				} else {
+					schema->vars[ "zb_P_yield_P" ]->exclude = true;
+				}
 				activePlayers.push_back( "zd_" + plc2 + "_g" + plc2 );
 				if ( plc == plc2 ) continue;
 
 				double zbMu2 = zbMean( plc2, avgP, iCen );
 				double zbNd = ( zbMu - zbMu2 ) / zbSig;
 
-				if ( abs( zbNd ) < 3.0 )
+				if ( abs( zbNd ) < 3.0 ){
 					activePlayers.push_back( "zd_" + plc + "_g" + plc2 );
+					schema->vars[ "zd_"+plc+"_yield_"+plc2 ]->exclude = false;
+				} else {
+					schema->vars[ "zd_"+plc+"_yield_"+plc2 ]->exclude = true;
+				}
 
 				double zdMu2 = zdMean( plc2, avgP );
 				double zdNd = ( zdMu - zdMu2 ) / zdSig;
 
-				if ( abs( zdNd ) < 3.0 )
+				if ( abs( zdNd ) < 3.0 ){
 					activePlayers.push_back( "zb_" + plc + "_g" + plc2 );
+					schema->vars[ "zb_"+plc+"_yield_"+plc2 ]->exclude = false;
+				} else {
+					schema->vars[ "zb_"+plc+"_yield_"+plc2 ]->exclude = true;;
+				}
+
+
 
 			}
 

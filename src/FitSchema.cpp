@@ -118,8 +118,8 @@ namespace TSF{
 			vars[ var ]->min = 0;
 			vars[ var ]->max = 0;
 		} else { // set the range
-			vars[ var ]->min = 0; //_mu - _sigma * _dmu;
-			vars[ var ]->max = 0; //_mu + _sigma * _dmu;
+			vars[ var ]->min = _mu - _sigma * _dmu;
+			vars[ var ]->max = _mu + _sigma * _dmu;
 		}
 
 		logger->info(__FUNCTION__) <<  vars[ var ]->toString() << endl;

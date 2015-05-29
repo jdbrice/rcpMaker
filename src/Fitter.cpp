@@ -18,10 +18,12 @@ namespace TSF{
 
 
 		for ( auto k : schema->vars ){
+			if ( k.second->exclude ) continue;
 			parNames.push_back( k.first );
 		}
 
 		for ( int i = 0; i < parNames.size(); i++ ){
+			if (schema->vars[ parNames[ i ] ]->exclude) continue;
 
 			minuit->DefineParameter( i, 		// parameter index
 						parNames[ i ].c_str(), 	// name
@@ -200,10 +202,19 @@ namespace TSF{
 			tries++;
       	}
 
+
+
+		//minuit->mnexcm( "STATUS", arglist, 1, iFlag ); // get errors
+
       	// if ( iFlag > 0 )
       	// 	minuit->mnexcm( "MINOS", arglist, 1, iFlag );
       	// else
       	minuit->mnexcm( "HESSE", arglist, 1, iFlag ); // get errors
+
+      	/*for ( int i = 0; i < parNames.size(); i++ ){
+			//schema->vars[ parNames[ i ] ]->;
+			minuit->Release( i );
+		}*/
 
 		cout << "iFlag " << iFlag << endl;
 		//if ( 0 == iFlag )
@@ -220,6 +231,10 @@ namespace TSF{
 		logger->info(__FUNCTION__) << "Updating parameters after Fit" << endl;
 		updateParameters();
 		schema->reportModels();
+
+
+
+
 	}
 
 
@@ -322,11 +337,13 @@ namespace TSF{
 			if ( npar >= self->parNames.size() ){
 				double val = pars[ i ];
 				self->schema->vars[ self->parNames[ i ] ]->val = val;
+
 			} else {
 				double val = 0, err = 0;
 				self->minuit->GetParameter( i, val, err );
 				self->schema->vars[ self->parNames[ i ] ]->val = val;
 				self->schema->vars[ self->parNames[ i ] ]->error = err;
+
 			}
 		}
 		self->schema->updateModels( self->players );		

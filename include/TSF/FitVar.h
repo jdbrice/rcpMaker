@@ -16,6 +16,7 @@ namespace TSF{
 		string name;
 		double val, min, max, error;
 		bool fixed;
+		bool exclude;
 
 		/**
 		 * <FitVar name="zb_mu_Pi" value="-0.5"  min="-0.6" max="-0.4" />
@@ -36,12 +37,14 @@ namespace TSF{
 				Logger::log.error(__FUNCTION__) << "Invalid Config" << endl;
 			}
 			fixed = false;
+			exclude = false;
 
 		}
 		FitVar( string _name, double _val, double _min, double _max, double _error ){
 			name = _name;
 			set( _val, _min, _max, _error );
 			fixed = false;
+			exclude = false;
 		}
 		~FitVar(){}
 
