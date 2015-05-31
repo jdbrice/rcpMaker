@@ -15,8 +15,8 @@
 		</histograms>
 		<!-- fit bins -->
 		<FitRange>
-			<ptBins min="4" max="15" />
-			<centralityBins>6</centralityBins>
+			<ptBins min="4" max="35" />
+			<centralityBins>0</centralityBins>
 			<etaBins>0</etaBins>
 			<charges>-1</charges>
 		</FitRange>
@@ -48,7 +48,7 @@
 			<method>nonlinear</method>
 		</PhaseSpaceRecentering>
 
-		<FitSchema method="poisson" roi="-2">
+		<FitSchema method="poisson" roi="3">
 
 			<!-- 1/beta -->
 			<!-- Mus -->

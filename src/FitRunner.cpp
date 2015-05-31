@@ -82,8 +82,16 @@ namespace TSF{
 						name = muName( plc, iCen, iCharge, iEta );
 						book->clone( "/", "yield", plc+"_zbMu", name );
 
+						book->cd( plc + "_zbMu" );
+						name = "delta"+muName( plc, iCen, iCharge, iEta );
+						book->clone( "/", "yield", plc+"_zbMu", name );
+
 						book->cd( plc + "_zdMu" );
 						name = muName( plc, iCen, iCharge, iEta );
+						book->clone( "/", "yield", plc+"_zdMu", name );
+
+						book->cd( plc + "_zdMu" );
+						name = "delta" + muName( plc, iCen, iCharge, iEta );
 						book->clone( "/", "yield", plc+"_zdMu", name );
 
 						// Sigma Histos
@@ -374,7 +382,12 @@ namespace TSF{
 
 	void FitRunner::fillFitHistograms(int iPt, int iCen, int iCharge, int iEta, double norm ){
 
+		double avgP = averageP( iPt, iEta );
+
 		for ( string plc : PidPhaseSpace::species ){
+
+			double zbMu = zbMean( plc, avgP, iCen );
+			double zdMu = zdMean( plc, avgP );
 
 			logger->info(__FUNCTION__) << "Filling Histograms for " << plc << endl;
 			int iiPt = iPt + 1;
@@ -394,6 +407,7 @@ namespace TSF{
 
 			logger->info(__FUNCTION__) << "Filling Mus for " << plc << endl;
 			//Mu
+			// zb
 			string name = muName( plc, iCen, iCharge, iEta );
 			book->cd( plc+"_zbMu");
 			double sC = schema->vars[ "zb_mu_"+plc ]->val;
@@ -402,9 +416,26 @@ namespace TSF{
 			book->get( name )->SetBinContent( iiPt, sC );
 			book->get( name )->SetBinError( iiPt, sE );
 
+			name = "delta"+muName( plc, iCen, iCharge, iEta );
+			book->cd( plc+"_zbMu");
+			sC = schema->vars[ "zb_mu_"+plc ]->val - zbMu;
+			sE = schema->vars[ "zb_mu_"+plc ]->error;
+			
+			book->get( name )->SetBinContent( iiPt, sC );
+			book->get( name )->SetBinError( iiPt, sE );
+
+			// zd
 			name = muName( plc, iCen, iCharge, iEta );
 			book->cd( plc+"_zdMu");
 			sC = schema->vars[ "zd_mu_"+plc ]->val;
+			sE = schema->vars[ "zd_mu_"+plc ]->error;
+			
+			book->get( name )->SetBinContent( iiPt, sC );
+			book->get( name )->SetBinError( iiPt, sE );
+
+			name = "delta"+muName( plc, iCen, iCharge, iEta );
+			book->cd( plc+"_zdMu");
+			sC = schema->vars[ "zd_mu_"+plc ]->val - zdMu;
 			sE = schema->vars[ "zd_mu_"+plc ]->error;
 			
 			book->get( name )->SetBinContent( iiPt, sC );
