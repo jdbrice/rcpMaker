@@ -16,9 +16,9 @@
 		<!-- fit bins -->
 		<FitRange>
 			<ptBins min="4" max="35" />
-			<centralityBins>0</centralityBins>
+			<centralityBins>6</centralityBins>
 			<etaBins>0</etaBins>
-			<charges>-1</charges>
+			<charges>1</charges>
 		</FitRange>
 		<!-- Guiding parameters -->
 
