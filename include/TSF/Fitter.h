@@ -65,7 +65,7 @@ namespace TSF{
 
 		static void updateParameters( int npar = 0, double * pars = 0);
 
-		void loadDatasets( string cs, int charge, int cenBin, int ptBin, int etaBin );
+		bool loadDatasets( string cs, int charge, int cenBin, int ptBin, int etaBin );
 		void fit( string cs, int charge, int cenBin, int ptBin, int etaBin );
 		void fixedFit( string cs, int charge, int cenBin, int ptBin, int etaBin );
 

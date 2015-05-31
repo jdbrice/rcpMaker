@@ -102,10 +102,10 @@ namespace TSF{
 
 		//convergence.push_back( fnVal );
 		//cout << " nll = " << fnVal << endl;
-		f = fnVal;		
+		f = fnVal * ( self->norm / 100.0 );		
 	}
 
-	void Fitter::loadDatasets( string cs, int charge, int cenBin, int ptBin, int etaBin ){
+	bool Fitter::loadDatasets( string cs, int charge, int cenBin, int ptBin, int etaBin ){
 		logger->info(__FUNCTION__) << endl;
 
 		map< string, TH1D* > zb;
@@ -126,15 +126,25 @@ namespace TSF{
 		
 		
 		norm = dataHists[ "zd_All"]->Integral();
+		bool doFit = true;
 
 		for ( auto k : dataHists ){
+
+			double nObs = k.second->GetEntries();
+			logger->debug(__FUNCTION__) << "Num Entries in " << k.first << " : " << nObs << endl;
 
 			// normalize
 			k.second->Sumw2();
 			k.second->Scale( 100.0 / norm );
-			
 			schema->loadDataset( k.first, k.second );
+			
+			if ( nObs < 300 ){
+				doFit = false;
+			}
 		}
+
+
+		return doFit;
 	}
 
 	void Fitter::fixedFit( string cs, int charge, int cenBin, int ptBin, int etaBin ){
@@ -166,25 +176,38 @@ namespace TSF{
 	void Fitter::fit( string cs, int charge, int cenBin, int ptBin, int etaBin ){
 		logger->info(__FUNCTION__) << endl;
 
+
+		// are we using fit ranges?
+		// if so lets report
+		if ( schema->constrainFitRange() ){
+      		schema->reportFitRanges();
+      	}
+
+      	// just let us know what you are doing
+		logger->info(__FUNCTION__) << "OK Starting for ( " << cs << ", " << charge << ", " << cenBin << ", " << ptBin << ", " << etaBin << " ) " << endl;
+
 		// load the current datasets
-		loadDatasets( cs, charge, cenBin, ptBin, etaBin );
+		double sufficienctStatistics = loadDatasets( cs, charge, cenBin, ptBin, etaBin );
+
+		if ( !sufficienctStatistics ){
+			fitIsGood = false;
+			logger->warn( __FUNCTION__ ) << "Insufficient Statistics : Skipping " << endl;
+			return;
+		}
+
 
 		//updateParameters();
 		//return;
 
-
-		//return;
 		double arglist[10];
       	arglist[0] = -1;
       	int iFlag = 0;
       	fitIsGood = false; 
 
-      	if ( schema->constrainFitRange() ){
-      		schema->reportFitRanges();
-      	}
+      	
 
       	logger->info(__FUNCTION__) << "Fit Method : " << self->schema->getMethod() << endl;
-      	logger->info(__FUNCTION__) << "OK Starting for ( " << cs << ", " << charge << ", " << cenBin << ", " << ptBin << ", " << etaBin << " ) " << endl;
+      	
       	if ( "nll" != self->schema->getMethod() )
       		arglist[ 0 ] = 1.0; 
       	else 
