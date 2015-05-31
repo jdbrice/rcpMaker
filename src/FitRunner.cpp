@@ -253,17 +253,26 @@ namespace TSF{
 			double zdMinParP = cfg->getDouble( nodePath + "ParameterFixing." + plc + ":zdSigma", 5.0 );
 
 
+			double zbSigFix = schema->vars[ "zb_sigma_"+plc ]->val;
+			if ( zbMinParP > 0 && avgP >= zbMinParP)
+				schema->fixParameter( "zb_sigma_" + plc, zbSigFix );
+			else 
+				schema->setInitialSigma( "zb_sigma_"+plc, zbSig, 0, 0);//0.006, 0.025 );
+
+
 			if ( true /*== paramFixing && iPt != 0*/ ){ // if 1st bin let schema settings stick
 				
 				schema->setInitialMu( "zb_mu_"+plc, zbMu, zbSig, zbDeltaMu );
 				schema->setInitialMu( "zd_mu_"+plc, zdMu, zdSig, zdDeltaMu );
 
 				//if ( avgP < 0. ){
-					schema->setInitialSigma( "zb_sigma_"+plc, zbSig, 0, 0);//0.006, 0.025 );
+					
 					schema->setInitialSigma( "zd_sigma_"+plc, zdSig, 0, 0);//0.04, 0.16 );	
 				//}
 				
 			}
+
+
 
 				/*
 			if ( false == paramFixing ){
@@ -275,8 +284,7 @@ namespace TSF{
 			}
 
 			//if ( true == paramFixing  ){
-				if ( zbMinParP > 0 && avgP >= zbMinParP)
-				schema->fixParameter( "zb_sigma_" + plc, zbSig );
+				
 				
 				if ( zdMinParP > 0 && avgP >= zdMinParP )
 					schema->fixParameter( "zd_sigma_" + plc, zdSig );
