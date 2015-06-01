@@ -83,18 +83,18 @@ map<string, double> PidProbabilityMapper::pidWeights( int charge, int iCen, doub
 	int i = 0;
 	for ( string plc : PidPhaseSpace::species ){
 
-		
+/*		
 		double v = evaluateGauss( eVal, yields[ i ], mus[ i ], sigmas[ i ] );
 		if ( (eVal - mus[ i ]) / sigmas[ i ] > 8 )
 			v = 0;
 
 		total += v;
 
-		weights[ plc ] = v;
+		weights[ plc ] = v;*/
 
 
-		//total += yields[ i ];
-		//weights[ plc ] = yields[ i ];
+		total += yields[ i ];
+		weights[ plc ] = yields[ i ];
 		i++;
 	}
 
