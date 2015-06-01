@@ -5,20 +5,20 @@
 
 	<SimultaneousPid>
 		<Logger color="true" logLevel="info" globalLogLevel="info"/>
-		<Reporter> <output url="rpSgfTest.pdf" width="800" height="800" /> </Reporter>	
+		<Reporter> <output url=".pdf" width="800" height="800" /> </Reporter>	
 		<!--<input> <data url="/Users/danielbrandenburg/bnl/local/data/Run14/rcp/phaseSpace/pid.root"/> </input>-->
-		<input> <data url="../products/15/phaseSpace/pid_pbinning_May_27_15.root"/> </input>
-		<output path=""> <data>tsf_test.root</data> </output>
+		<input> <data url="../products/15/phaseSpace/all_mass_june_01_15_pt_eta_lt_0p25.root"/> </input>
+		<output path=""> <data>tsf_15_pt_eta.root</data> </output>
 	
 		<histograms>
 			<Histo name="yield" title="yield" xBins="bin.pt" />
 		</histograms>
 		<!-- fit bins -->
 		<FitRange>
-			<ptBins min="4" max="35" />
-			<centralityBins>6</centralityBins>
+			<ptBins min="4" max="30" />
+			<centralityBins>0, 6</centralityBins>
 			<etaBins>0</etaBins>
-			<charges>1</charges>
+			<charges>-1</charges>
 		</FitRange>
 		<!-- Guiding parameters -->
 
@@ -29,9 +29,9 @@
 			<deltaSigma zb="0.990" zd="0.990" />
 
 			<!-- the minimum momentum at which the value is fixed -->
-			<Pi zbSigma="1.1" zdSigma="5.7" />
-			<K zbSigma="1.1" zdSigma="5.7" />
-			<P zbSigma="1.9" zdSigma="5.7" />
+			<Pi zbSigma="5.1" zdSigma="5.7" />
+			<K zbSigma="5.1" zdSigma="5.7" />
+			<P zbSigma="5.9" zdSigma="5.7" />
 
 			
 		</ParameterFixing>
@@ -44,7 +44,7 @@
 		
 		<PhaseSpaceRecentering>
 			<centerSpecies>K</centerSpecies>
-			<sigma tof="0.0115" dedx="0.08"/>
+			<sigma tof="0.012" dedx="0.08"/>
 			<method>nonlinear</method>
 		</PhaseSpaceRecentering>
 
@@ -171,7 +171,7 @@
 			4.5
 		</pt>
 		
-		<eta>0.0, 0.2, 0.4, 0.5 </eta>
+		<eta>0.0, 0.2 </eta>
 
 		<charge> -1.5, -0.5, 0.5, 1.5 </charge>
 

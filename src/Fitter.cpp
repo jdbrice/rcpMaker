@@ -138,9 +138,9 @@ namespace TSF{
 			k.second->Scale( 100.0 / norm );
 			schema->loadDataset( k.first, k.second );
 			
-			if ( nObs < 300 ){
+			/*if ( nObs < 300 ){
 				doFit = false;
-			}
+			}*/
 		}
 
 

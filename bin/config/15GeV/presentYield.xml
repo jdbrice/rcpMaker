@@ -8,30 +8,31 @@
 		<Reporter> <output url="../products/presentation/15GeV/present.pdf" width="800" height="500" /> </Reporter>	
 
 		<input>
-			<fit url="tsf_test.root" />
-			<!--<fit url="../products/pidFit/15GeV/allFit.root" />-->
-			<ps url="../products/15GeV/phaseSpace/pid_05_26_15.root" />
+			<!--<fit url="tsf_15_pt_eta.root" />-->
+			<fit url="../products/15/fit/good_001/tsf_test.root" />
+			<ps url="../products/15/phaseSpace/pid_pbinning_May_27_15.root" />
+			<!--<ps url="../products/15/phaseSpace/mass_june_01_15_pt_eta_lt_0p25.root" />-->
 		</input>
 
-		<output path="../products/presentation/15GeV/">
+		<output path="../products/15/presentation/">
 			<data url="data.root"/>
 		</output>
 
 		<!-- fit bins : FROM sgfRunner.xml-->
 		<FitRange>
-			<ptBins min="0" max="35" />
+			<ptBins min="5" max="30" />
 			<centralityBins>0,6</centralityBins>
 			<etaBins>0 </etaBins>
 			<charges>-1, 1</charges>
 		</FitRange>
 
 		<LastYieldBin>
-			<Pi p="27" n="30" />
-			<K p="24" n="24"/> 
-			<P p="31" n="37"/> 
+			<Pi p="27" n="27" />
+			<K p="27" n="27"/> 
+			<P p="27" n="27"/> 
 		</LastYieldBin>
 
-		<nColl> 788, 639, 455, 284, 171, 75, 18 </nColl>
+		<nColl> 787.9, 639, 455, 284, 171, 75, 18.305 </nColl>
 		<nPart ptBin="15" > 338, 291, 226, 159, 109, 58, 20 </nPart>
 		<colors>632, 416, 600, 616, 800, 880, 820, 840, 860, 900</colors>
 
@@ -64,7 +65,7 @@
 			4.5
 		</pt>
 		
-		<eta>0.0, 0.2, 0.4, 0.6 </eta>
+		<eta>0.0, 0.2 </eta>
 
 		<!-- Based on Evan's thesis.v5.pdf -->
 		<!-- .1 from .5 to 2.5 => 15 bins -->
