@@ -131,14 +131,14 @@ public:
 		if ( ptBin < 0 || ptBin > binsPt->nBins() ){
 			return 0;
 		}
-		if ( etaBin < 0 || etaBin > binsEta->nBins() ){
-			return 0;
-		} 
+		//if ( etaBin < 0 || etaBin > binsEta->nBins() ){
+		//	return 0;
+		//} 
 
 		double avgPt = ((*binsPt)[ ptBin ] + (*binsPt)[ ptBin + 1 ]) / 2.0;
-		double avgEta = ((*binsEta)[ etaBin ] + (*binsEta)[ etaBin + 1 ]) / 2.0;
+		//double avgEta = ((*binsEta)[ etaBin ] + (*binsEta)[ etaBin + 1 ]) / 2.0;
 
-		return p( avgPt, avgEta );
+		return p( avgPt, 0/*avgEta*/ );
 
 	}
 
@@ -159,6 +159,7 @@ public:
 								double tofPadding = 1, double dedxPadding = 1, double tofScaledPadding = 0, double dedxScaledPadding = 0 );
 
 
+	void reportAll( string n );
 	void reportAllTof(  );
 	void reportAllDedx(  );
 

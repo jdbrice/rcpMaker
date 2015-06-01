@@ -8,6 +8,7 @@
 #include "Adapter/PicoDataStore.h"
 #include "PidPhaseSpace.h"
 #include "PidProbabilityMapper.h"
+#include "SpectraCorrecter.h"
 
 // STL
 #include <math.h>
@@ -41,6 +42,7 @@ protected:
 	double nSigBelow, nSigAbove;
 
 	PidProbabilityMapper * ppm;
+	unique_ptr<SpectraCorrecter> sc;
 
 public:
 	PidSpectraMaker( XmlConfig* config, string np, string fl ="", string jp ="" );

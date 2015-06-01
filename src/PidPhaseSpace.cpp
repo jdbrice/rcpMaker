@@ -103,9 +103,9 @@ void PidPhaseSpace::postEventLoop() {
 	logger->info(__FUNCTION__) << endl;
 
 	if ( cfg->getBool( nodePath+"MakeQA:tof", false ) )
-		reportAllTof();
+		reportAll( "" );
 	if ( cfg->getBool( nodePath+"MakeQA:dedx", false ) )
-		reportAllDedx();
+		reportAll( "dedx" );
 
 	book->cd();
 
@@ -367,55 +367,76 @@ void PidPhaseSpace::enhanceDistributions( double avgP, int ptBin, int etaBin, in
 }
 
 
-void PidPhaseSpace::reportAllTof() {
+void PidPhaseSpace::reportAll( string type ){
+
+
 
 	logger->info( __FUNCTION__ ) << endl;
-	double tSigma = tofSigmaIdeal;
+	
+	double sigma = tofSigmaIdeal;
+	if ( "dedx" == type )
+		sigma = dedxSigmaIdeal;
+
+	vector<int> charges = { -1, 0, 1 };
 
 	book->cd();
 	int nCenBins = nCentralityBins();
-	int nChargeBins = binsCharge->nBins();
+	int nChargeBins = charges.size();
 	int nEtaBins = binsEta->nBins();
-	vector< unique_ptr<Reporter> > rps;
+	map<string,  unique_ptr<Reporter> > rps;
 	string baseURL = cfg->getString(  nodePath + "output:path", "./" );
 	string baseName= cfg->getString(  nodePath + "output.Reports", "" );
+
+
+	book->cd( "tof" );
+	if ( "dedx" == type )
+		book->cd( "dedx" );
 	// Make the slew of reporters
 	for ( int etaBin = 0; etaBin < nEtaBins; etaBin++ ){
 		// Loop over charge, skip if config doesnt include that charge bin
-		for ( int charge = -1; charge <= 1; charge++ ){
-			int chargeBin = binsCharge->findBin( charge );
-			if ( chargeBin < 0 )
-				continue;
+		for ( int charge : charges ){
+			
 			for ( int iCen = 0; iCen < nCenBins; iCen++ ){
 			
-				
 				string sn = tofName( centerSpecies, charge, iCen, 1, etaBin );
+				if ( "dedx" == type )
+					sn = dedxName( centerSpecies, charge, iCen, 1, etaBin );
 				
-				rps.push_back( unique_ptr<Reporter>(new Reporter( baseURL + jobPrefix + baseName + sn + ".pdf", 1000, 500 )) );
+				if ( !book->exists( sn ) ) continue;
+
+				rps[ sn ] = unique_ptr<Reporter>(new Reporter( baseURL + jobPrefix + baseName + sn + ".pdf", 1000, 500 )) ;
 
 
 			} // loop centralities
 		} // loop charges 
 	} // loop eta bins
 
-	book->cd( "tof" );
+	
 	// Loop through pt, then eta then charge
 	for ( int ptBin = 0; ptBin < binsPt->nBins(); ptBin++ ){
-		for ( int etaBin = 0; etaBin < binsEta->size()-1; etaBin++ ){
+		for ( int etaBin = 0; etaBin < nEtaBins; etaBin++ ){
 			// Loop over charge, skip if config doesnt include that charge bin
-			for ( int charge = -1; charge <= 1; charge++ ){
-				int chargeBin = binsCharge->findBin( charge );
-				if ( chargeBin < 0 )
-					continue;
-				for ( int iCen = 0; iCen < nCentralityBins(); iCen++ ){
+			for ( int charge : charges ){
 				
-					double avgP = averageP( ptBin, etaBin );	
+				for ( int iCen = 0; iCen < nCenBins; iCen++ ){
+				
+					double avgP = averageP( ptBin, 0 );	
 
 					vector<double> tMeans = psr->centeredTofMeans( centerSpecies, avgP );
 					vector<double> dMeans = psr->centeredDedxMeans( centerSpecies, avgP );				
+					vector<double> means = tMeans;
+					if ( "dedx" == type )
+						means = dMeans;
 
-					int index = iCen + (charge + 1 ) * nCenBins + etaBin * nChargeBins * nCenBins;
+
 					string n = tofName( centerSpecies, charge, iCen, ptBin, etaBin );
+					if ( "dedx" == type )
+						n = dedxName( centerSpecies, charge, iCen, ptBin, etaBin );
+					
+					string sn = tofName( centerSpecies, charge, iCen, 1, etaBin );
+					if ( "dedx" == type )
+						sn = dedxName( centerSpecies, charge, iCen, 1, etaBin );
+					if ( !book->exists( n ) ) continue;
 
 					string ptLowEdge = dts(binsPt->getBins()[ ptBin ]);
 					string ptHiEdge = dts(binsPt->getBins()[ ptBin + 1 ]);
@@ -423,7 +444,123 @@ void PidPhaseSpace::reportAllTof() {
 					string etaHiEdge = dts(binsEta->getBins()[ etaBin + 1 ]);
 					//string range = dts(binsPt->getBins()[ ptBin ]) + " < Pt < " + dts(binsPt->getBins()[ ptBin ]) + " : #eta = " << dts(binsEta->getBins()[ etaBin ])
 
-					rps[ index ]->newPage();
+					if ( !rps[sn] ){
+						logger->error(__FUNCTION__) << "NO reporter for : " << sn << endl;
+						continue;
+					}
+					rps[ sn ]->newPage();
+					book->style( n )->set( "logY", 1 )->
+					set( "title", ptLowEdge + " < Pt < " + ptHiEdge + " : " + etaLowEdge + " < |#eta| < " + etaHiEdge )->
+					set( "x", "z_{1/#beta}" )->
+					set( "y", "events / " + dts( tofBinWidth ) )->
+					set( "draw", "pe" )->
+					draw();
+
+					map<string, int> colors;
+					colors[ "Pi" ] = kBlue;
+					colors[ "K" ] = kGreen;
+					colors[ "P" ] = kBlack;
+					int i = 0;
+					for ( string plc : species ){
+						
+						double ttMean = means[ i ];
+						TLine * l1 = new TLine( ttMean - sigma * tofCut, 0, ttMean - sigma* tofCut, 10 );
+						TLine * l2 = new TLine( ttMean + sigma* tofCut, 0, ttMean + sigma* tofCut, 10 );
+						l1->SetLineColor( colors[ plc ] );
+						l2->SetLineColor( colors[ plc ] );
+
+						l1->Draw("same");
+						l2->Draw("same");
+						i++;
+					}
+					if ( "dedx" != type  ){
+						double ttMean = tMeans[ 0 ];
+						logger->info(__FUNCTION__) << "PiMu = " << ttMean << ", sigma = " << sigma << ", nSigma = " << nSigBelow << endl; 
+						logger->info(__FUNCTION__) << "ptBin = " << ptBin << " electron cut : " << ttMean - sigma * nSigBelow <<  endl;
+						TLine * l1 = new TLine( ttMean - sigma * nSigBelow, 0, ttMean - sigma * nSigBelow, 100 );
+						l1->SetLineStyle( 2 );
+						l1->SetLineColor( kRed );
+						l1->Draw( "same" );
+
+						ttMean = tMeans[ 2 ];
+						TLine * l2 = new TLine( ttMean + sigma * nSigAbove, 0, ttMean + sigma * nSigAbove, 100 );
+						l2->SetLineStyle( 2 );
+						l2->SetLineColor( kRed );
+						l2->Draw("same" );
+					}
+					
+					rps[ sn ]->savePage();
+				
+				} // loop centralities
+			} // loop charges 
+		} // loop eta bins
+	} // loop pt bins
+
+}
+
+void PidPhaseSpace::reportAllTof() {
+
+	logger->info( __FUNCTION__ ) << endl;
+	double tSigma = tofSigmaIdeal;
+
+	vector<int> charges = { -1, 0, 1 };
+
+	book->cd();
+	int nCenBins = nCentralityBins();
+	int nChargeBins = charges.size();
+	int nEtaBins = binsEta->nBins();
+	map<string,  unique_ptr<Reporter> > rps;
+	string baseURL = cfg->getString(  nodePath + "output:path", "./" );
+	string baseName= cfg->getString(  nodePath + "output.Reports", "" );
+
+	book->cd( "tof" );
+	// Make the slew of reporters
+	for ( int etaBin = 0; etaBin < nEtaBins; etaBin++ ){
+		// Loop over charge, skip if config doesnt include that charge bin
+		for ( int charge : charges ){
+			
+			for ( int iCen = 0; iCen < nCenBins; iCen++ ){
+			
+				string sn = tofName( centerSpecies, charge, iCen, 1, etaBin );
+				
+				if ( !book->exists( sn ) ) continue;
+
+				rps[ sn ] = unique_ptr<Reporter>(new Reporter( baseURL + jobPrefix + baseName + sn + ".pdf", 1000, 500 )) ;
+
+
+			} // loop centralities
+		} // loop charges 
+	} // loop eta bins
+
+	
+	// Loop through pt, then eta then charge
+	for ( int ptBin = 0; ptBin < binsPt->nBins(); ptBin++ ){
+		for ( int etaBin = 0; etaBin < nEtaBins; etaBin++ ){
+			// Loop over charge, skip if config doesnt include that charge bin
+			for ( int charge : charges ){
+				
+				for ( int iCen = 0; iCen < nCenBins; iCen++ ){
+				
+					double avgP = averageP( ptBin, 0 );	
+
+					vector<double> tMeans = psr->centeredTofMeans( centerSpecies, avgP );
+					vector<double> dMeans = psr->centeredDedxMeans( centerSpecies, avgP );				
+
+					string n = tofName( centerSpecies, charge, iCen, ptBin, etaBin );
+					string sn = tofName( centerSpecies, charge, iCen, 1, etaBin );
+					if ( !book->exists( n ) ) continue;
+
+					string ptLowEdge = dts(binsPt->getBins()[ ptBin ]);
+					string ptHiEdge = dts(binsPt->getBins()[ ptBin + 1 ]);
+					string etaLowEdge = dts(binsEta->getBins()[ etaBin ]);
+					string etaHiEdge = dts(binsEta->getBins()[ etaBin + 1 ]);
+					//string range = dts(binsPt->getBins()[ ptBin ]) + " < Pt < " + dts(binsPt->getBins()[ ptBin ]) + " : #eta = " << dts(binsEta->getBins()[ etaBin ])
+
+					if ( !rps[sn] ){
+						logger->error(__FUNCTION__) << "NO reporter for : " << sn << endl;
+						continue;
+					}
+					rps[ sn ]->newPage();
 					book->style( n )->set( "logY", 1 )->
 					set( "title", ptLowEdge + " < Pt < " + ptHiEdge + " : " + etaLowEdge + " < |#eta| < " + etaHiEdge )->
 					set( "x", "z_{1/#beta}" )->
@@ -463,7 +600,7 @@ void PidPhaseSpace::reportAllTof() {
 					l2->SetLineColor( kRed );
 					l2->Draw("same" );
 					
-					rps[ index ]->savePage();
+					rps[ sn ]->savePage();
 				
 				} // loop centralities
 			} // loop charges 
@@ -474,8 +611,11 @@ void PidPhaseSpace::reportAllTof() {
 void PidPhaseSpace::reportAllDedx() {
 	logger->info( __FUNCTION__ ) << endl;
 	book->cd();
+
+	vector<int> charges = { -1, 1 };
+
 	int nCenBins = nCentralityBins();
-	int nChargeBins = binsCharge->nBins();
+	int nChargeBins = charges.size();//binsCharge->nBins();
 	int nEtaBins = binsEta->nBins();
 
 	vector< unique_ptr<Reporter> > rps;
@@ -486,10 +626,8 @@ void PidPhaseSpace::reportAllDedx() {
 	// Make the slew of reporters
 	for ( int etaBin = 0; etaBin < nEtaBins; etaBin++ ){
 		// Loop over charge, skip if config doesnt include that charge bin
-		for ( int charge = -1; charge <= 1; charge++ ){
-			int chargeBin = binsCharge->findBin( charge );
-			if ( chargeBin < 0 )
-				continue;
+		for ( int charge : charges ){
+			
 			for ( int iCen = 0; iCen < nCenBins; iCen++ ){
 			
 				string sn = dedxName( centerSpecies, charge, iCen, 1, etaBin );	
@@ -505,10 +643,8 @@ void PidPhaseSpace::reportAllDedx() {
 	for ( int ptBin = 0; ptBin < binsPt->nBins(); ptBin++ ){
 		for ( int etaBin = 0; etaBin < binsEta->size()-1; etaBin++ ){
 			// Loop over charge, skip if config doesnt include that charge bin
-			for ( int charge = -1; charge <= 1; charge++ ){
-				int chargeBin = binsCharge->findBin( charge );
-				if ( chargeBin < 0 )
-					continue;
+			for ( int charge : charges ){
+				
 				for ( int iCen = 0; iCen < nCentralityBins(); iCen++ ){
 				
 					double avgP = averageP( ptBin, etaBin );

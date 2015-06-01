@@ -16,10 +16,11 @@ InclusiveSpectra::InclusiveSpectra( XmlConfig * config, string np, string fileLi
 	/**
 	 * Make the desired PicoDataStore Interface
 	 */
-	
-	if ( ds && ds->getTreeName() == "PicoDst" )
+	logger->debug(__FUNCTION__) << ds << endl;
+	if ( ds && ds->getTreeName() == "PicoDst" ){
+		logger->info(__FUNCTION__) << "DataDtore" << endl;
 		pico = unique_ptr<PicoDataStore>( new ProdPicoDst( ds->getChain() ) );
-	else if ( chain && "PicoDst" == cfg->getString( np + "input.dst:treeName" ) ){
+	} else if ( chain && "PicoDst" == cfg->getString( np + "input.dst:treeName" ) ){
 		logger->info(__FUNCTION__) << "ProdPico" << endl;
 		pico = unique_ptr<PicoDataStore>( new ProdPicoDst( chain ) );
 	} else if ( chain && "rcpPicoDst" == cfg->getString( np + "input.dst:treeName" ) ){
@@ -27,7 +28,7 @@ InclusiveSpectra::InclusiveSpectra( XmlConfig * config, string np, string fileLi
 		pico = unique_ptr<PicoDataStore>( new RcpPicoDst( chain ) );
 	}
 
-	logger->info(__FUNCTION__) << endl;
+	logger->info(__FUNCTION__) << "Got a valid Data Adapter" << endl;
 	/**
 	 * Load in the common configs
 	 */

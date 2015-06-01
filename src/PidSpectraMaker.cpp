@@ -1,6 +1,6 @@
 #include "PidSpectraMaker.h"
 
-
+#include "SpectraCorrecter.h"
 
 PidSpectraMaker::PidSpectraMaker( XmlConfig* config, string np, string fl, string jp ) : InclusiveSpectra( config, np, fl, jp ) {
 
@@ -47,6 +47,11 @@ PidSpectraMaker::PidSpectraMaker( XmlConfig* config, string np, string fl, strin
 
 	ppm = new PidProbabilityMapper( cfg, nodePath + "PidProbabilityMapper." );
 
+	logger->info(__FUNCTION__) << "Making correcter" << endl;      
+	sc = unique_ptr<SpectraCorrecter>( new SpectraCorrecter( "config/15GeV/efficiency.xml" ) ); 
+
+	//logger->info(__FUNCTION__) << "reweight = " << sc->reweight( "Pi", 1, 15, 0.15 ) << endl;
+
  }
 
  PidSpectraMaker::~PidSpectraMaker(){
@@ -92,8 +97,9 @@ void PidSpectraMaker::analyzeTrack( int iTrack ){
 
 
 
-	int ptBin = binsPt->findBin( pt );
-	int etaBin = binsEta->findBin( TMath::Abs( eta ) );
+	//int ptBin = binsPt->findBin( pt );
+	int ptBin = binsPt->findBin( p );
+	int etaBin = binsEta->findBin( TMath::Abs( 0 ) );
 	int charge = pico->trackCharge( iTrack );
 
 	double avgP = averageP( ptBin, etaBin );
@@ -137,7 +143,9 @@ void PidSpectraMaker::analyzeTrack( int iTrack ){
 		return;
 
 	//cout << "Pi y = " << yPlc[ 0 ] << endl; 
-	map< string, double> weights = ppm->pidWeights( charge, cBin, pt, eta, tof, dedx );
+	map< string, double> weights = ppm->pidWeights( charge, cBin, p/*TODO*/, 0, tof, dedx );
+
+	double tofEffWeight = sc->reweight( "tof", 0, refMult, pt );
 
 	int i = 0;
 	for ( string plc : PidPhaseSpace::species ){
@@ -145,13 +153,21 @@ void PidSpectraMaker::analyzeTrack( int iTrack ){
 		if ( Abs(yPlc[ i ]) > 0.25 && weights[ plc ] > 0 )
 			continue;
 		
-
+		double effWeight = sc->reweight( plc, charge, refMult, pt );
 
 		book->cd( plc );
 		string cName = "pt_" + ts( cBin ) + "_" + PidPhaseSpace::chargeString( charge );
+		
 		int bin = book->get( cName )->GetXaxis()->FindBin( pt );
 		double bWidth = book->get( cName )->GetXaxis()->GetBinWidth( bin );
-		book->fill( cName, pt, eventWeight * weights[ plc ] / bWidth );
+
+		logger->debug(__FUNCTION__) << "Filling " << cName << " = " << eventWeight * weights[ plc ] / bWidth << endl;
+		logger->debug(__FUNCTION__) << "Weight = " << weights[ plc ] << endl;
+		logger->debug(__FUNCTION__) << "EventWeight = " << eventWeight << endl;
+		logger->debug(__FUNCTION__) << "bWidth = " << bWidth << endl;
+
+		double fullWeight = eventWeight * weights[ plc ] * effWeight * tofEffWeight * ( 1.0 / bWidth);
+		book->fill( cName, pt, fullWeight );
 
 		i++;
 	}
