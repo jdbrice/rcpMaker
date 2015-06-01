@@ -172,15 +172,12 @@ void PidYieldPresenter::normalizeYield() {
 void PidYieldPresenter::compareYields(){
 
 	reporter->newPage( 2, 1 );
-	compareYields( "Pi", -1);
-	compareYields( "Pi", 1);
 
-	compareYields( "K", -1);
-	compareYields( "K", 1);
-
-	compareYields( "P", -1);
-	compareYields( "P", 1);
-
+	for ( int c : charges ){
+		compareYields( "Pi", c);
+		compareYields( "K", c);
+		compareYields( "P", c);	
+	}
 
 }
 

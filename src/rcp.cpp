@@ -76,8 +76,8 @@ int main( int argc, char* argv[] ) {
 				pyp.chargeRatio();
 				pyp.chargeRatioCompare( );
 
-				pyp.rcpVsNPart( config.getInt( "PidYieldPresenter.nPart:ptBin" ) );
-				pyp.rcpVsNPartCompare( config.getInt( "PidYieldPresenter.nPart:ptBin" ) );
+				//pyp.rcpVsNPart( config.getInt( "PidYieldPresenter.nPart:ptBin" ) );
+				//pyp.rcpVsNPartCompare( config.getInt( "PidYieldPresenter.nPart:ptBin" ) );
 				
 				
 				
