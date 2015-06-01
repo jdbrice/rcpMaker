@@ -75,6 +75,10 @@ namespace TSF{
 		bool inRange( string ds, double x );
 		void reportFitRanges();
 
+		vector<FitRange> & getRanges() {
+			return ranges;
+		}
+
 	};
 
 

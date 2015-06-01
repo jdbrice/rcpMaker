@@ -75,6 +75,7 @@ namespace TSF{
 		}
 
 		datasets[ ds ].clear();
+		datasets[ ds ].setName( ds );
 
 		// // normalize h first
 		//h->Sumw2();

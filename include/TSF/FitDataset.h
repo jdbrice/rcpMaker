@@ -3,6 +3,7 @@
 
 //TSF
 #include "TSF/FitDataPoint.h"
+#include "TSF/FitRange.h"
 
 
 // STL
@@ -64,12 +65,39 @@ namespace TSF{
 			}
 			return make_pair( min, max );
 		}
-		double yield( ){
-			double n = 0;
-			for ( FitDataPoint fdp : points ){
-				n += fdp.y;
+		double yield( vector<FitRange> &ranges ){
+
+			if ( 0 == ranges.size()  ){
+				double n = 0;
+				for ( FitDataPoint fdp : points ){
+					n += fdp.y;
+				}
+				return n;	
+			} else {
+				double n = 0;
+				for ( FitDataPoint fdp : points ){
+					if ( inRange( ranges, fdp.x ) )
+						n += fdp.y;
+				}
+				return n;
 			}
-			return n;
+			return 0;
+		}
+
+		bool inRange( vector<FitRange> &ranges, double x ){
+			bool foundDS = false;
+			for ( FitRange fr : ranges ){
+
+				if ( name == fr.dataset ){
+					foundDS = true;
+					if ( fr.inRange( x ) )
+						return true;
+				}
+			}
+			if ( foundDS )
+				return false;
+			else
+				return true;
 		}
 
 		FitDataPoint pointNear( double x ){

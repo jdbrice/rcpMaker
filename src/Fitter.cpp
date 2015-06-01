@@ -25,6 +25,9 @@ namespace TSF{
 		for ( int i = 0; i < parNames.size(); i++ ){
 			if (schema->vars[ parNames[ i ] ]->exclude) continue;
 
+			if ( 0 <= schema->vars[ parNames[ i ] ]->error )
+				schema->vars[ parNames[ i ] ]->error = 0.001;
+
 			minuit->DefineParameter( i, 		// parameter index
 						parNames[ i ].c_str(), 	// name
 						schema->vars[ parNames[ i ] ]->val, 
@@ -55,6 +58,8 @@ namespace TSF{
 
 		bool useRange = self->schema->constrainFitRange();
 		string method = self->schema->getMethod();
+
+		double normFactor = ( 100.0 / self->norm );
 
 		// loop on datasets
 		for ( auto k : self->schema->datasets ){
@@ -90,11 +95,13 @@ namespace TSF{
 				}
 			} // loop on data points
 
-			if ( "nll" == method ){
+			if ( "nll" == method){
 				double mYield = modelYield( ds );
-				double dsYield = k.second.yield();
-
+				double dsYield = k.second.yield(self->schema->getRanges()) /* ( normFactor )*/;
+				//cout << "ds : " << ds << endl;
+				//cout << "dsYield : " << dsYield << ", " << mYield << " dif = " << abs( dsYield - mYield ) << endl;
 				// subtract off this dataset's (N - E) term
+				//fnVal = fnVal + abs( dsYield - mYield );
 				fnVal = fnVal - ( dsYield - mYield );
 			}
 
@@ -102,7 +109,7 @@ namespace TSF{
 
 		//convergence.push_back( fnVal );
 		//cout << " nll = " << fnVal << endl;
-		f = fnVal * ( self->norm / 100.0 );		
+		f = fnVal  / normFactor ;		
 	}
 
 	bool Fitter::loadDatasets( string cs, int charge, int cenBin, int ptBin, int etaBin ){
