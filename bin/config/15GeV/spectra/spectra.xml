@@ -11,7 +11,7 @@
 		</input>
 
 		<output path="../products/15/spectra/">
-			<data>spectratsf_low.root</data>
+			<data>spectratsf_good_002.root</data>
 			<Reports></Reports>
 		</output>
 
@@ -64,7 +64,7 @@
 
 		<PidProbabilityMapper>
 			<Logger color="true" logLevel="info" globalLogLevel="info" />
-			<input> <data url="../products/15/fit/tsf_15_pt_eta.root"/> </input>
+			<input> <data url="../products/15/fit/good_002.root"/> </input>
 			<output> <data url="mapTest.root" /> </output>
 
 			<PSBinning>

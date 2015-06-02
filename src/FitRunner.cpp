@@ -253,6 +253,7 @@ namespace TSF{
 			double zdMinParP = cfg->getDouble( nodePath + "ParameterFixing." + plc + ":zdSigma", 5.0 );
 
 
+			double zdSigFix = schema->vars[ "zd_sigma_"+plc ]->val;
 			double zbSigFix = schema->vars[ "zb_sigma_"+plc ]->val;
 			if ( iCen == 0 ){
 				if ( "Pi" == plc )
@@ -282,7 +283,10 @@ namespace TSF{
 
 				//if ( avgP < 0. ){
 					
-				schema->setInitialSigma( "zd_sigma_"+plc, zdSig, 0.06, 0.08);//0.04, 0.16 );	
+				if ( zdMinParP > 0 && avgP >= zdMinParP)
+					schema->fixParameter( "zd_sigma_" + plc, zdSigFix, true );
+				else 
+					schema->setInitialSigma( "zd_sigma_"+plc, zdSig, 0.06, 0.08);//0.04, 0.16 );	
 				//}
 				
 			}

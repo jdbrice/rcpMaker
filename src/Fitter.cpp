@@ -90,13 +90,13 @@ namespace TSF{
 				}
 			} // loop on data points
 
-			/*if ( "nll" == method ){
+			if ( "nll" == method ){
 				double mYield = modelYield( ds );
 				double dsYield = k.second.yield();
 
 				// subtract off this dataset's (N - E) term
 				fnVal = fnVal - ( dsYield - mYield ) * ( 100.0 / self->norm );
-			}*/
+			}
 
 		}
 
@@ -225,27 +225,6 @@ namespace TSF{
 			minuit->mnexcm( "MINI", arglist, 1, iFlag );
 			tries++;
       	}
-
-      	for ( int i = 0; i < parNames.size(); i++ ){
-
-			bool shouldFix = false;
-			if ( /*string::npos != parNames[ i ].find( "sig" ) ||*/ string::npos != parNames[ i ].find( "mu" ) )
-				shouldFix = true;
-
-			if ( schema->vars[ parNames[ i ] ]->fixed || shouldFix )
-				minuit->FixParameter( i );
-		}
-
-		for ( int i = 0; i < parNames.size(); i++ ){
-
-			bool shouldFix = false;
-			if ( /*string::npos != parNames[ i ].find( "sig" ) ||*/ string::npos != parNames[ i ].find( "mu" ) )
-				shouldFix = true;
-
-			if ( schema->vars[ parNames[ i ] ]->fixed || shouldFix )
-				minuit->Release( i );
-		}
-
 
 
 		//minuit->mnexcm( "STATUS", arglist, 1, iFlag ); // get errors

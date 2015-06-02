@@ -8,8 +8,8 @@
 		<Reporter> <output url="../products/presentation/15GeV/present.pdf" width="800" height="500" /> </Reporter>	
 
 		<input>
-			<fit url="tsf_15_pt_eta.root" />
-			<!--<fit url="../products/15/fit/good_001/tsf_test.root" />-->
+			<!--<fit url="tsf_15_pt_eta.root" />-->
+			<fit url="../products/15/fit/good_001/tsf_test.root" />
 			<ps url="../products/15/phaseSpace/pid_pbinning_May_27_15.root" />
 			<!--<ps url="../products/15/phaseSpace/mass_june_01_15_pt_eta_lt_0p25.root" />-->
 		</input>
