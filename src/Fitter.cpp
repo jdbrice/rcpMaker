@@ -95,14 +95,14 @@ namespace TSF{
 				}
 			} // loop on data points
 
-			if ( "nll" == method){
+			if ( "zd_All" == ds || "zb_All" == ds ){
 				double mYield = modelYield( ds );
 				double dsYield = k.second.yield(self->schema->getRanges()) /* ( normFactor )*/;
 				//cout << "ds : " << ds << endl;
 				//cout << "dsYield : " << dsYield << ", " << mYield << " dif = " << abs( dsYield - mYield ) << endl;
 				// subtract off this dataset's (N - E) term
-				//fnVal = fnVal + abs( dsYield - mYield );
-				fnVal = fnVal - ( dsYield - mYield );
+				fnVal = fnVal + abs( dsYield - mYield ) * normFactor;
+				//fnVal = fnVal - ( dsYield - mYield );
 			}
 
 		}

@@ -160,14 +160,6 @@ namespace TSF{
 						Fitter fitter( schema, inFile );
 						fitter.addPlayers( activePlayers );
 						//fitter.fixedFit( centerSpecies, iCharge, iCen, iPt, iEta );
-						
-						schema->setMethod( "poisson" );
-						fitter.fit( centerSpecies, iCharge, iCen, iPt, iEta );
-						
-						schema->setMethod("nll");
-						fitter.fixedFit( centerSpecies, iCharge, iCen, iPt, iEta );
-
-						schema->setMethod( "poisson" );
 						fitter.fit( centerSpecies, iCharge, iCen, iPt, iEta );
 
 						// fill info about fit convergence
@@ -262,7 +254,14 @@ namespace TSF{
 
 
 			double zbSigFix = schema->vars[ "zb_sigma_"+plc ]->val;
-			if ( zbMinParP > 0 && avgP >= zbMinParP  + iCen * .05){
+			if ( "K" == plc ){
+				if ( 6 == iCen ){
+					zbMinParP = 0.5;
+					zbSigFix = 0.013;
+				}
+			}
+
+			if ( zbMinParP > 0 && avgP >= zbMinParP ){
 				schema->fixParameter( "zb_sigma_" + plc, zbSigFix, true );
 			}
 			else 

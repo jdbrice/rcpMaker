@@ -23,7 +23,7 @@
 			<ptBins min="4" max="30" />
 			<centralityBins>0,6</centralityBins>
 			<etaBins>0 </etaBins>
-			<charges>-1</charges>
+			<charges>1, -1</charges>
 		</FitRange>
 
 		<LastYieldBin>
