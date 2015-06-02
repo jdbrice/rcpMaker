@@ -255,7 +255,7 @@ namespace TSF{
 
 			double zdSigFix = schema->vars[ "zd_sigma_"+plc ]->val;
 			double zbSigFix = schema->vars[ "zb_sigma_"+plc ]->val;
-			if ( iCen == 0 ){
+			/*if ( iCen == 0 ){
 				if ( "Pi" == plc )
 					zbSigFix = 0.0115;
 				if ( "K" == plc )
@@ -269,7 +269,7 @@ namespace TSF{
 					zbSigFix = 0.012;
 				if ( "P" == plc )
 					zbSigFix = 0.0125;
-			}
+			}*/
 			if ( zbMinParP > 0 && avgP >= zbMinParP)
 				schema->fixParameter( "zb_sigma_" + plc, zbSigFix, true );
 			else 
@@ -283,9 +283,9 @@ namespace TSF{
 
 				//if ( avgP < 0. ){
 					
-				if ( zdMinParP > 0 && avgP >= zdMinParP)
+				/*if ( zdMinParP > 0 && avgP >= zdMinParP)
 					schema->fixParameter( "zd_sigma_" + plc, zdSigFix, true );
-				else 
+				else */
 					schema->setInitialSigma( "zd_sigma_"+plc, zdSig, 0.06, 0.08);//0.04, 0.16 );	
 				//}
 				
