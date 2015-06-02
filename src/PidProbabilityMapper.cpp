@@ -55,23 +55,24 @@ map<string, double> PidProbabilityMapper::pidWeights( int charge, int iCen, doub
 	//	eVal = zb;
 
 	for ( string plc : PidPhaseSpace::species ){
-		string name = TSF::FitRunner::sigmaName(plc, iCen, charge, iEta);
+		/*string name = TSF::FitRunner::sigmaName(plc, iCen, charge, iEta);
 		string fName = plc + "_" + model + "Sigma/" + name;
 		TH1D * h = ( TH1D * )inFile->Get( fName.c_str()   );
-		if ( !h ){
-			//logger->error( __FUNCTION__ ) << fName << " not found " << endl;
-			return weights;
-		}
+		
 		sigmas.push_back( h->GetBinContent( iPt ) );
 
 		name = TSF::FitRunner::muName(plc, iCen, charge, iEta);
 		fName = plc + "_" + model + "Mu/" + name;
 		h = ( TH1D * )inFile->Get( fName.c_str()   );
 		mus.push_back( h->GetBinContent( iPt ) );
-
-		name = TSF::FitRunner::yieldName(plc, iCen, charge, iEta);
-		fName = plc + "_yield/" + name;
-		h = ( TH1D * )inFile->Get( fName.c_str()   );
+*/
+		string name = TSF::FitRunner::yieldName(plc, iCen, charge, iEta);
+		string fName = plc + "_yield/" + name;
+		TH1D * h = ( TH1D * )inFile->Get( fName.c_str()   );
+		if ( !h ){
+			//logger->error( __FUNCTION__ ) << fName << " not found " << endl;
+			return weights;
+		}
 		yields.push_back( h->GetBinContent( iPt ) );
 	}
 
@@ -80,27 +81,14 @@ map<string, double> PidProbabilityMapper::pidWeights( int charge, int iCen, doub
 	
 	double total = 0.0;
 
-	bool near = false;
+	
 	int i = 0;
 	for ( string plc : PidPhaseSpace::species ){
-		if ( (eVal - mus[ i ]) / sigmas[ i ] < 3 ){
-			near = true;
-			break;
-		}
-		i++;
-	}
 
-	i = 0;
-	for ( string plc : PidPhaseSpace::species ){
-
-		if ( near ){
-			double v = evaluateGauss( eVal, yields[ i ], mus[ i ], sigmas[ i ] );
-			total += v;
-			weights[ plc ] = v;
-		} else {
-			total += yields[ i ];
-			weights[ plc ] = yields[ i ];
-		}
+		
+		total += yields[ i ];
+		weights[ plc ] = yields[ i ];
+		
 		i++;
 	}
 
