@@ -254,10 +254,25 @@ namespace TSF{
 
 
 			double zbSigFix = schema->vars[ "zb_sigma_"+plc ]->val;
+			if ( iCen == 0 ){
+				if ( "Pi" == plc )
+					zbSigFix = 0.0115;
+				if ( "K" == plc )
+					zbSigFix = 0.012;
+				if ( "P" == plc )
+					zbSigFix = 0.0125;
+			} else {
+				if ( "Pi" == plc )
+					zbSigFix = 0.0115;
+				if ( "K" == plc )
+					zbSigFix = 0.012;
+				if ( "P" == plc )
+					zbSigFix = 0.0125;
+			}
 			if ( zbMinParP > 0 && avgP >= zbMinParP)
-				schema->fixParameter( "zb_sigma_" + plc, zbSigFix );
+				schema->fixParameter( "zb_sigma_" + plc, zbSigFix, true );
 			else 
-				schema->setInitialSigma( "zb_sigma_"+plc, zbSig, 0, 0);//0.006, 0.025 );
+				schema->setInitialSigma( "zb_sigma_"+plc, zbSig, 0.005, 0.066);//0.006, 0.025 );
 
 
 			if ( true /*== paramFixing && iPt != 0*/ ){ // if 1st bin let schema settings stick
@@ -267,7 +282,7 @@ namespace TSF{
 
 				//if ( avgP < 0. ){
 					
-					schema->setInitialSigma( "zd_sigma_"+plc, zdSig, 0, 0);//0.04, 0.16 );	
+				schema->setInitialSigma( "zd_sigma_"+plc, zdSig, 0.06, 0.08);//0.04, 0.16 );	
 				//}
 				
 			}
@@ -292,10 +307,11 @@ namespace TSF{
 			//}*/
 		
 			if ( roi > 0 ){
-				schema->addRange( "zb_All", zbMu - zbSig * roi, zbMu + zbSig * roi );
-				schema->addRange( "zb_Pi", zbMu - zbSig * roi, zbMu + zbSig * roi );
-				schema->addRange( "zb_K", zbMu - zbSig * roi, zbMu + zbSig * roi );
-				schema->addRange( "zb_P", zbMu - zbSig * roi, zbMu + zbSig * roi );	
+				double roiTof = roi * 10;
+				schema->addRange( "zb_All", zbMu - zbSig * roiTof, zbMu + zbSig * roiTof );
+				schema->addRange( "zb_Pi", zbMu - zbSig * roiTof, zbMu + zbSig * roiTof );
+				schema->addRange( "zb_K", zbMu - zbSig * roiTof, zbMu + zbSig * roiTof );
+				schema->addRange( "zb_P", zbMu - zbSig * roiTof, zbMu + zbSig * roiTof );	
 
 				schema->addRange( "zd_All", zdMu - zdSig * roi, zdMu + zdSig * roi );
 				schema->addRange( "zd_Pi", zdMu - zdSig * roi, zdMu + zdSig * roi );

@@ -90,13 +90,13 @@ namespace TSF{
 				}
 			} // loop on data points
 
-			if ( "nll" == method ){
+			/*if ( "nll" == method ){
 				double mYield = modelYield( ds );
 				double dsYield = k.second.yield();
 
 				// subtract off this dataset's (N - E) term
-				fnVal = fnVal - ( dsYield - mYield );
-			}
+				fnVal = fnVal - ( dsYield - mYield ) * ( 100.0 / self->norm );
+			}*/
 
 		}
 
@@ -111,7 +111,8 @@ namespace TSF{
 		map< string, TH1D* > zb;
 		map< string, TH1D* > zd;
 
-		dataHists[ "zb_All"] = (TH1*)dataFile->Get( ("tof/" + PidPhaseSpace::tofName( cs, charge, cenBin, ptBin, etaBin )).c_str() 		);
+		if ( ptBin > 8 )
+			dataHists[ "zb_All"] = (TH1*)dataFile->Get( ("tof/" + PidPhaseSpace::tofName( cs, charge, cenBin, ptBin, etaBin )).c_str() 		);
 		dataHists[ "zd_All"] = (TH1*)dataFile->Get( ("dedx/" + PidPhaseSpace::dedxName( cs, charge, cenBin, ptBin, etaBin )).c_str() 	);
 		
 		// dEdx enhanced distributions
@@ -225,12 +226,32 @@ namespace TSF{
 			tries++;
       	}
 
+      	for ( int i = 0; i < parNames.size(); i++ ){
+
+			bool shouldFix = false;
+			if ( /*string::npos != parNames[ i ].find( "sig" ) ||*/ string::npos != parNames[ i ].find( "mu" ) )
+				shouldFix = true;
+
+			if ( schema->vars[ parNames[ i ] ]->fixed || shouldFix )
+				minuit->FixParameter( i );
+		}
+
+		for ( int i = 0; i < parNames.size(); i++ ){
+
+			bool shouldFix = false;
+			if ( /*string::npos != parNames[ i ].find( "sig" ) ||*/ string::npos != parNames[ i ].find( "mu" ) )
+				shouldFix = true;
+
+			if ( schema->vars[ parNames[ i ] ]->fixed || shouldFix )
+				minuit->Release( i );
+		}
+
 
 
 		//minuit->mnexcm( "STATUS", arglist, 1, iFlag ); // get errors
 
       	// if ( iFlag > 0 )
-      	// 	minuit->mnexcm( "MINOS", arglist, 1, iFlag );
+      	//minuit->mnexcm( "MINOS", arglist, 1, iFlag );
       	// else
       	minuit->mnexcm( "HESSE", arglist, 1, iFlag ); // get errors
 

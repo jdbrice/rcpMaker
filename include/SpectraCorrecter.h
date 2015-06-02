@@ -27,11 +27,11 @@ public:
 
 		for ( string plc : PidPhaseSpace::species ){
 			for ( string c : cs ){
-				params[  plc + "_" + c  ] = unique_ptr<EffParams>( new EffParams( cfg, plc + "_" + c ) );
+				params[  plc + "_" + c  ] = unique_ptr<EffParams>( new EffParams( plc, cfg, plc + "_" + c ) );
 			}
 		}
 
-		params[  "tof"  ] = unique_ptr<EffParams>( new EffParams( cfg, "tof" ) );
+		params[  "tof"  ] = unique_ptr<EffParams>( new EffParams( "tof", cfg, "tof" ) );
 	
 	}
 

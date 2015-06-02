@@ -7,11 +7,11 @@
 		<Logger color="true" logLevel="warning" globalLogLevel="info"/>
 		
 		<input>
-			<dst treeName="rcpPicoDst" url="/Users/danielbrandenburg/bnl/local/data/BES/15GeV/" maxFiles="25"/>
+			<dst treeName="rcpPicoDst" url="/Users/danielbrandenburg/bnl/local/data/BES/15GeV/rcpPicoDst/" maxFiles="25"/>
 		</input>
 
-		<output path="../products/spectra/15GeV/">
-			<data>spectrasgf.root</data>
+		<output path="../products/15/spectra/">
+			<data>spectratsf_low.root</data>
 			<Reports></Reports>
 		</output>
 
@@ -43,7 +43,7 @@
 		
 		<PhaseSpaceRecentering>
 			<centerSpecies>K</centerSpecies>
-			<sigma tof="0.011" dedx="0.033"/>
+			<sigma tof="0.012" dedx="0.08"/>
 			<method>nonlinear</method>
 		</PhaseSpaceRecentering>
 
@@ -64,7 +64,7 @@
 
 		<PidProbabilityMapper>
 			<Logger color="true" logLevel="info" globalLogLevel="info" />
-			<input> <data url="../products/sgf/15GeV/april_30_15/f0/sgf_full.root"/> </input>
+			<input> <data url="../products/15/fit/tsf_15_pt_eta.root"/> </input>
 			<output> <data url="mapTest.root" /> </output>
 
 			<PSBinning>
@@ -97,7 +97,7 @@
 			4.5
 		</pt>
 		
-		<eta>0.0,  0.6 </eta>
+		<eta>0.0,  0.4 </eta>
 
 		<charge> -1.5, -0.5, 0.5, 1.5 </charge>
 

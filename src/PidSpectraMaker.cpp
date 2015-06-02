@@ -145,7 +145,7 @@ void PidSpectraMaker::analyzeTrack( int iTrack ){
 	//cout << "Pi y = " << yPlc[ 0 ] << endl; 
 	map< string, double> weights = ppm->pidWeights( charge, cBin, p/*TODO*/, 0, tof, dedx );
 
-	double tofEffWeight = sc->reweight( "tof", 0, refMult, pt );
+	double tofEffWeight = sc->reweight( "tof", 0, refMult , pt ); 
 
 	int i = 0;
 	for ( string plc : PidPhaseSpace::species ){
@@ -154,6 +154,8 @@ void PidSpectraMaker::analyzeTrack( int iTrack ){
 			continue;
 		
 		double effWeight = sc->reweight( plc, charge, refMult, pt );
+		//cout << "effWeight = " << effWeight << endl;
+		//cout << "tofWeight = " << tofEffWeight << endl;
 
 		book->cd( plc );
 		string cName = "pt_" + ts( cBin ) + "_" + PidPhaseSpace::chargeString( charge );
