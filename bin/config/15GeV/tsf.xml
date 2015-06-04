@@ -7,7 +7,7 @@
 		<Logger color="true" logLevel="info" globalLogLevel="info"/>
 		<Reporter> <output url=".pdf" width="800" height="800" /> </Reporter>	
 		<!--<input> <data url="/Users/danielbrandenburg/bnl/local/data/Run14/rcp/phaseSpace/pid.root"/> </input>-->
-		<input> <data url="../products/15/phaseSpace/all_mass_june_01_15_pt_eta_lt_0p25.root"/> </input>
+		<input> <data url="../products/15/phaseSpace/pid_pbinning_May_27_15.root"/> </input>
 		<output path=""> <data>tsf_15_pt_eta.root</data> </output>
 	
 		<histograms>
@@ -15,6 +15,7 @@
 		</histograms>
 		<!-- fit bins -->
 		<FitRange>
+
 			<ptBins min="4" max="12" />
 			<centralityBins>0,6</centralityBins>
 			<etaBins>0</etaBins>
@@ -24,14 +25,15 @@
 
 		<ParameterFixing>
 			<!-- mu can vary +/- nSigma -->
-			<deltaMu zb="10.0" zd="3.0" />
+			<deltaMu zb="3.0" zd="3.0" />
 			<!-- sigma can vary +/- n percent (between 0 and 1) -->
 			<deltaSigma zb="0.990" zd="0.990" />
 
 			<!-- the minimum momentum at which the value is fixed -->
-			<Pi zbSigma="1.1" zdSigma="5.7" />
-			<K zbSigma="1.1" zdSigma="5.7" />
-			<P zbSigma="1.7" zdSigma="5.7" />
+			<Pi zbSigma="0.8" zdSigma="1.1" />
+			<K zbSigma="0.9" zdSigma="1.1" />
+			<P zbSigma="1.43" zdSigma="1.1" />
+
 
 			
 		</ParameterFixing>
@@ -44,7 +46,7 @@
 		
 		<PhaseSpaceRecentering>
 			<centerSpecies>K</centerSpecies>
-			<sigma tof="0.012" dedx="0.08"/>
+			<sigma tof="0.010" dedx="0.07"/>
 			<method>nonlinear</method>
 		</PhaseSpaceRecentering>
 
@@ -164,7 +166,7 @@
 		<!-- .1 from .5 to 2.5 => 15 bins -->
 		<!-- .2 from 2.0 to 3.0 => 5 bins -->
 		<pt>
-			0.2, 0.25, 0.3, 0.35, 0.4, 0.45,
+			0.2, 0.3, 0.4,
 			0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2.0, 
 			2.2, 2.4, 2.6, 2.8, 3.0, 	
 			3.5,						
@@ -177,10 +179,7 @@
 
 		<tof width="0.006" min="-1" max="1" />
 		<dedx width="0.03" min="-0.75" max="0.75" />
-		<!--
-		<tof width="0.006" min="-1" max="1" />
-		<dedx width="0.015" min="-0.75" max="0.75" />
-		-->
+
 		<tofRaw width="0.0024" min="0.9" max="3" />
 		<dedxRaw width="0.012" min="1" max="6" />
 

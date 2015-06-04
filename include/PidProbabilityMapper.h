@@ -27,6 +27,9 @@ public:
 	~PidProbabilityMapper();
 	
 	map<string, double> pidWeights( int charge, int iCen, double pt, double eta, double zb, double zd );
+	//map<string, double> pidWeights0( int charge, int iCen, double pt );
+	//map<string, double> pidWeights1( int charge, int iCen, double pt, double eta, double zb, double zd );
+
 };
 
 

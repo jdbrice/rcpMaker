@@ -27,19 +27,19 @@ public:
 
 		for ( string plc : PidPhaseSpace::species ){
 			for ( string c : cs ){
-				params[  plc + "_" + c  ] = unique_ptr<EffParams>( new EffParams( cfg, plc + "_" + c ) );
+				params[  plc + "_" + c  ] = unique_ptr<EffParams>( new EffParams( plc, cfg, plc + "_" + c ) );
 			}
 		}
 
-		params[  "tof"  ] = unique_ptr<EffParams>( new EffParams( cfg, "tof" ) );
+		params[  "tof_p"  ] = unique_ptr<EffParams>( new EffParams( "tof", cfg, "tof_p" ) );
+		params[  "tof_n"  ] = unique_ptr<EffParams>( new EffParams( "tof", cfg, "tof_n" ) );
 	
 	}
 
 	double reweight( string plc, int c, int rm, double pt ){
 
 		string name = plc + "_" + PidPhaseSpace::chargeString( c );
-		if ( "tof" == plc )
-			name = plc;
+	
 		if ( params.find( name ) != params.end() )
 			return params[ name ]->reweight( pt, rm );
 

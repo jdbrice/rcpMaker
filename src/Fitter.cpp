@@ -101,8 +101,7 @@ namespace TSF{
 				//cout << "ds : " << ds << endl;
 				//cout << "dsYield : " << dsYield << ", " << mYield << " dif = " << abs( dsYield - mYield ) << endl;
 				// subtract off this dataset's (N - E) term
-				fnVal = fnVal + abs( dsYield - mYield ) * normFactor;
-				//fnVal = fnVal - ( dsYield - mYield );
+				fnVal = fnVal - ( dsYield - mYield ) * ( 100.0 / self->norm );
 			}
 
 		}
@@ -118,7 +117,8 @@ namespace TSF{
 		map< string, TH1D* > zb;
 		map< string, TH1D* > zd;
 
-		dataHists[ "zb_All"] = (TH1*)dataFile->Get( ("tof/" + PidPhaseSpace::tofName( cs, charge, cenBin, ptBin, etaBin )).c_str() 		);
+		if ( ptBin > 8 )
+			dataHists[ "zb_All"] = (TH1*)dataFile->Get( ("tof/" + PidPhaseSpace::tofName( cs, charge, cenBin, ptBin, etaBin )).c_str() 		);
 		dataHists[ "zd_All"] = (TH1*)dataFile->Get( ("dedx/" + PidPhaseSpace::dedxName( cs, charge, cenBin, ptBin, etaBin )).c_str() 	);
 		
 		// dEdx enhanced distributions
@@ -233,11 +233,10 @@ namespace TSF{
       	}
 
 
-
 		//minuit->mnexcm( "STATUS", arglist, 1, iFlag ); // get errors
 
       	// if ( iFlag > 0 )
-      	// 	minuit->mnexcm( "MINOS", arglist, 1, iFlag );
+      	//minuit->mnexcm( "MINOS", arglist, 1, iFlag );
       	// else
       	minuit->mnexcm( "HESSE", arglist, 1, iFlag ); // get errors
 

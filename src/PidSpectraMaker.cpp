@@ -77,6 +77,8 @@ void PidSpectraMaker::postEventLoop() {
 
 void PidSpectraMaker::analyzeTrack( int iTrack ){
 	
+
+
 	using namespace TMath;
 
 	book->cd();
@@ -99,7 +101,7 @@ void PidSpectraMaker::analyzeTrack( int iTrack ){
 
 	//int ptBin = binsPt->findBin( pt );
 	int ptBin = binsPt->findBin( p );
-	int etaBin = binsEta->findBin( TMath::Abs( 0 ) );
+	int etaBin = binsEta->findBin( TMath::Abs( eta ) );
 	int charge = pico->trackCharge( iTrack );
 
 	double avgP = averageP( ptBin, etaBin );
@@ -145,15 +147,17 @@ void PidSpectraMaker::analyzeTrack( int iTrack ){
 	//cout << "Pi y = " << yPlc[ 0 ] << endl; 
 	map< string, double> weights = ppm->pidWeights( charge, cBin, p/*TODO*/, 0, tof, dedx );
 
-	double tofEffWeight = sc->reweight( "tof", 0, refMult, pt );
+	double tofEffWeight = sc->reweight( "tof", charge, refMult , pt ); 
 
 	int i = 0;
 	for ( string plc : PidPhaseSpace::species ){
 
-		if ( Abs(yPlc[ i ]) > 0.25 && weights[ plc ] > 0 )
+		if ( Abs(yPlc[ i ]) > 0.25 )
 			continue;
 		
 		double effWeight = sc->reweight( plc, charge, refMult, pt );
+		//cout << "effWeight = " << effWeight << endl;
+		//cout << "tofWeight = " << tofEffWeight << endl;
 
 		book->cd( plc );
 		string cName = "pt_" + ts( cBin ) + "_" + PidPhaseSpace::chargeString( charge );
