@@ -19,7 +19,7 @@
 		<!-- RefMult Inspection -->
 		<Histo name="pre_refMult" title="Raw RefMult" xBins="Bins.refMult" />
 		<Histo name="refMult" title="Raw RefMult" xBins="Bins.refMult" />
-		<Histo name="corrRefMult" title="Corrected RefMult" xBins="Bins.refMult" />
+		<Histo name="corrRefMult" title="Corrected RefMult" xBins="Bins.corrRefMult" />
 		<Histo name="refMultBin9" title="Corrected refMult in Bin9" xBins="Bins.rm9" />
 		<Histo name="refMultBin16" title="Corrected refMult in Bin16" xBins="Bins.rm16" />
 		<Histo name="mappedRefMultBins" title="Mapped RefMult Bins; refMult Bin; #"   xBins="Bins.rm9" />
@@ -72,7 +72,8 @@
 	</Track>
 
 	<Bins>
-		<refMult width="1.0" min="-0.5" max="400.5" />
+		<corrRefMult width=".1" min="0.0" max="500.0" />
+		<refMult width="1.0" min="0.0" max="500.0" />
 		<vZ width="1.0" min="-200" max="200" />
 		<vR width="0.1" min="0.0" max="3.0" />
 		<vPerp width="0.05" min="-1.5" max="1.5" />

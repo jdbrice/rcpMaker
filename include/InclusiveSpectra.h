@@ -73,7 +73,7 @@ protected:
 	/**
 	 * Current Event Info
 	 */
-	int refMult = -1;
+	float refMult = -1;
 	double eventWeight = 1.0;
 	int cBin;
 
@@ -93,7 +93,7 @@ protected:
 	virtual void makeCentralityHistos();
 	virtual int centralityBin( int refMult ) {
 		if ( rmc ){
-			int bin9 = rmc->bin9( refMult);
+			int bin9 = rmc->bin9( refMult );
 			//if ( bin9 > 8 || bin9 < 0 )
 			//	return -1;
 			map<int, int>::iterator mit = centralityBinMap.find( bin9 );

@@ -116,18 +116,18 @@ public:
 		return true;
 
 	}
-	int bin16( int m, double z = -1000 ){
+	int bin16( float m, double z = -1000 ){
 
 		if ( z < -999 ){ // corrected refMult - just use
-			int bin = centralityBins->findBin( m );
+			int bin = centralityBins->findBin( m, BinEdge::upper );
 			return bin;
 		} else if ( z >= zVertexRange->min && z <= zVertexRange->max ){
-			int bin = centralityBins->findBin( refMult( m, z ) );
+			int bin = centralityBins->findBin( refMult( m, z ), BinEdge::upper );
 			return bin;
 		}
 		return -1;
 	}
-	int bin9( int m, double z = -1000 ){
+	int bin9( float m, double z = -1000 ){
 		int preBin = bin16( m, z );
 		if ( preBin < 0 )
 			return preBin;

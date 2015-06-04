@@ -40,6 +40,8 @@ InclusiveSpectra::InclusiveSpectra( XmlConfig * config, string np, string fileLi
 		rmc = unique_ptr<RefMultCorrection> (new RefMultCorrection( config->getString( np + "RMCParams:config" ) ) );
 
 
+
+
 	/**
 	 * Event and Track Cuts
 	 */
@@ -134,6 +136,9 @@ void InclusiveSpectra::preEventLoop(){
 		logger->info(__FUNCTION__) << " Making track QA histograms " << endl;
 		book->makeAll( qaCfg.get(), "Track" );
 	}
+
+
+
 }
 
 void InclusiveSpectra::postEventLoop(){
@@ -187,6 +192,8 @@ bool InclusiveSpectra::keepEvent(){
 		// needed for other things
 		if ( makeEventQA ){
 			book->cd( "EventQA" );
+			
+			book->fill( "corrRefMult", refMult, eventWeight );
 			book->fill( "mappedRefMultBins", cBin, eventWeight );
 		}
 

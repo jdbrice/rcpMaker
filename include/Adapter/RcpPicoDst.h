@@ -30,7 +30,7 @@ public:
    // Declaration of leaf types
    Int_t           rrunId;
    Float_t         weight;
-   UShort_t        corrRefMult;
+   Float_t         corrRefMult;
    Int_t           nTracks;
    Float_t         ppT[1000];   //[nTracks]
    Float_t         pP[1000];   //[nTracks]
@@ -62,7 +62,7 @@ public:
 
    inline virtual Int_t runId(){ return rrunId; }
    inline virtual Float_t eventWeight(){ return weight; }
-   inline virtual UShort_t refMult(){ return corrRefMult; }
+   inline virtual Float_t refMult(){ return corrRefMult; }
    inline virtual Int_t numTracks(){ return nTracks; }
    inline virtual Double_t trackPt( Int_t iHit ){ 
       return TMath::Abs(ppT[iHit]); 

@@ -312,7 +312,7 @@ public :
    inline virtual Double_t vZ(  ){ return Event_mPrimaryVertex_mX3[0]; }
    inline virtual Double_t vR(  ){ return TMath::Sqrt( vX()*vX() + vY()*vY() ); }
 
-   inline virtual UShort_t refMult(){ return (Event_mRefMultPos[0] + Event_mRefMultNeg[0]); }
+   inline virtual Float_t refMult(){ return (Event_mRefMultPos[0] + Event_mRefMultNeg[0]); }
    inline virtual Int_t numTracks(){ return Event_mNumberOfGlobalTracks[0]; }
    inline virtual Int_t trackTofMatch( Int_t iHit ){ 
       return Tracks_mBTofMatchFlag[ iHit ]; 

@@ -63,7 +63,7 @@ public:
 
 	virtual Int_t nTZero(  ){ return 0; }
 	virtual Short_t tofMult(){ return 0; }
-	virtual UShort_t refMult(){ return 0; }
+	virtual Float_t refMult(){ return 0; }
 	virtual Int_t numTracks(){ return 0; }
 	virtual Short_t numPrimary(){ return 0; }
 	virtual Short_t numGlobal(){ return 0; }
