@@ -126,7 +126,7 @@ void PidPhaseSpace::analyzeTrack( int iTrack ){
 
 	double avgP = averageP( ptBin, etaBin );
 
-	binByMomentum = false;
+	binByMomentum = true;
 	if ( true == binByMomentum  ){
 		ptBin = binsPt->findBin( p );
 		etaBin = 0;
