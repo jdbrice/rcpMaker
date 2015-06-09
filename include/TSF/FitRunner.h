@@ -76,6 +76,13 @@ namespace TSF{
 		double p( double pt, double eta ){
 			return pt * cosh( eta );
 		}
+		double averagePt( int ptBin ){
+			if ( ptBin < 0 || ptBin > binsPt->nBins() ){
+				return 0;
+			}
+			double avgPt = ((*binsPt)[ ptBin ] + (*binsPt)[ ptBin + 1 ]) / 2.0;
+			return avgPt;
+		}
 		double averageP( int ptBin, int etaBin ){
 			if ( ptBin < 0 || ptBin > binsPt->nBins() ){
 				return 0;

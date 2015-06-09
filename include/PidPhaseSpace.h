@@ -24,7 +24,7 @@ protected:
 	unique_ptr<HistoBins> binsDedx;
 	unique_ptr<HistoBins> binsPt;
 	unique_ptr<HistoBins> binsEta;
-	unique_ptr<HistoBins> binsCharge;
+	vector<int> charges;
 	// these are made on the fly
 	double tofBinWidth, dedxBinWidth;
 
@@ -131,14 +131,14 @@ public:
 		if ( ptBin < 0 || ptBin > binsPt->nBins() ){
 			return 0;
 		}
-		//if ( etaBin < 0 || etaBin > binsEta->nBins() ){
-		//	return 0;
-		//} 
+		if ( etaBin < 0 || etaBin > binsEta->nBins() ){
+			return 0;
+		} 
 
 		double avgPt = ((*binsPt)[ ptBin ] + (*binsPt)[ ptBin + 1 ]) / 2.0;
-		//double avgEta = ((*binsEta)[ etaBin ] + (*binsEta)[ etaBin + 1 ]) / 2.0;
+		double avgEta = ((*binsEta)[ etaBin ] + (*binsEta)[ etaBin + 1 ]) / 2.0;
 
-		return p( avgPt, 0/*avgEta*/ );
+		return p( avgPt, avgEta );
 
 	}
 

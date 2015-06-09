@@ -139,7 +139,7 @@ namespace TSF{
 
 					for ( int iPt = firstPtBin; iPt <= lastPtBin; iPt++ ){
 
-						double avgP = averageP( iPt, iEta );
+						double avgP = averagePt( iPt );
 						
 						logger->warn(__FUNCTION__) << "<p> = " << avgP << endl;
 						logger->info(__FUNCTION__) << "pt Bin : " << iPt << endl;

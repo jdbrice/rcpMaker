@@ -7,11 +7,11 @@
 		<Logger color="true" logLevel="warning" globalLogLevel="info" />
 		
 		<input>
-			<dst treeName="rcpPicoDst" url="/Users/danielbrandenburg/bnl/local/data/BES/15GeV/rcpPicoDst/" maxFiles="5000"/>
+			<dst treeName="rcpPicoDst" url="/Users/danielbrandenburg/bnl/local/data/BES/15GeV/rcpPicoDst/" maxFiles="50"/>
 		</input>
 
 		<output path="../products/15/phaseSpace/">
-			<data>imass.root</data>
+			<data>imass_all.root</data>
 			<Reports>report/</Reports>
 		</output>
 
@@ -89,7 +89,7 @@
 		
 		<eta>0.0, 1.0 </eta>
 
-		<charge> -1.5, -0.5, 0.5, 1.5 </charge>
+		<charges> -1, 0, 1 </charges>
 
 		<tof width="0.006" min="-1" max="1" />
 		<dedx width="0.03" min="-0.75" max="0.75" />
