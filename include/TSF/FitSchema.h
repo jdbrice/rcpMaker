@@ -39,6 +39,8 @@ namespace TSF{
 		bool fitInRange = false;
 		vector<FitRange> ranges;
 
+		double normalization = 0;
+
 
 	public:
 		FitSchema( XmlConfig * _cfg, string np );
@@ -67,6 +69,7 @@ namespace TSF{
 		void setInitialSigma( string var, double _sigma, double _dsig );
 		void setInitialSigma( string var, double _sigma, double _min, double _max );
 		void fixParameter( string var, double val, bool fixed = true );
+		void setYieldRange( string var, double low, double high );
 
 	
 		void addRange( string dataset, double _min, double _max );
@@ -75,9 +78,18 @@ namespace TSF{
 		bool inRange( string ds, double x );
 		void reportFitRanges();
 
+		void setNormalization( double n) {
+			normalization = n;
+		}
+		double getNormalization(){
+			return normalization;
+		}
+
 		vector<FitRange> & getRanges() {
 			return ranges;
 		}
+
+		double enforceMassOrdering(){ return 1.0;};
 
 	};
 

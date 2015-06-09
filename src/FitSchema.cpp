@@ -204,6 +204,11 @@ namespace TSF{
 		}
 	}
 
+	void FitSchema::setYieldRange( string var, double low, double hi ){
+		vars[ var ]->min = low;
+		vars[ var ]->max = hi;
+	}
+
 
 
 

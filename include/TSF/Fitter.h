@@ -34,11 +34,14 @@ namespace TSF{
 		map<string, bool> players;
 
 		double norm;
+		bool sufficienctStatistics;
 
 	public:
 		Fitter( shared_ptr<FitSchema> _schema, TFile * dataFile );
 
 		~Fitter();
+		void setupFit();
+
 		static vector<double> convergence;
 
 		static void tminuitFCN(int &npar, double *gin, double &f, double *par, int flag);
@@ -65,7 +68,7 @@ namespace TSF{
 
 		static void updateParameters( int npar = 0, double * pars = 0);
 
-		bool loadDatasets( string cs, int charge, int cenBin, int ptBin, int etaBin );
+		void loadDatasets( string cs, int charge, int cenBin, int ptBin, int etaBin );
 		void fit( string cs, int charge, int cenBin, int ptBin, int etaBin );
 		void fixedFit( string cs, int charge, int cenBin, int ptBin, int etaBin );
 
@@ -86,6 +89,7 @@ namespace TSF{
 
 
 		double getNorm() { return norm; }
+		double normFactor() { return 10.0; }
 
 	};
 }

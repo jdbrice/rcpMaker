@@ -36,7 +36,7 @@ namespace TSF{
 		/**
 		 * Setup the PID Params
 		 */
-		if ( cfg->exists( nodePath +  "PidParameters:url" ) ){
+		/*if ( cfg->exists( nodePath +  "PidParameters:url" ) ){
 			string fnPidParams = cfg->getString( nodePath + "PidParameters:url" );
 			useParams = true;
 			
@@ -46,7 +46,7 @@ namespace TSF{
 			logger->info(__FUNCTION__) << "Making zbParams" << endl;
 			zbParams = unique_ptr<ZbPidParameters>( new ZbPidParameters( paramsConfig.get(), "TofPidParams", psr ) );
 			zdParams = unique_ptr<ZdPidParameters>( new ZdPidParameters( paramsConfig.get(), "DedxPidParams" ) );	
-		}
+		}*/
 
 	}
 
@@ -110,6 +110,225 @@ namespace TSF{
 
 	}
 
+	void FitRunner::prepare( double avgP, int iCen ){
+
+		//Constraints on the mu 	 
+		double zbDeltaMu = cfg->getDouble( nodePath + "ParameterFixing.deltaMu:zb", 1.5 );
+		double zdDeltaMu = cfg->getDouble( nodePath + "ParameterFixing.deltaMu:zd", 1.5 );
+		
+		//Constraints on the sigma  
+		double zbDeltaSigma = cfg->getDouble( nodePath + "ParameterFixing.deltaSigma:zb", -1 );
+		double zdDeltaSigma = cfg->getDouble( nodePath + "ParameterFixing.deltaSigma:zd", -1 );
+
+		bool paramFixing = cfg->getBool( nodePath + "ParameterFixing:apply", true );
+
+		// fit roi
+		double roi = cfg->getDouble( nodePath + "FitSchema:roi", -1 );
+
+		activePlayers.clear();
+		for ( string plc : PidPhaseSpace::species ){
+
+			// zb Parameters
+			double zbMu = zbMean( plc, avgP, iCen );
+			double zbSig = zbSigma( plc, avgP, iCen );
+
+			// zd Parameters
+			double zdMu = zdMean( plc, avgP );
+			double zdSig = zdSigma( plc, avgP, iCen );
+
+			// update the schema
+			logger->trace(__FUNCTION__) << plc << " : zb mu=" << zbMu << ", sig=" << zbSig << endl;
+			logger->trace(__FUNCTION__) << plc << " : zd mu=" << zdMu << ", sig=" << zdSig << endl; 
+			
+			// check if the sigmas should be fixed
+			double zbMinParP = cfg->getDouble( nodePath + "ParameterFixing." + plc + ":zbSigma", 5.0 );
+			double zdMinParP = cfg->getDouble( nodePath + "ParameterFixing." + plc + ":zdSigma", 5.0 );
+
+
+			double zdSigFix = schema->vars[ "zd_sigma_"+plc ]->val;
+			double zbSigFix = schema->vars[ "zb_sigma_"+plc ]->val;
+
+
+			if ( zbMinParP > 0 && avgP >= zbMinParP)
+				schema->fixParameter( "zb_sigma_" + plc, zbSigFix, true );
+			else 
+				schema->setInitialSigma( "zb_sigma_"+plc, zbSig, 0.005, 0.066);//0.006, 0.025 );
+
+
+			if ( true /*== paramFixing && iPt != 0*/ ){ // if 1st bin let schema settings stick
+				
+				schema->setInitialMu( "zb_mu_"+plc, zbMu, zbSig, zbDeltaMu );
+				schema->setInitialMu( "zd_mu_"+plc, zdMu, zdSig, zdDeltaMu );
+
+				//if ( avgP < 0. ){
+					
+				/*if ( zdMinParP > 0 && avgP >= zdMinParP)
+					schema->fixParameter( "zd_sigma_" + plc, zdSigFix, true );
+				else */
+					schema->setInitialSigma( "zd_sigma_"+plc, zdSig, 0.06, 0.08);//0.04, 0.16 );	
+				//}
+				
+			}
+
+
+
+				/*
+			if ( false == paramFixing ){
+				schema->setInitialMu( "zb_mu_"+plc, zbMu, zbSig, zbDeltaMu );
+				schema->setInitialMu( "zd_mu_"+plc, zdMu, zdSig, zdDeltaMu );
+
+				schema->setInitialSigma( "zb_sigma_"+plc, zbSig, tofSigmaIdeal * .25, tofSigmaIdeal * 4 );
+				schema->setInitialSigma( "zd_sigma_"+plc, zdSig,dedxSigmaIdeal * .25 , dedxSigmaIdeal * 4 );
+			}
+
+			//if ( true == paramFixing  ){
+				
+				
+				if ( zdMinParP > 0 && avgP >= zdMinParP )
+					schema->fixParameter( "zd_sigma_" + plc, zdSig );
+				
+			//}*/
+		
+			if ( roi > 0 ){
+				schema->addRange( "zb_All", zbMu - zbSig * roi, zbMu + zbSig * roi );
+				// schema->addRange( "zb_Pi", zbMu - zbSig * roi, zbMu + zbSig * roi );
+				// schema->addRange( "zb_K", zbMu - zbSig * roi, zbMu + zbSig * roi );
+				// schema->addRange( "zb_P", zbMu - zbSig * roi, zbMu + zbSig * roi );	
+
+				schema->addRange( "zd_All", zdMu - zdSig * roi, zdMu + zdSig * roi );
+				// schema->addRange( "zd_Pi", zdMu - zdSig * roi, zdMu + zdSig * roi );
+				// schema->addRange( "zd_K", zdMu - zdSig * roi, zdMu + zdSig * roi );
+				// schema->addRange( "zd_P", zdMu - zdSig * roi, zdMu + zdSig * roi );	
+			}
+
+			choosePlayers( avgP, plc, roi );
+
+			schema->vars[ "yield_" + plc ]->min = 0;
+			schema->vars[ "yield_" + plc ]->max = schema->getNormalization() * 10;
+
+
+		} // loop on plc to set config
+	}
+
+	void FitRunner::choosePlayers( double avgP, string plc, double roi ){
+
+		double zdOnly = 0.3;
+		double useZdEnhanced = 0.3;
+		double useZbEnhanced = 0.3;
+		double nSigZbEnhanced = 3.0;
+		double nSigZdEnhanced = 3.0;
+
+		// always include the total yields
+		activePlayers.push_back( "zd_All_g" + plc );
+		schema->vars[ "yield_" + plc ]->exclude = false;
+
+		// exclude all enhanced yields for a clean slate
+		for ( string plc2 : PidPhaseSpace::species ){
+			schema->vars[ "zb_"+plc+"_yield_"+plc2 ]->exclude = true;
+			schema->vars[ "zd_"+plc+"_yield_"+plc2 ]->exclude = true;
+		}
+
+
+		if ( avgP >= zdOnly ){
+			// remove the zb variables
+			activePlayers.push_back( "zb_All_g" + plc );
+			schema->vars[ "zb_sigma_" + plc ]->exclude 	= false;
+			schema->vars[ "zb_mu_" + plc ]->exclude 	= false;
+		} else {
+			schema->vars[ "zb_sigma_" + plc ]->exclude = true;
+			schema->vars[ "zb_mu_" + plc ]->exclude 	= true;
+		}
+
+		if ( avgP < useZdEnhanced ){
+			for ( string plc2 : PidPhaseSpace::species ){
+				schema->vars[ "zd_"+plc+"_yield_"+plc2 ]->exclude = true;
+			}
+		} else {
+
+			double zbSig = zbSigma( plc, avgP, 0 );
+			double zbMu = zbMean( plc, avgP, 0 );
+
+			
+
+			for ( string plc2 : PidPhaseSpace::species ){
+				double zdMu2 = zdMean( plc2, avgP );
+				double zdSig2 = zdSigma( plc2, avgP, 0 );
+				string var = "zd_"+plc+"_yield_"+plc2;
+				
+				bool firstTimeIncluded = false;
+				if ( schema->vars[ var ]->exclude )
+					firstTimeIncluded = true;
+
+				double zbMu2 = zbMean( plc2, avgP, 0 );
+				double zbNd = ( zbMu - zbMu2 ) / zbSig;
+
+				if ( abs( zbNd ) < nSigZbEnhanced ){
+					activePlayers.push_back( "zd_" + plc + "_g" + plc2 );
+					
+
+					schema->vars[ var ]->exclude = false;
+					schema->vars[ var ]->min = 0;
+					schema->vars[ var ]->max = schema->getNormalization() * 10;
+
+					schema->addRange( "zd_" + plc, zdMu2 - zdSig2 * roi, zdMu2 + zdSig2 * roi );
+
+					if ( firstTimeIncluded && plc != plc2 )
+						schema->vars[ var ]->val = 0;
+
+				} else {
+					schema->vars[ "zd_"+plc+"_yield_"+plc2 ]->exclude = true;
+				}
+			}
+
+		}
+
+
+		if ( avgP < useZbEnhanced ){
+			for ( string plc2 : PidPhaseSpace::species ){
+				schema->vars[ "zb_"+plc+"_yield_"+plc2 ]->exclude = true;
+			}
+		} else {
+
+			double zdMu = zdMean( plc, avgP );
+			double zdSig = zdSigma( plc, avgP, 0 );
+
+			for ( string plc2 : PidPhaseSpace::species ){
+				double zbSig2 = zbSigma( plc2, avgP, 0 );
+				double zbMu2 = zbMean( plc2, avgP, 0 );
+
+				string var = "zb_"+plc+"_yield_"+plc2;
+				bool firstTimeIncluded = false;
+				if ( schema->vars[ var ]->exclude )
+					firstTimeIncluded = true;
+
+				double zdMu2 = zdMean( plc2, avgP );
+				double zdNd = ( zdMu - zdMu2 ) / zdSig;
+
+				if ( abs( zdNd ) < nSigZdEnhanced ){
+					activePlayers.push_back( "zb_" + plc + "_g" + plc2 );
+					
+
+					schema->vars[ var ]->exclude = false;
+					schema->vars[ var ]->min = 0;
+					schema->vars[ var ]->max = schema->getNormalization() * 10;
+
+					if ( roi > 0 )
+						schema->addRange( "zb_" + plc, zbMu2 - zbSig2 * roi, zbMu2 + zbSig2 * roi );
+
+					if ( firstTimeIncluded && plc != plc2)
+						schema->vars[ var ]->val = 0;
+
+				} else {
+					schema->vars[ "zb_"+plc+"_yield_"+plc2 ]->exclude = true;;
+				}
+			}
+
+		}
+
+	}
+
+
+
 	void FitRunner::make(){
 
 		
@@ -149,10 +368,16 @@ namespace TSF{
 
 						schema->clearRanges();
 
-						prepare( avgP, iCen );
-						
-
+						INFO( "Creating fitter" );
 						Fitter fitter( schema, inFile );
+						INFO( "Setting up Fit" );
+						
+						fitter.loadDatasets(centerSpecies, iCharge, iCen, iPt, iEta);
+
+						// prepare initial values, ranges, etc. for fit
+						prepare( avgP, iCen );
+						fitter.setupFit();
+						
 						fitter.addPlayers( activePlayers );
 						//fitter.fixedFit( centerSpecies, iCharge, iCen, iPt, iEta );
 						fitter.fit( centerSpecies, iCharge, iCen, iPt, iEta );
@@ -211,163 +436,7 @@ namespace TSF{
 
 	}
 
-	void FitRunner::prepare( double avgP, int iCen ){
-
-		//Constraints on the mu 	 
-		double zbDeltaMu = cfg->getDouble( nodePath + "ParameterFixing.deltaMu:zb", 1.5 );
-		double zdDeltaMu = cfg->getDouble( nodePath + "ParameterFixing.deltaMu:zd", 1.5 );
-		
-		//Constraints on the sigma  
-		double zbDeltaSigma = cfg->getDouble( nodePath + "ParameterFixing.deltaSigma:zb", -1 );
-		double zdDeltaSigma = cfg->getDouble( nodePath + "ParameterFixing.deltaSigma:zd", -1 );
-
-		bool paramFixing = cfg->getBool( nodePath + "ParameterFixing:apply", true );
-
-		// fit roi
-		double roi = cfg->getDouble( nodePath + "FitSchema:roi", -1 );
-
-
-
-		activePlayers.clear();
-		for ( string plc : PidPhaseSpace::species ){
-
-			// zb Parameters
-			double zbMu = zbMean( plc, avgP, iCen );
-			double zbSig = zbSigma( plc, avgP, iCen );
-
-			// zd Parameters
-			double zdMu = zdMean( plc, avgP );
-			double zdSig = zdSigma( plc, avgP, iCen );
-
-			// update the schema
-			logger->trace(__FUNCTION__) << plc << " : zb mu=" << zbMu << ", sig=" << zbSig << endl;
-			logger->trace(__FUNCTION__) << plc << " : zd mu=" << zdMu << ", sig=" << zdSig << endl; 
-			
-			// check if the sigmas should be fixed
-			double zbMinParP = cfg->getDouble( nodePath + "ParameterFixing." + plc + ":zbSigma", 5.0 );
-			double zdMinParP = cfg->getDouble( nodePath + "ParameterFixing." + plc + ":zdSigma", 5.0 );
-
-
-			double zdSigFix = schema->vars[ "zd_sigma_"+plc ]->val;
-			double zbSigFix = schema->vars[ "zb_sigma_"+plc ]->val;
-
-			/*if ( iCen == 0 ){
-				if ( "Pi" == plc )
-					zbSigFix = 0.0115;
-				if ( "K" == plc )
-					zbSigFix = 0.012;
-				if ( "P" == plc )
-					zbSigFix = 0.0125;
-			} else {
-				if ( "Pi" == plc )
-					zbSigFix = 0.0115;
-				if ( "K" == plc )
-					zbSigFix = 0.012;
-				if ( "P" == plc )
-					zbSigFix = 0.0125;
-			}*/
-			if ( zbMinParP > 0 && avgP >= zbMinParP)
-				schema->fixParameter( "zb_sigma_" + plc, zbSigFix, true );
-			else 
-				schema->setInitialSigma( "zb_sigma_"+plc, zbSig, 0.005, 0.066);//0.006, 0.025 );
-
-
-			if ( true /*== paramFixing && iPt != 0*/ ){ // if 1st bin let schema settings stick
-				
-				schema->setInitialMu( "zb_mu_"+plc, zbMu, zbSig, zbDeltaMu );
-				schema->setInitialMu( "zd_mu_"+plc, zdMu, zdSig, zdDeltaMu );
-
-				//if ( avgP < 0. ){
-					
-				/*if ( zdMinParP > 0 && avgP >= zdMinParP)
-					schema->fixParameter( "zd_sigma_" + plc, zdSigFix, true );
-				else */
-					schema->setInitialSigma( "zd_sigma_"+plc, zdSig, 0.06, 0.08);//0.04, 0.16 );	
-				//}
-				
-			}
-
-
-
-				/*
-			if ( false == paramFixing ){
-				schema->setInitialMu( "zb_mu_"+plc, zbMu, zbSig, zbDeltaMu );
-				schema->setInitialMu( "zd_mu_"+plc, zdMu, zdSig, zdDeltaMu );
-
-				schema->setInitialSigma( "zb_sigma_"+plc, zbSig, tofSigmaIdeal * .25, tofSigmaIdeal * 4 );
-				schema->setInitialSigma( "zd_sigma_"+plc, zdSig,dedxSigmaIdeal * .25 , dedxSigmaIdeal * 4 );
-			}
-
-			//if ( true == paramFixing  ){
-				
-				
-				if ( zdMinParP > 0 && avgP >= zdMinParP )
-					schema->fixParameter( "zd_sigma_" + plc, zdSig );
-				
-			//}*/
-		
-			if ( roi > 0 ){
-				double roiTof = roi * 10;
-				schema->addRange( "zb_All", zbMu - zbSig * roiTof, zbMu + zbSig * roiTof );
-				schema->addRange( "zb_Pi", zbMu - zbSig * roiTof, zbMu + zbSig * roiTof );
-				schema->addRange( "zb_K", zbMu - zbSig * roiTof, zbMu + zbSig * roiTof );
-				schema->addRange( "zb_P", zbMu - zbSig * roiTof, zbMu + zbSig * roiTof );	
-
-				schema->addRange( "zd_All", zdMu - zdSig * roi, zdMu + zdSig * roi );
-				schema->addRange( "zd_Pi", zdMu - zdSig * roi, zdMu + zdSig * roi );
-				schema->addRange( "zd_K", zdMu - zdSig * roi, zdMu + zdSig * roi );
-				schema->addRange( "zd_P", zdMu - zdSig * roi, zdMu + zdSig * roi );	
-			}
-
-			// decide which models to include
-			
-			for ( auto plc2 : PidPhaseSpace::species ){
-				
-				if ( plc2 != "P" || avgP > 0.8  ){
-					activePlayers.push_back( "zb_" + plc2 + "_g" + plc2 );
-					schema->vars[ "zb_P_yield_P" ]->exclude = false;
-				} else {
-					schema->vars[ "zb_P_yield_P" ]->exclude = true;
-				}
-				activePlayers.push_back( "zd_" + plc2 + "_g" + plc2 );
-				if ( plc == plc2 ) continue;
-
-				double zbMu2 = zbMean( plc2, avgP, iCen );
-				double zbNd = ( zbMu - zbMu2 ) / zbSig;
-
-				if ( abs( zbNd ) < 3.0 ){
-					activePlayers.push_back( "zd_" + plc + "_g" + plc2 );
-					schema->vars[ "zd_"+plc+"_yield_"+plc2 ]->exclude = false;
-				} else {
-					schema->vars[ "zd_"+plc+"_yield_"+plc2 ]->exclude = true;
-				}
-
-				double zdMu2 = zdMean( plc2, avgP );
-				double zdNd = ( zdMu - zdMu2 ) / zdSig;
-
-				if ( abs( zdNd ) < 3.0 ){
-					activePlayers.push_back( "zb_" + plc + "_g" + plc2 );
-					schema->vars[ "zb_"+plc+"_yield_"+plc2 ]->exclude = false;
-				} else {
-					schema->vars[ "zb_"+plc+"_yield_"+plc2 ]->exclude = true;;
-				}
-
-
-
-			}
-
-			// always include the all stuff
-			activePlayers.push_back( "zb_All_gPi" );
-			activePlayers.push_back( "zb_All_gK" );
-			activePlayers.push_back( "zd_All_gPi" );
-			activePlayers.push_back( "zd_All_gK" );
-			if ( avgP > 0.4 ){
-				activePlayers.push_back( "zb_All_gP" );
-				activePlayers.push_back( "zd_All_gP" );
-			}
-
-		} // loop on plc to set config
-	}
+	
 
 
 	void FitRunner::reportFit( Fitter * fitter, int iPt ){

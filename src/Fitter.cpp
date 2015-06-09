@@ -12,11 +12,15 @@ namespace TSF{
 		self = this;
 		schema = _schema;
 		dataFile = _dataFile;
-		minuit = unique_ptr<TMinuit>( new TMinuit( schema->numParams() ) );
+
 		logger = unique_ptr<Logger>( new Logger() );
 		logger->setClassSpace( "Fitter" );
+		logger->info(__FUNCTION__) << endl;
+	}
 
-
+	void Fitter::setupFit(){
+		minuit = unique_ptr<TMinuit>( new TMinuit( schema->numParams() ) );
+		
 		for ( auto k : schema->vars ){
 			if ( k.second->exclude ) continue;
 			parNames.push_back( k.first );
@@ -45,7 +49,6 @@ namespace TSF{
 
 		logger->info(__FUNCTION__) << endl;
 	}
-
 
 	Fitter::~Fitter(){
 
@@ -95,14 +98,14 @@ namespace TSF{
 				}
 			} // loop on data points
 
-			if ( "zd_All" == ds || "zb_All" == ds ){
+			/*if ( "zd_All" == ds || "zb_All" == ds ){
 				double mYield = modelYield( ds );
-				double dsYield = k.second.yield(self->schema->getRanges()) /* ( normFactor )*/;
+				double dsYield = k.second.yield(self->schema->getRanges());
 				//cout << "ds : " << ds << endl;
 				//cout << "dsYield : " << dsYield << ", " << mYield << " dif = " << abs( dsYield - mYield ) << endl;
 				// subtract off this dataset's (N - E) term
 				fnVal = fnVal - ( dsYield - mYield ) * ( 100.0 / self->norm );
-			}
+			}*/
 
 		}
 
@@ -111,14 +114,14 @@ namespace TSF{
 		f = fnVal  / normFactor ;		
 	}
 
-	bool Fitter::loadDatasets( string cs, int charge, int cenBin, int ptBin, int etaBin ){
+	void Fitter::loadDatasets( string cs, int charge, int cenBin, int ptBin, int etaBin ){
 		logger->info(__FUNCTION__) << endl;
 
 		map< string, TH1D* > zb;
 		map< string, TH1D* > zd;
 
-		if ( ptBin > 8 )
-			dataHists[ "zb_All"] = (TH1*)dataFile->Get( ("tof/" + PidPhaseSpace::tofName( cs, charge, cenBin, ptBin, etaBin )).c_str() 		);
+		
+		dataHists[ "zb_All"] = (TH1*)dataFile->Get( ("tof/" + PidPhaseSpace::tofName( cs, charge, cenBin, ptBin, etaBin )).c_str() 		);
 		dataHists[ "zd_All"] = (TH1*)dataFile->Get( ("dedx/" + PidPhaseSpace::dedxName( cs, charge, cenBin, ptBin, etaBin )).c_str() 	);
 		
 		// dEdx enhanced distributions
@@ -133,7 +136,10 @@ namespace TSF{
 		
 		
 		norm = dataHists[ "zd_All"]->Integral();
-		bool doFit = true;
+		double nf = normFactor();
+
+		schema->setNormalization( nf );
+		sufficienctStatistics = true;
 
 		for ( auto k : dataHists ){
 
@@ -142,16 +148,14 @@ namespace TSF{
 
 			// normalize
 			k.second->Sumw2();
-			k.second->Scale( 100.0 / norm );
+			k.second->Scale( nf / norm );
 			schema->loadDataset( k.first, k.second );
 			
-			/*if ( nObs < 300 ){
-				doFit = false;
-			}*/
+			//if ( nObs < 300 ){
+			//	sufficienctStatistics = false;
+			//}		
 		}
 
-
-		return doFit;
 	}
 
 	void Fitter::fixedFit( string cs, int charge, int cenBin, int ptBin, int etaBin ){
@@ -194,16 +198,17 @@ namespace TSF{
 		logger->info(__FUNCTION__) << "OK Starting for ( " << cs << ", " << charge << ", " << cenBin << ", " << ptBin << ", " << etaBin << " ) " << endl;
 
 		// load the current datasets
-		double sufficienctStatistics = loadDatasets( cs, charge, cenBin, ptBin, etaBin );
+		//loadDatasets( cs, charge, cenBin, ptBin, etaBin );
 
 		if ( !sufficienctStatistics ){
 			fitIsGood = false;
+			updateParameters();
 			logger->warn( __FUNCTION__ ) << "Insufficient Statistics : Skipping " << endl;
 			return;
 		}
 
 
-		//updateParameters();
+		//
 		//return;
 
 		double arglist[10];

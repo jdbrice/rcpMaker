@@ -71,6 +71,7 @@ namespace TSF{
 		void drawSet( string v, Fitter * fitter, int iPt );
 
 		void prepare( double avgP, int iCen );
+		void choosePlayers( double avgP, string plc, double roi );
 
 
 		double p( double pt, double eta ){
