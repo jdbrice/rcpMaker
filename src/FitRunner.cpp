@@ -150,11 +150,6 @@ namespace TSF{
 						schema->clearRanges();
 
 						prepare( avgP, iCen );
-
-						//if ( avgP > 1.4 ){
-						//	schema->setMethod( "nll" );
-						//}
-						//
 						
 
 						Fitter fitter( schema, inFile );
