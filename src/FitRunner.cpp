@@ -98,6 +98,9 @@ namespace TSF{
 						book->cd( plc + "_zbSigma" );
 						name = sigmaName( plc, iCen, iCharge, iEta );
 						book->clone( "/", "yield", plc+"_zbSigma", name );
+						name = sigmaName( plc, iCen, iCharge, iEta ) + "_rel";
+						book->clone( "/", "yield", plc+"_zbSigma", name );
+
 						book->cd( plc + "_zdSigma" );
 						name = sigmaName( plc, iCen, iCharge, iEta );
 						book->clone( "/", "yield", plc+"_zdSigma", name );
@@ -135,10 +138,6 @@ namespace TSF{
 			// zd Parameters
 			double zdMu = zdMean( plc, avgP );
 			double zdSig = zdSigma( plc, avgP, iCen );
-
-			// update the schema
-			logger->trace(__FUNCTION__) << plc << " : zb mu=" << zbMu << ", sig=" << zbSig << endl;
-			logger->trace(__FUNCTION__) << plc << " : zd mu=" << zdMu << ", sig=" << zdSig << endl; 
 			
 			// check if the sigmas should be fixed
 			double zbMinParP = cfg->getDouble( nodePath + "ParameterFixing." + plc + ":zbSigma", 5.0 );
@@ -154,59 +153,25 @@ namespace TSF{
 			else 
 				schema->setInitialSigma( "zb_sigma_"+plc, zbSig, 0.005, 0.066);//0.006, 0.025 );
 
-
-			if ( true /*== paramFixing && iPt != 0*/ ){ // if 1st bin let schema settings stick
+			schema->setInitialMu( "zb_mu_"+plc, zbMu, zbSig, zbDeltaMu );
+			schema->setInitialMu( "zd_mu_"+plc, zdMu, zdSig, zdDeltaMu );
+			schema->setInitialSigma( "zd_sigma_"+plc, zdSig, 0.06, 0.08);
 				
-				schema->setInitialMu( "zb_mu_"+plc, zbMu, zbSig, zbDeltaMu );
-				schema->setInitialMu( "zd_mu_"+plc, zdMu, zdSig, zdDeltaMu );
-
-				//if ( avgP < 0. ){
-					
-				/*if ( zdMinParP > 0 && avgP >= zdMinParP)
-					schema->fixParameter( "zd_sigma_" + plc, zdSigFix, true );
-				else */
-					schema->setInitialSigma( "zd_sigma_"+plc, zdSig, 0.06, 0.08);//0.04, 0.16 );	
-				//}
-				
-			}
-
-
-
-				/*
-			if ( false == paramFixing ){
-				schema->setInitialMu( "zb_mu_"+plc, zbMu, zbSig, zbDeltaMu );
-				schema->setInitialMu( "zd_mu_"+plc, zdMu, zdSig, zdDeltaMu );
-
-				schema->setInitialSigma( "zb_sigma_"+plc, zbSig, tofSigmaIdeal * .25, tofSigmaIdeal * 4 );
-				schema->setInitialSigma( "zd_sigma_"+plc, zdSig,dedxSigmaIdeal * .25 , dedxSigmaIdeal * 4 );
-			}
-
-			//if ( true == paramFixing  ){
-				
-				
-				if ( zdMinParP > 0 && avgP >= zdMinParP )
-					schema->fixParameter( "zd_sigma_" + plc, zdSig );
-				
-			//}*/
-		
 			if ( roi > 0 ){
 				schema->addRange( "zb_All", zbMu - zbSig * roi, zbMu + zbSig * roi );
-				// schema->addRange( "zb_Pi", zbMu - zbSig * roi, zbMu + zbSig * roi );
-				// schema->addRange( "zb_K", zbMu - zbSig * roi, zbMu + zbSig * roi );
-				// schema->addRange( "zb_P", zbMu - zbSig * roi, zbMu + zbSig * roi );	
-
-				schema->addRange( "zd_All", zdMu - zdSig * roi, zdMu + zdSig * roi );
-				// schema->addRange( "zd_Pi", zdMu - zdSig * roi, zdMu + zdSig * roi );
-				// schema->addRange( "zd_K", zdMu - zdSig * roi, zdMu + zdSig * roi );
-				// schema->addRange( "zd_P", zdMu - zdSig * roi, zdMu + zdSig * roi );	
+				schema->addRange( "zd_All", zdMu - zdSig * roi, zdMu + zdSig * roi );	
 			}
 
 			choosePlayers( avgP, plc, roi );
 
-			schema->vars[ "yield_" + plc ]->min = 0;
-			schema->vars[ "yield_" + plc ]->max = schema->getNormalization() * 10;
-
-
+			if ( avgP < 1.5 ){
+				schema->vars[ "yield_" + plc ]->min = 0;
+				schema->vars[ "yield_" + plc ]->max = schema->getNormalization() * 10;	
+			} else {
+				schema->vars[ "yield_" + plc ]->min = 0;
+				schema->vars[ "yield_" + plc ]->max = schema->vars[ "yield_" + plc ]->val * 2;	
+			}
+			
 		} // loop on plc to set config
 	}
 

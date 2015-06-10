@@ -8,10 +8,10 @@
 		<Reporter> <output url="../products/presentation/15GeV/present.pdf" width="800" height="500" /> </Reporter>	
 
 		<input>
-			<fit url="tsf_15_pt_eta.root" />
+			<fit url="pid_table.root" />
 			<!--<fit url="../products/15/fit/good_001/tsf_test.root" />-->
-			<ps url="../products/15/phaseSpace/pid_pbinning_May_27_15.root" />
-			<ps url="../products/15/phaseSpace/all_mass_june_01_15_pt_eta_lt_0p25.root" />
+			<!--<ps url="../products/15/phaseSpace/pid_pbinning_May_27_15.root" />-->
+			<ps url="../products/15/phaseSpace/imass_june_06_15.root" />
 		</input>
 
 		<output path="../products/15/presentation/">
@@ -20,7 +20,7 @@
 
 		<!-- fit bins : FROM sgfRunner.xml-->
 		<FitRange>
-			<ptBins min="4" max="30" />
+			<ptBins min="0" max="30" />
 			<centralityBins>0,6</centralityBins>
 			<etaBins>0 </etaBins>
 			<charges>1, -1</charges>

@@ -264,7 +264,7 @@ namespace TSF{
 		// get the final state of all variables 
 		logger->info(__FUNCTION__) << "Updating parameters after Fit" << endl;
 		updateParameters();
-		schema->reportModels();
+		//schema->reportModels();
 
 
 
