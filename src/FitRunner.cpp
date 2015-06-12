@@ -144,7 +144,6 @@ namespace TSF{
 			double zdMinParP = cfg->getDouble( nodePath + "ParameterFixing." + plc + ":zdSigma", 5.0 );
 
 
-			double zdSigFix = schema->vars[ "zd_sigma_"+plc ]->val;
 			double zbSigFix = schema->vars[ "zb_sigma_"+plc ]->val;
 
 
@@ -155,12 +154,16 @@ namespace TSF{
 
 			schema->setInitialMu( "zb_mu_"+plc, zbMu, zbSig, zbDeltaMu );
 			schema->setInitialMu( "zd_mu_"+plc, zdMu, zdSig, zdDeltaMu );
-			schema->setInitialSigma( "zd_sigma_"+plc, zdSig, 0.06, 0.08);
-				
-			if ( roi > 0 ){
-				schema->addRange( "zb_All", zbMu - zbSig * roi, zbMu + zbSig * roi );
-				schema->addRange( "zd_All", zdMu - zdSig * roi, zdMu + zdSig * roi );	
+
+			if ( zdMinParP > 0 && avgP >= zdMinParP){
+				if ( 0 == zdSigFix ) // only set it once
+					zdSigFix = schema->vars[ "zd_sigma_"+plc ]->val;
+				schema->setInitialSigma( "zd_sigma_"+plc, zdSigFix, zdSigFix, zdSigFix + 0.05 * zdSigFix);
 			}
+			else 
+				schema->setInitialSigma( "zd_sigma_"+plc, zdSig, 0.06, 0.08);
+				
+			
 
 			choosePlayers( avgP, plc, roi );
 
@@ -177,11 +180,22 @@ namespace TSF{
 
 	void FitRunner::choosePlayers( double avgP, string plc, double roi ){
 
-		double zdOnly = 0.3;
-		double useZdEnhanced = 0.3;
-		double useZbEnhanced = 0.3;
-		double nSigZbEnhanced = 3.0;
-		double nSigZdEnhanced = 3.0;
+		double zdOnly = cfg->getDouble( nodePath + "Timing:zdOnly" , 0.5 );
+		double useZdEnhanced = cfg->getDouble( nodePath + "Timing:useZdEnhanced" , 0.6 );
+		double useZbEnhanced = cfg->getDouble( nodePath + "Timing:useZbEnhanced" , 0.6 );
+		double nSigZbEnhanced = cfg->getDouble( nodePath + "Timing:nSigZbEnhanced" , 3.0 );
+		double nSigZdEnhanced = cfg->getDouble( nodePath + "Timing:nSigZdEnhanced" , 3.0 );
+
+		if ( roi > 0 ){
+			double zbSig = zbSigma( plc, avgP, 0 );
+			double zbMu = zbMean( plc, avgP, 0 );
+			double zdMu = zdMean( plc, avgP );
+			double zdSig = zdSigma( plc, avgP, 0 );
+
+			if ( avgP > zdOnly )
+				schema->addRange( "zb_All", zbMu - zbSig * roi, zbMu + zbSig * roi );
+			schema->addRange( "zd_All", zdMu - zdSig * roi, zdMu + zdSig * roi );	
+		}
 
 		// always include the total yields
 		activePlayers.push_back( "zd_All_g" + plc );
@@ -219,6 +233,7 @@ namespace TSF{
 				double zdMu2 = zdMean( plc2, avgP );
 				double zdSig2 = zdSigma( plc2, avgP, 0 );
 				string var = "zd_"+plc+"_yield_"+plc2;
+				double cv = schema->vars[ var ]->val;
 				
 				bool firstTimeIncluded = false;
 				if ( schema->vars[ var ]->exclude )
@@ -227,12 +242,12 @@ namespace TSF{
 				double zbMu2 = zbMean( plc2, avgP, 0 );
 				double zbNd = ( zbMu - zbMu2 ) / zbSig;
 
-				if ( abs( zbNd ) < nSigZbEnhanced ){
+				if ( abs( zbNd ) < nSigZbEnhanced && schema->datasetActive( "zd_" + plc ) ){
 					activePlayers.push_back( "zd_" + plc + "_g" + plc2 );
 					
 
 					schema->vars[ var ]->exclude = false;
-					schema->vars[ var ]->min = 0;
+					schema->vars[ var ]->min = cv * .1;
 					schema->vars[ var ]->max = schema->getNormalization() * 10;
 
 					schema->addRange( "zd_" + plc, zdMu2 - zdSig2 * roi, zdMu2 + zdSig2 * roi );
@@ -269,7 +284,7 @@ namespace TSF{
 				double zdMu2 = zdMean( plc2, avgP );
 				double zdNd = ( zdMu - zdMu2 ) / zdSig;
 
-				if ( abs( zdNd ) < nSigZdEnhanced ){
+				if ( abs( zdNd ) < nSigZdEnhanced && schema->datasetActive( "zb_" + plc ) ){
 					activePlayers.push_back( "zb_" + plc + "_g" + plc2 );
 					
 
@@ -380,6 +395,7 @@ namespace TSF{
 			return ;
 		}
 		h->Draw("pe");
+		h->GetYaxis()->SetRangeUser( 1e-5, fitter->normFactor() * 2 );
 
 		TGraph * sum = fitter->plotResult( v );
 		sum->SetLineColor( kBlue );
@@ -508,6 +524,16 @@ namespace TSF{
 			
 			book->get( name )->SetBinContent( iiPt, sC );
 			book->get( name )->SetBinError( iiPt, sE );
+
+
+			name = sigmaName( plc, iCen, iCharge, iEta ) + "_rel";
+			sC = schema->vars[ "zb_sigma_"+plc ]->val / schema->vars[ "zb_mu_"+plc ]->val;
+			sE = schema->vars[ "zb_sigma_"+plc ]->error / schema->vars[ "zb_mu_"+plc ]->val;
+			
+			book->get( name )->SetBinContent( iiPt, sC );
+			book->get( name )->SetBinError( iiPt, sE );
+
+
 
 			name = sigmaName( plc, iCen, iCharge, iEta );
 			book->cd( plc+"_zdSigma");

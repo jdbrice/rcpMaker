@@ -70,6 +70,10 @@ namespace TSF{
 
 		void loadDatasets( string cs, int charge, int cenBin, int ptBin, int etaBin );
 		void fit( string cs, int charge, int cenBin, int ptBin, int etaBin );
+		void fixParameters();
+		void releaseParameters();
+
+
 		void fixedFit( string cs, int charge, int cenBin, int ptBin, int etaBin );
 
 		TGraph * plotResult( string dataset );
@@ -87,9 +91,17 @@ namespace TSF{
 			}
 		}
 
+		double currentYield( string var, int npar = 0, double * pars = 0 );
+		double currentYield( string var, string plc, int npar = 0, double * pars = 0 );
+		double penalizeYields( int npar = 0, double * pars = 0 );
+
 
 		double getNorm() { return norm; }
 		double normFactor() { return 10.0; }
+
+		void fixShapes();
+		void releaseShapes();
+
 
 	};
 }

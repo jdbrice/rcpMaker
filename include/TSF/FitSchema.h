@@ -64,6 +64,13 @@ namespace TSF{
 
 		void reportModels();
 
+		void clearDatasets(){ datasets.clear(); }
+		bool datasetActive( string dsName ){
+			if ( datasets.find( dsName ) != datasets.end() )
+				return true;
+			return false;
+		}
+
 
 		void setInitialMu( string var, double _mu, double _sigma, double _dmu );
 		void setInitialSigma( string var, double _sigma, double _dsig );

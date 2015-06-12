@@ -49,6 +49,8 @@ namespace TSF{
 
 		vector<string> activePlayers;
 
+		double zdSigFix = 0;
+
 	public:
 		FitRunner( XmlConfig * _cfg, string _np  );
 

@@ -16,21 +16,23 @@
 		<!-- fit bins -->
 		<FitRange>
 
-			<ptBins min="0" max="30" />
-			<centralityBins>0, 6</centralityBins>
+			<ptBins min="0" max="28" />
+			<centralityBins>6</centralityBins>
 			<etaBins>0</etaBins>
-			<charges>1, -1</charges>
+			<charges>-1</charges>
 		</FitRange>
 		<!-- Guiding parameters -->
 
+		<Timing zdOnly="0.5" useZdEnhanced="0.5" useZbEnhanced="0.5" nSigZdEnhanced="3.0" nSigZbEnhanced="3.0" />
+
 		<ParameterFixing>
 			<!-- mu can vary +/- nSigma -->
-			<deltaMu zb="5.0" zd="5.0" />
+			<deltaMu zb="3.0" zd="3.0" />
 
 			<!-- the minimum momentum at which the value is fixed -->
-			<Pi zbSigma="0.9" zdSigma="5.1" />
-			<K zbSigma="0.9" zdSigma="5.1" />
-			<P zbSigma="1.43" zdSigma="5.1" />
+			<Pi zbSigma="0.9" zdSigma="5.4" />
+			<K zbSigma="0.9" zdSigma="5.15" />
+			<P zbSigma="1.43" zdSigma="5.15" />
 
 		</ParameterFixing>
 		<!--<PidParameters url="config/15GeV/PidParameters.xml" />-->

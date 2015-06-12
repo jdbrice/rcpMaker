@@ -32,12 +32,12 @@ namespace TSF{
 			if ( 0 <= schema->vars[ parNames[ i ] ]->error )
 				schema->vars[ parNames[ i ] ]->error = 0.001;
 
-			minuit->DefineParameter( i, 		// parameter index
-						parNames[ i ].c_str(), 	// name
-						schema->vars[ parNames[ i ] ]->val, 
-						schema->vars[ parNames[ i ] ]->error,
-						schema->vars[ parNames[ i ] ]->min,
-						schema->vars[ parNames[ i ] ]->max );
+			minuit->DefineParameter( i, 						// parameter index
+						parNames[ i ].c_str(), 					// name
+						schema->vars[ parNames[ i ] ]->val, 	// initial value
+						schema->vars[ parNames[ i ] ]->error,	// intial step size
+						schema->vars[ parNames[ i ] ]->min,		// limit min
+						schema->vars[ parNames[ i ] ]->max );	// limit max
 
 			if ( schema->vars[ parNames[ i ] ]->fixed )
 				minuit->FixParameter( i );
@@ -48,6 +48,24 @@ namespace TSF{
 		minuit->SetFCN( tminuitFCN );
 
 		logger->info(__FUNCTION__) << endl;
+	}
+
+	void Fitter::fixParameters(){
+		for ( int i = 0; i < parNames.size(); i++ ){
+			if (schema->vars[ parNames[ i ] ]->exclude) continue;
+
+			if ( schema->vars[ parNames[ i ] ]->fixed )
+				minuit->FixParameter( i );
+		}
+	}
+
+	void Fitter::releaseParameters(){
+		for ( int i = 0; i < parNames.size(); i++ ){
+			if (schema->vars[ parNames[ i ] ]->exclude) continue;
+
+			if ( schema->vars[ parNames[ i ] ]->fixed )
+				minuit->Release( i );
+		}
 	}
 
 	Fitter::~Fitter(){
@@ -72,8 +90,11 @@ namespace TSF{
 			// loop on datapoints
 			for ( auto d : k.second ){
 				
-				if ( useRange && !self->schema->inRange( ds, d.x ))
+				if ( useRange && !self->schema->inRange( ds, d.x )){
+					//double modelVal = modelEval( ds, d.x );
+					//fnVal += modelVal;
 					continue;
+				}
 
 
 				if ( "chi2" == method ){
@@ -109,6 +130,8 @@ namespace TSF{
 
 		}
 
+		self->penalizeYields( npar, par );
+
 		//convergence.push_back( fnVal );
 		//cout << " nll = " << fnVal << endl;
 		f = fnVal  / normFactor ;		
@@ -120,7 +143,7 @@ namespace TSF{
 		map< string, TH1D* > zb;
 		map< string, TH1D* > zd;
 
-		
+		schema->clearDatasets();
 		dataHists[ "zb_All"] = (TH1*)dataFile->Get( ("tof/" + PidPhaseSpace::tofName( cs, charge, cenBin, ptBin, etaBin )).c_str() 		);
 		dataHists[ "zd_All"] = (TH1*)dataFile->Get( ("dedx/" + PidPhaseSpace::dedxName( cs, charge, cenBin, ptBin, etaBin )).c_str() 	);
 		
@@ -144,15 +167,19 @@ namespace TSF{
 		for ( auto k : dataHists ){
 
 			double nObs = k.second->GetEntries();
-			logger->debug(__FUNCTION__) << "Num Entries in " << k.first << " : " << nObs << endl;
+			logger->info(__FUNCTION__) << "Num Entries in " << k.first << " : " << nObs << endl;
 
 			// normalize
 			k.second->Sumw2();
 			k.second->Scale( nf / norm );
-			schema->loadDataset( k.first, k.second );
+
+			if ( nObs > 75 )
+				schema->loadDataset( k.first, k.second );
+			//else 
+			//	dataHists.erase( k.first );
 			
-			//if ( nObs < 300 ){
-			//	sufficienctStatistics = false;
+			
+			//sufficienctStatistics = false;
 			//}		
 		}
 
@@ -237,13 +264,16 @@ namespace TSF{
 			tries++;
       	}
 
+      	/*fixShapes();
+      	minuit->mnexcm( "MINI", arglist, 1, iFlag );
+      	releaseShapes();*/
 
 		//minuit->mnexcm( "STATUS", arglist, 1, iFlag ); // get errors
 
       	// if ( iFlag > 0 )
-      	//minuit->mnexcm( "MINOS", arglist, 1, iFlag );
+      	minuit->mnexcm( "MINOS", arglist, 1, iFlag );
       	// else
-      	minuit->mnexcm( "HESSE", arglist, 1, iFlag ); // get errors
+      	//minuit->mnexcm( "HESSE", arglist, 1, iFlag ); // get errors
 
       	/*for ( int i = 0; i < parNames.size(); i++ ){
 			//schema->vars[ parNames[ i ] ]->;
@@ -383,7 +413,77 @@ namespace TSF{
 		self->schema->updateModels( self->players );		
 	}
 
+	double Fitter::currentYield( string plc, int npar, double * pars ){
+		// update the variables
+		for ( int i = 0; i < self->parNames.size(); i++ ){
+			
+			if ( self->parNames[ i ].find( "yield_" + plc ) != string::npos ){
+				return pars[ i ];	
+			}
+		}
+		return 0.0;
+	}
 
+	double Fitter::currentYield( string enh, string plc2, int npar , double * pars  ){
+		// update the variables
+		for ( int i = 0; i < self->parNames.size(); i++ ){
+			
+			if ( self->parNames[ i ].find( enh + "_yield_" + plc2 ) != string::npos ){
+				return pars[ i ];	
+			}
+		}
+		return 0.0;
+	}
+
+	double Fitter::penalizeYields( int npar , double * pars ){
+
+		double penalty = 1.0;
+		for( string plc : PidPhaseSpace::species ){
+			double cy = currentYield( plc, npar, pars );
+			for( string plc2 : PidPhaseSpace::species ){
+				double cey = currentYield( "zb_"+plc2, plc, npar, pars );
+				if ( cey > cy ){
+					penalty *= (1.0 + ( cey - cy )/cey);
+				}
+			}
+		}
+		return penalty;
+	}
+
+
+	void Fitter::fixShapes(){
+		for ( int i = 0; i < parNames.size(); i++ ){
+
+			bool shouldFix = false;
+			if ( string::npos != parNames[ i ].find( "sig" ) || string::npos != parNames[ i ].find( "mu" ) )
+				shouldFix = true;
+
+			for ( string plc : PidPhaseSpace::species ){
+				if ( string::npos != parNames[ i ].find( "zb_" + plc +"_yield_" +plc ) )
+					shouldFix = true;
+			}
+
+			if ( schema->vars[ parNames[ i ] ]->fixed || shouldFix )
+				minuit->FixParameter( i );
+		}
+	}
+
+	void Fitter::releaseShapes(){
+		for ( int i = 0; i < parNames.size(); i++ ){
+
+			bool shouldFix = false;
+			if ( string::npos != parNames[ i ].find( "sig" ) || string::npos != parNames[ i ].find( "mu" ) )
+				shouldFix = true;
+
+			for ( string plc : PidPhaseSpace::species ){
+				if ( string::npos != parNames[ i ].find( "zb_" + plc +"_yield_" +plc ) )
+					shouldFix = true;
+			}
+
+			if ( schema->vars[ parNames[ i ] ]->fixed || shouldFix )
+				minuit->Release( i );
+		}
+	}
 
 
 }
