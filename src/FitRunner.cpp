@@ -33,9 +33,6 @@ namespace TSF{
 		zdReporter = unique_ptr<Reporter>(new Reporter( cfg->getString( nodePath + "output:path" ) + "rpTSF_zd.pdf",
 			cfg->getInt( nodePath + "Reporter.output:width", 400 ), cfg->getInt( nodePath + "Reporter.output:height", 400 ) ) );
 
-		for ( string plc : PidPhaseSpace::species ){
-			lockedZbSig[ plc ] = 0.0;	
-		}
 		
 		/**
 		 * Setup the PID Params
@@ -152,12 +149,8 @@ namespace TSF{
 
 
 			if ( zbMinParP > 0 && avgP >= zbMinParP){
-				if ( lockedZbSig[ plc ] == 0.0 ){
-					lockedZbSig[ plc ] = averageZbMem( plc );
-					INFO( "Setting lockedZbSig[ " << plc << " ] = " << lockedZbSig[ plc ] );
-				}
-				schema->setInitialMu( "zb_mu_"+plc, zbMu, lockedZbSig[ plc ], 2.0 );
-				schema->fixParameter( "zb_sigma_" + plc, lockedZbSig[ plc ], true );
+				schema->setInitialMu( "zb_mu_"+plc, zbMu, zbSigFix, 2.0 );
+				schema->fixParameter( "zb_sigma_" + plc, zbSigFix, true );
 			}
 			else {
 				schema->setInitialSigma( "zb_sigma_"+plc, zbSig, 0.005, 0.066);//0.006, 0.025 );
@@ -350,21 +343,13 @@ namespace TSF{
 					
 					//Create the schema and fitter 
 					schema = shared_ptr<FitSchema>(new FitSchema( cfg, nodePath + "FitSchema" ));
-					
 
-					for ( string plc : PidPhaseSpace::species ){
-						lockedZbSig[ plc ] = 0.0;	
-					}
 
 					for ( int iPt = firstPtBin; iPt <= lastPtBin; iPt++ ){
 
 						double avgP = averagePt( iPt );
 						
 						logger->warn(__FUNCTION__) << "<p> = " << avgP << endl;
-						logger->info(__FUNCTION__) << "pt Bin : " << iPt << endl;
-						logger->info(__FUNCTION__) << "Cen Bin : " << iCen << endl;
-						logger->info(__FUNCTION__) << "Charge Bin : " << iCharge << endl;
-						logger->info(__FUNCTION__) << "Eta Bin : " << iEta << endl;
 
 						schema->clearRanges();
 
@@ -394,11 +379,6 @@ namespace TSF{
 						// 	book->get( fitName(iPt, iCen, iCharge, iEta ) )->SetBinContent( bin, c );
 						// 	bin ++;
 						// }
-
-						for ( string plc : PidPhaseSpace::species ){
-							zbSigMem[ plc ].push_back( schema->vars[ "zb_sigma_" + plc ]->val );
-							INFO( "zbSigMem[ " << plc << " ] << " <<  schema->vars[ "zb_sigma_" + plc ]->val );	
-						}
 						
 
 						reportFit( &fitter, iPt );
