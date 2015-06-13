@@ -80,7 +80,7 @@ namespace TSF{
 		bool useRange = self->schema->constrainFitRange();
 		string method = self->schema->getMethod();
 
-		double normFactor = ( 100.0 / self->norm );
+		double normFactor = ( self->normFactor() / self->getNorm() );
 
 		// loop on datasets
 		for ( auto k : self->schema->datasets ){
@@ -114,6 +114,12 @@ namespace TSF{
 						continue;
 					double modelVal = modelEval( ds, d.x );
 					fnVal += poisson( d.y, modelVal );	
+				} else if ( "fractional" == method ){
+					// Minimize by fractional errors ie error =  N 
+					if ( 0 >= d.y || 0 >= d.ey )
+						continue;
+					double modelVal = modelEval( ds, d.x );
+					fnVal += fractional( d.y, modelVal );	
 				} else {
 					cout << "No Fit method" << endl;
 				}
@@ -134,7 +140,7 @@ namespace TSF{
 
 		//convergence.push_back( fnVal );
 		//cout << " nll = " << fnVal << endl;
-		f = fnVal  / normFactor ;		
+		f = fnVal / normFactor ;		
 	}
 
 	void Fitter::loadDatasets( string cs, int charge, int cenBin, int ptBin, int etaBin ){
@@ -244,7 +250,7 @@ namespace TSF{
       	fitIsGood = false; 
 
       	
-
+      	schema->setMethod( "fractional" );
       	logger->info(__FUNCTION__) << "Fit Method : " << self->schema->getMethod() << endl;
       	
       	if ( "nll" != self->schema->getMethod() )
@@ -255,6 +261,7 @@ namespace TSF{
 
       	int tries = 0;
 
+      	
       	iFlag = 4;
       	while ( iFlag > 0 && tries < 3 ){
       		logger->info(__FUNCTION__) << "Running MINI" << endl;
@@ -264,16 +271,25 @@ namespace TSF{
 			tries++;
       	}
 
-      	/*fixShapes();
+
+      	schema->setMethod( "poisson" );
+      	logger->info(__FUNCTION__) << "Fit Method : " << self->schema->getMethod() << endl;
+      	//fixShapes();
       	minuit->mnexcm( "MINI", arglist, 1, iFlag );
-      	releaseShapes();*/
+      	minuit->mnexcm( "MINI", arglist, 1, iFlag );
+      	//releaseShapes();
+
+      	if ( 0 == iFlag )
+			fitIsGood = true;
+		else 
+			fitIsGood = false;
 
 		//minuit->mnexcm( "STATUS", arglist, 1, iFlag ); // get errors
 
       	// if ( iFlag > 0 )
-      	minuit->mnexcm( "MINOS", arglist, 1, iFlag );
+      	//minuit->mnexcm( "MINOS", arglist, 1, iFlag );
       	// else
-      	//minuit->mnexcm( "HESSE", arglist, 1, iFlag ); // get errors
+      	minuit->mnexcm( "HESSE", arglist, 1, iFlag ); // get errors
 
       	/*for ( int i = 0; i < parNames.size(); i++ ){
 			//schema->vars[ parNames[ i ] ]->;
@@ -281,8 +297,7 @@ namespace TSF{
 		}*/
 
 		cout << "iFlag " << iFlag << endl;
-		//if ( 0 == iFlag )
-			fitIsGood = true;
+		
 
 		//logger->info(__FUNCTION__) << "Calculating errors with HESE" << endl;
 		//minuit->mnexcm( "HESSE", arglist, 1, iFlag );
@@ -446,6 +461,15 @@ namespace TSF{
 					penalty *= (1.0 + ( cey - cy )/cey);
 				}
 			}
+		}
+
+		for( string plc : PidPhaseSpace::species ){
+			double cy = currentYield( plc, npar, pars );
+			double cey = currentYield( "zb_"+plc, plc, npar, pars );
+			if ( cey < cy * .30 ){
+				penalty *= (1.0 + ( cey - (cy * .30) )/cey);
+			}
+			
 		}
 		return penalty;
 	}

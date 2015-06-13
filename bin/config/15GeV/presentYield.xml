@@ -9,9 +9,11 @@
 
 		<input>
 			<fit url="pid_table.root" />
-			<!--<fit url="../products/15/fit/good_001/tsf_test.root" />-->
-			<!--<ps url="../products/15/phaseSpace/pid_pbinning_May_27_15.root" />-->
 			<ps url="../products/15/phaseSpace/imass_june_06_15.root" />
+			
+			<!--<fit url="~/Desktop/present/all_fit.root" />
+			<ps url="~/Desktop/present/pid_pbinning_May_27_15.root" />-->
+			
 		</input>
 
 		<output path="../products/15/presentation/">
@@ -20,7 +22,7 @@
 
 		<!-- fit bins : FROM sgfRunner.xml-->
 		<FitRange>
-			<ptBins min="0" max="30" />
+			<ptBins min="0" max="20" />
 			<centralityBins>0,6</centralityBins>
 			<etaBins>0 </etaBins>
 			<charges>1, -1</charges>
@@ -59,7 +61,7 @@
 	<bin hide="true" >
 		
 		<pt>
-			0.2, 0.25, 0.3, 0.35, 0.4, 0.45,
+			0.2, 0.3, 0.4, 
 			0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2.0, 
 			2.2, 2.4, 2.6, 2.8, 3.0, 	
 			3.5,						

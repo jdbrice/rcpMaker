@@ -59,6 +59,11 @@ namespace TSF{
 			return q;
 		};
 
+		static double fractional( double data, double pred){
+			double q = (data - pred) * (data - pred) / (data * data);
+			return q;
+		};
+
 		static double nll( double data, double model ){
 			if ( 0 != model ){
 				return -data * TMath::Log( model );
@@ -97,7 +102,7 @@ namespace TSF{
 
 
 		double getNorm() { return norm; }
-		double normFactor() { return 10.0; }
+		double normFactor() { return 1000.0; }
 
 		void fixShapes();
 		void releaseShapes();

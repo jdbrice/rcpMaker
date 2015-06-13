@@ -147,18 +147,24 @@ namespace TSF{
 			double zbSigFix = schema->vars[ "zb_sigma_"+plc ]->val;
 
 
-			if ( zbMinParP > 0 && avgP >= zbMinParP)
+			if ( zbMinParP > 0 && avgP >= zbMinParP){
+				schema->setInitialMu( "zb_mu_"+plc, zbMu, zbSigFix, 2.0 );
 				schema->fixParameter( "zb_sigma_" + plc, zbSigFix, true );
-			else 
+			}
+			else {
 				schema->setInitialSigma( "zb_sigma_"+plc, zbSig, 0.005, 0.066);//0.006, 0.025 );
+				schema->setInitialMu( "zb_mu_"+plc, zbMu, zbSig, zbDeltaMu );
+			}
 
-			schema->setInitialMu( "zb_mu_"+plc, zbMu, zbSig, zbDeltaMu );
+			
 			schema->setInitialMu( "zd_mu_"+plc, zdMu, zdSig, zdDeltaMu );
 
+			zdSigFix = schema->vars[ "zd_sigma_"+plc ]->val;
 			if ( zdMinParP > 0 && avgP >= zdMinParP){
-				if ( 0 == zdSigFix ) // only set it once
-					zdSigFix = schema->vars[ "zd_sigma_"+plc ]->val;
-				schema->setInitialSigma( "zd_sigma_"+plc, zdSigFix, zdSigFix, zdSigFix + 0.05 * zdSigFix);
+				//if ( 0 == zdSigFix ) // only set it once
+					
+				schema->fixParameter( "zd_sigma_" + plc, zdSigFix, true );
+				//schema->setInitialSigma( "zd_sigma_"+plc, zdSigFix, zdSigFix - 0.05 * zdSigFix, zdSigFix + 0.05 * zdSigFix);
 			}
 			else 
 				schema->setInitialSigma( "zd_sigma_"+plc, zdSig, 0.06, 0.08);
@@ -247,13 +253,15 @@ namespace TSF{
 					
 
 					schema->vars[ var ]->exclude = false;
-					schema->vars[ var ]->min = cv * .1;
-					schema->vars[ var ]->max = schema->getNormalization() * 10;
+					schema->vars[ var ]->min = 0;
+					schema->vars[ var ]->max = schema->getNormalization();
 
 					schema->addRange( "zd_" + plc, zdMu2 - zdSig2 * roi, zdMu2 + zdSig2 * roi );
 
-					if ( firstTimeIncluded && plc != plc2 )
-						schema->vars[ var ]->val = 0;
+					if ( firstTimeIncluded && plc != plc2 ){
+						schema->vars[ var ]->val = 1/schema->getNormalization();
+						schema->vars[ var ]->error = 0.1/schema->getNormalization();
+					}
 
 				} else {
 					schema->vars[ "zd_"+plc+"_yield_"+plc2 ]->exclude = true;
@@ -379,7 +387,7 @@ namespace TSF{
 						reportFit( &fitter, iPt );
 
 						if ( fitter.isFitGood() )
-							fillFitHistograms(iPt, iCen, iCharge, iEta, fitter.getNorm() / 100.0 );
+							fillFitHistograms(iPt, iCen, iCharge, iEta, fitter.getNorm() / fitter.normFactor() );
 
 					}// loop pt Bins
 				} // loop eta bins
@@ -395,7 +403,7 @@ namespace TSF{
 			return ;
 		}
 		h->Draw("pe");
-		h->GetYaxis()->SetRangeUser( 1e-5, fitter->normFactor() * 2 );
+		h->GetYaxis()->SetRangeUser( fitter->normFactor() * 1e-6, fitter->normFactor() * 2 );
 
 		TGraph * sum = fitter->plotResult( v );
 		sum->SetLineColor( kBlue );
