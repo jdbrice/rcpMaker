@@ -91,14 +91,14 @@ protected:
 	 * Makes pt histograms for each centrality
 	 */
 	virtual void makeCentralityHistos();
-	virtual int centralityBin( int refMult ) {
+	virtual int centralityBin( double refMult ) {
 		if ( rmc ){
 			int bin9 = rmc->bin9( refMult );
 			//if ( bin9 > 8 || bin9 < 0 )
 			//	return -1;
 			map<int, int>::iterator mit = centralityBinMap.find( bin9 );
 			if ( mit != centralityBinMap.end() )
-				return centralityBinMap[ rmc->bin9( refMult) ];
+				return centralityBinMap[ bin9 ];
 		}
 		
 		return -1;
