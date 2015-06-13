@@ -19,41 +19,23 @@ namespace TSF{
 		// alias the centered species for ease of use
 		centerSpecies = cfg->getString( nodePath+"PhaseSpaceRecentering.centerSpecies", "K" );
 
-		/**
-		 * Make the momentum transverse, eta, charge binning
-		 */
+		
+		//Make the momentum transverse, eta, charge binning 
 		binsPt = new HistoBins( cfg, "bin.pt" );
 		binsEta = new HistoBins( cfg, "bin.eta" );
 		binsCharge = new HistoBins( cfg, "bin.charge" );
 
 		logger->setClassSpace( "FitRunner" );
 
+		// setup reporters for the zb and zd fit projections
 		zbReporter = unique_ptr<Reporter>(new Reporter( cfg->getString( nodePath + "output:path" ) + "rpTSF_zb.pdf",
 			cfg->getInt( nodePath + "Reporter.output:width", 400 ), cfg->getInt( nodePath + "Reporter.output:height", 400 ) ) );
 		zdReporter = unique_ptr<Reporter>(new Reporter( cfg->getString( nodePath + "output:path" ) + "rpTSF_zd.pdf",
 			cfg->getInt( nodePath + "Reporter.output:width", 400 ), cfg->getInt( nodePath + "Reporter.output:height", 400 ) ) );
 
-		
-		/**
-		 * Setup the PID Params
-		 */
-		/*if ( cfg->exists( nodePath +  "PidParameters:url" ) ){
-			string fnPidParams = cfg->getString( nodePath + "PidParameters:url" );
-			useParams = true;
-			
-			logger->info(__FUNCTION__) << "Loading PID parameters from : " << fnPidParams << endl;
-			paramsConfig = shared_ptr<XmlConfig>( new XmlConfig( fnPidParams ) );
-			
-			logger->info(__FUNCTION__) << "Making zbParams" << endl;
-			zbParams = unique_ptr<ZbPidParameters>( new ZbPidParameters( paramsConfig.get(), "TofPidParams", psr ) );
-			zdParams = unique_ptr<ZdPidParameters>( new ZdPidParameters( paramsConfig.get(), "DedxPidParams" ) );	
-		}*/
-
 	}
 
 	FitRunner::~FitRunner(){
-
-
 	}
 
 
@@ -110,8 +92,6 @@ namespace TSF{
 				} // loop iEta
 			} // loop iCharge
 		} // loop iCen
-
-
 	}
 
 	void FitRunner::prepare( double avgP, int iCen ){
@@ -133,20 +113,19 @@ namespace TSF{
 		for ( string plc : PidPhaseSpace::species ){
 
 			// zb Parameters
-			double zbMu = zbMean( plc, avgP, iCen );
-			double zbSig = zbSigma( plc, avgP, iCen );
+			double zbMu = zbMean( plc, avgP );
+			double zbSig = zbSigma( );
 
 			// zd Parameters
 			double zdMu = zdMean( plc, avgP );
-			double zdSig = zdSigma( plc, avgP, iCen );
+			double zdSig = zdSigma( );
 			
 			// check if the sigmas should be fixed
 			double zbMinParP = cfg->getDouble( nodePath + "ParameterFixing." + plc + ":zbSigma", 5.0 );
 			double zdMinParP = cfg->getDouble( nodePath + "ParameterFixing." + plc + ":zdSigma", 5.0 );
 
-
+			// value to shich zb sigma should be fixed
 			double zbSigFix = schema->vars[ "zb_sigma_"+plc ]->val;
-
 
 			if ( zbMinParP > 0 && avgP >= zbMinParP){
 				schema->setInitialMu( "zb_mu_"+plc, zbMu, zbSigFix, 2.0 );
@@ -157,21 +136,15 @@ namespace TSF{
 				schema->setInitialMu( "zb_mu_"+plc, zbMu, zbSig, zbDeltaMu );
 			}
 
-			
 			schema->setInitialMu( "zd_mu_"+plc, zdMu, zdSig, zdDeltaMu );
-
 			zdSigFix = schema->vars[ "zd_sigma_"+plc ]->val;
-			if ( zdMinParP > 0 && avgP >= zdMinParP){
-				//if ( 0 == zdSigFix ) // only set it once
-					
+			if ( zdMinParP > 0 && avgP >= zdMinParP){	
 				schema->fixParameter( "zd_sigma_" + plc, zdSigFix, true );
-				//schema->setInitialSigma( "zd_sigma_"+plc, zdSigFix, zdSigFix - 0.05 * zdSigFix, zdSigFix + 0.05 * zdSigFix);
 			}
 			else 
 				schema->setInitialSigma( "zd_sigma_"+plc, zdSig, 0.06, 0.08);
 				
 			
-
 			choosePlayers( avgP, plc, roi );
 
 			if ( avgP < 1.5 ){
@@ -182,7 +155,7 @@ namespace TSF{
 				schema->vars[ "yield_" + plc ]->max = schema->vars[ "yield_" + plc ]->val * 2;	
 			}
 			
-		} // loop on plc to set config
+		} // loop on plc to set initial vals
 	}
 
 	void FitRunner::choosePlayers( double avgP, string plc, double roi ){
@@ -194,10 +167,10 @@ namespace TSF{
 		double nSigZdEnhanced = cfg->getDouble( nodePath + "Timing:nSigZdEnhanced" , 3.0 );
 
 		if ( roi > 0 ){
-			double zbSig = zbSigma( plc, avgP, 0 );
-			double zbMu = zbMean( plc, avgP, 0 );
+			double zbSig = zbSigma( );
+			double zbMu = zbMean( plc, avgP );
 			double zdMu = zdMean( plc, avgP );
-			double zdSig = zdSigma( plc, avgP, 0 );
+			double zdSig = zdSigma(  );
 
 			if ( avgP > zdOnly )
 				schema->addRange( "zb_All", zbMu - zbSig * roi, zbMu + zbSig * roi );
@@ -231,14 +204,14 @@ namespace TSF{
 			}
 		} else {
 
-			double zbSig = zbSigma( plc, avgP, 0 );
-			double zbMu = zbMean( plc, avgP, 0 );
+			double zbSig = zbSigma(  );
+			double zbMu = zbMean( plc, avgP);
 
 			
 
 			for ( string plc2 : PidPhaseSpace::species ){
 				double zdMu2 = zdMean( plc2, avgP );
-				double zdSig2 = zdSigma( plc2, avgP, 0 );
+				double zdSig2 = zdSigma(  );
 				string var = "zd_"+plc+"_yield_"+plc2;
 				double cv = schema->vars[ var ]->val;
 				
@@ -246,7 +219,7 @@ namespace TSF{
 				if ( schema->vars[ var ]->exclude )
 					firstTimeIncluded = true;
 
-				double zbMu2 = zbMean( plc2, avgP, 0 );
+				double zbMu2 = zbMean( plc2, avgP );
 				double zbNd = ( zbMu - zbMu2 ) / zbSig;
 
 				if ( abs( zbNd ) < nSigZbEnhanced && schema->datasetActive( "zd_" + plc ) ){
@@ -279,11 +252,11 @@ namespace TSF{
 		} else {
 
 			double zdMu = zdMean( plc, avgP );
-			double zdSig = zdSigma( plc, avgP, 0 );
+			double zdSig = zdSigma( );
 
 			for ( string plc2 : PidPhaseSpace::species ){
-				double zbSig2 = zbSigma( plc2, avgP, 0 );
-				double zbMu2 = zbMean( plc2, avgP, 0 );
+				double zbSig2 = zbSigma(  );
+				double zbMu2 = zbMean( plc2, avgP );
 
 				string var = "zb_"+plc+"_yield_"+plc2;
 				bool firstTimeIncluded = false;
@@ -313,14 +286,9 @@ namespace TSF{
 			}
 
 		}
-
 	}
 
-
-
 	void FitRunner::make(){
-
-		
 
 		//The bins to fit over
 		vector<int> centralityFitBins = cfg->getIntVector( nodePath + "FitRange.centralityBins" );
@@ -353,33 +321,20 @@ namespace TSF{
 
 						schema->clearRanges();
 
-						INFO( "Creating fitter" );
+						DEBUG( "Creating fitter" );
 						Fitter fitter( schema, inFile );
-						INFO( "Setting up Fit" );
 						
+						// load the datasets from the file
 						fitter.loadDatasets(centerSpecies, iCharge, iCen, iPt, iEta);
 
 						// prepare initial values, ranges, etc. for fit
 						prepare( avgP, iCen );
+						// build the minuit interface
 						fitter.setupFit();
-						
+						// assign active players to this fit
 						fitter.addPlayers( activePlayers );
-						//fitter.fixedFit( centerSpecies, iCharge, iCen, iPt, iEta );
+						// do the fit
 						fitter.fit( centerSpecies, iCharge, iCen, iPt, iEta );
-
-						// fill info about fit convergence
-						//book->cd( "fit" );
-						// book->make1D( 	fitName(iPt, iCen, iCharge, iEta ),
-						// 				fitName(iPt, iCen, iCharge, iEta ),
-						// 				1000, 0, 999.5 );
-						// int bin = 1;
-						// for ( double c : Fitter::convergence ){
-						// 	if ( bin > 1000 )
-						// 		break;
-						// 	book->get( fitName(iPt, iCen, iCharge, iEta ) )->SetBinContent( bin, c );
-						// 	bin ++;
-						// }
-						
 
 						reportFit( &fitter, iPt );
 
@@ -419,7 +374,6 @@ namespace TSF{
 		}
 
 		gPad->SetLogy(1);
-
 	}
 
 	
@@ -465,7 +419,7 @@ namespace TSF{
 
 		for ( string plc : PidPhaseSpace::species ){
 
-			double zbMu = zbMean( plc, avgP, iCen );
+			double zbMu = zbMean( plc, avgP );
 			double zdMu = zdMean( plc, avgP );
 
 			logger->info(__FUNCTION__) << "Filling Histograms for " << plc << endl;
@@ -570,6 +524,5 @@ namespace TSF{
 	}
 
 }
-
 
 

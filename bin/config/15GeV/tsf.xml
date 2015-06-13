@@ -16,14 +16,14 @@
 		<!-- fit bins -->
 		<FitRange>
 
-			<ptBins min="0" max="20" />
-			<centralityBins>0, 6</centralityBins>
+			<ptBins min="0" max="23" />
+			<centralityBins>0, 1, 2, 3, 4, 5, 6</centralityBins>
 			<etaBins>0</etaBins>
-			<charges>-1</charges>
+			<charges>1, -1</charges>
 		</FitRange>
 		<!-- Guiding parameters -->
 
-		<Timing zdOnly="0.5" useZdEnhanced="0.5" useZbEnhanced="0.5" nSigZdEnhanced="3.0" nSigZbEnhanced="5.0" />
+		<Timing zdOnly="0.5" useZdEnhanced="0.5" useZbEnhanced="0.5" nSigZdEnhanced="3.0" nSigZbEnhanced="3.0" />
 
 		<ParameterFixing>
 			<!-- mu can vary +/- nSigma -->

@@ -16,8 +16,6 @@ using namespace jdb;
 #include "TSF/FitSchema.h"
 #include "TSF/Fitter.h"
 #include "PhaseSpaceRecentering.h"
-#include "Params/ZbPidParameters.h"
-#include "Params/ZdPidParameters.h"
 
 
 
@@ -26,13 +24,6 @@ namespace TSF{
 	class FitRunner : public HistoAnalyzer
 	{
 	protected:
-		
-		shared_ptr<XmlConfig> paramsConfig;
-
-		bool useParams = false;
-
-		unique_ptr< ZbPidParameters > zbParams;
-		unique_ptr< ZdPidParameters > zdParams;
 
 		string centerSpecies;
 		string psrMethod;
@@ -104,50 +95,21 @@ namespace TSF{
 
 		}
 
-		double zbSigma( string plc, double p, int iCen ){
-
-			if ( useParams )
-				return zbParams->sigma( plc, p, iCen );
-			
+		double zbSigma( ){	
 			return tofSigmaIdeal;
 		}
-		double zbMean( string plc, double p, int iCen ){
-			if ( useParams )
-				return zbParams->mean( plc, p, iCen );
-
+		double zbMean( string plc, double p ){
 			map< string, double> means = psr->centeredTofMap( centerSpecies, p );
-
 			return means[ plc ];
 		}
 		double zdMean( string plc, double p ){
 			map< string, double> means = psr->centeredDedxMap( centerSpecies, p );
 			return means[ plc ];
 		}
-		double zdSigma( string plc, double p, int iCen ){
-
-			if ( useParams )
-				return zdParams->sigma( plc, p, iCen );
-
+		double zdSigma( ){
 			return dedxSigmaIdeal;
 		}
 
-		double averageZbMem( string plc ){
-			
-			double total = 0;
-			int n = 0;
-			for ( int i = 0; i < zbSigMem[ plc ].size(); i++ ){
-				if ( i > zbSigMem[ plc ].size() - 3 ){
-					INFO( "Averaging [" << i << "] :: " << zbSigMem[ plc ][ i ] );
-					total += zbSigMem[ plc ][ i ];
-					n ++;
-				}
-			}
-
-			return total / (double)n;
-
-		}
-
-		
 	};
 
 }
