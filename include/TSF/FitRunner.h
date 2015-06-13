@@ -51,6 +51,9 @@ namespace TSF{
 
 		double zdSigFix = 0;
 
+		map<string, vector<double> > zbSigMem;
+		map< string, double> lockedZbSig;
+
 	public:
 		FitRunner( XmlConfig * _cfg, string _np  );
 
@@ -126,6 +129,22 @@ namespace TSF{
 				return zdParams->sigma( plc, p, iCen );
 
 			return dedxSigmaIdeal;
+		}
+
+		double averageZbMem( string plc ){
+			
+			double total = 0;
+			int n = 0;
+			for ( int i = 0; i < zbSigMem[ plc ].size(); i++ ){
+				if ( i > zbSigMem[ plc ].size() - 3 ){
+					INFO( "Averaging [" << i << "] :: " << zbSigMem[ plc ][ i ] );
+					total += zbSigMem[ plc ][ i ];
+					n ++;
+				}
+			}
+
+			return total / (double)n;
+
 		}
 
 		

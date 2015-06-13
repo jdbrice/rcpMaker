@@ -33,6 +33,10 @@ namespace TSF{
 		zdReporter = unique_ptr<Reporter>(new Reporter( cfg->getString( nodePath + "output:path" ) + "rpTSF_zd.pdf",
 			cfg->getInt( nodePath + "Reporter.output:width", 400 ), cfg->getInt( nodePath + "Reporter.output:height", 400 ) ) );
 
+		for ( string plc : PidPhaseSpace::species ){
+			lockedZbSig[ plc ] = 0.0;	
+		}
+		
 		/**
 		 * Setup the PID Params
 		 */
@@ -148,8 +152,12 @@ namespace TSF{
 
 
 			if ( zbMinParP > 0 && avgP >= zbMinParP){
-				schema->setInitialMu( "zb_mu_"+plc, zbMu, zbSigFix, 2.0 );
-				schema->fixParameter( "zb_sigma_" + plc, zbSigFix, true );
+				if ( lockedZbSig[ plc ] == 0.0 ){
+					lockedZbSig[ plc ] = averageZbMem( plc );
+					INFO( "Setting lockedZbSig[ " << plc << " ] = " << lockedZbSig[ plc ] );
+				}
+				schema->setInitialMu( "zb_mu_"+plc, zbMu, lockedZbSig[ plc ], 2.0 );
+				schema->fixParameter( "zb_sigma_" + plc, lockedZbSig[ plc ], true );
 			}
 			else {
 				schema->setInitialSigma( "zb_sigma_"+plc, zbSig, 0.005, 0.066);//0.006, 0.025 );
@@ -344,6 +352,10 @@ namespace TSF{
 					schema = shared_ptr<FitSchema>(new FitSchema( cfg, nodePath + "FitSchema" ));
 					
 
+					for ( string plc : PidPhaseSpace::species ){
+						lockedZbSig[ plc ] = 0.0;	
+					}
+
 					for ( int iPt = firstPtBin; iPt <= lastPtBin; iPt++ ){
 
 						double avgP = averagePt( iPt );
@@ -383,6 +395,11 @@ namespace TSF{
 						// 	bin ++;
 						// }
 
+						for ( string plc : PidPhaseSpace::species ){
+							zbSigMem[ plc ].push_back( schema->vars[ "zb_sigma_" + plc ]->val );
+							INFO( "zbSigMem[ " << plc << " ] << " <<  schema->vars[ "zb_sigma_" + plc ]->val );	
+						}
+						
 
 						reportFit( &fitter, iPt );
 

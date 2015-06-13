@@ -19,7 +19,7 @@
 			<ptBins min="0" max="20" />
 			<centralityBins>0, 6</centralityBins>
 			<etaBins>0</etaBins>
-			<charges>1, -1</charges>
+			<charges>-1</charges>
 		</FitRange>
 		<!-- Guiding parameters -->
 
@@ -31,7 +31,7 @@
 
 			<!-- the minimum momentum at which the value is fixed -->
 			<Pi zbSigma="0.65" zdSigma="5.15" />
-			<K zbSigma="0.75" zdSigma="5.15" />
+			<K zbSigma="0.65" zdSigma="5.15" />
 			<P zbSigma="1.33" zdSigma="5.15" />
 
 		</ParameterFixing>

@@ -228,7 +228,7 @@ namespace TSF{
       	}
 
       	// just let us know what you are doing
-		logger->info(__FUNCTION__) << "OK Starting for ( " << cs << ", " << charge << ", " << cenBin << ", " << ptBin << ", " << etaBin << " ) " << endl;
+		logger->info(__FUNCTION__) << "OK Starting for ( charge=" << charge << ", cen=" << cenBin << ", ptBin=" << ptBin << ", etaBin=" << etaBin << " ) " << endl;
 
 		// load the current datasets
 		//loadDatasets( cs, charge, cenBin, ptBin, etaBin );
