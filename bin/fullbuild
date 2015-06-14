@@ -2,5 +2,5 @@
 
 cd ../src
 make clean
-make
+make -j 4
 cd ../bin

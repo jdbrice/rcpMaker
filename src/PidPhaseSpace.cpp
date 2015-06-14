@@ -1,8 +1,3 @@
-/**
- *
- *
- * 
- */
 #include "PidPhaseSpace.h"
 #include "TLine.h"
 

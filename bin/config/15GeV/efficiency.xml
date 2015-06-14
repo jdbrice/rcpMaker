@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
+<!-- 
+TODO: rerun TPC eff in 40s like even 
+TODO: make tof eff for pi/k/p +/- 
+-->
 <config>
 	<Pi_p>
 		<EffParams cl="6" ch="20" yl="-0.25" yh="0.25" p0="0.881759" p1="0.170094" p2="7.30733"/>

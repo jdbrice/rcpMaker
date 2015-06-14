@@ -1,7 +1,7 @@
 #ifndef PID_PHASE_SPACE_H
 #define PID_PHASE_SPACE_H
 
-// RcpMaker
+// Rcp Maker
 #include "InclusiveSpectra.h"
 #include "PhaseSpaceRecentering.h"
 #include "Adapter/PicoDataStore.h"
@@ -17,9 +17,7 @@ class PidPhaseSpace : public InclusiveSpectra
 {
 protected:
 
-	/**
-	 * Binning
-	 */
+	//Binning
 	unique_ptr<HistoBins> binsTof;
 	unique_ptr<HistoBins> binsDedx;
 	unique_ptr<HistoBins> binsPt;
@@ -29,14 +27,12 @@ protected:
 	double tofBinWidth, dedxBinWidth;
 
 
-	/**
-	 * Plot Ranges
-	 */
+	
+	// Plot Ranges 
 	double tofPadding, dedxPadding, tofScalePadding, dedxScalePadding;
 
-	/**
-	 * Phase Space Recentering
-	 */
+	
+	// Phase Space Recentering 
 	string centerSpecies;
 	string psrMethod;
 	double dedxSigmaIdeal, tofSigmaIdeal;
