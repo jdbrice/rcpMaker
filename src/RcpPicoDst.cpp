@@ -63,6 +63,8 @@ void RcpPicoDst::Init(TTree *tree)
 
    fChain->SetBranchAddress("runId", &rrunId, &b_run);
    fChain->SetBranchAddress("weight", &weight, &b_weight);
+   fChain->SetBranchAddress("bin9", &bin9, &b_bin9);
+   fChain->SetBranchAddress("bin16", &bin16, &b_bin16);
    fChain->SetBranchAddress("corrRefMult", &corrRefMult, &b_corrRefMult);
    fChain->SetBranchAddress("nTracks", &nTracks, &b_nTracks);
    fChain->SetBranchAddress("ppT", ppT, &b_ppT);

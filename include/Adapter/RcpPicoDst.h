@@ -31,6 +31,9 @@ public:
    Int_t           rrunId;
    Float_t         weight;
    Float_t         corrRefMult;
+   UShort_t        bin9;
+   UShort_t        bin16;
+
    Int_t           nTracks;
    Float_t         ppT[1000];   //[nTracks]
    Float_t         pP[1000];   //[nTracks]
@@ -41,6 +44,8 @@ public:
    // List of branches
    TBranch        *b_run;   //!
    TBranch        *b_weight;   //!
+   TBranch        *b_bin9;   //!
+   TBranch        *b_bin16;   //!
    TBranch        *b_corrRefMult;   //!
    TBranch        *b_nTracks;   //!
    TBranch        *b_ppT;   //!
@@ -85,6 +90,9 @@ public:
 
    inline virtual Double_t trackDedx( Int_t iHit ){ return ((Float_t)dedx[ iHit ]) / 1000.0; }
    inline virtual Double_t trackBeta( Int_t iHit ){ return ((Float_t)beta[ iHit ] / 20000.0); }
+
+   inline virtual UShort_t b9() { return bin9; }
+   inline virtual UShort_t b16() { return bin16; }
 
 };
 

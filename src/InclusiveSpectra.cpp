@@ -148,6 +148,8 @@ void InclusiveSpectra::postEventLoop(){
 
 void InclusiveSpectra::analyzeEvent(){
 
+	 
+
 	nTofMatchedTracks = 0;
 	Int_t nTracks = pico->numTracks();
 
@@ -159,6 +161,9 @@ void InclusiveSpectra::analyzeEvent(){
 		analyzeTrack( iTrack );	
 
 	}
+
+	if ( pico->b9() != rmc->bin9( refMult ) )
+		cout << "ERROR in RMC" << endl;
 }
 
 
@@ -195,6 +200,8 @@ bool InclusiveSpectra::keepEvent(){
 			
 			book->fill( "corrRefMult", refMult, eventWeight );
 			book->fill( "mappedRefMultBins", cBin, eventWeight );
+			book->fill( "refMultBin9", pico->b9(), eventWeight );
+			book->fill( "refMultBin16", pico->b16(), eventWeight );
 		}
 
 		/**

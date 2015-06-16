@@ -58,6 +58,9 @@ public:
 	virtual Float_t eventWeight(){ return 0; }
 	virtual UInt_t eventDay(){ return 0; }
 	virtual UInt_t eventYear(){ return 0; }
+	virtual UShort_t b9(){ return 0;}
+	virtual UShort_t b16(){ return 0;}
+
 
 	virtual UInt_t triggerWord(){ return 0; }
 

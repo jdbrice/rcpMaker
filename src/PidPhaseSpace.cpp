@@ -69,6 +69,8 @@ PidPhaseSpace::PidPhaseSpace( XmlConfig* config, string np, string fl, string jp
 	nSigAbove = cfg->getDouble( nodePath + "enhanceDistributions:nSigAbove", 3.0 );
 	logger->info(__FUNCTION__) << "nSig cuts for e, d : " << nSigBelow << ", " << nSigAbove << endl;
 
+	makeCombinedCharge = false;
+
  }
 
  PidPhaseSpace::~PidPhaseSpace(){
@@ -81,17 +83,7 @@ void PidPhaseSpace::preEventLoop() {
 	InclusiveSpectra::preEventLoop();
 
 	book->cd();
-	preparePhaseSpaceHistograms( centerSpecies );
-
-/*
-	book->cd();
-	logger->info(__FUNCTION__) << "Making " << nCentralityBins() << " centralities" << endl; 
-	for ( int iC = 0; iC < nCentralityBins(); iC ++ ){
-		string hName = "pt_" + ts(iC);
-		logger->info( __FUNCTION__ ) << hName << endl;
-		book->clone( "ptBase", hName );
-	}*/
-	
+	preparePhaseSpaceHistograms( centerSpecies );	
 }
 
 void PidPhaseSpace::postEventLoop() {
@@ -107,7 +99,7 @@ void PidPhaseSpace::postEventLoop() {
 }
 
 void PidPhaseSpace::analyzeTrack( int iTrack ){
-	
+
 	book->cd();
 
 
@@ -122,7 +114,8 @@ void PidPhaseSpace::analyzeTrack( int iTrack ){
 	double avgP = averageP( ptBin, etaBin );
 
 	binByMomentum = true;
-	if ( true == binByMomentum  ){
+	// even if we use p binning we still want to cut on eta
+	if ( true == binByMomentum  && etaBin >= 0 ){
 		ptBin = binsPt->findBin( p );
 		etaBin = 0;
 		avgP = averagePt( ptBin );
@@ -167,7 +160,7 @@ void PidPhaseSpace::analyzeTrack( int iTrack ){
 		book->cd( "dedx_tof" );
 
 		// combined charge 
-		book->fill( speciesName( centerSpecies, 0, cBin, ptBin, etaBin ), dedx, tof );
+		if ( makeCombinedCharge ) book->fill( speciesName( centerSpecies, 0, cBin, ptBin, etaBin ), dedx, tof );
 		book->fill( speciesName( centerSpecies, charge, cBin, ptBin, etaBin ), dedx, tof );
 			
 	}
@@ -318,14 +311,14 @@ void PidPhaseSpace::enhanceDistributions( double avgP, int ptBin, int etaBin, in
 	book->cd( "tof" );
 	// unenhanced - all tof tracks
 	// combined charge 
-	book->fill( tofName( centerSpecies, 0, cBin, ptBin, etaBin ), tof, eventWeight );
+	if ( makeCombinedCharge ) book->fill( tofName( centerSpecies, 0, cBin, ptBin, etaBin ), tof, eventWeight );
 	book->fill( tofName( centerSpecies, charge, cBin, ptBin, etaBin ), tof, eventWeight );
 
 	// enhanced by species
 	if ( makeEnhanced ){
 		for ( int iS = 0; iS < mSpecies.size(); iS++ ){
 			if ( dedx >= dMeans[ iS ] - dSigma && dedx <= dMeans[ iS ] + dSigma ){
-				//book->fill( tofName( centerSpecies, 0, cBin, ptBin, etaBin, mSpecies[ iS ] ), tof, eventWeight );
+				if ( makeCombinedCharge ) book->fill( tofName( centerSpecies, 0, cBin, ptBin, etaBin, mSpecies[ iS ] ), tof, eventWeight );
 				book->fill( tofName( centerSpecies, charge, cBin, ptBin, etaBin, mSpecies[ iS ] ), tof, eventWeight );
 			}
 		} // loop on species from centered means
@@ -341,7 +334,7 @@ void PidPhaseSpace::enhanceDistributions( double avgP, int ptBin, int etaBin, in
 	book->cd( "dedx" );
 	// unenhanced - all dedx
 	// combined charge 
-	book->fill( dedxName( centerSpecies, 0, cBin, ptBin, etaBin ), dedx, eventWeight );
+	if ( makeCombinedCharge ) book->fill( dedxName( centerSpecies, 0, cBin, ptBin, etaBin ), dedx, eventWeight );
 	book->fill( dedxName( centerSpecies, charge, cBin, ptBin, etaBin ), dedx, eventWeight );
 
 	// enhanced by species
@@ -351,7 +344,7 @@ void PidPhaseSpace::enhanceDistributions( double avgP, int ptBin, int etaBin, in
 			double ttMean = tMeans[ iS ];
 
 			if ( tof >= ttMean - tSigma && tof <= ttMean + tSigma ){
-				//book->fill( dedxName( centerSpecies, 0, cBin, ptBin, etaBin, mSpecies[ iS ] ), dedx, eventWeight );
+				if ( makeCombinedCharge ) book->fill( dedxName( centerSpecies, 0, cBin, ptBin, etaBin, mSpecies[ iS ] ), dedx, eventWeight );
 				book->fill( dedxName( centerSpecies, charge, cBin, ptBin, etaBin, mSpecies[ iS ] ), dedx, eventWeight );
 			}
 		} // loop on species from centered means	

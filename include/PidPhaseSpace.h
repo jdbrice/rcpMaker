@@ -47,6 +47,7 @@ protected:
 	double nSigBelow, nSigAbove;
 
 	bool binByMomentum;
+	bool makeCombinedCharge = false;
 
 public:
 	PidPhaseSpace( XmlConfig* config, string np, string fl ="", string jp ="" );
