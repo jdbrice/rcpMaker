@@ -1,0 +1,487 @@
+####################
+# June 18, 2015
+# Create Invariant Mass plots for Proton
+####################
+
+Executable    = /home/jdb12/work/rcpMaker/bin/rcp 
+initialdir 		= /home/jdb12/work/rcpMaker/bin/
+
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aaa _aaa_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aab _aab_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aac _aac_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aad _aad_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aae _aae_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aaf _aaf_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aag _aag_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aah _aah_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aai _aai_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aaj _aaj_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aak _aak_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aal _aal_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aam _aam_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aan _aan_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aao _aao_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aap _aap_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aaq _aaq_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aar _aar_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aas _aas_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aat _aat_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aau _aau_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aav _aav_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aaw _aaw_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aax _aax_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aay _aay_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aaz _aaz_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aba _aba_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_abb _abb_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_abc _abc_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_abd _abd_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_abe _abe_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_abf _abf_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_abg _abg_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_abh _abh_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_abi _abi_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_abj _abj_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_abk _abk_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_abl _abl_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_abm _abm_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_abn _abn_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_abo _abo_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_abp _abp_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_abq _abq_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_abr _abr_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_abs _abs_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_abt _abt_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_abu _abu_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_abv _abv_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_abw _abw_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_abx _abx_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aby _aby_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_abz _abz_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aca _aca_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_acb _acb_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_acc _acc_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_acd _acd_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_ace _ace_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_acf _acf_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_acg _acg_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_ach _ach_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aci _aci_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_acj _acj_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_ack _ack_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_acl _acl_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_acm _acm_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_acn _acn_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aco _aco_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_acp _acp_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_acq _acq_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_acr _acr_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_acs _acs_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_act _act_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_acu _acu_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_acv _acv_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_acw _acw_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_acx _acx_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_acy _acy_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_acz _acz_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_ada _ada_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_adb _adb_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_adc _adc_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_add _add_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_ade _ade_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_adf _adf_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_adg _adg_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_adh _adh_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_adi _adi_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_adj _adj_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_adk _adk_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_adl _adl_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_adm _adm_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_adn _adn_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_ado _ado_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_adp _adp_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_adq _adq_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_adr _adr_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_ads _ads_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_adt _adt_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_adu _adu_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_adv _adv_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_adw _adw_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_adx _adx_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_ady _ady_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_adz _adz_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aea _aea_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aeb _aeb_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aec _aec_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aed _aed_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aee _aee_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aef _aef_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aeg _aeg_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aeh _aeh_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aei _aei_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aej _aej_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aek _aek_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_ael _ael_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aem _aem_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aen _aen_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aeo _aeo_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aep _aep_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aeq _aeq_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aer _aer_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aes _aes_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aet _aet_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aeu _aeu_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aev _aev_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aew _aew_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aex _aex_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aey _aey_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aez _aez_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_afa _afa_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_afb _afb_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_afc _afc_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_afd _afd_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_afe _afe_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aff _aff_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_afg _afg_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_afh _afh_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_afi _afi_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_afj _afj_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_afk _afk_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_afl _afl_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_afm _afm_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_afn _afn_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_afo _afo_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_afp _afp_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_afq _afq_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_afr _afr_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_afs _afs_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aft _aft_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_afu _afu_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_afv _afv_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_afw _afw_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_afx _afx_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_afy _afy_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_afz _afz_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aga _aga_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_agb _agb_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_agc _agc_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_agd _agd_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_age _age_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_agf _agf_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_agg _agg_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_agh _agh_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_agi _agi_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_agj _agj_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_agk _agk_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_agl _agl_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_agm _agm_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_agn _agn_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_ago _ago_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_agp _agp_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_agq _agq_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_agr _agr_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_ags _ags_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_agt _agt_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_agu _agu_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_agv _agv_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_agw _agw_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_agx _agx_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_agy _agy_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_agz _agz_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aha _aha_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_ahb _ahb_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_ahc _ahc_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_ahd _ahd_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_ahe _ahe_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_ahf _ahf_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_ahg _ahg_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_ahh _ahh_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_ahi _ahi_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_ahj _ahj_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_ahk _ahk_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_ahl _ahl_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_ahm _ahm_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_ahn _ahn_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aho _aho_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_ahp _ahp_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_ahq _ahq_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_ahr _ahr_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_ahs _ahs_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aht _aht_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_ahu _ahu_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_ahv _ahv_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_ahw _ahw_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_ahx _ahx_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_ahy _ahy_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_ahz _ahz_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aia _aia_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aib _aib_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aic _aic_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aid _aid_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aie _aie_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aif _aif_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aig _aig_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aih _aih_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aii _aii_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aij _aij_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aik _aik_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_ail _ail_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aim _aim_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_ain _ain_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aio _aio_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aip _aip_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aiq _aiq_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_air _air_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_ais _ais_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_ait _ait_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aiu _aiu_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aiv _aiv_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aiw _aiw_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aix _aix_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aiy _aiy_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aiz _aiz_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aja _aja_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_ajb _ajb_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_ajc _ajc_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_ajd _ajd_
+Queue
+Arguments = config/15GeV/imass/P.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aje _aje_
+Queue
+
