@@ -43,7 +43,7 @@ public:
    UShort_t        beta[kMaxRcpTracks];   //[nTracks]
    Float_t         yLocal[ kMaxRcpTracks ];
    Float_t         zLocal[ kMaxRcpTracks ];
-   Float_t         matchFlag[ kMaxRcpTracks ];
+   UChar_t         matchFlag[ kMaxRcpTracks ];
 
    // List of branches
    TBranch        *b_run;   //!
