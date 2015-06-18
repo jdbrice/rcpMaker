@@ -138,6 +138,7 @@ void PidPhaseSpace::analyzeTrack( int iTrack ){
 	if ( makeTrackQA )
 		book->fill( "rapidity", 	y );
 
+	book->cd();
 
 	// fill the dN/dPt plots
 	if ( cBin >= 0 ){
