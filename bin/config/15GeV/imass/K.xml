@@ -11,7 +11,7 @@
 		</input>
 
 		<output path="../products/15/phaseSpace/">
-			<data>imass_local.root</data>
+			<data>imass.root</data>
 			<Reports>report/</Reports>
 		</output>
 
