@@ -65,6 +65,62 @@ void PidSpectraMaker::preEventLoop() {
 
 	book->cd();
 	prepareHistograms();
+
+	// test the eff
+
+	vector<float> effCenToRef = { 280, 220, 180, 140, 100, 60, 20  };
+	for ( string plc : PidPhaseSpace::species ){
+		for ( int iCen = 0; iCen < nCentralityBins(); iCen++ ){
+
+
+			// Make the Pid table weight plots
+			TH1 * hp = book->get( "pid_"+ts(iCen)+"_p", "pid_"+plc );
+			TH1 * hn = book->get( "pid_"+ts(iCen)+"_n", "pid_"+plc );
+
+			for ( int ib = 1; ib < hp->GetNbinsX() + 1; ib++ ){
+
+				float pt = hp->GetBinCenter( ib );
+				//INFO( "pid weights in pt[" << ib << " ] = " << pt )
+				map< string, double> pWeights = ppm->pidWeights( 1, iCen, pt, 0, 0, 0 );
+				map< string, double> nWeights = ppm->pidWeights( -1, iCen, pt, 0, 0, 0 );
+
+				hp->SetBinContent( ib, pWeights[ plc ] );
+				hn->SetBinContent( ib, nWeights[ plc ] );
+			}
+
+			TH1 * hep = book->get( "eff_"+ts(iCen)+"_p", "eff_"+plc );
+			TH1 * hen = book->get( "eff_"+ts(iCen)+"_n", "eff_"+plc );
+
+			for ( int ib = 1; ib < hep->GetNbinsX() + 1; ib++ ){
+
+				float pt = hp->GetBinCenter( ib );
+				double pEff = sc->reweight( plc, 1, effCenToRef[iCen] , pt );
+				double nEff = sc->reweight( plc, -1, effCenToRef[iCen], pt );
+
+				hep->SetBinContent( ib, pEff );
+				hen->SetBinContent( ib, nEff );
+			}
+
+			if ( "Pi" == plc ){
+				TH1 * htp = book->get( "eff_"+ts(iCen)+"_p", "eff_tof" );
+				TH1 * htn = book->get( "eff_"+ts(iCen)+"_n", "eff_tof" );
+
+				for ( int ib = 1; ib < htp->GetNbinsX() + 1; ib++ ){
+
+					float pt = htp->GetBinCenter( ib );
+					double pEff = sc->reweight( "tof", 1, effCenToRef[iCen] , pt );
+					double nEff = sc->reweight( "tof", -1, effCenToRef[iCen], pt );
+
+					htp->SetBinContent( ib, pEff );
+					htn->SetBinContent( ib, nEff );
+				}
+			}
+			
+
+
+		}
+	}
+
 	
 }
 
@@ -87,6 +143,8 @@ void PidSpectraMaker::analyzeTrack( int iTrack ){
 	double pt = pico->trackPt( iTrack );
 	double p = pico->trackP( iTrack );
 	double eta = pico->trackEta( iTrack );
+
+	book->fill( "eta", eta, eventWeight );
 
 	vector<double> yPlc;
 	for ( string plc : PidPhaseSpace::species ){
@@ -154,13 +212,15 @@ void PidSpectraMaker::analyzeTrack( int iTrack ){
 
 		if ( Abs(yPlc[ i ]) > 0.25 )
 			continue;
+
+		book->cd( );
+		book->fill( "eta_" + plc, eta, weights[ plc ] );
+		book->fill( "rapidity_" + plc, yPlc[ i ], weights[ plc ] );
 		
 		double effWeight = sc->reweight( plc, charge, refMult, pt );
-		//cout << "effWeight = " << effWeight << endl;
-		//cout << "tofWeight = " << tofEffWeight << endl;
 
 		book->cd( plc );
-		string cName = "pt_" + ts( cBin ) + "_" + PidPhaseSpace::chargeString( charge );
+		string cName = "corr_" + ts( cBin ) + "_" + PidPhaseSpace::chargeString( charge );
 		
 		int bin = book->get( cName )->GetXaxis()->FindBin( pt );
 		double bWidth = book->get( cName )->GetXaxis()->GetBinWidth( bin );
@@ -170,8 +230,11 @@ void PidSpectraMaker::analyzeTrack( int iTrack ){
 		logger->debug(__FUNCTION__) << "EventWeight = " << eventWeight << endl;
 		logger->debug(__FUNCTION__) << "bWidth = " << bWidth << endl;
 
-		double fullWeight = eventWeight * weights[ plc ] * effWeight * tofEffWeight * ( 1.0 / bWidth);
+		double fullWeight = eventWeight * weights[ plc ] * (1.0/effWeight) * (1.0/tofEffWeight) * (1.0 / pt);
 		book->fill( cName, pt, fullWeight );
+
+		cName = "raw_" + ts( cBin ) + "_" + PidPhaseSpace::chargeString( charge );
+		book->fill( cName, pt, eventWeight * weights[ plc ] * (1.0 / pt) );
 
 		i++;
 	}
@@ -190,11 +253,27 @@ void PidSpectraMaker::prepareHistograms(  ){
 	for ( string plc : PidPhaseSpace::species ){
 		book->cd( plc );
 		for ( int iCen = 0; iCen < nCentralityBins(); iCen++ ){
-			book->clone( "/", "ptBase", plc, "pt_"+ts(iCen)+"_p" );
-			book->clone( "/", "ptBase", plc, "pt_"+ts(iCen)+"_n" );
+			book->clone( "/", "ptBase", plc, "corr_"+ts(iCen)+"_p" );
+			book->clone( "/", "ptBase", plc, "corr_"+ts(iCen)+"_n" );
+
+			book->clone( "/", "ptBase", plc, "raw_"+ts(iCen)+"_n" );
+			book->clone( "/", "ptBase", plc, "raw_"+ts(iCen)+"_p" );
+
+			book->clone( "/", "pid_check", "pid_" + plc, "pid_"+ts(iCen)+"_p" );
+			book->clone( "/", "pid_check", "pid_" + plc, "pid_"+ts(iCen)+"_n" );
+
+			book->clone( "/", "eff_check", "eff_" + plc, "eff_"+ts(iCen)+"_p" );
+			book->clone( "/", "eff_check", "eff_" + plc, "eff_"+ts(iCen)+"_n" );
+
+			if ( "Pi" == plc ){ // TODO: create plc dep tof eff
+				book->clone( "/", "eff_check", "eff_tof", "eff_"+ts(iCen)+"_p" );
+				book->clone( "/", "eff_check", "eff_tof", "eff_"+ts(iCen)+"_n" );
+			}
 		}	
+
+		book->clone( "/", "eta", "/", "eta_"+plc );
+		book->clone( "/", "rapidity", "/", "rapidity_"+plc );
 	}
-	
 
 }
 

@@ -162,8 +162,8 @@ void InclusiveSpectra::analyzeEvent(){
 
 	}
 
-	if ( pico->b9() != rmc->bin9( refMult ) )
-		cout << "ERROR in RMC" << endl;
+	// if ( pico->b9() != rmc->bin9( refMult )  )
+	// 	cout << "ERROR in RMC" << endl;
 }
 
 

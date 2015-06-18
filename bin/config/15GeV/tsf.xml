@@ -7,8 +7,8 @@
 		<Logger color="true" logLevel="info" globalLogLevel="info"/>
 		<Reporter> <output url=".pdf" width="800" height="800" /> </Reporter>	
 		<!--<input> <data url="/Users/danielbrandenburg/bnl/local/data/Run14/rcp/phaseSpace/pid.root"/> </input>-->
-		<input> <data url="../products/15/phaseSpace/imass_june_06_15.root"/> </input>
-		<output path=""> <data>pid_table.root</data> </output>
+		<input> <data url="../products/15/phaseSpace/imass_june_15_15_all_mb.root"/> </input>
+		<output path=""> <data>pid_table_all_mb.root</data> </output>
 	
 		<histograms>
 			<Histo name="yield" title="yield" xBins="bin.pt" />
@@ -17,9 +17,9 @@
 		<FitRange>
 
 			<ptBins min="0" max="23" />
-			<centralityBins>0, 1, 2, 3, 4, 5, 6</centralityBins>
+			<centralityBins>6</centralityBins>
 			<etaBins>0</etaBins>
-			<charges>1, -1</charges>
+			<charges>-1</charges>
 		</FitRange>
 		<!-- Guiding parameters -->
 
@@ -30,9 +30,9 @@
 			<deltaMu zb="3.0" zd="13.0" />
 
 			<!-- the minimum momentum at which the value is fixed -->
-			<Pi zbSigma="0.65" zdSigma="5.15" />
-			<K zbSigma="0.65" zdSigma="5.15" />
-			<P zbSigma="1.33" zdSigma="5.15" />
+			<Pi zbSigma="0.65" zdSigma="1.915" />
+			<K zbSigma="0.65" zdSigma="1.915" />
+			<P zbSigma="1.33" zdSigma="1.915" />
 
 		</ParameterFixing>
 		<!--<PidParameters url="config/15GeV/PidParameters.xml" />-->

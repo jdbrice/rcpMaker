@@ -139,7 +139,8 @@ namespace TSF{
 			schema->setInitialMu( "zd_mu_"+plc, zdMu, zdSig, zdDeltaMu );
 			zdSigFix = schema->vars[ "zd_sigma_"+plc ]->val;
 			if ( zdMinParP > 0 && avgP >= zdMinParP){	
-				schema->fixParameter( "zd_sigma_" + plc, zdSigFix, true );
+				//schema->fixParameter( "zd_sigma_" + plc, zdSigFix, true );
+				schema->setInitialSigma( "zd_sigma_"+plc, zdSigFix, zdSigFix - .005, zdSigFix + 0.005);
 			}
 			else 
 				schema->setInitialSigma( "zd_sigma_"+plc, zdSig, 0.06, 0.08);
