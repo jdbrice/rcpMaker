@@ -163,6 +163,12 @@ public:
 protected:
 
 	void preparePhaseSpaceHistograms( string plc );
+
+	double rapidity( double pt, double eta, double m ){
+		double a = sqrt( m*m + pt*pt*cosh( eta )*cosh( eta ) ) + pt * sinh( eta );
+		double b = sqrt( m*m + pt*pt );
+		return log( a / b );
+	}
 	
 	
 };

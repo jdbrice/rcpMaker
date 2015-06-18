@@ -18,6 +18,7 @@
  */
 #include <memory>
 #include <vector>
+#include <math.h>
 
 /**
  * Local
@@ -56,6 +57,7 @@ protected:
 	unique_ptr<ConfigRange> cutPtGlobalOverPrimary;
 	unique_ptr<ConfigRange> cutYLocal;
 	unique_ptr<ConfigRange> cutZLocal;
+	unique_ptr<ConfigRange> cutRapidity;
 
 
 	map<int, int> centralityBinMap;

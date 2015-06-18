@@ -20,6 +20,7 @@
 		<ptGlobalOverPrimary min="0.7" max="1.42857" />
 		<yLocal min="-1.6" max="1.6" />
 		<zLocal min="-2.8" max="2.8" />
+		<rapidity min="-0.25" max="0.25" />
 	</TrackCuts>
 
 

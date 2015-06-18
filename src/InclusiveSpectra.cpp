@@ -60,6 +60,7 @@ InclusiveSpectra::InclusiveSpectra( XmlConfig * config, string np, string fileLi
     cutPtGlobalOverPrimary 	= unique_ptr<ConfigRange>(new ConfigRange( cutsCfg.get(), "TrackCuts.ptGlobalOverPrimary", 	0.7, 	1.42 ) );
     cutYLocal 				= unique_ptr<ConfigRange>(new ConfigRange( cutsCfg.get(), "TrackCuts.yLocal", 				-1.6, 	1.6 ) );
     cutZLocal 				= unique_ptr<ConfigRange>(new ConfigRange( cutsCfg.get(), "TrackCuts.zLocal", 				-2.8, 	2.8 ) );
+    cutRapidity				= unique_ptr<ConfigRange>(new ConfigRange( cutsCfg.get(), "TrackCuts.rapidity", 			-0.25, 	0.25 ) );
 
 
 
@@ -346,7 +347,10 @@ bool InclusiveSpectra::keepTrack( Int_t iTrack ){
 	double 	yLocal 			= pico->trackYLocal( iTrack );
 	double 	zLocal 			= pico->trackZLocal( iTrack );
 	double 	ptGlobal 		= pico->globalPt( iTrack );
+	double 	pt 		 		= pico->trackPt( iTrack );
 	int 	matchFlag		= pico->trackTofMatch( iTrack );
+	double 	eta 			= pico->trackEta( iTrack );
+	
 
 	/**
 	 * Pre Track Cut QA
@@ -368,6 +372,9 @@ bool InclusiveSpectra::keepTrack( Int_t iTrack ){
 		book->fill( "pre_ptGlobalVsPrimary", 	ptPrimary, ptGlobal );
 		book->fill( "pre_refMult", 				refMult );
 
+		book->fill( "pre_eta", 					eta );
+		
+
 	}
 
 	// TOF track cuts
@@ -381,10 +388,13 @@ bool InclusiveSpectra::keepTrack( Int_t iTrack ){
 		book->get( "trackCuts" )->Fill( "yLocal", 1 );
 	if ( zLocal < cutZLocal->min || zLocal > cutZLocal->max )
 		return false;
+	if ( makeTrackQA )
+			book->get( "trackCuts" )->Fill( "zLocal", 1 );
+
+	
+	
 
 	if ( !isRcpPicoDst ){
-		if ( makeTrackQA )
-			book->get( "trackCuts" )->Fill( "zLocal", 1 );
 		if ( ptPrimary < cutPt->min || ptPrimary > cutPt->max )
 			return false;
 		if ( makeTrackQA )
@@ -412,6 +422,8 @@ bool InclusiveSpectra::keepTrack( Int_t iTrack ){
 
 	} // isRcpPicoDst
 
+	
+
 
 	// Post Track Cut QA
 	if ( makeTrackQA ){
@@ -430,6 +442,8 @@ bool InclusiveSpectra::keepTrack( Int_t iTrack ){
 		book->fill( "ptGlobalOverPrimary", 	ptGlobal / ptPrimary );
 		book->fill( "ptGlobalVsPrimary", 	ptPrimary, ptGlobal );
 		book->fill( "refMult", 				refMult );
+
+		book->fill( "eta", 					eta );
 	}
 
 	return true;

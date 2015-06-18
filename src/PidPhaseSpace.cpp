@@ -103,9 +103,10 @@ void PidPhaseSpace::analyzeTrack( int iTrack ){
 	book->cd();
 
 
-	double pt 	= pico->trackPt( iTrack );
-	double p 	= pico->trackP( iTrack );
-	double eta 	= pico->trackEta( iTrack );
+	double pt 		= pico->trackPt( iTrack );
+	double p 		= pico->trackP( iTrack );
+	double eta 		= pico->trackEta( iTrack );
+	double y 		= rapidity( pt, eta, psr->mass( centerSpecies ) );
 
 	int ptBin 	= binsPt->findBin( pt );
 	int etaBin 	= binsEta->findBin( TMath::Abs( eta ) );
@@ -115,7 +116,7 @@ void PidPhaseSpace::analyzeTrack( int iTrack ){
 
 	binByMomentum = true;
 	// even if we use p binning we still want to cut on eta
-	if ( true == binByMomentum  && etaBin >= 0 ){
+	if ( true == binByMomentum  ){
 		ptBin = binsPt->findBin( p );
 		etaBin = 0;
 		avgP = averagePt( ptBin );
@@ -123,6 +124,19 @@ void PidPhaseSpace::analyzeTrack( int iTrack ){
 
 	if ( ptBin < 0 || etaBin < 0 || cBin < 0 )
 		return;
+
+	// cut on rapidity
+	if ( makeTrackQA ){
+		book->cd( "TrackQA" );
+		book->fill( "pre_rapidity", y );
+	}
+
+	// Rapidity Cut
+	if ( y < cutRapidity->min || y > cutRapidity->max )
+		return;
+
+	if ( makeTrackQA )
+		book->fill( "rapidity", 	y );
 
 
 	// fill the dN/dPt plots
