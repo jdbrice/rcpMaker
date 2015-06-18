@@ -74,8 +74,8 @@
 		<Histo name="eta" title="eta" widthX=".1" minX="-1.2" maxX="1.2" />
 		<Histo name="pre_eta" title="eta" widthX="0.1" minX="-1.2" maxX="1.2" />		
 
-		<Histo name="rapidity" title="rapidity" widthX=".1" minX="-0.3" maxX="0.3" />
-		<Histo name="pre_rapidity" title="rapidity" widthX="0.1" minX="-1.2" maxX="1.3" />		
+		<Histo name="rapidity" title="rapidity" widthX="0.05" minX="-0.3" maxX="0.3" />
+		<Histo name="pre_rapidity" title="rapidity" widthX="0.05" minX="-1.2" maxX="1.3" />		
 		
 		
 	</Track>
