@@ -346,6 +346,7 @@ bool InclusiveSpectra::keepTrack( Int_t iTrack ){
 	double 	yLocal 			= pico->trackYLocal( iTrack );
 	double 	zLocal 			= pico->trackZLocal( iTrack );
 	double 	ptGlobal 		= pico->globalPt( iTrack );
+	int 	matchFlag		= pico->trackTofMatch( iTrack );
 
 	/**
 	 * Pre Track Cut QA
@@ -354,6 +355,7 @@ bool InclusiveSpectra::keepTrack( Int_t iTrack ){
 
 		book->fill( "pre_yLocal", 				yLocal );
 		book->fill( "pre_zLocal", 				zLocal );
+		book->fill( "pre_matchFlag", 			matchFlag );
 		book->fill( "pre_dca", 					dca );
 		book->fill( "pre_nHitsDedx", 			nHitsDedx );
 		book->fill( "pre_nHitsFit", 			nHitsFit );
@@ -365,10 +367,11 @@ bool InclusiveSpectra::keepTrack( Int_t iTrack ){
 		book->fill( "pre_ptGlobalOverPrimary", 	ptGlobal / ptPrimary );
 		book->fill( "pre_ptGlobalVsPrimary", 	ptPrimary, ptGlobal );
 		book->fill( "pre_refMult", 				refMult );
+
 	}
 
 	// TOF track cuts
-	if ( 0 >= pico->trackTofMatch( iTrack ) )
+	if ( 0 >= matchFlag )
 		return false;
 	if ( makeTrackQA )
 		book->get( "trackCuts" )->Fill( "tofMatch", 1 );
@@ -415,6 +418,7 @@ bool InclusiveSpectra::keepTrack( Int_t iTrack ){
 
 		book->fill( "yLocal", 				yLocal );
 		book->fill( "zLocal", 				zLocal );
+		book->fill( "matchFlag", 			matchFlag );
 		book->fill( "dca", 					dca );
 		book->fill( "nHitsDedx", 			nHitsDedx );
 		book->fill( "nHitsFit", 			nHitsFit );
