@@ -18,14 +18,14 @@
 // Header file for the classes stored in the TTree if any.
 
 // Fixed size dimensions of array or collections stored in the TTree if any.
-   const Int_t kMaxEvent = 1;
-   const Int_t kMaxTracks = 5000;
-   const Int_t kMaxTrigger = 1;
-   const Int_t kMaxBTOWHit = 1;
-   const Int_t kMaxBTofHit = 5000;
-   const Int_t kMaxV0Ks = 1;
-   const Int_t kMaxV0L = 1;
-   const Int_t kMaxV0Lbar = 1;
+const Int_t kMaxEvent = 1;
+const Int_t kMaxTracks = 5000;
+const Int_t kMaxTrigger = 1;
+const Int_t kMaxBTOWHit = 1;
+const Int_t kMaxBTofHit = 5000;
+const Int_t kMaxV0Ks = 1;
+const Int_t kMaxV0L = 1;
+const Int_t kMaxV0Lbar = 1;
 
 class ProdPicoDst : public PicoDataStore {
 public :
