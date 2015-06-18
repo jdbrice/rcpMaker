@@ -17,6 +17,7 @@
 // Header file for the classes stored in the TTree if any.
 
 // Fixed size dimensions of array or collections stored in the TTree if any.
+const int kMaxTracks = 5000;
 
 class RcpPicoDst : public PicoDataStore{
 public:
@@ -35,11 +36,14 @@ public:
    UShort_t        bin16;
 
    Int_t           nTracks;
-   Float_t         ppT[1000];   //[nTracks]
-   Float_t         pP[1000];   //[nTracks]
-   Float_t         pEta[1000];   //[nTracks]
-   UShort_t        dedx[1000];   //[nTracks]
-   UShort_t        beta[1000];   //[nTracks]
+   Float_t         ppT[kMaxTracks];   //[nTracks]
+   Float_t         pP[kMaxTracks];   //[nTracks]
+   Float_t         pEta[kMaxTracks];   //[nTracks]
+   UShort_t        dedx[kMaxTracks];   //[nTracks]
+   UShort_t        beta[kMaxTracks];   //[nTracks]
+   Float_t         yLocal[ kMaxTracks ];
+   Float_t         zLocal[ kMaxTracks ];
+   Float_t         matchFlag[ kMaxTracks ];
 
    // List of branches
    TBranch        *b_run;   //!
@@ -53,6 +57,9 @@ public:
    TBranch        *b_pEta;   //!
    TBranch        *b_dedx;   //!
    TBranch        *b_beta;   //!
+   TBranch        *b_yLocal;   //!
+   TBranch        *b_zLocal;   //!
+   TBranch        *b_matchFlag;   //!
 
    RcpPicoDst(TTree *tree=0);
    virtual ~RcpPicoDst();
@@ -90,6 +97,9 @@ public:
 
    inline virtual Double_t trackDedx( Int_t iHit ){ return ((Float_t)dedx[ iHit ]) / 1000.0; }
    inline virtual Double_t trackBeta( Int_t iHit ){ return ((Float_t)beta[ iHit ] / 20000.0); }
+   inline virtual Double_t trackYLocal( Int_t iHit ){ return yLocal[ iHit ]; }
+   inline virtual Double_t trackZLocal( Int_t iHit ){ return zLocal[ iHit ]; }
+   inline virtual Int_t trackTofMatch( Int_t iHit ){ return matchFlag[ iHit ]; }
 
    inline virtual UShort_t b9() { return bin9; }
    inline virtual UShort_t b16() { return bin16; }

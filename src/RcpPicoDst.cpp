@@ -72,6 +72,9 @@ void RcpPicoDst::Init(TTree *tree)
    fChain->SetBranchAddress("pEta", pEta, &b_pEta);
    fChain->SetBranchAddress("dedx", dedx, &b_dedx);
    fChain->SetBranchAddress("beta", beta, &b_beta);
+   fChain->SetBranchAddress("yLocal", yLocal, &b_yLocal);
+   fChain->SetBranchAddress("zLocal", zLocal, &b_zLocal);
+   fChain->SetBranchAddress("matchFlag", matchFlag, &b_matchFlag);
    Notify();
 }
 

@@ -194,7 +194,14 @@ bool InclusiveSpectra::keepEvent(){
 		refMult 	= pico->refMult();
 		cBin 		= centralityBin( refMult );
 		
-		// needed for other things
+		
+		//Bad Run Rejection
+		if ( rmc->isBad( pico->runId() ) ){
+			logger->debug( __FUNCTION__ ) << "Rejecting Run : " << pico->runId() << endl;
+			return false;
+		} 
+
+		// Report event counts for normalization
 		if ( makeEventQA ){
 			book->cd( "EventQA" );
 			
@@ -203,14 +210,6 @@ bool InclusiveSpectra::keepEvent(){
 			book->fill( "refMultBin9", pico->b9(), eventWeight );
 			book->fill( "refMultBin16", pico->b16(), eventWeight );
 		}
-
-		/**
-		 * Bad Run Rejection
-		 */
-		if ( rmc->isBad( pico->runId() ) ){
-			logger->debug( __FUNCTION__ ) << "Rejecting Run : " << pico->runId() << endl;
-			return false;
-		} 
 
 		return true;
 	}
@@ -322,8 +321,8 @@ bool InclusiveSpectra::keepEvent(){
 
 bool InclusiveSpectra::keepTrack( Int_t iTrack ){
 
-	if ( "rcpPicoDst" == cfg->getString( nodePath + "input.dst:treeName" ) )
-		return true;
+	bool isRcpPicoDst = "rcpPicoDst" == cfg->getString( nodePath + "input.dst:treeName" );
+	
 
 	if ( makeTrackQA ){
 		book->cd( "TrackQA" );
@@ -368,6 +367,7 @@ bool InclusiveSpectra::keepTrack( Int_t iTrack ){
 		book->fill( "pre_refMult", 				refMult );
 	}
 
+	// TOF track cuts
 	if ( 0 >= pico->trackTofMatch( iTrack ) )
 		return false;
 	if ( makeTrackQA )
@@ -378,39 +378,39 @@ bool InclusiveSpectra::keepTrack( Int_t iTrack ){
 		book->get( "trackCuts" )->Fill( "yLocal", 1 );
 	if ( zLocal < cutZLocal->min || zLocal > cutZLocal->max )
 		return false;
-	if ( makeTrackQA )
-		book->get( "trackCuts" )->Fill( "zLocal", 1 );
-	if ( ptPrimary < cutPt->min || ptPrimary > cutPt->max )
-		return false;
-	if ( makeTrackQA )
-		book->get( "trackCuts" )->Fill( "ptPrimary", 1 );
-	if ( (ptGlobal / ptPrimary) < cutPtGlobalOverPrimary->min || (ptGlobal / ptPrimary) > cutPtGlobalOverPrimary->max )
-		return false;
-	if ( makeTrackQA )
-		book->get( "trackCuts" )->Fill( "ptRatio", 1 );
-	if ( dca < cutDca->min || dca > cutDca->max )
-		return false;
-	if ( makeTrackQA )
-		book->get( "trackCuts" )->Fill( "dca", 1 );
-	if ( nHitsDedx < cutNHitsDedx->min || nHitsDedx > cutNHitsDedx->max )
-		return false;
-	if ( makeTrackQA )
-		book->get( "trackCuts" )->Fill( "nHitsDedx", 1 );
-	if ( nHitsFit < cutNHitsFit->min || nHitsFit > cutNHitsFit->max )
-		return false;
-	if ( makeTrackQA )
-		book->get( "trackCuts" )->Fill( "nHitsFit", 1 );
-	if ( fitPoss < cutNHitsFitOverPossible->min || fitPoss > cutNHitsFitOverPossible->max )
-		return false; 
-	if ( makeTrackQA )
-		book->get( "trackCuts" )->Fill( "nHitsRatio", 1 );
+
+	if ( !isRcpPicoDst ){
+		if ( makeTrackQA )
+			book->get( "trackCuts" )->Fill( "zLocal", 1 );
+		if ( ptPrimary < cutPt->min || ptPrimary > cutPt->max )
+			return false;
+		if ( makeTrackQA )
+			book->get( "trackCuts" )->Fill( "ptPrimary", 1 );
+		if ( (ptGlobal / ptPrimary) < cutPtGlobalOverPrimary->min || (ptGlobal / ptPrimary) > cutPtGlobalOverPrimary->max )
+			return false;
+		if ( makeTrackQA )
+			book->get( "trackCuts" )->Fill( "ptRatio", 1 );
+		if ( dca < cutDca->min || dca > cutDca->max )
+			return false;
+		if ( makeTrackQA )
+			book->get( "trackCuts" )->Fill( "dca", 1 );
+		if ( nHitsDedx < cutNHitsDedx->min || nHitsDedx > cutNHitsDedx->max )
+			return false;
+		if ( makeTrackQA )
+			book->get( "trackCuts" )->Fill( "nHitsDedx", 1 );
+		if ( nHitsFit < cutNHitsFit->min || nHitsFit > cutNHitsFit->max )
+			return false;
+		if ( makeTrackQA )
+			book->get( "trackCuts" )->Fill( "nHitsFit", 1 );
+		if ( fitPoss < cutNHitsFitOverPossible->min || fitPoss > cutNHitsFitOverPossible->max )
+			return false; 
+		if ( makeTrackQA )
+			book->get( "trackCuts" )->Fill( "nHitsRatio", 1 );
+
+	} // isRcpPicoDst
 
 
-
-
-	/**
-	 * Post Track Cut QA
-	 */
+	// Post Track Cut QA
 	if ( makeTrackQA ){
 
 		book->fill( "yLocal", 				yLocal );
