@@ -468,7 +468,7 @@ bool InclusiveSpectra::keepTofTrack( Int_t iTrack ){
 	 * Pre Track Cut QA
 	 */
 	if ( makeTrackQA ){
-
+		book->cd( "TrackQA" );
 		book->fill( "pre_yLocal", 				yLocal );
 		book->fill( "pre_zLocal", 				zLocal );
 		book->fill( "pre_matchFlag", 			matchFlag );
