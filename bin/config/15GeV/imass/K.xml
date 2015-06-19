@@ -54,7 +54,7 @@
 			<Histo name="betaRaw" title="#beta^{-1}" xBins="bin.pt" yBins="bin.tofRaw" />
 			<Histo name="dedxRaw" title="dEdx" xBins="bin.pt" yBins="bin.dedxRaw" />
 			<Histo name="eta" type="1D" title="eta" nBinsX="200" minX="-2" maxX="2" />
-			<ptBase type="1D" title="p_{T} [GeV]; p_{T} [GeV]; #Events"  xBins="bin.pt"/>
+			<Histo name="ptBase" title="p_{T} [GeV]; p_{T} [GeV]; #Events"  xBins="bin.pt"/>
 
 			
 			<Histo name="trBeta" title="" xBins="bin.pt" yBins="bin.tof" />

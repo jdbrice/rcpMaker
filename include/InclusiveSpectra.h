@@ -148,6 +148,12 @@ protected:
 	virtual void analyzeTrack( Int_t iTrack );
 
 	/**
+	 * Analyze a track that passes normal and TOF cuts in the current Event
+	 * @param	iTrack 	- Track index 
+	 */
+	virtual void analyzeTofTrack( Int_t iTrack );
+
+	/**
 	 * Performs event based cuts
 	 * @return 	True 	- Keep Event 
 	 *          False 	- Reject Event
@@ -160,6 +166,13 @@ protected:
 	 *          False 	- Reject Track
 	 */
 	virtual bool keepTrack( Int_t iTrack );
+
+	/**
+	 * Performs TOF track based cuts
+	 * @return 	True 	- Keep Track 
+	 *          False 	- Reject Track
+	 */
+	virtual bool keepTofTrack( Int_t iTrack );
 	
 
 

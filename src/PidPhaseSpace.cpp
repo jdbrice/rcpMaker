@@ -98,6 +98,93 @@ void PidPhaseSpace::postEventLoop() {
 
 }
 
+void PidPhaseSpace::analyzeTofTrack( int iTrack ){
+
+	book->cd();
+
+
+	double pt 		= pico->trackPt( iTrack );
+	double p 		= pico->trackP( iTrack );
+	double eta 		= pico->trackEta( iTrack );
+	double y 		= rapidity( pt, eta, psr->mass( centerSpecies ) );
+
+	int ptBin 	= binsPt->findBin( pt );
+	int etaBin 	= binsEta->findBin( TMath::Abs( eta ) );
+	int charge 	= pico->trackCharge( iTrack );
+
+	double avgP = averageP( ptBin, etaBin );
+
+	binByMomentum = true;
+	// even if we use p binning we still want to cut on eta
+	if ( true == binByMomentum  ){
+		ptBin = binsPt->findBin( p );
+		etaBin = 0;
+		avgP = averagePt( ptBin );
+	}
+
+	if ( ptBin < 0 || etaBin < 0 || cBin < 0 )
+		return;
+
+	// cut on rapidity
+	if ( makeTrackQA ){
+		book->cd( "TrackQA" );
+		book->fill( "pre_rapidity", y );
+	}
+
+	// Rapidity Cut
+	if ( y < cutRapidity->min || y > cutRapidity->max )
+		return;
+
+	if ( makeTrackQA )
+		book->fill( "rapidity", 	y );
+
+	book->cd();
+
+	// fill the dN/dPt plots
+	if ( cBin >= 0 ){
+		string cName = "pt_tof_" + ts( cBin ) + "_" + ts(charge);
+		book->fill( cName, pt, eventWeight );		
+	}
+
+
+	double tof = psr->rTof(centerSpecies, pico->trackBeta(iTrack), p );
+	double dedx = psr->rDedx(centerSpecies, pico->trackDedx(iTrack), p );
+
+	double tofNL = psr->nlTof(centerSpecies, pico->trackBeta(iTrack), p, avgP );
+	double dedxNL = psr->nlDedx(centerSpecies, pico->trackDedx(iTrack), p, avgP );
+
+	
+	
+	book->fill( "betaRaw", p, 1.0/pico->trackBeta( iTrack ) );
+
+
+	book->fill( "dedxRaw", p, pico->trackDedx( iTrack ) );
+	book->fill( "eta", eta );
+
+	book->fill( "trBeta", p, tof );
+	book->fill( "trDedx", p, dedx );
+	book->fill( "nlBeta", p, tofNL );
+	book->fill( "nlDedx", p, dedxNL );
+
+	if ( "nonlinear" == psrMethod ){
+		tof = tofNL;
+		dedx = dedxNL;
+	} 
+
+	if ( make2D ){
+		book->cd( "dedx_tof" );
+
+		// combined charge 
+		if ( makeCombinedCharge ) book->fill( speciesName( centerSpecies, 0, cBin, ptBin, etaBin ), dedx, tof );
+		book->fill( speciesName( centerSpecies, charge, cBin, ptBin, etaBin ), dedx, tof );
+			
+	}
+	
+	enhanceDistributions(avgP, ptBin, etaBin, charge, dedx, tof );
+
+	book->cd();
+}
+
 void PidPhaseSpace::analyzeTrack( int iTrack ){
 
 	book->cd();
@@ -142,47 +229,10 @@ void PidPhaseSpace::analyzeTrack( int iTrack ){
 
 	// fill the dN/dPt plots
 	if ( cBin >= 0 ){
-		string cName = "pt_" + ts( cBin );
+		string cName = "pt_" + ts( cBin ) + "_" + ts(charge);
 		book->fill( cName, pt, eventWeight );		
 	}
 
-
-	double tof = psr->rTof(centerSpecies, pico->trackBeta(iTrack), p );
-	double dedx = psr->rDedx(centerSpecies, pico->trackDedx(iTrack), p );
-
-	double tofNL = psr->nlTof(centerSpecies, pico->trackBeta(iTrack), p, avgP );
-	double dedxNL = psr->nlDedx(centerSpecies, pico->trackDedx(iTrack), p, avgP );
-
-	
-	
-	book->fill( "betaRaw", p, 1.0/pico->trackBeta( iTrack ) );
-
-
-	book->fill( "dedxRaw", p, pico->trackDedx( iTrack ) );
-	book->fill( "eta", eta );
-
-	book->fill( "trBeta", p, tof );
-	book->fill( "trDedx", p, dedx );
-	book->fill( "nlBeta", p, tofNL );
-	book->fill( "nlDedx", p, dedxNL );
-
-	if ( "nonlinear" == psrMethod ){
-		tof = tofNL;
-		dedx = dedxNL;
-	} 
-
-	if ( make2D ){
-		book->cd( "dedx_tof" );
-
-		// combined charge 
-		if ( makeCombinedCharge ) book->fill( speciesName( centerSpecies, 0, cBin, ptBin, etaBin ), dedx, tof );
-		book->fill( speciesName( centerSpecies, charge, cBin, ptBin, etaBin ), dedx, tof );
-			
-	}
-	
-	enhanceDistributions(avgP, ptBin, etaBin, charge, dedx, tof );
-
-	book->cd();
 }
 
 void PidPhaseSpace::preparePhaseSpaceHistograms( string plc ){

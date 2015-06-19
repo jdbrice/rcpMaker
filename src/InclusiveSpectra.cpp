@@ -110,7 +110,13 @@ void InclusiveSpectra::makeCentralityHistos() {
 	for ( int iC = 0; iC < nCentralityBins(); iC ++ ){
 		string hName = "pt_" + ts(iC);
 		logger->info( __FUNCTION__ ) << hName << endl;
-		book->clone( "ptBase", hName );
+		book->clone( "ptBase", hName + "_p" );
+		book->clone( "ptBase", hName + "_n" );
+
+		hName = "pt_tof_" + ts(iC);
+		logger->info( __FUNCTION__ ) << hName << endl;
+		book->clone( "ptBase", hName + "_p" );
+		book->clone( "ptBase", hName + "_n" );
 	}
 	for ( int iB = 0; iB < 11; iB++ ){
 		if( centralityBinMap.find( iB ) != centralityBinMap.end() )
@@ -161,6 +167,10 @@ void InclusiveSpectra::analyzeEvent(){
 		
 		analyzeTrack( iTrack );	
 
+		if ( !keepTofTrack( iTrack ) )
+			continue;
+		
+		analyzeTofTrack( iTrack );			
 	}
 
 	// if ( pico->b9() != rmc->bin9( refMult )  )
@@ -169,6 +179,25 @@ void InclusiveSpectra::analyzeEvent(){
 
 
 void InclusiveSpectra::analyzeTrack( Int_t iTrack ){
+
+	// double pt = pico->trackPt( iTrack );
+	// int charge = pico->trackCharge( iTrack );
+	 
+	// book->cd();
+	// book->fill( "ptAll", pt, eventWeight );
+	// if ( 1 == charge )
+	// 	book->fill( "ptPos", pt, eventWeight );
+	// else if ( -1 == charge  )
+	// 	book->fill( "ptNeg", pt, eventWeight );
+	
+	// if ( cBin >= 0 ){
+	// 	string cName = "pt_" + ts( cBin );
+	// 	book->fill( cName, pt, eventWeight );		
+	// }
+	
+}
+
+void InclusiveSpectra::analyzeTofTrack( Int_t iTrack ){
 
 	double pt = pico->trackPt( iTrack );
 	int charge = pico->trackCharge( iTrack );
@@ -181,11 +210,12 @@ void InclusiveSpectra::analyzeTrack( Int_t iTrack ){
 		book->fill( "ptNeg", pt, eventWeight );
 	
 	if ( cBin >= 0 ){
-		string cName = "pt_" + ts( cBin );
+		string cName = "pt_" + ts( cBin ) + "_" + ts( charge );
 		book->fill( cName, pt, eventWeight );		
 	}
 	
 }
+
 
 bool InclusiveSpectra::keepEvent(){
 
@@ -357,9 +387,6 @@ bool InclusiveSpectra::keepTrack( Int_t iTrack ){
 	 */
 	if ( makeTrackQA ){
 
-		book->fill( "pre_yLocal", 				yLocal );
-		book->fill( "pre_zLocal", 				zLocal );
-		book->fill( "pre_matchFlag", 			matchFlag );
 		book->fill( "pre_dca", 					dca );
 		book->fill( "pre_nHitsDedx", 			nHitsDedx );
 		book->fill( "pre_nHitsFit", 			nHitsFit );
@@ -376,22 +403,6 @@ bool InclusiveSpectra::keepTrack( Int_t iTrack ){
 		
 
 	}
-
-	// TOF track cuts
-	if ( 0 >= matchFlag )
-		return false;
-	if ( makeTrackQA )
-		book->get( "trackCuts" )->Fill( "tofMatch", 1 );
-	if ( yLocal < cutYLocal->min || yLocal > cutYLocal->max )
-		return false;
-	if ( makeTrackQA )
-		book->get( "trackCuts" )->Fill( "yLocal", 1 );
-	if ( zLocal < cutZLocal->min || zLocal > cutZLocal->max )
-		return false;
-	if ( makeTrackQA )
-			book->get( "trackCuts" )->Fill( "zLocal", 1 );
-
-	
 	
 
 	if ( !isRcpPicoDst ){
@@ -428,9 +439,6 @@ bool InclusiveSpectra::keepTrack( Int_t iTrack ){
 	// Post Track Cut QA
 	if ( makeTrackQA ){
 
-		book->fill( "yLocal", 				yLocal );
-		book->fill( "zLocal", 				zLocal );
-		book->fill( "matchFlag", 			matchFlag );
 		book->fill( "dca", 					dca );
 		book->fill( "nHitsDedx", 			nHitsDedx );
 		book->fill( "nHitsFit", 			nHitsFit );
@@ -444,6 +452,51 @@ bool InclusiveSpectra::keepTrack( Int_t iTrack ){
 		book->fill( "refMult", 				refMult );
 
 		book->fill( "eta", 					eta );
+	}
+
+	return true;
+}
+
+
+bool InclusiveSpectra::keepTofTrack( Int_t iTrack ){
+
+	// alias
+	double 	yLocal 			= pico->trackYLocal( iTrack );
+	double 	zLocal 			= pico->trackZLocal( iTrack );
+	int 	matchFlag		= pico->trackTofMatch( iTrack );
+	
+
+	/**
+	 * Pre Track Cut QA
+	 */
+	if ( makeTrackQA ){
+
+		book->fill( "pre_yLocal", 				yLocal );
+		book->fill( "pre_zLocal", 				zLocal );
+		book->fill( "pre_matchFlag", 			matchFlag );
+	}
+
+	// TOF track cuts
+	if ( 0 >= matchFlag )
+		return false;
+	if ( makeTrackQA )
+		book->get( "trackCuts" )->Fill( "tofMatch", 1 );
+	if ( yLocal < cutYLocal->min || yLocal > cutYLocal->max )
+		return false;
+	if ( makeTrackQA )
+		book->get( "trackCuts" )->Fill( "yLocal", 1 );
+	if ( zLocal < cutZLocal->min || zLocal > cutZLocal->max )
+		return false;
+	if ( makeTrackQA )
+			book->get( "trackCuts" )->Fill( "zLocal", 1 );
+
+
+	// Post Track Cut QA
+	if ( makeTrackQA ){
+
+		book->fill( "yLocal", 				yLocal );
+		book->fill( "zLocal", 				zLocal );
+		book->fill( "matchFlag", 			matchFlag );
 	}
 
 	return true;
