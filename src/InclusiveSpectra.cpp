@@ -5,6 +5,7 @@
 #include "Adapter/RcpPicoDst.h"
 
 #include <limits.h>
+#include "PidPhaseSpace.h"
 
 /**
  * Constructor
@@ -208,7 +209,7 @@ void InclusiveSpectra::analyzeTofTrack( Int_t iTrack ){
 		book->fill( "ptNeg", pt, eventWeight );
 	
 	if ( cBin >= 0 ){
-		string cName = "pt_" + ts( cBin ) + "_" + ts( charge );
+		string cName = "pt_" + ts( cBin ) + "_" + PidPhaseSpace::chargeString( charge );
 		book->fill( cName, pt, eventWeight );		
 	}
 	
