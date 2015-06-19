@@ -155,8 +155,6 @@ void InclusiveSpectra::postEventLoop(){
 
 void InclusiveSpectra::analyzeEvent(){
 
-	 
-
 	nTofMatchedTracks = 0;
 	Int_t nTracks = pico->numTracks();
 
@@ -449,7 +447,6 @@ bool InclusiveSpectra::keepTrack( Int_t iTrack ){
 		book->fill( "ptGlobal", 			ptGlobal );
 		book->fill( "ptGlobalOverPrimary", 	ptGlobal / ptPrimary );
 		book->fill( "ptGlobalVsPrimary", 	ptPrimary, ptGlobal );
-		book->fill( "refMult", 				refMult );
 
 		book->fill( "eta", 					eta );
 	}
