@@ -179,20 +179,20 @@ void InclusiveSpectra::analyzeEvent(){
 
 void InclusiveSpectra::analyzeTrack( Int_t iTrack ){
 
-	// double pt = pico->trackPt( iTrack );
-	// int charge = pico->trackCharge( iTrack );
+	double pt = pico->trackPt( iTrack );
+	int charge = pico->trackCharge( iTrack );
 	 
-	// book->cd();
-	// book->fill( "ptAll", pt, eventWeight );
-	// if ( 1 == charge )
-	// 	book->fill( "ptPos", pt, eventWeight );
-	// else if ( -1 == charge  )
-	// 	book->fill( "ptNeg", pt, eventWeight );
+	book->cd();
+	book->fill( "ptAll", pt, eventWeight );
+	if ( 1 == charge )
+		book->fill( "ptPos", pt, eventWeight );
+	else if ( -1 == charge  )
+		book->fill( "ptNeg", pt, eventWeight );
 	
-	// if ( cBin >= 0 ){
-	// 	string cName = "pt_" + ts( cBin );
-	// 	book->fill( cName, pt, eventWeight );		
-	// }
+	if ( cBin >= 0 ){
+		string cName = "pt_" + ts( cBin ) + "_" + PidPhaseSpace::chargeString( charge );
+		book->fill( cName, pt, eventWeight );		
+	}
 	
 }
 
@@ -209,7 +209,7 @@ void InclusiveSpectra::analyzeTofTrack( Int_t iTrack ){
 		book->fill( "ptNeg", pt, eventWeight );
 	
 	if ( cBin >= 0 ){
-		string cName = "pt_" + ts( cBin ) + "_" + PidPhaseSpace::chargeString( charge );
+		string cName = "pt_tof_" + ts( cBin ) + "_" + PidPhaseSpace::chargeString( charge );
 		book->fill( cName, pt, eventWeight );		
 	}
 	
