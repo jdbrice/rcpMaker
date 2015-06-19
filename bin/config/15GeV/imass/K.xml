@@ -21,7 +21,7 @@
 		</Bichsel>
 
 		<!-- Common Resources -->
-		<MakeQA config="config/15GeV/qaHistograms.xml" event="true" track="false" tof="false" dedx="false" />
+		<MakeQA config="config/15GeV/qaHistograms.xml" event="true" track="true" tof="false" dedx="false" />
 		<Cuts config="config/15GeV/cuts.xml" />
 		<RMCParams config="config/15GeV/StRMCParams.xml" />
 
