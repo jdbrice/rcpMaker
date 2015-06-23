@@ -12,6 +12,7 @@ using namespace jdb;
 #include "PidPhaseSpace.h"
 #include "PidSpectraMaker.h"
 #include "PidYieldPresenter.h"
+#include "TofEffMaker.h"
 
 #include "TSF/FitRunner.h"
 
@@ -52,6 +53,9 @@ int main( int argc, char* argv[] ) {
 			} else if ( "PidPhaseSpace" == job ){
 				PidPhaseSpace pps( &config, "PidPhaseSpace.", fileList, jobPrefix  );
 				pps.make();
+			} else if ( "TofEffMaker" == job ){
+				TofEffMaker tem( &config, "TofEffMaker.", fileList, jobPrefix  );
+				tem.make();
 			} else if ( "SimultaneousTPid" == job ){
 				FitRunner fr( &config, "SimultaneousPid." );
 				fr.make();
