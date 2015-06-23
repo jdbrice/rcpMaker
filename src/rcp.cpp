@@ -16,7 +16,7 @@ using namespace jdb;
 
 #include "TSF/FitRunner.h"
 
-
+#include "TofEffFitter.h"
 //#include "PidParamMaker.h"
 //#include "SimultaneousGaussians.h"
 //#include "SimultaneousPid.h"
@@ -56,6 +56,9 @@ int main( int argc, char* argv[] ) {
 			} else if ( "TofEffMaker" == job ){
 				TofEffMaker tem( &config, "TofEffMaker.", fileList, jobPrefix  );
 				tem.make();
+			} else if ( "TofEffFitter" == job ){
+				TofEffFitter tef( &config, "TofEffFitter." );
+				tef.make();     
 			} else if ( "SimultaneousTPid" == job ){
 				FitRunner fr( &config, "SimultaneousPid." );
 				fr.make();
