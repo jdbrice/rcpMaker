@@ -1,0 +1,487 @@
+####################
+# June 18, 2015
+# Create Tof Eff for Kaon
+####################
+
+Executable    = /home/jdb12/work/rcpMaker/bin/rcp 
+initialdir 		= /home/jdb12/work/rcpMaker/bin/
+
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aaa K_aaa_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aab K_aab_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aac K_aac_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aad K_aad_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aae K_aae_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aaf K_aaf_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aag K_aag_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aah K_aah_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aai K_aai_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aaj K_aaj_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aak K_aak_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aal K_aal_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aam K_aam_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aan K_aan_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aao K_aao_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aap K_aap_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aaq K_aaq_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aar K_aar_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aas K_aas_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aat K_aat_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aau K_aau_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aav K_aav_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aaw K_aaw_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aax K_aax_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aay K_aay_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aaz K_aaz_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aba K_aba_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_abb K_abb_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_abc K_abc_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_abd K_abd_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_abe K_abe_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_abf K_abf_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_abg K_abg_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_abh K_abh_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_abi K_abi_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_abj K_abj_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_abk K_abk_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_abl K_abl_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_abm K_abm_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_abn K_abn_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_abo K_abo_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_abp K_abp_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_abq K_abq_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_abr K_abr_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_abs K_abs_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_abt K_abt_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_abu K_abu_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_abv K_abv_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_abw K_abw_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_abx K_abx_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aby K_aby_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_abz K_abz_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aca K_aca_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_acb K_acb_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_acc K_acc_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_acd K_acd_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_ace K_ace_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_acf K_acf_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_acg K_acg_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_ach K_ach_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aci K_aci_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_acj K_acj_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_ack K_ack_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_acl K_acl_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_acm K_acm_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_acn K_acn_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aco K_aco_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_acp K_acp_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_acq K_acq_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_acr K_acr_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_acs K_acs_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_act K_act_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_acu K_acu_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_acv K_acv_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_acw K_acw_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_acx K_acx_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_acy K_acy_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_acz K_acz_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_ada K_ada_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_adb K_adb_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_adc K_adc_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_add K_add_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_ade K_ade_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_adf K_adf_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_adg K_adg_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_adh K_adh_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_adi K_adi_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_adj K_adj_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_adk K_adk_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_adl K_adl_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_adm K_adm_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_adn K_adn_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_ado K_ado_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_adp K_adp_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_adq K_adq_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_adr K_adr_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_ads K_ads_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_adt K_adt_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_adu K_adu_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_adv K_adv_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_adw K_adw_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_adx K_adx_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_ady K_ady_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_adz K_adz_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aea K_aea_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aeb K_aeb_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aec K_aec_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aed K_aed_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aee K_aee_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aef K_aef_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aeg K_aeg_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aeh K_aeh_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aei K_aei_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aej K_aej_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aek K_aek_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_ael K_ael_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aem K_aem_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aen K_aen_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aeo K_aeo_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aep K_aep_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aeq K_aeq_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aer K_aer_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aes K_aes_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aet K_aet_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aeu K_aeu_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aev K_aev_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aew K_aew_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aex K_aex_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aey K_aey_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aez K_aez_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_afa K_afa_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_afb K_afb_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_afc K_afc_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_afd K_afd_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_afe K_afe_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aff K_aff_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_afg K_afg_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_afh K_afh_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_afi K_afi_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_afj K_afj_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_afk K_afk_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_afl K_afl_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_afm K_afm_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_afn K_afn_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_afo K_afo_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_afp K_afp_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_afq K_afq_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_afr K_afr_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_afs K_afs_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aft K_aft_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_afu K_afu_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_afv K_afv_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_afw K_afw_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_afx K_afx_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_afy K_afy_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_afz K_afz_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aga K_aga_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_agb K_agb_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_agc K_agc_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_agd K_agd_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_age K_age_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_agf K_agf_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_agg K_agg_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_agh K_agh_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_agi K_agi_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_agj K_agj_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_agk K_agk_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_agl K_agl_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_agm K_agm_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_agn K_agn_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_ago K_ago_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_agp K_agp_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_agq K_agq_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_agr K_agr_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_ags K_ags_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_agt K_agt_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_agu K_agu_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_agv K_agv_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_agw K_agw_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_agx K_agx_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_agy K_agy_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_agz K_agz_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aha K_aha_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_ahb K_ahb_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_ahc K_ahc_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_ahd K_ahd_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_ahe K_ahe_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_ahf K_ahf_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_ahg K_ahg_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_ahh K_ahh_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_ahi K_ahi_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_ahj K_ahj_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_ahk K_ahk_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_ahl K_ahl_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_ahm K_ahm_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_ahn K_ahn_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aho K_aho_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_ahp K_ahp_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_ahq K_ahq_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_ahr K_ahr_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_ahs K_ahs_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aht K_aht_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_ahu K_ahu_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_ahv K_ahv_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_ahw K_ahw_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_ahx K_ahx_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_ahy K_ahy_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_ahz K_ahz_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aia K_aia_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aib K_aib_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aic K_aic_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aid K_aid_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aie K_aie_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aif K_aif_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aig K_aig_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aih K_aih_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aii K_aii_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aij K_aij_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aik K_aik_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_ail K_ail_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aim K_aim_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_ain K_ain_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aio K_aio_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aip K_aip_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aiq K_aiq_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_air K_air_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_ais K_ais_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_ait K_ait_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aiu K_aiu_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aiv K_aiv_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aiw K_aiw_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aix K_aix_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aiy K_aiy_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aiz K_aiz_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aja K_aja_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_ajb K_ajb_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_ajc K_ajc_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_ajd K_ajd_
+Queue
+Arguments = config/15GeV/tofEff.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aje K_aje_
+Queue
+
