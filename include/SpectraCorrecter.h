@@ -10,6 +10,7 @@ using namespace std;
 #include "EffParams.h"
 #include "PidPhaseSpace.h"
 
+
 class SpectraCorrecter
 {
 protected:
@@ -30,19 +31,17 @@ public:
 				params[  plc + "_" + c  ] = unique_ptr<EffParams>( new EffParams( plc, cfg, plc + "_" + c ) );
 			}
 		}
-
-		params[  "tof_p"  ] = unique_ptr<EffParams>( new EffParams( "tof", cfg, "tof_p" ) );
-		params[  "tof_n"  ] = unique_ptr<EffParams>( new EffParams( "tof", cfg, "tof_n" ) );
 	
 	}
 
 	double reweight( string plc, int c, int rm, double pt ){
-
+		DEBUG( plc << ", " << c << ", " << rm << ", " << pt )
 		string name = plc + "_" + PidPhaseSpace::chargeString( c );
 	
 		if ( params.find( name ) != params.end() )
 			return params[ name ]->reweight( pt, rm );
 
+		ERROR( "Invalid" )
 		return 0.0;
 
 	}

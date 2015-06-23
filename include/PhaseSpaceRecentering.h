@@ -34,9 +34,9 @@ public:
 		species = { "Pi", "K", "P" };
 
 		// in GeV / c^2
-		piMass = 0.1395702;
-		kaonMass = 0.493667;
-		protonMass = 0.9382721;
+		piMass 		= 0.1395702;
+		kaonMass 	= 0.493667;
+		protonMass 	= 0.9382721;
 	}
 	~PhaseSpaceRecentering(){
 		delete dedxGen;

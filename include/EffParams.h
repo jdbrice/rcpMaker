@@ -92,7 +92,7 @@ public:
 			double val = eff[ index ]->Eval( pt );
 			// if ( "tof" == name )
 			// 	cout << "Eval( " << pt <<" ) = " << val << endl;
-			return val;
+			return 1.0 / val;
 		}
 
 		return 0.0;

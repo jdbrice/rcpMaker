@@ -1,5 +1,6 @@
 #include "PidPhaseSpace.h"
 #include "TLine.h"
+#include "SpectraCorrecter.h"
 
 vector<string> PidPhaseSpace::species = { "Pi", "K", "P" };
 
@@ -71,6 +72,9 @@ PidPhaseSpace::PidPhaseSpace( XmlConfig* config, string np, string fl, string jp
 
 	makeCombinedCharge = false;
 
+	// Efficiency corrector
+	sc = unique_ptr<SpectraCorrecter>( new SpectraCorrecter( "config/15GeV/efficiency.xml" ) ); 
+
  }
 
  PidPhaseSpace::~PidPhaseSpace(){
@@ -112,6 +116,8 @@ void PidPhaseSpace::analyzeTofTrack( int iTrack ){
 	int etaBin 	= binsEta->findBin( TMath::Abs( eta ) );
 	int charge 	= pico->trackCharge( iTrack );
 
+	effWeight 		= sc->reweight(centerSpecies, charge, refMult, pt);
+
 	double avgP = averageP( ptBin, etaBin );
 
 	binByMomentum = true;
@@ -140,13 +146,6 @@ void PidPhaseSpace::analyzeTofTrack( int iTrack ){
 
 	book->cd();
 
-	// fill the dN/dPt plots
-	if ( cBin >= 0 ){
-		string cName = "pt_tof_" + ts( cBin ) + "_" + ts(charge);
-		book->fill( cName, pt, eventWeight );		
-	}
-
-
 	double tof = psr->rTof(centerSpecies, pico->trackBeta(iTrack), p );
 	double dedx = psr->rDedx(centerSpecies, pico->trackDedx(iTrack), p );
 
@@ -156,8 +155,6 @@ void PidPhaseSpace::analyzeTofTrack( int iTrack ){
 	
 	
 	book->fill( "betaRaw", p, 1.0/pico->trackBeta( iTrack ) );
-
-
 	book->fill( "dedxRaw", p, pico->trackDedx( iTrack ) );
 	book->fill( "eta", eta );
 
@@ -224,14 +221,6 @@ void PidPhaseSpace::analyzeTrack( int iTrack ){
 
 	if ( makeTrackQA )
 		book->fill( "rapidity", 	y );
-
-	book->cd();
-
-	// fill the dN/dPt plots
-	if ( cBin >= 0 ){
-		string cName = "pt_" + ts( cBin ) + "_" + ts(charge);
-		book->fill( cName, pt, eventWeight );		
-	}
 
 }
 
@@ -376,15 +365,15 @@ void PidPhaseSpace::enhanceDistributions( double avgP, int ptBin, int etaBin, in
 	book->cd( "tof" );
 	// unenhanced - all tof tracks
 	// combined charge 
-	if ( makeCombinedCharge ) book->fill( tofName( centerSpecies, 0, cBin, ptBin, etaBin ), tof, eventWeight );
-	book->fill( tofName( centerSpecies, charge, cBin, ptBin, etaBin ), tof, eventWeight );
+	if ( makeCombinedCharge ) book->fill( tofName( centerSpecies, 0, cBin, ptBin, etaBin ), tof, eventWeight*effWeight );
+	book->fill( tofName( centerSpecies, charge, cBin, ptBin, etaBin ), tof, eventWeight*effWeight );
 
 	// enhanced by species
 	if ( makeEnhanced ){
 		for ( int iS = 0; iS < mSpecies.size(); iS++ ){
 			if ( dedx >= dMeans[ iS ] - dSigma && dedx <= dMeans[ iS ] + dSigma ){
-				if ( makeCombinedCharge ) book->fill( tofName( centerSpecies, 0, cBin, ptBin, etaBin, mSpecies[ iS ] ), tof, eventWeight );
-				book->fill( tofName( centerSpecies, charge, cBin, ptBin, etaBin, mSpecies[ iS ] ), tof, eventWeight );
+				if ( makeCombinedCharge ) book->fill( tofName( centerSpecies, 0, cBin, ptBin, etaBin, mSpecies[ iS ] ), tof, eventWeight*effWeight );
+				book->fill( tofName( centerSpecies, charge, cBin, ptBin, etaBin, mSpecies[ iS ] ), tof, eventWeight*effWeight );
 			}
 		} // loop on species from centered means
 	}
@@ -399,8 +388,8 @@ void PidPhaseSpace::enhanceDistributions( double avgP, int ptBin, int etaBin, in
 	book->cd( "dedx" );
 	// unenhanced - all dedx
 	// combined charge 
-	if ( makeCombinedCharge ) book->fill( dedxName( centerSpecies, 0, cBin, ptBin, etaBin ), dedx, eventWeight );
-	book->fill( dedxName( centerSpecies, charge, cBin, ptBin, etaBin ), dedx, eventWeight );
+	if ( makeCombinedCharge ) book->fill( dedxName( centerSpecies, 0, cBin, ptBin, etaBin ), dedx, eventWeight*effWeight );
+	book->fill( dedxName( centerSpecies, charge, cBin, ptBin, etaBin ), dedx, eventWeight*effWeight );
 
 	// enhanced by species
 	if ( makeEnhanced ){
@@ -409,14 +398,11 @@ void PidPhaseSpace::enhanceDistributions( double avgP, int ptBin, int etaBin, in
 			double ttMean = tMeans[ iS ];
 
 			if ( tof >= ttMean - tSigma && tof <= ttMean + tSigma ){
-				if ( makeCombinedCharge ) book->fill( dedxName( centerSpecies, 0, cBin, ptBin, etaBin, mSpecies[ iS ] ), dedx, eventWeight );
-				book->fill( dedxName( centerSpecies, charge, cBin, ptBin, etaBin, mSpecies[ iS ] ), dedx, eventWeight );
+				if ( makeCombinedCharge ) book->fill( dedxName( centerSpecies, 0, cBin, ptBin, etaBin, mSpecies[ iS ] ), dedx, eventWeight*effWeight );
+				book->fill( dedxName( centerSpecies, charge, cBin, ptBin, etaBin, mSpecies[ iS ] ), dedx, eventWeight*effWeight );
 			}
 		} // loop on species from centered means	
 	}
-
-	
-
 }
 
 

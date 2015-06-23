@@ -4,14 +4,14 @@
 	<jobType>PidPhaseSpace</jobType>
 
 	<PidPhaseSpace>
-		<Logger color="true" logLevel="warning" globalLogLevel="info" />
+		<Logger color="true" logLevel="warning" globalLogLevel="warning" />
 		
 		<input>
-			<dst treeName="rcpPicoDst" url="/Users/danielbrandenburg/bnl/local/data/BES/15GeV/rcpPicoDst/all_mb/" maxFiles="50"/>
+			<dst treeName="rcpPicoDst" url="/Users/danielbrandenburg/bnl/local/data/BES/15GeV/rcpPicoDst/" maxFiles="10"/>
 		</input>
 
 		<output path="../products/15/phaseSpace/">
-			<data>imass.root</data>
+			<data>K_imass.root</data>
 			<Reports>report/</Reports>
 		</output>
 
@@ -21,7 +21,7 @@
 		</Bichsel>
 
 		<!-- Common Resources -->
-		<MakeQA config="config/15GeV/qaHistograms.xml" event="true" track="true" tof="false" dedx="false" />
+		<MakeQA config="config/15GeV/qaHistograms.xml" event="true" track="false" tof="false" dedx="false" />
 		<Cuts config="config/15GeV/cuts.xml" />
 		<RMCParams config="config/15GeV/StRMCParams.xml" />
 

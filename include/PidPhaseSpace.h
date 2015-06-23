@@ -5,6 +5,7 @@
 #include "InclusiveSpectra.h"
 #include "PhaseSpaceRecentering.h"
 #include "Adapter/PicoDataStore.h"
+class SpectraCorrecter;
 
 // STL
 #include <algorithm> 
@@ -48,6 +49,9 @@ protected:
 
 	bool binByMomentum;
 	bool makeCombinedCharge = false;
+
+	unique_ptr<SpectraCorrecter> sc;
+	float effWeight = 0;
 
 public:
 	PidPhaseSpace( XmlConfig* config, string np, string fl ="", string jp ="" );
