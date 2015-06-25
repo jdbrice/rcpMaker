@@ -340,7 +340,7 @@ namespace TSF{
 						reportFit( &fitter, iPt );
 
 						if ( fitter.isFitGood() )
-							fillFitHistograms(iPt, iCen, iCharge, iEta, fitter.getNorm() / fitter.normFactor() );
+							fillFitHistograms(iPt, iCen, iCharge, iEta );
 
 					}// loop pt Bins
 				} // loop eta bins
@@ -356,7 +356,7 @@ namespace TSF{
 			return ;
 		}
 		h->Draw("pe");
-		h->GetYaxis()->SetRangeUser( fitter->normFactor() * 1e-6, fitter->normFactor() * 2 );
+		h->GetYaxis()->SetRangeUser( schema->getNormalization() * 1e-6, schema->getNormalization() * 2 );
 
 		TGraph * sum = fitter->plotResult( v );
 		sum->SetLineColor( kBlue );
@@ -414,7 +414,7 @@ namespace TSF{
 	}
 
 
-	void FitRunner::fillFitHistograms(int iPt, int iCen, int iCharge, int iEta, double norm ){
+	void FitRunner::fillFitHistograms(int iPt, int iCen, int iCharge, int iEta ){
 
 		double avgP = averageP( iPt, iEta );
 
@@ -432,8 +432,8 @@ namespace TSF{
 				logger->info(__FUNCTION__) << "Filling Yield for " << plc << endl;
 				string name = yieldName( plc, iCen, iCharge, iEta );
 				book->cd( plc+"_yield");
-				double sC = schema->vars[ "yield_"+plc ]->val * norm / book->get( name )->GetBinWidth( iiPt );
-				double sE = schema->vars[ "yield_"+plc ]->error * norm / book->get( name )->GetBinWidth( iiPt );
+				double sC = schema->vars[ "yield_"+plc ]->val / book->get( name )->GetBinWidth( iiPt );
+				double sE = schema->vars[ "yield_"+plc ]->error / book->get( name )->GetBinWidth( iiPt );
 				
 				book->get( name )->SetBinContent( iiPt, sC );
 				book->get( name )->SetBinError( iiPt, sE );
@@ -505,8 +505,6 @@ namespace TSF{
 
 		}
 
-		// just makes it so that the RooFit Frames aren't saved into HistoBook File
-		inFile->cd();
 	}
 
 

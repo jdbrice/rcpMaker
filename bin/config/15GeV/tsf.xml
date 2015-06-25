@@ -7,8 +7,8 @@
 		<Logger color="true" logLevel="info" globalLogLevel="info"/>
 		<Reporter> <output url=".pdf" width="800" height="800" /> </Reporter>	
 		<!--<input> <data url="/Users/danielbrandenburg/bnl/local/data/Run14/rcp/phaseSpace/pid.root"/> </input>-->
-		<input> <data url="../products/15/phaseSpace/imass_june_15_15_all_mb.root"/> </input>
-		<output path=""> <data>pid_table_all_mb.root</data> </output>
+		<input> <data url="../products/15/phaseSpace/imass_Pi.root"/> </input>
+		<output path=""> <data>fit_Pi.root</data> </output>
 	
 		<histograms>
 			<Histo name="yield" title="yield" xBins="bin.pt" />
@@ -17,9 +17,9 @@
 		<FitRange>
 
 			<ptBins min="0" max="23" />
-			<centralityBins>6</centralityBins>
+			<centralityBins>0, 5</centralityBins>
 			<etaBins>0</etaBins>
-			<charges>-1</charges>
+			<charges>-1, 1</charges>
 		</FitRange>
 		<!-- Guiding parameters -->
 
@@ -43,7 +43,7 @@
 		</Bichsel>
 		
 		<PhaseSpaceRecentering>
-			<centerSpecies>K</centerSpecies>
+			<centerSpecies>Pi</centerSpecies>
 			<sigma tof="0.012" dedx="0.07"/>
 			<method>nonlinear</method>
 		</PhaseSpaceRecentering>

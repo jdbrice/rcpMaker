@@ -163,11 +163,11 @@ namespace TSF{
 		dataHists[ "zb_K" ] 	= (TH1D*)dataFile->Get( ("tof/" + PidPhaseSpace::tofName( cs, charge, cenBin, ptBin, etaBin, "K" )).c_str() );
 		dataHists[ "zb_P" ] 	= (TH1D*)dataFile->Get( ("tof/" + PidPhaseSpace::tofName( cs, charge, cenBin, ptBin, etaBin, "P" )).c_str() );
 		
-		
-		norm = dataHists[ "zd_All"]->Integral();
-		double nf = normFactor();
+		double maxYield = dataHists[ "zd_All"]->Integral();
+		norm = ((TH1D*)dataFile->Get( "EventQA/mappedRefMultBins" ))->GetBinContent( cenBin + 1 );
 
-		schema->setNormalization( nf );
+		schema->setNormalization( maxYield / norm );
+
 		sufficienctStatistics = true;
 
 		for ( auto k : dataHists ){
@@ -177,16 +177,10 @@ namespace TSF{
 
 			// normalize
 			k.second->Sumw2();
-			k.second->Scale( nf / norm );
+			k.second->Scale( 1.0 / norm );
 
 			if ( nObs > 75 )
 				schema->loadDataset( k.first, k.second );
-			//else 
-			//	dataHists.erase( k.first );
-			
-			
-			//sufficienctStatistics = false;
-			//}		
 		}
 
 	}

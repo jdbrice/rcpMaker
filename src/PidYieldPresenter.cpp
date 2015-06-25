@@ -134,7 +134,7 @@ void PidYieldPresenter::normalizeYield( string plc, int charge, int iCen ){
 
 	
 		double pt = ny->GetBinCenter( iBin );
-		double sc = 1.0 / ( nEvents * 2 * pt * 3.1415926 );
+		double sc = 1.0 / ( 2 * pt * 3.1415926 );
 
 		if ( iBin > lastGoodBin ){
 			sc = 0;	

@@ -70,15 +70,14 @@ int main( int argc, char* argv[] ) {
 				pyp.integrateEta();
 				pyp.normalizeYield();
 				pyp.compareYields();
-				pyp.rcp( 6 );
+				pyp.rcp( 5 );
 
-				pyp.rcpPanel( 0, 6);
-				pyp.rcpPanel( 1, 6);
-				pyp.rcpPanel( 2, 6);
-				pyp.rcpPanel( 3, 6);
-				pyp.rcpPanel( 4, 6);
-				pyp.rcpPanel( 5, 6);
-				pyp.rcpPanel( 6, 6);
+				pyp.rcpPanel( 0, 5);
+				pyp.rcpPanel( 1, 5);
+				pyp.rcpPanel( 2, 5);
+				pyp.rcpPanel( 3, 5);
+				pyp.rcpPanel( 4, 5);
+				pyp.rcpPanel( 5, 5);
 
 				pyp.chargeRatio();
 				pyp.chargeRatioCompare( );

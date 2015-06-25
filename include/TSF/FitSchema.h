@@ -39,8 +39,7 @@ namespace TSF{
 		bool fitInRange = false;
 		vector<FitRange> ranges;
 
-		double normalization = 0;
-
+		double normalization;
 
 	public:
 		FitSchema( XmlConfig * _cfg, string np );

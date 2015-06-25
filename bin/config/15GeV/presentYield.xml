@@ -8,8 +8,8 @@
 		<Reporter> <output url="../products/presentation/15GeV/present.pdf" width="800" height="500" /> </Reporter>	
 
 		<input>
-			<fit url="pid_table.root" />
-			<ps url="../products/15/phaseSpace/imass_june_06_15.root" />
+			<fit url="fit_Pi.root" />
+			<ps url="../products/15/phaseSpace/imass_Pi.root" />
 			
 			<!--<fit url="~/Desktop/present/all_fit.root" />
 			<ps url="~/Desktop/present/pid_pbinning_May_27_15.root" />-->
@@ -23,7 +23,7 @@
 		<!-- fit bins : FROM sgfRunner.xml-->
 		<FitRange>
 			<ptBins min="0" max="20" />
-			<centralityBins>0,6</centralityBins>
+			<centralityBins>0, 5</centralityBins>
 			<etaBins>0 </etaBins>
 			<charges>1, -1</charges>
 
@@ -35,7 +35,8 @@
 			<P p="27" n="27"/> 
 		</LastYieldBin>
 
-		<nColl> 787.9, 639, 455, 284, 171, 75, 18.305 </nColl>
+		<!--<nColl> 787.9, 639, 455, 284, 171, 75, 18.305 </nColl>-->
+		<nColl> 787.9, 639, 455, 284, 171, 18.305 </nColl>
 		<nPart ptBin="15" > 338, 291, 226, 159, 109, 58, 20 </nPart>
 		<colors>632, 416, 600, 616, 800, 880, 820, 840, 860, 900</colors>
 
