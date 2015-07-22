@@ -5,6 +5,8 @@
 #include "InclusiveSpectra.h"
 #include "PhaseSpaceRecentering.h"
 #include "Adapter/PicoDataStore.h"
+#include "Params/EnergyLossParams.h"
+#include "Params/FeedDownParams.h"
 class SpectraCorrecter;
 
 // STL
@@ -17,6 +19,11 @@ using namespace std;
 class PidPhaseSpace : public InclusiveSpectra
 {
 protected:
+
+
+	// Configs for
+	XmlConfig * cfgEnergyLoss;
+	XmlConfig * cfgFeedDown;
 
 	//Binning
 	unique_ptr<HistoBins> binsTof;
@@ -52,6 +59,10 @@ protected:
 
 	unique_ptr<SpectraCorrecter> sc;
 	float effWeight = 0;
+
+	map< string, unique_ptr<EnergyLossParams> > elParams;
+
+	map< string, vector< unique_ptr<FeedDownParams> > > fdParams;
 
 public:
 	PidPhaseSpace( XmlConfig* config, string np, string fl ="", string jp ="" );
@@ -173,6 +184,23 @@ protected:
 		double a = sqrt( m*m + pt*pt*cosh( eta )*cosh( eta ) ) + pt * sinh( eta );
 		double b = sqrt( m*m + pt*pt );
 		return log( a / b );
+	}
+
+	double feedDownWeight( int charge, double pt ){
+
+		string name = centerSpecies + "_" + PidPhaseSpace::chargeString( charge );
+		if ( fdParams.count( name ) ){
+
+			for ( int i = 0; i < fdParams[ name ].size(); i++ ){
+				if ( fdParams[ name ][ i ]->usable( refMult ) ){
+					return fdParams[ name ][ i ]->weight( pt );
+				}
+			}
+			ERROR( "Feed Down Corrections not found for refMult = " << refMult )	
+		}
+		ERROR( "Feed Down Corrections not found for " + name )
+		return 1.0;
+
 	}
 	
 	

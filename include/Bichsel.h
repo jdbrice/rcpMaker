@@ -2,11 +2,15 @@
 #ifndef DEDX_BICHSEL_H
 #define DEDX_BICHSEL_H
 
+// RooBarb
+#include "Logger.h"
+using namespace jdb;
+
 #include <string>
 #include <math.h>
 #include "TH1D.h"
 #include "TFile.h"
-#include "TMath.h"
+
 
 using namespace std;
 
@@ -58,7 +62,7 @@ public:
 			return ( h->GetBinContent( bin ) );
 
 		} else 
-			cout << " error no table found " << endl;
+			ERROR( " error no table found " )
 
 		return -999.999;
 	}
@@ -71,11 +75,11 @@ public:
 	 * @return        Log10( mean )
 	 */
 	double mean10( double p, double m, int method = -1, double scale = 1 ){
-		return TMath::Log10( mean(p, m, method ) * scale );
+		return log10( mean(p, m, method ) * scale );
 	}
 
 	double meanLog( double p, double m, int method = -1, double scale = 1 ){
-		return TMath::Log( mean(p, m, method ) * scale );
+		return log( mean(p, m, method ) * scale );
 	}
 
 	double getFromTable( string plc, double p );

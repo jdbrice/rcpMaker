@@ -2,6 +2,7 @@
 #include "TLine.h"
 #include "SpectraCorrecter.h"
 
+
 vector<string> PidPhaseSpace::species = { "Pi", "K", "P" };
 
 PidPhaseSpace::PidPhaseSpace( XmlConfig* config, string np, string fl, string jp ) : InclusiveSpectra( config, np, fl, jp ) {
@@ -75,6 +76,45 @@ PidPhaseSpace::PidPhaseSpace( XmlConfig* config, string np, string fl, string jp
 	// Efficiency corrector
 	sc = unique_ptr<SpectraCorrecter>( new SpectraCorrecter( "config/15GeV/efficiency.xml" ) ); 
 
+
+	// make the energy loss params
+	vector<int> charges = { -1, 1 };
+	if ( cfg->exists( np + "ELParams:config" ) ){
+		cfgEnergyLoss = new XmlConfig( cfg->getString( np + "ELParams:config" ) );
+
+		for ( int c : charges ){
+			string cs = PidPhaseSpace::chargeString( c );
+			string name = centerSpecies + "_" + cs;
+			elParams[ name ] = unique_ptr<EnergyLossParams>( new EnergyLossParams(cfgEnergyLoss, name + ".EnergyLossParams") );
+
+			DEBUG( "Energy Loss Sanity Check : " << name << " @ 0.2 = " << elParams[ name ]->eval( 0.2 ) )
+		}
+	}
+
+	
+	if ( cfg->exists( np + "FDParams:config" ) ){
+		cfgFeedDown = new XmlConfig( cfg->getString( np + "FDParams:config" ) );
+		
+
+		for ( int c : charges ){
+			string cs = PidPhaseSpace::chargeString( c );
+			string name = centerSpecies + "_" + cs;
+			vector<string> children = cfgFeedDown->childrenOf( name );
+			DEBUG( "FOUND : " << children.size() )
+			for ( string path : children ){
+				DEBUG( "\t Checking " << path )
+				fdParams[ name ].push_back(  unique_ptr<FeedDownParams>( new FeedDownParams(cfgFeedDown, path ) ) );
+
+				if ( fdParams[ name ].size() == 1 )
+					DEBUG( "Feed Down Sanity Check : " << name << "@ pt = .6 ==> weight = " <<  fdParams[ name ][ 0 ]->weight( 0.6 )  );
+			}
+		}	
+	} else {
+		ERROR( "Cannot find FeedDownParams" )
+	}
+
+
+
  }
 
  PidPhaseSpace::~PidPhaseSpace(){
@@ -107,18 +147,36 @@ void PidPhaseSpace::analyzeTofTrack( int iTrack ){
 	book->cd();
 
 
+	int charge 	= pico->trackCharge( iTrack );
 	double pt 		= pico->trackPt( iTrack );
 	double p 		= pico->trackP( iTrack );
 	double eta 		= pico->trackEta( iTrack );
+	// Apply Energy Loss Corrections if given
+	string elName = centerSpecies + "_" + PidPhaseSpace::chargeString(charge);
+	if ( elParams.count( elName ) ){
+
+		double corrPt = pt - elParams[ elName ]->eval( pt );
+		// QA
+		book->fill( "corrPt_" + PidPhaseSpace::chargeString( charge ), pt, pt - corrPt );
+
+		// recalc the p from corrPt and eta
+		p = PidPhaseSpace::p( corrPt, eta );
+		pt = corrPt;
+	} 
+
+	
 	double y 		= rapidity( pt, eta, psr->mass( centerSpecies ) );
 
 	int ptBin 	= binsPt->findBin( pt );
 	int etaBin 	= binsEta->findBin( TMath::Abs( eta ) );
-	int charge 	= pico->trackCharge( iTrack );
 
 	effWeight 		= sc->reweight(centerSpecies, charge, refMult, pt);
 
 	double avgP = averageP( ptBin, etaBin );
+
+	double fdWeight = feedDownWeight( charge, pt );
+	book->get3D( "fdWeight_" + PidPhaseSpace::chargeString(charge) )->Fill( pt, fdWeight, cBin );
+
 
 	binByMomentum = true;
 	// even if we use p binning we still want to cut on eta
@@ -187,14 +245,32 @@ void PidPhaseSpace::analyzeTrack( int iTrack ){
 	book->cd();
 
 
+	int charge 	= pico->trackCharge( iTrack );
 	double pt 		= pico->trackPt( iTrack );
 	double p 		= pico->trackP( iTrack );
 	double eta 		= pico->trackEta( iTrack );
+	// Apply Energy Loss Corrections if given
+	string elName = centerSpecies + "_" + PidPhaseSpace::chargeString(charge);
+	if ( elParams.count( elName ) ){
+
+		double corrPt = pt - elParams[ elName ]->eval( pt );
+		// QA
+		book->fill( "corrPt_" + PidPhaseSpace::chargeString( charge ), pt, pt - corrPt );
+
+		// recalc the p from corrPt and eta
+		p = PidPhaseSpace::p( corrPt, eta );
+		pt = corrPt;
+	} 
+
+	
 	double y 		= rapidity( pt, eta, psr->mass( centerSpecies ) );
+
+	logger->debug(__FUNCTION__) << "pt = " << pt << " eta = " << eta << " p = " << p << endl;
+	logger->debug( __FUNCTION__ ) << "calc p = " << PidPhaseSpace::p( pt, eta ) << endl;
 
 	int ptBin 	= binsPt->findBin( pt );
 	int etaBin 	= binsEta->findBin( TMath::Abs( eta ) );
-	int charge 	= pico->trackCharge( iTrack );
+	
 
 	double avgP = averageP( ptBin, etaBin );
 

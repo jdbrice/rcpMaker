@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+
+    <jobType>FeedDownPresentation</jobType>
+
+    <Style name="colz" draw="colz" logz="1" />
+
+    <Make>TrackQA</Make>
+
+    <Report name="TrackQA" suffix=".pdf" data="dFeedDownMaker.root" >
+        <!-- create canvases -->
+        <Canvas n="QA" title="QA" w="600" h="500">
+            <Pad n="pad1" gx1="0" gx2="3" gy1="0" gy2="6" rm="0.1"/>
+            <Pad n="pad2" gx1="3" gx2="6" gy1="0" gy2="6" lm="0.1"/>
+        </Canvas>
+
+        <!-- Styles -->
+        <Style name="colz" draw="colz" logz="1" optstat="0"/>
+        <Style name="1dlogy" draw="" logy="1" logz="0" optstat="0"/>
+
+        <Page canvas="QA">
+            <Plot name="pre_dca" on="pad1" style="1dlogy"/>
+            <Plot name="dca" on="pad2" style="1dlogy"/>
+        </Page>
+
+    </Report>
+
+
+
+</config>

@@ -9,7 +9,8 @@ objects = rcp.o InclusiveSpectra.o PidPhaseSpace.o \
 	ProdPicoDst.o PidYieldPresenter.o RcpPicoDst.o \
 	FitSchema.o Fitter.o FitRunner.o \
 	PidProbabilityMapper.o PidSpectraMaker.o \
-	TofEffMaker.o 
+	TofEffMaker.o PhaseSpaceRecentering.o \
+	FeedDownMaker.o EnergyLossParams.o FeedDownParams.o
 
 # ParamSpectra.o  PidParamMaker.o SimultaneousPid.o
 

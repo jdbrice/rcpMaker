@@ -13,6 +13,7 @@ using namespace jdb;
 #include "PidSpectraMaker.h"
 #include "PidYieldPresenter.h"
 #include "TofEffMaker.h"
+#include "FeedDownMaker.h"
 
 #include "TSF/FitRunner.h"
 
@@ -21,7 +22,7 @@ using namespace jdb;
 //#include "SimultaneousGaussians.h"
 //#include "SimultaneousPid.h"
 
-
+#include <jdb/RooPlotter.h>
 
 
 
@@ -91,6 +92,13 @@ int main( int argc, char* argv[] ) {
 			} else if ( "PidSpectraMaker" == job ){
 				PidSpectraMaker psm( &config, "PidSpectraMaker." );
 				psm.make();
+			} else if ( "FeedDownMaker" == job ){
+				FeedDownMaker fdm( &config, "FeedDownMaker." );
+				fdm.make();
+			} else if ( "FeedDownPresentation" == job ){
+				Logger::setGlobalLogLevel( Logger::llAll );
+				RooPlotter plt( argv[1] );
+
 			}
 			else if ( "test" == job ){
 				

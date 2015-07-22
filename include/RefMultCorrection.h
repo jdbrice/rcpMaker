@@ -40,7 +40,7 @@ public:
 
 	RefMultCorrection(string paramFile ){
 
-		logger = new Logger();
+		logger = new Logger( Logger::llAll);
 		logger->setClassSpace( "RefMultCorrection" );
 
 		logger->info(__FUNCTION__) << "Loading params from " << paramFile << endl;
@@ -141,12 +141,15 @@ public:
 			return 8;
 		return -1;
 	}
-	int refMult( int rawRefMult, double z ){
+	float refMult( int rawRefMult, double z ){
 
 		if ( z < zVertexRange->min || z > zVertexRange->max )
 			return rawRefMult;
 
-		double rmZ = zPolEval( z );
+		//double rmZ = zPolEval( z );
+		for ( int i = 0; i < zParameters.size(); i++ )
+			cout << " par" << i << " = " << zParameters[ i ] << endl;
+		double rmZ = zParameters[0] + zParameters[1]*z + zParameters[2]*z*z + zParameters[3]*z*z*z + zParameters[4]*z*z*z*z + zParameters[5]*z*z*z*z*z + zParameters[6]*z*z*z*z*z*z;
 		if ( rmZ > 0 && zParameters.size() >= 1 ){
 
 			const double center = zParameters[ 0 ];
@@ -154,10 +157,10 @@ public:
 
 			double refMultRnd = rawRefMult + rGen->Rndm();
 
-			return TMath::Nint( refMultRnd * corRefMult );
+			return  rawRefMult * corRefMult;
 		}
 
-		logger->warn( __FUNCTION__ ) << "Ref Mult not corrected : zPol = " << rmZ << endl;
+		logger->warn( __FUNCTION__ ) << "Ref Mult not corrected : zPol = " << rmZ << "z = " << z << endl;
 		return rawRefMult;
 	}
 

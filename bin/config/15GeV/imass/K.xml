@@ -4,7 +4,7 @@
 	<jobType>PidPhaseSpace</jobType>
 
 	<PidPhaseSpace>
-		<Logger color="true" logLevel="warning" globalLogLevel="warning" />
+		<Logger color="true" logLevel="info" globalLogLevel="warning" />
 		
 		<input>
 			<dst treeName="rcpPicoDst" url="/Users/danielbrandenburg/bnl/local/data/BES/15GeV/rcpPicoDst/" maxFiles="10"/>
@@ -24,6 +24,7 @@
 		<MakeQA config="config/15GeV/qaHistograms.xml" event="true" track="false" tof="false" dedx="false" />
 		<Cuts config="config/15GeV/cuts.xml" />
 		<RMCParams config="config/15GeV/StRMCParams.xml" />
+		<ELParams config="config/15GeV/EnergyLoss.xml" />
 
 		<!-- the bins into which the 9 centrality bins are mapped. -->
 		<CentralityMap>
@@ -61,6 +62,9 @@
 			<Histo name="trDedx" title="" xBins="bin.pt" yBins="bin.dedx" />
 			<Histo name="nlBeta" title="" xBins="bin.pt" yBins="bin.tof"/>
 			<Histo name="nlDedx" title="" xBins="bin.pt" yBins="bin.dedx"/>
+
+			<Histo name="corrPt_p" title="Corrected pT" xBins="bin.pt" nBinsY="200" minY="-0.1" maxY="0.01" />
+			<Histo name="corrPt_n" title="Corrected pT" xBins="bin.pt" nBinsY="200" minY="-0.1" maxY="0.01" />
 			
 
 		</histograms>
