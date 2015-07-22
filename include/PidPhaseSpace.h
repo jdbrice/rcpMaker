@@ -64,6 +64,8 @@ protected:
 
 	map< string, vector< unique_ptr<FeedDownParams> > > fdParams;
 
+	double fdWeight = 0;
+
 public:
 	PidPhaseSpace( XmlConfig* config, string np, string fl ="", string jp ="" );
 	~PidPhaseSpace();

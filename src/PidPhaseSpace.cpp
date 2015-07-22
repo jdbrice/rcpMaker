@@ -174,7 +174,7 @@ void PidPhaseSpace::analyzeTofTrack( int iTrack ){
 
 	double avgP = averageP( ptBin, etaBin );
 
-	double fdWeight = feedDownWeight( charge, pt );
+	fdWeight = feedDownWeight( charge, pt );
 	book->get3D( "fdWeight_" + PidPhaseSpace::chargeString(charge) )->Fill( pt, fdWeight, cBin );
 
 
@@ -436,20 +436,20 @@ void PidPhaseSpace::enhanceDistributions( double avgP, int ptBin, int etaBin, in
 	vector<double> dMeans = psr->centeredDedxMeans( centerSpecies, avgP );
 	vector<string> mSpecies = psr->allSpecies();
 
-	
+	double trackWeight = eventWeight*effWeight*fdWeight;	
 
 	book->cd( "tof" );
 	// unenhanced - all tof tracks
 	// combined charge 
-	if ( makeCombinedCharge ) book->fill( tofName( centerSpecies, 0, cBin, ptBin, etaBin ), tof, eventWeight*effWeight );
-	book->fill( tofName( centerSpecies, charge, cBin, ptBin, etaBin ), tof, eventWeight*effWeight );
+	if ( makeCombinedCharge ) book->fill( tofName( centerSpecies, 0, cBin, ptBin, etaBin ), tof, trackWeight );
+	book->fill( tofName( centerSpecies, charge, cBin, ptBin, etaBin ), tof, trackWeight );
 
 	// enhanced by species
 	if ( makeEnhanced ){
 		for ( int iS = 0; iS < mSpecies.size(); iS++ ){
 			if ( dedx >= dMeans[ iS ] - dSigma && dedx <= dMeans[ iS ] + dSigma ){
-				if ( makeCombinedCharge ) book->fill( tofName( centerSpecies, 0, cBin, ptBin, etaBin, mSpecies[ iS ] ), tof, eventWeight*effWeight );
-				book->fill( tofName( centerSpecies, charge, cBin, ptBin, etaBin, mSpecies[ iS ] ), tof, eventWeight*effWeight );
+				if ( makeCombinedCharge ) book->fill( tofName( centerSpecies, 0, cBin, ptBin, etaBin, mSpecies[ iS ] ), tof, trackWeight );
+				book->fill( tofName( centerSpecies, charge, cBin, ptBin, etaBin, mSpecies[ iS ] ), tof, trackWeight );
 			}
 		} // loop on species from centered means
 	}
@@ -464,8 +464,8 @@ void PidPhaseSpace::enhanceDistributions( double avgP, int ptBin, int etaBin, in
 	book->cd( "dedx" );
 	// unenhanced - all dedx
 	// combined charge 
-	if ( makeCombinedCharge ) book->fill( dedxName( centerSpecies, 0, cBin, ptBin, etaBin ), dedx, eventWeight*effWeight );
-	book->fill( dedxName( centerSpecies, charge, cBin, ptBin, etaBin ), dedx, eventWeight*effWeight );
+	if ( makeCombinedCharge ) book->fill( dedxName( centerSpecies, 0, cBin, ptBin, etaBin ), dedx, trackWeight );
+	book->fill( dedxName( centerSpecies, charge, cBin, ptBin, etaBin ), dedx, trackWeight );
 
 	// enhanced by species
 	if ( makeEnhanced ){
@@ -474,8 +474,8 @@ void PidPhaseSpace::enhanceDistributions( double avgP, int ptBin, int etaBin, in
 			double ttMean = tMeans[ iS ];
 
 			if ( tof >= ttMean - tSigma && tof <= ttMean + tSigma ){
-				if ( makeCombinedCharge ) book->fill( dedxName( centerSpecies, 0, cBin, ptBin, etaBin, mSpecies[ iS ] ), dedx, eventWeight*effWeight );
-				book->fill( dedxName( centerSpecies, charge, cBin, ptBin, etaBin, mSpecies[ iS ] ), dedx, eventWeight*effWeight );
+				if ( makeCombinedCharge ) book->fill( dedxName( centerSpecies, 0, cBin, ptBin, etaBin, mSpecies[ iS ] ), dedx, trackWeight );
+				book->fill( dedxName( centerSpecies, charge, cBin, ptBin, etaBin, mSpecies[ iS ] ), dedx, trackWeight );
 			}
 		} // loop on species from centered means	
 	}
