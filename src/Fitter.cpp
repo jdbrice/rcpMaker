@@ -150,20 +150,33 @@ namespace TSF{
 		map< string, TH1D* > zd;
 
 		schema->clearDatasets();
+
+		DEBUG( "Loading " << "tof/" + PidPhaseSpace::tofName( cs, charge, cenBin, ptBin, etaBin ) );
+		DEBUG( "Loading " << "dedx/" + PidPhaseSpace::tofName( cs, charge, cenBin, ptBin, etaBin ) );
 		dataHists[ "zb_All"] = (TH1*)dataFile->Get( ("tof/" + PidPhaseSpace::tofName( cs, charge, cenBin, ptBin, etaBin )).c_str() 		);
 		dataHists[ "zd_All"] = (TH1*)dataFile->Get( ("dedx/" + PidPhaseSpace::dedxName( cs, charge, cenBin, ptBin, etaBin )).c_str() 	);
-		
+		DEBUG( "got zb_All = " << dataHists[ "zb_All"] )
+		DEBUG( "got zd_All = " << dataHists[ "zd_All"] )
+
+
 		// dEdx enhanced distributions
+		DEBUG( "Loading " << "dedx/" + PidPhaseSpace::tofName( cs, charge, cenBin, ptBin, etaBin, "Pi" ) );
+		DEBUG( "Loading " << "dedx/" + PidPhaseSpace::tofName( cs, charge, cenBin, ptBin, etaBin, "K" ) );
+		DEBUG( "Loading " << "dedx/" + PidPhaseSpace::tofName( cs, charge, cenBin, ptBin, etaBin, "P" ) );
 		dataHists[ "zd_K" ]		= (TH1D*)dataFile->Get( ("dedx/" + PidPhaseSpace::dedxName( cs, charge, cenBin, ptBin, etaBin, "K" )).c_str() );
 		dataHists[ "zd_Pi" ]	= (TH1D*)dataFile->Get( ("dedx/" + PidPhaseSpace::dedxName( cs, charge, cenBin, ptBin, etaBin, "Pi" )).c_str() );
 		dataHists[ "zd_P" ]		= (TH1D*)dataFile->Get( ("dedx/" + PidPhaseSpace::dedxName( cs, charge, cenBin, ptBin, etaBin, "P" )).c_str() );
 
 		// 1/beta enhanced distributions
+		DEBUG( "Loading " << "tof/" + PidPhaseSpace::tofName( cs, charge, cenBin, ptBin, etaBin, "Pi" ) );
+		DEBUG( "Loading " << "tof/" + PidPhaseSpace::tofName( cs, charge, cenBin, ptBin, etaBin, "K" ) );
+		DEBUG( "Loading " << "tof/" + PidPhaseSpace::tofName( cs, charge, cenBin, ptBin, etaBin, "P" ) );
 		dataHists[ "zb_Pi" ] 	= (TH1D*)dataFile->Get( ("tof/" + PidPhaseSpace::tofName( cs, charge, cenBin, ptBin, etaBin, "Pi" )).c_str() );
 		dataHists[ "zb_K" ] 	= (TH1D*)dataFile->Get( ("tof/" + PidPhaseSpace::tofName( cs, charge, cenBin, ptBin, etaBin, "K" )).c_str() );
 		dataHists[ "zb_P" ] 	= (TH1D*)dataFile->Get( ("tof/" + PidPhaseSpace::tofName( cs, charge, cenBin, ptBin, etaBin, "P" )).c_str() );
 		
 		double maxYield = dataHists[ "zd_All"]->Integral();
+		DEBUG( "Getting norm from : EventQA/mappedRefMultBins" )
 		norm = ((TH1D*)dataFile->Get( "EventQA/mappedRefMultBins" ))->GetBinContent( cenBin + 1 );
 
 		schema->setNormalization( maxYield / norm );
