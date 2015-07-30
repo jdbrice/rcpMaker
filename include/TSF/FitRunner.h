@@ -15,7 +15,7 @@ using namespace jdb;
 // Local
 #include "TSF/FitSchema.h"
 #include "TSF/Fitter.h"
-#include "PhaseSpaceRecentering.h"
+#include "Spectra/ZRecentering.h"
 
 
 
@@ -28,7 +28,7 @@ namespace TSF{
 		string centerSpecies;
 		string psrMethod;
 		double dedxSigmaIdeal, tofSigmaIdeal;
-		PhaseSpaceRecentering * psr;
+		ZRecentering * psr;
 
 		shared_ptr<FitSchema> schema;
 

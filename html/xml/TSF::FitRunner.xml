@@ -1,0 +1,267 @@
+<class xmlns="http://jessevdk.github.com/cldoc/1.0" abstract="true" id="TSF::FitRunner" name="FitRunner">
+  <base access="public">
+    <type name="jdb::HistoAnalyzer" />
+  </base>
+  <constructor abstract="yes" id="TSF::FitRunner::FitRunner" name="FitRunner">
+    <argument id="TSF::FitRunner::FitRunner::_cfg" name="_cfg">
+      <type name="jdb::XmlConfig" qualifier="*" />
+    </argument>
+    <argument id="TSF::FitRunner::FitRunner::_np" name="_np">
+      <type name="string" />
+    </argument>
+  </constructor>
+  <destructor abstract="yes" id="TSF::FitRunner::~FitRunner" name="~FitRunner" />
+  <method abstract="yes" id="TSF::FitRunner::fitName" name="fitName" static="yes">
+    <return>
+      <type name="string" />
+    </return>
+    <argument id="TSF::FitRunner::fitName::iPt" name="iPt">
+      <type builtin="yes" name="int" />
+    </argument>
+    <argument id="TSF::FitRunner::fitName::iCen" name="iCen">
+      <type builtin="yes" name="int" />
+    </argument>
+    <argument id="TSF::FitRunner::fitName::charge" name="charge">
+      <type builtin="yes" name="int" />
+    </argument>
+    <argument id="TSF::FitRunner::fitName::iEta" name="iEta">
+      <type builtin="yes" name="int" />
+    </argument>
+  </method>
+  <method abstract="yes" id="TSF::FitRunner::make" name="make" virtual="yes">
+    <return>
+      <type builtin="yes" name="void" />
+    </return>
+  </method>
+  <method abstract="yes" id="TSF::FitRunner::muName" name="muName" static="yes">
+    <return>
+      <type name="string" />
+    </return>
+    <argument id="TSF::FitRunner::muName::plc" name="plc">
+      <type name="string" />
+    </argument>
+    <argument id="TSF::FitRunner::muName::iCen" name="iCen">
+      <type builtin="yes" name="int" />
+    </argument>
+    <argument id="TSF::FitRunner::muName::charge" name="charge">
+      <type builtin="yes" name="int" />
+    </argument>
+    <argument id="TSF::FitRunner::muName::iEta" name="iEta">
+      <type builtin="yes" name="int" />
+    </argument>
+  </method>
+  <method abstract="yes" id="TSF::FitRunner::sigmaName" name="sigmaName" static="yes">
+    <return>
+      <type name="string" />
+    </return>
+    <argument id="TSF::FitRunner::sigmaName::plc" name="plc">
+      <type name="string" />
+    </argument>
+    <argument id="TSF::FitRunner::sigmaName::iCen" name="iCen">
+      <type builtin="yes" name="int" />
+    </argument>
+    <argument id="TSF::FitRunner::sigmaName::charge" name="charge">
+      <type builtin="yes" name="int" />
+    </argument>
+    <argument id="TSF::FitRunner::sigmaName::iEta" name="iEta">
+      <type builtin="yes" name="int" />
+    </argument>
+  </method>
+  <method abstract="yes" id="TSF::FitRunner::yieldName" name="yieldName" static="yes">
+    <return>
+      <type name="string" />
+    </return>
+    <argument id="TSF::FitRunner::yieldName::plc" name="plc">
+      <type name="string" />
+    </argument>
+    <argument id="TSF::FitRunner::yieldName::iCen" name="iCen">
+      <type builtin="yes" name="int" />
+    </argument>
+    <argument id="TSF::FitRunner::yieldName::charge" name="charge">
+      <type builtin="yes" name="int" />
+    </argument>
+    <argument id="TSF::FitRunner::yieldName::iEta" name="iEta">
+      <type builtin="yes" name="int" />
+    </argument>
+  </method>
+  <field access="protected" id="TSF::FitRunner::centerSpecies" name="centerSpecies">
+    <type name="string" />
+  </field>
+  <field access="protected" id="TSF::FitRunner::psrMethod" name="psrMethod">
+    <type name="string" />
+  </field>
+  <field access="protected" id="TSF::FitRunner::dedxSigmaIdeal" name="dedxSigmaIdeal">
+    <type builtin="yes" name="double" />
+  </field>
+  <field access="protected" id="TSF::FitRunner::tofSigmaIdeal" name="tofSigmaIdeal">
+    <type builtin="yes" name="double" />
+  </field>
+  <field access="protected" id="TSF::FitRunner::psr" name="psr">
+    <type name="ZRecentering" qualifier="*" ref="ZRecentering#ZRecentering" />
+  </field>
+  <field access="protected" id="TSF::FitRunner::schema" name="schema">
+    <type name="shared_ptr&lt;TSF::FitSchema&gt;" />
+  </field>
+  <field access="protected" id="TSF::FitRunner::binsPt" name="binsPt">
+    <type name="jdb::HistoBins" qualifier="*" />
+  </field>
+  <field access="protected" id="TSF::FitRunner::binsEta" name="binsEta">
+    <type name="jdb::HistoBins" qualifier="*" />
+  </field>
+  <field access="protected" id="TSF::FitRunner::binsCharge" name="binsCharge">
+    <type name="jdb::HistoBins" qualifier="*" />
+  </field>
+  <field access="protected" id="TSF::FitRunner::zbReporter" name="zbReporter">
+    <type name="unique_ptr&lt;jdb::Reporter, default_delete&lt;jdb::Reporter&gt; &gt;" />
+  </field>
+  <field access="protected" id="TSF::FitRunner::zdReporter" name="zdReporter">
+    <type name="unique_ptr&lt;jdb::Reporter, default_delete&lt;jdb::Reporter&gt; &gt;" />
+  </field>
+  <field access="protected" id="TSF::FitRunner::activePlayers" name="activePlayers">
+    <type name="vector&lt;string&gt;" />
+  </field>
+  <field access="protected" id="TSF::FitRunner::zdSigFix" name="zdSigFix">
+    <type builtin="yes" name="double" />
+  </field>
+  <field access="protected" id="TSF::FitRunner::zbSigMem" name="zbSigMem">
+    <type name="map&lt;string, vector&lt;double&gt;" />
+  </field>
+  <field access="protected" id="TSF::FitRunner::lockedZbSig" name="lockedZbSig">
+    <type name="map&lt;string, double&gt;" />
+  </field>
+  <method access="protected" id="TSF::FitRunner::averageP" name="averageP">
+    <brief>TODO: Clean up remnants of pt eta binning</brief>
+    <return>
+      <type builtin="yes" name="double" />
+    </return>
+    <argument id="TSF::FitRunner::averageP::ptBin" name="ptBin">
+      <type builtin="yes" name="int" />
+    </argument>
+    <argument id="TSF::FitRunner::averageP::etaBin" name="etaBin">
+      <type builtin="yes" name="int" />
+    </argument>
+  </method>
+  <method access="protected" id="TSF::FitRunner::averagePt" name="averagePt">
+    <return>
+      <type builtin="yes" name="double" />
+    </return>
+    <argument id="TSF::FitRunner::averagePt::ptBin" name="ptBin">
+      <type builtin="yes" name="int" />
+    </argument>
+  </method>
+  <method abstract="yes" access="protected" id="TSF::FitRunner::choosePlayers" name="choosePlayers">
+    <return>
+      <type builtin="yes" name="void" />
+    </return>
+    <argument id="TSF::FitRunner::choosePlayers::avgP" name="avgP">
+      <type builtin="yes" name="double" />
+    </argument>
+    <argument id="TSF::FitRunner::choosePlayers::plc" name="plc">
+      <type name="string" />
+    </argument>
+    <argument id="TSF::FitRunner::choosePlayers::roi" name="roi">
+      <type builtin="yes" name="double" />
+    </argument>
+  </method>
+  <method abstract="yes" access="protected" id="TSF::FitRunner::drawSet" name="drawSet">
+    <return>
+      <type builtin="yes" name="void" />
+    </return>
+    <argument id="TSF::FitRunner::drawSet::v" name="v">
+      <type name="string" />
+    </argument>
+    <argument id="TSF::FitRunner::drawSet::fitter" name="fitter">
+      <type name="Fitter" qualifier="*" ref="TSF::Fitter#TSF::Fitter" />
+    </argument>
+    <argument id="TSF::FitRunner::drawSet::iPt" name="iPt">
+      <type builtin="yes" name="int" />
+    </argument>
+  </method>
+  <method abstract="yes" access="protected" id="TSF::FitRunner::fillFitHistograms" name="fillFitHistograms">
+    <return>
+      <type builtin="yes" name="void" />
+    </return>
+    <argument id="TSF::FitRunner::fillFitHistograms::iPt" name="iPt">
+      <type builtin="yes" name="int" />
+    </argument>
+    <argument id="TSF::FitRunner::fillFitHistograms::iCen" name="iCen">
+      <type builtin="yes" name="int" />
+    </argument>
+    <argument id="TSF::FitRunner::fillFitHistograms::iCharge" name="iCharge">
+      <type builtin="yes" name="int" />
+    </argument>
+    <argument id="TSF::FitRunner::fillFitHistograms::iEta" name="iEta">
+      <type builtin="yes" name="int" />
+    </argument>
+  </method>
+  <method abstract="yes" access="protected" id="TSF::FitRunner::makeHistograms" name="makeHistograms">
+    <return>
+      <type builtin="yes" name="void" />
+    </return>
+  </method>
+  <method access="protected" id="TSF::FitRunner::p" name="p">
+    <return>
+      <type builtin="yes" name="double" />
+    </return>
+    <argument id="TSF::FitRunner::p::pt" name="pt">
+      <type builtin="yes" name="double" />
+    </argument>
+    <argument id="TSF::FitRunner::p::eta" name="eta">
+      <type builtin="yes" name="double" />
+    </argument>
+  </method>
+  <method abstract="yes" access="protected" id="TSF::FitRunner::prepare" name="prepare">
+    <return>
+      <type builtin="yes" name="void" />
+    </return>
+    <argument id="TSF::FitRunner::prepare::avgP" name="avgP">
+      <type builtin="yes" name="double" />
+    </argument>
+    <argument id="TSF::FitRunner::prepare::iCen" name="iCen">
+      <type builtin="yes" name="int" />
+    </argument>
+  </method>
+  <method abstract="yes" access="protected" id="TSF::FitRunner::reportFit" name="reportFit">
+    <return>
+      <type builtin="yes" name="void" />
+    </return>
+    <argument id="TSF::FitRunner::reportFit::fitter" name="fitter">
+      <type name="Fitter" qualifier="*" ref="TSF::Fitter#TSF::Fitter" />
+    </argument>
+    <argument id="TSF::FitRunner::reportFit::iPt" name="iPt">
+      <type builtin="yes" name="int" />
+    </argument>
+  </method>
+  <method access="protected" id="TSF::FitRunner::zbMean" name="zbMean">
+    <return>
+      <type builtin="yes" name="double" />
+    </return>
+    <argument id="TSF::FitRunner::zbMean::plc" name="plc">
+      <type name="string" />
+    </argument>
+    <argument id="TSF::FitRunner::zbMean::p" name="p">
+      <type builtin="yes" name="double" />
+    </argument>
+  </method>
+  <method access="protected" id="TSF::FitRunner::zbSigma" name="zbSigma">
+    <return>
+      <type builtin="yes" name="double" />
+    </return>
+  </method>
+  <method access="protected" id="TSF::FitRunner::zdMean" name="zdMean">
+    <return>
+      <type builtin="yes" name="double" />
+    </return>
+    <argument id="TSF::FitRunner::zdMean::plc" name="plc">
+      <type name="string" />
+    </argument>
+    <argument id="TSF::FitRunner::zdMean::p" name="p">
+      <type builtin="yes" name="double" />
+    </argument>
+  </method>
+  <method access="protected" id="TSF::FitRunner::zdSigma" name="zdSigma">
+    <return>
+      <type builtin="yes" name="double" />
+    </return>
+  </method>
+</class>

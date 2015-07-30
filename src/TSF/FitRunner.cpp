@@ -1,6 +1,6 @@
 
 #include "TSF/FitRunner.h"
-#include "PidPhaseSpace.h"
+#include "Spectra/PidHistoMaker.h"
 
 #include "TGraph.h"
 
@@ -9,15 +9,15 @@ namespace TSF{
 	: HistoAnalyzer( _cfg, _np ){
 		
 		// Initialize the Phase Space Recentering Object
-		tofSigmaIdeal = cfg->getDouble( nodePath+"PhaseSpaceRecentering.sigma:tof", 0.0012);
-		dedxSigmaIdeal = cfg->getDouble( nodePath+"PhaseSpaceRecentering.sigma:dedx", 0.06);
-		psr = new PhaseSpaceRecentering( dedxSigmaIdeal,
+		tofSigmaIdeal = cfg->getDouble( nodePath+"ZRecentering.sigma:tof", 0.0012);
+		dedxSigmaIdeal = cfg->getDouble( nodePath+"ZRecentering.sigma:dedx", 0.06);
+		psr = new ZRecentering( dedxSigmaIdeal,
 										 tofSigmaIdeal,
 										 cfg->getString( nodePath+"Bichsel.table", "dedxBichsel.root"),
 										 cfg->getInt( nodePath+"Bichsel.method", 0) );
-		psrMethod = cfg->getString( nodePath+"PhaseSpaceRecentering.method", "traditional" );
+		psrMethod = cfg->getString( nodePath+"ZRecentering.method", "traditional" );
 		// alias the centered species for ease of use
-		centerSpecies = cfg->getString( nodePath+"PhaseSpaceRecentering.centerSpecies", "K" );
+		centerSpecies = cfg->getString( nodePath+"ZRecentering.centerSpecies", "K" );
 
 		
 		//Make the momentum transverse, eta, charge binning 

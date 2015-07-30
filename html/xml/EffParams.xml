@@ -1,0 +1,56 @@
+<class xmlns="http://jessevdk.github.com/cldoc/1.0" id="EffParams" name="EffParams">
+  <constructor id="EffParams::EffParams" name="EffParams">
+    <argument id="EffParams::EffParams::_name" name="_name">
+      <type name="string" />
+    </argument>
+    <argument id="EffParams::EffParams::_cfg" name="_cfg">
+      <type name="shared_ptr&lt;jdb::XmlConfig&gt;" />
+    </argument>
+    <argument id="EffParams::EffParams::_nodePath" name="_nodePath">
+      <type name="string" />
+    </argument>
+  </constructor>
+  <destructor id="EffParams::~EffParams" name="~EffParams" />
+  <method id="EffParams::find" name="find">
+    <return>
+      <type builtin="yes" name="int" />
+    </return>
+    <argument id="EffParams::find::cl" name="cl">
+      <type builtin="yes" name="int" />
+    </argument>
+  </method>
+  <method id="EffParams::load" name="load">
+    <return>
+      <type builtin="yes" name="void" />
+    </return>
+  </method>
+  <method id="EffParams::reweight" name="reweight">
+    <return>
+      <type builtin="yes" name="double" />
+    </return>
+    <argument id="EffParams::reweight::pt" name="pt">
+      <type builtin="yes" name="double" />
+    </argument>
+    <argument id="EffParams::reweight::cl" name="cl">
+      <type builtin="yes" name="int" />
+    </argument>
+  </method>
+  <field access="protected" id="EffParams::cfg" name="cfg">
+    <type name="shared_ptr&lt;jdb::XmlConfig&gt;" />
+  </field>
+  <field access="protected" id="EffParams::nodePath" name="nodePath">
+    <type name="string" />
+  </field>
+  <field access="protected" id="EffParams::eff" name="eff">
+    <type name="vector&lt;TF1 *&gt;" />
+  </field>
+  <field access="protected" id="EffParams::cenLimits" name="cenLimits">
+    <type name="vector&lt;pair&lt;int&gt;" />
+  </field>
+  <field access="protected" id="EffParams::yLimits" name="yLimits">
+    <type name="vector&lt;pair&lt;float&gt;" />
+  </field>
+  <field access="protected" id="EffParams::name" name="name">
+    <type name="string" />
+  </field>
+</class>

@@ -31,11 +31,11 @@
 			<method>0</method>
 		</Bichsel>
 
-		<PhaseSpaceRecentering>
+		<ZRecentering>
 			<centerSpecies>K</centerSpecies>
 			<sigma tof="0.012" dedx="0.033"/>
 			<method>nonlinear</method>
-		</PhaseSpaceRecentering>
+		</ZRecentering>
 
 		<PidSpecies>Pi, K, P</PidSpecies>
 

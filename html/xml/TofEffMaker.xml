@@ -1,0 +1,108 @@
+<class xmlns="http://jessevdk.github.com/cldoc/1.0" abstract="true" id="TofEffMaker" name="TofEffMaker">
+  <base access="public">
+    <type name="InclusiveSpectra" ref="InclusiveSpectra#InclusiveSpectra" />
+  </base>
+  <constructor abstract="yes" id="TofEffMaker::TofEffMaker" name="TofEffMaker">
+    <argument id="TofEffMaker::TofEffMaker::config" name="config">
+      <type name="jdb::XmlConfig" qualifier="*" />
+    </argument>
+    <argument id="TofEffMaker::TofEffMaker::np" name="np">
+      <type name="string" />
+    </argument>
+    <argument id="TofEffMaker::TofEffMaker::fl" name="fl">
+      <type name="string" />
+    </argument>
+    <argument id="TofEffMaker::TofEffMaker::jp" name="jp">
+      <type name="string" />
+    </argument>
+  </constructor>
+  <destructor abstract="yes" id="TofEffMaker::~TofEffMaker" name="~TofEffMaker" />
+  <method abstract="yes" id="TofEffMaker::analyzeTofTrack" name="analyzeTofTrack" override="yes" virtual="yes">
+    <return>
+      <type builtin="yes" name="void" />
+    </return>
+    <argument id="TofEffMaker::analyzeTofTrack::iTrack" name="iTrack">
+      <type name="Int_t" />
+    </argument>
+    <override name="InclusiveSpectra::analyzeTofTrack" ref="InclusiveSpectra#InclusiveSpectra::analyzeTofTrack" />
+  </method>
+  <method abstract="yes" id="TofEffMaker::analyzeTrack" name="analyzeTrack" override="yes" virtual="yes">
+    <brief>*</brief>
+    <doc>Analyze a track in the current Event
+</doc>
+    <return>
+      <type builtin="yes" name="void" />
+    </return>
+    <argument id="TofEffMaker::analyzeTrack::iTrack" name="iTrack">
+      <type name="Int_t" />
+    </argument>
+    <override name="InclusiveSpectra::analyzeTrack" ref="InclusiveSpectra#InclusiveSpectra::analyzeTrack" />
+  </method>
+  <method abstract="yes" id="TofEffMaker::postEventLoop" name="postEventLoop" override="yes" virtual="yes">
+    <return>
+      <type builtin="yes" name="void" />
+    </return>
+    <override name="InclusiveSpectra::postEventLoop" ref="InclusiveSpectra#InclusiveSpectra::postEventLoop" />
+  </method>
+  <method abstract="yes" id="TofEffMaker::preEventLoop" name="preEventLoop" override="yes" virtual="yes">
+    <return>
+      <type builtin="yes" name="void" />
+    </return>
+    <override name="InclusiveSpectra::preEventLoop" ref="InclusiveSpectra#InclusiveSpectra::preEventLoop" />
+  </method>
+  <field access="protected" id="TofEffMaker::binsTof" name="binsTof">
+    <brief>Binning</brief>
+    <type name="unique_ptr&lt;jdb::HistoBins, default_delete&lt;jdb::HistoBins&gt; &gt;" />
+  </field>
+  <field access="protected" id="TofEffMaker::binsDedx" name="binsDedx">
+    <type name="unique_ptr&lt;jdb::HistoBins, default_delete&lt;jdb::HistoBins&gt; &gt;" />
+  </field>
+  <field access="protected" id="TofEffMaker::binsPt" name="binsPt">
+    <type name="unique_ptr&lt;jdb::HistoBins, default_delete&lt;jdb::HistoBins&gt; &gt;" />
+  </field>
+  <field access="protected" id="TofEffMaker::binsEta" name="binsEta">
+    <type name="unique_ptr&lt;jdb::HistoBins, default_delete&lt;jdb::HistoBins&gt; &gt;" />
+  </field>
+  <field access="protected" id="TofEffMaker::charges" name="charges">
+    <type name="vector&lt;int&gt;" />
+  </field>
+  <field access="protected" id="TofEffMaker::tofBinWidth" name="tofBinWidth">
+    <brief>these are made on the fly</brief>
+    <type builtin="yes" name="double" />
+  </field>
+  <field access="protected" id="TofEffMaker::dedxBinWidth" name="dedxBinWidth">
+    <brief>these are made on the fly</brief>
+    <type builtin="yes" name="double" />
+  </field>
+  <field access="protected" id="TofEffMaker::centerSpecies" name="centerSpecies">
+    <brief>Phase Space Recentering</brief>
+    <doc>Only used to apply the rapidity cut</doc>
+    <type name="string" />
+  </field>
+  <field access="protected" id="TofEffMaker::psrMethod" name="psrMethod">
+    <type name="string" />
+  </field>
+  <field access="protected" id="TofEffMaker::dedxSigmaIdeal" name="dedxSigmaIdeal">
+    <type builtin="yes" name="double" />
+  </field>
+  <field access="protected" id="TofEffMaker::tofSigmaIdeal" name="tofSigmaIdeal">
+    <type builtin="yes" name="double" />
+  </field>
+  <field access="protected" id="TofEffMaker::psr" name="psr">
+    <type name="ZRecentering" qualifier="*" ref="ZRecentering#ZRecentering" />
+  </field>
+  <method access="protected" id="TofEffMaker::rapidity" name="rapidity">
+    <return>
+      <type builtin="yes" name="double" />
+    </return>
+    <argument id="TofEffMaker::rapidity::pt" name="pt">
+      <type builtin="yes" name="double" />
+    </argument>
+    <argument id="TofEffMaker::rapidity::eta" name="eta">
+      <type builtin="yes" name="double" />
+    </argument>
+    <argument id="TofEffMaker::rapidity::m" name="m">
+      <type builtin="yes" name="double" />
+    </argument>
+  </method>
+</class>

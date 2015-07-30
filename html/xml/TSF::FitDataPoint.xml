@@ -1,0 +1,35 @@
+<class xmlns="http://jessevdk.github.com/cldoc/1.0" id="TSF::FitDataPoint" name="FitDataPoint">
+  <field id="TSF::FitDataPoint::x" name="x">
+    <type builtin="yes" name="double" />
+  </field>
+  <field id="TSF::FitDataPoint::y" name="y">
+    <type builtin="yes" name="double" />
+  </field>
+  <field id="TSF::FitDataPoint::ey" name="ey">
+    <type builtin="yes" name="double" />
+  </field>
+  <field id="TSF::FitDataPoint::bw" name="bw">
+    <type builtin="yes" name="double" />
+  </field>
+  <constructor id="TSF::FitDataPoint::FitDataPoint" name="FitDataPoint" />
+  <constructor id="TSF::FitDataPoint::FitDataPoint" name="FitDataPoint">
+    <argument id="TSF::FitDataPoint::FitDataPoint::_x" name="_x">
+      <type builtin="yes" name="double" />
+    </argument>
+    <argument id="TSF::FitDataPoint::FitDataPoint::_y" name="_y">
+      <type builtin="yes" name="double" />
+    </argument>
+    <argument id="TSF::FitDataPoint::FitDataPoint::_ey" name="_ey">
+      <type builtin="yes" name="double" />
+    </argument>
+    <argument id="TSF::FitDataPoint::FitDataPoint::_bw" name="_bw">
+      <type builtin="yes" name="double" />
+    </argument>
+  </constructor>
+  <destructor id="TSF::FitDataPoint::~FitDataPoint" name="~FitDataPoint" />
+  <method id="TSF::FitDataPoint::toString" name="toString">
+    <return>
+      <type name="string" />
+    </return>
+  </method>
+</class>

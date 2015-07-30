@@ -1,0 +1,36 @@
+<class xmlns="http://jessevdk.github.com/cldoc/1.0" id="TSF::FitRange" name="FitRange">
+  <field id="TSF::FitRange::dataset" name="dataset">
+    <type name="string" />
+  </field>
+  <field id="TSF::FitRange::min" name="min">
+    <type builtin="yes" name="double" />
+  </field>
+  <field id="TSF::FitRange::max" name="max">
+    <type builtin="yes" name="double" />
+  </field>
+  <constructor id="TSF::FitRange::FitRange" name="FitRange">
+    <argument id="TSF::FitRange::FitRange::ds" name="ds">
+      <type name="string" />
+    </argument>
+    <argument id="TSF::FitRange::FitRange::_min" name="_min">
+      <type builtin="yes" name="double" />
+    </argument>
+    <argument id="TSF::FitRange::FitRange::_max" name="_max">
+      <type builtin="yes" name="double" />
+    </argument>
+  </constructor>
+  <destructor id="TSF::FitRange::~FitRange" name="~FitRange" />
+  <method id="TSF::FitRange::inRange" name="inRange">
+    <return>
+      <type builtin="yes" name="bool" />
+    </return>
+    <argument id="TSF::FitRange::inRange::x" name="x">
+      <type builtin="yes" name="double" />
+    </argument>
+  </method>
+  <method id="TSF::FitRange::toString" name="toString">
+    <return>
+      <type name="string" />
+    </return>
+  </method>
+</class>

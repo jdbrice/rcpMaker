@@ -1,0 +1,66 @@
+<class xmlns="http://jessevdk.github.com/cldoc/1.0" id="TpcEffMcHistoMaker" interface="true" name="TpcEffMcHistoMaker">
+  <base access="public">
+    <type name="jdb::TreeAnalyzer" />
+  </base>
+  <constructor abstract="yes" id="TpcEffMcHistoMaker::TpcEffMcHistoMaker" name="TpcEffMcHistoMaker">
+    <argument id="TpcEffMcHistoMaker::TpcEffMcHistoMaker::config" name="config">
+      <type name="jdb::XmlConfig" qualifier="*" />
+    </argument>
+    <argument id="TpcEffMcHistoMaker::TpcEffMcHistoMaker::nodePath" name="nodePath">
+      <type name="string" />
+    </argument>
+    <argument id="TpcEffMcHistoMaker::TpcEffMcHistoMaker::fileList" name="fileList">
+      <type name="string" />
+    </argument>
+    <argument id="TpcEffMcHistoMaker::TpcEffMcHistoMaker::jobPrefix" name="jobPrefix">
+      <type name="string" />
+    </argument>
+  </constructor>
+  <destructor abstract="yes" id="TpcEffMcHistoMaker::~TpcEffMcHistoMaker" name="~TpcEffMcHistoMaker" />
+  <method abstract="yes" id="TpcEffMcHistoMaker::analyzeEvent" name="analyzeEvent" virtual="yes">
+    <brief>*</brief>
+    <doc>Analyze an Event
+</doc>
+    <return>
+      <type builtin="yes" name="void" />
+    </return>
+  </method>
+  <method abstract="yes" id="TpcEffMcHistoMaker::analyzeTrack" name="analyzeTrack">
+    <return>
+      <type builtin="yes" name="void" />
+    </return>
+    <argument id="TpcEffMcHistoMaker::analyzeTrack::iTrack" name="iTrack">
+      <type builtin="yes" name="int" />
+    </argument>
+  </method>
+  <method abstract="yes" id="TpcEffMcHistoMaker::keepEvent" name="keepEvent" virtual="yes">
+    <brief>*</brief>
+    <doc>Performs event based cuts
+</doc>
+    <return>
+      <doc>True    - Keep Event
+         False  - Reject Event</doc>
+      <type builtin="yes" name="bool" />
+    </return>
+  </method>
+  <method abstract="yes" id="TpcEffMcHistoMaker::keepTrack" name="keepTrack">
+    <return>
+      <type builtin="yes" name="bool" />
+    </return>
+    <argument id="TpcEffMcHistoMaker::keepTrack::iTrack" name="iTrack">
+      <type builtin="yes" name="int" />
+    </argument>
+  </method>
+  <field access="protected" id="TpcEffMcHistoMaker::pico" name="pico">
+    <type name="unique_ptr&lt;PicoDataStore, default_delete&lt;PicoDataStore&gt; &gt;" />
+  </field>
+  <field access="protected" id="TpcEffMcHistoMaker::cut_rapidity" name="cut_rapidity">
+    <type name="unique_ptr&lt;jdb::ConfigRange, default_delete&lt;jdb::ConfigRange&gt; &gt;" />
+  </field>
+  <field access="protected" id="TpcEffMcHistoMaker::plc" name="plc">
+    <type name="string" />
+  </field>
+  <field access="protected" id="TpcEffMcHistoMaker::mass" name="mass">
+    <type builtin="yes" name="double" />
+  </field>
+</class>

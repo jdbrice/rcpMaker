@@ -1,0 +1,272 @@
+<class xmlns="http://jessevdk.github.com/cldoc/1.0" id="ZRecentering" interface="true" name="ZRecentering">
+  <field id="ZRecentering::piMass" name="piMass">
+    <brief>*</brief>
+    <doc>Static usage
+</doc>
+    <type builtin="yes" name="double" />
+  </field>
+  <field id="ZRecentering::kaonMass" name="kaonMass">
+    <brief>[GeV]</brief>
+    <type builtin="yes" name="double" />
+  </field>
+  <field id="ZRecentering::protonMass" name="protonMass">
+    <brief>[GeV]</brief>
+    <type builtin="yes" name="double" />
+  </field>
+  <constructor abstract="yes" id="ZRecentering::ZRecentering" name="ZRecentering">
+    <argument id="ZRecentering::ZRecentering::dedxSigma" name="dedxSigma">
+      <type builtin="yes" name="double" />
+    </argument>
+    <argument id="ZRecentering::ZRecentering::tofSigma" name="tofSigma">
+      <type builtin="yes" name="double" />
+    </argument>
+    <argument id="ZRecentering::ZRecentering::bTable" name="bTable">
+      <type name="string" />
+    </argument>
+    <argument id="ZRecentering::ZRecentering::bMethod" name="bMethod">
+      <type builtin="yes" name="int" />
+    </argument>
+  </constructor>
+  <destructor abstract="yes" id="ZRecentering::~ZRecentering" name="~ZRecentering" />
+  <method abstract="yes" id="ZRecentering::allSpecies" name="allSpecies">
+    <return>
+      <type name="vector&lt;string&gt;" />
+    </return>
+  </method>
+  <method abstract="yes" id="ZRecentering::centeredDedxMap" name="centeredDedxMap">
+    <return>
+      <type name="map&lt;string, double&gt;" />
+    </return>
+    <argument id="ZRecentering::centeredDedxMap::center" name="center">
+      <type name="string" />
+    </argument>
+    <argument id="ZRecentering::centeredDedxMap::p" name="p">
+      <type builtin="yes" name="double" />
+    </argument>
+  </method>
+  <method abstract="yes" id="ZRecentering::centeredDedxMeans" name="centeredDedxMeans">
+    <return>
+      <type name="vector&lt;double&gt;" />
+    </return>
+    <argument id="ZRecentering::centeredDedxMeans::center" name="center">
+      <type name="string" />
+    </argument>
+    <argument id="ZRecentering::centeredDedxMeans::p" name="p">
+      <type builtin="yes" name="double" />
+    </argument>
+    <argument id="ZRecentering::centeredDedxMeans::others" name="others">
+      <type name="vector&lt;string&gt;" />
+    </argument>
+  </method>
+  <method abstract="yes" id="ZRecentering::centeredDedxMeans" name="centeredDedxMeans">
+    <return>
+      <type name="vector&lt;double&gt;" />
+    </return>
+    <argument id="ZRecentering::centeredDedxMeans::center" name="center">
+      <type name="string" />
+    </argument>
+    <argument id="ZRecentering::centeredDedxMeans::p" name="p">
+      <type builtin="yes" name="double" />
+    </argument>
+  </method>
+  <method abstract="yes" id="ZRecentering::centeredTofMap" name="centeredTofMap">
+    <return>
+      <type name="map&lt;string, double&gt;" />
+    </return>
+    <argument id="ZRecentering::centeredTofMap::center" name="center">
+      <type name="string" />
+    </argument>
+    <argument id="ZRecentering::centeredTofMap::p" name="p">
+      <type builtin="yes" name="double" />
+    </argument>
+  </method>
+  <method abstract="yes" id="ZRecentering::centeredTofMeans" name="centeredTofMeans">
+    <return>
+      <type name="vector&lt;double&gt;" />
+    </return>
+    <argument id="ZRecentering::centeredTofMeans::center" name="center">
+      <type name="string" />
+    </argument>
+    <argument id="ZRecentering::centeredTofMeans::p" name="p">
+      <type builtin="yes" name="double" />
+    </argument>
+    <argument id="ZRecentering::centeredTofMeans::others" name="others">
+      <type name="vector&lt;string&gt;" />
+    </argument>
+  </method>
+  <method abstract="yes" id="ZRecentering::centeredTofMeans" name="centeredTofMeans">
+    <return>
+      <type name="vector&lt;double&gt;" />
+    </return>
+    <argument id="ZRecentering::centeredTofMeans::center" name="center">
+      <type name="string" />
+    </argument>
+    <argument id="ZRecentering::centeredTofMeans::p" name="p">
+      <type builtin="yes" name="double" />
+    </argument>
+  </method>
+  <method abstract="yes" id="ZRecentering::dedxGenerator" name="dedxGenerator">
+    <return>
+      <type name="Bichsel" qualifier="*" ref="Bichsel#Bichsel" />
+    </return>
+  </method>
+  <method abstract="yes" id="ZRecentering::lh" name="lh" static="yes">
+    <brief>Likelihood function</brief>
+    <doc>A gauss around the expected value with expected sigma
+</doc>
+    <return>
+      <doc>the unnormalized likelihood</doc>
+      <type builtin="yes" name="double" />
+    </return>
+    <argument id="ZRecentering::lh::x" name="x">
+      <type builtin="yes" name="double" />
+    </argument>
+    <argument id="ZRecentering::lh::mu" name="mu">
+      <type builtin="yes" name="double" />
+    </argument>
+    <argument id="ZRecentering::lh::sigma" name="sigma">
+      <type builtin="yes" name="double" />
+    </argument>
+  </method>
+  <method abstract="yes" id="ZRecentering::mass" name="mass">
+    <brief>*</brief>
+    <doc>* Get the expected mass from the string identifier
+* @param        pType   - string identifier for species
+* @return       mass of the given particle species
+</doc>
+    <return>
+      <type builtin="yes" name="double" />
+    </return>
+    <argument id="ZRecentering::mass::pType" name="pType">
+      <type name="string" />
+    </argument>
+  </method>
+  <method abstract="yes" id="ZRecentering::nl2Tof" name="nl2Tof">
+    <return>
+      <type builtin="yes" name="double" />
+    </return>
+    <argument id="ZRecentering::nl2Tof::centerSpecies" name="centerSpecies">
+      <type name="string" />
+    </argument>
+    <argument id="ZRecentering::nl2Tof::beta" name="beta">
+      <type builtin="yes" name="double" />
+    </argument>
+    <argument id="ZRecentering::nl2Tof::p" name="p">
+      <type builtin="yes" name="double" />
+    </argument>
+    <argument id="ZRecentering::nl2Tof::avgP" name="avgP">
+      <type builtin="yes" name="double" />
+    </argument>
+  </method>
+  <method abstract="yes" id="ZRecentering::nlDedx" name="nlDedx">
+    <brief>*</brief>
+    <doc>Calculates the difference from the expected value of log10( dedx )
+Uses the non-linear recentering scheme
+</doc>
+    <return>
+      <doc>n Sigma from expectation</doc>
+      <type builtin="yes" name="double" />
+    </return>
+    <argument id="ZRecentering::nlDedx::centerSpecies" name="centerSpecies">
+      <type name="string" />
+    </argument>
+    <argument id="ZRecentering::nlDedx::dedx" name="dedx">
+      <type builtin="yes" name="double" />
+    </argument>
+    <argument id="ZRecentering::nlDedx::p" name="p">
+      <type builtin="yes" name="double" />
+    </argument>
+    <argument id="ZRecentering::nlDedx::avgP" name="avgP">
+      <type builtin="yes" name="double" />
+    </argument>
+  </method>
+  <method abstract="yes" id="ZRecentering::nlTof" name="nlTof">
+    <brief>*</brief>
+    <doc>Calculates the difference from the expected value of 1/beta
+Uses the nonlinear recentering scheme
+</doc>
+    <return>
+      <doc>n Sigma from expectation</doc>
+      <type builtin="yes" name="double" />
+    </return>
+    <argument id="ZRecentering::nlTof::centerSpecies" name="centerSpecies">
+      <type name="string" />
+    </argument>
+    <argument id="ZRecentering::nlTof::beta" name="beta">
+      <type builtin="yes" name="double" />
+    </argument>
+    <argument id="ZRecentering::nlTof::p" name="p">
+      <type builtin="yes" name="double" />
+    </argument>
+    <argument id="ZRecentering::nlTof::avgP" name="avgP">
+      <type builtin="yes" name="double" />
+    </argument>
+  </method>
+  <method abstract="yes" id="ZRecentering::otherSpecies" name="otherSpecies">
+    <return>
+      <type name="vector&lt;string&gt;" />
+    </return>
+    <argument id="ZRecentering::otherSpecies::center" name="center">
+      <type name="string" />
+    </argument>
+  </method>
+  <method abstract="yes" id="ZRecentering::rDedx" name="rDedx">
+    <brief>*</brief>
+    <doc>Calculates the difference from the expected value of log10( dedx )
+</doc>
+    <return>
+      <doc>The recentered dEdx value</doc>
+      <type builtin="yes" name="double" />
+    </return>
+    <argument id="ZRecentering::rDedx::centerSpecies" name="centerSpecies">
+      <type name="string" />
+    </argument>
+    <argument id="ZRecentering::rDedx::dedx" name="dedx">
+      <type builtin="yes" name="double" />
+    </argument>
+    <argument id="ZRecentering::rDedx::p" name="p">
+      <type builtin="yes" name="double" />
+    </argument>
+  </method>
+  <method abstract="yes" id="ZRecentering::rTof" name="rTof">
+    <brief>*</brief>
+    <doc>Calculates the difference from the expected value of 1/beta
+</doc>
+    <return>
+      <doc>recentered around centerSpecies</doc>
+      <type builtin="yes" name="double" />
+    </return>
+    <argument id="ZRecentering::rTof::centerSpecies" name="centerSpecies">
+      <type name="string" />
+    </argument>
+    <argument id="ZRecentering::rTof::beta" name="beta">
+      <type builtin="yes" name="double" />
+    </argument>
+    <argument id="ZRecentering::rTof::p" name="p">
+      <type builtin="yes" name="double" />
+    </argument>
+  </method>
+  <method abstract="yes" id="ZRecentering::tofGenerator" name="tofGenerator">
+    <return>
+      <type name="TofGenerator" qualifier="*" ref="TofGenerator#TofGenerator" />
+    </return>
+  </method>
+  <field access="protected" id="ZRecentering::dedxSigma" name="dedxSigma">
+    <brief>*</brief>
+    <doc>The naive sigma values for calculating the likelihood
+</doc>
+    <type builtin="yes" name="double" />
+  </field>
+  <field access="protected" id="ZRecentering::tofSigma" name="tofSigma">
+    <type builtin="yes" name="double" />
+  </field>
+  <field access="protected" id="ZRecentering::dedxGen" name="dedxGen">
+    <type name="Bichsel" qualifier="*" ref="Bichsel#Bichsel" />
+  </field>
+  <field access="protected" id="ZRecentering::tofGen" name="tofGen">
+    <type name="TofGenerator" qualifier="*" ref="TofGenerator#TofGenerator" />
+  </field>
+  <field access="protected" id="ZRecentering::species" name="species">
+    <type name="vector&lt;string&gt;" />
+  </field>
+</class>

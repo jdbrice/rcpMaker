@@ -7,29 +7,30 @@ source = .cpp
 # Source files to make
 sources = 	Engine.cpp 							\
 			Common.cpp 							\
-			InclusiveSpectra.cpp 				\
-			PhaseSpaceRecentering.cpp 			\
+			Spectra/InclusiveSpectra.cpp 		\
+			Spectra/ZRecentering.cpp 			\
 			Adapter/ProdPicoDst.cpp 			\
 			Adapter/RcpPicoDst.cpp 				\
 			TSF/FitSchema.cpp 					\
 			TSF/Fitter.cpp 						\
 			TSF/FitRunner.cpp 					\
-			Efficiency/TpcEffMcHistoMaker.cpp 	\
-			Efficiency/TpcEffRcHistoMaker.cpp 	\
+			McMaker/TpcEffMcHistoMaker.cpp 		\
+			McMaker/TpcEffRcHistoMaker.cpp 		\
+			McMaker/EnergyLoss.cpp 				\
 			Params/FeedDownParams.cpp 			\
 			Params/EnergyLossParams.cpp
 
 
-#			Efficiency/TofEffMaker.cpp 			\
+#			McMaker/TofEffMaker.cpp 			\
 #			FeedDownMaker.cpp  					\
-#			PidPhaseSpace.cpp 					\
+#			PidHistoMaker.cpp 					\
 #			PidYieldPresenter.cpp 				\
 
 # TODO: Fix broken files
 
 objects = $(patsubst %.cpp,%.o, $(sources))
 
-ClassHeaders = $(wildcard ../include/*.h)
+ClassHeaders = $(wildcard ../include/*/*.h)
 
 # ROOT libs and includes
 ROOTCFLAGS    	= $(shell root-config --cflags)

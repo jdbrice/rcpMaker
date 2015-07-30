@@ -6,8 +6,6 @@
 		<Event>
 
 			<!-- RefMult Inspection -->
-			<Histo name="pre_refMult" title="Raw RefMult" xBins="binning.refMult" />
-			<Histo name="refMult" title="Raw RefMult" xBins="binning.refMult" />
 			<Histo name="corrRefMult" title="Corrected RefMult" xBins="binning.corrRefMult" />
 			<Histo name="refMultBin9" title="Corrected refMult in Bin9" xBins="binning.rm9" />
 			<Histo name="refMultBin16" title="Corrected refMult in Bin16" xBins="binning.rm16" />

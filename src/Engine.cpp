@@ -10,18 +10,19 @@ using namespace jdb;
 // Rcp Maker
 
 // Spectra 
-	#include "InclusiveSpectra.h"
-//	#include "PidPhaseSpace.h"
+	#include "Spectra/InclusiveSpectra.h"
+//	#include "Spectra/PidHistoMaker.h"
 
 
-// Efficiency
-//	#include "Efficiency/TofEffMaker.h"
-	#include "Efficiency/TpcEffMcHistoMaker.h"
-	#include "Efficiency/TpcEffRcHistoMaker.h"
-	#include "Efficiency/TofEffFitter.h"
+// McMaker
+//	#include "McMaker/TofEffMaker.h"
+	#include "McMaker/EnergyLoss.h"
+	#include "McMaker/TpcEffMcHistoMaker.h"
+	#include "McMaker/TpcEffRcHistoMaker.h"
+	#include "McMaker/TofEffFitter.h"
 
 // Presentation
-	#include "PidYieldPresenter.h"
+	#include "Present/PidYieldPresenter.h"
 
 // Feed down
 //	#include "FeedDownMaker.h"
@@ -58,8 +59,11 @@ int main( int argc, char* argv[] ) {
 			if ( "InclusiveSpectra" == job ){
 				InclusiveSpectra is( &config, "InclusiveSpectra.", fileList, jobPrefix );
 				is.make();
-			} else if ( "PidPhaseSpace" == job ){
-				// PidPhaseSpace pps( &config, "PidPhaseSpace.", fileList, jobPrefix  );
+			} if ( "EnergyLoss" == job ){
+				EnergyLoss el( &config, "EnergyLoss.", fileList, jobPrefix );
+				el.make();
+			} else if ( "PidHistoMaker" == job ){
+				// PidHistoMaker pps( &config, "PidHistoMaker.", fileList, jobPrefix  );
 				// pps.make();
 			} else if ( "TpcEffMcHistoMaker" == job ){
 				TpcEffMcHistoMaker temch( &config, "TpcEffMcHistoMaker.", fileList, jobPrefix  );

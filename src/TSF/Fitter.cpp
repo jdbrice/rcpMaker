@@ -1,5 +1,5 @@
 #include "TSF/Fitter.h"
-#include "PidPhaseSpace.h"
+#include "Spectra/PidHistoMaker.h"
 
 
 namespace TSF{

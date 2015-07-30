@@ -1,0 +1,10 @@
+<namespace xmlns="http://jessevdk.github.com/cldoc/1.0" id="TSF" name="TSF">
+  <class name="FitDataPoint" ref="TSF::FitDataPoint#TSF::FitDataPoint" />
+  <class name="FitDataset" ref="TSF::FitDataset#TSF::FitDataset" />
+  <class name="FitRange" ref="TSF::FitRange#TSF::FitRange" />
+  <class name="FitRunner" ref="TSF::FitRunner#TSF::FitRunner" />
+  <class name="FitSchema" ref="TSF::FitSchema#TSF::FitSchema" />
+  <class name="Fitter" ref="TSF::Fitter#TSF::Fitter" />
+  <class name="FitVar" ref="TSF::FitVar#TSF::FitVar" />
+  <class name="GaussModel" ref="TSF::GaussModel#TSF::GaussModel" />
+</namespace>

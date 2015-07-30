@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
 
-	<jobType>PidPhaseSpace</jobType>
+	<jobType>PidHistoMaker</jobType>
 
-	<PidPhaseSpace>
+	<PidHistoMaker>
 		<Logger color="true" logLevel="all" />
 		
 		<input>
@@ -33,11 +33,11 @@
 
 		<enhanceDistributions tof="1.0" dedx="1.0" nSigBelow="3.0" nSigAbove="3.0"/>
 		
-		<PhaseSpaceRecentering>
+		<ZRecentering>
 			<centerSpecies>K</centerSpecies>
 			<sigma tof="0.012" dedx="0.033"/>
 			<method>nonlinear</method>
-		</PhaseSpaceRecentering>
+		</ZRecentering>
 
 		<makePhaseSpace 2D="false" enhanced="true" /> 
 
@@ -54,7 +54,7 @@
 			<tof title="#beta^{-1}" logy="1" draw="pe"/>
 			<dedx title="dedx" logy="1" draw="pe"/>
 		</style>
-	</PidPhaseSpace>
+	</PidHistoMaker>
 
 
 	<bin hide="true" >

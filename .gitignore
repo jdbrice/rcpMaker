@@ -24,6 +24,8 @@
 !/bin/config.xml
 
 /products/*
+/lists/*
+
 
 /ParamFits
 

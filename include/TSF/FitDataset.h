@@ -10,6 +10,7 @@
 #include <vector>
 #include <utility>
 #include <string>
+#include <cmath>
 
 namespace TSF{
 
@@ -105,7 +106,7 @@ namespace TSF{
 			double mindis = 10000;
 			FitDataPoint p;
 			for ( FitDataPoint fdp : points ){
-				double dis = TMath::Abs( x - fdp.x );
+				double dis = abs( x - fdp.x );
 
 				if ( dis < mindis ){
 					mindis = dis;

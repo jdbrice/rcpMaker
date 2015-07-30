@@ -1,0 +1,51 @@
+<class xmlns="http://jessevdk.github.com/cldoc/1.0" abstract="true" id="FeedDownParams" name="FeedDownParams">
+  <constructor abstract="yes" id="FeedDownParams::FeedDownParams" name="FeedDownParams">
+    <argument id="FeedDownParams::FeedDownParams::cfg" name="cfg">
+      <type name="jdb::XmlConfig" qualifier="*" />
+    </argument>
+    <argument id="FeedDownParams::FeedDownParams::nodePath" name="nodePath">
+      <type name="string" />
+    </argument>
+  </constructor>
+  <destructor id="FeedDownParams::~FeedDownParams" name="~FeedDownParams" />
+  <method id="FeedDownParams::usable" name="usable">
+    <return>
+      <type builtin="yes" name="bool" />
+    </return>
+    <argument id="FeedDownParams::usable::rm" name="rm">
+      <type builtin="yes" name="double" />
+    </argument>
+  </method>
+  <method id="FeedDownParams::weight" name="weight">
+    <return>
+      <type builtin="yes" name="double" />
+    </return>
+    <argument id="FeedDownParams::weight::pt" name="pt">
+      <type builtin="yes" name="double" />
+    </argument>
+  </method>
+  <variable access="protected" id="FeedDownParams::instances" name="instances">
+    <type builtin="yes" name="int" />
+  </variable>
+  <field access="protected" id="FeedDownParams::cfg" name="cfg">
+    <type name="jdb::XmlConfig" qualifier="*" />
+  </field>
+  <field access="protected" id="FeedDownParams::nodePath" name="nodePath">
+    <type name="string" />
+  </field>
+  <field access="protected" id="FeedDownParams::log" name="log">
+    <type name="jdb::Logger" />
+  </field>
+  <field access="protected" id="FeedDownParams::cl" name="cl">
+    <type builtin="yes" name="float" />
+  </field>
+  <field access="protected" id="FeedDownParams::ch" name="ch">
+    <type builtin="yes" name="float" />
+  </field>
+  <field access="protected" id="FeedDownParams::formula" name="formula">
+    <type name="string" />
+  </field>
+  <field access="protected" id="FeedDownParams::fn" name="fn">
+    <type name="TF1" qualifier="*" />
+  </field>
+</class>

@@ -1,0 +1,86 @@
+<class xmlns="http://jessevdk.github.com/cldoc/1.0" id="TSF::FitDataset" name="FitDataset">
+  <constructor id="TSF::FitDataset::FitDataset" name="FitDataset" />
+  <destructor id="TSF::FitDataset::~FitDataset" name="~FitDataset" />
+  <method id="TSF::FitDataset::begin" name="begin">
+    <return>
+      <type name="vector&lt;TSF::FitDataPoint&gt;" />
+    </return>
+  </method>
+  <method id="TSF::FitDataset::clear" name="clear">
+    <return>
+      <type builtin="yes" name="void" />
+    </return>
+  </method>
+  <method id="TSF::FitDataset::end" name="end">
+    <return>
+      <type name="vector&lt;TSF::FitDataPoint&gt;" />
+    </return>
+  </method>
+  <method id="TSF::FitDataset::inRange" name="inRange">
+    <return>
+      <type builtin="yes" name="bool" />
+    </return>
+    <argument id="TSF::FitDataset::inRange::ranges" name="ranges">
+      <type name="vector&lt;TSF::FitRange&gt;" qualifier=" &amp;" />
+    </argument>
+    <argument id="TSF::FitDataset::inRange::x" name="x">
+      <type builtin="yes" name="double" />
+    </argument>
+  </method>
+  <method id="TSF::FitDataset::operator[]" name="operator[]">
+    <return>
+      <type name="FitDataPoint" ref="TSF::FitDataPoint#TSF::FitDataPoint" />
+    </return>
+    <argument id="TSF::FitDataset::operator[]::index" name="index">
+      <type builtin="yes" name="int" />
+    </argument>
+  </method>
+  <method id="TSF::FitDataset::pointNear" name="pointNear">
+    <return>
+      <type name="FitDataPoint" ref="TSF::FitDataPoint#TSF::FitDataPoint" />
+    </return>
+    <argument id="TSF::FitDataset::pointNear::x" name="x">
+      <type builtin="yes" name="double" />
+    </argument>
+  </method>
+  <method id="TSF::FitDataset::push_back" name="push_back">
+    <return>
+      <type builtin="yes" name="void" />
+    </return>
+    <argument id="TSF::FitDataset::push_back::fdp" name="fdp">
+      <type name="FitDataPoint" ref="TSF::FitDataPoint#TSF::FitDataPoint" />
+    </argument>
+  </method>
+  <method id="TSF::FitDataset::rangeX" name="rangeX">
+    <return>
+      <type name="pair&lt;double, double&gt;" />
+    </return>
+  </method>
+  <method id="TSF::FitDataset::rangeY" name="rangeY">
+    <return>
+      <type name="pair&lt;double, double&gt;" />
+    </return>
+  </method>
+  <method id="TSF::FitDataset::setName" name="setName">
+    <return>
+      <type builtin="yes" name="void" />
+    </return>
+    <argument id="TSF::FitDataset::setName::_name" name="_name">
+      <type name="string" />
+    </argument>
+  </method>
+  <method id="TSF::FitDataset::yield" name="yield">
+    <return>
+      <type builtin="yes" name="double" />
+    </return>
+    <argument id="TSF::FitDataset::yield::ranges" name="ranges">
+      <type name="vector&lt;TSF::FitRange&gt;" qualifier=" &amp;" />
+    </argument>
+  </method>
+  <field access="protected" id="TSF::FitDataset::points" name="points">
+    <type name="vector&lt;TSF::FitDataPoint&gt;" />
+  </field>
+  <field access="protected" id="TSF::FitDataset::name" name="name">
+    <type name="string" />
+  </field>
+</class>

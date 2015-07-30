@@ -1,0 +1,420 @@
+<class xmlns="http://jessevdk.github.com/cldoc/1.0" abstract="true" id="RcpPicoDst" name="RcpPicoDst">
+  <base access="public">
+    <type name="PicoDataStore" ref="PicoDataStore#PicoDataStore" />
+  </base>
+  <field id="RcpPicoDst::fChain" name="fChain">
+    <type name="TTree" qualifier="*" />
+  </field>
+  <field id="RcpPicoDst::fCurrent" name="fCurrent">
+    <type name="Int_t" />
+  </field>
+  <field id="RcpPicoDst::rrunId" name="rrunId">
+    <brief>Declaration of leaf types</brief>
+    <type name="Int_t" />
+  </field>
+  <field id="RcpPicoDst::bin16" name="bin16">
+    <type name="UShort_t" />
+  </field>
+  <field id="RcpPicoDst::bin9" name="bin9">
+    <type name="UShort_t" />
+  </field>
+  <field id="RcpPicoDst::weight" name="weight">
+    <type name="Float_t" />
+  </field>
+  <field id="RcpPicoDst::corrRefMult" name="corrRefMult">
+    <type name="Float_t" />
+  </field>
+  <field id="RcpPicoDst::nTracks" name="nTracks">
+    <type name="Int_t" />
+  </field>
+  <field id="RcpPicoDst::ppT" name="ppT">
+    <type size="5000">
+      <type name="Float_t" />
+    </type>
+  </field>
+  <field id="RcpPicoDst::gpT" name="gpT">
+    <brief>[nTracks]</brief>
+    <type size="5000">
+      <type name="Float_t" />
+    </type>
+  </field>
+  <field id="RcpPicoDst::pP" name="pP">
+    <brief>[nTracks]</brief>
+    <type size="5000">
+      <type name="Float_t" />
+    </type>
+  </field>
+  <field id="RcpPicoDst::pEta" name="pEta">
+    <brief>[nTracks]</brief>
+    <type size="5000">
+      <type name="Float_t" />
+    </type>
+  </field>
+  <field id="RcpPicoDst::dca" name="dca">
+    <brief>[nTracks]</brief>
+    <type size="5000">
+      <type name="Float_t" />
+    </type>
+  </field>
+  <field id="RcpPicoDst::nHitsFit" name="nHitsFit">
+    <brief>[nTracks]</brief>
+    <type size="5000">
+      <type name="UChar_t" />
+    </type>
+  </field>
+  <field id="RcpPicoDst::nHitsDedx" name="nHitsDedx">
+    <brief>[nTracks]</brief>
+    <type size="5000">
+      <type name="UChar_t" />
+    </type>
+  </field>
+  <field id="RcpPicoDst::nHitsPossible" name="nHitsPossible">
+    <brief>[nTracks]</brief>
+    <type size="5000">
+      <type name="UChar_t" />
+    </type>
+  </field>
+  <field id="RcpPicoDst::dedx" name="dedx">
+    <brief>[nTracks]</brief>
+    <type size="5000">
+      <type name="UShort_t" />
+    </type>
+  </field>
+  <field id="RcpPicoDst::beta" name="beta">
+    <brief>[nTracks]</brief>
+    <type size="5000">
+      <type name="UShort_t" />
+    </type>
+  </field>
+  <field id="RcpPicoDst::matchFlag" name="matchFlag">
+    <brief>[nTracks]</brief>
+    <type size="5000">
+      <type name="UChar_t" />
+    </type>
+  </field>
+  <field id="RcpPicoDst::yLocal" name="yLocal">
+    <brief>[nTracks]</brief>
+    <type size="5000">
+      <type name="Float_t" />
+    </type>
+  </field>
+  <field id="RcpPicoDst::zLocal" name="zLocal">
+    <brief>[nTracks]</brief>
+    <type size="5000">
+      <type name="Float_t" />
+    </type>
+  </field>
+  <field id="RcpPicoDst::b_run" name="b_run">
+    <brief>List of branches</brief>
+    <type name="TBranch" qualifier="*" />
+  </field>
+  <field id="RcpPicoDst::b_bin16" name="b_bin16">
+    <brief>!</brief>
+    <type name="TBranch" qualifier="*" />
+  </field>
+  <field id="RcpPicoDst::b_bin9" name="b_bin9">
+    <brief>!</brief>
+    <type name="TBranch" qualifier="*" />
+  </field>
+  <field id="RcpPicoDst::b_weight" name="b_weight">
+    <brief>!</brief>
+    <type name="TBranch" qualifier="*" />
+  </field>
+  <field id="RcpPicoDst::b_corrRefMult" name="b_corrRefMult">
+    <brief>!</brief>
+    <type name="TBranch" qualifier="*" />
+  </field>
+  <field id="RcpPicoDst::b_nTracks" name="b_nTracks">
+    <brief>!</brief>
+    <type name="TBranch" qualifier="*" />
+  </field>
+  <field id="RcpPicoDst::b_ppT" name="b_ppT">
+    <brief>!</brief>
+    <type name="TBranch" qualifier="*" />
+  </field>
+  <field id="RcpPicoDst::b_gpT" name="b_gpT">
+    <brief>!</brief>
+    <type name="TBranch" qualifier="*" />
+  </field>
+  <field id="RcpPicoDst::b_pP" name="b_pP">
+    <brief>!</brief>
+    <type name="TBranch" qualifier="*" />
+  </field>
+  <field id="RcpPicoDst::b_pEta" name="b_pEta">
+    <brief>!</brief>
+    <type name="TBranch" qualifier="*" />
+  </field>
+  <field id="RcpPicoDst::b_dca" name="b_dca">
+    <brief>!</brief>
+    <type name="TBranch" qualifier="*" />
+  </field>
+  <field id="RcpPicoDst::b_nHitsFit" name="b_nHitsFit">
+    <brief>!</brief>
+    <type name="TBranch" qualifier="*" />
+  </field>
+  <field id="RcpPicoDst::b_nHitsDedx" name="b_nHitsDedx">
+    <brief>!</brief>
+    <type name="TBranch" qualifier="*" />
+  </field>
+  <field id="RcpPicoDst::b_nHitsPossible" name="b_nHitsPossible">
+    <brief>!</brief>
+    <type name="TBranch" qualifier="*" />
+  </field>
+  <field id="RcpPicoDst::b_dedx" name="b_dedx">
+    <brief>!</brief>
+    <type name="TBranch" qualifier="*" />
+  </field>
+  <field id="RcpPicoDst::b_beta" name="b_beta">
+    <brief>!</brief>
+    <type name="TBranch" qualifier="*" />
+  </field>
+  <field id="RcpPicoDst::b_matchFlag" name="b_matchFlag">
+    <brief>!</brief>
+    <type name="TBranch" qualifier="*" />
+  </field>
+  <field id="RcpPicoDst::b_yLocal" name="b_yLocal">
+    <brief>!</brief>
+    <type name="TBranch" qualifier="*" />
+  </field>
+  <field id="RcpPicoDst::b_zLocal" name="b_zLocal">
+    <brief>!</brief>
+    <type name="TBranch" qualifier="*" />
+  </field>
+  <constructor abstract="yes" id="RcpPicoDst::RcpPicoDst" name="RcpPicoDst">
+    <brief>!</brief>
+    <argument id="RcpPicoDst::RcpPicoDst::tree" name="tree">
+      <type name="TTree" qualifier="*" />
+    </argument>
+  </constructor>
+  <destructor abstract="yes" id="RcpPicoDst::~RcpPicoDst" name="~RcpPicoDst" virtual="yes" />
+  <method id="RcpPicoDst::b9" name="b9" override="yes" virtual="yes">
+    <return>
+      <type name="UShort_t" />
+    </return>
+    <override name="PicoDataStore::b9" ref="PicoDataStore#PicoDataStore::b9" />
+  </method>
+  <method id="RcpPicoDst::b16" name="b16" override="yes" virtual="yes">
+    <return>
+      <type name="UShort_t" />
+    </return>
+    <override name="PicoDataStore::b16" ref="PicoDataStore#PicoDataStore::b16" />
+  </method>
+  <method abstract="yes" id="RcpPicoDst::Cut" name="Cut" virtual="yes">
+    <return>
+      <type name="Int_t" />
+    </return>
+    <argument id="RcpPicoDst::Cut::entry" name="entry">
+      <type name="Long64_t" />
+    </argument>
+  </method>
+  <method id="RcpPicoDst::eventWeight" name="eventWeight" override="yes" virtual="yes">
+    <return>
+      <type name="Float_t" />
+    </return>
+    <override name="PicoDataStore::eventWeight" ref="PicoDataStore#PicoDataStore::eventWeight" />
+  </method>
+  <method abstract="yes" id="RcpPicoDst::GetEntry" name="GetEntry" override="yes" virtual="yes">
+    <return>
+      <type name="Int_t" />
+    </return>
+    <argument id="RcpPicoDst::GetEntry::entry" name="entry">
+      <type name="Long64_t" />
+    </argument>
+    <override name="PicoDataStore::GetEntry" ref="PicoDataStore#PicoDataStore::GetEntry" />
+  </method>
+  <method id="RcpPicoDst::getTree" name="getTree" override="yes" virtual="yes">
+    <brief>!pointer to the analyzed TTree or TChain</brief>
+    <return>
+      <type name="TTree" qualifier="*" />
+    </return>
+    <override name="PicoDataStore::getTree" ref="PicoDataStore#PicoDataStore::getTree" />
+  </method>
+  <method id="RcpPicoDst::globalPt" name="globalPt" override="yes" virtual="yes">
+    <return>
+      <type name="Double_t" />
+    </return>
+    <argument id="RcpPicoDst::globalPt::iHit" name="iHit">
+      <type name="Int_t" />
+    </argument>
+    <override name="PicoDataStore::globalPt" ref="PicoDataStore#PicoDataStore::globalPt" />
+  </method>
+  <method abstract="yes" id="RcpPicoDst::Init" name="Init" virtual="yes">
+    <return>
+      <type builtin="yes" name="void" />
+    </return>
+    <argument id="RcpPicoDst::Init::tree" name="tree">
+      <type name="TTree" qualifier="*" />
+    </argument>
+  </method>
+  <method abstract="yes" id="RcpPicoDst::LoadTree" name="LoadTree" virtual="yes">
+    <return>
+      <type name="Long64_t" />
+    </return>
+    <argument id="RcpPicoDst::LoadTree::entry" name="entry">
+      <type name="Long64_t" />
+    </argument>
+  </method>
+  <method abstract="yes" id="RcpPicoDst::Loop" name="Loop" virtual="yes">
+    <return>
+      <type builtin="yes" name="void" />
+    </return>
+  </method>
+  <method id="RcpPicoDst::mcPt" name="mcPt" override="yes" virtual="yes">
+    <brief>only used for Rc tracks</brief>
+    <return>
+      <type name="Double_t" />
+    </return>
+    <argument id="RcpPicoDst::mcPt::iHit" name="iHit">
+      <type name="Int_t" />
+    </argument>
+    <override name="PicoDataStore::mcPt" ref="PicoDataStore#PicoDataStore::mcPt" />
+  </method>
+  <method abstract="yes" id="RcpPicoDst::Notify" name="Notify" virtual="yes">
+    <return>
+      <type name="Bool_t" />
+    </return>
+  </method>
+  <method id="RcpPicoDst::numTracks" name="numTracks" override="yes" virtual="yes">
+    <return>
+      <type name="Int_t" />
+    </return>
+    <override name="PicoDataStore::numTracks" ref="PicoDataStore#PicoDataStore::numTracks" />
+  </method>
+  <method id="RcpPicoDst::refMult" name="refMult" override="yes" virtual="yes">
+    <return>
+      <type name="Float_t" />
+    </return>
+    <override name="PicoDataStore::refMult" ref="PicoDataStore#PicoDataStore::refMult" />
+  </method>
+  <method id="RcpPicoDst::runId" name="runId" override="yes" virtual="yes">
+    <return>
+      <type name="Int_t" />
+    </return>
+    <override name="PicoDataStore::runId" ref="PicoDataStore#PicoDataStore::runId" />
+  </method>
+  <method abstract="yes" id="RcpPicoDst::Show" name="Show" virtual="yes">
+    <return>
+      <type builtin="yes" name="void" />
+    </return>
+    <argument id="RcpPicoDst::Show::entry" name="entry">
+      <type name="Long64_t" />
+    </argument>
+  </method>
+  <method id="RcpPicoDst::trackBeta" name="trackBeta" override="yes" virtual="yes">
+    <return>
+      <type name="Double_t" />
+    </return>
+    <argument id="RcpPicoDst::trackBeta::iHit" name="iHit">
+      <type name="Int_t" />
+    </argument>
+    <override name="PicoDataStore::trackBeta" ref="PicoDataStore#PicoDataStore::trackBeta" />
+  </method>
+  <method id="RcpPicoDst::trackCharge" name="trackCharge" override="yes" virtual="yes">
+    <return>
+      <type name="Int_t" />
+    </return>
+    <argument id="RcpPicoDst::trackCharge::iHit" name="iHit">
+      <type name="Int_t" />
+    </argument>
+    <override name="PicoDataStore::trackCharge" ref="PicoDataStore#PicoDataStore::trackCharge" />
+  </method>
+  <method id="RcpPicoDst::trackDca" name="trackDca" override="yes" virtual="yes">
+    <return>
+      <type name="Double_t" />
+    </return>
+    <argument id="RcpPicoDst::trackDca::iHit" name="iHit">
+      <type name="Int_t" />
+    </argument>
+    <override name="PicoDataStore::trackDca" ref="PicoDataStore#PicoDataStore::trackDca" />
+  </method>
+  <method id="RcpPicoDst::trackDedx" name="trackDedx" override="yes" virtual="yes">
+    <return>
+      <type name="Double_t" />
+    </return>
+    <argument id="RcpPicoDst::trackDedx::iHit" name="iHit">
+      <type name="Int_t" />
+    </argument>
+    <override name="PicoDataStore::trackDedx" ref="PicoDataStore#PicoDataStore::trackDedx" />
+  </method>
+  <method id="RcpPicoDst::trackEta" name="trackEta" override="yes" virtual="yes">
+    <return>
+      <type name="Double_t" />
+    </return>
+    <argument id="RcpPicoDst::trackEta::iHit" name="iHit">
+      <type name="Int_t" />
+    </argument>
+    <override name="PicoDataStore::trackEta" ref="PicoDataStore#PicoDataStore::trackEta" />
+  </method>
+  <method id="RcpPicoDst::trackNHitsDedx" name="trackNHitsDedx" override="yes" virtual="yes">
+    <return>
+      <type name="Int_t" />
+    </return>
+    <argument id="RcpPicoDst::trackNHitsDedx::iHit" name="iHit">
+      <type name="Int_t" />
+    </argument>
+    <override name="PicoDataStore::trackNHitsDedx" ref="PicoDataStore#PicoDataStore::trackNHitsDedx" />
+  </method>
+  <method id="RcpPicoDst::trackNHitsFit" name="trackNHitsFit" override="yes" virtual="yes">
+    <return>
+      <type name="Int_t" />
+    </return>
+    <argument id="RcpPicoDst::trackNHitsFit::iHit" name="iHit">
+      <type name="Int_t" />
+    </argument>
+    <override name="PicoDataStore::trackNHitsFit" ref="PicoDataStore#PicoDataStore::trackNHitsFit" />
+  </method>
+  <method id="RcpPicoDst::trackNHitsPossible" name="trackNHitsPossible" override="yes" virtual="yes">
+    <return>
+      <type name="Int_t" />
+    </return>
+    <argument id="RcpPicoDst::trackNHitsPossible::iHit" name="iHit">
+      <type name="Int_t" />
+    </argument>
+    <override name="PicoDataStore::trackNHitsPossible" ref="PicoDataStore#PicoDataStore::trackNHitsPossible" />
+  </method>
+  <method id="RcpPicoDst::trackP" name="trackP" override="yes" virtual="yes">
+    <return>
+      <type name="Double_t" />
+    </return>
+    <argument id="RcpPicoDst::trackP::iHit" name="iHit">
+      <type name="Int_t" />
+    </argument>
+    <override name="PicoDataStore::trackP" ref="PicoDataStore#PicoDataStore::trackP" />
+  </method>
+  <method id="RcpPicoDst::trackPt" name="trackPt" override="yes" virtual="yes">
+    <return>
+      <type name="Double_t" />
+    </return>
+    <argument id="RcpPicoDst::trackPt::iHit" name="iHit">
+      <type name="Int_t" />
+    </argument>
+    <override name="PicoDataStore::trackPt" ref="PicoDataStore#PicoDataStore::trackPt" />
+  </method>
+  <method id="RcpPicoDst::trackTofMatch" name="trackTofMatch" override="yes" virtual="yes">
+    <return>
+      <type name="Int_t" />
+    </return>
+    <argument id="RcpPicoDst::trackTofMatch::iHit" name="iHit">
+      <type name="Int_t" />
+    </argument>
+    <override name="PicoDataStore::trackTofMatch" ref="PicoDataStore#PicoDataStore::trackTofMatch" />
+  </method>
+  <method id="RcpPicoDst::trackYLocal" name="trackYLocal" override="yes" virtual="yes">
+    <return>
+      <type name="Double_t" />
+    </return>
+    <argument id="RcpPicoDst::trackYLocal::iHit" name="iHit">
+      <type name="Int_t" />
+    </argument>
+    <override name="PicoDataStore::trackYLocal" ref="PicoDataStore#PicoDataStore::trackYLocal" />
+  </method>
+  <method id="RcpPicoDst::trackZLocal" name="trackZLocal" override="yes" virtual="yes">
+    <return>
+      <type name="Double_t" />
+    </return>
+    <argument id="RcpPicoDst::trackZLocal::iHit" name="iHit">
+      <type name="Int_t" />
+    </argument>
+    <override name="PicoDataStore::trackZLocal" ref="PicoDataStore#PicoDataStore::trackZLocal" />
+  </method>
+</class>

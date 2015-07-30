@@ -1,12 +1,62 @@
 <index xmlns="http://jessevdk.github.com/cldoc/1.0">
+  <variable id="kMaxBTofHit" name="kMaxBTofHit">
+    <type name="Int_t" qualifier=" const" />
+  </variable>
+  <variable id="kMaxBTOWHit" name="kMaxBTOWHit">
+    <type name="Int_t" qualifier=" const" />
+  </variable>
+  <variable id="kMaxEvent" name="kMaxEvent">
+    <brief>Fixed size dimensions of array or collections stored in the TTree if any.</brief>
+    <type name="Int_t" qualifier=" const" />
+  </variable>
+  <variable id="kMaxRcpTracks" name="kMaxRcpTracks">
+    <brief>Fixed size dimensions of array or collections stored in the TTree if any.</brief>
+    <type builtin="yes" name="int" qualifier=" const" />
+  </variable>
+  <variable id="kMaxTracks" name="kMaxTracks">
+    <type name="Int_t" qualifier=" const" />
+  </variable>
+  <variable id="kMaxTrigger" name="kMaxTrigger">
+    <type name="Int_t" qualifier=" const" />
+  </variable>
+  <variable id="kMaxV0Ks" name="kMaxV0Ks">
+    <type name="Int_t" qualifier=" const" />
+  </variable>
+  <variable id="kMaxV0L" name="kMaxV0L">
+    <type name="Int_t" qualifier=" const" />
+  </variable>
+  <variable id="kMaxV0Lbar" name="kMaxV0Lbar">
+    <type name="Int_t" qualifier=" const" />
+  </variable>
+  <namespace name="TSF" ref="TSF#TSF">
+    <class name="FitDataPoint" ref="TSF::FitDataPoint#TSF::FitDataPoint" />
+    <class name="FitDataset" ref="TSF::FitDataset#TSF::FitDataset" />
+    <class name="FitRange" ref="TSF::FitRange#TSF::FitRange" />
+    <class name="FitRunner" ref="TSF::FitRunner#TSF::FitRunner" />
+    <class name="FitSchema" ref="TSF::FitSchema#TSF::FitSchema" />
+    <class name="Fitter" ref="TSF::Fitter#TSF::Fitter" />
+    <class name="FitVar" ref="TSF::FitVar#TSF::FitVar" />
+    <class name="GaussModel" ref="TSF::GaussModel#TSF::GaussModel" />
+  </namespace>
   <class name="Bichsel" ref="Bichsel#Bichsel" />
-  <class name="Common" ref="Common#Common" />
+  <class name="EffParams" ref="EffParams#EffParams" />
+  <class name="EnergyLoss" ref="EnergyLoss#EnergyLoss" />
+  <class name="EnergyLossParams" ref="EnergyLossParams#EnergyLossParams" />
   <class name="FeedDownMaker" ref="FeedDownMaker#FeedDownMaker" />
+  <class name="FeedDownParams" ref="FeedDownParams#FeedDownParams" />
   <class name="InclusiveSpectra" ref="InclusiveSpectra#InclusiveSpectra" />
-  <class name="PhaseSpaceRecentering" ref="PhaseSpaceRecentering#PhaseSpaceRecentering" />
-  <class name="PidPhaseSpace" ref="PidPhaseSpace#PidPhaseSpace" />
+  <class name="PicoDataStore" ref="PicoDataStore#PicoDataStore" />
+  <class name="PidHistoMaker" ref="PidHistoMaker#PidHistoMaker" />
   <class name="PidYieldPresenter" ref="PidYieldPresenter#PidYieldPresenter" />
   <class name="PresentationMaker" ref="PresentationMaker#PresentationMaker" />
+  <class name="ProdPicoDst" ref="ProdPicoDst#ProdPicoDst" />
+  <class name="RcpPicoDst" ref="RcpPicoDst#RcpPicoDst" />
   <class name="SpectraCorrecter" ref="SpectraCorrecter#SpectraCorrecter" />
+  <class name="TofEffFitter" ref="TofEffFitter#TofEffFitter" />
+  <class name="TofEffMaker" ref="TofEffMaker#TofEffMaker" />
+  <class name="TofGenerator" ref="TofGenerator#TofGenerator" />
+  <class name="TpcEffMcHistoMaker" ref="TpcEffMcHistoMaker#TpcEffMcHistoMaker" />
+  <class name="TpcEffRcHistoMaker" ref="TpcEffRcHistoMaker#TpcEffRcHistoMaker" />
+  <class name="ZRecentering" ref="ZRecentering#ZRecentering" />
   <report name="Documentation generator" ref="report" />
 </index>

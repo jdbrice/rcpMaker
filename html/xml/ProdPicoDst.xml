@@ -1,0 +1,1556 @@
+<class xmlns="http://jessevdk.github.com/cldoc/1.0" abstract="true" id="ProdPicoDst" name="ProdPicoDst">
+  <base access="public">
+    <type name="PicoDataStore" ref="PicoDataStore#PicoDataStore" />
+  </base>
+  <field id="ProdPicoDst::fChain" name="fChain">
+    <type name="TTree" qualifier="*" />
+  </field>
+  <field id="ProdPicoDst::fCurrent" name="fCurrent">
+    <brief>!pointer to the analyzed TTree or TChain</brief>
+    <type name="Int_t" />
+  </field>
+  <field id="ProdPicoDst::Event_" name="Event_">
+    <brief>Declaration of leaf types</brief>
+    <type name="Int_t" />
+  </field>
+  <field id="ProdPicoDst::Event_mRunId" name="Event_mRunId">
+    <type size="1">
+      <type name="Int_t" />
+    </type>
+  </field>
+  <field id="ProdPicoDst::Event_mEventId" name="Event_mEventId">
+    <brief>[Event_]</brief>
+    <type size="1">
+      <type name="Int_t" />
+    </type>
+  </field>
+  <field id="ProdPicoDst::Event_mFillId" name="Event_mFillId">
+    <brief>[Event_]</brief>
+    <type size="1">
+      <type name="UShort_t" />
+    </type>
+  </field>
+  <field id="ProdPicoDst::Event_mBField" name="Event_mBField">
+    <brief>[Event_]</brief>
+    <type size="1">
+      <type name="Float_t" />
+    </type>
+  </field>
+  <field id="ProdPicoDst::Event_mPrimaryVertex_mX1" name="Event_mPrimaryVertex_mX1">
+    <brief>[Event_]</brief>
+    <type size="1">
+      <type name="Float_t" />
+    </type>
+  </field>
+  <field id="ProdPicoDst::Event_mPrimaryVertex_mX2" name="Event_mPrimaryVertex_mX2">
+    <brief>[Event_]</brief>
+    <type size="1">
+      <type name="Float_t" />
+    </type>
+  </field>
+  <field id="ProdPicoDst::Event_mPrimaryVertex_mX3" name="Event_mPrimaryVertex_mX3">
+    <brief>[Event_]</brief>
+    <type size="1">
+      <type name="Float_t" />
+    </type>
+  </field>
+  <field id="ProdPicoDst::Event_mSecondVertex_mX1" name="Event_mSecondVertex_mX1">
+    <brief>[Event_]</brief>
+    <type size="1">
+      <type name="Float_t" />
+    </type>
+  </field>
+  <field id="ProdPicoDst::Event_mSecondVertex_mX2" name="Event_mSecondVertex_mX2">
+    <brief>[Event_]</brief>
+    <type size="1">
+      <type name="Float_t" />
+    </type>
+  </field>
+  <field id="ProdPicoDst::Event_mSecondVertex_mX3" name="Event_mSecondVertex_mX3">
+    <brief>[Event_]</brief>
+    <type size="1">
+      <type name="Float_t" />
+    </type>
+  </field>
+  <field id="ProdPicoDst::Event_mTriggerWord" name="Event_mTriggerWord">
+    <brief>[Event_]</brief>
+    <type size="1">
+      <type name="UShort_t" />
+    </type>
+  </field>
+  <field id="ProdPicoDst::Event_mRefMultFtpcEast" name="Event_mRefMultFtpcEast">
+    <brief>[Event_]</brief>
+    <type size="1">
+      <type name="UShort_t" />
+    </type>
+  </field>
+  <field id="ProdPicoDst::Event_mRefMultFtpcWest" name="Event_mRefMultFtpcWest">
+    <brief>[Event_]</brief>
+    <type size="1">
+      <type name="UShort_t" />
+    </type>
+  </field>
+  <field id="ProdPicoDst::Event_mRefMultNeg" name="Event_mRefMultNeg">
+    <brief>[Event_]</brief>
+    <type size="1">
+      <type name="UShort_t" />
+    </type>
+  </field>
+  <field id="ProdPicoDst::Event_mRefMultPos" name="Event_mRefMultPos">
+    <brief>[Event_]</brief>
+    <type size="1">
+      <type name="UShort_t" />
+    </type>
+  </field>
+  <field id="ProdPicoDst::Event_mRefMult2NegEast" name="Event_mRefMult2NegEast">
+    <brief>[Event_]</brief>
+    <type size="1">
+      <type name="UShort_t" />
+    </type>
+  </field>
+  <field id="ProdPicoDst::Event_mRefMult2PosEast" name="Event_mRefMult2PosEast">
+    <brief>[Event_]</brief>
+    <type size="1">
+      <type name="UShort_t" />
+    </type>
+  </field>
+  <field id="ProdPicoDst::Event_mRefMult2NegWest" name="Event_mRefMult2NegWest">
+    <brief>[Event_]</brief>
+    <type size="1">
+      <type name="UShort_t" />
+    </type>
+  </field>
+  <field id="ProdPicoDst::Event_mRefMult2PosWest" name="Event_mRefMult2PosWest">
+    <brief>[Event_]</brief>
+    <type size="1">
+      <type name="UShort_t" />
+    </type>
+  </field>
+  <field id="ProdPicoDst::Event_mRefMultHalfNegEast" name="Event_mRefMultHalfNegEast">
+    <brief>[Event_]</brief>
+    <type size="1">
+      <type name="UShort_t" />
+    </type>
+  </field>
+  <field id="ProdPicoDst::Event_mRefMultHalfPosEast" name="Event_mRefMultHalfPosEast">
+    <brief>[Event_]</brief>
+    <type size="1">
+      <type name="UShort_t" />
+    </type>
+  </field>
+  <field id="ProdPicoDst::Event_mRefMultHalfNegWest" name="Event_mRefMultHalfNegWest">
+    <brief>[Event_]</brief>
+    <type size="1">
+      <type name="UShort_t" />
+    </type>
+  </field>
+  <field id="ProdPicoDst::Event_mRefMultHalfPosWest" name="Event_mRefMultHalfPosWest">
+    <brief>[Event_]</brief>
+    <type size="1">
+      <type name="UShort_t" />
+    </type>
+  </field>
+  <field id="ProdPicoDst::Event_mNVpdHitsEast" name="Event_mNVpdHitsEast">
+    <brief>[Event_]</brief>
+    <type size="1">
+      <type name="UChar_t" />
+    </type>
+  </field>
+  <field id="ProdPicoDst::Event_mNVpdHitsWest" name="Event_mNVpdHitsWest">
+    <brief>[Event_]</brief>
+    <type size="1">
+      <type name="UChar_t" />
+    </type>
+  </field>
+  <field id="ProdPicoDst::Event_mNT0" name="Event_mNT0">
+    <brief>[Event_]</brief>
+    <type size="1">
+      <type name="UShort_t" />
+    </type>
+  </field>
+  <field id="ProdPicoDst::Event_mVzVpd" name="Event_mVzVpd">
+    <brief>[Event_]</brief>
+    <type size="1">
+      <type name="Short_t" />
+    </type>
+  </field>
+  <field id="ProdPicoDst::Event_mZDCx" name="Event_mZDCx">
+    <brief>[Event_]</brief>
+    <type size="1">
+      <type name="UShort_t" />
+    </type>
+  </field>
+  <field id="ProdPicoDst::Event_mBBCx" name="Event_mBBCx">
+    <brief>[Event_]</brief>
+    <type size="1">
+      <type name="UShort_t" />
+    </type>
+  </field>
+  <field id="ProdPicoDst::Event_mBackgroundRate" name="Event_mBackgroundRate">
+    <brief>[Event_]</brief>
+    <type size="1">
+      <type name="Float_t" />
+    </type>
+  </field>
+  <field id="ProdPicoDst::Event_mBbcBlueBackgroundRate" name="Event_mBbcBlueBackgroundRate">
+    <brief>[Event_]</brief>
+    <type size="1">
+      <type name="Float_t" />
+    </type>
+  </field>
+  <field id="ProdPicoDst::Event_mBbcYellowBackgroundRate" name="Event_mBbcYellowBackgroundRate">
+    <brief>[Event_]</brief>
+    <type size="1">
+      <type name="Float_t" />
+    </type>
+  </field>
+  <field id="ProdPicoDst::Event_mBbcEastRate" name="Event_mBbcEastRate">
+    <brief>[Event_]</brief>
+    <type size="1">
+      <type name="Float_t" />
+    </type>
+  </field>
+  <field id="ProdPicoDst::Event_mBbcWestRate" name="Event_mBbcWestRate">
+    <brief>[Event_]</brief>
+    <type size="1">
+      <type name="Float_t" />
+    </type>
+  </field>
+  <field id="ProdPicoDst::Event_mZdcEastRate" name="Event_mZdcEastRate">
+    <brief>[Event_]</brief>
+    <type size="1">
+      <type name="Float_t" />
+    </type>
+  </field>
+  <field id="ProdPicoDst::Event_mZdcWestRate" name="Event_mZdcWestRate">
+    <brief>[Event_]</brief>
+    <type size="1">
+      <type name="Float_t" />
+    </type>
+  </field>
+  <field id="ProdPicoDst::Event_mVpd" name="Event_mVpd">
+    <brief>[Event_]</brief>
+    <type size="1">
+      <type size="64">
+        <type name="UShort_t" />
+      </type>
+    </type>
+  </field>
+  <field id="ProdPicoDst::Event_mZdcSumAdcEast" name="Event_mZdcSumAdcEast">
+    <brief>[Event_]</brief>
+    <type size="1">
+      <type name="UShort_t" />
+    </type>
+  </field>
+  <field id="ProdPicoDst::Event_mZdcSumAdcWest" name="Event_mZdcSumAdcWest">
+    <brief>[Event_]</brief>
+    <type size="1">
+      <type name="UShort_t" />
+    </type>
+  </field>
+  <field id="ProdPicoDst::Event_mZdcSmdEastHorizontal" name="Event_mZdcSmdEastHorizontal">
+    <brief>[Event_]</brief>
+    <type size="1">
+      <type size="8">
+        <type name="UShort_t" />
+      </type>
+    </type>
+  </field>
+  <field id="ProdPicoDst::Event_mZdcSmdEastVertical" name="Event_mZdcSmdEastVertical">
+    <brief>[Event_]</brief>
+    <type size="1">
+      <type size="8">
+        <type name="UShort_t" />
+      </type>
+    </type>
+  </field>
+  <field id="ProdPicoDst::Event_mZdcSmdWestHorizontal" name="Event_mZdcSmdWestHorizontal">
+    <brief>[Event_]</brief>
+    <type size="1">
+      <type size="8">
+        <type name="UShort_t" />
+      </type>
+    </type>
+  </field>
+  <field id="ProdPicoDst::Event_mZdcSmdWestVertical" name="Event_mZdcSmdWestVertical">
+    <brief>[Event_]</brief>
+    <type size="1">
+      <type size="8">
+        <type name="UShort_t" />
+      </type>
+    </type>
+  </field>
+  <field id="ProdPicoDst::Event_mSpaceCharge" name="Event_mSpaceCharge">
+    <brief>[Event_]</brief>
+    <type size="1">
+      <type name="Float_t" />
+    </type>
+  </field>
+  <field id="ProdPicoDst::Event_mbTofTrayMultiplicity" name="Event_mbTofTrayMultiplicity">
+    <brief>[Event_]</brief>
+    <type size="1">
+      <type name="UShort_t" />
+    </type>
+  </field>
+  <field id="ProdPicoDst::Event_mNumberOfGlobalTracks" name="Event_mNumberOfGlobalTracks">
+    <brief>[Event_]</brief>
+    <type size="1">
+      <type name="UShort_t" />
+    </type>
+  </field>
+  <field id="ProdPicoDst::Event_mRanking" name="Event_mRanking">
+    <brief>[Event_]</brief>
+    <type size="1">
+      <type name="Float_t" />
+    </type>
+  </field>
+  <field id="ProdPicoDst::Event_mNBEMCMatch" name="Event_mNBEMCMatch">
+    <brief>[Event_]</brief>
+    <type size="1">
+      <type name="UShort_t" />
+    </type>
+  </field>
+  <field id="ProdPicoDst::Event_mNBTOFMatch" name="Event_mNBTOFMatch">
+    <brief>[Event_]</brief>
+    <type size="1">
+      <type name="UShort_t" />
+    </type>
+  </field>
+  <field id="ProdPicoDst::Event_mBbcAdcEast" name="Event_mBbcAdcEast">
+    <brief>[Event_]</brief>
+    <type size="1">
+      <type size="24">
+        <type name="UShort_t" />
+      </type>
+    </type>
+  </field>
+  <field id="ProdPicoDst::Event_mBbcAdcWest" name="Event_mBbcAdcWest">
+    <brief>[Event_]</brief>
+    <type size="1">
+      <type size="24">
+        <type name="UShort_t" />
+      </type>
+    </type>
+  </field>
+  <field id="ProdPicoDst::Event_mHT_Th" name="Event_mHT_Th">
+    <brief>[Event_]</brief>
+    <type size="1">
+      <type size="3">
+        <type name="UChar_t" />
+      </type>
+    </type>
+  </field>
+  <field id="ProdPicoDst::Event_mJP_Th" name="Event_mJP_Th">
+    <brief>[Event_]</brief>
+    <type size="1">
+      <type size="3">
+        <type name="UChar_t" />
+      </type>
+    </type>
+  </field>
+  <field id="ProdPicoDst::Tracks_" name="Tracks_">
+    <brief>[Event_]</brief>
+    <type name="Int_t" />
+  </field>
+  <field id="ProdPicoDst::Tracks_mId" name="Tracks_mId">
+    <type size="5000">
+      <type name="UShort_t" />
+    </type>
+  </field>
+  <field id="ProdPicoDst::Tracks_mChi2" name="Tracks_mChi2">
+    <brief>[Tracks_]</brief>
+    <type size="5000">
+      <type name="UShort_t" />
+    </type>
+  </field>
+  <field id="ProdPicoDst::Tracks_mChi2Prob" name="Tracks_mChi2Prob">
+    <brief>[Tracks_]</brief>
+    <type size="5000">
+      <type name="UShort_t" />
+    </type>
+  </field>
+  <field id="ProdPicoDst::Tracks_mGMomentum_mX1" name="Tracks_mGMomentum_mX1">
+    <brief>[Tracks_]</brief>
+    <type size="5000">
+      <type name="Float_t" />
+    </type>
+  </field>
+  <field id="ProdPicoDst::Tracks_mGMomentum_mX2" name="Tracks_mGMomentum_mX2">
+    <brief>[Tracks_]</brief>
+    <type size="5000">
+      <type name="Float_t" />
+    </type>
+  </field>
+  <field id="ProdPicoDst::Tracks_mGMomentum_mX3" name="Tracks_mGMomentum_mX3">
+    <brief>[Tracks_]</brief>
+    <type size="5000">
+      <type name="Float_t" />
+    </type>
+  </field>
+  <field id="ProdPicoDst::Tracks_mPMomentum_mX1" name="Tracks_mPMomentum_mX1">
+    <brief>[Tracks_]</brief>
+    <type size="5000">
+      <type name="Float_t" />
+    </type>
+  </field>
+  <field id="ProdPicoDst::Tracks_mPMomentum_mX2" name="Tracks_mPMomentum_mX2">
+    <brief>[Tracks_]</brief>
+    <type size="5000">
+      <type name="Float_t" />
+    </type>
+  </field>
+  <field id="ProdPicoDst::Tracks_mPMomentum_mX3" name="Tracks_mPMomentum_mX3">
+    <brief>[Tracks_]</brief>
+    <type size="5000">
+      <type name="Float_t" />
+    </type>
+  </field>
+  <field id="ProdPicoDst::Tracks_mFlowFlag" name="Tracks_mFlowFlag">
+    <brief>[Tracks_]</brief>
+    <type size="5000">
+      <type name="UChar_t" />
+    </type>
+  </field>
+  <field id="ProdPicoDst::Tracks_mOriginX" name="Tracks_mOriginX">
+    <brief>[Tracks_]</brief>
+    <type size="5000">
+      <type name="Short_t" />
+    </type>
+  </field>
+  <field id="ProdPicoDst::Tracks_mOriginY" name="Tracks_mOriginY">
+    <brief>[Tracks_]</brief>
+    <type size="5000">
+      <type name="Short_t" />
+    </type>
+  </field>
+  <field id="ProdPicoDst::Tracks_mOriginZ" name="Tracks_mOriginZ">
+    <brief>[Tracks_]</brief>
+    <type size="5000">
+      <type name="Short_t" />
+    </type>
+  </field>
+  <field id="ProdPicoDst::Tracks_mGDca" name="Tracks_mGDca">
+    <brief>[Tracks_]</brief>
+    <type size="5000">
+      <type name="UShort_t" />
+    </type>
+  </field>
+  <field id="ProdPicoDst::Tracks_mDedx" name="Tracks_mDedx">
+    <brief>[Tracks_]</brief>
+    <type size="5000">
+      <type name="UShort_t" />
+    </type>
+  </field>
+  <field id="ProdPicoDst::Tracks_mNHitsFit" name="Tracks_mNHitsFit">
+    <brief>[Tracks_]</brief>
+    <type size="5000">
+      <type name="Char_t" />
+    </type>
+  </field>
+  <field id="ProdPicoDst::Tracks_mNHitsMax" name="Tracks_mNHitsMax">
+    <brief>[Tracks_]</brief>
+    <type size="5000">
+      <type name="UChar_t" />
+    </type>
+  </field>
+  <field id="ProdPicoDst::Tracks_mNHitsDedx" name="Tracks_mNHitsDedx">
+    <brief>[Tracks_]</brief>
+    <type size="5000">
+      <type name="UChar_t" />
+    </type>
+  </field>
+  <field id="ProdPicoDst::Tracks_mNSigmaPion" name="Tracks_mNSigmaPion">
+    <brief>[Tracks_]</brief>
+    <type size="5000">
+      <type name="Short_t" />
+    </type>
+  </field>
+  <field id="ProdPicoDst::Tracks_mNSigmaKaon" name="Tracks_mNSigmaKaon">
+    <brief>[Tracks_]</brief>
+    <type size="5000">
+      <type name="Short_t" />
+    </type>
+  </field>
+  <field id="ProdPicoDst::Tracks_mNSigmaProton" name="Tracks_mNSigmaProton">
+    <brief>[Tracks_]</brief>
+    <type size="5000">
+      <type name="Short_t" />
+    </type>
+  </field>
+  <field id="ProdPicoDst::Tracks_mNSigmaElectron" name="Tracks_mNSigmaElectron">
+    <brief>[Tracks_]</brief>
+    <type size="5000">
+      <type name="Short_t" />
+    </type>
+  </field>
+  <field id="ProdPicoDst::Tracks_mBTofCellId" name="Tracks_mBTofCellId">
+    <brief>[Tracks_]</brief>
+    <type size="5000">
+      <type name="Short_t" />
+    </type>
+  </field>
+  <field id="ProdPicoDst::Tracks_mBTofMatchFlag" name="Tracks_mBTofMatchFlag">
+    <brief>[Tracks_]</brief>
+    <type size="5000">
+      <type name="UChar_t" />
+    </type>
+  </field>
+  <field id="ProdPicoDst::Tracks_mBTof" name="Tracks_mBTof">
+    <brief>[Tracks_]</brief>
+    <type size="5000">
+      <type name="UShort_t" />
+    </type>
+  </field>
+  <field id="ProdPicoDst::Tracks_mBTofBeta" name="Tracks_mBTofBeta">
+    <brief>[Tracks_]</brief>
+    <type size="5000">
+      <type name="UShort_t" />
+    </type>
+  </field>
+  <field id="ProdPicoDst::Tracks_mBTofYLocal" name="Tracks_mBTofYLocal">
+    <brief>[Tracks_]</brief>
+    <type size="5000">
+      <type name="Short_t" />
+    </type>
+  </field>
+  <field id="ProdPicoDst::Tracks_mBTofZLocal" name="Tracks_mBTofZLocal">
+    <brief>[Tracks_]</brief>
+    <type size="5000">
+      <type name="Short_t" />
+    </type>
+  </field>
+  <field id="ProdPicoDst::Tracks_mBTofHitPosX" name="Tracks_mBTofHitPosX">
+    <brief>[Tracks_]</brief>
+    <type size="5000">
+      <type name="Short_t" />
+    </type>
+  </field>
+  <field id="ProdPicoDst::Tracks_mBTofHitPosY" name="Tracks_mBTofHitPosY">
+    <brief>[Tracks_]</brief>
+    <type size="5000">
+      <type name="Short_t" />
+    </type>
+  </field>
+  <field id="ProdPicoDst::Tracks_mBTofHitPosZ" name="Tracks_mBTofHitPosZ">
+    <brief>[Tracks_]</brief>
+    <type size="5000">
+      <type name="Short_t" />
+    </type>
+  </field>
+  <field id="ProdPicoDst::Trigger_" name="Trigger_">
+    <brief>[Tracks_]</brief>
+    <type name="Int_t" />
+  </field>
+  <field id="ProdPicoDst::Trigger_fUniqueID" name="Trigger_fUniqueID">
+    <type size="1">
+      <type name="UInt_t" />
+    </type>
+  </field>
+  <field id="ProdPicoDst::Trigger_fBits" name="Trigger_fBits">
+    <brief>[Trigger_]</brief>
+    <type size="1">
+      <type name="UInt_t" />
+    </type>
+  </field>
+  <field id="ProdPicoDst::Trigger_mFlag" name="Trigger_mFlag">
+    <brief>[Trigger_]</brief>
+    <type size="1">
+      <type name="UChar_t" />
+    </type>
+  </field>
+  <field id="ProdPicoDst::Trigger_mId" name="Trigger_mId">
+    <brief>[Trigger_]</brief>
+    <type size="1">
+      <type name="UShort_t" />
+    </type>
+  </field>
+  <field id="ProdPicoDst::Trigger_mAdc" name="Trigger_mAdc">
+    <brief>[Trigger_]</brief>
+    <type size="1">
+      <type name="UShort_t" />
+    </type>
+  </field>
+  <field id="ProdPicoDst::BTOWHit_" name="BTOWHit_">
+    <brief>[Trigger_]</brief>
+    <type name="Int_t" />
+  </field>
+  <field id="ProdPicoDst::BTOWHit_fUniqueID" name="BTOWHit_fUniqueID">
+    <type size="1">
+      <type name="UInt_t" />
+    </type>
+  </field>
+  <field id="ProdPicoDst::BTOWHit_fBits" name="BTOWHit_fBits">
+    <brief>[BTOWHit_]</brief>
+    <type size="1">
+      <type name="UInt_t" />
+    </type>
+  </field>
+  <field id="ProdPicoDst::BTOWHit_mId" name="BTOWHit_mId">
+    <brief>[BTOWHit_]</brief>
+    <type size="1">
+      <type name="UShort_t" />
+    </type>
+  </field>
+  <field id="ProdPicoDst::BTOWHit_mAdc" name="BTOWHit_mAdc">
+    <brief>[BTOWHit_]</brief>
+    <type size="1">
+      <type name="UShort_t" />
+    </type>
+  </field>
+  <field id="ProdPicoDst::BTOWHit_mE" name="BTOWHit_mE">
+    <brief>[BTOWHit_]</brief>
+    <type size="1">
+      <type name="Short_t" />
+    </type>
+  </field>
+  <field id="ProdPicoDst::BTofHit_" name="BTofHit_">
+    <brief>[BTOWHit_]</brief>
+    <type name="Int_t" />
+  </field>
+  <field id="ProdPicoDst::BTofHit_fUniqueID" name="BTofHit_fUniqueID">
+    <type size="5000">
+      <type name="UInt_t" />
+    </type>
+  </field>
+  <field id="ProdPicoDst::BTofHit_fBits" name="BTofHit_fBits">
+    <brief>[BTofHit_]</brief>
+    <type size="5000">
+      <type name="UInt_t" />
+    </type>
+  </field>
+  <field id="ProdPicoDst::BTofHit_mId" name="BTofHit_mId">
+    <brief>[BTofHit_]</brief>
+    <type size="5000">
+      <type name="Short_t" />
+    </type>
+  </field>
+  <field id="ProdPicoDst::V0Ks_" name="V0Ks_">
+    <brief>[BTofHit_]</brief>
+    <type name="Int_t" />
+  </field>
+  <field id="ProdPicoDst::V0Ks_mIndex2Track" name="V0Ks_mIndex2Track">
+    <type size="1">
+      <type size="2">
+        <type name="Short_t" />
+      </type>
+    </type>
+  </field>
+  <field id="ProdPicoDst::V0Ks_mV0Pos_mX1" name="V0Ks_mV0Pos_mX1">
+    <brief>[V0Ks_]</brief>
+    <doc>StThreeVector&amp;lt;float&amp;gt; V0Ks_mMomentum[2][kMaxV0Ks];</doc>
+    <type size="1">
+      <type name="Float_t" />
+    </type>
+  </field>
+  <field id="ProdPicoDst::V0Ks_mV0Pos_mX2" name="V0Ks_mV0Pos_mX2">
+    <brief>[V0Ks_]</brief>
+    <type size="1">
+      <type name="Float_t" />
+    </type>
+  </field>
+  <field id="ProdPicoDst::V0Ks_mV0Pos_mX3" name="V0Ks_mV0Pos_mX3">
+    <brief>[V0Ks_]</brief>
+    <type size="1">
+      <type name="Float_t" />
+    </type>
+  </field>
+  <field id="ProdPicoDst::V0Ks_mDcaDaughters" name="V0Ks_mDcaDaughters">
+    <brief>[V0Ks_]</brief>
+    <type size="1">
+      <type name="UShort_t" />
+    </type>
+  </field>
+  <field id="ProdPicoDst::V0Ks_mDca2Vtx" name="V0Ks_mDca2Vtx">
+    <brief>[V0Ks_]</brief>
+    <type size="1">
+      <type name="UShort_t" />
+    </type>
+  </field>
+  <field id="ProdPicoDst::V0Ks_mM" name="V0Ks_mM">
+    <brief>[V0Ks_]</brief>
+    <type size="1">
+      <type name="Float_t" />
+    </type>
+  </field>
+  <field id="ProdPicoDst::V0L_" name="V0L_">
+    <brief>[V0Ks_]</brief>
+    <type name="Int_t" />
+  </field>
+  <field id="ProdPicoDst::V0L_mIndex2Track" name="V0L_mIndex2Track">
+    <type size="1">
+      <type size="2">
+        <type name="Short_t" />
+      </type>
+    </type>
+  </field>
+  <field id="ProdPicoDst::V0L_mV0Pos_mX1" name="V0L_mV0Pos_mX1">
+    <brief>[V0L_]</brief>
+    <doc>StThreeVector&amp;lt;float&amp;gt; V0L_mMomentum[2][kMaxV0L];</doc>
+    <type size="1">
+      <type name="Float_t" />
+    </type>
+  </field>
+  <field id="ProdPicoDst::V0L_mV0Pos_mX2" name="V0L_mV0Pos_mX2">
+    <brief>[V0L_]</brief>
+    <type size="1">
+      <type name="Float_t" />
+    </type>
+  </field>
+  <field id="ProdPicoDst::V0L_mV0Pos_mX3" name="V0L_mV0Pos_mX3">
+    <brief>[V0L_]</brief>
+    <type size="1">
+      <type name="Float_t" />
+    </type>
+  </field>
+  <field id="ProdPicoDst::V0L_mDcaDaughters" name="V0L_mDcaDaughters">
+    <brief>[V0L_]</brief>
+    <type size="1">
+      <type name="UShort_t" />
+    </type>
+  </field>
+  <field id="ProdPicoDst::V0L_mDca2Vtx" name="V0L_mDca2Vtx">
+    <brief>[V0L_]</brief>
+    <type size="1">
+      <type name="UShort_t" />
+    </type>
+  </field>
+  <field id="ProdPicoDst::V0L_mM" name="V0L_mM">
+    <brief>[V0L_]</brief>
+    <type size="1">
+      <type name="Float_t" />
+    </type>
+  </field>
+  <field id="ProdPicoDst::V0Lbar_" name="V0Lbar_">
+    <brief>[V0L_]</brief>
+    <type name="Int_t" />
+  </field>
+  <field id="ProdPicoDst::V0Lbar_mIndex2Track" name="V0Lbar_mIndex2Track">
+    <type size="1">
+      <type size="2">
+        <type name="Short_t" />
+      </type>
+    </type>
+  </field>
+  <field id="ProdPicoDst::V0Lbar_mV0Pos_mX1" name="V0Lbar_mV0Pos_mX1">
+    <brief>[V0Lbar_]</brief>
+    <doc>StThreeVector&amp;lt;float&amp;gt; V0Lbar_mMomentum[2][kMaxV0Lbar];</doc>
+    <type size="1">
+      <type name="Float_t" />
+    </type>
+  </field>
+  <field id="ProdPicoDst::V0Lbar_mV0Pos_mX2" name="V0Lbar_mV0Pos_mX2">
+    <brief>[V0Lbar_]</brief>
+    <type size="1">
+      <type name="Float_t" />
+    </type>
+  </field>
+  <field id="ProdPicoDst::V0Lbar_mV0Pos_mX3" name="V0Lbar_mV0Pos_mX3">
+    <brief>[V0Lbar_]</brief>
+    <type size="1">
+      <type name="Float_t" />
+    </type>
+  </field>
+  <field id="ProdPicoDst::V0Lbar_mDcaDaughters" name="V0Lbar_mDcaDaughters">
+    <brief>[V0Lbar_]</brief>
+    <type size="1">
+      <type name="UShort_t" />
+    </type>
+  </field>
+  <field id="ProdPicoDst::V0Lbar_mDca2Vtx" name="V0Lbar_mDca2Vtx">
+    <brief>[V0Lbar_]</brief>
+    <type size="1">
+      <type name="UShort_t" />
+    </type>
+  </field>
+  <field id="ProdPicoDst::V0Lbar_mM" name="V0Lbar_mM">
+    <brief>[V0Lbar_]</brief>
+    <type size="1">
+      <type name="Float_t" />
+    </type>
+  </field>
+  <field id="ProdPicoDst::b_Event_" name="b_Event_">
+    <brief>List of branches</brief>
+    <type name="TBranch" qualifier="*" />
+  </field>
+  <field id="ProdPicoDst::b_Event_mRunId" name="b_Event_mRunId">
+    <brief>!</brief>
+    <type name="TBranch" qualifier="*" />
+  </field>
+  <field id="ProdPicoDst::b_Event_mEventId" name="b_Event_mEventId">
+    <brief>!</brief>
+    <type name="TBranch" qualifier="*" />
+  </field>
+  <field id="ProdPicoDst::b_Event_mFillId" name="b_Event_mFillId">
+    <brief>!</brief>
+    <type name="TBranch" qualifier="*" />
+  </field>
+  <field id="ProdPicoDst::b_Event_mBField" name="b_Event_mBField">
+    <brief>!</brief>
+    <type name="TBranch" qualifier="*" />
+  </field>
+  <field id="ProdPicoDst::b_Event_mPrimaryVertex_mX1" name="b_Event_mPrimaryVertex_mX1">
+    <brief>!</brief>
+    <type name="TBranch" qualifier="*" />
+  </field>
+  <field id="ProdPicoDst::b_Event_mPrimaryVertex_mX2" name="b_Event_mPrimaryVertex_mX2">
+    <brief>!</brief>
+    <type name="TBranch" qualifier="*" />
+  </field>
+  <field id="ProdPicoDst::b_Event_mPrimaryVertex_mX3" name="b_Event_mPrimaryVertex_mX3">
+    <brief>!</brief>
+    <type name="TBranch" qualifier="*" />
+  </field>
+  <field id="ProdPicoDst::b_Event_mSecondVertex_mX1" name="b_Event_mSecondVertex_mX1">
+    <brief>!</brief>
+    <type name="TBranch" qualifier="*" />
+  </field>
+  <field id="ProdPicoDst::b_Event_mSecondVertex_mX2" name="b_Event_mSecondVertex_mX2">
+    <brief>!</brief>
+    <type name="TBranch" qualifier="*" />
+  </field>
+  <field id="ProdPicoDst::b_Event_mSecondVertex_mX3" name="b_Event_mSecondVertex_mX3">
+    <brief>!</brief>
+    <type name="TBranch" qualifier="*" />
+  </field>
+  <field id="ProdPicoDst::b_Event_mTriggerWord" name="b_Event_mTriggerWord">
+    <brief>!</brief>
+    <type name="TBranch" qualifier="*" />
+  </field>
+  <field id="ProdPicoDst::b_Event_mRefMultFtpcEast" name="b_Event_mRefMultFtpcEast">
+    <brief>!</brief>
+    <type name="TBranch" qualifier="*" />
+  </field>
+  <field id="ProdPicoDst::b_Event_mRefMultFtpcWest" name="b_Event_mRefMultFtpcWest">
+    <brief>!</brief>
+    <type name="TBranch" qualifier="*" />
+  </field>
+  <field id="ProdPicoDst::b_Event_mRefMultNeg" name="b_Event_mRefMultNeg">
+    <brief>!</brief>
+    <type name="TBranch" qualifier="*" />
+  </field>
+  <field id="ProdPicoDst::b_Event_mRefMultPos" name="b_Event_mRefMultPos">
+    <brief>!</brief>
+    <type name="TBranch" qualifier="*" />
+  </field>
+  <field id="ProdPicoDst::b_Event_mRefMult2NegEast" name="b_Event_mRefMult2NegEast">
+    <brief>!</brief>
+    <type name="TBranch" qualifier="*" />
+  </field>
+  <field id="ProdPicoDst::b_Event_mRefMult2PosEast" name="b_Event_mRefMult2PosEast">
+    <brief>!</brief>
+    <type name="TBranch" qualifier="*" />
+  </field>
+  <field id="ProdPicoDst::b_Event_mRefMult2NegWest" name="b_Event_mRefMult2NegWest">
+    <brief>!</brief>
+    <type name="TBranch" qualifier="*" />
+  </field>
+  <field id="ProdPicoDst::b_Event_mRefMult2PosWest" name="b_Event_mRefMult2PosWest">
+    <brief>!</brief>
+    <type name="TBranch" qualifier="*" />
+  </field>
+  <field id="ProdPicoDst::b_Event_mRefMultHalfNegEast" name="b_Event_mRefMultHalfNegEast">
+    <brief>!</brief>
+    <type name="TBranch" qualifier="*" />
+  </field>
+  <field id="ProdPicoDst::b_Event_mRefMultHalfPosEast" name="b_Event_mRefMultHalfPosEast">
+    <brief>!</brief>
+    <type name="TBranch" qualifier="*" />
+  </field>
+  <field id="ProdPicoDst::b_Event_mRefMultHalfNegWest" name="b_Event_mRefMultHalfNegWest">
+    <brief>!</brief>
+    <type name="TBranch" qualifier="*" />
+  </field>
+  <field id="ProdPicoDst::b_Event_mRefMultHalfPosWest" name="b_Event_mRefMultHalfPosWest">
+    <brief>!</brief>
+    <type name="TBranch" qualifier="*" />
+  </field>
+  <field id="ProdPicoDst::b_Event_mNVpdHitsEast" name="b_Event_mNVpdHitsEast">
+    <brief>!</brief>
+    <type name="TBranch" qualifier="*" />
+  </field>
+  <field id="ProdPicoDst::b_Event_mNVpdHitsWest" name="b_Event_mNVpdHitsWest">
+    <brief>!</brief>
+    <type name="TBranch" qualifier="*" />
+  </field>
+  <field id="ProdPicoDst::b_Event_mNT0" name="b_Event_mNT0">
+    <brief>!</brief>
+    <type name="TBranch" qualifier="*" />
+  </field>
+  <field id="ProdPicoDst::b_Event_mVzVpd" name="b_Event_mVzVpd">
+    <brief>!</brief>
+    <type name="TBranch" qualifier="*" />
+  </field>
+  <field id="ProdPicoDst::b_Event_mZDCx" name="b_Event_mZDCx">
+    <brief>!</brief>
+    <type name="TBranch" qualifier="*" />
+  </field>
+  <field id="ProdPicoDst::b_Event_mBBCx" name="b_Event_mBBCx">
+    <brief>!</brief>
+    <type name="TBranch" qualifier="*" />
+  </field>
+  <field id="ProdPicoDst::b_Event_mBackgroundRate" name="b_Event_mBackgroundRate">
+    <brief>!</brief>
+    <type name="TBranch" qualifier="*" />
+  </field>
+  <field id="ProdPicoDst::b_Event_mBbcBlueBackgroundRate" name="b_Event_mBbcBlueBackgroundRate">
+    <brief>!</brief>
+    <type name="TBranch" qualifier="*" />
+  </field>
+  <field id="ProdPicoDst::b_Event_mBbcYellowBackgroundRate" name="b_Event_mBbcYellowBackgroundRate">
+    <brief>!</brief>
+    <type name="TBranch" qualifier="*" />
+  </field>
+  <field id="ProdPicoDst::b_Event_mBbcEastRate" name="b_Event_mBbcEastRate">
+    <brief>!</brief>
+    <type name="TBranch" qualifier="*" />
+  </field>
+  <field id="ProdPicoDst::b_Event_mBbcWestRate" name="b_Event_mBbcWestRate">
+    <brief>!</brief>
+    <type name="TBranch" qualifier="*" />
+  </field>
+  <field id="ProdPicoDst::b_Event_mZdcEastRate" name="b_Event_mZdcEastRate">
+    <brief>!</brief>
+    <type name="TBranch" qualifier="*" />
+  </field>
+  <field id="ProdPicoDst::b_Event_mZdcWestRate" name="b_Event_mZdcWestRate">
+    <brief>!</brief>
+    <type name="TBranch" qualifier="*" />
+  </field>
+  <field id="ProdPicoDst::b_Event_mVpd" name="b_Event_mVpd">
+    <brief>!</brief>
+    <type name="TBranch" qualifier="*" />
+  </field>
+  <field id="ProdPicoDst::b_Event_mZdcSumAdcEast" name="b_Event_mZdcSumAdcEast">
+    <brief>!</brief>
+    <type name="TBranch" qualifier="*" />
+  </field>
+  <field id="ProdPicoDst::b_Event_mZdcSumAdcWest" name="b_Event_mZdcSumAdcWest">
+    <brief>!</brief>
+    <type name="TBranch" qualifier="*" />
+  </field>
+  <field id="ProdPicoDst::b_Event_mZdcSmdEastHorizontal" name="b_Event_mZdcSmdEastHorizontal">
+    <brief>!</brief>
+    <type name="TBranch" qualifier="*" />
+  </field>
+  <field id="ProdPicoDst::b_Event_mZdcSmdEastVertical" name="b_Event_mZdcSmdEastVertical">
+    <brief>!</brief>
+    <type name="TBranch" qualifier="*" />
+  </field>
+  <field id="ProdPicoDst::b_Event_mZdcSmdWestHorizontal" name="b_Event_mZdcSmdWestHorizontal">
+    <brief>!</brief>
+    <type name="TBranch" qualifier="*" />
+  </field>
+  <field id="ProdPicoDst::b_Event_mZdcSmdWestVertical" name="b_Event_mZdcSmdWestVertical">
+    <brief>!</brief>
+    <type name="TBranch" qualifier="*" />
+  </field>
+  <field id="ProdPicoDst::b_Event_mSpaceCharge" name="b_Event_mSpaceCharge">
+    <brief>!</brief>
+    <type name="TBranch" qualifier="*" />
+  </field>
+  <field id="ProdPicoDst::b_Event_mbTofTrayMultiplicity" name="b_Event_mbTofTrayMultiplicity">
+    <brief>!</brief>
+    <type name="TBranch" qualifier="*" />
+  </field>
+  <field id="ProdPicoDst::b_Event_mNumberOfGlobalTracks" name="b_Event_mNumberOfGlobalTracks">
+    <brief>!</brief>
+    <type name="TBranch" qualifier="*" />
+  </field>
+  <field id="ProdPicoDst::b_Event_mRanking" name="b_Event_mRanking">
+    <brief>!</brief>
+    <type name="TBranch" qualifier="*" />
+  </field>
+  <field id="ProdPicoDst::b_Event_mNBEMCMatch" name="b_Event_mNBEMCMatch">
+    <brief>!</brief>
+    <type name="TBranch" qualifier="*" />
+  </field>
+  <field id="ProdPicoDst::b_Event_mNBTOFMatch" name="b_Event_mNBTOFMatch">
+    <brief>!</brief>
+    <type name="TBranch" qualifier="*" />
+  </field>
+  <field id="ProdPicoDst::b_Event_mBbcAdcEast" name="b_Event_mBbcAdcEast">
+    <brief>!</brief>
+    <type name="TBranch" qualifier="*" />
+  </field>
+  <field id="ProdPicoDst::b_Event_mBbcAdcWest" name="b_Event_mBbcAdcWest">
+    <brief>!</brief>
+    <type name="TBranch" qualifier="*" />
+  </field>
+  <field id="ProdPicoDst::b_Event_mHT_Th" name="b_Event_mHT_Th">
+    <brief>!</brief>
+    <type name="TBranch" qualifier="*" />
+  </field>
+  <field id="ProdPicoDst::b_Event_mJP_Th" name="b_Event_mJP_Th">
+    <brief>!</brief>
+    <type name="TBranch" qualifier="*" />
+  </field>
+  <field id="ProdPicoDst::b_Tracks_" name="b_Tracks_">
+    <brief>!</brief>
+    <type name="TBranch" qualifier="*" />
+  </field>
+  <field id="ProdPicoDst::b_Tracks_mId" name="b_Tracks_mId">
+    <brief>!</brief>
+    <type name="TBranch" qualifier="*" />
+  </field>
+  <field id="ProdPicoDst::b_Tracks_mChi2" name="b_Tracks_mChi2">
+    <brief>!</brief>
+    <type name="TBranch" qualifier="*" />
+  </field>
+  <field id="ProdPicoDst::b_Tracks_mChi2Prob" name="b_Tracks_mChi2Prob">
+    <brief>!</brief>
+    <type name="TBranch" qualifier="*" />
+  </field>
+  <field id="ProdPicoDst::b_Tracks_mGMomentum_mX1" name="b_Tracks_mGMomentum_mX1">
+    <brief>!</brief>
+    <type name="TBranch" qualifier="*" />
+  </field>
+  <field id="ProdPicoDst::b_Tracks_mGMomentum_mX2" name="b_Tracks_mGMomentum_mX2">
+    <brief>!</brief>
+    <type name="TBranch" qualifier="*" />
+  </field>
+  <field id="ProdPicoDst::b_Tracks_mGMomentum_mX3" name="b_Tracks_mGMomentum_mX3">
+    <brief>!</brief>
+    <type name="TBranch" qualifier="*" />
+  </field>
+  <field id="ProdPicoDst::b_Tracks_mPMomentum_mX1" name="b_Tracks_mPMomentum_mX1">
+    <brief>!</brief>
+    <type name="TBranch" qualifier="*" />
+  </field>
+  <field id="ProdPicoDst::b_Tracks_mPMomentum_mX2" name="b_Tracks_mPMomentum_mX2">
+    <brief>!</brief>
+    <type name="TBranch" qualifier="*" />
+  </field>
+  <field id="ProdPicoDst::b_Tracks_mPMomentum_mX3" name="b_Tracks_mPMomentum_mX3">
+    <brief>!</brief>
+    <type name="TBranch" qualifier="*" />
+  </field>
+  <field id="ProdPicoDst::b_Tracks_mFlowFlag" name="b_Tracks_mFlowFlag">
+    <brief>!</brief>
+    <type name="TBranch" qualifier="*" />
+  </field>
+  <field id="ProdPicoDst::b_Tracks_mOriginX" name="b_Tracks_mOriginX">
+    <brief>!</brief>
+    <type name="TBranch" qualifier="*" />
+  </field>
+  <field id="ProdPicoDst::b_Tracks_mOriginY" name="b_Tracks_mOriginY">
+    <brief>!</brief>
+    <type name="TBranch" qualifier="*" />
+  </field>
+  <field id="ProdPicoDst::b_Tracks_mOriginZ" name="b_Tracks_mOriginZ">
+    <brief>!</brief>
+    <type name="TBranch" qualifier="*" />
+  </field>
+  <field id="ProdPicoDst::b_Tracks_mGDca" name="b_Tracks_mGDca">
+    <brief>!</brief>
+    <type name="TBranch" qualifier="*" />
+  </field>
+  <field id="ProdPicoDst::b_Tracks_mDedx" name="b_Tracks_mDedx">
+    <brief>!</brief>
+    <type name="TBranch" qualifier="*" />
+  </field>
+  <field id="ProdPicoDst::b_Tracks_mNHitsFit" name="b_Tracks_mNHitsFit">
+    <brief>!</brief>
+    <type name="TBranch" qualifier="*" />
+  </field>
+  <field id="ProdPicoDst::b_Tracks_mNHitsMax" name="b_Tracks_mNHitsMax">
+    <brief>!</brief>
+    <type name="TBranch" qualifier="*" />
+  </field>
+  <field id="ProdPicoDst::b_Tracks_mNHitsDedx" name="b_Tracks_mNHitsDedx">
+    <brief>!</brief>
+    <type name="TBranch" qualifier="*" />
+  </field>
+  <field id="ProdPicoDst::b_Tracks_mNSigmaPion" name="b_Tracks_mNSigmaPion">
+    <brief>!</brief>
+    <type name="TBranch" qualifier="*" />
+  </field>
+  <field id="ProdPicoDst::b_Tracks_mNSigmaKaon" name="b_Tracks_mNSigmaKaon">
+    <brief>!</brief>
+    <type name="TBranch" qualifier="*" />
+  </field>
+  <field id="ProdPicoDst::b_Tracks_mNSigmaProton" name="b_Tracks_mNSigmaProton">
+    <brief>!</brief>
+    <type name="TBranch" qualifier="*" />
+  </field>
+  <field id="ProdPicoDst::b_Tracks_mNSigmaElectron" name="b_Tracks_mNSigmaElectron">
+    <brief>!</brief>
+    <type name="TBranch" qualifier="*" />
+  </field>
+  <field id="ProdPicoDst::b_Tracks_mBTofCellId" name="b_Tracks_mBTofCellId">
+    <brief>!</brief>
+    <type name="TBranch" qualifier="*" />
+  </field>
+  <field id="ProdPicoDst::b_Tracks_mBTofMatchFlag" name="b_Tracks_mBTofMatchFlag">
+    <brief>!</brief>
+    <type name="TBranch" qualifier="*" />
+  </field>
+  <field id="ProdPicoDst::b_Tracks_mBTof" name="b_Tracks_mBTof">
+    <brief>!</brief>
+    <type name="TBranch" qualifier="*" />
+  </field>
+  <field id="ProdPicoDst::b_Tracks_mBTofBeta" name="b_Tracks_mBTofBeta">
+    <brief>!</brief>
+    <type name="TBranch" qualifier="*" />
+  </field>
+  <field id="ProdPicoDst::b_Tracks_mBTofYLocal" name="b_Tracks_mBTofYLocal">
+    <brief>!</brief>
+    <type name="TBranch" qualifier="*" />
+  </field>
+  <field id="ProdPicoDst::b_Tracks_mBTofZLocal" name="b_Tracks_mBTofZLocal">
+    <brief>!</brief>
+    <type name="TBranch" qualifier="*" />
+  </field>
+  <field id="ProdPicoDst::b_Tracks_mBTofHitPosX" name="b_Tracks_mBTofHitPosX">
+    <brief>!</brief>
+    <type name="TBranch" qualifier="*" />
+  </field>
+  <field id="ProdPicoDst::b_Tracks_mBTofHitPosY" name="b_Tracks_mBTofHitPosY">
+    <brief>!</brief>
+    <type name="TBranch" qualifier="*" />
+  </field>
+  <field id="ProdPicoDst::b_Tracks_mBTofHitPosZ" name="b_Tracks_mBTofHitPosZ">
+    <brief>!</brief>
+    <type name="TBranch" qualifier="*" />
+  </field>
+  <field id="ProdPicoDst::b_Trigger_" name="b_Trigger_">
+    <brief>!</brief>
+    <type name="TBranch" qualifier="*" />
+  </field>
+  <field id="ProdPicoDst::b_Trigger_fUniqueID" name="b_Trigger_fUniqueID">
+    <brief>!</brief>
+    <type name="TBranch" qualifier="*" />
+  </field>
+  <field id="ProdPicoDst::b_Trigger_fBits" name="b_Trigger_fBits">
+    <brief>!</brief>
+    <type name="TBranch" qualifier="*" />
+  </field>
+  <field id="ProdPicoDst::b_Trigger_mFlag" name="b_Trigger_mFlag">
+    <brief>!</brief>
+    <type name="TBranch" qualifier="*" />
+  </field>
+  <field id="ProdPicoDst::b_Trigger_mId" name="b_Trigger_mId">
+    <brief>!</brief>
+    <type name="TBranch" qualifier="*" />
+  </field>
+  <field id="ProdPicoDst::b_Trigger_mAdc" name="b_Trigger_mAdc">
+    <brief>!</brief>
+    <type name="TBranch" qualifier="*" />
+  </field>
+  <field id="ProdPicoDst::b_BTOWHit_" name="b_BTOWHit_">
+    <brief>!</brief>
+    <type name="TBranch" qualifier="*" />
+  </field>
+  <field id="ProdPicoDst::b_BTOWHit_fUniqueID" name="b_BTOWHit_fUniqueID">
+    <brief>!</brief>
+    <type name="TBranch" qualifier="*" />
+  </field>
+  <field id="ProdPicoDst::b_BTOWHit_fBits" name="b_BTOWHit_fBits">
+    <brief>!</brief>
+    <type name="TBranch" qualifier="*" />
+  </field>
+  <field id="ProdPicoDst::b_BTOWHit_mId" name="b_BTOWHit_mId">
+    <brief>!</brief>
+    <type name="TBranch" qualifier="*" />
+  </field>
+  <field id="ProdPicoDst::b_BTOWHit_mAdc" name="b_BTOWHit_mAdc">
+    <brief>!</brief>
+    <type name="TBranch" qualifier="*" />
+  </field>
+  <field id="ProdPicoDst::b_BTOWHit_mE" name="b_BTOWHit_mE">
+    <brief>!</brief>
+    <type name="TBranch" qualifier="*" />
+  </field>
+  <field id="ProdPicoDst::b_BTofHit_" name="b_BTofHit_">
+    <brief>!</brief>
+    <type name="TBranch" qualifier="*" />
+  </field>
+  <field id="ProdPicoDst::b_BTofHit_fUniqueID" name="b_BTofHit_fUniqueID">
+    <brief>!</brief>
+    <type name="TBranch" qualifier="*" />
+  </field>
+  <field id="ProdPicoDst::b_BTofHit_fBits" name="b_BTofHit_fBits">
+    <brief>!</brief>
+    <type name="TBranch" qualifier="*" />
+  </field>
+  <field id="ProdPicoDst::b_BTofHit_mId" name="b_BTofHit_mId">
+    <brief>!</brief>
+    <type name="TBranch" qualifier="*" />
+  </field>
+  <field id="ProdPicoDst::b_V0Ks_" name="b_V0Ks_">
+    <brief>!</brief>
+    <type name="TBranch" qualifier="*" />
+  </field>
+  <field id="ProdPicoDst::b_V0Ks_mIndex2Track" name="b_V0Ks_mIndex2Track">
+    <brief>!</brief>
+    <type name="TBranch" qualifier="*" />
+  </field>
+  <field id="ProdPicoDst::b_V0Ks_mV0Pos_mX1" name="b_V0Ks_mV0Pos_mX1">
+    <brief>!</brief>
+    <type name="TBranch" qualifier="*" />
+  </field>
+  <field id="ProdPicoDst::b_V0Ks_mV0Pos_mX2" name="b_V0Ks_mV0Pos_mX2">
+    <brief>!</brief>
+    <type name="TBranch" qualifier="*" />
+  </field>
+  <field id="ProdPicoDst::b_V0Ks_mV0Pos_mX3" name="b_V0Ks_mV0Pos_mX3">
+    <brief>!</brief>
+    <type name="TBranch" qualifier="*" />
+  </field>
+  <field id="ProdPicoDst::b_V0Ks_mDcaDaughters" name="b_V0Ks_mDcaDaughters">
+    <brief>!</brief>
+    <type name="TBranch" qualifier="*" />
+  </field>
+  <field id="ProdPicoDst::b_V0Ks_mDca2Vtx" name="b_V0Ks_mDca2Vtx">
+    <brief>!</brief>
+    <type name="TBranch" qualifier="*" />
+  </field>
+  <field id="ProdPicoDst::b_V0Ks_mM" name="b_V0Ks_mM">
+    <brief>!</brief>
+    <type name="TBranch" qualifier="*" />
+  </field>
+  <field id="ProdPicoDst::b_V0L_" name="b_V0L_">
+    <brief>!</brief>
+    <type name="TBranch" qualifier="*" />
+  </field>
+  <field id="ProdPicoDst::b_V0L_mIndex2Track" name="b_V0L_mIndex2Track">
+    <brief>!</brief>
+    <type name="TBranch" qualifier="*" />
+  </field>
+  <field id="ProdPicoDst::b_V0L_mV0Pos_mX1" name="b_V0L_mV0Pos_mX1">
+    <brief>!</brief>
+    <type name="TBranch" qualifier="*" />
+  </field>
+  <field id="ProdPicoDst::b_V0L_mV0Pos_mX2" name="b_V0L_mV0Pos_mX2">
+    <brief>!</brief>
+    <type name="TBranch" qualifier="*" />
+  </field>
+  <field id="ProdPicoDst::b_V0L_mV0Pos_mX3" name="b_V0L_mV0Pos_mX3">
+    <brief>!</brief>
+    <type name="TBranch" qualifier="*" />
+  </field>
+  <field id="ProdPicoDst::b_V0L_mDcaDaughters" name="b_V0L_mDcaDaughters">
+    <brief>!</brief>
+    <type name="TBranch" qualifier="*" />
+  </field>
+  <field id="ProdPicoDst::b_V0L_mDca2Vtx" name="b_V0L_mDca2Vtx">
+    <brief>!</brief>
+    <type name="TBranch" qualifier="*" />
+  </field>
+  <field id="ProdPicoDst::b_V0L_mM" name="b_V0L_mM">
+    <brief>!</brief>
+    <type name="TBranch" qualifier="*" />
+  </field>
+  <field id="ProdPicoDst::b_V0Lbar_" name="b_V0Lbar_">
+    <brief>!</brief>
+    <type name="TBranch" qualifier="*" />
+  </field>
+  <field id="ProdPicoDst::b_V0Lbar_mIndex2Track" name="b_V0Lbar_mIndex2Track">
+    <brief>!</brief>
+    <type name="TBranch" qualifier="*" />
+  </field>
+  <field id="ProdPicoDst::b_V0Lbar_mV0Pos_mX1" name="b_V0Lbar_mV0Pos_mX1">
+    <brief>!</brief>
+    <type name="TBranch" qualifier="*" />
+  </field>
+  <field id="ProdPicoDst::b_V0Lbar_mV0Pos_mX2" name="b_V0Lbar_mV0Pos_mX2">
+    <brief>!</brief>
+    <type name="TBranch" qualifier="*" />
+  </field>
+  <field id="ProdPicoDst::b_V0Lbar_mV0Pos_mX3" name="b_V0Lbar_mV0Pos_mX3">
+    <brief>!</brief>
+    <type name="TBranch" qualifier="*" />
+  </field>
+  <field id="ProdPicoDst::b_V0Lbar_mDcaDaughters" name="b_V0Lbar_mDcaDaughters">
+    <brief>!</brief>
+    <type name="TBranch" qualifier="*" />
+  </field>
+  <field id="ProdPicoDst::b_V0Lbar_mDca2Vtx" name="b_V0Lbar_mDca2Vtx">
+    <brief>!</brief>
+    <type name="TBranch" qualifier="*" />
+  </field>
+  <field id="ProdPicoDst::b_V0Lbar_mM" name="b_V0Lbar_mM">
+    <brief>!</brief>
+    <type name="TBranch" qualifier="*" />
+  </field>
+  <constructor abstract="yes" id="ProdPicoDst::ProdPicoDst" name="ProdPicoDst">
+    <brief>!</brief>
+    <argument id="ProdPicoDst::ProdPicoDst::tree" name="tree">
+      <type name="TTree" qualifier="*" />
+    </argument>
+  </constructor>
+  <destructor abstract="yes" id="ProdPicoDst::~ProdPicoDst" name="~ProdPicoDst" virtual="yes" />
+  <method abstract="yes" id="ProdPicoDst::Cut" name="Cut" virtual="yes">
+    <return>
+      <type name="Int_t" />
+    </return>
+    <argument id="ProdPicoDst::Cut::entry" name="entry">
+      <type name="Long64_t" />
+    </argument>
+  </method>
+  <method abstract="yes" id="ProdPicoDst::GetEntry" name="GetEntry" override="yes" virtual="yes">
+    <return>
+      <type name="Int_t" />
+    </return>
+    <argument id="ProdPicoDst::GetEntry::entry" name="entry">
+      <type name="Long64_t" />
+    </argument>
+    <override name="PicoDataStore::GetEntry" ref="PicoDataStore#PicoDataStore::GetEntry" />
+  </method>
+  <method id="ProdPicoDst::getTree" name="getTree" override="yes" virtual="yes">
+    <return>
+      <type name="TTree" qualifier="*" />
+    </return>
+    <override name="PicoDataStore::getTree" ref="PicoDataStore#PicoDataStore::getTree" />
+  </method>
+  <method id="ProdPicoDst::globalPt" name="globalPt" override="yes" virtual="yes">
+    <return>
+      <type name="Double_t" />
+    </return>
+    <argument id="ProdPicoDst::globalPt::iHit" name="iHit">
+      <type name="Int_t" />
+    </argument>
+    <override name="PicoDataStore::globalPt" ref="PicoDataStore#PicoDataStore::globalPt" />
+  </method>
+  <method abstract="yes" id="ProdPicoDst::Init" name="Init" virtual="yes">
+    <return>
+      <type builtin="yes" name="void" />
+    </return>
+    <argument id="ProdPicoDst::Init::tree" name="tree">
+      <type name="TTree" qualifier="*" />
+    </argument>
+  </method>
+  <method abstract="yes" id="ProdPicoDst::LoadTree" name="LoadTree" virtual="yes">
+    <return>
+      <type name="Long64_t" />
+    </return>
+    <argument id="ProdPicoDst::LoadTree::entry" name="entry">
+      <type name="Long64_t" />
+    </argument>
+  </method>
+  <method id="ProdPicoDst::Loop" name="Loop" virtual="yes">
+    <return>
+      <type builtin="yes" name="void" />
+    </return>
+  </method>
+  <method abstract="yes" id="ProdPicoDst::Notify" name="Notify" virtual="yes">
+    <return>
+      <type name="Bool_t" />
+    </return>
+  </method>
+  <method id="ProdPicoDst::numTofMatchedTracks" name="numTofMatchedTracks" override="yes" virtual="yes">
+    <return>
+      <type name="Int_t" />
+    </return>
+    <override name="PicoDataStore::numTofMatchedTracks" ref="PicoDataStore#PicoDataStore::numTofMatchedTracks" />
+  </method>
+  <method id="ProdPicoDst::numTracks" name="numTracks" override="yes" virtual="yes">
+    <return>
+      <type name="Int_t" />
+    </return>
+    <override name="PicoDataStore::numTracks" ref="PicoDataStore#PicoDataStore::numTracks" />
+  </method>
+  <method id="ProdPicoDst::refMult" name="refMult" override="yes" virtual="yes">
+    <return>
+      <type name="Float_t" />
+    </return>
+    <override name="PicoDataStore::refMult" ref="PicoDataStore#PicoDataStore::refMult" />
+  </method>
+  <method id="ProdPicoDst::runId" name="runId" override="yes" virtual="yes">
+    <return>
+      <type name="Int_t" />
+    </return>
+    <override name="PicoDataStore::runId" ref="PicoDataStore#PicoDataStore::runId" />
+  </method>
+  <method abstract="yes" id="ProdPicoDst::Show" name="Show" virtual="yes">
+    <return>
+      <type builtin="yes" name="void" />
+    </return>
+    <argument id="ProdPicoDst::Show::entry" name="entry">
+      <type name="Long64_t" />
+    </argument>
+  </method>
+  <method id="ProdPicoDst::trackBeta" name="trackBeta" override="yes" virtual="yes">
+    <return>
+      <type name="Double_t" />
+    </return>
+    <argument id="ProdPicoDst::trackBeta::iHit" name="iHit">
+      <type name="Int_t" />
+    </argument>
+    <override name="PicoDataStore::trackBeta" ref="PicoDataStore#PicoDataStore::trackBeta" />
+  </method>
+  <method id="ProdPicoDst::trackCharge" name="trackCharge" override="yes" virtual="yes">
+    <return>
+      <type name="Int_t" />
+    </return>
+    <argument id="ProdPicoDst::trackCharge::iHit" name="iHit">
+      <type name="Int_t" />
+    </argument>
+    <override name="PicoDataStore::trackCharge" ref="PicoDataStore#PicoDataStore::trackCharge" />
+  </method>
+  <method id="ProdPicoDst::trackDca" name="trackDca" override="yes" virtual="yes">
+    <return>
+      <type name="Double_t" />
+    </return>
+    <argument id="ProdPicoDst::trackDca::iHit" name="iHit">
+      <type name="Int_t" />
+    </argument>
+    <override name="PicoDataStore::trackDca" ref="PicoDataStore#PicoDataStore::trackDca" />
+  </method>
+  <method id="ProdPicoDst::trackDedx" name="trackDedx" override="yes" virtual="yes">
+    <return>
+      <type name="Double_t" />
+    </return>
+    <argument id="ProdPicoDst::trackDedx::iHit" name="iHit">
+      <type name="Int_t" />
+    </argument>
+    <override name="PicoDataStore::trackDedx" ref="PicoDataStore#PicoDataStore::trackDedx" />
+  </method>
+  <method id="ProdPicoDst::trackEta" name="trackEta" override="yes" virtual="yes">
+    <return>
+      <type name="Double_t" />
+    </return>
+    <argument id="ProdPicoDst::trackEta::iHit" name="iHit">
+      <type name="Int_t" />
+    </argument>
+    <override name="PicoDataStore::trackEta" ref="PicoDataStore#PicoDataStore::trackEta" />
+  </method>
+  <method id="ProdPicoDst::trackNHits" name="trackNHits" override="yes" virtual="yes">
+    <brief>same as nHitsFit for primary track</brief>
+    <return>
+      <type name="Int_t" />
+    </return>
+    <argument id="ProdPicoDst::trackNHits::iHit" name="iHit">
+      <type name="Int_t" />
+    </argument>
+    <override name="PicoDataStore::trackNHits" ref="PicoDataStore#PicoDataStore::trackNHits" />
+  </method>
+  <method id="ProdPicoDst::trackNHitsDedx" name="trackNHitsDedx" override="yes" virtual="yes">
+    <return>
+      <type name="Int_t" />
+    </return>
+    <argument id="ProdPicoDst::trackNHitsDedx::iHit" name="iHit">
+      <type name="Int_t" />
+    </argument>
+    <override name="PicoDataStore::trackNHitsDedx" ref="PicoDataStore#PicoDataStore::trackNHitsDedx" />
+  </method>
+  <method id="ProdPicoDst::trackNHitsFit" name="trackNHitsFit" override="yes" virtual="yes">
+    <return>
+      <type name="Int_t" />
+    </return>
+    <argument id="ProdPicoDst::trackNHitsFit::iHit" name="iHit">
+      <type name="Int_t" />
+    </argument>
+    <override name="PicoDataStore::trackNHitsFit" ref="PicoDataStore#PicoDataStore::trackNHitsFit" />
+  </method>
+  <method id="ProdPicoDst::trackNHitsPossible" name="trackNHitsPossible" override="yes" virtual="yes">
+    <return>
+      <type name="Int_t" />
+    </return>
+    <argument id="ProdPicoDst::trackNHitsPossible::iHit" name="iHit">
+      <type name="Int_t" />
+    </argument>
+    <override name="PicoDataStore::trackNHitsPossible" ref="PicoDataStore#PicoDataStore::trackNHitsPossible" />
+  </method>
+  <method id="ProdPicoDst::trackP" name="trackP" override="yes" virtual="yes">
+    <return>
+      <type name="Double_t" />
+    </return>
+    <argument id="ProdPicoDst::trackP::iHit" name="iHit">
+      <type name="Int_t" />
+    </argument>
+    <override name="PicoDataStore::trackP" ref="PicoDataStore#PicoDataStore::trackP" />
+  </method>
+  <method id="ProdPicoDst::trackPt" name="trackPt" override="yes" virtual="yes">
+    <return>
+      <type name="Double_t" />
+    </return>
+    <argument id="ProdPicoDst::trackPt::iHit" name="iHit">
+      <type name="Int_t" />
+    </argument>
+    <override name="PicoDataStore::trackPt" ref="PicoDataStore#PicoDataStore::trackPt" />
+  </method>
+  <method id="ProdPicoDst::trackPx" name="trackPx" override="yes" virtual="yes">
+    <return>
+      <type name="Double_t" />
+    </return>
+    <argument id="ProdPicoDst::trackPx::iHit" name="iHit">
+      <type name="Int_t" />
+    </argument>
+    <override name="PicoDataStore::trackPx" ref="PicoDataStore#PicoDataStore::trackPx" />
+  </method>
+  <method id="ProdPicoDst::trackPy" name="trackPy" override="yes" virtual="yes">
+    <return>
+      <type name="Double_t" />
+    </return>
+    <argument id="ProdPicoDst::trackPy::iHit" name="iHit">
+      <type name="Int_t" />
+    </argument>
+    <override name="PicoDataStore::trackPy" ref="PicoDataStore#PicoDataStore::trackPy" />
+  </method>
+  <method id="ProdPicoDst::trackPz" name="trackPz" override="yes" virtual="yes">
+    <return>
+      <type name="Double_t" />
+    </return>
+    <argument id="ProdPicoDst::trackPz::iHit" name="iHit">
+      <type name="Int_t" />
+    </argument>
+    <override name="PicoDataStore::trackPz" ref="PicoDataStore#PicoDataStore::trackPz" />
+  </method>
+  <method id="ProdPicoDst::trackTofMatch" name="trackTofMatch" override="yes" virtual="yes">
+    <return>
+      <type name="Int_t" />
+    </return>
+    <argument id="ProdPicoDst::trackTofMatch::iHit" name="iHit">
+      <type name="Int_t" />
+    </argument>
+    <override name="PicoDataStore::trackTofMatch" ref="PicoDataStore#PicoDataStore::trackTofMatch" />
+  </method>
+  <method id="ProdPicoDst::trackYLocal" name="trackYLocal" override="yes" virtual="yes">
+    <return>
+      <type name="Double_t" />
+    </return>
+    <argument id="ProdPicoDst::trackYLocal::iHit" name="iHit">
+      <type name="Int_t" />
+    </argument>
+    <override name="PicoDataStore::trackYLocal" ref="PicoDataStore#PicoDataStore::trackYLocal" />
+  </method>
+  <method id="ProdPicoDst::trackZLocal" name="trackZLocal" override="yes" virtual="yes">
+    <return>
+      <type name="Double_t" />
+    </return>
+    <argument id="ProdPicoDst::trackZLocal::iHit" name="iHit">
+      <type name="Int_t" />
+    </argument>
+    <override name="PicoDataStore::trackZLocal" ref="PicoDataStore#PicoDataStore::trackZLocal" />
+  </method>
+  <method id="ProdPicoDst::triggerWord" name="triggerWord" override="yes" virtual="yes">
+    <return>
+      <type name="UInt_t" />
+    </return>
+    <override name="PicoDataStore::triggerWord" ref="PicoDataStore#PicoDataStore::triggerWord" />
+  </method>
+  <method id="ProdPicoDst::vR" name="vR" override="yes" virtual="yes">
+    <return>
+      <type name="Double_t" />
+    </return>
+    <override name="PicoDataStore::vR" ref="PicoDataStore#PicoDataStore::vR" />
+  </method>
+  <method id="ProdPicoDst::vX" name="vX" override="yes" virtual="yes">
+    <return>
+      <type name="Double_t" />
+    </return>
+    <override name="PicoDataStore::vX" ref="PicoDataStore#PicoDataStore::vX" />
+  </method>
+  <method id="ProdPicoDst::vY" name="vY" override="yes" virtual="yes">
+    <return>
+      <type name="Double_t" />
+    </return>
+    <override name="PicoDataStore::vY" ref="PicoDataStore#PicoDataStore::vY" />
+  </method>
+  <method id="ProdPicoDst::vZ" name="vZ" override="yes" virtual="yes">
+    <return>
+      <type name="Double_t" />
+    </return>
+    <override name="PicoDataStore::vZ" ref="PicoDataStore#PicoDataStore::vZ" />
+  </method>
+</class>

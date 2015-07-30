@@ -1,0 +1,47 @@
+<class xmlns="http://jessevdk.github.com/cldoc/1.0" id="TofEffFitter" name="TofEffFitter">
+  <base access="private">
+    <type name="jdb::HistoAnalyzer" />
+  </base>
+  <constructor id="TofEffFitter::TofEffFitter" name="TofEffFitter">
+    <argument id="TofEffFitter::TofEffFitter::cfg" name="cfg">
+      <type name="jdb::XmlConfig" qualifier="*" />
+    </argument>
+    <argument id="TofEffFitter::TofEffFitter::np" name="np">
+      <type name="string" />
+    </argument>
+  </constructor>
+  <destructor id="TofEffFitter::~TofEffFitter" name="~TofEffFitter" />
+  <method id="TofEffFitter::effFor" name="effFor">
+    <brief>Efficiency plot for a given centrality and charge</brief>
+    <return>
+      <type builtin="yes" name="void" />
+    </return>
+    <argument id="TofEffFitter::effFor::cen" name="cen">
+      <doc>mapped centrality bin ( 0, 5)</doc>
+      <type builtin="yes" name="int" />
+    </argument>
+    <argument id="TofEffFitter::effFor::charge" name="charge">
+      <doc>"p" for plus and "n" minus</doc>
+      <type name="string" />
+    </argument>
+  </method>
+  <method id="TofEffFitter::exportParams" name="exportParams">
+    <return>
+      <type builtin="yes" name="void" />
+    </return>
+    <argument id="TofEffFitter::exportParams::cen" name="cen">
+      <type builtin="yes" name="int" />
+    </argument>
+    <argument id="TofEffFitter::exportParams::charge" name="charge">
+      <type name="string" />
+    </argument>
+    <argument id="TofEffFitter::exportParams::vals" name="vals">
+      <type name="vector&lt;double&gt;" qualifier=" &amp;" />
+    </argument>
+  </method>
+  <method id="TofEffFitter::make" name="make" virtual="yes">
+    <return>
+      <type builtin="yes" name="void" />
+    </return>
+  </method>
+</class>

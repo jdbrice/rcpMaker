@@ -1,0 +1,53 @@
+<class xmlns="http://jessevdk.github.com/cldoc/1.0" id="TofGenerator" name="TofGenerator">
+  <constructor id="TofGenerator::TofGenerator" name="TofGenerator">
+    <brief>*</brief>
+    <doc>Constructor
+</doc>
+    <argument id="TofGenerator::TofGenerator::obSigma" name="obSigma">
+      <type builtin="yes" name="double" />
+    </argument>
+    <argument id="TofGenerator::TofGenerator::nSamples" name="nSamples">
+      <type builtin="yes" name="int" />
+    </argument>
+  </constructor>
+  <destructor id="TofGenerator::~TofGenerator" name="~TofGenerator" />
+  <method id="TofGenerator::mean" name="mean">
+    <brief>*</brief>
+    <doc>Returns the expected mean 1/beta value
+</doc>
+    <return>
+      <doc>Expected 1/beta for the given p, m</doc>
+      <type builtin="yes" name="double" />
+    </return>
+    <argument id="TofGenerator::mean::p" name="p">
+      <type builtin="yes" name="double" />
+    </argument>
+    <argument id="TofGenerator::mean::mass" name="mass">
+      <type builtin="yes" name="double" />
+    </argument>
+  </method>
+  <method id="TofGenerator::random" name="random">
+    <brief>*</brief>
+    <doc>Generates a single random 1/beta value
+</doc>
+    <return>
+      <doc>Randomly generated 1/beta value for the given p, m</doc>
+      <type builtin="yes" name="double" />
+    </return>
+    <argument id="TofGenerator::random::p" name="p">
+      <type builtin="yes" name="double" />
+    </argument>
+    <argument id="TofGenerator::random::mass" name="mass">
+      <type builtin="yes" name="double" />
+    </argument>
+  </method>
+  <field access="protected" id="TofGenerator::rGen" name="rGen">
+    <type name="TRandom3" qualifier="*" />
+  </field>
+  <field access="protected" id="TofGenerator::obSigma" name="obSigma">
+    <type builtin="yes" name="double" />
+  </field>
+  <field access="protected" id="TofGenerator::nSamples" name="nSamples">
+    <type builtin="yes" name="int" />
+  </field>
+</class>

@@ -11,572 +11,1708 @@ return values.
 3. [References](#report/references): Unresolved cross references.
 </doc>
   <coverage>
-    <type documented="0" name="class" undocumented="9">
-      <undocumented id="Bichsel" name="Bichsel">
-        <location column="1" file="../include/Bichsel.h" line="17" />
-      </undocumented>
-      <undocumented id="Common" name="Common">
-        <location column="1" file="../include/Common.h" line="15" />
-      </undocumented>
-      <undocumented id="FeedDownMaker" name="FeedDownMaker">
-        <location column="1" file="../include/FeedDownMaker.h" line="15" />
-      </undocumented>
-      <undocumented id="InclusiveSpectra" name="InclusiveSpectra">
-        <location column="1" file="../include/InclusiveSpectra.h" line="20" />
-      </undocumented>
-      <undocumented id="PhaseSpaceRecentering" name="PhaseSpaceRecentering">
-        <location column="1" file="../include/PhaseSpaceRecentering.h" line="15" />
-      </undocumented>
-      <undocumented id="PidPhaseSpace" name="PidPhaseSpace">
-        <location column="1" file="../include/PidPhaseSpace.h" line="19" />
-      </undocumented>
-      <undocumented id="PidYieldPresenter" name="PidYieldPresenter">
-        <location column="1" file="../include/PidYieldPresenter.h" line="32" />
-      </undocumented>
-      <undocumented id="PresentationMaker" name="PresentationMaker">
-        <location column="1" file="../include/PresentationMaker.h" line="8" />
-      </undocumented>
-      <undocumented id="SpectraCorrecter" name="SpectraCorrecter">
-        <location column="1" file="../include/PidPhaseSpace.h" line="10" />
-        <location column="1" file="../include/SpectraCorrecter.h" line="14" />
+    <type documented="0" name="namespace" undocumented="1">
+      <undocumented id="TSF" name="TSF">
+        <location column="1" file="../include/TSF/FitDataPoint.h" line="11" />
+        <location column="1" file="../include/TSF/FitDataset.h" line="15" />
+        <location column="1" file="../include/TSF/FitRange.h" line="7" />
+        <location column="1" file="../include/TSF/FitRunner.h" line="23" />
+        <location column="1" file="../include/TSF/FitSchema.h" line="25" />
+        <location column="1" file="../include/TSF/FitVar.h" line="12" />
+        <location column="1" file="../include/TSF/Fitter.h" line="16" />
+        <location column="1" file="../include/TSF/GaussModel.h" line="23" />
       </undocumented>
     </type>
-    <type documented="0" name="destructor" undocumented="9">
+    <type documented="0" name="destructor" undocumented="27">
       <undocumented id="Bichsel::~Bichsel" name="~Bichsel">
-        <location column="2" file="../include/Bichsel.h" line="45" />
+        <location column="2" file="../include/Params/Bichsel.h" line="45" />
       </undocumented>
-      <undocumented id="Common::~Common" name="~Common">
-        <location column="2" file="../include/Common.h" line="19" />
+      <undocumented id="EffParams::~EffParams" name="~EffParams">
+        <location column="2" file="../include/Params/EffParams.h" line="38" />
+      </undocumented>
+      <undocumented id="EnergyLoss::~EnergyLoss" name="~EnergyLoss">
+        <location column="2" file="../include/McMaker/EnergyLoss.h" line="11" />
+      </undocumented>
+      <undocumented id="EnergyLossParams::~EnergyLossParams" name="~EnergyLossParams">
+        <location column="2" file="../include/Params/EnergyLossParams.h" line="26" />
       </undocumented>
       <undocumented id="FeedDownMaker::~FeedDownMaker" name="~FeedDownMaker">
-        <location column="2" file="../include/FeedDownMaker.h" line="23" />
+        <location column="2" file="../include/McMaker/FeedDownMaker.h" line="23" />
+      </undocumented>
+      <undocumented id="FeedDownParams::~FeedDownParams" name="~FeedDownParams">
+        <location column="2" file="../include/Params/FeedDownParams.h" line="29" />
       </undocumented>
       <undocumented id="InclusiveSpectra::~InclusiveSpectra" name="~InclusiveSpectra">
-        <location column="2" file="../include/InclusiveSpectra.h" line="83" />
+        <location column="2" file="../include/Spectra/InclusiveSpectra.h" line="83" />
       </undocumented>
-      <undocumented id="PhaseSpaceRecentering::~PhaseSpaceRecentering" name="~PhaseSpaceRecentering">
-        <location column="2" file="../include/PhaseSpaceRecentering.h" line="32" />
-      </undocumented>
-      <undocumented id="PidPhaseSpace::~PidPhaseSpace" name="~PidPhaseSpace">
-        <location column="2" file="../include/PidPhaseSpace.h" line="71" />
+      <undocumented id="PidHistoMaker::~PidHistoMaker" name="~PidHistoMaker">
+        <location column="2" file="../include/Spectra/PidHistoMaker.h" line="71" />
       </undocumented>
       <undocumented id="PidYieldPresenter::~PidYieldPresenter" name="~PidYieldPresenter">
-        <location column="2" file="../include/PidYieldPresenter.h" line="67" />
+        <location column="2" file="../include/Present/PidYieldPresenter.h" line="67" />
       </undocumented>
       <undocumented id="PresentationMaker::~PresentationMaker" name="~PresentationMaker">
-        <location column="2" file="../include/PresentationMaker.h" line="12" />
+        <location column="2" file="../include/Present/PresentationMaker.h" line="12" />
+      </undocumented>
+      <undocumented id="ProdPicoDst::~ProdPicoDst" name="~ProdPicoDst">
+        <location column="4" file="../include/Adapter/ProdPicoDst.h" line="295" />
+      </undocumented>
+      <undocumented id="RcpPicoDst::~RcpPicoDst" name="~RcpPicoDst">
+        <location column="4" file="../include/Adapter/RcpPicoDst.h" line="74" />
       </undocumented>
       <undocumented id="SpectraCorrecter::~SpectraCorrecter" name="~SpectraCorrecter">
-        <location column="2" file="../include/SpectraCorrecter.h" line="49" />
+        <location column="2" file="../include/Spectra/SpectraCorrecter.h" line="49" />
+      </undocumented>
+      <undocumented id="TSF::FitDataPoint::~FitDataPoint" name="~FitDataPoint">
+        <location column="3" file="../include/TSF/FitDataPoint.h" line="29" />
+      </undocumented>
+      <undocumented id="TSF::FitDataset::~FitDataset" name="~FitDataset">
+        <location column="3" file="../include/TSF/FitDataset.h" line="26" />
+      </undocumented>
+      <undocumented id="TSF::FitRange::~FitRange" name="~FitRange">
+        <location column="3" file="../include/TSF/FitRange.h" line="21" />
+      </undocumented>
+      <undocumented id="TSF::FitRunner::~FitRunner" name="~FitRunner">
+        <location column="3" file="../include/TSF/FitRunner.h" line="51" />
+      </undocumented>
+      <undocumented id="TSF::FitSchema::~FitSchema" name="~FitSchema">
+        <location column="3" file="../include/TSF/FitSchema.h" line="46" />
+      </undocumented>
+      <undocumented id="TSF::FitVar::~FitVar" name="~FitVar">
+        <location column="3" file="../include/TSF/FitVar.h" line="49" />
+      </undocumented>
+      <undocumented id="TSF::Fitter::~Fitter" name="~Fitter">
+        <location column="3" file="../include/TSF/Fitter.h" line="42" />
+      </undocumented>
+      <undocumented id="TSF::GaussModel::~GaussModel" name="~GaussModel">
+        <location column="3" file="../include/TSF/GaussModel.h" line="56" />
+      </undocumented>
+      <undocumented id="TofEffFitter::~TofEffFitter" name="~TofEffFitter">
+        <location column="2" file="../include/McMaker/TofEffFitter.h" line="25" />
+      </undocumented>
+      <undocumented id="TofEffMaker::~TofEffMaker" name="~TofEffMaker">
+        <location column="2" file="../include/McMaker/TofEffMaker.h" line="39" />
+      </undocumented>
+      <undocumented id="TofGenerator::~TofGenerator" name="~TofGenerator">
+        <location column="2" file="../include/Params/TofGenerator.h" line="46" />
+      </undocumented>
+      <undocumented id="TpcEffMcHistoMaker::~TpcEffMcHistoMaker" name="~TpcEffMcHistoMaker">
+        <location column="2" file="../include/McMaker/TpcEffMcHistoMaker.h" line="32" />
+      </undocumented>
+      <undocumented id="TpcEffRcHistoMaker::~TpcEffRcHistoMaker" name="~TpcEffRcHistoMaker">
+        <location column="2" file="../include/McMaker/TpcEffRcHistoMaker.h" line="33" />
+      </undocumented>
+      <undocumented id="ZRecentering::~ZRecentering" name="~ZRecentering">
+        <location column="2" file="../include/Spectra/ZRecentering.h" line="32" />
       </undocumented>
     </type>
-    <type documented="31" name="field" undocumented="58">
+    <type documented="312" name="field" undocumented="161">
       <undocumented id="Bichsel::hK" name="hK">
-        <location column="2" file="../include/Bichsel.h" line="24" />
+        <location column="2" file="../include/Params/Bichsel.h" line="24" />
       </undocumented>
       <undocumented id="Bichsel::hP" name="hP">
-        <location column="2" file="../include/Bichsel.h" line="24" />
+        <location column="2" file="../include/Params/Bichsel.h" line="24" />
       </undocumented>
       <undocumented id="Bichsel::hPi" name="hPi">
-        <location column="2" file="../include/Bichsel.h" line="24" />
+        <location column="2" file="../include/Params/Bichsel.h" line="24" />
       </undocumented>
       <undocumented id="Bichsel::kaonMass" name="kaonMass">
-        <location column="2" file="../include/Bichsel.h" line="28" />
+        <location column="2" file="../include/Params/Bichsel.h" line="28" />
       </undocumented>
       <undocumented id="Bichsel::method" name="method">
-        <location column="2" file="../include/Bichsel.h" line="21" />
+        <location column="2" file="../include/Params/Bichsel.h" line="21" />
       </undocumented>
       <undocumented id="Bichsel::piMass" name="piMass">
-        <location column="2" file="../include/Bichsel.h" line="27" />
+        <location column="2" file="../include/Params/Bichsel.h" line="27" />
       </undocumented>
       <undocumented id="Bichsel::protonMass" name="protonMass">
-        <location column="2" file="../include/Bichsel.h" line="29" />
+        <location column="2" file="../include/Params/Bichsel.h" line="29" />
       </undocumented>
       <undocumented id="Bichsel::table" name="table">
-        <location column="2" file="../include/Bichsel.h" line="22" />
+        <location column="2" file="../include/Params/Bichsel.h" line="22" />
       </undocumented>
       <undocumented id="Bichsel::tableFile" name="tableFile">
-        <location column="2" file="../include/Bichsel.h" line="20" />
+        <location column="2" file="../include/Params/Bichsel.h" line="20" />
+      </undocumented>
+      <undocumented id="EffParams::cenLimits" name="cenLimits">
+        <location column="2" file="../include/Params/EffParams.h" line="24" />
+      </undocumented>
+      <undocumented id="EffParams::cfg" name="cfg">
+        <location column="2" file="../include/Params/EffParams.h" line="20" />
+      </undocumented>
+      <undocumented id="EffParams::eff" name="eff">
+        <location column="2" file="../include/Params/EffParams.h" line="23" />
+      </undocumented>
+      <undocumented id="EffParams::name" name="name">
+        <location column="2" file="../include/Params/EffParams.h" line="26" />
+      </undocumented>
+      <undocumented id="EffParams::nodePath" name="nodePath">
+        <location column="2" file="../include/Params/EffParams.h" line="21" />
+      </undocumented>
+      <undocumented id="EffParams::yLimits" name="yLimits">
+        <location column="2" file="../include/Params/EffParams.h" line="25" />
+      </undocumented>
+      <undocumented id="EnergyLossParams::cfg" name="cfg">
+        <location column="2" file="../include/Params/EnergyLossParams.h" line="15" />
+      </undocumented>
+      <undocumented id="EnergyLossParams::fn" name="fn">
+        <location column="2" file="../include/Params/EnergyLossParams.h" line="20" />
+      </undocumented>
+      <undocumented id="EnergyLossParams::formula" name="formula">
+        <location column="2" file="../include/Params/EnergyLossParams.h" line="19" />
+      </undocumented>
+      <undocumented id="EnergyLossParams::log" name="log">
+        <location column="2" file="../include/Params/EnergyLossParams.h" line="17" />
+      </undocumented>
+      <undocumented id="EnergyLossParams::nodePath" name="nodePath">
+        <location column="2" file="../include/Params/EnergyLossParams.h" line="16" />
       </undocumented>
       <undocumented id="FeedDownMaker::plcName" name="plcName">
-        <location column="2" file="../include/FeedDownMaker.h" line="28" />
+        <location column="2" file="../include/McMaker/FeedDownMaker.h" line="28" />
+      </undocumented>
+      <undocumented id="FeedDownParams::cfg" name="cfg">
+        <location column="2" file="../include/Params/FeedDownParams.h" line="16" />
+      </undocumented>
+      <undocumented id="FeedDownParams::ch" name="ch">
+        <location column="2" file="../include/Params/FeedDownParams.h" line="20" />
+      </undocumented>
+      <undocumented id="FeedDownParams::cl" name="cl">
+        <location column="2" file="../include/Params/FeedDownParams.h" line="20" />
+      </undocumented>
+      <undocumented id="FeedDownParams::fn" name="fn">
+        <location column="2" file="../include/Params/FeedDownParams.h" line="22" />
+      </undocumented>
+      <undocumented id="FeedDownParams::formula" name="formula">
+        <location column="2" file="../include/Params/FeedDownParams.h" line="21" />
+      </undocumented>
+      <undocumented id="FeedDownParams::log" name="log">
+        <location column="2" file="../include/Params/FeedDownParams.h" line="18" />
+      </undocumented>
+      <undocumented id="FeedDownParams::nodePath" name="nodePath">
+        <location column="2" file="../include/Params/FeedDownParams.h" line="17" />
       </undocumented>
       <undocumented id="InclusiveSpectra::cBin" name="cBin">
-        <location column="2" file="../include/InclusiveSpectra.h" line="77" />
+        <location column="2" file="../include/Spectra/InclusiveSpectra.h" line="77" />
       </undocumented>
       <undocumented id="InclusiveSpectra::eventWeight" name="eventWeight">
-        <location column="2" file="../include/InclusiveSpectra.h" line="76" />
+        <location column="2" file="../include/Spectra/InclusiveSpectra.h" line="76" />
       </undocumented>
       <undocumented id="InclusiveSpectra::pico" name="pico">
-        <location column="2" file="../include/InclusiveSpectra.h" line="31" />
+        <location column="2" file="../include/Spectra/InclusiveSpectra.h" line="31" />
       </undocumented>
-      <undocumented id="PhaseSpaceRecentering::dedxGen" name="dedxGen">
-        <location column="2" file="../include/PhaseSpaceRecentering.h" line="25" />
+      <undocumented id="PidHistoMaker::binByMomentum" name="binByMomentum">
+        <location column="2" file="../include/Spectra/PidHistoMaker.h" line="57" />
       </undocumented>
-      <undocumented id="PhaseSpaceRecentering::species" name="species">
-        <location column="2" file="../include/PhaseSpaceRecentering.h" line="28" />
+      <undocumented id="PidHistoMaker::binsDedx" name="binsDedx">
+        <location column="2" file="../include/Spectra/PidHistoMaker.h" line="30" />
       </undocumented>
-      <undocumented id="PhaseSpaceRecentering::tofGen" name="tofGen">
-        <location column="2" file="../include/PhaseSpaceRecentering.h" line="26" />
+      <undocumented id="PidHistoMaker::binsEta" name="binsEta">
+        <location column="2" file="../include/Spectra/PidHistoMaker.h" line="32" />
       </undocumented>
-      <undocumented id="PhaseSpaceRecentering::tofSigma" name="tofSigma">
-        <location column="2" file="../include/PhaseSpaceRecentering.h" line="23" />
+      <undocumented id="PidHistoMaker::binsPt" name="binsPt">
+        <location column="2" file="../include/Spectra/PidHistoMaker.h" line="31" />
       </undocumented>
-      <undocumented id="PidPhaseSpace::binByMomentum" name="binByMomentum">
-        <location column="2" file="../include/PidPhaseSpace.h" line="57" />
+      <undocumented id="PidHistoMaker::cfgFeedDown" name="cfgFeedDown">
+        <location column="2" file="../include/Spectra/PidHistoMaker.h" line="26" />
       </undocumented>
-      <undocumented id="PidPhaseSpace::binsDedx" name="binsDedx">
-        <location column="2" file="../include/PidPhaseSpace.h" line="30" />
+      <undocumented id="PidHistoMaker::charges" name="charges">
+        <location column="2" file="../include/Spectra/PidHistoMaker.h" line="33" />
       </undocumented>
-      <undocumented id="PidPhaseSpace::binsEta" name="binsEta">
-        <location column="2" file="../include/PidPhaseSpace.h" line="32" />
+      <undocumented id="PidHistoMaker::dedxCut" name="dedxCut">
+        <location column="2" file="../include/Spectra/PidHistoMaker.h" line="50" />
       </undocumented>
-      <undocumented id="PidPhaseSpace::binsPt" name="binsPt">
-        <location column="2" file="../include/PidPhaseSpace.h" line="31" />
+      <undocumented id="PidHistoMaker::dedxSigmaIdeal" name="dedxSigmaIdeal">
+        <location column="2" file="../include/Spectra/PidHistoMaker.h" line="46" />
       </undocumented>
-      <undocumented id="PidPhaseSpace::cfgFeedDown" name="cfgFeedDown">
-        <location column="2" file="../include/PidPhaseSpace.h" line="26" />
+      <undocumented id="PidHistoMaker::effWeight" name="effWeight">
+        <location column="2" file="../include/Spectra/PidHistoMaker.h" line="61" />
       </undocumented>
-      <undocumented id="PidPhaseSpace::charges" name="charges">
-        <location column="2" file="../include/PidPhaseSpace.h" line="33" />
+      <undocumented id="PidHistoMaker::elParams" name="elParams">
+        <location column="2" file="../include/Spectra/PidHistoMaker.h" line="63" />
       </undocumented>
-      <undocumented id="PidPhaseSpace::dedxCut" name="dedxCut">
-        <location column="2" file="../include/PidPhaseSpace.h" line="50" />
+      <undocumented id="PidHistoMaker::fdParams" name="fdParams">
+        <location column="2" file="../include/Spectra/PidHistoMaker.h" line="65" />
       </undocumented>
-      <undocumented id="PidPhaseSpace::dedxSigmaIdeal" name="dedxSigmaIdeal">
-        <location column="2" file="../include/PidPhaseSpace.h" line="46" />
+      <undocumented id="PidHistoMaker::fdWeight" name="fdWeight">
+        <location column="2" file="../include/Spectra/PidHistoMaker.h" line="67" />
       </undocumented>
-      <undocumented id="PidPhaseSpace::effWeight" name="effWeight">
-        <location column="2" file="../include/PidPhaseSpace.h" line="61" />
+      <undocumented id="PidHistoMaker::make2D" name="make2D">
+        <location column="2" file="../include/Spectra/PidHistoMaker.h" line="52" />
       </undocumented>
-      <undocumented id="PidPhaseSpace::elParams" name="elParams">
-        <location column="2" file="../include/PidPhaseSpace.h" line="63" />
+      <undocumented id="PidHistoMaker::makeCombinedCharge" name="makeCombinedCharge">
+        <location column="2" file="../include/Spectra/PidHistoMaker.h" line="58" />
       </undocumented>
-      <undocumented id="PidPhaseSpace::fdParams" name="fdParams">
-        <location column="2" file="../include/PidPhaseSpace.h" line="65" />
+      <undocumented id="PidHistoMaker::makeEnhanced" name="makeEnhanced">
+        <location column="2" file="../include/Spectra/PidHistoMaker.h" line="52" />
       </undocumented>
-      <undocumented id="PidPhaseSpace::fdWeight" name="fdWeight">
-        <location column="2" file="../include/PidPhaseSpace.h" line="67" />
+      <undocumented id="PidHistoMaker::nSigAbove" name="nSigAbove">
+        <location column="2" file="../include/Spectra/PidHistoMaker.h" line="55" />
       </undocumented>
-      <undocumented id="PidPhaseSpace::make2D" name="make2D">
-        <location column="2" file="../include/PidPhaseSpace.h" line="52" />
+      <undocumented id="PidHistoMaker::nSigBelow" name="nSigBelow">
+        <location column="2" file="../include/Spectra/PidHistoMaker.h" line="55" />
       </undocumented>
-      <undocumented id="PidPhaseSpace::makeCombinedCharge" name="makeCombinedCharge">
-        <location column="2" file="../include/PidPhaseSpace.h" line="58" />
+      <undocumented id="PidHistoMaker::psr" name="psr">
+        <location column="2" file="../include/Spectra/PidHistoMaker.h" line="47" />
       </undocumented>
-      <undocumented id="PidPhaseSpace::makeEnhanced" name="makeEnhanced">
-        <location column="2" file="../include/PidPhaseSpace.h" line="52" />
+      <undocumented id="PidHistoMaker::psrMethod" name="psrMethod">
+        <location column="2" file="../include/Spectra/PidHistoMaker.h" line="45" />
       </undocumented>
-      <undocumented id="PidPhaseSpace::nSigAbove" name="nSigAbove">
-        <location column="2" file="../include/PidPhaseSpace.h" line="55" />
+      <undocumented id="PidHistoMaker::sc" name="sc">
+        <location column="2" file="../include/Spectra/PidHistoMaker.h" line="60" />
       </undocumented>
-      <undocumented id="PidPhaseSpace::nSigBelow" name="nSigBelow">
-        <location column="2" file="../include/PidPhaseSpace.h" line="55" />
+      <undocumented id="PidHistoMaker::tofCut" name="tofCut">
+        <location column="2" file="../include/Spectra/PidHistoMaker.h" line="50" />
       </undocumented>
-      <undocumented id="PidPhaseSpace::psr" name="psr">
-        <location column="2" file="../include/PidPhaseSpace.h" line="47" />
-      </undocumented>
-      <undocumented id="PidPhaseSpace::psrMethod" name="psrMethod">
-        <location column="2" file="../include/PidPhaseSpace.h" line="45" />
-      </undocumented>
-      <undocumented id="PidPhaseSpace::sc" name="sc">
-        <location column="2" file="../include/PidPhaseSpace.h" line="60" />
-      </undocumented>
-      <undocumented id="PidPhaseSpace::tofCut" name="tofCut">
-        <location column="2" file="../include/PidPhaseSpace.h" line="50" />
-      </undocumented>
-      <undocumented id="PidPhaseSpace::tofSigmaIdeal" name="tofSigmaIdeal">
-        <location column="2" file="../include/PidPhaseSpace.h" line="46" />
+      <undocumented id="PidHistoMaker::tofSigmaIdeal" name="tofSigmaIdeal">
+        <location column="2" file="../include/Spectra/PidHistoMaker.h" line="46" />
       </undocumented>
       <undocumented id="PidYieldPresenter::binsCharge" name="binsCharge">
-        <location column="2" file="../include/PidYieldPresenter.h" line="62" />
+        <location column="2" file="../include/Present/PidYieldPresenter.h" line="62" />
       </undocumented>
       <undocumented id="PidYieldPresenter::binsEta" name="binsEta">
-        <location column="2" file="../include/PidYieldPresenter.h" line="61" />
+        <location column="2" file="../include/Present/PidYieldPresenter.h" line="61" />
       </undocumented>
       <undocumented id="PidYieldPresenter::book" name="book">
-        <location column="2" file="../include/PidYieldPresenter.h" line="42" />
+        <location column="2" file="../include/Present/PidYieldPresenter.h" line="42" />
       </undocumented>
       <undocumented id="PidYieldPresenter::cenBins" name="cenBins">
-        <location column="2" file="../include/PidYieldPresenter.h" line="48" />
+        <location column="2" file="../include/Present/PidYieldPresenter.h" line="48" />
       </undocumented>
       <undocumented id="PidYieldPresenter::cenLabels" name="cenLabels">
-        <location column="2" file="../include/PidYieldPresenter.h" line="49" />
+        <location column="2" file="../include/Present/PidYieldPresenter.h" line="49" />
       </undocumented>
       <undocumented id="PidYieldPresenter::cfg" name="cfg">
-        <location column="2" file="../include/PidYieldPresenter.h" line="38" />
+        <location column="2" file="../include/Present/PidYieldPresenter.h" line="38" />
       </undocumented>
       <undocumented id="PidYieldPresenter::charges" name="charges">
-        <location column="2" file="../include/PidYieldPresenter.h" line="50" />
+        <location column="2" file="../include/Present/PidYieldPresenter.h" line="50" />
       </undocumented>
       <undocumented id="PidYieldPresenter::colors" name="colors">
-        <location column="2" file="../include/PidYieldPresenter.h" line="51" />
+        <location column="2" file="../include/Present/PidYieldPresenter.h" line="51" />
       </undocumented>
       <undocumented id="PidYieldPresenter::fPidFit" name="fPidFit">
-        <location column="2" file="../include/PidYieldPresenter.h" line="44" />
+        <location column="2" file="../include/Present/PidYieldPresenter.h" line="44" />
       </undocumented>
       <undocumented id="PidYieldPresenter::fPidPS" name="fPidPS">
-        <location column="2" file="../include/PidYieldPresenter.h" line="45" />
+        <location column="2" file="../include/Present/PidYieldPresenter.h" line="45" />
       </undocumented>
       <undocumented id="PidYieldPresenter::logger" name="logger">
-        <location column="2" file="../include/PidYieldPresenter.h" line="37" />
+        <location column="2" file="../include/Present/PidYieldPresenter.h" line="37" />
       </undocumented>
       <undocumented id="PidYieldPresenter::nColl" name="nColl">
-        <location column="2" file="../include/PidYieldPresenter.h" line="53" />
+        <location column="2" file="../include/Present/PidYieldPresenter.h" line="53" />
       </undocumented>
       <undocumented id="PidYieldPresenter::nPart" name="nPart">
-        <location column="2" file="../include/PidYieldPresenter.h" line="52" />
+        <location column="2" file="../include/Present/PidYieldPresenter.h" line="52" />
       </undocumented>
       <undocumented id="PidYieldPresenter::np" name="np">
-        <location column="2" file="../include/PidYieldPresenter.h" line="39" />
+        <location column="2" file="../include/Present/PidYieldPresenter.h" line="39" />
       </undocumented>
       <undocumented id="PidYieldPresenter::reporter" name="reporter">
-        <location column="2" file="../include/PidYieldPresenter.h" line="41" />
+        <location column="2" file="../include/Present/PidYieldPresenter.h" line="41" />
+      </undocumented>
+      <undocumented id="ProdPicoDst::BTOWHit_fUniqueID" name="BTOWHit_fUniqueID">
+        <location column="4" file="../include/Adapter/ProdPicoDst.h" line="129" />
+      </undocumented>
+      <undocumented id="ProdPicoDst::BTofHit_fUniqueID" name="BTofHit_fUniqueID">
+        <location column="4" file="../include/Adapter/ProdPicoDst.h" line="135" />
+      </undocumented>
+      <undocumented id="ProdPicoDst::Event_mRunId" name="Event_mRunId">
+        <location column="4" file="../include/Adapter/ProdPicoDst.h" line="37" />
+      </undocumented>
+      <undocumented id="ProdPicoDst::Tracks_mId" name="Tracks_mId">
+        <location column="4" file="../include/Adapter/ProdPicoDst.h" line="91" />
+      </undocumented>
+      <undocumented id="ProdPicoDst::Trigger_fUniqueID" name="Trigger_fUniqueID">
+        <location column="4" file="../include/Adapter/ProdPicoDst.h" line="123" />
+      </undocumented>
+      <undocumented id="ProdPicoDst::V0Ks_mIndex2Track" name="V0Ks_mIndex2Track">
+        <location column="4" file="../include/Adapter/ProdPicoDst.h" line="139" />
+      </undocumented>
+      <undocumented id="ProdPicoDst::V0L_mIndex2Track" name="V0L_mIndex2Track">
+        <location column="4" file="../include/Adapter/ProdPicoDst.h" line="148" />
+      </undocumented>
+      <undocumented id="ProdPicoDst::V0Lbar_mIndex2Track" name="V0Lbar_mIndex2Track">
+        <location column="4" file="../include/Adapter/ProdPicoDst.h" line="157" />
+      </undocumented>
+      <undocumented id="ProdPicoDst::fChain" name="fChain">
+        <location column="4" file="../include/Adapter/ProdPicoDst.h" line="32" />
+      </undocumented>
+      <undocumented id="RcpPicoDst::bin16" name="bin16">
+        <location column="4" file="../include/Adapter/RcpPicoDst.h" line="33" />
+      </undocumented>
+      <undocumented id="RcpPicoDst::bin9" name="bin9">
+        <location column="4" file="../include/Adapter/RcpPicoDst.h" line="34" />
+      </undocumented>
+      <undocumented id="RcpPicoDst::corrRefMult" name="corrRefMult">
+        <location column="4" file="../include/Adapter/RcpPicoDst.h" line="36" />
+      </undocumented>
+      <undocumented id="RcpPicoDst::fChain" name="fChain">
+        <location column="4" file="../include/Adapter/RcpPicoDst.h" line="27" />
+      </undocumented>
+      <undocumented id="RcpPicoDst::fCurrent" name="fCurrent">
+        <location column="4" file="../include/Adapter/RcpPicoDst.h" line="29" />
+      </undocumented>
+      <undocumented id="RcpPicoDst::nTracks" name="nTracks">
+        <location column="4" file="../include/Adapter/RcpPicoDst.h" line="37" />
+      </undocumented>
+      <undocumented id="RcpPicoDst::ppT" name="ppT">
+        <location column="4" file="../include/Adapter/RcpPicoDst.h" line="38" />
+      </undocumented>
+      <undocumented id="RcpPicoDst::weight" name="weight">
+        <location column="4" file="../include/Adapter/RcpPicoDst.h" line="35" />
       </undocumented>
       <undocumented id="SpectraCorrecter::cfg" name="cfg">
-        <location column="2" file="../include/SpectraCorrecter.h" line="18" />
+        <location column="2" file="../include/Spectra/SpectraCorrecter.h" line="18" />
       </undocumented>
       <undocumented id="SpectraCorrecter::filename" name="filename">
-        <location column="2" file="../include/SpectraCorrecter.h" line="17" />
+        <location column="2" file="../include/Spectra/SpectraCorrecter.h" line="17" />
       </undocumented>
       <undocumented id="SpectraCorrecter::nodePath" name="nodePath">
-        <location column="2" file="../include/SpectraCorrecter.h" line="19" />
+        <location column="2" file="../include/Spectra/SpectraCorrecter.h" line="19" />
       </undocumented>
       <undocumented id="SpectraCorrecter::params" name="params">
-        <location column="2" file="../include/SpectraCorrecter.h" line="20" />
+        <location column="2" file="../include/Spectra/SpectraCorrecter.h" line="20" />
+      </undocumented>
+      <undocumented id="TSF::FitDataPoint::bw" name="bw">
+        <location column="3" file="../include/TSF/FitDataPoint.h" line="15" />
+      </undocumented>
+      <undocumented id="TSF::FitDataPoint::ey" name="ey">
+        <location column="3" file="../include/TSF/FitDataPoint.h" line="15" />
+      </undocumented>
+      <undocumented id="TSF::FitDataPoint::x" name="x">
+        <location column="3" file="../include/TSF/FitDataPoint.h" line="15" />
+      </undocumented>
+      <undocumented id="TSF::FitDataPoint::y" name="y">
+        <location column="3" file="../include/TSF/FitDataPoint.h" line="15" />
+      </undocumented>
+      <undocumented id="TSF::FitDataset::name" name="name">
+        <location column="3" file="../include/TSF/FitDataset.h" line="22" />
+      </undocumented>
+      <undocumented id="TSF::FitDataset::points" name="points">
+        <location column="3" file="../include/TSF/FitDataset.h" line="21" />
+      </undocumented>
+      <undocumented id="TSF::FitRange::dataset" name="dataset">
+        <location column="3" file="../include/TSF/FitRange.h" line="12" />
+      </undocumented>
+      <undocumented id="TSF::FitRange::max" name="max">
+        <location column="3" file="../include/TSF/FitRange.h" line="13" />
+      </undocumented>
+      <undocumented id="TSF::FitRange::min" name="min">
+        <location column="3" file="../include/TSF/FitRange.h" line="13" />
+      </undocumented>
+      <undocumented id="TSF::FitRunner::activePlayers" name="activePlayers">
+        <location column="3" file="../include/TSF/FitRunner.h" line="41" />
+      </undocumented>
+      <undocumented id="TSF::FitRunner::binsCharge" name="binsCharge">
+        <location column="3" file="../include/TSF/FitRunner.h" line="37" />
+      </undocumented>
+      <undocumented id="TSF::FitRunner::binsEta" name="binsEta">
+        <location column="3" file="../include/TSF/FitRunner.h" line="36" />
+      </undocumented>
+      <undocumented id="TSF::FitRunner::binsPt" name="binsPt">
+        <location column="3" file="../include/TSF/FitRunner.h" line="35" />
+      </undocumented>
+      <undocumented id="TSF::FitRunner::centerSpecies" name="centerSpecies">
+        <location column="3" file="../include/TSF/FitRunner.h" line="28" />
+      </undocumented>
+      <undocumented id="TSF::FitRunner::dedxSigmaIdeal" name="dedxSigmaIdeal">
+        <location column="3" file="../include/TSF/FitRunner.h" line="30" />
+      </undocumented>
+      <undocumented id="TSF::FitRunner::lockedZbSig" name="lockedZbSig">
+        <location column="3" file="../include/TSF/FitRunner.h" line="46" />
+      </undocumented>
+      <undocumented id="TSF::FitRunner::psr" name="psr">
+        <location column="3" file="../include/TSF/FitRunner.h" line="31" />
+      </undocumented>
+      <undocumented id="TSF::FitRunner::psrMethod" name="psrMethod">
+        <location column="3" file="../include/TSF/FitRunner.h" line="29" />
+      </undocumented>
+      <undocumented id="TSF::FitRunner::schema" name="schema">
+        <location column="3" file="../include/TSF/FitRunner.h" line="33" />
+      </undocumented>
+      <undocumented id="TSF::FitRunner::tofSigmaIdeal" name="tofSigmaIdeal">
+        <location column="3" file="../include/TSF/FitRunner.h" line="30" />
+      </undocumented>
+      <undocumented id="TSF::FitRunner::zbReporter" name="zbReporter">
+        <location column="3" file="../include/TSF/FitRunner.h" line="39" />
+      </undocumented>
+      <undocumented id="TSF::FitRunner::zbSigMem" name="zbSigMem">
+        <location column="3" file="../include/TSF/FitRunner.h" line="45" />
+      </undocumented>
+      <undocumented id="TSF::FitRunner::zdReporter" name="zdReporter">
+        <location column="3" file="../include/TSF/FitRunner.h" line="39" />
+      </undocumented>
+      <undocumented id="TSF::FitRunner::zdSigFix" name="zdSigFix">
+        <location column="3" file="../include/TSF/FitRunner.h" line="43" />
+      </undocumented>
+      <undocumented id="TSF::FitSchema::cfg" name="cfg">
+        <location column="3" file="../include/TSF/FitSchema.h" line="30" />
+      </undocumented>
+      <undocumented id="TSF::FitSchema::datasets" name="datasets">
+        <location column="3" file="../include/TSF/FitSchema.h" line="50" />
+      </undocumented>
+      <undocumented id="TSF::FitSchema::fitInRange" name="fitInRange">
+        <location column="3" file="../include/TSF/FitSchema.h" line="39" />
+      </undocumented>
+      <undocumented id="TSF::FitSchema::logger" name="logger">
+        <location column="3" file="../include/TSF/FitSchema.h" line="33" />
+      </undocumented>
+      <undocumented id="TSF::FitSchema::method" name="method">
+        <location column="3" file="../include/TSF/FitSchema.h" line="37" />
+      </undocumented>
+      <undocumented id="TSF::FitSchema::models" name="models">
+        <location column="3" file="../include/TSF/FitSchema.h" line="49" />
+      </undocumented>
+      <undocumented id="TSF::FitSchema::nPars" name="nPars">
+        <location column="3" file="../include/TSF/FitSchema.h" line="35" />
+      </undocumented>
+      <undocumented id="TSF::FitSchema::nodePath" name="nodePath">
+        <location column="3" file="../include/TSF/FitSchema.h" line="31" />
+      </undocumented>
+      <undocumented id="TSF::FitSchema::normalization" name="normalization">
+        <location column="3" file="../include/TSF/FitSchema.h" line="42" />
+      </undocumented>
+      <undocumented id="TSF::FitSchema::ranges" name="ranges">
+        <location column="3" file="../include/TSF/FitSchema.h" line="40" />
+      </undocumented>
+      <undocumented id="TSF::FitSchema::vars" name="vars">
+        <location column="3" file="../include/TSF/FitSchema.h" line="48" />
+      </undocumented>
+      <undocumented id="TSF::FitVar::error" name="error">
+        <location column="3" file="../include/TSF/FitVar.h" line="17" />
+      </undocumented>
+      <undocumented id="TSF::FitVar::exclude" name="exclude">
+        <location column="3" file="../include/TSF/FitVar.h" line="19" />
+      </undocumented>
+      <undocumented id="TSF::FitVar::fixed" name="fixed">
+        <location column="3" file="../include/TSF/FitVar.h" line="18" />
+      </undocumented>
+      <undocumented id="TSF::FitVar::max" name="max">
+        <location column="3" file="../include/TSF/FitVar.h" line="17" />
+      </undocumented>
+      <undocumented id="TSF::FitVar::min" name="min">
+        <location column="3" file="../include/TSF/FitVar.h" line="17" />
+      </undocumented>
+      <undocumented id="TSF::FitVar::name" name="name">
+        <location column="3" file="../include/TSF/FitVar.h" line="16" />
+      </undocumented>
+      <undocumented id="TSF::FitVar::val" name="val">
+        <location column="3" file="../include/TSF/FitVar.h" line="17" />
+      </undocumented>
+      <undocumented id="TSF::GaussModel::dataset" name="dataset">
+        <location column="3" file="../include/TSF/GaussModel.h" line="33" />
+      </undocumented>
+      <undocumented id="TSF::GaussModel::m" name="m">
+        <location column="3" file="../include/TSF/GaussModel.h" line="34" />
+      </undocumented>
+      <undocumented id="TSF::GaussModel::mu" name="mu">
+        <location column="3" file="../include/TSF/GaussModel.h" line="33" />
+      </undocumented>
+      <undocumented id="TSF::GaussModel::name" name="name">
+        <location column="3" file="../include/TSF/GaussModel.h" line="33" />
+      </undocumented>
+      <undocumented id="TSF::GaussModel::s" name="s">
+        <location column="3" file="../include/TSF/GaussModel.h" line="34" />
+      </undocumented>
+      <undocumented id="TSF::GaussModel::sigma" name="sigma">
+        <location column="3" file="../include/TSF/GaussModel.h" line="33" />
+      </undocumented>
+      <undocumented id="TSF::GaussModel::y" name="y">
+        <location column="3" file="../include/TSF/GaussModel.h" line="34" />
+      </undocumented>
+      <undocumented id="TSF::GaussModel::yield" name="yield">
+        <location column="3" file="../include/TSF/GaussModel.h" line="33" />
+      </undocumented>
+      <undocumented id="TofEffMaker::binsDedx" name="binsDedx">
+        <location column="2" file="../include/McMaker/TofEffMaker.h" line="22" />
+      </undocumented>
+      <undocumented id="TofEffMaker::binsEta" name="binsEta">
+        <location column="2" file="../include/McMaker/TofEffMaker.h" line="24" />
+      </undocumented>
+      <undocumented id="TofEffMaker::binsPt" name="binsPt">
+        <location column="2" file="../include/McMaker/TofEffMaker.h" line="23" />
+      </undocumented>
+      <undocumented id="TofEffMaker::charges" name="charges">
+        <location column="2" file="../include/McMaker/TofEffMaker.h" line="25" />
+      </undocumented>
+      <undocumented id="TofEffMaker::dedxSigmaIdeal" name="dedxSigmaIdeal">
+        <location column="2" file="../include/McMaker/TofEffMaker.h" line="33" />
+      </undocumented>
+      <undocumented id="TofEffMaker::psr" name="psr">
+        <location column="2" file="../include/McMaker/TofEffMaker.h" line="34" />
+      </undocumented>
+      <undocumented id="TofEffMaker::psrMethod" name="psrMethod">
+        <location column="2" file="../include/McMaker/TofEffMaker.h" line="32" />
+      </undocumented>
+      <undocumented id="TofEffMaker::tofSigmaIdeal" name="tofSigmaIdeal">
+        <location column="2" file="../include/McMaker/TofEffMaker.h" line="33" />
+      </undocumented>
+      <undocumented id="TofGenerator::nSamples" name="nSamples">
+        <location column="2" file="../include/Params/TofGenerator.h" line="26" />
+      </undocumented>
+      <undocumented id="TofGenerator::obSigma" name="obSigma">
+        <location column="2" file="../include/Params/TofGenerator.h" line="25" />
+      </undocumented>
+      <undocumented id="TofGenerator::rGen" name="rGen">
+        <location column="2" file="../include/Params/TofGenerator.h" line="24" />
+      </undocumented>
+      <undocumented id="TpcEffMcHistoMaker::cut_rapidity" name="cut_rapidity">
+        <location column="2" file="../include/McMaker/TpcEffMcHistoMaker.h" line="25" />
+      </undocumented>
+      <undocumented id="TpcEffMcHistoMaker::mass" name="mass">
+        <location column="2" file="../include/McMaker/TpcEffMcHistoMaker.h" line="28" />
+      </undocumented>
+      <undocumented id="TpcEffMcHistoMaker::pico" name="pico">
+        <location column="2" file="../include/McMaker/TpcEffMcHistoMaker.h" line="24" />
+      </undocumented>
+      <undocumented id="TpcEffMcHistoMaker::plc" name="plc">
+        <location column="2" file="../include/McMaker/TpcEffMcHistoMaker.h" line="27" />
+      </undocumented>
+      <undocumented id="TpcEffRcHistoMaker::cut_rapidity" name="cut_rapidity">
+        <location column="2" file="../include/McMaker/TpcEffRcHistoMaker.h" line="26" />
+      </undocumented>
+      <undocumented id="TpcEffRcHistoMaker::mass" name="mass">
+        <location column="2" file="../include/McMaker/TpcEffRcHistoMaker.h" line="29" />
+      </undocumented>
+      <undocumented id="TpcEffRcHistoMaker::plc" name="plc">
+        <location column="2" file="../include/McMaker/TpcEffRcHistoMaker.h" line="28" />
+      </undocumented>
+      <undocumented id="ZRecentering::dedxGen" name="dedxGen">
+        <location column="2" file="../include/Spectra/ZRecentering.h" line="25" />
+      </undocumented>
+      <undocumented id="ZRecentering::species" name="species">
+        <location column="2" file="../include/Spectra/ZRecentering.h" line="28" />
+      </undocumented>
+      <undocumented id="ZRecentering::tofGen" name="tofGen">
+        <location column="2" file="../include/Spectra/ZRecentering.h" line="26" />
+      </undocumented>
+      <undocumented id="ZRecentering::tofSigma" name="tofSigma">
+        <location column="2" file="../include/Spectra/ZRecentering.h" line="23" />
       </undocumented>
     </type>
-    <type documented="0" name="constructor" undocumented="9">
-      <undocumented id="Bichsel::Bichsel" name="Bichsel">
-        <location column="2" file="../include/Bichsel.h" line="32" />
-      </undocumented>
-      <undocumented id="Common::Common" name="Common">
-        <location column="2" file="../include/Common.h" line="18" />
-      </undocumented>
-      <undocumented id="FeedDownMaker::FeedDownMaker" name="FeedDownMaker">
-        <location column="2" file="../include/FeedDownMaker.h" line="22" />
-      </undocumented>
-      <undocumented id="InclusiveSpectra::InclusiveSpectra" name="InclusiveSpectra">
-        <location column="2" file="../include/InclusiveSpectra.h" line="82" />
-      </undocumented>
-      <undocumented id="PhaseSpaceRecentering::PhaseSpaceRecentering" name="PhaseSpaceRecentering">
-        <location column="2" file="../include/PhaseSpaceRecentering.h" line="31" />
-      </undocumented>
-      <undocumented id="PidPhaseSpace::PidPhaseSpace" name="PidPhaseSpace">
-        <location column="2" file="../include/PidPhaseSpace.h" line="70" />
-      </undocumented>
-      <undocumented id="PidYieldPresenter::PidYieldPresenter" name="PidYieldPresenter">
-        <location column="2" file="../include/PidYieldPresenter.h" line="66" />
-      </undocumented>
-      <undocumented id="PresentationMaker::PresentationMaker" name="PresentationMaker">
-        <location column="2" file="../include/PresentationMaker.h" line="11" />
-      </undocumented>
-      <undocumented id="SpectraCorrecter::SpectraCorrecter" name="SpectraCorrecter">
-        <location column="2" file="../include/SpectraCorrecter.h" line="23" />
-      </undocumented>
-    </type>
-    <type documented="4" name="variable" undocumented="5">
-      <undocumented id="Bichsel::MPM" name="MPM">
-        <location column="2" file="../include/Bichsel.h" line="118" />
-      </undocumented>
-      <undocumented id="Bichsel::POL" name="POL">
-        <location column="2" file="../include/Bichsel.h" line="120" />
-      </undocumented>
-      <undocumented id="Bichsel::T70" name="T70">
-        <location column="2" file="../include/Bichsel.h" line="119" />
-      </undocumented>
-      <undocumented id="FeedDownMaker::plcID" name="plcID">
-        <location column="2" file="../include/FeedDownMaker.h" line="29" />
-      </undocumented>
-      <undocumented id="FeedDownMaker::plcMass" name="plcMass">
-        <location column="2" file="../include/FeedDownMaker.h" line="30" />
-      </undocumented>
-    </type>
-    <type documented="31" name="method" undocumented="59">
+    <type documented="41" name="method" undocumented="266">
       <undocumented id="Bichsel::getFromTable" name="getFromTable">
-        <location column="2" file="../include/Bichsel.h" line="85" />
+        <location column="2" file="../include/Params/Bichsel.h" line="85" />
       </undocumented>
       <undocumented id="Bichsel::getTables" name="getTables">
-        <location column="2" file="../include/Bichsel.h" line="87" />
+        <location column="2" file="../include/Params/Bichsel.h" line="87" />
       </undocumented>
       <undocumented id="Bichsel::mean" name="mean">
-        <location column="2" file="../include/Bichsel.h" line="49" />
+        <location column="2" file="../include/Params/Bichsel.h" line="49" />
       </undocumented>
       <undocumented id="Bichsel::meanLog" name="meanLog">
-        <location column="2" file="../include/Bichsel.h" line="81" />
+        <location column="2" file="../include/Params/Bichsel.h" line="81" />
       </undocumented>
       <undocumented id="Bichsel::tableFor" name="tableFor">
-        <location column="2" file="../include/Bichsel.h" line="104" />
+        <location column="2" file="../include/Params/Bichsel.h" line="104" />
       </undocumented>
-      <undocumented id="Common::mass" name="mass">
-        <location column="2" file="../include/Common.h" line="58" />
+      <undocumented id="EffParams::find" name="find">
+        <location column="2" file="../include/Params/EffParams.h" line="73" />
       </undocumented>
-      <undocumented id="Common::speciesName" name="speciesName">
-        <location column="2" file="../include/Common.h" line="79" />
+      <undocumented id="EffParams::load" name="load">
+        <location column="2" file="../include/Params/EffParams.h" line="46" />
       </undocumented>
-      <undocumented id="Common::zbName" name="zbName">
-        <location column="2" file="../include/Common.h" line="82" />
+      <undocumented id="EffParams::reweight" name="reweight">
+        <location column="2" file="../include/Params/EffParams.h" line="89" />
       </undocumented>
-      <undocumented id="Common::zdName" name="zdName">
-        <location column="2" file="../include/Common.h" line="88" />
+      <undocumented id="EnergyLoss::analyzeTrack" name="analyzeTrack">
+        <location column="2" file="../include/McMaker/EnergyLoss.h" line="15" />
+      </undocumented>
+      <undocumented id="EnergyLoss::preEventLoop" name="preEventLoop">
+        <location column="2" file="../include/McMaker/EnergyLoss.h" line="13" />
+      </undocumented>
+      <undocumented id="EnergyLossParams::eval" name="eval">
+        <location column="2" file="../include/Params/EnergyLossParams.h" line="28" />
       </undocumented>
       <undocumented id="FeedDownMaker::addGEANTLabels" name="addGEANTLabels">
-        <location column="2" file="../include/FeedDownMaker.h" line="74" />
+        <location column="2" file="../include/McMaker/FeedDownMaker.h" line="74" />
       </undocumented>
       <undocumented id="FeedDownMaker::background" name="background">
-        <location column="2" file="../include/FeedDownMaker.h" line="116" />
+        <location column="2" file="../include/McMaker/FeedDownMaker.h" line="116" />
       </undocumented>
       <undocumented id="FeedDownMaker::exportParams" name="exportParams">
-        <location column="2" file="../include/FeedDownMaker.h" line="113" />
+        <location column="2" file="../include/McMaker/FeedDownMaker.h" line="113" />
       </undocumented>
       <undocumented id="FeedDownMaker::rapidity" name="rapidity">
-        <location column="2" file="../include/FeedDownMaker.h" line="68" />
+        <location column="2" file="../include/McMaker/FeedDownMaker.h" line="68" />
+      </undocumented>
+      <undocumented id="FeedDownParams::usable" name="usable">
+        <location column="2" file="../include/Params/FeedDownParams.h" line="31" />
+      </undocumented>
+      <undocumented id="FeedDownParams::weight" name="weight">
+        <location column="2" file="../include/Params/FeedDownParams.h" line="37" />
       </undocumented>
       <undocumented id="InclusiveSpectra::centralityBin" name="centralityBin">
-        <location column="2" file="../include/InclusiveSpectra.h" line="91" />
+        <location column="2" file="../include/Spectra/InclusiveSpectra.h" line="91" />
       </undocumented>
       <undocumented id="InclusiveSpectra::histoForCentrality" name="histoForCentrality">
-        <location column="2" file="../include/InclusiveSpectra.h" line="116" />
+        <location column="2" file="../include/Spectra/InclusiveSpectra.h" line="116" />
       </undocumented>
       <undocumented id="InclusiveSpectra::nCentralityBins" name="nCentralityBins">
-        <location column="2" file="../include/InclusiveSpectra.h" line="99" />
+        <location column="2" file="../include/Spectra/InclusiveSpectra.h" line="99" />
       </undocumented>
-      <undocumented id="PhaseSpaceRecentering::allSpecies" name="allSpecies">
-        <location column="2" file="../include/PhaseSpaceRecentering.h" line="48" />
+      <undocumented id="PicoDataStore::GetEntry" name="GetEntry">
+        <location column="2" file="../include/Adapter/PicoDataStore.h" line="12" />
       </undocumented>
-      <undocumented id="PhaseSpaceRecentering::centeredDedxMap" name="centeredDedxMap">
-        <location column="2" file="../include/PhaseSpaceRecentering.h" line="59" />
+      <undocumented id="PicoDataStore::b16" name="b16">
+        <location column="2" file="../include/Adapter/PicoDataStore.h" line="64" />
       </undocumented>
-      <undocumented id="PhaseSpaceRecentering::centeredDedxMeans" name="centeredDedxMeans">
-        <location column="2" file="../include/PhaseSpaceRecentering.h" line="56" />
+      <undocumented id="PicoDataStore::b9" name="b9">
+        <location column="2" file="../include/Adapter/PicoDataStore.h" line="63" />
       </undocumented>
-      <undocumented id="PhaseSpaceRecentering::centeredDedxMeans" name="centeredDedxMeans">
-        <location column="2" file="../include/PhaseSpaceRecentering.h" line="57" />
+      <undocumented id="PicoDataStore::bbc" name="bbc">
+        <location column="2" file="../include/Adapter/PicoDataStore.h" line="78" />
       </undocumented>
-      <undocumented id="PhaseSpaceRecentering::centeredTofMap" name="centeredTofMap">
-        <location column="2" file="../include/PhaseSpaceRecentering.h" line="51" />
+      <undocumented id="PicoDataStore::eventDay" name="eventDay">
+        <location column="2" file="../include/Adapter/PicoDataStore.h" line="61" />
       </undocumented>
-      <undocumented id="PhaseSpaceRecentering::centeredTofMeans" name="centeredTofMeans">
-        <location column="2" file="../include/PhaseSpaceRecentering.h" line="49" />
+      <undocumented id="PicoDataStore::eventId" name="eventId">
+        <location column="2" file="../include/Adapter/PicoDataStore.h" line="59" />
       </undocumented>
-      <undocumented id="PhaseSpaceRecentering::centeredTofMeans" name="centeredTofMeans">
-        <location column="2" file="../include/PhaseSpaceRecentering.h" line="50" />
+      <undocumented id="PicoDataStore::eventWeight" name="eventWeight">
+        <location column="2" file="../include/Adapter/PicoDataStore.h" line="60" />
       </undocumented>
-      <undocumented id="PhaseSpaceRecentering::dedxGenerator" name="dedxGenerator">
-        <location column="2" file="../include/PhaseSpaceRecentering.h" line="54" />
+      <undocumented id="PicoDataStore::eventYear" name="eventYear">
+        <location column="2" file="../include/Adapter/PicoDataStore.h" line="62" />
       </undocumented>
-      <undocumented id="PhaseSpaceRecentering::nl2Tof" name="nl2Tof">
-        <location column="2" file="../include/PhaseSpaceRecentering.h" line="97" />
+      <undocumented id="PicoDataStore::getTree" name="getTree">
+        <location column="2" file="../include/Adapter/PicoDataStore.h" line="11" />
       </undocumented>
-      <undocumented id="PhaseSpaceRecentering::otherSpecies" name="otherSpecies">
-        <location column="2" file="../include/PhaseSpaceRecentering.h" line="47" />
+      <undocumented id="PicoDataStore::globalPt" name="globalPt">
+        <location column="2" file="../include/Adapter/PicoDataStore.h" line="23" />
       </undocumented>
-      <undocumented id="PhaseSpaceRecentering::tofGenerator" name="tofGenerator">
-        <location column="2" file="../include/PhaseSpaceRecentering.h" line="53" />
+      <undocumented id="PicoDataStore::nTZero" name="nTZero">
+        <location column="2" file="../include/Adapter/PicoDataStore.h" line="69" />
       </undocumented>
-      <undocumented id="PidPhaseSpace::analyzeTofTrack" name="analyzeTofTrack">
-        <location column="2" file="../include/PidPhaseSpace.h" line="78" />
+      <undocumented id="PicoDataStore::numGlobal" name="numGlobal">
+        <location column="2" file="../include/Adapter/PicoDataStore.h" line="74" />
       </undocumented>
-      <undocumented id="PidPhaseSpace::averageEta" name="averageEta">
-        <location column="2" file="../include/PidPhaseSpace.h" line="91" />
+      <undocumented id="PicoDataStore::numPrimary" name="numPrimary">
+        <location column="2" file="../include/Adapter/PicoDataStore.h" line="73" />
       </undocumented>
-      <undocumented id="PidPhaseSpace::averagePt" name="averagePt">
-        <location column="2" file="../include/PidPhaseSpace.h" line="85" />
+      <undocumented id="PicoDataStore::numTofMatchedTracks" name="numTofMatchedTracks">
+        <location column="2" file="../include/Adapter/PicoDataStore.h" line="75" />
       </undocumented>
-      <undocumented id="PidPhaseSpace::enhanceDistributions" name="enhanceDistributions">
-        <location column="2" file="../include/PidPhaseSpace.h" line="83" />
+      <undocumented id="PicoDataStore::numTracks" name="numTracks">
+        <location column="2" file="../include/Adapter/PicoDataStore.h" line="72" />
       </undocumented>
-      <undocumented id="PidPhaseSpace::feedDownWeight" name="feedDownWeight">
-        <location column="2" file="../include/PidPhaseSpace.h" line="149" />
+      <undocumented id="PicoDataStore::refMult" name="refMult">
+        <location column="2" file="../include/Adapter/PicoDataStore.h" line="71" />
       </undocumented>
-      <undocumented id="PidPhaseSpace::postEventLoop" name="postEventLoop">
-        <location column="2" file="../include/PidPhaseSpace.h" line="80" />
+      <undocumented id="PicoDataStore::tofMult" name="tofMult">
+        <location column="2" file="../include/Adapter/PicoDataStore.h" line="70" />
       </undocumented>
-      <undocumented id="PidPhaseSpace::preEventLoop" name="preEventLoop">
-        <location column="2" file="../include/PidPhaseSpace.h" line="79" />
+      <undocumented id="PicoDataStore::trackBeta" name="trackBeta">
+        <location column="2" file="../include/Adapter/PicoDataStore.h" line="37" />
       </undocumented>
-      <undocumented id="PidPhaseSpace::preparePhaseSpaceHistograms" name="preparePhaseSpaceHistograms">
-        <location column="2" file="../include/PidPhaseSpace.h" line="141" />
+      <undocumented id="PicoDataStore::trackCharge" name="trackCharge">
+        <location column="2" file="../include/Adapter/PicoDataStore.h" line="32" />
       </undocumented>
-      <undocumented id="PidPhaseSpace::rapidity" name="rapidity">
-        <location column="2" file="../include/PidPhaseSpace.h" line="143" />
+      <undocumented id="PicoDataStore::trackDca" name="trackDca">
+        <location column="2" file="../include/Adapter/PicoDataStore.h" line="49" />
       </undocumented>
-      <undocumented id="PidPhaseSpace::reportAll" name="reportAll">
-        <location column="2" file="../include/PidPhaseSpace.h" line="135" />
+      <undocumented id="PicoDataStore::trackDcaX" name="trackDcaX">
+        <location column="2" file="../include/Adapter/PicoDataStore.h" line="46" />
       </undocumented>
-      <undocumented id="PidPhaseSpace::reportAllDedx" name="reportAllDedx">
-        <location column="2" file="../include/PidPhaseSpace.h" line="137" />
+      <undocumented id="PicoDataStore::trackDcaY" name="trackDcaY">
+        <location column="2" file="../include/Adapter/PicoDataStore.h" line="47" />
       </undocumented>
-      <undocumented id="PidPhaseSpace::reportAllTof" name="reportAllTof">
-        <location column="2" file="../include/PidPhaseSpace.h" line="136" />
+      <undocumented id="PicoDataStore::trackDcaZ" name="trackDcaZ">
+        <location column="2" file="../include/Adapter/PicoDataStore.h" line="48" />
+      </undocumented>
+      <undocumented id="PicoDataStore::trackDedx" name="trackDedx">
+        <location column="2" file="../include/Adapter/PicoDataStore.h" line="34" />
+      </undocumented>
+      <undocumented id="PicoDataStore::trackEta" name="trackEta">
+        <location column="2" file="../include/Adapter/PicoDataStore.h" line="31" />
+      </undocumented>
+      <undocumented id="PicoDataStore::trackNHitsDedx" name="trackNHitsDedx">
+        <location column="2" file="../include/Adapter/PicoDataStore.h" line="19" />
+      </undocumented>
+      <undocumented id="PicoDataStore::trackNHitsFit" name="trackNHitsFit">
+        <location column="2" file="../include/Adapter/PicoDataStore.h" line="20" />
+      </undocumented>
+      <undocumented id="PicoDataStore::trackNHitsPossible" name="trackNHitsPossible">
+        <location column="2" file="../include/Adapter/PicoDataStore.h" line="21" />
+      </undocumented>
+      <undocumented id="PicoDataStore::trackP" name="trackP">
+        <location column="2" file="../include/Adapter/PicoDataStore.h" line="27" />
+      </undocumented>
+      <undocumented id="PicoDataStore::trackPathLength" name="trackPathLength">
+        <location column="2" file="../include/Adapter/PicoDataStore.h" line="35" />
+      </undocumented>
+      <undocumented id="PicoDataStore::trackPt" name="trackPt">
+        <location column="2" file="../include/Adapter/PicoDataStore.h" line="24" />
+      </undocumented>
+      <undocumented id="PicoDataStore::trackPx" name="trackPx">
+        <location column="2" file="../include/Adapter/PicoDataStore.h" line="28" />
+      </undocumented>
+      <undocumented id="PicoDataStore::trackPy" name="trackPy">
+        <location column="2" file="../include/Adapter/PicoDataStore.h" line="29" />
+      </undocumented>
+      <undocumented id="PicoDataStore::trackPz" name="trackPz">
+        <location column="2" file="../include/Adapter/PicoDataStore.h" line="30" />
+      </undocumented>
+      <undocumented id="PicoDataStore::trackTof" name="trackTof">
+        <location column="2" file="../include/Adapter/PicoDataStore.h" line="36" />
+      </undocumented>
+      <undocumented id="PicoDataStore::trackTofMatch" name="trackTofMatch">
+        <location column="2" file="../include/Adapter/PicoDataStore.h" line="38" />
+      </undocumented>
+      <undocumented id="PicoDataStore::trackZLocal" name="trackZLocal">
+        <location column="2" file="../include/Adapter/PicoDataStore.h" line="53" />
+      </undocumented>
+      <undocumented id="PicoDataStore::triggerWord" name="triggerWord">
+        <location column="2" file="../include/Adapter/PicoDataStore.h" line="67" />
+      </undocumented>
+      <undocumented id="PicoDataStore::vR" name="vR">
+        <location column="2" file="../include/Adapter/PicoDataStore.h" line="44" />
+      </undocumented>
+      <undocumented id="PicoDataStore::vX" name="vX">
+        <location column="2" file="../include/Adapter/PicoDataStore.h" line="41" />
+      </undocumented>
+      <undocumented id="PicoDataStore::vY" name="vY">
+        <location column="2" file="../include/Adapter/PicoDataStore.h" line="42" />
+      </undocumented>
+      <undocumented id="PicoDataStore::vZ" name="vZ">
+        <location column="2" file="../include/Adapter/PicoDataStore.h" line="43" />
+      </undocumented>
+      <undocumented id="PicoDataStore::zdc" name="zdc">
+        <location column="2" file="../include/Adapter/PicoDataStore.h" line="77" />
+      </undocumented>
+      <undocumented id="PidHistoMaker::analyzeTofTrack" name="analyzeTofTrack">
+        <location column="2" file="../include/Spectra/PidHistoMaker.h" line="78" />
+      </undocumented>
+      <undocumented id="PidHistoMaker::averageEta" name="averageEta">
+        <location column="2" file="../include/Spectra/PidHistoMaker.h" line="91" />
+      </undocumented>
+      <undocumented id="PidHistoMaker::averagePt" name="averagePt">
+        <location column="2" file="../include/Spectra/PidHistoMaker.h" line="85" />
+      </undocumented>
+      <undocumented id="PidHistoMaker::enhanceDistributions" name="enhanceDistributions">
+        <location column="2" file="../include/Spectra/PidHistoMaker.h" line="83" />
+      </undocumented>
+      <undocumented id="PidHistoMaker::feedDownWeight" name="feedDownWeight">
+        <location column="2" file="../include/Spectra/PidHistoMaker.h" line="149" />
+      </undocumented>
+      <undocumented id="PidHistoMaker::postEventLoop" name="postEventLoop">
+        <location column="2" file="../include/Spectra/PidHistoMaker.h" line="80" />
+      </undocumented>
+      <undocumented id="PidHistoMaker::preEventLoop" name="preEventLoop">
+        <location column="2" file="../include/Spectra/PidHistoMaker.h" line="79" />
+      </undocumented>
+      <undocumented id="PidHistoMaker::preparePhaseSpaceHistograms" name="preparePhaseSpaceHistograms">
+        <location column="2" file="../include/Spectra/PidHistoMaker.h" line="141" />
+      </undocumented>
+      <undocumented id="PidHistoMaker::rapidity" name="rapidity">
+        <location column="2" file="../include/Spectra/PidHistoMaker.h" line="143" />
+      </undocumented>
+      <undocumented id="PidHistoMaker::reportAll" name="reportAll">
+        <location column="2" file="../include/Spectra/PidHistoMaker.h" line="135" />
+      </undocumented>
+      <undocumented id="PidHistoMaker::reportAllDedx" name="reportAllDedx">
+        <location column="2" file="../include/Spectra/PidHistoMaker.h" line="137" />
+      </undocumented>
+      <undocumented id="PidHistoMaker::reportAllTof" name="reportAllTof">
+        <location column="2" file="../include/Spectra/PidHistoMaker.h" line="136" />
       </undocumented>
       <undocumented id="PidYieldPresenter::chargeRatio" name="chargeRatio">
-        <location column="2" file="../include/PidYieldPresenter.h" line="96" />
+        <location column="2" file="../include/Present/PidYieldPresenter.h" line="96" />
       </undocumented>
       <undocumented id="PidYieldPresenter::chargeRatio" name="chargeRatio">
-        <location column="2" file="../include/PidYieldPresenter.h" line="97" />
+        <location column="2" file="../include/Present/PidYieldPresenter.h" line="97" />
       </undocumented>
       <undocumented id="PidYieldPresenter::chargeRatioCompare" name="chargeRatioCompare">
-        <location column="2" file="../include/PidYieldPresenter.h" line="98" />
+        <location column="2" file="../include/Present/PidYieldPresenter.h" line="98" />
       </undocumented>
       <undocumented id="PidYieldPresenter::chargeRatioCompare" name="chargeRatioCompare">
-        <location column="2" file="../include/PidYieldPresenter.h" line="99" />
+        <location column="2" file="../include/Present/PidYieldPresenter.h" line="99" />
       </undocumented>
       <undocumented id="PidYieldPresenter::chargeRatioName" name="chargeRatioName">
-        <location column="2" file="../include/PidYieldPresenter.h" line="108" />
+        <location column="2" file="../include/Present/PidYieldPresenter.h" line="108" />
       </undocumented>
       <undocumented id="PidYieldPresenter::chargeString" name="chargeString">
-        <location column="2" file="../include/PidYieldPresenter.h" line="112" />
+        <location column="2" file="../include/Present/PidYieldPresenter.h" line="112" />
       </undocumented>
       <undocumented id="PidYieldPresenter::compareYields" name="compareYields">
-        <location column="2" file="../include/PidYieldPresenter.h" line="93" />
+        <location column="2" file="../include/Present/PidYieldPresenter.h" line="93" />
       </undocumented>
       <undocumented id="PidYieldPresenter::compareYields" name="compareYields">
-        <location column="2" file="../include/PidYieldPresenter.h" line="94" />
+        <location column="2" file="../include/Present/PidYieldPresenter.h" line="94" />
       </undocumented>
       <undocumented id="PidYieldPresenter::integrateEta" name="integrateEta">
-        <location column="2" file="../include/PidYieldPresenter.h" line="75" />
+        <location column="2" file="../include/Present/PidYieldPresenter.h" line="75" />
       </undocumented>
       <undocumented id="PidYieldPresenter::nPartName" name="nPartName">
-        <location column="2" file="../include/PidYieldPresenter.h" line="105" />
+        <location column="2" file="../include/Present/PidYieldPresenter.h" line="105" />
       </undocumented>
       <undocumented id="PidYieldPresenter::normalizeYield" name="normalizeYield">
-        <location column="2" file="../include/PidYieldPresenter.h" line="82" />
+        <location column="2" file="../include/Present/PidYieldPresenter.h" line="82" />
       </undocumented>
       <undocumented id="PidYieldPresenter::plcName" name="plcName">
-        <location column="2" file="../include/PidYieldPresenter.h" line="121" />
+        <location column="2" file="../include/Present/PidYieldPresenter.h" line="121" />
       </undocumented>
       <undocumented id="PidYieldPresenter::rcp" name="rcp">
-        <location column="2" file="../include/PidYieldPresenter.h" line="84" />
+        <location column="2" file="../include/Present/PidYieldPresenter.h" line="84" />
       </undocumented>
       <undocumented id="PidYieldPresenter::rcp" name="rcp">
-        <location column="2" file="../include/PidYieldPresenter.h" line="85" />
+        <location column="2" file="../include/Present/PidYieldPresenter.h" line="85" />
       </undocumented>
       <undocumented id="PidYieldPresenter::rcpName" name="rcpName">
-        <location column="2" file="../include/PidYieldPresenter.h" line="102" />
+        <location column="2" file="../include/Present/PidYieldPresenter.h" line="102" />
       </undocumented>
       <undocumented id="PidYieldPresenter::rcpPanel" name="rcpPanel">
-        <location column="2" file="../include/PidYieldPresenter.h" line="87" />
+        <location column="2" file="../include/Present/PidYieldPresenter.h" line="87" />
       </undocumented>
       <undocumented id="PidYieldPresenter::rcpVsNPart" name="rcpVsNPart">
-        <location column="2" file="../include/PidYieldPresenter.h" line="89" />
+        <location column="2" file="../include/Present/PidYieldPresenter.h" line="89" />
       </undocumented>
       <undocumented id="PidYieldPresenter::rcpVsNPart" name="rcpVsNPart">
-        <location column="2" file="../include/PidYieldPresenter.h" line="90" />
+        <location column="2" file="../include/Present/PidYieldPresenter.h" line="90" />
       </undocumented>
       <undocumented id="PidYieldPresenter::rcpVsNPartCompare" name="rcpVsNPartCompare">
-        <location column="2" file="../include/PidYieldPresenter.h" line="91" />
+        <location column="2" file="../include/Present/PidYieldPresenter.h" line="91" />
+      </undocumented>
+      <undocumented id="ProdPicoDst::Cut" name="Cut">
+        <location column="4" file="../include/Adapter/ProdPicoDst.h" line="296" />
+      </undocumented>
+      <undocumented id="ProdPicoDst::GetEntry" name="GetEntry">
+        <location column="4" file="../include/Adapter/ProdPicoDst.h" line="297" />
+      </undocumented>
+      <undocumented id="ProdPicoDst::Init" name="Init">
+        <location column="4" file="../include/Adapter/ProdPicoDst.h" line="299" />
+      </undocumented>
+      <undocumented id="ProdPicoDst::LoadTree" name="LoadTree">
+        <location column="4" file="../include/Adapter/ProdPicoDst.h" line="298" />
+      </undocumented>
+      <undocumented id="ProdPicoDst::Loop" name="Loop">
+        <location column="4" file="../include/Adapter/ProdPicoDst.h" line="300" />
+      </undocumented>
+      <undocumented id="ProdPicoDst::Notify" name="Notify">
+        <location column="4" file="../include/Adapter/ProdPicoDst.h" line="301" />
+      </undocumented>
+      <undocumented id="ProdPicoDst::Show" name="Show">
+        <location column="4" file="../include/Adapter/ProdPicoDst.h" line="302" />
+      </undocumented>
+      <undocumented id="ProdPicoDst::getTree" name="getTree">
+        <location column="4" file="../include/Adapter/ProdPicoDst.h" line="305" />
+      </undocumented>
+      <undocumented id="ProdPicoDst::globalPt" name="globalPt">
+        <location column="4" file="../include/Adapter/ProdPicoDst.h" line="357" />
+      </undocumented>
+      <undocumented id="ProdPicoDst::numTofMatchedTracks" name="numTofMatchedTracks">
+        <location column="4" file="../include/Adapter/ProdPicoDst.h" line="320" />
+      </undocumented>
+      <undocumented id="ProdPicoDst::numTracks" name="numTracks">
+        <location column="4" file="../include/Adapter/ProdPicoDst.h" line="316" />
+      </undocumented>
+      <undocumented id="ProdPicoDst::refMult" name="refMult">
+        <location column="4" file="../include/Adapter/ProdPicoDst.h" line="315" />
+      </undocumented>
+      <undocumented id="ProdPicoDst::runId" name="runId">
+        <location column="4" file="../include/Adapter/ProdPicoDst.h" line="308" />
+      </undocumented>
+      <undocumented id="ProdPicoDst::trackBeta" name="trackBeta">
+        <location column="4" file="../include/Adapter/ProdPicoDst.h" line="385" />
+      </undocumented>
+      <undocumented id="ProdPicoDst::trackCharge" name="trackCharge">
+        <location column="4" file="../include/Adapter/ProdPicoDst.h" line="362" />
+      </undocumented>
+      <undocumented id="ProdPicoDst::trackDca" name="trackDca">
+        <location column="4" file="../include/Adapter/ProdPicoDst.h" line="389" />
+      </undocumented>
+      <undocumented id="ProdPicoDst::trackDedx" name="trackDedx">
+        <location column="4" file="../include/Adapter/ProdPicoDst.h" line="383" />
+      </undocumented>
+      <undocumented id="ProdPicoDst::trackEta" name="trackEta">
+        <location column="4" file="../include/Adapter/ProdPicoDst.h" line="372" />
+      </undocumented>
+      <undocumented id="ProdPicoDst::trackNHitsDedx" name="trackNHitsDedx">
+        <location column="4" file="../include/Adapter/ProdPicoDst.h" line="379" />
+      </undocumented>
+      <undocumented id="ProdPicoDst::trackNHitsFit" name="trackNHitsFit">
+        <location column="4" file="../include/Adapter/ProdPicoDst.h" line="380" />
+      </undocumented>
+      <undocumented id="ProdPicoDst::trackNHitsPossible" name="trackNHitsPossible">
+        <location column="4" file="../include/Adapter/ProdPicoDst.h" line="381" />
+      </undocumented>
+      <undocumented id="ProdPicoDst::trackP" name="trackP">
+        <location column="4" file="../include/Adapter/ProdPicoDst.h" line="351" />
+      </undocumented>
+      <undocumented id="ProdPicoDst::trackPt" name="trackPt">
+        <location column="4" file="../include/Adapter/ProdPicoDst.h" line="337" />
+      </undocumented>
+      <undocumented id="ProdPicoDst::trackPx" name="trackPx">
+        <location column="4" file="../include/Adapter/ProdPicoDst.h" line="342" />
+      </undocumented>
+      <undocumented id="ProdPicoDst::trackPy" name="trackPy">
+        <location column="4" file="../include/Adapter/ProdPicoDst.h" line="345" />
+      </undocumented>
+      <undocumented id="ProdPicoDst::trackPz" name="trackPz">
+        <location column="4" file="../include/Adapter/ProdPicoDst.h" line="348" />
+      </undocumented>
+      <undocumented id="ProdPicoDst::trackTofMatch" name="trackTofMatch">
+        <location column="4" file="../include/Adapter/ProdPicoDst.h" line="317" />
+      </undocumented>
+      <undocumented id="ProdPicoDst::trackYLocal" name="trackYLocal">
+        <location column="4" file="../include/Adapter/ProdPicoDst.h" line="386" />
+      </undocumented>
+      <undocumented id="ProdPicoDst::trackZLocal" name="trackZLocal">
+        <location column="4" file="../include/Adapter/ProdPicoDst.h" line="387" />
+      </undocumented>
+      <undocumented id="ProdPicoDst::triggerWord" name="triggerWord">
+        <location column="4" file="../include/Adapter/ProdPicoDst.h" line="307" />
+      </undocumented>
+      <undocumented id="ProdPicoDst::vR" name="vR">
+        <location column="4" file="../include/Adapter/ProdPicoDst.h" line="313" />
+      </undocumented>
+      <undocumented id="ProdPicoDst::vX" name="vX">
+        <location column="4" file="../include/Adapter/ProdPicoDst.h" line="310" />
+      </undocumented>
+      <undocumented id="ProdPicoDst::vY" name="vY">
+        <location column="4" file="../include/Adapter/ProdPicoDst.h" line="311" />
+      </undocumented>
+      <undocumented id="ProdPicoDst::vZ" name="vZ">
+        <location column="4" file="../include/Adapter/ProdPicoDst.h" line="312" />
+      </undocumented>
+      <undocumented id="RcpPicoDst::Cut" name="Cut">
+        <location column="4" file="../include/Adapter/RcpPicoDst.h" line="75" />
+      </undocumented>
+      <undocumented id="RcpPicoDst::GetEntry" name="GetEntry">
+        <location column="4" file="../include/Adapter/RcpPicoDst.h" line="76" />
+      </undocumented>
+      <undocumented id="RcpPicoDst::Init" name="Init">
+        <location column="4" file="../include/Adapter/RcpPicoDst.h" line="78" />
+      </undocumented>
+      <undocumented id="RcpPicoDst::LoadTree" name="LoadTree">
+        <location column="4" file="../include/Adapter/RcpPicoDst.h" line="77" />
+      </undocumented>
+      <undocumented id="RcpPicoDst::Loop" name="Loop">
+        <location column="4" file="../include/Adapter/RcpPicoDst.h" line="79" />
+      </undocumented>
+      <undocumented id="RcpPicoDst::Notify" name="Notify">
+        <location column="4" file="../include/Adapter/RcpPicoDst.h" line="80" />
+      </undocumented>
+      <undocumented id="RcpPicoDst::Show" name="Show">
+        <location column="4" file="../include/Adapter/RcpPicoDst.h" line="81" />
+      </undocumented>
+      <undocumented id="RcpPicoDst::b16" name="b16">
+        <location column="4" file="../include/Adapter/RcpPicoDst.h" line="114" />
+      </undocumented>
+      <undocumented id="RcpPicoDst::b9" name="b9">
+        <location column="4" file="../include/Adapter/RcpPicoDst.h" line="113" />
+      </undocumented>
+      <undocumented id="RcpPicoDst::eventWeight" name="eventWeight">
+        <location column="4" file="../include/Adapter/RcpPicoDst.h" line="85" />
+      </undocumented>
+      <undocumented id="RcpPicoDst::globalPt" name="globalPt">
+        <location column="4" file="../include/Adapter/RcpPicoDst.h" line="118" />
+      </undocumented>
+      <undocumented id="RcpPicoDst::numTracks" name="numTracks">
+        <location column="4" file="../include/Adapter/RcpPicoDst.h" line="87" />
+      </undocumented>
+      <undocumented id="RcpPicoDst::refMult" name="refMult">
+        <location column="4" file="../include/Adapter/RcpPicoDst.h" line="86" />
+      </undocumented>
+      <undocumented id="RcpPicoDst::runId" name="runId">
+        <location column="4" file="../include/Adapter/RcpPicoDst.h" line="84" />
+      </undocumented>
+      <undocumented id="RcpPicoDst::trackBeta" name="trackBeta">
+        <location column="4" file="../include/Adapter/RcpPicoDst.h" line="108" />
+      </undocumented>
+      <undocumented id="RcpPicoDst::trackCharge" name="trackCharge">
+        <location column="4" file="../include/Adapter/RcpPicoDst.h" line="94" />
+      </undocumented>
+      <undocumented id="RcpPicoDst::trackDca" name="trackDca">
+        <location column="4" file="../include/Adapter/RcpPicoDst.h" line="119" />
+      </undocumented>
+      <undocumented id="RcpPicoDst::trackDedx" name="trackDedx">
+        <location column="4" file="../include/Adapter/RcpPicoDst.h" line="107" />
+      </undocumented>
+      <undocumented id="RcpPicoDst::trackEta" name="trackEta">
+        <location column="4" file="../include/Adapter/RcpPicoDst.h" line="103" />
+      </undocumented>
+      <undocumented id="RcpPicoDst::trackNHitsDedx" name="trackNHitsDedx">
+        <location column="4" file="../include/Adapter/RcpPicoDst.h" line="121" />
+      </undocumented>
+      <undocumented id="RcpPicoDst::trackNHitsFit" name="trackNHitsFit">
+        <location column="4" file="../include/Adapter/RcpPicoDst.h" line="122" />
+      </undocumented>
+      <undocumented id="RcpPicoDst::trackNHitsPossible" name="trackNHitsPossible">
+        <location column="4" file="../include/Adapter/RcpPicoDst.h" line="123" />
+      </undocumented>
+      <undocumented id="RcpPicoDst::trackP" name="trackP">
+        <location column="4" file="../include/Adapter/RcpPicoDst.h" line="91" />
+      </undocumented>
+      <undocumented id="RcpPicoDst::trackPt" name="trackPt">
+        <location column="4" file="../include/Adapter/RcpPicoDst.h" line="88" />
+      </undocumented>
+      <undocumented id="RcpPicoDst::trackTofMatch" name="trackTofMatch">
+        <location column="4" file="../include/Adapter/RcpPicoDst.h" line="111" />
+      </undocumented>
+      <undocumented id="RcpPicoDst::trackYLocal" name="trackYLocal">
+        <location column="4" file="../include/Adapter/RcpPicoDst.h" line="109" />
+      </undocumented>
+      <undocumented id="RcpPicoDst::trackZLocal" name="trackZLocal">
+        <location column="4" file="../include/Adapter/RcpPicoDst.h" line="110" />
       </undocumented>
       <undocumented id="SpectraCorrecter::reweight" name="reweight">
-        <location column="2" file="../include/SpectraCorrecter.h" line="37" />
+        <location column="2" file="../include/Spectra/SpectraCorrecter.h" line="37" />
+      </undocumented>
+      <undocumented id="TSF::FitDataPoint::toString" name="toString">
+        <location column="3" file="../include/TSF/FitDataPoint.h" line="31" />
+      </undocumented>
+      <undocumented id="TSF::FitDataset::begin" name="begin">
+        <location column="3" file="../include/TSF/FitDataset.h" line="28" />
+      </undocumented>
+      <undocumented id="TSF::FitDataset::clear" name="clear">
+        <location column="3" file="../include/TSF/FitDataset.h" line="38" />
+      </undocumented>
+      <undocumented id="TSF::FitDataset::end" name="end">
+        <location column="3" file="../include/TSF/FitDataset.h" line="31" />
+      </undocumented>
+      <undocumented id="TSF::FitDataset::inRange" name="inRange">
+        <location column="3" file="../include/TSF/FitDataset.h" line="88" />
+      </undocumented>
+      <undocumented id="TSF::FitDataset::operator[]" name="operator[]">
+        <location column="3" file="../include/TSF/FitDataset.h" line="45" />
+      </undocumented>
+      <undocumented id="TSF::FitDataset::pointNear" name="pointNear">
+        <location column="3" file="../include/TSF/FitDataset.h" line="104" />
+      </undocumented>
+      <undocumented id="TSF::FitDataset::push_back" name="push_back">
+        <location column="3" file="../include/TSF/FitDataset.h" line="41" />
+      </undocumented>
+      <undocumented id="TSF::FitDataset::rangeX" name="rangeX">
+        <location column="3" file="../include/TSF/FitDataset.h" line="51" />
+      </undocumented>
+      <undocumented id="TSF::FitDataset::rangeY" name="rangeY">
+        <location column="3" file="../include/TSF/FitDataset.h" line="60" />
+      </undocumented>
+      <undocumented id="TSF::FitDataset::setName" name="setName">
+        <location column="3" file="../include/TSF/FitDataset.h" line="35" />
+      </undocumented>
+      <undocumented id="TSF::FitDataset::yield" name="yield">
+        <location column="3" file="../include/TSF/FitDataset.h" line="69" />
+      </undocumented>
+      <undocumented id="TSF::FitRange::inRange" name="inRange">
+        <location column="3" file="../include/TSF/FitRange.h" line="23" />
+      </undocumented>
+      <undocumented id="TSF::FitRange::toString" name="toString">
+        <location column="3" file="../include/TSF/FitRange.h" line="29" />
+      </undocumented>
+      <undocumented id="TSF::FitRunner::averagePt" name="averagePt">
+        <location column="3" file="../include/TSF/FitRunner.h" line="76" />
+      </undocumented>
+      <undocumented id="TSF::FitRunner::choosePlayers" name="choosePlayers">
+        <location column="3" file="../include/TSF/FitRunner.h" line="70" />
+      </undocumented>
+      <undocumented id="TSF::FitRunner::drawSet" name="drawSet">
+        <location column="3" file="../include/TSF/FitRunner.h" line="67" />
+      </undocumented>
+      <undocumented id="TSF::FitRunner::fillFitHistograms" name="fillFitHistograms">
+        <location column="3" file="../include/TSF/FitRunner.h" line="65" />
+      </undocumented>
+      <undocumented id="TSF::FitRunner::fitName" name="fitName">
+        <location column="3" file="../include/TSF/FitRunner.h" line="59" />
+      </undocumented>
+      <undocumented id="TSF::FitRunner::make" name="make">
+        <location column="3" file="../include/TSF/FitRunner.h" line="53" />
+      </undocumented>
+      <undocumented id="TSF::FitRunner::makeHistograms" name="makeHistograms">
+        <location column="3" file="../include/TSF/FitRunner.h" line="64" />
+      </undocumented>
+      <undocumented id="TSF::FitRunner::muName" name="muName">
+        <location column="3" file="../include/TSF/FitRunner.h" line="58" />
+      </undocumented>
+      <undocumented id="TSF::FitRunner::p" name="p">
+        <location column="3" file="../include/TSF/FitRunner.h" line="73" />
+      </undocumented>
+      <undocumented id="TSF::FitRunner::prepare" name="prepare">
+        <location column="3" file="../include/TSF/FitRunner.h" line="69" />
+      </undocumented>
+      <undocumented id="TSF::FitRunner::reportFit" name="reportFit">
+        <location column="3" file="../include/TSF/FitRunner.h" line="66" />
+      </undocumented>
+      <undocumented id="TSF::FitRunner::sigmaName" name="sigmaName">
+        <location column="3" file="../include/TSF/FitRunner.h" line="57" />
+      </undocumented>
+      <undocumented id="TSF::FitRunner::yieldName" name="yieldName">
+        <location column="3" file="../include/TSF/FitRunner.h" line="56" />
+      </undocumented>
+      <undocumented id="TSF::FitRunner::zbMean" name="zbMean">
+        <location column="3" file="../include/TSF/FitRunner.h" line="103" />
+      </undocumented>
+      <undocumented id="TSF::FitRunner::zbSigma" name="zbSigma">
+        <location column="3" file="../include/TSF/FitRunner.h" line="100" />
+      </undocumented>
+      <undocumented id="TSF::FitRunner::zdMean" name="zdMean">
+        <location column="3" file="../include/TSF/FitRunner.h" line="107" />
+      </undocumented>
+      <undocumented id="TSF::FitRunner::zdSigma" name="zdSigma">
+        <location column="3" file="../include/TSF/FitRunner.h" line="111" />
+      </undocumented>
+      <undocumented id="TSF::FitSchema::addRange" name="addRange">
+        <location column="3" file="../include/TSF/FitSchema.h" line="81" />
+      </undocumented>
+      <undocumented id="TSF::FitSchema::clearDatasets" name="clearDatasets">
+        <location column="3" file="../include/TSF/FitSchema.h" line="66" />
+      </undocumented>
+      <undocumented id="TSF::FitSchema::clearRanges" name="clearRanges">
+        <location column="3" file="../include/TSF/FitSchema.h" line="82" />
+      </undocumented>
+      <undocumented id="TSF::FitSchema::constrainFitRange" name="constrainFitRange">
+        <location column="3" file="../include/TSF/FitSchema.h" line="83" />
+      </undocumented>
+      <undocumented id="TSF::FitSchema::datasetActive" name="datasetActive">
+        <location column="3" file="../include/TSF/FitSchema.h" line="67" />
+      </undocumented>
+      <undocumented id="TSF::FitSchema::enforceMassOrdering" name="enforceMassOrdering">
+        <location column="3" file="../include/TSF/FitSchema.h" line="98" />
+      </undocumented>
+      <undocumented id="TSF::FitSchema::fixParameter" name="fixParameter">
+        <location column="3" file="../include/TSF/FitSchema.h" line="77" />
+      </undocumented>
+      <undocumented id="TSF::FitSchema::getMethod" name="getMethod">
+        <location column="3" file="../include/TSF/FitSchema.h" line="53" />
+      </undocumented>
+      <undocumented id="TSF::FitSchema::getNormalization" name="getNormalization">
+        <location column="3" file="../include/TSF/FitSchema.h" line="90" />
+      </undocumented>
+      <undocumented id="TSF::FitSchema::getRanges" name="getRanges">
+        <location column="3" file="../include/TSF/FitSchema.h" line="94" />
+      </undocumented>
+      <undocumented id="TSF::FitSchema::inRange" name="inRange">
+        <location column="3" file="../include/TSF/FitSchema.h" line="84" />
+      </undocumented>
+      <undocumented id="TSF::FitSchema::loadDataset" name="loadDataset">
+        <location column="3" file="../include/TSF/FitSchema.h" line="60" />
+      </undocumented>
+      <undocumented id="TSF::FitSchema::makeFitVars" name="makeFitVars">
+        <location column="3" file="../include/TSF/FitSchema.h" line="55" />
+      </undocumented>
+      <undocumented id="TSF::FitSchema::makeGauss" name="makeGauss">
+        <location column="3" file="../include/TSF/FitSchema.h" line="57" />
+      </undocumented>
+      <undocumented id="TSF::FitSchema::makeModels" name="makeModels">
+        <location column="3" file="../include/TSF/FitSchema.h" line="56" />
+      </undocumented>
+      <undocumented id="TSF::FitSchema::numParams" name="numParams">
+        <location column="3" file="../include/TSF/FitSchema.h" line="62" />
+      </undocumented>
+      <undocumented id="TSF::FitSchema::reportFitRanges" name="reportFitRanges">
+        <location column="3" file="../include/TSF/FitSchema.h" line="85" />
+      </undocumented>
+      <undocumented id="TSF::FitSchema::reportModels" name="reportModels">
+        <location column="3" file="../include/TSF/FitSchema.h" line="64" />
+      </undocumented>
+      <undocumented id="TSF::FitSchema::setInitialMu" name="setInitialMu">
+        <location column="3" file="../include/TSF/FitSchema.h" line="74" />
+      </undocumented>
+      <undocumented id="TSF::FitSchema::setInitialSigma" name="setInitialSigma">
+        <location column="3" file="../include/TSF/FitSchema.h" line="75" />
+      </undocumented>
+      <undocumented id="TSF::FitSchema::setInitialSigma" name="setInitialSigma">
+        <location column="3" file="../include/TSF/FitSchema.h" line="76" />
+      </undocumented>
+      <undocumented id="TSF::FitSchema::setMethod" name="setMethod">
+        <location column="3" file="../include/TSF/FitSchema.h" line="52" />
+      </undocumented>
+      <undocumented id="TSF::FitSchema::setNormalization" name="setNormalization">
+        <location column="3" file="../include/TSF/FitSchema.h" line="87" />
+      </undocumented>
+      <undocumented id="TSF::FitSchema::setYieldRange" name="setYieldRange">
+        <location column="3" file="../include/TSF/FitSchema.h" line="78" />
+      </undocumented>
+      <undocumented id="TSF::FitSchema::updateModels" name="updateModels">
+        <location column="3" file="../include/TSF/FitSchema.h" line="58" />
+      </undocumented>
+      <undocumented id="TSF::FitVar::set" name="set">
+        <location column="3" file="../include/TSF/FitVar.h" line="51" />
+      </undocumented>
+      <undocumented id="TSF::FitVar::set" name="set">
+        <location column="3" file="../include/TSF/FitVar.h" line="66" />
+      </undocumented>
+      <undocumented id="TSF::FitVar::toString" name="toString">
+        <location column="3" file="../include/TSF/FitVar.h" line="80" />
+      </undocumented>
+      <undocumented id="TSF::Fitter::addPlayer" name="addPlayer">
+        <location column="3" file="../include/TSF/Fitter.h" line="89" />
+      </undocumented>
+      <undocumented id="TSF::Fitter::addPlayers" name="addPlayers">
+        <location column="3" file="../include/TSF/Fitter.h" line="92" />
+      </undocumented>
+      <undocumented id="TSF::Fitter::chi2" name="chi2">
+        <location column="3" file="../include/TSF/Fitter.h" line="52" />
+      </undocumented>
+      <undocumented id="TSF::Fitter::clearPlayers" name="clearPlayers">
+        <location column="3" file="../include/TSF/Fitter.h" line="88" />
+      </undocumented>
+      <undocumented id="TSF::Fitter::currentYield" name="currentYield">
+        <location column="3" file="../include/TSF/Fitter.h" line="99" />
+      </undocumented>
+      <undocumented id="TSF::Fitter::currentYield" name="currentYield">
+        <location column="3" file="../include/TSF/Fitter.h" line="100" />
+      </undocumented>
+      <undocumented id="TSF::Fitter::fit" name="fit">
+        <location column="3" file="../include/TSF/Fitter.h" line="77" />
+      </undocumented>
+      <undocumented id="TSF::Fitter::fixParameters" name="fixParameters">
+        <location column="3" file="../include/TSF/Fitter.h" line="78" />
+      </undocumented>
+      <undocumented id="TSF::Fitter::fixShapes" name="fixShapes">
+        <location column="3" file="../include/TSF/Fitter.h" line="107" />
+      </undocumented>
+      <undocumented id="TSF::Fitter::fixedFit" name="fixedFit">
+        <location column="3" file="../include/TSF/Fitter.h" line="82" />
+      </undocumented>
+      <undocumented id="TSF::Fitter::fractional" name="fractional">
+        <location column="3" file="../include/TSF/Fitter.h" line="62" />
+      </undocumented>
+      <undocumented id="TSF::Fitter::getDataHist" name="getDataHist">
+        <location column="3" file="../include/TSF/Fitter.h" line="85" />
+      </undocumented>
+      <undocumented id="TSF::Fitter::getNorm" name="getNorm">
+        <location column="3" file="../include/TSF/Fitter.h" line="104" />
+      </undocumented>
+      <undocumented id="TSF::Fitter::isFitGood" name="isFitGood">
+        <location column="3" file="../include/TSF/Fitter.h" line="86" />
+      </undocumented>
+      <undocumented id="TSF::Fitter::loadDatasets" name="loadDatasets">
+        <location column="3" file="../include/TSF/Fitter.h" line="76" />
+      </undocumented>
+      <undocumented id="TSF::Fitter::modelEval" name="modelEval">
+        <location column="3" file="../include/TSF/Fitter.h" line="49" />
+      </undocumented>
+      <undocumented id="TSF::Fitter::modelYield" name="modelYield">
+        <location column="3" file="../include/TSF/Fitter.h" line="50" />
+      </undocumented>
+      <undocumented id="TSF::Fitter::nll" name="nll">
+        <location column="3" file="../include/TSF/Fitter.h" line="67" />
+      </undocumented>
+      <undocumented id="TSF::Fitter::normFactor" name="normFactor">
+        <location column="3" file="../include/TSF/Fitter.h" line="105" />
+      </undocumented>
+      <undocumented id="TSF::Fitter::penalizeYields" name="penalizeYields">
+        <location column="3" file="../include/TSF/Fitter.h" line="101" />
+      </undocumented>
+      <undocumented id="TSF::Fitter::plotResult" name="plotResult">
+        <location column="3" file="../include/TSF/Fitter.h" line="84" />
+      </undocumented>
+      <undocumented id="TSF::Fitter::poisson" name="poisson">
+        <location column="3" file="../include/TSF/Fitter.h" line="57" />
+      </undocumented>
+      <undocumented id="TSF::Fitter::releaseParameters" name="releaseParameters">
+        <location column="3" file="../include/TSF/Fitter.h" line="79" />
+      </undocumented>
+      <undocumented id="TSF::Fitter::releaseShapes" name="releaseShapes">
+        <location column="3" file="../include/TSF/Fitter.h" line="108" />
+      </undocumented>
+      <undocumented id="TSF::Fitter::setupFit" name="setupFit">
+        <location column="3" file="../include/TSF/Fitter.h" line="43" />
+      </undocumented>
+      <undocumented id="TSF::Fitter::tminuitFCN" name="tminuitFCN">
+        <location column="3" file="../include/TSF/Fitter.h" line="47" />
+      </undocumented>
+      <undocumented id="TSF::Fitter::updateParameters" name="updateParameters">
+        <location column="3" file="../include/TSF/Fitter.h" line="74" />
+      </undocumented>
+      <undocumented id="TSF::GaussModel::eval" name="eval">
+        <location column="3" file="../include/TSF/GaussModel.h" line="64" />
+      </undocumented>
+      <undocumented id="TSF::GaussModel::integral" name="integral">
+        <location column="3" file="../include/TSF/GaussModel.h" line="72" />
+      </undocumented>
+      <undocumented id="TSF::GaussModel::setVars" name="setVars">
+        <location column="3" file="../include/TSF/GaussModel.h" line="58" />
+      </undocumented>
+      <undocumented id="TSF::GaussModel::toString" name="toString">
+        <location column="3" file="../include/TSF/GaussModel.h" line="77" />
+      </undocumented>
+      <undocumented id="TofEffFitter::exportParams" name="exportParams">
+        <location column="2" file="../include/McMaker/TofEffFitter.h" line="64" />
+      </undocumented>
+      <undocumented id="TofEffFitter::make" name="make">
+        <location column="2" file="../include/McMaker/TofEffFitter.h" line="91" />
+      </undocumented>
+      <undocumented id="TofEffMaker::analyzeTofTrack" name="analyzeTofTrack">
+        <location column="2" file="../include/McMaker/TofEffMaker.h" line="46" />
+      </undocumented>
+      <undocumented id="TofEffMaker::postEventLoop" name="postEventLoop">
+        <location column="2" file="../include/McMaker/TofEffMaker.h" line="48" />
+      </undocumented>
+      <undocumented id="TofEffMaker::preEventLoop" name="preEventLoop">
+        <location column="2" file="../include/McMaker/TofEffMaker.h" line="47" />
+      </undocumented>
+      <undocumented id="TofEffMaker::rapidity" name="rapidity">
+        <location column="2" file="../include/McMaker/TofEffMaker.h" line="52" />
+      </undocumented>
+      <undocumented id="TpcEffMcHistoMaker::analyzeTrack" name="analyzeTrack">
+        <location column="2" file="../include/McMaker/TpcEffMcHistoMaker.h" line="48" />
+      </undocumented>
+      <undocumented id="TpcEffMcHistoMaker::keepTrack" name="keepTrack">
+        <location column="2" file="../include/McMaker/TpcEffMcHistoMaker.h" line="47" />
+      </undocumented>
+      <undocumented id="TpcEffRcHistoMaker::analyzeTrack" name="analyzeTrack">
+        <location column="2" file="../include/McMaker/TpcEffRcHistoMaker.h" line="36" />
+      </undocumented>
+      <undocumented id="ZRecentering::allSpecies" name="allSpecies">
+        <location column="2" file="../include/Spectra/ZRecentering.h" line="48" />
+      </undocumented>
+      <undocumented id="ZRecentering::centeredDedxMap" name="centeredDedxMap">
+        <location column="2" file="../include/Spectra/ZRecentering.h" line="59" />
+      </undocumented>
+      <undocumented id="ZRecentering::centeredDedxMeans" name="centeredDedxMeans">
+        <location column="2" file="../include/Spectra/ZRecentering.h" line="56" />
+      </undocumented>
+      <undocumented id="ZRecentering::centeredDedxMeans" name="centeredDedxMeans">
+        <location column="2" file="../include/Spectra/ZRecentering.h" line="57" />
+      </undocumented>
+      <undocumented id="ZRecentering::centeredTofMap" name="centeredTofMap">
+        <location column="2" file="../include/Spectra/ZRecentering.h" line="51" />
+      </undocumented>
+      <undocumented id="ZRecentering::centeredTofMeans" name="centeredTofMeans">
+        <location column="2" file="../include/Spectra/ZRecentering.h" line="49" />
+      </undocumented>
+      <undocumented id="ZRecentering::centeredTofMeans" name="centeredTofMeans">
+        <location column="2" file="../include/Spectra/ZRecentering.h" line="50" />
+      </undocumented>
+      <undocumented id="ZRecentering::dedxGenerator" name="dedxGenerator">
+        <location column="2" file="../include/Spectra/ZRecentering.h" line="54" />
+      </undocumented>
+      <undocumented id="ZRecentering::nl2Tof" name="nl2Tof">
+        <location column="2" file="../include/Spectra/ZRecentering.h" line="97" />
+      </undocumented>
+      <undocumented id="ZRecentering::otherSpecies" name="otherSpecies">
+        <location column="2" file="../include/Spectra/ZRecentering.h" line="47" />
+      </undocumented>
+      <undocumented id="ZRecentering::tofGenerator" name="tofGenerator">
+        <location column="2" file="../include/Spectra/ZRecentering.h" line="53" />
+      </undocumented>
+    </type>
+    <type documented="4" name="constructor" undocumented="26">
+      <undocumented id="Bichsel::Bichsel" name="Bichsel">
+        <location column="2" file="../include/Params/Bichsel.h" line="32" />
+      </undocumented>
+      <undocumented id="EffParams::EffParams" name="EffParams">
+        <location column="2" file="../include/Params/EffParams.h" line="29" />
+      </undocumented>
+      <undocumented id="EnergyLoss::EnergyLoss" name="EnergyLoss">
+        <location column="2" file="../include/McMaker/EnergyLoss.h" line="10" />
+      </undocumented>
+      <undocumented id="EnergyLossParams::EnergyLossParams" name="EnergyLossParams">
+        <location column="2" file="../include/Params/EnergyLossParams.h" line="25" />
+      </undocumented>
+      <undocumented id="FeedDownMaker::FeedDownMaker" name="FeedDownMaker">
+        <location column="2" file="../include/McMaker/FeedDownMaker.h" line="22" />
+      </undocumented>
+      <undocumented id="FeedDownParams::FeedDownParams" name="FeedDownParams">
+        <location column="2" file="../include/Params/FeedDownParams.h" line="28" />
+      </undocumented>
+      <undocumented id="InclusiveSpectra::InclusiveSpectra" name="InclusiveSpectra">
+        <location column="2" file="../include/Spectra/InclusiveSpectra.h" line="82" />
+      </undocumented>
+      <undocumented id="PidHistoMaker::PidHistoMaker" name="PidHistoMaker">
+        <location column="2" file="../include/Spectra/PidHistoMaker.h" line="70" />
+      </undocumented>
+      <undocumented id="PidYieldPresenter::PidYieldPresenter" name="PidYieldPresenter">
+        <location column="2" file="../include/Present/PidYieldPresenter.h" line="66" />
+      </undocumented>
+      <undocumented id="PresentationMaker::PresentationMaker" name="PresentationMaker">
+        <location column="2" file="../include/Present/PresentationMaker.h" line="11" />
+      </undocumented>
+      <undocumented id="SpectraCorrecter::SpectraCorrecter" name="SpectraCorrecter">
+        <location column="2" file="../include/Spectra/SpectraCorrecter.h" line="23" />
+      </undocumented>
+      <undocumented id="TSF::FitDataPoint::FitDataPoint" name="FitDataPoint">
+        <location column="3" file="../include/TSF/FitDataPoint.h" line="17" />
+      </undocumented>
+      <undocumented id="TSF::FitDataPoint::FitDataPoint" name="FitDataPoint">
+        <location column="3" file="../include/TSF/FitDataPoint.h" line="23" />
+      </undocumented>
+      <undocumented id="TSF::FitDataset::FitDataset" name="FitDataset">
+        <location column="3" file="../include/TSF/FitDataset.h" line="25" />
+      </undocumented>
+      <undocumented id="TSF::FitRange::FitRange" name="FitRange">
+        <location column="3" file="../include/TSF/FitRange.h" line="15" />
+      </undocumented>
+      <undocumented id="TSF::FitRunner::FitRunner" name="FitRunner">
+        <location column="3" file="../include/TSF/FitRunner.h" line="49" />
+      </undocumented>
+      <undocumented id="TSF::FitSchema::FitSchema" name="FitSchema">
+        <location column="3" file="../include/TSF/FitSchema.h" line="45" />
+      </undocumented>
+      <undocumented id="TSF::FitVar::FitVar" name="FitVar">
+        <location column="3" file="../include/TSF/FitVar.h" line="43" />
+      </undocumented>
+      <undocumented id="TSF::Fitter::Fitter" name="Fitter">
+        <location column="3" file="../include/TSF/Fitter.h" line="40" />
+      </undocumented>
+      <undocumented id="TSF::GaussModel::GaussModel" name="GaussModel">
+        <location column="3" file="../include/TSF/GaussModel.h" line="36" />
+      </undocumented>
+      <undocumented id="TSF::GaussModel::GaussModel" name="GaussModel">
+        <location column="3" file="../include/TSF/GaussModel.h" line="47" />
+      </undocumented>
+      <undocumented id="TofEffFitter::TofEffFitter" name="TofEffFitter">
+        <location column="2" file="../include/McMaker/TofEffFitter.h" line="22" />
+      </undocumented>
+      <undocumented id="TofEffMaker::TofEffMaker" name="TofEffMaker">
+        <location column="2" file="../include/McMaker/TofEffMaker.h" line="38" />
+      </undocumented>
+      <undocumented id="TpcEffMcHistoMaker::TpcEffMcHistoMaker" name="TpcEffMcHistoMaker">
+        <location column="2" file="../include/McMaker/TpcEffMcHistoMaker.h" line="31" />
+      </undocumented>
+      <undocumented id="TpcEffRcHistoMaker::TpcEffRcHistoMaker" name="TpcEffRcHistoMaker">
+        <location column="2" file="../include/McMaker/TpcEffRcHistoMaker.h" line="32" />
+      </undocumented>
+      <undocumented id="ZRecentering::ZRecentering" name="ZRecentering">
+        <location column="2" file="../include/Spectra/ZRecentering.h" line="31" />
+      </undocumented>
+    </type>
+    <type documented="2" name="variable" undocumented="15">
+      <undocumented id="Bichsel::MPM" name="MPM">
+        <location column="2" file="../include/Params/Bichsel.h" line="118" />
+      </undocumented>
+      <undocumented id="Bichsel::POL" name="POL">
+        <location column="2" file="../include/Params/Bichsel.h" line="120" />
+      </undocumented>
+      <undocumented id="Bichsel::T70" name="T70">
+        <location column="2" file="../include/Params/Bichsel.h" line="119" />
+      </undocumented>
+      <undocumented id="EnergyLossParams::instances" name="instances">
+        <location column="2" file="../include/Params/EnergyLossParams.h" line="22" />
+      </undocumented>
+      <undocumented id="FeedDownMaker::plcID" name="plcID">
+        <location column="2" file="../include/McMaker/FeedDownMaker.h" line="29" />
+      </undocumented>
+      <undocumented id="FeedDownMaker::plcMass" name="plcMass">
+        <location column="2" file="../include/McMaker/FeedDownMaker.h" line="30" />
+      </undocumented>
+      <undocumented id="FeedDownParams::instances" name="instances">
+        <location column="2" file="../include/Params/FeedDownParams.h" line="24" />
+      </undocumented>
+      <undocumented id="TSF::Fitter::convergence" name="convergence">
+        <location column="3" file="../include/TSF/Fitter.h" line="45" />
+      </undocumented>
+      <undocumented id="kMaxBTOWHit" name="kMaxBTOWHit">
+        <location column="1" file="../include/Adapter/ProdPicoDst.h" line="24" />
+      </undocumented>
+      <undocumented id="kMaxBTofHit" name="kMaxBTofHit">
+        <location column="1" file="../include/Adapter/ProdPicoDst.h" line="25" />
+      </undocumented>
+      <undocumented id="kMaxTracks" name="kMaxTracks">
+        <location column="1" file="../include/Adapter/ProdPicoDst.h" line="22" />
+      </undocumented>
+      <undocumented id="kMaxTrigger" name="kMaxTrigger">
+        <location column="1" file="../include/Adapter/ProdPicoDst.h" line="23" />
+      </undocumented>
+      <undocumented id="kMaxV0Ks" name="kMaxV0Ks">
+        <location column="1" file="../include/Adapter/ProdPicoDst.h" line="26" />
+      </undocumented>
+      <undocumented id="kMaxV0L" name="kMaxV0L">
+        <location column="1" file="../include/Adapter/ProdPicoDst.h" line="27" />
+      </undocumented>
+      <undocumented id="kMaxV0Lbar" name="kMaxV0Lbar">
+        <location column="1" file="../include/Adapter/ProdPicoDst.h" line="28" />
+      </undocumented>
+    </type>
+    <type documented="0" name="class" undocumented="28">
+      <undocumented id="Bichsel" name="Bichsel">
+        <location column="1" file="../include/Params/Bichsel.h" line="17" />
+      </undocumented>
+      <undocumented id="EffParams" name="EffParams">
+        <location column="1" file="../include/Params/EffParams.h" line="17" />
+      </undocumented>
+      <undocumented id="EnergyLoss" name="EnergyLoss">
+        <location column="1" file="../include/McMaker/EnergyLoss.h" line="7" />
+      </undocumented>
+      <undocumented id="EnergyLossParams" name="EnergyLossParams">
+        <location column="1" file="../include/Params/EnergyLossParams.h" line="12" />
+      </undocumented>
+      <undocumented id="FeedDownMaker" name="FeedDownMaker">
+        <location column="1" file="../include/McMaker/FeedDownMaker.h" line="15" />
+      </undocumented>
+      <undocumented id="FeedDownParams" name="FeedDownParams">
+        <location column="1" file="../include/Params/FeedDownParams.h" line="13" />
+      </undocumented>
+      <undocumented id="InclusiveSpectra" name="InclusiveSpectra">
+        <location column="1" file="../include/Spectra/InclusiveSpectra.h" line="20" />
+      </undocumented>
+      <undocumented id="PicoDataStore" name="PicoDataStore">
+        <location column="1" file="../include/Adapter/PicoDataStore.h" line="7" />
+      </undocumented>
+      <undocumented id="PidHistoMaker" name="PidHistoMaker">
+        <location column="1" file="../include/Spectra/PidHistoMaker.h" line="19" />
+      </undocumented>
+      <undocumented id="PidYieldPresenter" name="PidYieldPresenter">
+        <location column="1" file="../include/Present/PidYieldPresenter.h" line="32" />
+      </undocumented>
+      <undocumented id="PresentationMaker" name="PresentationMaker">
+        <location column="1" file="../include/Present/PresentationMaker.h" line="8" />
+      </undocumented>
+      <undocumented id="ProdPicoDst" name="ProdPicoDst">
+        <location column="1" file="../include/Adapter/ProdPicoDst.h" line="30" />
+      </undocumented>
+      <undocumented id="RcpPicoDst" name="RcpPicoDst">
+        <location column="1" file="../include/Adapter/RcpPicoDst.h" line="22" />
+      </undocumented>
+      <undocumented id="SpectraCorrecter" name="SpectraCorrecter">
+        <location column="1" file="../include/Spectra/PidHistoMaker.h" line="10" />
+        <location column="1" file="../include/Spectra/SpectraCorrecter.h" line="14" />
+      </undocumented>
+      <undocumented id="TSF::FitDataPoint" name="FitDataPoint">
+        <location column="2" file="../include/TSF/FitDataPoint.h" line="12" />
+      </undocumented>
+      <undocumented id="TSF::FitDataset" name="FitDataset">
+        <location column="2" file="../include/TSF/FitDataset.h" line="17" />
+      </undocumented>
+      <undocumented id="TSF::FitRange" name="FitRange">
+        <location column="2" file="../include/TSF/FitRange.h" line="8" />
+      </undocumented>
+      <undocumented id="TSF::FitRunner" name="FitRunner">
+        <location column="2" file="../include/TSF/FitRunner.h" line="24" />
+      </undocumented>
+      <undocumented id="TSF::FitSchema" name="FitSchema">
+        <location column="2" file="../include/TSF/FitSchema.h" line="27" />
+      </undocumented>
+      <undocumented id="TSF::FitVar" name="FitVar">
+        <location column="2" file="../include/TSF/FitVar.h" line="13" />
+      </undocumented>
+      <undocumented id="TSF::Fitter" name="Fitter">
+        <location column="2" file="../include/TSF/Fitter.h" line="18" />
+      </undocumented>
+      <undocumented id="TSF::GaussModel" name="GaussModel">
+        <location column="2" file="../include/TSF/GaussModel.h" line="25" />
+      </undocumented>
+      <undocumented id="TofEffFitter" name="TofEffFitter">
+        <location column="1" file="../include/McMaker/TofEffFitter.h" line="16" />
+      </undocumented>
+      <undocumented id="TofEffMaker" name="TofEffMaker">
+        <location column="1" file="../include/McMaker/TofEffMaker.h" line="16" />
+      </undocumented>
+      <undocumented id="TofGenerator" name="TofGenerator">
+        <location column="1" file="../include/Params/TofGenerator.h" line="19" />
+      </undocumented>
+      <undocumented id="TpcEffMcHistoMaker" name="TpcEffMcHistoMaker">
+        <location column="1" file="../include/McMaker/TpcEffMcHistoMaker.h" line="21" />
+      </undocumented>
+      <undocumented id="TpcEffRcHistoMaker" name="TpcEffRcHistoMaker">
+        <location column="1" file="../include/McMaker/TpcEffRcHistoMaker.h" line="22" />
+      </undocumented>
+      <undocumented id="ZRecentering" name="ZRecentering">
+        <location column="1" file="../include/Spectra/ZRecentering.h" line="15" />
       </undocumented>
     </type>
   </coverage>
   <arguments>
+    <function id="PicoDataStore::trackNHits" name="trackNHits">
+      <location column="2" file="../include/Adapter/PicoDataStore.h" line="18" />
+      <undocumented-return />
+      <undocumented name="iHit" />
+    </function>
+    <function id="PicoDataStore::mcPt" name="mcPt">
+      <location column="2" file="../include/Adapter/PicoDataStore.h" line="26" />
+      <undocumented-return />
+      <undocumented name="iHit" />
+    </function>
+    <function id="PicoDataStore::trackYLocal" name="trackYLocal">
+      <location column="2" file="../include/Adapter/PicoDataStore.h" line="52" />
+      <undocumented-return />
+      <undocumented name="iHit" />
+    </function>
+    <function id="PicoDataStore::runId" name="runId">
+      <location column="2" file="../include/Adapter/PicoDataStore.h" line="58" />
+      <undocumented-return />
+    </function>
+    <function id="ProdPicoDst::ProdPicoDst" name="ProdPicoDst">
+      <location column="4" file="../include/Adapter/ProdPicoDst.h" line="294" />
+      <undocumented name="tree" />
+    </function>
+    <function id="ProdPicoDst::trackNHits" name="trackNHits">
+      <location column="4" file="../include/Adapter/ProdPicoDst.h" line="378" />
+      <undocumented-return />
+      <undocumented name="iHit" />
+    </function>
+    <function id="RcpPicoDst::getTree" name="getTree">
+      <location column="4" file="../include/Adapter/RcpPicoDst.h" line="28" />
+      <undocumented-return />
+    </function>
+    <function id="RcpPicoDst::RcpPicoDst" name="RcpPicoDst">
+      <location column="4" file="../include/Adapter/RcpPicoDst.h" line="73" />
+      <undocumented name="tree" />
+    </function>
+    <function id="RcpPicoDst::mcPt" name="mcPt">
+      <location column="4" file="../include/Adapter/RcpPicoDst.h" line="117" />
+      <undocumented-return />
+      <undocumented name="iHit" />
+    </function>
+    <function id="FeedDownMaker::analyzeTrack" name="analyzeTrack">
+      <location column="2" file="../include/McMaker/FeedDownMaker.h" line="51" />
+      <undocumented name="iTrack" />
+    </function>
+    <function id="FeedDownMaker::keepTrack" name="keepTrack">
+      <location column="2" file="../include/McMaker/FeedDownMaker.h" line="65" />
+      <undocumented name="iTrack" />
+    </function>
+    <function id="TofEffMaker::analyzeTrack" name="analyzeTrack">
+      <location column="2" file="../include/McMaker/TofEffMaker.h" line="45" />
+      <undocumented name="iTrack" />
+    </function>
     <function id="Bichsel::mean10" name="mean10">
-      <location column="2" file="../include/Bichsel.h" line="77" />
+      <location column="2" file="../include/Params/Bichsel.h" line="77" />
       <undocumented name="p" />
       <undocumented name="scale" />
       <undocumented name="m" />
       <undocumented name="method" />
     </function>
-    <function id="Common::rapidity" name="rapidity">
-      <location column="2" file="../include/Common.h" line="38" />
-      <undocumented name="eta" />
-      <undocumented name="m" />
-      <undocumented name="pt" />
+    <function id="TofGenerator::TofGenerator" name="TofGenerator">
+      <location column="2" file="../include/Params/TofGenerator.h" line="37" />
+      <undocumented name="obSigma" />
+      <undocumented name="nSamples" />
     </function>
-    <function id="Common::chargeString" name="chargeString">
-      <location column="2" file="../include/Common.h" line="49" />
-      <undocumented name="charge" />
+    <function id="TofGenerator::mean" name="mean">
+      <location column="2" file="../include/Params/TofGenerator.h" line="56" />
+      <undocumented name="p" />
+      <undocumented name="mass" />
     </function>
-    <function id="Common::speciesName" name="speciesName">
-      <location column="2" file="../include/Common.h" line="76" />
-      <undocumented name="centerSpecies" />
-      <undocumented name="charge" />
-      <undocumented name="cenBin" />
-    </function>
-    <function id="Common::p" name="p">
-      <location column="2" file="../include/Common.h" line="100" />
-      <undocumented-return />
-      <misspelled name="return" />
-    </function>
-    <function id="FeedDownMaker::analyzeTrack" name="analyzeTrack">
-      <location column="2" file="../include/FeedDownMaker.h" line="51" />
-      <undocumented name="iTrack" />
-    </function>
-    <function id="FeedDownMaker::keepTrack" name="keepTrack">
-      <location column="2" file="../include/FeedDownMaker.h" line="65" />
-      <undocumented name="iTrack" />
+    <function id="TofGenerator::random" name="random">
+      <location column="2" file="../include/Params/TofGenerator.h" line="66" />
+      <undocumented name="p" />
+      <undocumented name="mass" />
     </function>
     <function id="InclusiveSpectra::analyzeTrack" name="analyzeTrack">
-      <location column="2" file="../include/InclusiveSpectra.h" line="133" />
+      <location column="2" file="../include/Spectra/InclusiveSpectra.h" line="133" />
       <undocumented name="iTrack" />
     </function>
     <function id="InclusiveSpectra::analyzeTofTrack" name="analyzeTofTrack">
-      <location column="2" file="../include/InclusiveSpectra.h" line="139" />
+      <location column="2" file="../include/Spectra/InclusiveSpectra.h" line="139" />
       <undocumented name="iTrack" />
     </function>
     <function id="InclusiveSpectra::keepEvent" name="keepEvent">
-      <location column="2" file="../include/InclusiveSpectra.h" line="142" />
+      <location column="2" file="../include/Spectra/InclusiveSpectra.h" line="142" />
       <undocumented-return />
     </function>
     <function id="InclusiveSpectra::keepTrack" name="keepTrack">
-      <location column="2" file="../include/InclusiveSpectra.h" line="149" />
+      <location column="2" file="../include/Spectra/InclusiveSpectra.h" line="149" />
       <undocumented name="iTrack" />
     </function>
     <function id="InclusiveSpectra::keepTofTrack" name="keepTofTrack">
-      <location column="2" file="../include/InclusiveSpectra.h" line="156" />
+      <location column="2" file="../include/Spectra/InclusiveSpectra.h" line="156" />
       <undocumented name="iTrack" />
     </function>
-    <function id="PhaseSpaceRecentering::mass" name="mass">
-      <location column="2" file="../include/PhaseSpaceRecentering.h" line="46" />
-      <undocumented-return />
-      <undocumented name="pType" />
-    </function>
-    <function id="PhaseSpaceRecentering::rDedx" name="rDedx">
-      <location column="2" file="../include/PhaseSpaceRecentering.h" line="68" />
-      <undocumented name="dedx" />
-      <undocumented name="centerSpecies" />
-      <undocumented name="p" />
-    </function>
-    <function id="PhaseSpaceRecentering::nlDedx" name="nlDedx">
-      <location column="2" file="../include/PhaseSpaceRecentering.h" line="77" />
-      <undocumented name="dedx" />
-      <undocumented name="centerSpecies" />
-      <undocumented name="avgP" />
-      <undocumented name="p" />
-    </function>
-    <function id="PhaseSpaceRecentering::rTof" name="rTof">
-      <location column="2" file="../include/PhaseSpaceRecentering.h" line="87" />
-      <undocumented name="p" />
-      <undocumented name="centerSpecies" />
-      <undocumented name="beta" />
-    </function>
-    <function id="PhaseSpaceRecentering::nlTof" name="nlTof">
-      <location column="2" file="../include/PhaseSpaceRecentering.h" line="96" />
-      <undocumented name="p" />
-      <undocumented name="centerSpecies" />
-      <undocumented name="avgP" />
-      <undocumented name="beta" />
-    </function>
-    <function id="PhaseSpaceRecentering::lh" name="lh">
-      <location column="2" file="../include/PhaseSpaceRecentering.h" line="107" />
-      <undocumented name="mu" />
-      <undocumented name="x" />
-      <undocumented name="sigma" />
-    </function>
-    <function id="PidPhaseSpace::analyzeTrack" name="analyzeTrack">
-      <location column="2" file="../include/PidPhaseSpace.h" line="77" />
+    <function id="PidHistoMaker::analyzeTrack" name="analyzeTrack">
+      <location column="2" file="../include/Spectra/PidHistoMaker.h" line="77" />
       <undocumented name="iTrack" />
     </function>
-    <function id="PidPhaseSpace::averageP" name="averageP">
-      <location column="2" file="../include/PidPhaseSpace.h" line="103" />
+    <function id="PidHistoMaker::averageP" name="averageP">
+      <location column="2" file="../include/Spectra/PidHistoMaker.h" line="103" />
       <undocumented name="ptBin" />
       <undocumented name="etaBin" />
     </function>
-    <function id="PidPhaseSpace::autoViewport" name="autoViewport">
-      <location column="2" file="../include/PidPhaseSpace.h" line="131" />
+    <function id="PidHistoMaker::autoViewport" name="autoViewport">
+      <location column="2" file="../include/Spectra/PidHistoMaker.h" line="131" />
       <undocumented name="tofHigh" />
       <undocumented name="dedxLow" />
       <undocumented name="tofLow" />
@@ -589,13 +1725,85 @@ return values.
       <undocumented name="tofScaledPadding" />
       <undocumented name="dedxPadding" />
     </function>
+    <function id="ZRecentering::mass" name="mass">
+      <location column="2" file="../include/Spectra/ZRecentering.h" line="46" />
+      <undocumented-return />
+      <undocumented name="pType" />
+    </function>
+    <function id="ZRecentering::rDedx" name="rDedx">
+      <location column="2" file="../include/Spectra/ZRecentering.h" line="68" />
+      <undocumented name="dedx" />
+      <undocumented name="centerSpecies" />
+      <undocumented name="p" />
+    </function>
+    <function id="ZRecentering::nlDedx" name="nlDedx">
+      <location column="2" file="../include/Spectra/ZRecentering.h" line="77" />
+      <undocumented name="dedx" />
+      <undocumented name="centerSpecies" />
+      <undocumented name="avgP" />
+      <undocumented name="p" />
+    </function>
+    <function id="ZRecentering::rTof" name="rTof">
+      <location column="2" file="../include/Spectra/ZRecentering.h" line="87" />
+      <undocumented name="p" />
+      <undocumented name="centerSpecies" />
+      <undocumented name="beta" />
+    </function>
+    <function id="ZRecentering::nlTof" name="nlTof">
+      <location column="2" file="../include/Spectra/ZRecentering.h" line="96" />
+      <undocumented name="p" />
+      <undocumented name="centerSpecies" />
+      <undocumented name="avgP" />
+      <undocumented name="beta" />
+    </function>
+    <function id="ZRecentering::lh" name="lh">
+      <location column="2" file="../include/Spectra/ZRecentering.h" line="107" />
+      <undocumented name="mu" />
+      <undocumented name="x" />
+      <undocumented name="sigma" />
+    </function>
+    <function id="TSF::FitRunner::averageP" name="averageP">
+      <location column="3" file="../include/TSF/FitRunner.h" line="85" />
+      <undocumented-return />
+      <undocumented name="ptBin" />
+      <undocumented name="etaBin" />
+    </function>
+    <function id="TSF::FitVar::FitVar" name="FitVar">
+      <location column="3" file="../include/TSF/FitVar.h" line="24" />
+      <undocumented name="np" />
+      <undocumented name="cfg" />
+    </function>
   </arguments>
   <references>
+    <field id="ProdPicoDst::V0Ks_mV0Pos_mX1" name="V0Ks_mV0Pos_mX1">
+      <location column="4" file="../include/Adapter/ProdPicoDst.h" line="141" />
+      <doctype name="doc">
+        <ref name="float" />
+      </doctype>
+    </field>
+    <field id="ProdPicoDst::V0L_mV0Pos_mX1" name="V0L_mV0Pos_mX1">
+      <location column="4" file="../include/Adapter/ProdPicoDst.h" line="150" />
+      <doctype name="doc">
+        <ref name="float" />
+      </doctype>
+    </field>
+    <field id="ProdPicoDst::V0Lbar_mV0Pos_mX1" name="V0Lbar_mV0Pos_mX1">
+      <location column="4" file="../include/Adapter/ProdPicoDst.h" line="159" />
+      <doctype name="doc">
+        <ref name="float" />
+      </doctype>
+    </field>
     <field id="FeedDownMaker::corrRefMult" name="corrRefMult">
-      <location column="2" file="../include/FeedDownMaker.h" line="19" />
+      <location column="2" file="../include/McMaker/FeedDownMaker.h" line="19" />
       <doctype name="brief">
         <ref name="RefMultCorrection" />
       </doctype>
     </field>
+    <constructor id="TSF::FitVar::FitVar" name="FitVar">
+      <location column="3" file="../include/TSF/FitVar.h" line="24" />
+      <doctype name="doc">
+        <ref name="FitVar name=&quot;zb_mu_Pi&quot; value=&quot;-0.5&quot;  min=&quot;-0.6&quot; max=&quot;-0.4&quot; /" />
+      </doctype>
+    </constructor>
   </references>
 </report>

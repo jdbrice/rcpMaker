@@ -2,7 +2,10 @@
   <base access="public">
     <type name="jdb::TreeAnalyzer" />
   </base>
-  <subclass access="public" name="PidPhaseSpace" ref="PidPhaseSpace#PidPhaseSpace" />
+  <subclass access="public" name="TpcEffRcHistoMaker" ref="TpcEffRcHistoMaker#TpcEffRcHistoMaker" />
+  <subclass access="public" name="TofEffMaker" ref="TofEffMaker#TofEffMaker" />
+  <subclass access="public" name="PidHistoMaker" ref="PidHistoMaker#PidHistoMaker" />
+  <subclass access="public" name="EnergyLoss" ref="EnergyLoss#EnergyLoss" />
   <constructor abstract="yes" id="InclusiveSpectra::InclusiveSpectra" name="InclusiveSpectra">
     <argument id="InclusiveSpectra::InclusiveSpectra::config" name="config">
       <type name="jdb::XmlConfig" qualifier="*" />

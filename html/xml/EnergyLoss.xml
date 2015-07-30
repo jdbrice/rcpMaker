@@ -1,0 +1,35 @@
+<class xmlns="http://jessevdk.github.com/cldoc/1.0" abstract="true" id="EnergyLoss" name="EnergyLoss">
+  <base access="public">
+    <type name="InclusiveSpectra" ref="InclusiveSpectra#InclusiveSpectra" />
+  </base>
+  <constructor abstract="yes" id="EnergyLoss::EnergyLoss" name="EnergyLoss">
+    <argument id="EnergyLoss::EnergyLoss::config" name="config">
+      <type name="jdb::XmlConfig" qualifier="*" />
+    </argument>
+    <argument id="EnergyLoss::EnergyLoss::nodePath" name="nodePath">
+      <type name="string" />
+    </argument>
+    <argument id="EnergyLoss::EnergyLoss::fileList" name="fileList">
+      <type name="string" />
+    </argument>
+    <argument id="EnergyLoss::EnergyLoss::jobPrefix" name="jobPrefix">
+      <type name="string" />
+    </argument>
+  </constructor>
+  <destructor id="EnergyLoss::~EnergyLoss" name="~EnergyLoss" />
+  <method abstract="yes" id="EnergyLoss::analyzeTrack" name="analyzeTrack" override="yes" virtual="yes">
+    <return>
+      <type builtin="yes" name="void" />
+    </return>
+    <argument id="EnergyLoss::analyzeTrack::iTrack" name="iTrack">
+      <type builtin="yes" name="int" />
+    </argument>
+    <override name="InclusiveSpectra::analyzeTrack" ref="InclusiveSpectra#InclusiveSpectra::analyzeTrack" />
+  </method>
+  <method abstract="yes" id="EnergyLoss::preEventLoop" name="preEventLoop" override="yes" virtual="yes">
+    <return>
+      <type builtin="yes" name="void" />
+    </return>
+    <override name="InclusiveSpectra::preEventLoop" ref="InclusiveSpectra#InclusiveSpectra::preEventLoop" />
+  </method>
+</class>

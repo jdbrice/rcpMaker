@@ -1,0 +1,256 @@
+<class xmlns="http://jessevdk.github.com/cldoc/1.0" abstract="true" id="TSF::FitSchema" name="FitSchema">
+  <field id="TSF::FitSchema::vars" name="vars">
+    <type name="map&lt;string, shared_ptr&lt;TSF::FitVar&gt;&gt;" />
+  </field>
+  <field id="TSF::FitSchema::models" name="models">
+    <type name="map&lt;string, shared_ptr&lt;TSF::GaussModel&gt;&gt;" />
+  </field>
+  <field id="TSF::FitSchema::datasets" name="datasets">
+    <type name="map&lt;string, TSF::FitDataset&gt;" />
+  </field>
+  <constructor abstract="yes" id="TSF::FitSchema::FitSchema" name="FitSchema">
+    <argument id="TSF::FitSchema::FitSchema::_cfg" name="_cfg">
+      <type name="jdb::XmlConfig" qualifier="*" />
+    </argument>
+    <argument id="TSF::FitSchema::FitSchema::np" name="np">
+      <type name="string" />
+    </argument>
+  </constructor>
+  <destructor abstract="yes" id="TSF::FitSchema::~FitSchema" name="~FitSchema" />
+  <method abstract="yes" id="TSF::FitSchema::addRange" name="addRange">
+    <return>
+      <type builtin="yes" name="void" />
+    </return>
+    <argument id="TSF::FitSchema::addRange::dataset" name="dataset">
+      <type name="string" />
+    </argument>
+    <argument id="TSF::FitSchema::addRange::_min" name="_min">
+      <type builtin="yes" name="double" />
+    </argument>
+    <argument id="TSF::FitSchema::addRange::_max" name="_max">
+      <type builtin="yes" name="double" />
+    </argument>
+  </method>
+  <method id="TSF::FitSchema::clearDatasets" name="clearDatasets">
+    <return>
+      <type builtin="yes" name="void" />
+    </return>
+  </method>
+  <method abstract="yes" id="TSF::FitSchema::clearRanges" name="clearRanges">
+    <return>
+      <type builtin="yes" name="void" />
+    </return>
+  </method>
+  <method id="TSF::FitSchema::constrainFitRange" name="constrainFitRange">
+    <return>
+      <type builtin="yes" name="bool" />
+    </return>
+  </method>
+  <method id="TSF::FitSchema::datasetActive" name="datasetActive">
+    <return>
+      <type builtin="yes" name="bool" />
+    </return>
+    <argument id="TSF::FitSchema::datasetActive::dsName" name="dsName">
+      <type name="string" />
+    </argument>
+  </method>
+  <method id="TSF::FitSchema::enforceMassOrdering" name="enforceMassOrdering">
+    <return>
+      <type builtin="yes" name="double" />
+    </return>
+  </method>
+  <method abstract="yes" id="TSF::FitSchema::fixParameter" name="fixParameter">
+    <return>
+      <type builtin="yes" name="void" />
+    </return>
+    <argument id="TSF::FitSchema::fixParameter::var" name="var">
+      <type name="string" />
+    </argument>
+    <argument id="TSF::FitSchema::fixParameter::val" name="val">
+      <type builtin="yes" name="double" />
+    </argument>
+    <argument id="TSF::FitSchema::fixParameter::fixed" name="fixed">
+      <type builtin="yes" name="bool" />
+    </argument>
+  </method>
+  <method id="TSF::FitSchema::getMethod" name="getMethod">
+    <return>
+      <type name="string" />
+    </return>
+  </method>
+  <method id="TSF::FitSchema::getNormalization" name="getNormalization">
+    <return>
+      <type builtin="yes" name="double" />
+    </return>
+  </method>
+  <method id="TSF::FitSchema::getRanges" name="getRanges">
+    <return>
+      <type name="vector&lt;TSF::FitRange&gt;" qualifier=" &amp;" />
+    </return>
+  </method>
+  <method abstract="yes" id="TSF::FitSchema::inRange" name="inRange">
+    <return>
+      <type builtin="yes" name="bool" />
+    </return>
+    <argument id="TSF::FitSchema::inRange::ds" name="ds">
+      <type name="string" />
+    </argument>
+    <argument id="TSF::FitSchema::inRange::x" name="x">
+      <type builtin="yes" name="double" />
+    </argument>
+  </method>
+  <method abstract="yes" id="TSF::FitSchema::loadDataset" name="loadDataset">
+    <return>
+      <type builtin="yes" name="void" />
+    </return>
+    <argument id="TSF::FitSchema::loadDataset::ds" name="ds">
+      <type name="string" />
+    </argument>
+    <argument id="TSF::FitSchema::loadDataset::h" name="h">
+      <type name="TH1" qualifier="*" />
+    </argument>
+  </method>
+  <method abstract="yes" id="TSF::FitSchema::makeFitVars" name="makeFitVars">
+    <return>
+      <type builtin="yes" name="void" />
+    </return>
+  </method>
+  <method abstract="yes" id="TSF::FitSchema::makeGauss" name="makeGauss">
+    <return>
+      <type builtin="yes" name="void" />
+    </return>
+    <argument id="TSF::FitSchema::makeGauss::path" name="path">
+      <type name="string" />
+    </argument>
+  </method>
+  <method abstract="yes" id="TSF::FitSchema::makeModels" name="makeModels">
+    <return>
+      <type builtin="yes" name="void" />
+    </return>
+  </method>
+  <method id="TSF::FitSchema::numParams" name="numParams">
+    <return>
+      <type builtin="yes" name="int" />
+    </return>
+  </method>
+  <method abstract="yes" id="TSF::FitSchema::reportFitRanges" name="reportFitRanges">
+    <return>
+      <type builtin="yes" name="void" />
+    </return>
+  </method>
+  <method abstract="yes" id="TSF::FitSchema::reportModels" name="reportModels">
+    <return>
+      <type builtin="yes" name="void" />
+    </return>
+  </method>
+  <method abstract="yes" id="TSF::FitSchema::setInitialMu" name="setInitialMu">
+    <return>
+      <type builtin="yes" name="void" />
+    </return>
+    <argument id="TSF::FitSchema::setInitialMu::var" name="var">
+      <type name="string" />
+    </argument>
+    <argument id="TSF::FitSchema::setInitialMu::_mu" name="_mu">
+      <type builtin="yes" name="double" />
+    </argument>
+    <argument id="TSF::FitSchema::setInitialMu::_sigma" name="_sigma">
+      <type builtin="yes" name="double" />
+    </argument>
+    <argument id="TSF::FitSchema::setInitialMu::_dmu" name="_dmu">
+      <type builtin="yes" name="double" />
+    </argument>
+  </method>
+  <method abstract="yes" id="TSF::FitSchema::setInitialSigma" name="setInitialSigma">
+    <return>
+      <type builtin="yes" name="void" />
+    </return>
+    <argument id="TSF::FitSchema::setInitialSigma::var" name="var">
+      <type name="string" />
+    </argument>
+    <argument id="TSF::FitSchema::setInitialSigma::_sigma" name="_sigma">
+      <type builtin="yes" name="double" />
+    </argument>
+    <argument id="TSF::FitSchema::setInitialSigma::_dsig" name="_dsig">
+      <type builtin="yes" name="double" />
+    </argument>
+  </method>
+  <method abstract="yes" id="TSF::FitSchema::setInitialSigma" name="setInitialSigma">
+    <return>
+      <type builtin="yes" name="void" />
+    </return>
+    <argument id="TSF::FitSchema::setInitialSigma::var" name="var">
+      <type name="string" />
+    </argument>
+    <argument id="TSF::FitSchema::setInitialSigma::_sigma" name="_sigma">
+      <type builtin="yes" name="double" />
+    </argument>
+    <argument id="TSF::FitSchema::setInitialSigma::_min" name="_min">
+      <type builtin="yes" name="double" />
+    </argument>
+    <argument id="TSF::FitSchema::setInitialSigma::_max" name="_max">
+      <type builtin="yes" name="double" />
+    </argument>
+  </method>
+  <method id="TSF::FitSchema::setMethod" name="setMethod">
+    <return>
+      <type builtin="yes" name="void" />
+    </return>
+    <argument id="TSF::FitSchema::setMethod::m" name="m">
+      <type name="string" />
+    </argument>
+  </method>
+  <method id="TSF::FitSchema::setNormalization" name="setNormalization">
+    <return>
+      <type builtin="yes" name="void" />
+    </return>
+    <argument id="TSF::FitSchema::setNormalization::n" name="n">
+      <type builtin="yes" name="double" />
+    </argument>
+  </method>
+  <method abstract="yes" id="TSF::FitSchema::setYieldRange" name="setYieldRange">
+    <return>
+      <type builtin="yes" name="void" />
+    </return>
+    <argument id="TSF::FitSchema::setYieldRange::var" name="var">
+      <type name="string" />
+    </argument>
+    <argument id="TSF::FitSchema::setYieldRange::low" name="low">
+      <type builtin="yes" name="double" />
+    </argument>
+    <argument id="TSF::FitSchema::setYieldRange::high" name="high">
+      <type builtin="yes" name="double" />
+    </argument>
+  </method>
+  <method abstract="yes" id="TSF::FitSchema::updateModels" name="updateModels">
+    <return>
+      <type builtin="yes" name="void" />
+    </return>
+    <argument id="TSF::FitSchema::updateModels::act" name="act">
+      <type name="map&lt;string, bool&gt;" qualifier=" &amp;" />
+    </argument>
+  </method>
+  <field access="protected" id="TSF::FitSchema::cfg" name="cfg">
+    <type name="jdb::XmlConfig" qualifier="*" />
+  </field>
+  <field access="protected" id="TSF::FitSchema::nodePath" name="nodePath">
+    <type name="string" />
+  </field>
+  <field access="protected" id="TSF::FitSchema::logger" name="logger">
+    <type name="unique_ptr&lt;jdb::Logger, default_delete&lt;jdb::Logger&gt; &gt;" />
+  </field>
+  <field access="protected" id="TSF::FitSchema::nPars" name="nPars">
+    <type builtin="yes" name="int" />
+  </field>
+  <field access="protected" id="TSF::FitSchema::method" name="method">
+    <type name="string" />
+  </field>
+  <field access="protected" id="TSF::FitSchema::fitInRange" name="fitInRange">
+    <type builtin="yes" name="bool" />
+  </field>
+  <field access="protected" id="TSF::FitSchema::ranges" name="ranges">
+    <type name="vector&lt;TSF::FitRange&gt;" />
+  </field>
+  <field access="protected" id="TSF::FitSchema::normalization" name="normalization">
+    <type builtin="yes" name="double" />
+  </field>
+</class>

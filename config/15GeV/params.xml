@@ -24,11 +24,11 @@
 
 		<enhanceDistributions tof="1.0" dedx="1.0"/>
 		
-		<PhaseSpaceRecentering>
+		<ZRecentering>
 			<centerSpecies>K</centerSpecies>
 			<sigma tof="0.012" dedx="0.03"/>
 			<method>nonlinear</method>
-		</PhaseSpaceRecentering>
+		</ZRecentering>
 
 		<histograms>
 			<mean title="Mean For Species; p_{T} [GeV]" xBins="binning.pt" />

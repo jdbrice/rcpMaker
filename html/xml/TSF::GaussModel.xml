@@ -1,0 +1,90 @@
+<class xmlns="http://jessevdk.github.com/cldoc/1.0" id="TSF::GaussModel" name="GaussModel">
+  <field id="TSF::GaussModel::dataset" name="dataset">
+    <type name="string" />
+  </field>
+  <field id="TSF::GaussModel::name" name="name">
+    <type name="string" />
+  </field>
+  <field id="TSF::GaussModel::yield" name="yield">
+    <type name="string" />
+  </field>
+  <field id="TSF::GaussModel::mu" name="mu">
+    <type name="string" />
+  </field>
+  <field id="TSF::GaussModel::sigma" name="sigma">
+    <type name="string" />
+  </field>
+  <field id="TSF::GaussModel::y" name="y">
+    <type builtin="yes" name="double" />
+  </field>
+  <field id="TSF::GaussModel::m" name="m">
+    <type builtin="yes" name="double" />
+  </field>
+  <field id="TSF::GaussModel::s" name="s">
+    <type builtin="yes" name="double" />
+  </field>
+  <constructor id="TSF::GaussModel::GaussModel" name="GaussModel">
+    <argument id="TSF::GaussModel::GaussModel::cfg" name="cfg">
+      <type name="jdb::XmlConfig" qualifier="*" />
+    </argument>
+    <argument id="TSF::GaussModel::GaussModel::np" name="np">
+      <type name="string" />
+    </argument>
+    <argument id="TSF::GaussModel::GaussModel::_dataset" name="_dataset">
+      <type name="string" />
+    </argument>
+  </constructor>
+  <constructor id="TSF::GaussModel::GaussModel" name="GaussModel">
+    <argument id="TSF::GaussModel::GaussModel::_name" name="_name">
+      <type name="string" />
+    </argument>
+    <argument id="TSF::GaussModel::GaussModel::_yield" name="_yield">
+      <type name="string" />
+    </argument>
+    <argument id="TSF::GaussModel::GaussModel::_mu" name="_mu">
+      <type name="string" />
+    </argument>
+    <argument id="TSF::GaussModel::GaussModel::_sigma" name="_sigma">
+      <type name="string" />
+    </argument>
+    <argument id="TSF::GaussModel::GaussModel::_ds" name="_ds">
+      <type name="string" />
+    </argument>
+  </constructor>
+  <destructor id="TSF::GaussModel::~GaussModel" name="~GaussModel" />
+  <method id="TSF::GaussModel::eval" name="eval">
+    <return>
+      <type builtin="yes" name="double" />
+    </return>
+    <argument id="TSF::GaussModel::eval::x" name="x">
+      <type builtin="yes" name="double" />
+    </argument>
+    <argument id="TSF::GaussModel::eval::bw" name="bw">
+      <type builtin="yes" name="double" />
+    </argument>
+  </method>
+  <method id="TSF::GaussModel::integral" name="integral">
+    <return>
+      <type builtin="yes" name="double" />
+    </return>
+    <argument id="TSF::GaussModel::integral::x1" name="x1">
+      <type builtin="yes" name="double" />
+    </argument>
+    <argument id="TSF::GaussModel::integral::x2" name="x2">
+      <type builtin="yes" name="double" />
+    </argument>
+  </method>
+  <method id="TSF::GaussModel::setVars" name="setVars">
+    <return>
+      <type builtin="yes" name="void" />
+    </return>
+    <argument id="TSF::GaussModel::setVars::vars" name="vars">
+      <type name="map&lt;string, shared_ptr&lt;TSF::FitVar&gt;&gt;" qualifier=" &amp;" />
+    </argument>
+  </method>
+  <method id="TSF::GaussModel::toString" name="toString">
+    <return>
+      <type name="string" />
+    </return>
+  </method>
+</class>

@@ -1,0 +1,290 @@
+<class xmlns="http://jessevdk.github.com/cldoc/1.0" abstract="true" id="TSF::Fitter" name="Fitter">
+  <variable id="TSF::Fitter::convergence" name="convergence">
+    <type name="vector&lt;double&gt;" />
+  </variable>
+  <constructor abstract="yes" id="TSF::Fitter::Fitter" name="Fitter">
+    <argument id="TSF::Fitter::Fitter::_schema" name="_schema">
+      <type name="shared_ptr&lt;TSF::FitSchema&gt;" />
+    </argument>
+    <argument id="TSF::Fitter::Fitter::dataFile" name="dataFile">
+      <type name="TFile" qualifier="*" />
+    </argument>
+  </constructor>
+  <destructor abstract="yes" id="TSF::Fitter::~Fitter" name="~Fitter" />
+  <method id="TSF::Fitter::addPlayer" name="addPlayer">
+    <return>
+      <type builtin="yes" name="void" />
+    </return>
+    <argument id="TSF::Fitter::addPlayer::mn" name="mn">
+      <type name="string" />
+    </argument>
+  </method>
+  <method id="TSF::Fitter::addPlayers" name="addPlayers">
+    <return>
+      <type builtin="yes" name="void" />
+    </return>
+    <argument id="TSF::Fitter::addPlayers::pls" name="pls">
+      <type name="vector&lt;string&gt;" qualifier=" &amp;" />
+    </argument>
+  </method>
+  <method id="TSF::Fitter::chi2" name="chi2" static="yes">
+    <return>
+      <type builtin="yes" name="double" />
+    </return>
+    <argument id="TSF::Fitter::chi2::data" name="data">
+      <type builtin="yes" name="double" />
+    </argument>
+    <argument id="TSF::Fitter::chi2::pred" name="pred">
+      <type builtin="yes" name="double" />
+    </argument>
+    <argument id="TSF::Fitter::chi2::ey" name="ey">
+      <type builtin="yes" name="double" />
+    </argument>
+  </method>
+  <method id="TSF::Fitter::clearPlayers" name="clearPlayers">
+    <return>
+      <type builtin="yes" name="void" />
+    </return>
+  </method>
+  <method abstract="yes" id="TSF::Fitter::currentYield" name="currentYield">
+    <return>
+      <type builtin="yes" name="double" />
+    </return>
+    <argument id="TSF::Fitter::currentYield::var" name="var">
+      <type name="string" />
+    </argument>
+    <argument id="TSF::Fitter::currentYield::npar" name="npar">
+      <type builtin="yes" name="int" />
+    </argument>
+    <argument id="TSF::Fitter::currentYield::pars" name="pars">
+      <type builtin="yes" name="double" qualifier="*" />
+    </argument>
+  </method>
+  <method abstract="yes" id="TSF::Fitter::currentYield" name="currentYield">
+    <return>
+      <type builtin="yes" name="double" />
+    </return>
+    <argument id="TSF::Fitter::currentYield::var" name="var">
+      <type name="string" />
+    </argument>
+    <argument id="TSF::Fitter::currentYield::plc" name="plc">
+      <type name="string" />
+    </argument>
+    <argument id="TSF::Fitter::currentYield::npar" name="npar">
+      <type builtin="yes" name="int" />
+    </argument>
+    <argument id="TSF::Fitter::currentYield::pars" name="pars">
+      <type builtin="yes" name="double" qualifier="*" />
+    </argument>
+  </method>
+  <method abstract="yes" id="TSF::Fitter::fit" name="fit">
+    <return>
+      <type builtin="yes" name="void" />
+    </return>
+    <argument id="TSF::Fitter::fit::cs" name="cs">
+      <type name="string" />
+    </argument>
+    <argument id="TSF::Fitter::fit::charge" name="charge">
+      <type builtin="yes" name="int" />
+    </argument>
+    <argument id="TSF::Fitter::fit::cenBin" name="cenBin">
+      <type builtin="yes" name="int" />
+    </argument>
+    <argument id="TSF::Fitter::fit::ptBin" name="ptBin">
+      <type builtin="yes" name="int" />
+    </argument>
+    <argument id="TSF::Fitter::fit::etaBin" name="etaBin">
+      <type builtin="yes" name="int" />
+    </argument>
+  </method>
+  <method abstract="yes" id="TSF::Fitter::fixedFit" name="fixedFit">
+    <return>
+      <type builtin="yes" name="void" />
+    </return>
+    <argument id="TSF::Fitter::fixedFit::cs" name="cs">
+      <type name="string" />
+    </argument>
+    <argument id="TSF::Fitter::fixedFit::charge" name="charge">
+      <type builtin="yes" name="int" />
+    </argument>
+    <argument id="TSF::Fitter::fixedFit::cenBin" name="cenBin">
+      <type builtin="yes" name="int" />
+    </argument>
+    <argument id="TSF::Fitter::fixedFit::ptBin" name="ptBin">
+      <type builtin="yes" name="int" />
+    </argument>
+    <argument id="TSF::Fitter::fixedFit::etaBin" name="etaBin">
+      <type builtin="yes" name="int" />
+    </argument>
+  </method>
+  <method abstract="yes" id="TSF::Fitter::fixParameters" name="fixParameters">
+    <return>
+      <type builtin="yes" name="void" />
+    </return>
+  </method>
+  <method abstract="yes" id="TSF::Fitter::fixShapes" name="fixShapes">
+    <return>
+      <type builtin="yes" name="void" />
+    </return>
+  </method>
+  <method id="TSF::Fitter::fractional" name="fractional" static="yes">
+    <return>
+      <type builtin="yes" name="double" />
+    </return>
+    <argument id="TSF::Fitter::fractional::data" name="data">
+      <type builtin="yes" name="double" />
+    </argument>
+    <argument id="TSF::Fitter::fractional::pred" name="pred">
+      <type builtin="yes" name="double" />
+    </argument>
+  </method>
+  <method id="TSF::Fitter::getDataHist" name="getDataHist">
+    <return>
+      <type name="TH1" qualifier="*" />
+    </return>
+    <argument id="TSF::Fitter::getDataHist::dataset" name="dataset">
+      <type name="string" />
+    </argument>
+  </method>
+  <method id="TSF::Fitter::getNorm" name="getNorm">
+    <return>
+      <type builtin="yes" name="double" />
+    </return>
+  </method>
+  <method id="TSF::Fitter::isFitGood" name="isFitGood">
+    <return>
+      <type builtin="yes" name="bool" />
+    </return>
+  </method>
+  <method abstract="yes" id="TSF::Fitter::loadDatasets" name="loadDatasets">
+    <return>
+      <type builtin="yes" name="void" />
+    </return>
+    <argument id="TSF::Fitter::loadDatasets::cs" name="cs">
+      <type name="string" />
+    </argument>
+    <argument id="TSF::Fitter::loadDatasets::charge" name="charge">
+      <type builtin="yes" name="int" />
+    </argument>
+    <argument id="TSF::Fitter::loadDatasets::cenBin" name="cenBin">
+      <type builtin="yes" name="int" />
+    </argument>
+    <argument id="TSF::Fitter::loadDatasets::ptBin" name="ptBin">
+      <type builtin="yes" name="int" />
+    </argument>
+    <argument id="TSF::Fitter::loadDatasets::etaBin" name="etaBin">
+      <type builtin="yes" name="int" />
+    </argument>
+  </method>
+  <method abstract="yes" id="TSF::Fitter::modelEval" name="modelEval" static="yes">
+    <return>
+      <type builtin="yes" name="double" />
+    </return>
+    <argument id="TSF::Fitter::modelEval::dataset" name="dataset">
+      <type name="string" />
+    </argument>
+    <argument id="TSF::Fitter::modelEval::x" name="x">
+      <type builtin="yes" name="double" />
+    </argument>
+  </method>
+  <method abstract="yes" id="TSF::Fitter::modelYield" name="modelYield" static="yes">
+    <return>
+      <type builtin="yes" name="double" />
+    </return>
+    <argument id="TSF::Fitter::modelYield::dataset" name="dataset">
+      <type name="string" />
+    </argument>
+  </method>
+  <method id="TSF::Fitter::nll" name="nll" static="yes">
+    <return>
+      <type builtin="yes" name="double" />
+    </return>
+    <argument id="TSF::Fitter::nll::data" name="data">
+      <type builtin="yes" name="double" />
+    </argument>
+    <argument id="TSF::Fitter::nll::model" name="model">
+      <type builtin="yes" name="double" />
+    </argument>
+  </method>
+  <method id="TSF::Fitter::normFactor" name="normFactor">
+    <return>
+      <type builtin="yes" name="double" />
+    </return>
+  </method>
+  <method abstract="yes" id="TSF::Fitter::penalizeYields" name="penalizeYields">
+    <return>
+      <type builtin="yes" name="double" />
+    </return>
+    <argument id="TSF::Fitter::penalizeYields::npar" name="npar">
+      <type builtin="yes" name="int" />
+    </argument>
+    <argument id="TSF::Fitter::penalizeYields::pars" name="pars">
+      <type builtin="yes" name="double" qualifier="*" />
+    </argument>
+  </method>
+  <method abstract="yes" id="TSF::Fitter::plotResult" name="plotResult">
+    <return>
+      <type name="TGraph" qualifier="*" />
+    </return>
+    <argument id="TSF::Fitter::plotResult::dataset" name="dataset">
+      <type name="string" />
+    </argument>
+  </method>
+  <method id="TSF::Fitter::poisson" name="poisson" static="yes">
+    <return>
+      <type builtin="yes" name="double" />
+    </return>
+    <argument id="TSF::Fitter::poisson::data" name="data">
+      <type builtin="yes" name="double" />
+    </argument>
+    <argument id="TSF::Fitter::poisson::pred" name="pred">
+      <type builtin="yes" name="double" />
+    </argument>
+  </method>
+  <method abstract="yes" id="TSF::Fitter::releaseParameters" name="releaseParameters">
+    <return>
+      <type builtin="yes" name="void" />
+    </return>
+  </method>
+  <method abstract="yes" id="TSF::Fitter::releaseShapes" name="releaseShapes">
+    <return>
+      <type builtin="yes" name="void" />
+    </return>
+  </method>
+  <method abstract="yes" id="TSF::Fitter::setupFit" name="setupFit">
+    <return>
+      <type builtin="yes" name="void" />
+    </return>
+  </method>
+  <method abstract="yes" id="TSF::Fitter::tminuitFCN" name="tminuitFCN" static="yes">
+    <return>
+      <type builtin="yes" name="void" />
+    </return>
+    <argument id="TSF::Fitter::tminuitFCN::npar" name="npar">
+      <type builtin="yes" name="int" qualifier=" &amp;" />
+    </argument>
+    <argument id="TSF::Fitter::tminuitFCN::gin" name="gin">
+      <type builtin="yes" name="double" qualifier="*" />
+    </argument>
+    <argument id="TSF::Fitter::tminuitFCN::f" name="f">
+      <type builtin="yes" name="double" qualifier=" &amp;" />
+    </argument>
+    <argument id="TSF::Fitter::tminuitFCN::par" name="par">
+      <type builtin="yes" name="double" qualifier="*" />
+    </argument>
+    <argument id="TSF::Fitter::tminuitFCN::flag" name="flag">
+      <type builtin="yes" name="int" />
+    </argument>
+  </method>
+  <method abstract="yes" id="TSF::Fitter::updateParameters" name="updateParameters" static="yes">
+    <return>
+      <type builtin="yes" name="void" />
+    </return>
+    <argument id="TSF::Fitter::updateParameters::npar" name="npar">
+      <type builtin="yes" name="int" />
+    </argument>
+    <argument id="TSF::Fitter::updateParameters::pars" name="pars">
+      <type builtin="yes" name="double" qualifier="*" />
+    </argument>
+  </method>
+</class>

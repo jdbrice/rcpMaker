@@ -113,6 +113,8 @@ public:
    inline virtual UShort_t b9() { return bin9; }
    inline virtual UShort_t b16() { return bin16; }
    
+   // only used for Rc tracks
+   inline virtual Double_t mcPt( Int_t iHit ){ return (double)yLocal[ iHit ]; } 
    inline virtual Double_t globalPt( Int_t iHit ){ return (double)gpT[ iHit ]; }
    inline virtual Double_t trackDca( Int_t iHit ){ return (double) dca[ iHit ]; }
 

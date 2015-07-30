@@ -22,6 +22,8 @@ public:
 
 	virtual Double_t globalPt( Int_t iHit ){ return 0; }
 	virtual Double_t trackPt( Int_t iHit ){ return 0; }
+	// returns the mc Pt associated with an rc trac - for MC tracks just use trackPt
+	virtual Double_t mcPt( Int_t iHit ){ return 0; } 
 	virtual Double_t trackP( Int_t iHit ){ return 0; }
 	virtual Double_t trackPx( Int_t iHit ){ return 0; }
 	virtual Double_t trackPy( Int_t iHit ){ return 0; }

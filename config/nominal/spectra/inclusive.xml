@@ -5,10 +5,10 @@
 	<jobType>InclusiveSpectra</jobType>
 
 	<InclusiveSpectra>
-		<Logger color="true" globalLogLevel="warning" logLevel="all" />
+		<Logger color="true" globalLogLevel="info" logLevel="all" />
 		
 		<input plc="Pi">
-			<dst treeName="rcpPicoDst" url="/Users/danielbrandenburg/bnl/local/data/RcpAnalysis/embedding/Pi_Plus_mc.root"/>
+			<dst treeName="rcpPicoDst" url="/Users/danielbrandenburg/bnl/local/data/RcpAnalysis/embedding/K_Minus_rc.root"/>
 		</input>
 		<output>
 			<data>../products/inclusiveSpectra.root</data>
@@ -21,10 +21,7 @@
 
 		<!-- histograms to auto-make -->
 		<histograms>
-			<ptBase type="1D" title="p_{T} [GeV]; p_{T} [GeV]; #Events"  xBins="binning.pt"/>
-			<ptAll type="1D" title="p_{T} [GeV]; p_{T} [GeV]; #Events"  xBins="binning.pt"/>
-			<ptPos type="1D" title="p_{T} [GeV]; p_{T} [GeV]; #Events"  xBins="binning.pt"/>
-			<ptNeg type="1D" title="p_{T} [GeV]; p_{T} [GeV]; #Events"  xBins="binning.pt"/>
+			<pt type="1D" title="p_{T} [GeV]; p_{T} [GeV]; #Events"  xBins="binning.pt"/>
 		</histograms>
 
 	</InclusiveSpectra>

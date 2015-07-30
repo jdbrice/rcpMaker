@@ -1,0 +1,301 @@
+<class xmlns="http://jessevdk.github.com/cldoc/1.0" abstract="true" id="PidHistoMaker" name="PidHistoMaker">
+  <base access="public">
+    <type name="InclusiveSpectra" ref="InclusiveSpectra#InclusiveSpectra" />
+  </base>
+  <constructor abstract="yes" id="PidHistoMaker::PidHistoMaker" name="PidHistoMaker">
+    <argument id="PidHistoMaker::PidHistoMaker::config" name="config">
+      <type name="jdb::XmlConfig" qualifier="*" />
+    </argument>
+    <argument id="PidHistoMaker::PidHistoMaker::np" name="np">
+      <type name="string" />
+    </argument>
+    <argument id="PidHistoMaker::PidHistoMaker::fl" name="fl">
+      <type name="string" />
+    </argument>
+    <argument id="PidHistoMaker::PidHistoMaker::jp" name="jp">
+      <type name="string" />
+    </argument>
+  </constructor>
+  <destructor abstract="yes" id="PidHistoMaker::~PidHistoMaker" name="~PidHistoMaker" />
+  <method abstract="yes" id="PidHistoMaker::analyzeTofTrack" name="analyzeTofTrack" override="yes" virtual="yes">
+    <return>
+      <type builtin="yes" name="void" />
+    </return>
+    <argument id="PidHistoMaker::analyzeTofTrack::iTrack" name="iTrack">
+      <type name="Int_t" />
+    </argument>
+    <override name="InclusiveSpectra::analyzeTofTrack" ref="InclusiveSpectra#InclusiveSpectra::analyzeTofTrack" />
+  </method>
+  <method abstract="yes" id="PidHistoMaker::analyzeTrack" name="analyzeTrack" override="yes" virtual="yes">
+    <brief>*</brief>
+    <doc>Analyze a track in the current Event
+</doc>
+    <return>
+      <type builtin="yes" name="void" />
+    </return>
+    <argument id="PidHistoMaker::analyzeTrack::iTrack" name="iTrack">
+      <type name="Int_t" />
+    </argument>
+    <override name="InclusiveSpectra::analyzeTrack" ref="InclusiveSpectra#InclusiveSpectra::analyzeTrack" />
+  </method>
+  <method abstract="yes" id="PidHistoMaker::autoViewport" name="autoViewport" static="yes">
+    <brief>*</brief>
+    <doc>Computes the upper and lower limits in tof and dedx phase space
+</doc>
+    <return>
+      <type builtin="yes" name="void" />
+    </return>
+    <argument id="PidHistoMaker::autoViewport::pType" name="pType">
+      <type name="string" />
+    </argument>
+    <argument id="PidHistoMaker::autoViewport::p" name="p">
+      <type builtin="yes" name="double" />
+    </argument>
+    <argument id="PidHistoMaker::autoViewport::lpsr" name="lpsr">
+      <type name="ZRecentering" qualifier="*" ref="ZRecentering#ZRecentering" />
+    </argument>
+    <argument id="PidHistoMaker::autoViewport::tofLow" name="tofLow">
+      <type builtin="yes" name="double" qualifier="*" />
+    </argument>
+    <argument id="PidHistoMaker::autoViewport::tofHigh" name="tofHigh">
+      <type builtin="yes" name="double" qualifier="*" />
+    </argument>
+    <argument id="PidHistoMaker::autoViewport::dedxLow" name="dedxLow">
+      <type builtin="yes" name="double" qualifier="*" />
+    </argument>
+    <argument id="PidHistoMaker::autoViewport::dedxHigh" name="dedxHigh">
+      <type builtin="yes" name="double" qualifier="*" />
+    </argument>
+    <argument id="PidHistoMaker::autoViewport::tofPadding" name="tofPadding">
+      <type builtin="yes" name="double" />
+    </argument>
+    <argument id="PidHistoMaker::autoViewport::dedxPadding" name="dedxPadding">
+      <type builtin="yes" name="double" />
+    </argument>
+    <argument id="PidHistoMaker::autoViewport::tofScaledPadding" name="tofScaledPadding">
+      <type builtin="yes" name="double" />
+    </argument>
+    <argument id="PidHistoMaker::autoViewport::dedxScaledPadding" name="dedxScaledPadding">
+      <type builtin="yes" name="double" />
+    </argument>
+  </method>
+  <method id="PidHistoMaker::averageEta" name="averageEta">
+    <return>
+      <type builtin="yes" name="double" />
+    </return>
+    <argument id="PidHistoMaker::averageEta::etaBin" name="etaBin">
+      <type builtin="yes" name="int" />
+    </argument>
+  </method>
+  <method id="PidHistoMaker::averageP" name="averageP">
+    <brief>*</brief>
+    <doc>Calculates the average momentum for a pt, eta bin
+</doc>
+    <return>
+      <doc>the average p in GeV/c</doc>
+      <type builtin="yes" name="double" />
+    </return>
+    <argument id="PidHistoMaker::averageP::ptBin" name="ptBin">
+      <type builtin="yes" name="int" />
+    </argument>
+    <argument id="PidHistoMaker::averageP::etaBin" name="etaBin">
+      <type builtin="yes" name="int" />
+    </argument>
+  </method>
+  <method id="PidHistoMaker::averagePt" name="averagePt">
+    <return>
+      <type builtin="yes" name="double" />
+    </return>
+    <argument id="PidHistoMaker::averagePt::ptBin" name="ptBin">
+      <type builtin="yes" name="int" />
+    </argument>
+  </method>
+  <method abstract="yes" id="PidHistoMaker::enhanceDistributions" name="enhanceDistributions">
+    <return>
+      <type builtin="yes" name="void" />
+    </return>
+    <argument id="PidHistoMaker::enhanceDistributions::avgP" name="avgP">
+      <type builtin="yes" name="double" />
+    </argument>
+    <argument id="PidHistoMaker::enhanceDistributions::ptBin" name="ptBin">
+      <type builtin="yes" name="int" />
+    </argument>
+    <argument id="PidHistoMaker::enhanceDistributions::etaBin" name="etaBin">
+      <type builtin="yes" name="int" />
+    </argument>
+    <argument id="PidHistoMaker::enhanceDistributions::charge" name="charge">
+      <type builtin="yes" name="int" />
+    </argument>
+    <argument id="PidHistoMaker::enhanceDistributions::dedx" name="dedx">
+      <type builtin="yes" name="double" />
+    </argument>
+    <argument id="PidHistoMaker::enhanceDistributions::tof" name="tof">
+      <type builtin="yes" name="double" />
+    </argument>
+  </method>
+  <method abstract="yes" id="PidHistoMaker::postEventLoop" name="postEventLoop" override="yes" virtual="yes">
+    <return>
+      <type builtin="yes" name="void" />
+    </return>
+    <override name="InclusiveSpectra::postEventLoop" ref="InclusiveSpectra#InclusiveSpectra::postEventLoop" />
+  </method>
+  <method abstract="yes" id="PidHistoMaker::preEventLoop" name="preEventLoop" override="yes" virtual="yes">
+    <return>
+      <type builtin="yes" name="void" />
+    </return>
+    <override name="InclusiveSpectra::preEventLoop" ref="InclusiveSpectra#InclusiveSpectra::preEventLoop" />
+  </method>
+  <method abstract="yes" id="PidHistoMaker::reportAll" name="reportAll">
+    <return>
+      <type builtin="yes" name="void" />
+    </return>
+    <argument id="PidHistoMaker::reportAll::n" name="n">
+      <type name="string" />
+    </argument>
+  </method>
+  <method abstract="yes" id="PidHistoMaker::reportAllDedx" name="reportAllDedx">
+    <return>
+      <type builtin="yes" name="void" />
+    </return>
+  </method>
+  <method abstract="yes" id="PidHistoMaker::reportAllTof" name="reportAllTof">
+    <return>
+      <type builtin="yes" name="void" />
+    </return>
+  </method>
+  <field access="protected" id="PidHistoMaker::cfgEnergyLoss" name="cfgEnergyLoss">
+    <brief>Configs for</brief>
+    <type name="jdb::XmlConfig" qualifier="*" />
+  </field>
+  <field access="protected" id="PidHistoMaker::cfgFeedDown" name="cfgFeedDown">
+    <type name="jdb::XmlConfig" qualifier="*" />
+  </field>
+  <field access="protected" id="PidHistoMaker::binsTof" name="binsTof">
+    <brief>Binning</brief>
+    <type name="unique_ptr&lt;jdb::HistoBins, default_delete&lt;jdb::HistoBins&gt; &gt;" />
+  </field>
+  <field access="protected" id="PidHistoMaker::binsDedx" name="binsDedx">
+    <type name="unique_ptr&lt;jdb::HistoBins, default_delete&lt;jdb::HistoBins&gt; &gt;" />
+  </field>
+  <field access="protected" id="PidHistoMaker::binsPt" name="binsPt">
+    <type name="unique_ptr&lt;jdb::HistoBins, default_delete&lt;jdb::HistoBins&gt; &gt;" />
+  </field>
+  <field access="protected" id="PidHistoMaker::binsEta" name="binsEta">
+    <type name="unique_ptr&lt;jdb::HistoBins, default_delete&lt;jdb::HistoBins&gt; &gt;" />
+  </field>
+  <field access="protected" id="PidHistoMaker::charges" name="charges">
+    <type name="vector&lt;int&gt;" />
+  </field>
+  <field access="protected" id="PidHistoMaker::tofBinWidth" name="tofBinWidth">
+    <brief>these are made on the fly</brief>
+    <type builtin="yes" name="double" />
+  </field>
+  <field access="protected" id="PidHistoMaker::dedxBinWidth" name="dedxBinWidth">
+    <brief>these are made on the fly</brief>
+    <type builtin="yes" name="double" />
+  </field>
+  <field access="protected" id="PidHistoMaker::tofPadding" name="tofPadding">
+    <brief>Plot Ranges</brief>
+    <type builtin="yes" name="double" />
+  </field>
+  <field access="protected" id="PidHistoMaker::dedxPadding" name="dedxPadding">
+    <brief>Plot Ranges</brief>
+    <type builtin="yes" name="double" />
+  </field>
+  <field access="protected" id="PidHistoMaker::tofScalePadding" name="tofScalePadding">
+    <brief>Plot Ranges</brief>
+    <type builtin="yes" name="double" />
+  </field>
+  <field access="protected" id="PidHistoMaker::dedxScalePadding" name="dedxScalePadding">
+    <brief>Plot Ranges</brief>
+    <type builtin="yes" name="double" />
+  </field>
+  <field access="protected" id="PidHistoMaker::centerSpecies" name="centerSpecies">
+    <brief>Phase Space Recentering</brief>
+    <type name="string" />
+  </field>
+  <field access="protected" id="PidHistoMaker::psrMethod" name="psrMethod">
+    <type name="string" />
+  </field>
+  <field access="protected" id="PidHistoMaker::dedxSigmaIdeal" name="dedxSigmaIdeal">
+    <type builtin="yes" name="double" />
+  </field>
+  <field access="protected" id="PidHistoMaker::tofSigmaIdeal" name="tofSigmaIdeal">
+    <type builtin="yes" name="double" />
+  </field>
+  <field access="protected" id="PidHistoMaker::psr" name="psr">
+    <type name="ZRecentering" qualifier="*" ref="ZRecentering#ZRecentering" />
+  </field>
+  <field access="protected" id="PidHistoMaker::tofCut" name="tofCut">
+    <type builtin="yes" name="double" />
+  </field>
+  <field access="protected" id="PidHistoMaker::dedxCut" name="dedxCut">
+    <type builtin="yes" name="double" />
+  </field>
+  <field access="protected" id="PidHistoMaker::make2D" name="make2D">
+    <type builtin="yes" name="bool" />
+  </field>
+  <field access="protected" id="PidHistoMaker::makeEnhanced" name="makeEnhanced">
+    <type builtin="yes" name="bool" />
+  </field>
+  <field access="protected" id="PidHistoMaker::nSigBelow" name="nSigBelow">
+    <type builtin="yes" name="double" />
+  </field>
+  <field access="protected" id="PidHistoMaker::nSigAbove" name="nSigAbove">
+    <type builtin="yes" name="double" />
+  </field>
+  <field access="protected" id="PidHistoMaker::binByMomentum" name="binByMomentum">
+    <type builtin="yes" name="bool" />
+  </field>
+  <field access="protected" id="PidHistoMaker::makeCombinedCharge" name="makeCombinedCharge">
+    <type builtin="yes" name="bool" />
+  </field>
+  <field access="protected" id="PidHistoMaker::sc" name="sc">
+    <type name="unique_ptr&lt;SpectraCorrecter, default_delete&lt;SpectraCorrecter&gt; &gt;" />
+  </field>
+  <field access="protected" id="PidHistoMaker::effWeight" name="effWeight">
+    <type builtin="yes" name="float" />
+  </field>
+  <field access="protected" id="PidHistoMaker::elParams" name="elParams">
+    <type name="map&lt;string, unique_ptr&lt;EnergyLossParams&gt;" />
+  </field>
+  <field access="protected" id="PidHistoMaker::fdParams" name="fdParams">
+    <type name="map&lt;string, vector&lt;unique_ptr&lt;FeedDownParams&gt;" />
+  </field>
+  <field access="protected" id="PidHistoMaker::fdWeight" name="fdWeight">
+    <type builtin="yes" name="double" />
+  </field>
+  <method access="protected" id="PidHistoMaker::feedDownWeight" name="feedDownWeight">
+    <return>
+      <type builtin="yes" name="double" />
+    </return>
+    <argument id="PidHistoMaker::feedDownWeight::charge" name="charge">
+      <type builtin="yes" name="int" />
+    </argument>
+    <argument id="PidHistoMaker::feedDownWeight::pt" name="pt">
+      <type builtin="yes" name="double" />
+    </argument>
+  </method>
+  <method abstract="yes" access="protected" id="PidHistoMaker::preparePhaseSpaceHistograms" name="preparePhaseSpaceHistograms">
+    <return>
+      <type builtin="yes" name="void" />
+    </return>
+    <argument id="PidHistoMaker::preparePhaseSpaceHistograms::plc" name="plc">
+      <type name="string" />
+    </argument>
+  </method>
+  <method access="protected" id="PidHistoMaker::rapidity" name="rapidity">
+    <return>
+      <type builtin="yes" name="double" />
+    </return>
+    <argument id="PidHistoMaker::rapidity::pt" name="pt">
+      <type builtin="yes" name="double" />
+    </argument>
+    <argument id="PidHistoMaker::rapidity::eta" name="eta">
+      <type builtin="yes" name="double" />
+    </argument>
+    <argument id="PidHistoMaker::rapidity::m" name="m">
+      <type builtin="yes" name="double" />
+    </argument>
+  </method>
+</class>

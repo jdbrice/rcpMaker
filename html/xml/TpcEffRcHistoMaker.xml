@@ -1,0 +1,38 @@
+<class xmlns="http://jessevdk.github.com/cldoc/1.0" id="TpcEffRcHistoMaker" interface="true" name="TpcEffRcHistoMaker">
+  <base access="public">
+    <type name="InclusiveSpectra" ref="InclusiveSpectra#InclusiveSpectra" />
+  </base>
+  <constructor abstract="yes" id="TpcEffRcHistoMaker::TpcEffRcHistoMaker" name="TpcEffRcHistoMaker">
+    <argument id="TpcEffRcHistoMaker::TpcEffRcHistoMaker::config" name="config">
+      <type name="jdb::XmlConfig" qualifier="*" />
+    </argument>
+    <argument id="TpcEffRcHistoMaker::TpcEffRcHistoMaker::nodePath" name="nodePath">
+      <type name="string" />
+    </argument>
+    <argument id="TpcEffRcHistoMaker::TpcEffRcHistoMaker::fileList" name="fileList">
+      <type name="string" />
+    </argument>
+    <argument id="TpcEffRcHistoMaker::TpcEffRcHistoMaker::jobPrefix" name="jobPrefix">
+      <type name="string" />
+    </argument>
+  </constructor>
+  <destructor abstract="yes" id="TpcEffRcHistoMaker::~TpcEffRcHistoMaker" name="~TpcEffRcHistoMaker" />
+  <method abstract="yes" id="TpcEffRcHistoMaker::analyzeTrack" name="analyzeTrack" override="yes" virtual="yes">
+    <return>
+      <type builtin="yes" name="void" />
+    </return>
+    <argument id="TpcEffRcHistoMaker::analyzeTrack::iTrack" name="iTrack">
+      <type builtin="yes" name="int" />
+    </argument>
+    <override name="InclusiveSpectra::analyzeTrack" ref="InclusiveSpectra#InclusiveSpectra::analyzeTrack" />
+  </method>
+  <field access="protected" id="TpcEffRcHistoMaker::cut_rapidity" name="cut_rapidity">
+    <type name="unique_ptr&lt;jdb::ConfigRange, default_delete&lt;jdb::ConfigRange&gt; &gt;" />
+  </field>
+  <field access="protected" id="TpcEffRcHistoMaker::plc" name="plc">
+    <type name="string" />
+  </field>
+  <field access="protected" id="TpcEffRcHistoMaker::mass" name="mass">
+    <type builtin="yes" name="double" />
+  </field>
+</class>

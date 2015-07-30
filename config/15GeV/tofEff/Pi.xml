@@ -37,11 +37,11 @@
 			8 :: 0
 		</CentralityMap>
 		
-		<PhaseSpaceRecentering>
+		<ZRecentering>
 			<centerSpecies>Pi</centerSpecies>
 			<sigma tof="0.012" dedx="0.07"/>
 			<method>nonlinear</method>
-		</PhaseSpaceRecentering>
+		</ZRecentering>
 
 		<histograms >
 			<Histo name="eta" type="1D" title="eta" nBinsX="200" minX="-2" maxX="2" />

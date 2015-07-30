@@ -1,0 +1,322 @@
+<class xmlns="http://jessevdk.github.com/cldoc/1.0" abstract="true" id="PicoDataStore" name="PicoDataStore">
+  <subclass access="public" name="RcpPicoDst" ref="RcpPicoDst#RcpPicoDst" />
+  <subclass access="public" name="ProdPicoDst" ref="ProdPicoDst#ProdPicoDst" />
+  <method id="PicoDataStore::b9" name="b9" virtual="yes">
+    <return>
+      <type name="UShort_t" />
+    </return>
+  </method>
+  <method id="PicoDataStore::b16" name="b16" virtual="yes">
+    <return>
+      <type name="UShort_t" />
+    </return>
+  </method>
+  <method id="PicoDataStore::bbc" name="bbc" virtual="yes">
+    <return>
+      <type name="Float_t" />
+    </return>
+  </method>
+  <method id="PicoDataStore::eventDay" name="eventDay" virtual="yes">
+    <return>
+      <type name="UInt_t" />
+    </return>
+  </method>
+  <method id="PicoDataStore::eventId" name="eventId" virtual="yes">
+    <return>
+      <type name="Int_t" />
+    </return>
+  </method>
+  <method id="PicoDataStore::eventWeight" name="eventWeight" virtual="yes">
+    <return>
+      <type name="Float_t" />
+    </return>
+  </method>
+  <method id="PicoDataStore::eventYear" name="eventYear" virtual="yes">
+    <return>
+      <type name="UInt_t" />
+    </return>
+  </method>
+  <method abstract="yes" id="PicoDataStore::GetEntry" name="GetEntry" virtual="yes">
+    <return>
+      <type name="Int_t" />
+    </return>
+    <argument id="PicoDataStore::GetEntry::entry" name="entry">
+      <type name="Long64_t" />
+    </argument>
+  </method>
+  <method abstract="yes" id="PicoDataStore::getTree" name="getTree" virtual="yes">
+    <return>
+      <type name="TTree" qualifier="*" />
+    </return>
+  </method>
+  <method id="PicoDataStore::globalPt" name="globalPt" virtual="yes">
+    <return>
+      <type name="Double_t" />
+    </return>
+    <argument id="PicoDataStore::globalPt::iHit" name="iHit">
+      <type name="Int_t" />
+    </argument>
+  </method>
+  <method id="PicoDataStore::mcPt" name="mcPt" virtual="yes">
+    <brief>returns the mc Pt associated with an rc trac - for MC tracks just use trackPt</brief>
+    <return>
+      <type name="Double_t" />
+    </return>
+    <argument id="PicoDataStore::mcPt::iHit" name="iHit">
+      <type name="Int_t" />
+    </argument>
+  </method>
+  <method id="PicoDataStore::nTZero" name="nTZero" virtual="yes">
+    <return>
+      <type name="Int_t" />
+    </return>
+  </method>
+  <method id="PicoDataStore::numGlobal" name="numGlobal" virtual="yes">
+    <return>
+      <type name="Short_t" />
+    </return>
+  </method>
+  <method id="PicoDataStore::numPrimary" name="numPrimary" virtual="yes">
+    <return>
+      <type name="Short_t" />
+    </return>
+  </method>
+  <method id="PicoDataStore::numTofMatchedTracks" name="numTofMatchedTracks" virtual="yes">
+    <return>
+      <type name="Int_t" />
+    </return>
+  </method>
+  <method id="PicoDataStore::numTracks" name="numTracks" virtual="yes">
+    <return>
+      <type name="Int_t" />
+    </return>
+  </method>
+  <method id="PicoDataStore::refMult" name="refMult" virtual="yes">
+    <return>
+      <type name="Float_t" />
+    </return>
+  </method>
+  <method id="PicoDataStore::runId" name="runId" virtual="yes">
+    <brief>*</brief>
+    <doc>Event properties
+</doc>
+    <return>
+      <type name="Int_t" />
+    </return>
+  </method>
+  <method id="PicoDataStore::tofMult" name="tofMult" virtual="yes">
+    <return>
+      <type name="Short_t" />
+    </return>
+  </method>
+  <method id="PicoDataStore::trackBeta" name="trackBeta" virtual="yes">
+    <return>
+      <type name="Double_t" />
+    </return>
+    <argument id="PicoDataStore::trackBeta::iHit" name="iHit">
+      <type name="Int_t" />
+    </argument>
+  </method>
+  <method id="PicoDataStore::trackCharge" name="trackCharge" virtual="yes">
+    <return>
+      <type name="Int_t" />
+    </return>
+    <argument id="PicoDataStore::trackCharge::iHit" name="iHit">
+      <type name="Int_t" />
+    </argument>
+  </method>
+  <method id="PicoDataStore::trackDca" name="trackDca" virtual="yes">
+    <return>
+      <type name="Double_t" />
+    </return>
+    <argument id="PicoDataStore::trackDca::iHit" name="iHit">
+      <type name="Int_t" />
+    </argument>
+  </method>
+  <method id="PicoDataStore::trackDcaX" name="trackDcaX" virtual="yes">
+    <return>
+      <type name="Double_t" />
+    </return>
+    <argument id="PicoDataStore::trackDcaX::iHit" name="iHit">
+      <type name="Int_t" />
+    </argument>
+  </method>
+  <method id="PicoDataStore::trackDcaY" name="trackDcaY" virtual="yes">
+    <return>
+      <type name="Double_t" />
+    </return>
+    <argument id="PicoDataStore::trackDcaY::iHit" name="iHit">
+      <type name="Int_t" />
+    </argument>
+  </method>
+  <method id="PicoDataStore::trackDcaZ" name="trackDcaZ" virtual="yes">
+    <return>
+      <type name="Double_t" />
+    </return>
+    <argument id="PicoDataStore::trackDcaZ::iHit" name="iHit">
+      <type name="Int_t" />
+    </argument>
+  </method>
+  <method id="PicoDataStore::trackDedx" name="trackDedx" virtual="yes">
+    <return>
+      <type name="Double_t" />
+    </return>
+    <argument id="PicoDataStore::trackDedx::iHit" name="iHit">
+      <type name="Int_t" />
+    </argument>
+  </method>
+  <method id="PicoDataStore::trackEta" name="trackEta" virtual="yes">
+    <return>
+      <type name="Double_t" />
+    </return>
+    <argument id="PicoDataStore::trackEta::iHit" name="iHit">
+      <type name="Int_t" />
+    </argument>
+  </method>
+  <method id="PicoDataStore::trackNHits" name="trackNHits" virtual="yes">
+    <brief>*</brief>
+    <doc>Track properties
+</doc>
+    <return>
+      <type name="Int_t" />
+    </return>
+    <argument id="PicoDataStore::trackNHits::iHit" name="iHit">
+      <type name="Int_t" />
+    </argument>
+  </method>
+  <method id="PicoDataStore::trackNHitsDedx" name="trackNHitsDedx" virtual="yes">
+    <return>
+      <type name="Int_t" />
+    </return>
+    <argument id="PicoDataStore::trackNHitsDedx::iHit" name="iHit">
+      <type name="Int_t" />
+    </argument>
+  </method>
+  <method id="PicoDataStore::trackNHitsFit" name="trackNHitsFit" virtual="yes">
+    <return>
+      <type name="Int_t" />
+    </return>
+    <argument id="PicoDataStore::trackNHitsFit::iHit" name="iHit">
+      <type name="Int_t" />
+    </argument>
+  </method>
+  <method id="PicoDataStore::trackNHitsPossible" name="trackNHitsPossible" virtual="yes">
+    <return>
+      <type name="Int_t" />
+    </return>
+    <argument id="PicoDataStore::trackNHitsPossible::iHit" name="iHit">
+      <type name="Int_t" />
+    </argument>
+  </method>
+  <method id="PicoDataStore::trackP" name="trackP" virtual="yes">
+    <return>
+      <type name="Double_t" />
+    </return>
+    <argument id="PicoDataStore::trackP::iHit" name="iHit">
+      <type name="Int_t" />
+    </argument>
+  </method>
+  <method id="PicoDataStore::trackPathLength" name="trackPathLength" virtual="yes">
+    <return>
+      <type name="Double_t" />
+    </return>
+    <argument id="PicoDataStore::trackPathLength::iHit" name="iHit">
+      <type name="Int_t" />
+    </argument>
+  </method>
+  <method id="PicoDataStore::trackPt" name="trackPt" virtual="yes">
+    <return>
+      <type name="Double_t" />
+    </return>
+    <argument id="PicoDataStore::trackPt::iHit" name="iHit">
+      <type name="Int_t" />
+    </argument>
+  </method>
+  <method id="PicoDataStore::trackPx" name="trackPx" virtual="yes">
+    <return>
+      <type name="Double_t" />
+    </return>
+    <argument id="PicoDataStore::trackPx::iHit" name="iHit">
+      <type name="Int_t" />
+    </argument>
+  </method>
+  <method id="PicoDataStore::trackPy" name="trackPy" virtual="yes">
+    <return>
+      <type name="Double_t" />
+    </return>
+    <argument id="PicoDataStore::trackPy::iHit" name="iHit">
+      <type name="Int_t" />
+    </argument>
+  </method>
+  <method id="PicoDataStore::trackPz" name="trackPz" virtual="yes">
+    <return>
+      <type name="Double_t" />
+    </return>
+    <argument id="PicoDataStore::trackPz::iHit" name="iHit">
+      <type name="Int_t" />
+    </argument>
+  </method>
+  <method id="PicoDataStore::trackTof" name="trackTof" virtual="yes">
+    <return>
+      <type name="Double_t" />
+    </return>
+    <argument id="PicoDataStore::trackTof::iHit" name="iHit">
+      <type name="Int_t" />
+    </argument>
+  </method>
+  <method id="PicoDataStore::trackTofMatch" name="trackTofMatch" virtual="yes">
+    <return>
+      <type name="Int_t" />
+    </return>
+    <argument id="PicoDataStore::trackTofMatch::iHit" name="iHit">
+      <type name="Int_t" />
+    </argument>
+  </method>
+  <method id="PicoDataStore::trackYLocal" name="trackYLocal" virtual="yes">
+    <brief>TOF</brief>
+    <return>
+      <type name="Double_t" />
+    </return>
+    <argument id="PicoDataStore::trackYLocal::iHit" name="iHit">
+      <type name="Int_t" />
+    </argument>
+  </method>
+  <method id="PicoDataStore::trackZLocal" name="trackZLocal" virtual="yes">
+    <return>
+      <type name="Double_t" />
+    </return>
+    <argument id="PicoDataStore::trackZLocal::iHit" name="iHit">
+      <type name="Int_t" />
+    </argument>
+  </method>
+  <method id="PicoDataStore::triggerWord" name="triggerWord" virtual="yes">
+    <return>
+      <type name="UInt_t" />
+    </return>
+  </method>
+  <method id="PicoDataStore::vR" name="vR" virtual="yes">
+    <return>
+      <type name="Double_t" />
+    </return>
+  </method>
+  <method id="PicoDataStore::vX" name="vX" virtual="yes">
+    <return>
+      <type name="Double_t" />
+    </return>
+  </method>
+  <method id="PicoDataStore::vY" name="vY" virtual="yes">
+    <return>
+      <type name="Double_t" />
+    </return>
+  </method>
+  <method id="PicoDataStore::vZ" name="vZ" virtual="yes">
+    <return>
+      <type name="Double_t" />
+    </return>
+  </method>
+  <method id="PicoDataStore::zdc" name="zdc" virtual="yes">
+    <return>
+      <type name="Float_t" />
+    </return>
+  </method>
+</class>

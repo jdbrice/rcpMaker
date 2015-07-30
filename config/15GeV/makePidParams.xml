@@ -68,11 +68,11 @@
 			<method>0</method>
 		</Bichsel>
 		
-		<PhaseSpaceRecentering>
+		<ZRecentering>
 			<centerSpecies>K</centerSpecies>
 			<sigma tof="0.0115" dedx="0.033"/>
 			<method>nonlinear</method>
-		</PhaseSpaceRecentering>
+		</ZRecentering>
 
 		<FitSchema method="nll" roi="2.0">
 
