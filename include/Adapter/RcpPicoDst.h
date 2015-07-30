@@ -30,36 +30,45 @@ public:
 
    // Declaration of leaf types
    Int_t           rrunId;
+   UShort_t        bin16;
+   UShort_t        bin9;
    Float_t         weight;
    Float_t         corrRefMult;
-   UShort_t        bin9;
-   UShort_t        bin16;
-
    Int_t           nTracks;
-   Float_t         ppT[kMaxRcpTracks];   //[nTracks]
-   Float_t         pP[kMaxRcpTracks];   //[nTracks]
-   Float_t         pEta[kMaxRcpTracks];   //[nTracks]
-   UShort_t        dedx[kMaxRcpTracks];   //[nTracks]
-   UShort_t        beta[kMaxRcpTracks];   //[nTracks]
-   Float_t         yLocal[ kMaxRcpTracks ];
-   Float_t         zLocal[ kMaxRcpTracks ];
-   UChar_t         matchFlag[ kMaxRcpTracks ];
+   Float_t         ppT[ kMaxRcpTracks ];   //[nTracks]
+   Float_t         gpT[ kMaxRcpTracks ];   //[nTracks]
+   Float_t         pP[ kMaxRcpTracks ];   //[nTracks]
+   Float_t         pEta[ kMaxRcpTracks ];   //[nTracks]
+   Float_t         dca[ kMaxRcpTracks ];   //[nTracks]
+   UChar_t         nHitsFit[ kMaxRcpTracks ];   //[nTracks]
+   UChar_t         nHitsDedx[ kMaxRcpTracks ];   //[nTracks]
+   UChar_t         nHitsPossible[ kMaxRcpTracks ];   //[nTracks]
+   UShort_t        dedx[ kMaxRcpTracks ];   //[nTracks]
+   UShort_t        beta[ kMaxRcpTracks ];   //[nTracks]
+   UChar_t         matchFlag[ kMaxRcpTracks ];   //[nTracks]
+   Float_t         yLocal[ kMaxRcpTracks ];   //[nTracks]
+   Float_t         zLocal[ kMaxRcpTracks ];   //[nTracks]
 
    // List of branches
    TBranch        *b_run;   //!
-   TBranch        *b_weight;   //!
-   TBranch        *b_bin9;   //!
    TBranch        *b_bin16;   //!
+   TBranch        *b_bin9;   //!
+   TBranch        *b_weight;   //!
    TBranch        *b_corrRefMult;   //!
    TBranch        *b_nTracks;   //!
    TBranch        *b_ppT;   //!
+   TBranch        *b_gpT;   //!
    TBranch        *b_pP;   //!
    TBranch        *b_pEta;   //!
+   TBranch        *b_dca;   //!
+   TBranch        *b_nHitsFit;   //!
+   TBranch        *b_nHitsDedx;   //!
+   TBranch        *b_nHitsPossible;   //!
    TBranch        *b_dedx;   //!
    TBranch        *b_beta;   //!
+   TBranch        *b_matchFlag;   //!
    TBranch        *b_yLocal;   //!
    TBranch        *b_zLocal;   //!
-   TBranch        *b_matchFlag;   //!
 
    RcpPicoDst(TTree *tree=0);
    virtual ~RcpPicoDst();
@@ -103,7 +112,15 @@ public:
 
    inline virtual UShort_t b9() { return bin9; }
    inline virtual UShort_t b16() { return bin16; }
+   
+   inline virtual Double_t globalPt( Int_t iHit ){ return (double)gpT[ iHit ]; }
+   inline virtual Double_t trackDca( Int_t iHit ){ return (double) dca[ iHit ]; }
 
+   inline virtual Int_t trackNHitsDedx( Int_t iHit ){ return nHitsDedx[ iHit ]; }
+   inline virtual Int_t trackNHitsFit( Int_t iHit ){ return nHitsFit[ iHit ]; }
+   inline virtual Int_t trackNHitsPossible( Int_t iHit ){ return nHitsPossible[ iHit ]; }
+
+   
 };
 
 #endif

@@ -1,0 +1,4 @@
+<class xmlns="http://jessevdk.github.com/cldoc/1.0" id="PresentationMaker" interface="true" name="PresentationMaker">
+  <constructor abstract="yes" id="PresentationMaker::PresentationMaker" name="PresentationMaker" />
+  <destructor abstract="yes" id="PresentationMaker::~PresentationMaker" name="~PresentationMaker" />
+</class>

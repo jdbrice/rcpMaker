@@ -1,0 +1,272 @@
+<class xmlns="http://jessevdk.github.com/cldoc/1.0" id="PhaseSpaceRecentering" interface="true" name="PhaseSpaceRecentering">
+  <field id="PhaseSpaceRecentering::piMass" name="piMass">
+    <brief>*</brief>
+    <doc>Static usage
+</doc>
+    <type builtin="yes" name="double" />
+  </field>
+  <field id="PhaseSpaceRecentering::kaonMass" name="kaonMass">
+    <brief>[GeV]</brief>
+    <type builtin="yes" name="double" />
+  </field>
+  <field id="PhaseSpaceRecentering::protonMass" name="protonMass">
+    <brief>[GeV]</brief>
+    <type builtin="yes" name="double" />
+  </field>
+  <constructor abstract="yes" id="PhaseSpaceRecentering::PhaseSpaceRecentering" name="PhaseSpaceRecentering">
+    <argument id="PhaseSpaceRecentering::PhaseSpaceRecentering::dedxSigma" name="dedxSigma">
+      <type builtin="yes" name="double" />
+    </argument>
+    <argument id="PhaseSpaceRecentering::PhaseSpaceRecentering::tofSigma" name="tofSigma">
+      <type builtin="yes" name="double" />
+    </argument>
+    <argument id="PhaseSpaceRecentering::PhaseSpaceRecentering::bTable" name="bTable">
+      <type name="string" />
+    </argument>
+    <argument id="PhaseSpaceRecentering::PhaseSpaceRecentering::bMethod" name="bMethod">
+      <type builtin="yes" name="int" />
+    </argument>
+  </constructor>
+  <destructor abstract="yes" id="PhaseSpaceRecentering::~PhaseSpaceRecentering" name="~PhaseSpaceRecentering" />
+  <method abstract="yes" id="PhaseSpaceRecentering::allSpecies" name="allSpecies">
+    <return>
+      <type name="vector&lt;string&gt;" />
+    </return>
+  </method>
+  <method abstract="yes" id="PhaseSpaceRecentering::centeredDedxMap" name="centeredDedxMap">
+    <return>
+      <type name="map&lt;string, double&gt;" />
+    </return>
+    <argument id="PhaseSpaceRecentering::centeredDedxMap::center" name="center">
+      <type name="string" />
+    </argument>
+    <argument id="PhaseSpaceRecentering::centeredDedxMap::p" name="p">
+      <type builtin="yes" name="double" />
+    </argument>
+  </method>
+  <method abstract="yes" id="PhaseSpaceRecentering::centeredDedxMeans" name="centeredDedxMeans">
+    <return>
+      <type name="vector&lt;double&gt;" />
+    </return>
+    <argument id="PhaseSpaceRecentering::centeredDedxMeans::center" name="center">
+      <type name="string" />
+    </argument>
+    <argument id="PhaseSpaceRecentering::centeredDedxMeans::p" name="p">
+      <type builtin="yes" name="double" />
+    </argument>
+    <argument id="PhaseSpaceRecentering::centeredDedxMeans::others" name="others">
+      <type name="vector&lt;string&gt;" />
+    </argument>
+  </method>
+  <method abstract="yes" id="PhaseSpaceRecentering::centeredDedxMeans" name="centeredDedxMeans">
+    <return>
+      <type name="vector&lt;double&gt;" />
+    </return>
+    <argument id="PhaseSpaceRecentering::centeredDedxMeans::center" name="center">
+      <type name="string" />
+    </argument>
+    <argument id="PhaseSpaceRecentering::centeredDedxMeans::p" name="p">
+      <type builtin="yes" name="double" />
+    </argument>
+  </method>
+  <method abstract="yes" id="PhaseSpaceRecentering::centeredTofMap" name="centeredTofMap">
+    <return>
+      <type name="map&lt;string, double&gt;" />
+    </return>
+    <argument id="PhaseSpaceRecentering::centeredTofMap::center" name="center">
+      <type name="string" />
+    </argument>
+    <argument id="PhaseSpaceRecentering::centeredTofMap::p" name="p">
+      <type builtin="yes" name="double" />
+    </argument>
+  </method>
+  <method abstract="yes" id="PhaseSpaceRecentering::centeredTofMeans" name="centeredTofMeans">
+    <return>
+      <type name="vector&lt;double&gt;" />
+    </return>
+    <argument id="PhaseSpaceRecentering::centeredTofMeans::center" name="center">
+      <type name="string" />
+    </argument>
+    <argument id="PhaseSpaceRecentering::centeredTofMeans::p" name="p">
+      <type builtin="yes" name="double" />
+    </argument>
+    <argument id="PhaseSpaceRecentering::centeredTofMeans::others" name="others">
+      <type name="vector&lt;string&gt;" />
+    </argument>
+  </method>
+  <method abstract="yes" id="PhaseSpaceRecentering::centeredTofMeans" name="centeredTofMeans">
+    <return>
+      <type name="vector&lt;double&gt;" />
+    </return>
+    <argument id="PhaseSpaceRecentering::centeredTofMeans::center" name="center">
+      <type name="string" />
+    </argument>
+    <argument id="PhaseSpaceRecentering::centeredTofMeans::p" name="p">
+      <type builtin="yes" name="double" />
+    </argument>
+  </method>
+  <method abstract="yes" id="PhaseSpaceRecentering::dedxGenerator" name="dedxGenerator">
+    <return>
+      <type name="Bichsel" qualifier="*" ref="Bichsel#Bichsel" />
+    </return>
+  </method>
+  <method abstract="yes" id="PhaseSpaceRecentering::lh" name="lh" static="yes">
+    <brief>Likelihood function</brief>
+    <doc>A gauss around the expected value with expected sigma
+</doc>
+    <return>
+      <doc>the unnormalized likelihood</doc>
+      <type builtin="yes" name="double" />
+    </return>
+    <argument id="PhaseSpaceRecentering::lh::x" name="x">
+      <type builtin="yes" name="double" />
+    </argument>
+    <argument id="PhaseSpaceRecentering::lh::mu" name="mu">
+      <type builtin="yes" name="double" />
+    </argument>
+    <argument id="PhaseSpaceRecentering::lh::sigma" name="sigma">
+      <type builtin="yes" name="double" />
+    </argument>
+  </method>
+  <method abstract="yes" id="PhaseSpaceRecentering::mass" name="mass">
+    <brief>*</brief>
+    <doc>* Get the expected mass from the string identifier
+* @param        pType   - string identifier for species
+* @return       mass of the given particle species
+</doc>
+    <return>
+      <type builtin="yes" name="double" />
+    </return>
+    <argument id="PhaseSpaceRecentering::mass::pType" name="pType">
+      <type name="string" />
+    </argument>
+  </method>
+  <method abstract="yes" id="PhaseSpaceRecentering::nl2Tof" name="nl2Tof">
+    <return>
+      <type builtin="yes" name="double" />
+    </return>
+    <argument id="PhaseSpaceRecentering::nl2Tof::centerSpecies" name="centerSpecies">
+      <type name="string" />
+    </argument>
+    <argument id="PhaseSpaceRecentering::nl2Tof::beta" name="beta">
+      <type builtin="yes" name="double" />
+    </argument>
+    <argument id="PhaseSpaceRecentering::nl2Tof::p" name="p">
+      <type builtin="yes" name="double" />
+    </argument>
+    <argument id="PhaseSpaceRecentering::nl2Tof::avgP" name="avgP">
+      <type builtin="yes" name="double" />
+    </argument>
+  </method>
+  <method abstract="yes" id="PhaseSpaceRecentering::nlDedx" name="nlDedx">
+    <brief>*</brief>
+    <doc>Calculates the difference from the expected value of log10( dedx )
+Uses the non-linear recentering scheme
+</doc>
+    <return>
+      <doc>n Sigma from expectation</doc>
+      <type builtin="yes" name="double" />
+    </return>
+    <argument id="PhaseSpaceRecentering::nlDedx::centerSpecies" name="centerSpecies">
+      <type name="string" />
+    </argument>
+    <argument id="PhaseSpaceRecentering::nlDedx::dedx" name="dedx">
+      <type builtin="yes" name="double" />
+    </argument>
+    <argument id="PhaseSpaceRecentering::nlDedx::p" name="p">
+      <type builtin="yes" name="double" />
+    </argument>
+    <argument id="PhaseSpaceRecentering::nlDedx::avgP" name="avgP">
+      <type builtin="yes" name="double" />
+    </argument>
+  </method>
+  <method abstract="yes" id="PhaseSpaceRecentering::nlTof" name="nlTof">
+    <brief>*</brief>
+    <doc>Calculates the difference from the expected value of 1/beta
+Uses the nonlinear recentering scheme
+</doc>
+    <return>
+      <doc>n Sigma from expectation</doc>
+      <type builtin="yes" name="double" />
+    </return>
+    <argument id="PhaseSpaceRecentering::nlTof::centerSpecies" name="centerSpecies">
+      <type name="string" />
+    </argument>
+    <argument id="PhaseSpaceRecentering::nlTof::beta" name="beta">
+      <type builtin="yes" name="double" />
+    </argument>
+    <argument id="PhaseSpaceRecentering::nlTof::p" name="p">
+      <type builtin="yes" name="double" />
+    </argument>
+    <argument id="PhaseSpaceRecentering::nlTof::avgP" name="avgP">
+      <type builtin="yes" name="double" />
+    </argument>
+  </method>
+  <method abstract="yes" id="PhaseSpaceRecentering::otherSpecies" name="otherSpecies">
+    <return>
+      <type name="vector&lt;string&gt;" />
+    </return>
+    <argument id="PhaseSpaceRecentering::otherSpecies::center" name="center">
+      <type name="string" />
+    </argument>
+  </method>
+  <method abstract="yes" id="PhaseSpaceRecentering::rDedx" name="rDedx">
+    <brief>*</brief>
+    <doc>Calculates the difference from the expected value of log10( dedx )
+</doc>
+    <return>
+      <doc>The recentered dEdx value</doc>
+      <type builtin="yes" name="double" />
+    </return>
+    <argument id="PhaseSpaceRecentering::rDedx::centerSpecies" name="centerSpecies">
+      <type name="string" />
+    </argument>
+    <argument id="PhaseSpaceRecentering::rDedx::dedx" name="dedx">
+      <type builtin="yes" name="double" />
+    </argument>
+    <argument id="PhaseSpaceRecentering::rDedx::p" name="p">
+      <type builtin="yes" name="double" />
+    </argument>
+  </method>
+  <method abstract="yes" id="PhaseSpaceRecentering::rTof" name="rTof">
+    <brief>*</brief>
+    <doc>Calculates the difference from the expected value of 1/beta
+</doc>
+    <return>
+      <doc>recentered around centerSpecies</doc>
+      <type builtin="yes" name="double" />
+    </return>
+    <argument id="PhaseSpaceRecentering::rTof::centerSpecies" name="centerSpecies">
+      <type name="string" />
+    </argument>
+    <argument id="PhaseSpaceRecentering::rTof::beta" name="beta">
+      <type builtin="yes" name="double" />
+    </argument>
+    <argument id="PhaseSpaceRecentering::rTof::p" name="p">
+      <type builtin="yes" name="double" />
+    </argument>
+  </method>
+  <method abstract="yes" id="PhaseSpaceRecentering::tofGenerator" name="tofGenerator">
+    <return>
+      <type name="TofGenerator" qualifier="*" />
+    </return>
+  </method>
+  <field access="protected" id="PhaseSpaceRecentering::dedxSigma" name="dedxSigma">
+    <brief>*</brief>
+    <doc>The naive sigma values for calculating the likelihood
+</doc>
+    <type builtin="yes" name="double" />
+  </field>
+  <field access="protected" id="PhaseSpaceRecentering::tofSigma" name="tofSigma">
+    <type builtin="yes" name="double" />
+  </field>
+  <field access="protected" id="PhaseSpaceRecentering::dedxGen" name="dedxGen">
+    <type name="Bichsel" qualifier="*" ref="Bichsel#Bichsel" />
+  </field>
+  <field access="protected" id="PhaseSpaceRecentering::tofGen" name="tofGen">
+    <type name="TofGenerator" qualifier="*" />
+  </field>
+  <field access="protected" id="PhaseSpaceRecentering::species" name="species">
+    <type name="vector&lt;string&gt;" />
+  </field>
+</class>

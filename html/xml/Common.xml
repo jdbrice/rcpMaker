@@ -1,0 +1,149 @@
+<class xmlns="http://jessevdk.github.com/cldoc/1.0" abstract="true" id="Common" name="Common">
+  <variable id="Common::mass_kaon" name="mass_kaon">
+    <brief>Kaon Mass [GeV/c] = 0.493667</brief>
+    <type builtin="yes" name="double" qualifier=" const" />
+  </variable>
+  <variable id="Common::mass_pi" name="mass_pi">
+    <brief>Pion Mass [GeV/c] = 0.1395702</brief>
+    <type builtin="yes" name="double" qualifier=" const" />
+  </variable>
+  <variable id="Common::mass_proton" name="mass_proton">
+    <brief>Proton Mass [GeV/c] = 0.9382721</brief>
+    <type builtin="yes" name="double" qualifier=" const" />
+  </variable>
+  <variable id="Common::species" name="species">
+    <brief>List of species we consider</brief>
+    <type name="vector&lt;string&gt;" />
+  </variable>
+  <constructor abstract="yes" id="Common::Common" name="Common" />
+  <destructor abstract="yes" id="Common::~Common" name="~Common" />
+  <method id="Common::chargeString" name="chargeString" static="yes">
+    <brief>Get the string part of the name based on charge</brief>
+    <return>
+      <doc>charge part of the name string</doc>
+      <type name="string" />
+    </return>
+    <argument id="Common::chargeString::charge" name="charge">
+      <type builtin="yes" name="int" />
+    </argument>
+  </method>
+  <method id="Common::mass" name="mass" static="yes">
+    <return>
+      <type builtin="yes" name="double" />
+    </return>
+    <argument id="Common::mass::pType" name="pType">
+      <type name="string" />
+    </argument>
+  </method>
+  <method id="Common::p" name="p" static="yes">
+    <brief>Momentum</brief>
+    <return>
+      <type builtin="yes" name="double" />
+    </return>
+    <argument id="Common::p::pt" name="pt">
+      <doc>Transverse mmtm [GeV/c]</doc>
+      <type builtin="yes" name="double" />
+    </argument>
+    <argument id="Common::p::eta" name="eta">
+      <doc>PseudoRapidity</doc>
+      <type builtin="yes" name="double" />
+    </argument>
+  </method>
+  <method id="Common::rapidity" name="rapidity" static="yes">
+    <brief>*</brief>
+    <doc>Gets the rapidity from pt, eta, mass
+</doc>
+    <return>
+      <doc>rapidity</doc>
+      <type builtin="yes" name="double" />
+    </return>
+    <argument id="Common::rapidity::pt" name="pt">
+      <type builtin="yes" name="double" />
+    </argument>
+    <argument id="Common::rapidity::eta" name="eta">
+      <type builtin="yes" name="double" />
+    </argument>
+    <argument id="Common::rapidity::m" name="m">
+      <type builtin="yes" name="double" />
+    </argument>
+  </method>
+  <method id="Common::speciesName" name="speciesName" static="yes">
+    <brief>Builds the string for a species histogram</brief>
+    <return>
+      <doc>string for histogram name</doc>
+      <type name="string" />
+    </return>
+    <argument id="Common::speciesName::centerSpecies" name="centerSpecies">
+      <type name="string" />
+    </argument>
+    <argument id="Common::speciesName::charge" name="charge">
+      <type builtin="yes" name="int" />
+    </argument>
+    <argument id="Common::speciesName::cenBin" name="cenBin">
+      <type builtin="yes" name="int" />
+    </argument>
+  </method>
+  <method id="Common::speciesName" name="speciesName" static="yes">
+    <return>
+      <type name="string" />
+    </return>
+    <argument id="Common::speciesName::centerSpecies" name="centerSpecies">
+      <type name="string" />
+    </argument>
+    <argument id="Common::speciesName::charge" name="charge">
+      <type builtin="yes" name="int" />
+    </argument>
+    <argument id="Common::speciesName::cenBin" name="cenBin">
+      <type builtin="yes" name="int" />
+    </argument>
+    <argument id="Common::speciesName::ptBin" name="ptBin">
+      <type builtin="yes" name="int" />
+    </argument>
+  </method>
+  <method id="Common::zbName" name="zbName" static="yes">
+    <return>
+      <type name="string" />
+    </return>
+    <argument id="Common::zbName::centerSpecies" name="centerSpecies">
+      <type name="string" />
+    </argument>
+    <argument id="Common::zbName::charge" name="charge">
+      <type builtin="yes" name="int" />
+    </argument>
+    <argument id="Common::zbName::cenBin" name="cenBin">
+      <type builtin="yes" name="int" />
+    </argument>
+    <argument id="Common::zbName::ptBin" name="ptBin">
+      <type builtin="yes" name="int" />
+    </argument>
+    <argument id="Common::zbName::etaBin" name="etaBin">
+      <type builtin="yes" name="int" />
+    </argument>
+    <argument id="Common::zbName::eSpecies" name="eSpecies">
+      <type name="string" />
+    </argument>
+  </method>
+  <method id="Common::zdName" name="zdName" static="yes">
+    <return>
+      <type name="string" />
+    </return>
+    <argument id="Common::zdName::centerSpecies" name="centerSpecies">
+      <type name="string" />
+    </argument>
+    <argument id="Common::zdName::charge" name="charge">
+      <type builtin="yes" name="int" />
+    </argument>
+    <argument id="Common::zdName::cenBin" name="cenBin">
+      <type builtin="yes" name="int" />
+    </argument>
+    <argument id="Common::zdName::ptBin" name="ptBin">
+      <type builtin="yes" name="int" />
+    </argument>
+    <argument id="Common::zdName::etaBin" name="etaBin">
+      <type builtin="yes" name="int" />
+    </argument>
+    <argument id="Common::zdName::eSpecies" name="eSpecies">
+      <type name="string" />
+    </argument>
+  </method>
+</class>

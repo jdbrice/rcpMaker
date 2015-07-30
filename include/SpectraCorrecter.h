@@ -7,7 +7,7 @@
 using namespace std;
 
 // LOCAL
-#include "EffParams.h"
+#include "Efficiency/EffParams.h"
 #include "PidPhaseSpace.h"
 
 
@@ -26,7 +26,7 @@ public:
 
 		string cs[] = { "p", "n"};
 
-		for ( string plc : PidPhaseSpace::species ){
+		for ( string plc : Common::species ){
 			for ( string c : cs ){
 				params[  plc + "_" + c  ] = unique_ptr<EffParams>( new EffParams( plc, cfg, plc + "_" + c ) );
 			}
@@ -36,7 +36,7 @@ public:
 
 	double reweight( string plc, int c, int rm, double pt ){
 		DEBUG( plc << ", " << c << ", " << rm << ", " << pt )
-		string name = plc + "_" + PidPhaseSpace::chargeString( c );
+		string name = plc + "_" + Common::chargeString( c );
 	
 		if ( params.find( name ) != params.end() )
 			return params[ name ]->reweight( pt, rm );

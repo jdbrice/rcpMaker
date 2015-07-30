@@ -1,0 +1,123 @@
+<class xmlns="http://jessevdk.github.com/cldoc/1.0" abstract="true" id="Bichsel" name="Bichsel">
+  <variable id="Bichsel::MPM" name="MPM">
+    <type builtin="yes" name="int" qualifier=" const" />
+  </variable>
+  <variable id="Bichsel::POL" name="POL">
+    <type builtin="yes" name="int" qualifier=" const" />
+  </variable>
+  <variable id="Bichsel::T70" name="T70">
+    <type builtin="yes" name="int" qualifier=" const" />
+  </variable>
+  <constructor id="Bichsel::Bichsel" name="Bichsel">
+    <argument id="Bichsel::Bichsel::tableFile" name="tableFile">
+      <type name="string" />
+    </argument>
+    <argument id="Bichsel::Bichsel::method" name="method">
+      <type builtin="yes" name="int" />
+    </argument>
+  </constructor>
+  <destructor id="Bichsel::~Bichsel" name="~Bichsel" />
+  <method abstract="yes" id="Bichsel::getFromTable" name="getFromTable">
+    <return>
+      <type builtin="yes" name="double" />
+    </return>
+    <argument id="Bichsel::getFromTable::plc" name="plc">
+      <type name="string" />
+    </argument>
+    <argument id="Bichsel::getFromTable::p" name="p">
+      <type builtin="yes" name="double" />
+    </argument>
+  </method>
+  <method id="Bichsel::getTables" name="getTables">
+    <return>
+      <type builtin="yes" name="void" />
+    </return>
+  </method>
+  <method id="Bichsel::mean" name="mean">
+    <return>
+      <type builtin="yes" name="double" />
+    </return>
+    <argument id="Bichsel::mean::p" name="p">
+      <type builtin="yes" name="double" />
+    </argument>
+    <argument id="Bichsel::mean::m" name="m">
+      <type builtin="yes" name="double" />
+    </argument>
+    <argument id="Bichsel::mean::method" name="method">
+      <type builtin="yes" name="int" />
+    </argument>
+  </method>
+  <method id="Bichsel::mean10" name="mean10">
+    <brief>*</brief>
+    <doc>Returns the Log10( mean(...) )
+</doc>
+    <return>
+      <doc>Log10( mean )</doc>
+      <type builtin="yes" name="double" />
+    </return>
+    <argument id="Bichsel::mean10::p" name="p">
+      <type builtin="yes" name="double" />
+    </argument>
+    <argument id="Bichsel::mean10::m" name="m">
+      <type builtin="yes" name="double" />
+    </argument>
+    <argument id="Bichsel::mean10::method" name="method">
+      <type builtin="yes" name="int" />
+    </argument>
+    <argument id="Bichsel::mean10::scale" name="scale">
+      <type builtin="yes" name="double" />
+    </argument>
+  </method>
+  <method id="Bichsel::meanLog" name="meanLog">
+    <return>
+      <type builtin="yes" name="double" />
+    </return>
+    <argument id="Bichsel::meanLog::p" name="p">
+      <type builtin="yes" name="double" />
+    </argument>
+    <argument id="Bichsel::meanLog::m" name="m">
+      <type builtin="yes" name="double" />
+    </argument>
+    <argument id="Bichsel::meanLog::method" name="method">
+      <type builtin="yes" name="int" />
+    </argument>
+    <argument id="Bichsel::meanLog::scale" name="scale">
+      <type builtin="yes" name="double" />
+    </argument>
+  </method>
+  <method id="Bichsel::tableFor" name="tableFor">
+    <return>
+      <type name="TH1D" qualifier="*" />
+    </return>
+    <argument id="Bichsel::tableFor::mass" name="mass">
+      <type builtin="yes" name="double" />
+    </argument>
+  </method>
+  <field access="protected" id="Bichsel::tableFile" name="tableFile">
+    <type name="string" />
+  </field>
+  <field access="protected" id="Bichsel::method" name="method">
+    <type builtin="yes" name="int" />
+  </field>
+  <field access="protected" id="Bichsel::table" name="table">
+    <type name="TFile" qualifier="*" />
+  </field>
+  <field access="protected" id="Bichsel::hP" name="hP">
+    <type name="TH1D" qualifier="*" />
+  </field>
+  <field access="protected" id="Bichsel::hPi" name="hPi">
+    <type name="TH1D" qualifier="*" />
+  </field>
+  <field access="protected" id="Bichsel::hK" name="hK">
+    <type name="TH1D" qualifier="*" />
+  </field>
+  <field access="protected" id="Bichsel::piMass" name="piMass">
+    <type builtin="yes" name="double" />
+  </field>
+  <field access="protected" id="Bichsel::kaonMass" name="kaonMass">
+    <type builtin="yes" name="double" />
+  </field>
+  <field access="protected" id="Bichsel::protonMass" name="protonMass">
+    <type builtin="yes" name="double" />
+  </field>
+</class>

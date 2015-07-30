@@ -1,0 +1,12 @@
+<index xmlns="http://jessevdk.github.com/cldoc/1.0">
+  <class name="Bichsel" ref="Bichsel#Bichsel" />
+  <class name="Common" ref="Common#Common" />
+  <class name="FeedDownMaker" ref="FeedDownMaker#FeedDownMaker" />
+  <class name="InclusiveSpectra" ref="InclusiveSpectra#InclusiveSpectra" />
+  <class name="PhaseSpaceRecentering" ref="PhaseSpaceRecentering#PhaseSpaceRecentering" />
+  <class name="PidPhaseSpace" ref="PidPhaseSpace#PidPhaseSpace" />
+  <class name="PidYieldPresenter" ref="PidYieldPresenter#PidYieldPresenter" />
+  <class name="PresentationMaker" ref="PresentationMaker#PresentationMaker" />
+  <class name="SpectraCorrecter" ref="SpectraCorrecter#SpectraCorrecter" />
+  <report name="Documentation generator" ref="report" />
+</index>

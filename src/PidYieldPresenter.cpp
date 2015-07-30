@@ -94,7 +94,7 @@ void PidYieldPresenter::integrateEta() {
 
 	reporter->newPage(1, 2);
 
-	for ( string plc : PidPhaseSpace::species ){
+	for ( string plc : Common::species ){
 		for ( int charge : charges ){
 			for ( int iCen : cenBins ){
 				integrateEta( plc, charge, iCen );
@@ -120,7 +120,7 @@ void PidYieldPresenter::normalizeYield( string plc, int charge, int iCen ){
 	TH1D * y = (TH1D*)book->get( name );
 
 	// find out which bin is the last with a good fit
-	int lastGoodBin = cfg->getInt( np + "LastYieldBin."+plc+":"+PidPhaseSpace::chargeString( charge ), 1000 );
+	int lastGoodBin = cfg->getInt( np + "LastYieldBin."+plc+":"+Common::chargeString( charge ), 1000 );
 	logger->info(__FUNCTION__) << "Last Good Bin : " << lastGoodBin << endl;
 
 	book->cd( "/" );
@@ -150,7 +150,7 @@ void PidYieldPresenter::normalizeYield() {
 
 	reporter->newPage(1, 2);
 
-	for ( string plc : PidPhaseSpace::species ){
+	for ( string plc : Common::species ){
 		for ( int charge : charges ){
 			for ( int iCen : cenBins ){
 				normalizeYield( plc, charge, iCen );
@@ -172,7 +172,7 @@ void PidYieldPresenter::normalizeYield() {
 void PidYieldPresenter::compareYields(){
 
 	reporter->newPage( 2, 1 );
-	for ( string plc : PidPhaseSpace::species ){
+	for ( string plc : Common::species ){
 		for ( int charge : charges ){
 			compareYields( plc, charge);	
 		}
@@ -313,7 +313,7 @@ void PidYieldPresenter::rcpPanel( int iCen, int iPer ){
 	reporter->newPage( 3, charges.size() );
 
 	for ( int charge : charges ){
-		for ( string plc : PidPhaseSpace::species ){
+		for ( string plc : Common::species ){
 		
 
 			book->style( rcpName( plc, charge, iCen, iPer ) )->
@@ -469,7 +469,7 @@ void PidYieldPresenter::rcpVsNPartCompare( int ptBin, int iPer ){
 
 	reporter->newPage( 1, 1);
 	int drawing = 0;
-	for ( string plc : PidPhaseSpace::species ){
+	for ( string plc : Common::species ){
 		for ( int charge : charges ){
 
 			string dOpt = "";

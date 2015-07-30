@@ -82,48 +82,6 @@ public:
 
 	void enhanceDistributions( double avgP, int ptBin, int etaBin, int charge, double dedx, double tof );
 
-	static vector<string> species;
-	/* Get the string part of the name based on charge
-	 * 
-	 * @charge charge as -1, 0, +1
-	 * @return        charge part of the name string
-	 */
-	static string chargeString( int charge = 0 ) {
-		if ( -1 >= charge )	// negative
-			return "n";
-		else if ( 1 <= charge ) //positive
-			return "p";
-		return "a";	// all
-	}
-
-	/* Builds the string for a species histogram
-	 * 
-	 * @centerSpecies the centering species
-	 * @charge        the charge, -1, 0, +1
-	 * @return               string for histogram name
-	 */
-	static string speciesName( string centerSpecies, int charge = 0, int cenBin = 9 ){
-		return "dedx_tof_" + chargeString(charge) + "_" + centerSpecies + "_" + ts(cenBin);
-	}
-	static string speciesName( string centerSpecies, int charge, int cenBin, int ptBin, int etaBin = 0 ){
-		return "dedx_tof_" + chargeString(charge) + "_" + centerSpecies + "_" + ts(cenBin) + "_" + ts(ptBin) + "_" + ts(etaBin);
-	}
-	static string tofName( string centerSpecies, int charge, int cenBin, int ptBin, int etaBin = 0, string eSpecies = "" ){
-		string ePart = "";
-		if ( "" != eSpecies )
-			ePart = "_" + eSpecies;
-		return "tof_" + chargeString(charge) + "_" + centerSpecies + "_" + ts(cenBin) + "_" + ts(ptBin) + "_" + ts(etaBin) + ePart;
-	}
-	static string dedxName( string centerSpecies, int charge, int cenBin, int ptBin, int etaBin = 0, string eSpecies = "" ){
-		string ePart = "";
-		if ( "" != eSpecies )
-			ePart = "_" + eSpecies;
-		return "dedx_" + chargeString(charge) + "_" + centerSpecies + "_" + ts(cenBin) + "_" + ts(ptBin) + "_" + ts(etaBin) + ePart;
-	}
-
-	static double p( double pt, double eta ){
-		return pt * cosh( eta );
-	}
 	double averagePt( int ptBin ){
 		if ( ptBin < 0 || ptBin > binsPt->nBins() ){
 			return 0;
@@ -153,7 +111,7 @@ public:
 		double avgPt = ((*binsPt)[ ptBin ] + (*binsPt)[ ptBin + 1 ]) / 2.0;
 		double avgEta = ((*binsEta)[ etaBin ] + (*binsEta)[ etaBin + 1 ]) / 2.0;
 
-		return p( avgPt, avgEta );
+		return Common::p( avgPt, avgEta );
 
 	}
 
@@ -190,7 +148,7 @@ protected:
 
 	double feedDownWeight( int charge, double pt ){
 
-		string name = centerSpecies + "_" + PidPhaseSpace::chargeString( charge );
+		string name = centerSpecies + "_" + Common::chargeString( charge );
 		if ( fdParams.count( name ) ){
 
 			for ( int i = 0; i < fdParams[ name ].size(); i++ ){

@@ -8,16 +8,14 @@ using namespace std;
 
 // Roobarb
 #include "TreeAnalyzer.h"
-#include "RefMultCorrection.h"
+
 using namespace jdb;
 
-
-#include "RefMultCorrection.h"
 
 class FeedDownMaker : public TreeAnalyzer
 {
 protected:
-	unique_ptr<RefMultCorrection> rmc;
+	//unique_ptr<RefMultCorrection> rmc;
 	float corrRefMult;
 
 public:

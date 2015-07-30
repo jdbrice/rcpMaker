@@ -1,0 +1,289 @@
+<class xmlns="http://jessevdk.github.com/cldoc/1.0" abstract="true" id="PidYieldPresenter" name="PidYieldPresenter">
+  <constructor abstract="yes" id="PidYieldPresenter::PidYieldPresenter" name="PidYieldPresenter">
+    <argument id="PidYieldPresenter::PidYieldPresenter::_cfg" name="_cfg">
+      <type name="jdb::XmlConfig" qualifier="*" />
+    </argument>
+    <argument id="PidYieldPresenter::PidYieldPresenter::_nodePath" name="_nodePath">
+      <type name="string" />
+    </argument>
+  </constructor>
+  <destructor abstract="yes" id="PidYieldPresenter::~PidYieldPresenter" name="~PidYieldPresenter" />
+  <method abstract="yes" id="PidYieldPresenter::chargeRatio" name="chargeRatio">
+    <return>
+      <type builtin="yes" name="void" />
+    </return>
+  </method>
+  <method abstract="yes" id="PidYieldPresenter::chargeRatio" name="chargeRatio">
+    <return>
+      <type builtin="yes" name="void" />
+    </return>
+    <argument id="PidYieldPresenter::chargeRatio::plc" name="plc">
+      <type name="string" />
+    </argument>
+    <argument id="PidYieldPresenter::chargeRatio::iCen" name="iCen">
+      <type builtin="yes" name="int" />
+    </argument>
+  </method>
+  <method abstract="yes" id="PidYieldPresenter::chargeRatioCompare" name="chargeRatioCompare">
+    <return>
+      <type builtin="yes" name="void" />
+    </return>
+    <argument id="PidYieldPresenter::chargeRatioCompare::plc" name="plc">
+      <type name="string" />
+    </argument>
+  </method>
+  <method abstract="yes" id="PidYieldPresenter::chargeRatioCompare" name="chargeRatioCompare">
+    <return>
+      <type builtin="yes" name="void" />
+    </return>
+  </method>
+  <method id="PidYieldPresenter::chargeRatioName" name="chargeRatioName">
+    <return>
+      <type name="string" />
+    </return>
+    <argument id="PidYieldPresenter::chargeRatioName::plc" name="plc">
+      <type name="string" />
+    </argument>
+    <argument id="PidYieldPresenter::chargeRatioName::iCen" name="iCen">
+      <type builtin="yes" name="int" />
+    </argument>
+  </method>
+  <method id="PidYieldPresenter::chargeString" name="chargeString">
+    <return>
+      <type name="string" />
+    </return>
+    <argument id="PidYieldPresenter::chargeString::charge" name="charge">
+      <type builtin="yes" name="int" />
+    </argument>
+  </method>
+  <method abstract="yes" id="PidYieldPresenter::compareYields" name="compareYields">
+    <return>
+      <type builtin="yes" name="void" />
+    </return>
+  </method>
+  <method abstract="yes" id="PidYieldPresenter::compareYields" name="compareYields">
+    <return>
+      <type builtin="yes" name="void" />
+    </return>
+    <argument id="PidYieldPresenter::compareYields::plc" name="plc">
+      <type name="string" />
+    </argument>
+    <argument id="PidYieldPresenter::compareYields::charge" name="charge">
+      <type builtin="yes" name="int" />
+    </argument>
+  </method>
+  <method abstract="yes" id="PidYieldPresenter::integrateEta" name="integrateEta">
+    <brief>*</brief>
+    <doc>Takes the fit results and produces a single spectra for each centrality, species, charge
+Outputs into the book into directory /raw/yieldName( plc, charge, iCen )
+</doc>
+    <return>
+      <type builtin="yes" name="void" />
+    </return>
+  </method>
+  <method abstract="yes" id="PidYieldPresenter::integrateEta" name="integrateEta">
+    <return>
+      <type builtin="yes" name="void" />
+    </return>
+    <argument id="PidYieldPresenter::integrateEta::plc" name="plc">
+      <type name="string" />
+    </argument>
+    <argument id="PidYieldPresenter::integrateEta::charge" name="charge">
+      <type builtin="yes" name="int" />
+    </argument>
+    <argument id="PidYieldPresenter::integrateEta::cBin" name="cBin">
+      <type builtin="yes" name="int" />
+    </argument>
+  </method>
+  <method abstract="yes" id="PidYieldPresenter::normalizeYield" name="normalizeYield">
+    <brief>*</brief>
+    <doc>Takes the eta integrated yields and applies normalization to them
+outputs into book /yield/yieldName( plc, charge, iCen )
+</doc>
+    <return>
+      <type builtin="yes" name="void" />
+    </return>
+  </method>
+  <method abstract="yes" id="PidYieldPresenter::normalizeYield" name="normalizeYield">
+    <return>
+      <type builtin="yes" name="void" />
+    </return>
+    <argument id="PidYieldPresenter::normalizeYield::plc" name="plc">
+      <type name="string" />
+    </argument>
+    <argument id="PidYieldPresenter::normalizeYield::charge" name="charge">
+      <type builtin="yes" name="int" />
+    </argument>
+    <argument id="PidYieldPresenter::normalizeYield::cBin" name="cBin">
+      <type builtin="yes" name="int" />
+    </argument>
+  </method>
+  <method id="PidYieldPresenter::nPartName" name="nPartName">
+    <return>
+      <type name="string" />
+    </return>
+    <argument id="PidYieldPresenter::nPartName::plc" name="plc">
+      <type name="string" />
+    </argument>
+    <argument id="PidYieldPresenter::nPartName::charge" name="charge">
+      <type builtin="yes" name="int" />
+    </argument>
+    <argument id="PidYieldPresenter::nPartName::ptBin" name="ptBin">
+      <type builtin="yes" name="int" />
+    </argument>
+  </method>
+  <method id="PidYieldPresenter::plcName" name="plcName">
+    <return>
+      <type name="string" />
+    </return>
+    <argument id="PidYieldPresenter::plcName::plc" name="plc">
+      <type name="string" />
+    </argument>
+    <argument id="PidYieldPresenter::plcName::charge" name="charge">
+      <type builtin="yes" name="int" />
+    </argument>
+  </method>
+  <method abstract="yes" id="PidYieldPresenter::rcp" name="rcp">
+    <return>
+      <type builtin="yes" name="void" />
+    </return>
+    <argument id="PidYieldPresenter::rcp::iPer" name="iPer">
+      <type builtin="yes" name="int" />
+    </argument>
+  </method>
+  <method abstract="yes" id="PidYieldPresenter::rcp" name="rcp">
+    <return>
+      <type builtin="yes" name="void" />
+    </return>
+    <argument id="PidYieldPresenter::rcp::plc" name="plc">
+      <type name="string" />
+    </argument>
+    <argument id="PidYieldPresenter::rcp::charge" name="charge">
+      <type builtin="yes" name="int" />
+    </argument>
+    <argument id="PidYieldPresenter::rcp::iCen" name="iCen">
+      <type builtin="yes" name="int" />
+    </argument>
+    <argument id="PidYieldPresenter::rcp::iPer" name="iPer">
+      <type builtin="yes" name="int" />
+    </argument>
+  </method>
+  <method id="PidYieldPresenter::rcpName" name="rcpName">
+    <return>
+      <type name="string" />
+    </return>
+    <argument id="PidYieldPresenter::rcpName::plc" name="plc">
+      <type name="string" />
+    </argument>
+    <argument id="PidYieldPresenter::rcpName::charge" name="charge">
+      <type builtin="yes" name="int" />
+    </argument>
+    <argument id="PidYieldPresenter::rcpName::iCen" name="iCen">
+      <type builtin="yes" name="int" />
+    </argument>
+    <argument id="PidYieldPresenter::rcpName::iPer" name="iPer">
+      <type builtin="yes" name="int" />
+    </argument>
+  </method>
+  <method abstract="yes" id="PidYieldPresenter::rcpPanel" name="rcpPanel">
+    <return>
+      <type builtin="yes" name="void" />
+    </return>
+    <argument id="PidYieldPresenter::rcpPanel::iCen" name="iCen">
+      <type builtin="yes" name="int" />
+    </argument>
+    <argument id="PidYieldPresenter::rcpPanel::iPer" name="iPer">
+      <type builtin="yes" name="int" />
+    </argument>
+  </method>
+  <method abstract="yes" id="PidYieldPresenter::rcpVsNPart" name="rcpVsNPart">
+    <return>
+      <type builtin="yes" name="void" />
+    </return>
+    <argument id="PidYieldPresenter::rcpVsNPart::plc" name="plc">
+      <type name="string" />
+    </argument>
+    <argument id="PidYieldPresenter::rcpVsNPart::charge" name="charge">
+      <type builtin="yes" name="int" />
+    </argument>
+    <argument id="PidYieldPresenter::rcpVsNPart::ptBin" name="ptBin">
+      <type builtin="yes" name="int" />
+    </argument>
+    <argument id="PidYieldPresenter::rcpVsNPart::iPer" name="iPer">
+      <type builtin="yes" name="int" />
+    </argument>
+  </method>
+  <method abstract="yes" id="PidYieldPresenter::rcpVsNPart" name="rcpVsNPart">
+    <return>
+      <type builtin="yes" name="void" />
+    </return>
+    <argument id="PidYieldPresenter::rcpVsNPart::ptBin" name="ptBin">
+      <type builtin="yes" name="int" />
+    </argument>
+    <argument id="PidYieldPresenter::rcpVsNPart::iPer" name="iPer">
+      <type builtin="yes" name="int" />
+    </argument>
+  </method>
+  <method abstract="yes" id="PidYieldPresenter::rcpVsNPartCompare" name="rcpVsNPartCompare">
+    <return>
+      <type builtin="yes" name="void" />
+    </return>
+    <argument id="PidYieldPresenter::rcpVsNPartCompare::ptBin" name="ptBin">
+      <type builtin="yes" name="int" />
+    </argument>
+    <argument id="PidYieldPresenter::rcpVsNPartCompare::iPer" name="iPer">
+      <type builtin="yes" name="int" />
+    </argument>
+  </method>
+  <field access="protected" id="PidYieldPresenter::logger" name="logger">
+    <type name="unique_ptr&lt;jdb::Logger, default_delete&lt;jdb::Logger&gt; &gt;" />
+  </field>
+  <field access="protected" id="PidYieldPresenter::cfg" name="cfg">
+    <type name="jdb::XmlConfig" qualifier="*" />
+  </field>
+  <field access="protected" id="PidYieldPresenter::np" name="np">
+    <type name="string" />
+  </field>
+  <field access="protected" id="PidYieldPresenter::reporter" name="reporter">
+    <type name="unique_ptr&lt;jdb::Reporter, default_delete&lt;jdb::Reporter&gt; &gt;" />
+  </field>
+  <field access="protected" id="PidYieldPresenter::book" name="book">
+    <type name="unique_ptr&lt;jdb::HistoBook, default_delete&lt;jdb::HistoBook&gt; &gt;" />
+  </field>
+  <field access="protected" id="PidYieldPresenter::fPidFit" name="fPidFit">
+    <type name="TFile" qualifier="*" />
+  </field>
+  <field access="protected" id="PidYieldPresenter::fPidPS" name="fPidPS">
+    <type name="TFile" qualifier="*" />
+  </field>
+  <field access="protected" id="PidYieldPresenter::cenBins" name="cenBins">
+    <type name="vector&lt;int&gt;" />
+  </field>
+  <field access="protected" id="PidYieldPresenter::cenLabels" name="cenLabels">
+    <type name="vector&lt;string&gt;" />
+  </field>
+  <field access="protected" id="PidYieldPresenter::charges" name="charges">
+    <type name="vector&lt;int&gt;" />
+  </field>
+  <field access="protected" id="PidYieldPresenter::colors" name="colors">
+    <type name="vector&lt;int&gt;" />
+  </field>
+  <field access="protected" id="PidYieldPresenter::nPart" name="nPart">
+    <type name="vector&lt;double&gt;" />
+  </field>
+  <field access="protected" id="PidYieldPresenter::nColl" name="nColl">
+    <type name="vector&lt;double&gt;" />
+  </field>
+  <field access="protected" id="PidYieldPresenter::binsPt" name="binsPt">
+    <brief>*</brief>
+    <doc>Binning in Config
+</doc>
+    <type name="unique_ptr&lt;jdb::HistoBins, default_delete&lt;jdb::HistoBins&gt; &gt;" />
+  </field>
+  <field access="protected" id="PidYieldPresenter::binsEta" name="binsEta">
+    <type name="unique_ptr&lt;jdb::HistoBins, default_delete&lt;jdb::HistoBins&gt; &gt;" />
+  </field>
+  <field access="protected" id="PidYieldPresenter::binsCharge" name="binsCharge">
+    <type name="unique_ptr&lt;jdb::HistoBins, default_delete&lt;jdb::HistoBins&gt; &gt;" />
+  </field>
+</class>

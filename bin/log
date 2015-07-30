@@ -1,0 +1,53 @@
+
+[1mRooFit v3.60 -- Developed by Wouter Verkerke and David Kirkby[0m 
+                Copyright (C) 2000-2013 NIKHEF, University of California & Stanford University
+                All rights reserved, please read http://roofit.sourceforge.net/license.txt
+
+Making logger( 0x7fff5114a538, InclusiveSpectra.Logger ) 
+Setting globalLogLevel = warning
+Looking in InclusiveSpectra.Logger:logLevel
+LogLevel = all
+Info     : [TreeAnalyzer.TreeAnalyzer] Got config with nodePath = InclusiveSpectra.
+Info     : [TreeAnalyzer.TreeAnalyzer]  Creating book ../products/inclusiveSpectra.root
+Info     : [TreeAnalyzer.TreeAnalyzer]  Loading data from /Users/danielbrandenburg/bnl/local/data/RcpAnalysis/embedding/Pi_Plus_mc.root
+Info     : [InclusiveSpectra.InclusiveSpectra] 
+Debug    : [InclusiveSpectra.InclusiveSpectra] 0x0
+Info     : [InclusiveSpectra.InclusiveSpectra] Rcp Pico
+Info     : [InclusiveSpectra.InclusiveSpectra] Got a valid Data Adapter
+Info     : [InclusiveSpectra.InclusiveSpectra] Loading Centrality Map
+Info     : [InclusiveSpectra.InclusiveSpectra] Making Track QA
+Info     : [InclusiveSpectra.InclusiveSpectra] Making Event QA
+Info     : [InclusiveSpectra.makeCentralityHistos] Making 7 centralities
+Info     : [InclusiveSpectra.makeCentralityHistos] pt_0
+Info     : [InclusiveSpectra.makeCentralityHistos] pt_tof_0
+Info     : [InclusiveSpectra.makeCentralityHistos] pt_1
+Info     : [InclusiveSpectra.makeCentralityHistos] pt_tof_1
+Info     : [InclusiveSpectra.makeCentralityHistos] pt_2
+Info     : [InclusiveSpectra.makeCentralityHistos] pt_tof_2
+Info     : [InclusiveSpectra.makeCentralityHistos] pt_3
+Info     : [InclusiveSpectra.makeCentralityHistos] pt_tof_3
+Info     : [InclusiveSpectra.makeCentralityHistos] pt_4
+Info     : [InclusiveSpectra.makeCentralityHistos] pt_tof_4
+Info     : [InclusiveSpectra.makeCentralityHistos] pt_5
+Info     : [InclusiveSpectra.makeCentralityHistos] pt_tof_5
+Info     : [InclusiveSpectra.makeCentralityHistos] pt_6
+Info     : [InclusiveSpectra.makeCentralityHistos] pt_tof_6
+Info     : [InclusiveSpectra.makeCentralityHistos] [0] = 6
+Info     : [InclusiveSpectra.makeCentralityHistos] [1] = 6
+Info     : [InclusiveSpectra.makeCentralityHistos] [2] = 5
+Info     : [InclusiveSpectra.makeCentralityHistos] [3] = 5
+Info     : [InclusiveSpectra.makeCentralityHistos] [4] = 4
+Info     : [InclusiveSpectra.makeCentralityHistos] [5] = 3
+Info     : [InclusiveSpectra.makeCentralityHistos] [6] = 2
+Info     : [InclusiveSpectra.makeCentralityHistos] [7] = 1
+Info     : [InclusiveSpectra.makeCentralityHistos] [8] = 0
+Info     : [InclusiveSpectra.preEventLoop] Making Event QA histograms 
+Info     : [InclusiveSpectra.preEventLoop] Making track QA histograms 
+Info     : [InclusiveSpectra.make] Loaded: 148364 events 
+Running Task : Event Loop
+[============================================================]100%
+Info     : [InclusiveSpectra.make] Completed in 54.2749
+Info     : [InclusiveSpectra.~TreeAnalyzer] 
+Debug    : [InclusiveSpectra.~TreeAnalyzer] Deleted book
+Debug    : [InclusiveSpectra.~TreeAnalyzer] Deleted Reporter
+Debug    : [InclusiveSpectra.~TreeAnalyzer] Deleting Logger

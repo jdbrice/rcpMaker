@@ -80,6 +80,8 @@ namespace TSF{
 			double avgPt = ((*binsPt)[ ptBin ] + (*binsPt)[ ptBin + 1 ]) / 2.0;
 			return avgPt;
 		}
+
+		// TODO: Clean up remnants of pt eta binning
 		double averageP( int ptBin, int etaBin ){
 			if ( ptBin < 0 || ptBin > binsPt->nBins() ){
 				return 0;

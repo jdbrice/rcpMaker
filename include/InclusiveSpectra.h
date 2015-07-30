@@ -1,85 +1,80 @@
 #ifndef INCLUSIVE_SPECTRA_H
 #define INCLUSIVE_SPECTRA_H 
 
-/**
- * JDB 
- */
+// JDB 
 #include "TreeAnalyzer.h"
- #include "RefMultCorrection.h"
  using namespace jdb;
 
-/**
- * ROOT
- */
+// ROOT
 #include "TChain.h"
 
-/**
- * STD
- */
+// STL
 #include <memory>
 #include <vector>
 #include <math.h>
 
-/**
- * Local
- */
+// RcpMaker
 #include "Adapter/PicoDataStore.h"
+#include "Common.h"
 
 class InclusiveSpectra : public TreeAnalyzer
 {
 protected:
 
+
+	// Assume all particles are of given species for Rapidity determination
+	//  Used to calculate the mass
+	string plc = "Pi";
+	// Assume mass for Rapidity cut
+	float mass = Common::mass( plc );
+
 	unique_ptr<PicoDataStore> pico;
-
-	/**
-	 * Common configs
-	 */
-	unique_ptr<XmlConfig> qaCfg;
-	unique_ptr<XmlConfig> cutsCfg;
 	
-	/**
-	 * Event cuts
-	 */
-	unique_ptr<ConfigRange> cutVertexZ;
-	unique_ptr<ConfigRange> cutVertexR;
-	unique_ptr<ConfigPoint> cutVertexROffset;
-	unique_ptr<ConfigRange> cutNTofMatchedTracks;
-	Int_t triggerMask;
+	// Track cuts loaded from config
 	
-	/**
-	 * Track Cuts
-	 */
-	unique_ptr<ConfigRange> cutNHitsFit;
-	unique_ptr<ConfigRange> cutDca;
-	unique_ptr<ConfigRange> cutNHitsFitOverPossible;
-	unique_ptr<ConfigRange> cutNHitsDedx;
-	unique_ptr<ConfigRange> cutPt;
-	unique_ptr<ConfigRange> cutPtGlobalOverPrimary;
-	unique_ptr<ConfigRange> cutYLocal;
-	unique_ptr<ConfigRange> cutZLocal;
-	unique_ptr<ConfigRange> cutRapidity;
+	// nHitsFit
+	unique_ptr<ConfigRange> cut_nHitsFit;
+	// Distance to closest approach [cm]
+	unique_ptr<ConfigRange> cut_dca;
+	// nHitsFit / nHitsPossible
+	unique_ptr<ConfigRange> cut_nHitsFitOverPossible;
+	// nHitDedx
+	unique_ptr<ConfigRange> cut_nHitsDedx;
+	// Minimum pT [GeV/c]
+	unique_ptr<ConfigRange> cut_pt;
+	// ptGlobal / ptPrimary
+	unique_ptr<ConfigRange> cut_ptGlobalOverPrimary;
+	// Rapidity based on mass assumption
+	unique_ptr<ConfigRange> cut_rapidity;
 
 
+	// Tof Track Cuts
+
+	// Tof Match Flag 0 - no match, 1 - match to 1 tray, 2 or more - multi-match
+	unique_ptr<ConfigRange> cut_matchFlag;
+	// yLocal [cm]
+	unique_ptr<ConfigRange> cut_yLocal;
+	// zLocal [cm]
+	unique_ptr<ConfigRange> cut_zLocal;
+
+	
+
+	// Centrality bins
+	// maps bins from bin9 RMC into some other binning
+	// used to combine bins
 	map<int, int> centralityBinMap;
 
-	/**
-	 * Make QA
-	 */
-	bool makeEventQA, makeTrackQA;
+	// Make QA for  Track distributions
+	bool makeTrackQA;
 
-	/**
-	 * RefMult Correction
-	 */	
-	unique_ptr<RefMultCorrection> rmc;
+	// Make QA for Event info 
+	bool makeEventQA;
 
-	/**
-	 * Current Event Info
-	 */
-	float refMult = -1;
-	double eventWeight = 1.0;
-	int cBin;
 
-	Int_t nTofMatchedTracks;
+	// Current Event Info
+	float 	refMult 		= -1;
+	double 	eventWeight 	= 1.0;
+	int 	cBin = -1;
 
 
 
@@ -93,16 +88,12 @@ protected:
 	 * Makes pt histograms for each centrality
 	 */
 	virtual void makeCentralityHistos();
-	virtual int centralityBin( double refMult ) {
-		if ( rmc ){
-			int bin9 = rmc->bin9( refMult );
-			//if ( bin9 > 8 || bin9 < 0 )
-			//	return -1;
-			map<int, int>::iterator mit = centralityBinMap.find( bin9 );
-			if ( mit != centralityBinMap.end() )
-				return centralityBinMap[ bin9 ];
-		}
-		
+	virtual int centralityBin( ) {
+
+		int bin9 = pico->b9();
+		map<int, int>::iterator mit = centralityBinMap.find( bin9 );
+		if ( mit != centralityBinMap.end() )
+			return centralityBinMap[ bin9 ];
 		return -1;
 	}
 	int nCentralityBins(){
@@ -126,51 +117,41 @@ protected:
 		return ("pt_" + centralityCut );
 	}
 
-	/**
-	 * Before the event loop starts - for subclass init
-	 */
+	/* @inherit */
 	virtual void preEventLoop();
 
-	/**
-	 * After the event loop starts - for subclass reporting
-	 */
+	/* @inherit */
 	virtual void postEventLoop();
 
-	/**
-	 * Analyze an Event
-	 */
+	/* @inherit */
 	virtual void analyzeEvent( );
 
 	/**
 	 * Analyze a track in the current Event
-	 * @param	iTrack 	- Track index 
+	 * @piTrack	- Track index 
 	 */
 	virtual void analyzeTrack( Int_t iTrack );
 
 	/**
 	 * Analyze a track that passes normal and TOF cuts in the current Event
-	 * @param	iTrack 	- Track index 
+	 * @iTrack 	- Track index 
 	 */
 	virtual void analyzeTofTrack( Int_t iTrack );
 
-	/**
-	 * Performs event based cuts
-	 * @return 	True 	- Keep Event 
-	 *          False 	- Reject Event
-	 */
+	/* @inherit */
 	virtual bool keepEvent();
 
 	/**
 	 * Performs track based cuts
-	 * @return 	True 	- Keep Track 
-	 *          False 	- Reject Track
+	 * @return 	True 	- Passes all selection cuts
+	 *          False 	- Fails 1 or more selection cuts
 	 */
 	virtual bool keepTrack( Int_t iTrack );
 
 	/**
 	 * Performs TOF track based cuts
-	 * @return 	True 	- Keep Track 
-	 *          False 	- Reject Track
+	 * @return 	True 	- Passes all selection cuts
+	 *          False 	- Fails 1 or more selection cuts
 	 */
 	virtual bool keepTofTrack( Int_t iTrack );
 	

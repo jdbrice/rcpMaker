@@ -1,0 +1,114 @@
+
+// STL
+#include <iostream>
+#include <exception>
+
+// RooBarb
+#include "XmlConfig.h"
+using namespace jdb;
+
+// Rcp Maker
+
+// Spectra 
+	#include "InclusiveSpectra.h"
+//	#include "PidPhaseSpace.h"
+
+
+// Efficiency
+//	#include "Efficiency/TofEffMaker.h"
+	#include "Efficiency/TpcEffMcHistoMaker.h"
+	#include "Efficiency/TpcEffRcHistoMaker.h"
+	#include "Efficiency/TofEffFitter.h"
+
+// Presentation
+	#include "PidYieldPresenter.h"
+
+// Feed down
+//	#include "FeedDownMaker.h"
+
+
+// PID Fitting
+	#include "TSF/FitRunner.h"
+
+
+
+
+
+
+using namespace TSF;
+
+int main( int argc, char* argv[] ) {
+
+	if ( argc >= 2 ){
+
+		try{
+			XmlConfig config( argv[ 1 ] );
+			//config.report();
+
+			string fileList = "";
+			string jobPrefix = "";
+
+			if ( argc >= 4 ){
+				fileList = argv[ 2 ];
+				jobPrefix = argv[ 3 ];
+			}
+
+			string job = config.getString( "jobType" );
+
+			if ( "InclusiveSpectra" == job ){
+				InclusiveSpectra is( &config, "InclusiveSpectra.", fileList, jobPrefix );
+				is.make();
+			} else if ( "PidPhaseSpace" == job ){
+				// PidPhaseSpace pps( &config, "PidPhaseSpace.", fileList, jobPrefix  );
+				// pps.make();
+			} else if ( "TpcEffMcHistoMaker" == job ){
+				TpcEffMcHistoMaker temch( &config, "TpcEffMcHistoMaker.", fileList, jobPrefix  );
+				temch.make();
+			} else if ( "TpcEffRcHistoMaker" == job ){
+				TpcEffRcHistoMaker terch( &config, "TpcEffRcHistoMaker.", fileList, jobPrefix  );
+				terch.make();
+			} else if ( "TofEffMaker" == job ){
+				// TofEffMaker tem( &config, "TofEffMaker.", fileList, jobPrefix  );
+				// tem.make();
+			} else if ( "TofEffFitter" == job ){
+				TofEffFitter tef( &config, "TofEffFitter." );
+				tef.make();     
+			} else if ( "SimultaneousTPid" == job ){
+				FitRunner fr( &config, "SimultaneousPid." );
+				fr.make();
+
+			}  else if ( "FeedDownMaker" == job ){
+				// FeedDownMaker fdm( &config, "FeedDownMaker." );
+				// fdm.make();
+			} else if ( "FeedDownPresentation" == job ){
+				// Logger::setGlobalLogLevel( Logger::llAll );
+				// RooPlotter plt( argv[1] );
+			} else if ( "test" == job ){
+			} else if ( "PresentPidYield" == job ){
+				//cout << "making presenter" << endl;
+ 
+				// PidYieldPresenter pyp( &config, "PidYieldPresenter." );
+				// pyp.integrateEta();
+				// pyp.normalizeYield();
+				// pyp.compareYields();
+				// pyp.rcp( 5 );
+
+				// pyp.rcpPanel( 0, 5);
+				// pyp.rcpPanel( 1, 5);
+				// pyp.rcpPanel( 2, 5);
+				// pyp.rcpPanel( 3, 5);
+				// pyp.rcpPanel( 4, 5);
+				// pyp.rcpPanel( 5, 5);
+
+				// pyp.chargeRatio();
+				// pyp.chargeRatioCompare( );
+
+			}
+
+		} catch ( exception &e ){
+			cout << e.what() << endl;
+		}
+
+	}
+	return 0;
+}

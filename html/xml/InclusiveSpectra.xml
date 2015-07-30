@@ -1,0 +1,195 @@
+<class xmlns="http://jessevdk.github.com/cldoc/1.0" abstract="true" id="InclusiveSpectra" name="InclusiveSpectra">
+  <base access="public">
+    <type name="jdb::TreeAnalyzer" />
+  </base>
+  <subclass access="public" name="PidPhaseSpace" ref="PidPhaseSpace#PidPhaseSpace" />
+  <constructor abstract="yes" id="InclusiveSpectra::InclusiveSpectra" name="InclusiveSpectra">
+    <argument id="InclusiveSpectra::InclusiveSpectra::config" name="config">
+      <type name="jdb::XmlConfig" qualifier="*" />
+    </argument>
+    <argument id="InclusiveSpectra::InclusiveSpectra::nodePath" name="nodePath">
+      <type name="string" />
+    </argument>
+    <argument id="InclusiveSpectra::InclusiveSpectra::fileList" name="fileList">
+      <type name="string" />
+    </argument>
+    <argument id="InclusiveSpectra::InclusiveSpectra::jobPrefix" name="jobPrefix">
+      <type name="string" />
+    </argument>
+  </constructor>
+  <destructor abstract="yes" id="InclusiveSpectra::~InclusiveSpectra" name="~InclusiveSpectra" />
+  <field access="protected" id="InclusiveSpectra::plc" name="plc">
+    <brief>Assume all particles are of given species for Rapidity determination</brief>
+    <doc>Used to calculate the mass</doc>
+    <type name="string" />
+  </field>
+  <field access="protected" id="InclusiveSpectra::mass" name="mass">
+    <brief>Assume mass for Rapidity cut</brief>
+    <type builtin="yes" name="float" />
+  </field>
+  <field access="protected" id="InclusiveSpectra::pico" name="pico">
+    <type name="unique_ptr&lt;PicoDataStore, default_delete&lt;PicoDataStore&gt; &gt;" />
+  </field>
+  <field access="protected" id="InclusiveSpectra::cut_nHitsFit" name="cut_nHitsFit">
+    <brief>nHitsFit</brief>
+    <type name="unique_ptr&lt;jdb::ConfigRange, default_delete&lt;jdb::ConfigRange&gt; &gt;" />
+  </field>
+  <field access="protected" id="InclusiveSpectra::cut_dca" name="cut_dca">
+    <brief>Distance to closest approach [cm]</brief>
+    <type name="unique_ptr&lt;jdb::ConfigRange, default_delete&lt;jdb::ConfigRange&gt; &gt;" />
+  </field>
+  <field access="protected" id="InclusiveSpectra::cut_nHitsFitOverPossible" name="cut_nHitsFitOverPossible">
+    <brief>nHitsFit / nHitsPossible</brief>
+    <type name="unique_ptr&lt;jdb::ConfigRange, default_delete&lt;jdb::ConfigRange&gt; &gt;" />
+  </field>
+  <field access="protected" id="InclusiveSpectra::cut_nHitsDedx" name="cut_nHitsDedx">
+    <brief>nHitDedx</brief>
+    <type name="unique_ptr&lt;jdb::ConfigRange, default_delete&lt;jdb::ConfigRange&gt; &gt;" />
+  </field>
+  <field access="protected" id="InclusiveSpectra::cut_pt" name="cut_pt">
+    <brief>Minimum pT [GeV/c]</brief>
+    <type name="unique_ptr&lt;jdb::ConfigRange, default_delete&lt;jdb::ConfigRange&gt; &gt;" />
+  </field>
+  <field access="protected" id="InclusiveSpectra::cut_ptGlobalOverPrimary" name="cut_ptGlobalOverPrimary">
+    <brief>ptGlobal / ptPrimary</brief>
+    <type name="unique_ptr&lt;jdb::ConfigRange, default_delete&lt;jdb::ConfigRange&gt; &gt;" />
+  </field>
+  <field access="protected" id="InclusiveSpectra::cut_rapidity" name="cut_rapidity">
+    <brief>Rapidity based on mass assumption</brief>
+    <type name="unique_ptr&lt;jdb::ConfigRange, default_delete&lt;jdb::ConfigRange&gt; &gt;" />
+  </field>
+  <field access="protected" id="InclusiveSpectra::cut_matchFlag" name="cut_matchFlag">
+    <brief>Tof Match Flag 0 - no match, 1 - match to 1 tray, 2 or more - multi-match</brief>
+    <type name="unique_ptr&lt;jdb::ConfigRange, default_delete&lt;jdb::ConfigRange&gt; &gt;" />
+  </field>
+  <field access="protected" id="InclusiveSpectra::cut_yLocal" name="cut_yLocal">
+    <brief>yLocal [cm]</brief>
+    <type name="unique_ptr&lt;jdb::ConfigRange, default_delete&lt;jdb::ConfigRange&gt; &gt;" />
+  </field>
+  <field access="protected" id="InclusiveSpectra::cut_zLocal" name="cut_zLocal">
+    <brief>zLocal [cm]</brief>
+    <type name="unique_ptr&lt;jdb::ConfigRange, default_delete&lt;jdb::ConfigRange&gt; &gt;" />
+  </field>
+  <field access="protected" id="InclusiveSpectra::centralityBinMap" name="centralityBinMap">
+    <brief>Centrality bins</brief>
+    <doc>maps bins from bin9 RMC into some other binning
+used to combine bins</doc>
+    <type name="map&lt;int, int&gt;" />
+  </field>
+  <field access="protected" id="InclusiveSpectra::makeTrackQA" name="makeTrackQA">
+    <brief>Make QA for  Track distributions</brief>
+    <type builtin="yes" name="bool" />
+  </field>
+  <field access="protected" id="InclusiveSpectra::makeEventQA" name="makeEventQA">
+    <brief>Make QA for Event info</brief>
+    <type builtin="yes" name="bool" />
+  </field>
+  <field access="protected" id="InclusiveSpectra::refMult" name="refMult">
+    <brief>Current Event Info</brief>
+    <type builtin="yes" name="float" />
+  </field>
+  <field access="protected" id="InclusiveSpectra::eventWeight" name="eventWeight">
+    <type builtin="yes" name="double" />
+  </field>
+  <field access="protected" id="InclusiveSpectra::cBin" name="cBin">
+    <type builtin="yes" name="int" />
+  </field>
+  <method abstract="yes" access="protected" id="InclusiveSpectra::analyzeEvent" name="analyzeEvent" virtual="yes">
+    <brief>@inherit</brief>
+    <return>
+      <type builtin="yes" name="void" />
+    </return>
+  </method>
+  <method abstract="yes" access="protected" id="InclusiveSpectra::analyzeTofTrack" name="analyzeTofTrack" virtual="yes">
+    <brief>*</brief>
+    <doc>Analyze a track that passes normal and TOF cuts in the current Event
+</doc>
+    <return>
+      <type builtin="yes" name="void" />
+    </return>
+    <argument id="InclusiveSpectra::analyzeTofTrack::iTrack" name="iTrack">
+      <type name="Int_t" />
+    </argument>
+  </method>
+  <method abstract="yes" access="protected" id="InclusiveSpectra::analyzeTrack" name="analyzeTrack" virtual="yes">
+    <brief>*</brief>
+    <doc>Analyze a track in the current Event
+</doc>
+    <return>
+      <type builtin="yes" name="void" />
+    </return>
+    <argument id="InclusiveSpectra::analyzeTrack::iTrack" name="iTrack">
+      <type name="Int_t" />
+    </argument>
+  </method>
+  <method access="protected" id="InclusiveSpectra::centralityBin" name="centralityBin" virtual="yes">
+    <return>
+      <type builtin="yes" name="int" />
+    </return>
+  </method>
+  <method access="protected" id="InclusiveSpectra::histoForCentrality" name="histoForCentrality" virtual="yes">
+    <return>
+      <type name="string" />
+    </return>
+    <argument id="InclusiveSpectra::histoForCentrality::centralityCut" name="centralityCut">
+      <type name="string" />
+    </argument>
+  </method>
+  <method abstract="yes" access="protected" id="InclusiveSpectra::keepEvent" name="keepEvent" virtual="yes">
+    <brief>@inherit</brief>
+    <return>
+      <type builtin="yes" name="bool" />
+    </return>
+  </method>
+  <method abstract="yes" access="protected" id="InclusiveSpectra::keepTofTrack" name="keepTofTrack" virtual="yes">
+    <brief>*</brief>
+    <doc>Performs TOF track based cuts
+</doc>
+    <return>
+      <doc>True    - Passes all selection cuts
+         False  - Fails 1 or more selection cuts</doc>
+      <type builtin="yes" name="bool" />
+    </return>
+    <argument id="InclusiveSpectra::keepTofTrack::iTrack" name="iTrack">
+      <type name="Int_t" />
+    </argument>
+  </method>
+  <method abstract="yes" access="protected" id="InclusiveSpectra::keepTrack" name="keepTrack" virtual="yes">
+    <brief>*</brief>
+    <doc>Performs track based cuts
+</doc>
+    <return>
+      <doc>True    - Passes all selection cuts
+         False  - Fails 1 or more selection cuts</doc>
+      <type builtin="yes" name="bool" />
+    </return>
+    <argument id="InclusiveSpectra::keepTrack::iTrack" name="iTrack">
+      <type name="Int_t" />
+    </argument>
+  </method>
+  <method abstract="yes" access="protected" id="InclusiveSpectra::makeCentralityHistos" name="makeCentralityHistos" virtual="yes">
+    <brief>*</brief>
+    <doc>Makes pt histograms for each centrality
+</doc>
+    <return>
+      <type builtin="yes" name="void" />
+    </return>
+  </method>
+  <method access="protected" id="InclusiveSpectra::nCentralityBins" name="nCentralityBins">
+    <return>
+      <type builtin="yes" name="int" />
+    </return>
+  </method>
+  <method abstract="yes" access="protected" id="InclusiveSpectra::postEventLoop" name="postEventLoop" virtual="yes">
+    <brief>@inherit</brief>
+    <return>
+      <type builtin="yes" name="void" />
+    </return>
+  </method>
+  <method abstract="yes" access="protected" id="InclusiveSpectra::preEventLoop" name="preEventLoop" virtual="yes">
+    <brief>@inherit</brief>
+    <return>
+      <type builtin="yes" name="void" />
+    </return>
+  </method>
+</class>

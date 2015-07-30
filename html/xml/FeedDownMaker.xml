@@ -1,0 +1,153 @@
+<class xmlns="http://jessevdk.github.com/cldoc/1.0" abstract="true" id="FeedDownMaker" name="FeedDownMaker">
+  <base access="public">
+    <type name="jdb::TreeAnalyzer" />
+  </base>
+  <constructor abstract="yes" id="FeedDownMaker::FeedDownMaker" name="FeedDownMaker">
+    <argument id="FeedDownMaker::FeedDownMaker::config" name="config">
+      <type name="jdb::XmlConfig" qualifier="*" />
+    </argument>
+    <argument id="FeedDownMaker::FeedDownMaker::nodePath" name="nodePath">
+      <type name="string" />
+    </argument>
+    <argument id="FeedDownMaker::FeedDownMaker::fileList" name="fileList">
+      <type name="string" />
+    </argument>
+    <argument id="FeedDownMaker::FeedDownMaker::jobPrefix" name="jobPrefix">
+      <type name="string" />
+    </argument>
+  </constructor>
+  <destructor abstract="yes" id="FeedDownMaker::~FeedDownMaker" name="~FeedDownMaker" />
+  <variable access="protected" id="FeedDownMaker::plcID" name="plcID">
+    <type name="vector&lt;int&gt;" />
+  </variable>
+  <variable access="protected" id="FeedDownMaker::plcMass" name="plcMass">
+    <type name="vector&lt;float&gt;" />
+  </variable>
+  <field access="protected" id="FeedDownMaker::corrRefMult" name="corrRefMult">
+    <brief>unique_ptr&amp;lt;RefMultCorrection&amp;gt; rmc;</brief>
+    <type builtin="yes" name="float" />
+  </field>
+  <field access="protected" id="FeedDownMaker::plcName" name="plcName">
+    <type name="map&lt;int, string&gt;" />
+  </field>
+  <method access="protected" id="FeedDownMaker::addGEANTLabels" name="addGEANTLabels">
+    <return>
+      <type builtin="yes" name="void" />
+    </return>
+    <argument id="FeedDownMaker::addGEANTLabels::h" name="h">
+      <type name="TH1" qualifier="*" />
+    </argument>
+  </method>
+  <method abstract="yes" access="protected" id="FeedDownMaker::analyzeEvent" name="analyzeEvent" virtual="yes">
+    <brief>*</brief>
+    <doc>Analyze an Event
+</doc>
+    <return>
+      <type builtin="yes" name="void" />
+    </return>
+  </method>
+  <method abstract="yes" access="protected" id="FeedDownMaker::analyzeTrack" name="analyzeTrack" virtual="yes">
+    <brief>*</brief>
+    <doc>Analyze a track in the current Event
+</doc>
+    <return>
+      <type builtin="yes" name="void" />
+    </return>
+    <argument id="FeedDownMaker::analyzeTrack::iTrack" name="iTrack">
+      <type name="Int_t" />
+    </argument>
+  </method>
+  <method abstract="yes" access="protected" id="FeedDownMaker::background" name="background">
+    <return>
+      <type builtin="yes" name="void" />
+    </return>
+    <argument id="FeedDownMaker::background::" name="">
+      <type name="string" />
+    </argument>
+    <argument id="FeedDownMaker::background::" name="">
+      <type builtin="yes" name="int" />
+    </argument>
+    <argument id="FeedDownMaker::background::" name="">
+      <type builtin="yes" name="int" />
+    </argument>
+    <argument id="FeedDownMaker::background::" name="">
+      <type builtin="yes" name="int" />
+    </argument>
+  </method>
+  <method abstract="yes" access="protected" id="FeedDownMaker::exportParams" name="exportParams">
+    <return>
+      <type builtin="yes" name="void" />
+    </return>
+    <argument id="FeedDownMaker::exportParams::name" name="name">
+      <type name="string" />
+    </argument>
+    <argument id="FeedDownMaker::exportParams::plcIndex" name="plcIndex">
+      <type builtin="yes" name="int" />
+    </argument>
+    <argument id="FeedDownMaker::exportParams::cl" name="cl">
+      <type builtin="yes" name="float" />
+    </argument>
+    <argument id="FeedDownMaker::exportParams::ch" name="ch">
+      <type builtin="yes" name="float" />
+    </argument>
+    <argument id="FeedDownMaker::exportParams::fn" name="fn">
+      <type name="TF1" qualifier="*" />
+    </argument>
+    <argument id="FeedDownMaker::exportParams::formula" name="formula">
+      <type name="string" />
+    </argument>
+  </method>
+  <method abstract="yes" access="protected" id="FeedDownMaker::keepEvent" name="keepEvent" virtual="yes">
+    <brief>*</brief>
+    <doc>Performs event based cuts
+</doc>
+    <return>
+      <doc>True    - Keep Event
+         False  - Reject Event</doc>
+      <type builtin="yes" name="bool" />
+    </return>
+  </method>
+  <method abstract="yes" access="protected" id="FeedDownMaker::keepTrack" name="keepTrack" virtual="yes">
+    <brief>*</brief>
+    <doc>Performs track based cuts
+</doc>
+    <return>
+      <doc>True    - Keep Track
+         False  - Reject Track</doc>
+      <type builtin="yes" name="bool" />
+    </return>
+    <argument id="FeedDownMaker::keepTrack::iTrack" name="iTrack">
+      <type name="Int_t" />
+    </argument>
+  </method>
+  <method abstract="yes" access="protected" id="FeedDownMaker::postEventLoop" name="postEventLoop" virtual="yes">
+    <brief>*</brief>
+    <doc>After the event loop starts - for subclass reporting
+</doc>
+    <return>
+      <type builtin="yes" name="void" />
+    </return>
+  </method>
+  <method abstract="yes" access="protected" id="FeedDownMaker::preEventLoop" name="preEventLoop" virtual="yes">
+    <brief>*</brief>
+    <doc>Before the event loop starts - for subclass init
+</doc>
+    <return>
+      <type builtin="yes" name="void" />
+    </return>
+  </method>
+  <method access="protected" id="FeedDownMaker::rapidity" name="rapidity">
+    <return>
+      <type builtin="yes" name="double" />
+    </return>
+    <argument id="FeedDownMaker::rapidity::pt" name="pt">
+      <type builtin="yes" name="double" />
+    </argument>
+    <argument id="FeedDownMaker::rapidity::eta" name="eta">
+      <type builtin="yes" name="double" />
+    </argument>
+    <argument id="FeedDownMaker::rapidity::m" name="m">
+      <type builtin="yes" name="double" />
+    </argument>
+  </method>
+</class>

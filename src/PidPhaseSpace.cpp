@@ -3,7 +3,7 @@
 #include "SpectraCorrecter.h"
 
 
-vector<string> PidPhaseSpace::species = { "Pi", "K", "P" };
+vector<string> Common::species = { "Pi", "K", "P" };
 
 PidPhaseSpace::PidPhaseSpace( XmlConfig* config, string np, string fl, string jp ) : InclusiveSpectra( config, np, fl, jp ) {
 
@@ -83,7 +83,7 @@ PidPhaseSpace::PidPhaseSpace( XmlConfig* config, string np, string fl, string jp
 		cfgEnergyLoss = new XmlConfig( cfg->getString( np + "ELParams:config" ) );
 
 		for ( int c : charges ){
-			string cs = PidPhaseSpace::chargeString( c );
+			string cs = Common::chargeString( c );
 			string name = centerSpecies + "_" + cs;
 			elParams[ name ] = unique_ptr<EnergyLossParams>( new EnergyLossParams(cfgEnergyLoss, name + ".EnergyLossParams") );
 
@@ -97,7 +97,7 @@ PidPhaseSpace::PidPhaseSpace( XmlConfig* config, string np, string fl, string jp
 		
 
 		for ( int c : charges ){
-			string cs = PidPhaseSpace::chargeString( c );
+			string cs = Common::chargeString( c );
 			string name = centerSpecies + "_" + cs;
 			vector<string> children = cfgFeedDown->childrenOf( name );
 			DEBUG( "FOUND : " << children.size() )
@@ -152,15 +152,15 @@ void PidPhaseSpace::analyzeTofTrack( int iTrack ){
 	double p 		= pico->trackP( iTrack );
 	double eta 		= pico->trackEta( iTrack );
 	// Apply Energy Loss Corrections if given
-	string elName = centerSpecies + "_" + PidPhaseSpace::chargeString(charge);
+	string elName = centerSpecies + "_" + Common::chargeString(charge);
 	if ( elParams.count( elName ) ){
 
 		double corrPt = pt - elParams[ elName ]->eval( pt );
 		// QA
-		book->fill( "corrPt_" + PidPhaseSpace::chargeString( charge ), pt, pt - corrPt );
+		book->fill( "corrPt_" + Common::chargeString( charge ), pt, pt - corrPt );
 
 		// recalc the p from corrPt and eta
-		p = PidPhaseSpace::p( corrPt, eta );
+		p = Common::p( corrPt, eta );
 		pt = corrPt;
 	} 
 
@@ -175,7 +175,7 @@ void PidPhaseSpace::analyzeTofTrack( int iTrack ){
 	double avgP = averageP( ptBin, etaBin );
 
 	fdWeight = feedDownWeight( charge, pt );
-	book->get3D( "fdWeight_" + PidPhaseSpace::chargeString(charge) )->Fill( pt, fdWeight, cBin );
+	book->get3D( "fdWeight_" + Common::chargeString(charge) )->Fill( pt, fdWeight, cBin );
 
 
 	binByMomentum = true;
@@ -250,15 +250,15 @@ void PidPhaseSpace::analyzeTrack( int iTrack ){
 	double p 		= pico->trackP( iTrack );
 	double eta 		= pico->trackEta( iTrack );
 	// Apply Energy Loss Corrections if given
-	string elName = centerSpecies + "_" + PidPhaseSpace::chargeString(charge);
+	string elName = centerSpecies + "_" + Common::chargeString(charge);
 	if ( elParams.count( elName ) ){
 
 		double corrPt = pt - elParams[ elName ]->eval( pt );
 		// QA
-		book->fill( "corrPt_" + PidPhaseSpace::chargeString( charge ), pt, pt - corrPt );
+		book->fill( "corrPt_" + Common::chargeString( charge ), pt, pt - corrPt );
 
 		// recalc the p from corrPt and eta
-		p = PidPhaseSpace::p( corrPt, eta );
+		p = Common::p( corrPt, eta );
 		pt = corrPt;
 	} 
 
@@ -266,7 +266,7 @@ void PidPhaseSpace::analyzeTrack( int iTrack ){
 	double y 		= rapidity( pt, eta, psr->mass( centerSpecies ) );
 
 	logger->debug(__FUNCTION__) << "pt = " << pt << " eta = " << eta << " p = " << p << endl;
-	logger->debug( __FUNCTION__ ) << "calc p = " << PidPhaseSpace::p( pt, eta ) << endl;
+	logger->debug( __FUNCTION__ ) << "calc p = " << Common::p( pt, eta ) << endl;
 
 	int ptBin 	= binsPt->findBin( pt );
 	int etaBin 	= binsEta->findBin( TMath::Abs( eta ) );

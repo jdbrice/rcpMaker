@@ -100,10 +100,10 @@ public:
 
 
 	string rcpName( string plc, int charge, int iCen, int iPer ){
-		return "rcp_" + plc + "_" + PidPhaseSpace::chargeString( charge ) + "_" + ts(iCen) + "_Over_" + ts(iPer);
+		return "rcp_" + plc + "_" + Common::chargeString( charge ) + "_" + ts(iCen) + "_Over_" + ts(iPer);
 	}
 	string nPartName( string plc, int charge, int ptBin ){
-		return "nPart_" + plc + "_" + PidPhaseSpace::chargeString( charge ) +"_" + ts( ptBin );
+		return "nPart_" + plc + "_" + Common::chargeString( charge ) +"_" + ts( ptBin );
 	}
 	string chargeRatioName( string plc, int iCen ){
 		return "chargeRatio_" + plc + "_" + ts( iCen );

@@ -3,19 +3,33 @@
 project = rcp
 # source suffix
 source = .cpp 
-# object files to make
-objects = rcp.o InclusiveSpectra.o PidPhaseSpace.o \
-	ZbPidParameters.o ZdPidParameters.o \
-	ProdPicoDst.o PidYieldPresenter.o RcpPicoDst.o \
-	FitSchema.o Fitter.o FitRunner.o \
-	PidProbabilityMapper.o PidSpectraMaker.o \
-	TofEffMaker.o PhaseSpaceRecentering.o \
-	FeedDownMaker.o EnergyLossParams.o FeedDownParams.o
 
-# ParamSpectra.o  PidParamMaker.o SimultaneousPid.o
+# Source files to make
+sources = 	Engine.cpp 							\
+			Common.cpp 							\
+			InclusiveSpectra.cpp 				\
+			PhaseSpaceRecentering.cpp 			\
+			Adapter/ProdPicoDst.cpp 			\
+			Adapter/RcpPicoDst.cpp 				\
+			TSF/FitSchema.cpp 					\
+			TSF/Fitter.cpp 						\
+			TSF/FitRunner.cpp 					\
+			Efficiency/TpcEffMcHistoMaker.cpp 	\
+			Efficiency/TpcEffRcHistoMaker.cpp 	\
+			Params/FeedDownParams.cpp 			\
+			Params/EnergyLossParams.cpp
 
-sources = $(wildcard *.cpp)
-headers = $(wildcard ../include/*.h)
+
+#			Efficiency/TofEffMaker.cpp 			\
+#			FeedDownMaker.cpp  					\
+#			PidPhaseSpace.cpp 					\
+#			PidYieldPresenter.cpp 				\
+
+# TODO: Fix broken files
+
+objects = $(patsubst %.cpp,%.o, $(sources))
+
+ClassHeaders = $(wildcard ../include/*.h)
 
 # ROOT libs and includes
 ROOTCFLAGS    	= $(shell root-config --cflags)
@@ -25,7 +39,7 @@ ROOTGLIBS     	= $(shell root-config --glibs)
 
 # Custom Project includes and libs
 includes		= -I../include -I. -I$(ROOTSYS)/include -I$(JDB_LIB)/include/jdb -I$(JDB_LIB)/include 
-libraries 		= 	$(ROOTLIBS) -lRooFitCore -lRooFit -lMinuit $(CERNLIBS) $(SYSLIBS)
+libraries 		= $(ROOTLIBS) -lRooFitCore -lRooFit -lMinuit $(CERNLIBS) $(SYSLIBS)
 staticLibs 		= $(JDB_LIB)/lib/libJDB.a
 
 cxx 		= g++ -std=c++11
@@ -40,7 +54,7 @@ $(project): $(objects)
 		@mv $(project) ../bin
 
 %.o: %$(source)
-		$(compile)  $<
+		$(compile)  $< -o $@
 
 clean:
 		@rm -f $(objects) $(project)
@@ -50,3 +64,8 @@ clean:
 full:
 	clean
 	$(project)
+
+doc:
+	@echo "Generating Documentation";				
+	clDoc generate $(includes) $(flags) -- 	--report --output ../html --merge ../html/mergedocs $(ClassHeaders)
+	python /Users/danielbrandenburg/bnl/local/work/boiler/html/sanitize_std.py ../html/xml/
