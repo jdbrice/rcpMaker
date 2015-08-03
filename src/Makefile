@@ -14,16 +14,15 @@ sources = 	Engine.cpp 							\
 			TSF/FitSchema.cpp 					\
 			TSF/Fitter.cpp 						\
 			TSF/FitRunner.cpp 					\
-			McMaker/TpcEffMcHistoMaker.cpp 		\
-			McMaker/TpcEffRcHistoMaker.cpp 		\
 			McMaker/EnergyLoss.cpp 				\
+			McMaker/TpcEffFitter.cpp 			\
 			Params/FeedDownParams.cpp 			\
-			Params/EnergyLossParams.cpp
-
+			Params/EnergyLossParams.cpp			\
+			Spectra/PidHistoMaker.cpp
 
 #			McMaker/TofEffMaker.cpp 			\
 #			FeedDownMaker.cpp  					\
-#			PidHistoMaker.cpp 					\
+
 #			PidYieldPresenter.cpp 				\
 
 # TODO: Fix broken files

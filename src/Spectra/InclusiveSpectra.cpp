@@ -97,6 +97,7 @@ void InclusiveSpectra::makeCentralityHistos() {
 	for ( int iC = 0; iC < nCentralityBins(); iC ++ ){
 		string hName = "pt_" + ts(iC);
 		logger->info( __FUNCTION__ ) << hName << endl;
+		book->clone( "pt", hName );
 		book->clone( "pt", hName + "_p" );
 		book->clone( "pt", hName + "_n" );
 
@@ -173,8 +174,11 @@ void InclusiveSpectra::analyzeTrack( Int_t iTrack ){
 	book->fill( "pt_" + Common::chargeString( charge ) , pt, eventWeight );
 	
 	if ( cBin >= 0 ){
-		string cName = "pt_" + ts( cBin ) + "_" + Common::chargeString( charge );
-		book->fill( cName, pt, eventWeight );		
+		string cName = "pt_" + ts( cBin ) ;
+		book->fill( cName, pt, eventWeight );
+		
+		cName = "pt_" + ts( cBin ) + "_" + Common::chargeString( charge );
+		book->fill( cName, pt, eventWeight );
 	}
 	
 }

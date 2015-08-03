@@ -17,9 +17,8 @@ using namespace jdb;
 // McMaker
 //	#include "McMaker/TofEffMaker.h"
 	#include "McMaker/EnergyLoss.h"
-	#include "McMaker/TpcEffMcHistoMaker.h"
-	#include "McMaker/TpcEffRcHistoMaker.h"
 	#include "McMaker/TofEffFitter.h"
+	#include "McMaker/TpcEffFitter.h"
 
 // Presentation
 	#include "Present/PidYieldPresenter.h"
@@ -62,15 +61,12 @@ int main( int argc, char* argv[] ) {
 			} if ( "EnergyLoss" == job ){
 				EnergyLoss el( &config, "EnergyLoss.", fileList, jobPrefix );
 				el.make();
+			} if ( "TpcEffFitter" == job ){
+				TpcEffFitter tef( &config, "TpcEffFitter." );
+				tef.make();
 			} else if ( "PidHistoMaker" == job ){
 				// PidHistoMaker pps( &config, "PidHistoMaker.", fileList, jobPrefix  );
 				// pps.make();
-			} else if ( "TpcEffMcHistoMaker" == job ){
-				TpcEffMcHistoMaker temch( &config, "TpcEffMcHistoMaker.", fileList, jobPrefix  );
-				temch.make();
-			} else if ( "TpcEffRcHistoMaker" == job ){
-				TpcEffRcHistoMaker terch( &config, "TpcEffRcHistoMaker.", fileList, jobPrefix  );
-				terch.make();
 			} else if ( "TofEffMaker" == job ){
 				// TofEffMaker tem( &config, "TofEffMaker.", fileList, jobPrefix  );
 				// tem.make();

@@ -20,6 +20,8 @@ public:
 
 	// List of species we consider
 	static vector<string> species;
+	static vector<int> charges;
+	static vector<string> sCharges;
 
 	// Pion Mass [GeV/c] = 0.1395702
 	static constexpr double 		mass_pi 		= 0.1395702;

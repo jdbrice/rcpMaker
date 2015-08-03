@@ -29,7 +29,7 @@ protected:
 	unique_ptr<HistoBins> binsTof;
 	unique_ptr<HistoBins> binsDedx;
 	unique_ptr<HistoBins> binsPt;
-	unique_ptr<HistoBins> binsEta;
+	
 	vector<int> charges;
 	// these are made on the fly
 	double tofBinWidth, dedxBinWidth;
