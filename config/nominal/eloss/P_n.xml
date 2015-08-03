@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+
+	<!-- Job to run -->
+	<jobType>EnergyLoss</jobType>
+
+	<EnergyLoss>
+		<Logger color="true" globalLogLevel="info" logLevel="all" />
+		
+		<input plc="P">
+			<dst treeName="rcpPicoDst" url="/Users/danielbrandenburg/bnl/local/data/RcpAnalysis/embedding/P_Minus_rc.root"/>
+		</input>
+		<output>
+			<data>../products/energyLoss_P_Minus.root</data>
+		</output>
+
+		<!-- the bins into which the 9 centrality bins are mapped. -->
+		<Include url="../common/centralityMap.xml" />
+
+		<MakeQA event="true" track="true" />
+
+		<!-- histograms to auto-make -->
+		<histograms>
+			<Histo name="pt" title="p_{T} [GeV]; p_{T} [GeV]; #Events"  xBins="binning.pt"/>
+			<Histo name="energyLoss" title="Energy Loss; RC p_{T} [GeV]; p_{T}^{RC} - p_{T}^{MC}"  xBins="binning.pt" yBins="binning.eloss"/>
+		</histograms>
+
+	</EnergyLoss>
+
+	<!-- Include common resources -->
+	<Include url="../common/cuts.xml" />
+	<Include url="../common/binning.xml" />
+	<Include url="../common/qaHistograms.xml" />
+
+
+</config>

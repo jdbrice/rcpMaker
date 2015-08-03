@@ -1,0 +1,36 @@
+
+	<?xml version="1.0" encoding="UTF-8"?>
+	<config>
+
+		<!-- Job to run -->
+		<jobType>InclusiveSpectra</jobType>
+
+		<InclusiveSpectra>
+			<Logger color="true" globalLogLevel="info" logLevel="all" />
+			
+			<input plc="P">
+				<dst treeName="rcpPicoDst" url="/Users/danielbrandenburg/bnl/local/data/RcpAnalysis/embedding/P_n_rc.root"/>
+			</input>
+			<output>
+				<data>/Users/danielbrandenburg/bnl/local/work/rcpMaker/products/TpcEff_P_n_rc.root</data>
+			</output>
+
+			<!-- the bins into which the 9 centrality bins are mapped. -->
+			<Include url="../common/centralityMap.xml" />
+
+			<MakeQA event="true" track="true" />
+
+			<!-- histograms to auto-make -->
+			<histograms>
+				<pt type="1D" title="p_{T} [GeV]; p_{T} [GeV]; #Events"  xBins="binning.ptEff"/>
+			</histograms>
+
+		</InclusiveSpectra>
+
+		<!-- Include common resources -->
+		<Include url="../common/cuts.xml" />
+		<Include url="../common/binning.xml" />
+		<Include url="../common/qaHistograms.xml" />
+
+	</config>
+	
