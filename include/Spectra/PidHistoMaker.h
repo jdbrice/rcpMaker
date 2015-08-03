@@ -21,50 +21,57 @@ class PidHistoMaker : public InclusiveSpectra
 protected:
 
 
-	// Configs for
+	//Configs for corrections
 	XmlConfig * cfgEnergyLoss;
 	XmlConfig * cfgFeedDown;
+
 
 	//Binning
 	unique_ptr<HistoBins> binsTof;
 	unique_ptr<HistoBins> binsDedx;
 	unique_ptr<HistoBins> binsPt;
-	
 	vector<int> charges;
-	// these are made on the fly
+	// these are made on the fly based on the config options
 	double tofBinWidth, dedxBinWidth;
 
-
-	
 	// Plot Ranges 
 	double tofPadding, dedxPadding, tofScalePadding, dedxScalePadding;
 
 	
-	// Phase Space Recentering 
+	// Z Recentering 
+	// Which cpecies are we centering around
 	string centerSpecies;
-	string psrMethod;
+	// traditional or nonlinear 
+	string zrMethod;
+	// ideal sigma for 1/beta and dEdx
 	double dedxSigmaIdeal, tofSigmaIdeal;
-	ZRecentering * psr;
+	// recentering object
+	ZRecentering * zr;
 	
-
+	// cuts used for enhancing distributions
 	double tofCut, dedxCut;
 
+	// options for histogram creation
 	bool make2D, makeEnhanced;
 
-	
+	// # of sigma to cut above and below
 	double nSigBelow, nSigAbove;
 
-	bool binByMomentum;
 	bool makeCombinedCharge = false;
 
 	unique_ptr<SpectraCorrecter> sc;
 	float effWeight = 0;
-
 	map< string, unique_ptr<EnergyLossParams> > elParams;
-
 	map< string, vector< unique_ptr<FeedDownParams> > > fdParams;
-
 	double fdWeight = 0;
+
+
+	// apply feed down correction
+	bool correctFeedDown = false;
+	// apply tpc eff correction
+	bool correctTpcEff = false;
+	// apply tof eff correction
+	bool correctTofEff = false;
 
 public:
 	PidHistoMaker( XmlConfig* config, string np, string fl ="", string jp ="" );
@@ -74,49 +81,30 @@ public:
 	 * Analyze a track in the current Event
 	 * @iTrack 	- Track index 
 	 */
-	virtual void analyzeTrack( Int_t iTrack );
+	//virtual void analyzeTrack( Int_t iTrack );
 	virtual void analyzeTofTrack( Int_t iTrack );
 	virtual void preEventLoop();
 	virtual void postEventLoop();
 	
 
-	void enhanceDistributions( double avgP, int ptBin, int etaBin, int charge, double dedx, double tof );
+	void enhanceDistributions( double avgP, int pBin, int charge, double dedx, double tof );
 
-	double averagePt( int ptBin ){
-		if ( ptBin < 0 || ptBin > binsPt->nBins() ){
-			return 0;
-		}
-		return ((*binsPt)[ ptBin ] + (*binsPt)[ ptBin + 1 ]) / 2.0;
-	}
-	double averageEta( int etaBin ){
-		if ( etaBin < 0 || etaBin > binsEta->nBins() ){
-			return 0;
-		} 
-		return ((*binsEta)[ etaBin ] + (*binsEta)[ etaBin + 1 ]) / 2.0;
-	}
-	/**
-	 * Calculates the average momentum for a pt, eta bin
-	 * @ptBin  		the ptBin
-	 * @etaBin 		the eta bin
-	 * @return        the average p in GeV/c
+
+	/* Average P in a bin range assuming a flat distribution
+	 * The distribution is really an exp, but we just need to be consistent
+	 * @param  bin 0 indexed bit 
+	 * @return     average value in the given bin range
 	 */
-	double averageP( int ptBin, int etaBin ){
-		if ( ptBin < 0 || ptBin > binsPt->nBins() ){
-			return 0;
+	double binAverageP( int bin ){
+		if ( bin < 0 || bin > binsPt->nBins() ){
+			return -1;
 		}
-		if ( etaBin < 0 || etaBin > binsEta->nBins() ){
-			return 0;
-		} 
-
-		double avgPt = ((*binsPt)[ ptBin ] + (*binsPt)[ ptBin + 1 ]) / 2.0;
-		double avgEta = ((*binsEta)[ etaBin ] + (*binsEta)[ etaBin + 1 ]) / 2.0;
-
-		return Common::p( avgPt, avgEta );
-
+		return ((*binsPt)[ bin ] + (*binsPt)[ bin + 1 ]) / 2.0;
 	}
 
+
 	/**
-	 * Computes the upper and lower limits in tof and dedx phase space
+	 * Computes the upper and lower limits in tof and dedx histogram space
 	 * @pType             centering plc
 	 * @p                 momentum transvers [GeV/c]
 	 * @tofLow            double* receiving tofLow limit
@@ -133,18 +121,12 @@ public:
 
 
 	void reportAll( string n );
-	void reportAllTof(  );
-	void reportAllDedx(  );
+	// void reportAllTof(  );
+	// void reportAllDedx(  );
 
 protected:
 
-	void preparePhaseSpaceHistograms( string plc );
-
-	double rapidity( double pt, double eta, double m ){
-		double a = sqrt( m*m + pt*pt*cosh( eta )*cosh( eta ) ) + pt * sinh( eta );
-		double b = sqrt( m*m + pt*pt );
-		return log( a / b );
-	}
+	void prepareHistograms( string plc );
 
 	double feedDownWeight( int charge, double pt ){
 
@@ -158,7 +140,7 @@ protected:
 			}
 			ERROR( "Feed Down Corrections not found for refMult = " << refMult )	
 		}
-		ERROR( "Feed Down Corrections not found for " + name )
+		//ERROR( "Feed Down Corrections not found for " + name )
 		return 1.0;
 
 	}

@@ -63,6 +63,11 @@ protected:
 	// maps bins from bin9 RMC into some other binning
 	// used to combine bins
 	map<int, int> centralityBinMap;
+	// the vector of bins in the mapped space - makes it easy to loop over
+	vector<int> centralityBins;
+
+	// checking bad runs
+	static vector<int> badRuns;
 
 	// Make QA for  Track distributions
 	bool makeTrackQA;
@@ -70,6 +75,11 @@ protected:
 	// Make QA for Event info 
 	bool makeEventQA;
 
+	// make spectra - subclasses may not need the inclusive spectra histos
+	bool makeSpectra;
+
+	// make the tof spectra
+	bool makeTofSpectra;
 
 	// Current Event Info
 	float 	refMult 		= -1;
@@ -155,6 +165,11 @@ protected:
 	 */
 	virtual bool keepTofTrack( Int_t iTrack );
 	
+	bool isRunBad( int runId ){
+		if ( find( badRuns.begin(), badRuns.end(), runId ) != badRuns.end() )
+			return true;
+		return false;
+	}
 
 
 };

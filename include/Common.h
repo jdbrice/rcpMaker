@@ -78,20 +78,20 @@ public:
 	static string speciesName( string centerSpecies, int charge = 0, int cenBin = 9 ){
 		return "dedx_tof_" + centerSpecies + "_" + Common::chargeString(charge) + "_" + ts(cenBin);
 	}
-	static string speciesName( string centerSpecies, int charge, int cenBin, int ptBin ){
-		return "dedx_tof_" + centerSpecies + "_" + Common::chargeString(charge) + "_" + ts(cenBin) + "_" + ts(ptBin);
+	static string speciesName( string centerSpecies, int charge, int cenBin, int pBin ){
+		return "dedx_tof_" + centerSpecies + "_" + Common::chargeString(charge) + "_" + ts(cenBin) + "_" + ts(pBin);
 	}
-	static string zbName( string centerSpecies, int charge, int cenBin, int ptBin, int etaBin = 0, string eSpecies = "" ){
+	static string zbName( string centerSpecies, int charge, int cenBin, int pBin, string eSpecies = "" ){
 		string ePart = "";
 		if ( "" != eSpecies )
 			ePart = "_" + eSpecies;
-		return "zb_" + centerSpecies + "_" + Common::chargeString(charge) + "_" + ts(cenBin) + "_" + ts(ptBin) + ePart;
+		return "zb_" + centerSpecies + "_" + Common::chargeString(charge) + "_" + ts(cenBin) + "_" + ts(pBin) + ePart;
 	}
-	static string zdName( string centerSpecies, int charge, int cenBin, int ptBin, int etaBin = 0, string eSpecies = "" ){
+	static string zdName( string centerSpecies, int charge, int cenBin, int pBin, string eSpecies = "" ){
 		string ePart = "";
 		if ( "" != eSpecies )
 			ePart = "_" + eSpecies;
-		return "zd_" + centerSpecies + "_" + Common::chargeString(charge) + "_" + ts(cenBin) + "_" + ts(ptBin) + ePart;
+		return "zd_" + centerSpecies + "_" + Common::chargeString(charge) + "_" + ts(cenBin) + "_" + ts(pBin) + ePart;
 	}
 
 	/* Momentum 

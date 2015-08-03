@@ -12,14 +12,13 @@ using namespace jdb;
 class EnergyLossParams{
 
 protected:
-	XmlConfig * cfg;
-	string nodePath;
-	Logger log;
-
+	
 	string formula;
 	TF1 * fn;
-
+	int centralityBin = -1;
+	
 	static int instances;
+
 
 public:
 	EnergyLossParams( XmlConfig * cfg, string nodePath, int ll = Logger::llGlobal);

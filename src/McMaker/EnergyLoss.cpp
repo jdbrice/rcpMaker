@@ -74,7 +74,7 @@ void EnergyLoss::analyzeTrack( int iTrack ){
 
 	book->cd();
 	book->fill( "energyLoss", pico->trackPt( iTrack ), pico->trackPt( iTrack ) - pico->mcPt( iTrack ) );
-
+	
 	if ( cBin >= 0 )
 		book->fill( "energyLoss_" + ts( cBin ), pico->trackPt( iTrack ), pico->trackPt( iTrack ) - pico->mcPt( iTrack ) );
 
@@ -83,5 +83,5 @@ void EnergyLoss::analyzeTrack( int iTrack ){
 
 void EnergyLoss::exportParams( int bin, TF1 * f, string formula, ofstream &out ){
 	double * params = f->GetParameters();
-	out << "\t<EnergyLossParams plc=\"" << cfg->getString( nodePath + "input:plc" ) << "\" bin=\"" << bin << "\" formula=\"" << formula << "\" p0=\"" << params[ 0 ] << "\" p1=\"" << params[ 1 ] << "\" p2=\"" << params[ 1 ] << "\" />" << endl;
+	out << "\t<EnergyLossParams plc=\"" << cfg->getString( nodePath + "input:plc" ) << "\" bin=\"" << bin << "\" formula=\"" << formula << "\" p0=\"" << params[ 0 ] << "\" p1=\"" << params[ 1 ] << "\" p2=\"" << params[ 2 ] << "\" />" << endl;
 }

@@ -151,29 +151,29 @@ namespace TSF{
 
 		schema->clearDatasets();
 
-		DEBUG( "Loading " << "tof/" + Common::zbName( cs, charge, cenBin, ptBin, etaBin ) );
-		DEBUG( "Loading " << "dedx/" + Common::zbName( cs, charge, cenBin, ptBin, etaBin ) );
-		dataHists[ "zb_All"] = (TH1*)dataFile->Get( ("tof/" + Common::zbName( cs, charge, cenBin, ptBin, etaBin )).c_str() 		);
-		dataHists[ "zd_All"] = (TH1*)dataFile->Get( ("dedx/" + Common::zdName( cs, charge, cenBin, ptBin, etaBin )).c_str() 	);
+		DEBUG( "Loading " << "tof/" + Common::zbName( cs, charge, cenBin, ptBin ) );
+		DEBUG( "Loading " << "dedx/" + Common::zbName( cs, charge, cenBin, ptBin ) );
+		dataHists[ "zb_All"] = (TH1*)dataFile->Get( ("tof/" + Common::zbName( cs, charge, cenBin, ptBin )).c_str() 		);
+		dataHists[ "zd_All"] = (TH1*)dataFile->Get( ("dedx/" + Common::zdName( cs, charge, cenBin, ptBin )).c_str() 	);
 		DEBUG( "got zb_All = " << dataHists[ "zb_All"] )
 		DEBUG( "got zd_All = " << dataHists[ "zd_All"] )
 
 
 		// dEdx enhanced distributions
-		DEBUG( "Loading " << "dedx/" + Common::zbName( cs, charge, cenBin, ptBin, etaBin, "Pi" ) );
-		DEBUG( "Loading " << "dedx/" + Common::zbName( cs, charge, cenBin, ptBin, etaBin, "K" ) );
-		DEBUG( "Loading " << "dedx/" + Common::zbName( cs, charge, cenBin, ptBin, etaBin, "P" ) );
-		dataHists[ "zd_K" ]		= (TH1D*)dataFile->Get( ("dedx/" + Common::zdName( cs, charge, cenBin, ptBin, etaBin, "K" )).c_str() );
-		dataHists[ "zd_Pi" ]	= (TH1D*)dataFile->Get( ("dedx/" + Common::zdName( cs, charge, cenBin, ptBin, etaBin, "Pi" )).c_str() );
-		dataHists[ "zd_P" ]		= (TH1D*)dataFile->Get( ("dedx/" + Common::zdName( cs, charge, cenBin, ptBin, etaBin, "P" )).c_str() );
+		DEBUG( "Loading " << "dedx/" + Common::zbName( cs, charge, cenBin, ptBin, "Pi" ) );
+		DEBUG( "Loading " << "dedx/" + Common::zbName( cs, charge, cenBin, ptBin, "K" ) );
+		DEBUG( "Loading " << "dedx/" + Common::zbName( cs, charge, cenBin, ptBin, "P" ) );
+		dataHists[ "zd_K" ]		= (TH1D*)dataFile->Get( ("dedx/" + Common::zdName( cs, charge, cenBin, ptBin, "K" )).c_str() );
+		dataHists[ "zd_Pi" ]	= (TH1D*)dataFile->Get( ("dedx/" + Common::zdName( cs, charge, cenBin, ptBin, "Pi" )).c_str() );
+		dataHists[ "zd_P" ]		= (TH1D*)dataFile->Get( ("dedx/" + Common::zdName( cs, charge, cenBin, ptBin, "P" )).c_str() );
 
 		// 1/beta enhanced distributions
-		DEBUG( "Loading " << "tof/" + Common::zbName( cs, charge, cenBin, ptBin, etaBin, "Pi" ) );
-		DEBUG( "Loading " << "tof/" + Common::zbName( cs, charge, cenBin, ptBin, etaBin, "K" ) );
-		DEBUG( "Loading " << "tof/" + Common::zbName( cs, charge, cenBin, ptBin, etaBin, "P" ) );
-		dataHists[ "zb_Pi" ] 	= (TH1D*)dataFile->Get( ("tof/" + Common::zbName( cs, charge, cenBin, ptBin, etaBin, "Pi" )).c_str() );
-		dataHists[ "zb_K" ] 	= (TH1D*)dataFile->Get( ("tof/" + Common::zbName( cs, charge, cenBin, ptBin, etaBin, "K" )).c_str() );
-		dataHists[ "zb_P" ] 	= (TH1D*)dataFile->Get( ("tof/" + Common::zbName( cs, charge, cenBin, ptBin, etaBin, "P" )).c_str() );
+		DEBUG( "Loading " << "tof/" + Common::zbName( cs, charge, cenBin, ptBin, "Pi" ) );
+		DEBUG( "Loading " << "tof/" + Common::zbName( cs, charge, cenBin, ptBin, "K" ) );
+		DEBUG( "Loading " << "tof/" + Common::zbName( cs, charge, cenBin, ptBin, "P" ) );
+		dataHists[ "zb_Pi" ] 	= (TH1D*)dataFile->Get( ("tof/" + Common::zbName( cs, charge, cenBin, ptBin, "Pi" )).c_str() );
+		dataHists[ "zb_K" ] 	= (TH1D*)dataFile->Get( ("tof/" + Common::zbName( cs, charge, cenBin, ptBin, "K" )).c_str() );
+		dataHists[ "zb_P" ] 	= (TH1D*)dataFile->Get( ("tof/" + Common::zbName( cs, charge, cenBin, ptBin, "P" )).c_str() );
 		
 		double maxYield = dataHists[ "zd_All"]->Integral();
 		DEBUG( "Getting norm from : EventQA/mappedRefMultBins" )

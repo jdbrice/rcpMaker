@@ -65,8 +65,8 @@ int main( int argc, char* argv[] ) {
 				TpcEffFitter tef( &config, "TpcEffFitter." );
 				tef.make();
 			} else if ( "PidHistoMaker" == job ){
-				// PidHistoMaker pps( &config, "PidHistoMaker.", fileList, jobPrefix  );
-				// pps.make();
+				PidHistoMaker pps( &config, "PidHistoMaker.", fileList, jobPrefix  );
+				pps.make();
 			} else if ( "TofEffMaker" == job ){
 				// TofEffMaker tem( &config, "TofEffMaker.", fileList, jobPrefix  );
 				// tem.make();
