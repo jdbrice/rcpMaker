@@ -5,7 +5,7 @@ pjoin = os.path.join
 # all of them should define this
 t_config_file = "{plc}_{c}_{tt}.{ext}"
 # all of them should define this
-t_product_file = "TpcEff.root"
+t_product_file = "TpcEff.{ext}"
 
 
 
@@ -72,7 +72,7 @@ def write_histo_conf( data_path, output_path, config_path ="./" ) :
 
 
 
-def write_fit_config( input_path, output_path, config_path ="./" ) :
+def write_fit_config( input_path, output_path, output_config_path,config_path ="./" ) :
 	""" Make the single config used to do the division and fitting"""
 
 
@@ -85,12 +85,13 @@ def write_fit_config( input_path, output_path, config_path ="./" ) :
 
 		<TpcEffFitter>
 			<Logger color="true" globalLogLevel="info" logLevel="all" />
-			<Reporter> <output url="{report}" width="1200" height="800" /> </Reporter>
+			<Reporter> <output url="{report_file}" width="1200" height="800" /> </Reporter>
 
 			<input url="{input_path}"/> 
 
-			<output path="{output_path}">
-				<data>{product}</data>
+			<output>
+				<data>{product_file}</data>
+				<params>{params_file}</params>
 			</output>
 
 			<!-- the bins into which the 9 centrality bins are mapped. -->
@@ -101,16 +102,19 @@ def write_fit_config( input_path, output_path, config_path ="./" ) :
 	</config>"""
 
 
-	report = pjoin( output_path, "rp_TpcEff.pdf" )
-	with open( pjoin( config_path, 'fit.xml' ), 'w' ) as f :
-		f.write( fit_template.format( input_path = input_path, output_path = output_path, product=t_product_file, report=report ) )
+	report = pjoin( output_path, "rp_" + t_product_file.format( ext="pdf" ) )
+	product = pjoin( output_path, t_product_file.format( ext="root" ) )
+	params = pjoin( output_config_path, t_product_file.format( ext="xml" ) )
 
-def write( data_path, output_path, config_path ="./" ) :
+	with open( pjoin( config_path, 'fit.xml' ), 'w' ) as f :
+		f.write( fit_template.format( input_path = output_path, params_file = params, product_file=product, report_file=report ) )
+
+def write( data_path, output_path, output_config_path,config_path ="./" ) :
 
 	if not os.path.exists(config_path):
 		os.makedirs(config_path)
 	write_histo_conf( data_path, output_path, config_path )
-	write_fit_config( output_path, output_path, config_path )
+	write_fit_config( output_path, output_path, output_config_path, config_path )
 
 
 # if __name__ == "__main__":

@@ -52,9 +52,13 @@ InclusiveSpectra::InclusiveSpectra( XmlConfig * config, string np, string fileLi
     
     // make the inclusive spectra
     makeSpectra 	= cfg->getBool( np + "Spectra:all", true );
+    logger->info( __FUNCTION__ ) << "Make Inclusive Spectra : " << makeSpectra << endl;
     // make the inclusive tof spectra
     makeTofSpectra 	= cfg->getBool( np + "Spectra:tof", true );
+    logger->info( __FUNCTION__ ) << "Make Inclusive Tof Spectra : " << makeTofSpectra << endl;
     
+
+
     // Setup the options
 	makeTrackQA = cfg->getBool( np + "MakeQA:track", false );
 	if( makeTrackQA )
@@ -90,10 +94,13 @@ void InclusiveSpectra::makeCentralityHistos() {
 	 * Make centrality ptHistos
 	 */
 	book->cd();
-	logger->info(__FUNCTION__) << "Making " << nCentralityBins() << " centralities" << endl; 
+	
 
 
-	for ( int iC = 0; iC < nCentralityBins(); iC ++ ){
+	logger->info( __FUNCTION__ ) << "Make Inclusive Spectra : " << makeSpectra << endl;
+	logger->info( __FUNCTION__ ) << "Make Inclusive Spectra : " << makeTofSpectra << endl;
+
+	for ( int iC : centralityBins ){
 		
 		if ( makeSpectra ){
 			string hName = "pt_" + ts(iC);
@@ -181,10 +188,7 @@ void InclusiveSpectra::analyzeTrack( Int_t iTrack ){
 	//book->fill( "pt_" + Common::chargeString( charge ) , pt, eventWeight );
 	
 	if ( cBin >= 0 ){
-		string cName = "pt_" + ts( cBin ) ;
-		book->fill( cName, pt, eventWeight );
-		
-		cName = "pt_" + ts( cBin ) + "_" + Common::chargeString( charge );
+		string cName = "pt_" + ts( cBin ) + "_" + Common::chargeString( charge );
 		book->fill( cName, pt, eventWeight );
 	}
 	book->cd();

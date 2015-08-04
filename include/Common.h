@@ -1,6 +1,8 @@
 #ifndef COMMON_H
 #define COMMON_H
 
+// ROOT
+#include "TF1.h"
 
 // ROOBARB
 #include "Utils.h"
@@ -102,6 +104,14 @@ public:
 	static double p( double pt, double eta ){
 		return pt * cosh( eta );
 	}
+
+
+	/* Converts a Root function (TF1 or subclass) to 
+	 * a list of xml attributes
+	 * @function	function to export as XML attributes
+	 * @return 		string representing the function as XML attributes
+	 */
+	static string toXml( TF1 * f );
 	
 };
 

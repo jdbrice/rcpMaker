@@ -17,10 +17,6 @@ TpcEffFitter::TpcEffFitter( XmlConfig * _cfg, string _nodePath ){
 	outputPath = cfg->getString( nodePath + "output:path", "./" );
 
 	book = unique_ptr<HistoBook>( new HistoBook( outputPath + cfg->getString( nodePath +  "output.data", "TpcEff.root" ), cfg, "", "" ) );	
-
-	
-    
-
 }
 
 
@@ -105,7 +101,7 @@ void TpcEffFitter::make(){
 					fitFunc->Draw("same");
 				rp.savePage();
 
-				exportParams( b, fitFunc, "[0] * exp( - pow( [1] / x, [2] ) )", out );
+				exportParams( b, fitFunc, out );
 
 			} // loop centrality bins
 
@@ -120,8 +116,8 @@ void TpcEffFitter::make(){
 
 }
 
-
-void TpcEffFitter::exportParams( int bin, TF1 * f, string formula, ofstream &out ){
-	double * params = f->GetParameters();
-	out << "\t\t<TpcEffParams bin=\"" << bin << "\" formula=\"" << formula << "\" p0=\"" << params[ 0 ] << "\" p1=\"" << params[ 1 ] << "\" p2=\"" << params[ 1 ] << "\" />" << endl;
+void TpcEffFitter::exportParams( int bin, TF1 * f, ofstream &out ){
+	out << "\t\t<TpcEffParams bin=\"" << bin << "\" ";
+	out << Common::toXml( f );
+	out << "/>" << endl;
 }

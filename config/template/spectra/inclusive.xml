@@ -7,8 +7,8 @@
 	<InclusiveSpectra>
 		<Logger color="true" globalLogLevel="info" logLevel="all" />
 		
-		<input plc="Pi" charge="-1">
-			<dst treeName="rcpPicoDst" url="/Users/danielbrandenburg/bnl/local/data/RcpAnalysis/embedding/K_Minus_rc.root"/>
+		<input plc="Pi" >
+			<dst treeName="rcpPicoDst" url="/Users/danielbrandenburg/bnl/local/data/RcpAnalysis/data/RcpPicoDst/" maxFiles="10"/>
 		</input>
 		<output>
 			<data>../products/inclusiveSpectra.root</data>

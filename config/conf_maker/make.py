@@ -2,6 +2,7 @@
 import TpcEff.make_xml_configs as effc
 import EnergyLoss.make_xml_configs as elossc
 import PidHisto.make_xml_configs as pidhc
+import TofEff.make_xml_configs as tofc
 import argparse
 import os
 import glob
@@ -22,12 +23,14 @@ args = parser.parse_args()
 if not os.path.exists(args.config_base_path):
     os.makedirs(args.config_base_path)
 
-# Tpc Efficiency
-effc.write( os.path.join( args.data_path, "embedding" ) , args.output_path, os.path.join( args.config_base_path, "TpcEff/") )
-#Energy Loss
+"""Correction Makers"""
+#	Tpc Efficiency
+effc.write( os.path.join( args.data_path, "embedding" ) , args.output_path, args.output_config_path, os.path.join( args.config_base_path, "TpcEff/") )
+#	Energy Loss
 elossc.write( os.path.join( args.data_path, "embedding" ), args.output_path, args.output_config_path, os.path.join( args.config_base_path, "EnergyLoss/") )
-
-
+#	Tof Efficiency
+tofc.write( os.path.join( args.data_path, "data", "RcpPicoDst" ), args.output_path, args.output_config_path, os.path.join( args.config_base_path, "TofEff/") )
+#PidHisto
 pidhc.write( os.path.join( args.data_path, "data", "RcpPicoDst" ), args.output_path, args.output_config_path, os.path.join( args.config_base_path, "PidHisto/") )
 
 

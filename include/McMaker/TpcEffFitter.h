@@ -32,7 +32,7 @@ public:
 
 	void make();
 
-	void exportParams( int cbin, TF1 * f, string formula, ofstream &out );
+	void exportParams( int cbin, TF1 * f, ofstream &out );
 	
 };
 
