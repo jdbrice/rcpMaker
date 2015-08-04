@@ -41,6 +41,7 @@ void TpcEffFitter::make(){
 	vector< int> cbins = cfg->getIntVector( nodePath + "CentralityBins" );
 	Reporter rp( cfg, nodePath + "Reporter." );
 
+	DEBUG( "Starting plc loop" )
 	for ( string plc : Common::species ){
 		for ( string c : Common::sCharges ){
 
