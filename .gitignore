@@ -12,6 +12,7 @@
 
 # Remove build files
 *.o
+*.pyc
 /src/rcp
 
 #remove items in bin used for managing different jobs
