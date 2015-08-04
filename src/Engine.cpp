@@ -4,6 +4,7 @@
 #include <exception>
 
 // RooBarb
+#include "Logger.h"
 #include "XmlConfig.h"
 using namespace jdb;
 
@@ -38,6 +39,8 @@ using namespace jdb;
 using namespace TSF;
 
 int main( int argc, char* argv[] ) {
+
+	Logger::setGlobalLogLevel( "all" );
 
 	if ( argc >= 2 ){
 
