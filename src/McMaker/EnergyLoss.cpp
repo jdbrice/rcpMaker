@@ -56,7 +56,7 @@ void EnergyLoss::postEventLoop(){
 		
 		h1->Fit( f );
 		
-		exportParams( bin, f, "[0] + [1] * pow( x, -[2] )", out );
+		exportParams( bin, f, out );
 
 		delete f; 
 
@@ -81,7 +81,9 @@ void EnergyLoss::analyzeTrack( int iTrack ){
 }
 
 
-void EnergyLoss::exportParams( int bin, TF1 * f, string formula, ofstream &out ){
-	double * params = f->GetParameters();
-	out << "\t<EnergyLossParams plc=\"" << cfg->getString( nodePath + "input:plc" ) << "\" bin=\"" << bin << "\" formula=\"" << formula << "\" p0=\"" << params[ 0 ] << "\" p1=\"" << params[ 1 ] << "\" p2=\"" << params[ 2 ] << "\" />" << endl;
+void EnergyLoss::exportParams( int bin, TF1 * f, ofstream &out ){
+	
+	out << "\t<EnergyLossParams plc=\"" << cfg->getString( nodePath + "input:plc" ) << "\" bin=\"" << bin << "\" "; 
+	out << Common::toXml( f ) ;
+	out << " />" << endl;
 }

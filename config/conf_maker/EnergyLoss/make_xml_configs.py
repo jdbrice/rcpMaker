@@ -32,7 +32,7 @@ def write_conf( data_path, output_path, output_config_path, config_path ="./" ) 
 			<!-- the bins into which the 9 centrality bins are mapped. -->
 			<Include url="../Common/centralityMap.xml" />
 
-			<MakeQA event="true" track="true" />
+			<MakeQA event="false" track="false" />
 
 			<!-- histograms to auto-make -->
 			<histograms>

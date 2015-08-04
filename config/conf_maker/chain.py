@@ -27,13 +27,14 @@ track_types = ( "mc", "rc" )
 
 
 if "EnergyLoss" == args.task :
-	charges = ( "p", "n" )
-
 	for plc in plcs :
 		for c in charges :
 			config = os.path.join( args.config, "EnergyLoss", elossc.t_config_file.format( plc=plc, c=c, ext="xml" ) )
 			logFile = config + ".log"
-			os.system( args.exe + " "  + config + " >& " + logFile )
+			cmd = args.exe + " "  + config + " >& " + logFile
+			print "Running : "
+			print cmd
+			os.system( cmd )
 
 if "TofEff" == args.task :
 	for plc in plcs :
