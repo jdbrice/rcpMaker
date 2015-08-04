@@ -15,7 +15,7 @@ TpcEffFitter::TpcEffFitter( XmlConfig * _cfg, string _nodePath ){
 	DEBUG( "( " << _cfg << ", " << _nodePath << " )" )
 	cfg = _cfg;
 	nodePath = _nodePath;
-	outputPath = cfg->getString( nodePath + "output:path", "./" );
+	outputPath = cfg->getString( nodePath + "output:path", "" );
 
 	book = unique_ptr<HistoBook>( new HistoBook( outputPath + cfg->getString( nodePath +  "output.data", "TpcEff.root" ), cfg, "", "" ) );	
 }
