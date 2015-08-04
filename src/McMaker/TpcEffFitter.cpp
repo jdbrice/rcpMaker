@@ -5,13 +5,14 @@
 #include "TGraphAsymmErrors.h"
 #include "TFile.h"
 
+#include "Logger.h"
 #include "Reporter.h"
 #include "RooPlotLib.h"
 using namespace jdb;
 
 
 TpcEffFitter::TpcEffFitter( XmlConfig * _cfg, string _nodePath ){
-
+	DEBUG( "( " << _cfg << ", " << _nodePath << " )" )
 	cfg = _cfg;
 	nodePath = _nodePath;
 	outputPath = cfg->getString( nodePath + "output:path", "./" );
@@ -22,7 +23,7 @@ TpcEffFitter::TpcEffFitter( XmlConfig * _cfg, string _nodePath ){
 
 
 void TpcEffFitter::make(){
-
+	DEBUG("")
 
 	string params_file =  cfg->getString( nodePath + "output.params" );
 	if ( "" == params_file ){
