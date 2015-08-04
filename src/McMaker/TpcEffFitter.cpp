@@ -52,6 +52,8 @@ void TpcEffFitter::make(){
 			string fnRc = cfg->getString( nodePath + "input:url" ) + "TpcEff_" + plc + "_" + c + "_rc" + ".root";
 			TFile * frc = new TFile( fnRc.c_str(), "READ" );
 
+			DEBUG( "Mc File = " << fmc )
+			DEBUG( "Rc File = " << frc )
 			if ( !fmc->IsOpen() || !frc->IsOpen() )
 				continue;
 			
