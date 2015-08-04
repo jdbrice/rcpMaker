@@ -61,8 +61,8 @@ void TpcEffFitter::make(){
 			// build an efficiency for each centrality
 			for ( int b : cbins ){
 
-				TH1 * hMc = (TH1*)fmc->Get( ("pt_" + ts( b )).c_str() );
-				TH1 * hRc = (TH1*)frc->Get( ("pt_" + ts( b )).c_str() );
+				TH1 * hMc = (TH1*)fmc->Get( ("inclusive/pt_" + ts( b ) + "_" + c ).c_str() );
+				TH1 * hRc = (TH1*)frc->Get( ("inclusive/pt_" + ts( b ) + "_" + c ).c_str() );
 
 
 				for ( int i = 0; i <= hMc->GetNbinsX(); i++ ){
