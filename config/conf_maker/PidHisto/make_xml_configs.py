@@ -44,7 +44,7 @@ def write_conf( data_path, output_path, input_config_path, config_path ="./" ) :
 
 		<!-- the bins into which the 9 centrality bins are mapped. -->
 		<Include url="../common/centralityMap.xml" />
-		<MakeQA event="true" track="true" tof="false" dedx="false"/>
+		<MakeQA event="true" track="false" tof="false" dedx="false"/>
 
 		<histograms>
 			<Histo name="betaRaw" title="#beta^{{-1}}" xBins="binning.pt" yBins="binning.tofRaw" />

@@ -64,14 +64,11 @@ void TpcEffFitter::make(){
 				TH1 * hMc = (TH1*)fmc->Get( ("inclusive/pt_" + ts( b ) + "_" + c ).c_str() );
 				TH1 * hRc = (TH1*)frc->Get( ("inclusive/pt_" + ts( b ) + "_" + c ).c_str() );
 
-
 				for ( int i = 0; i <= hMc->GetNbinsX(); i++ ){
 					if ( hMc->GetBinContent( i ) < hRc->GetBinContent( i ) ){
 						// set to 100%
 						hMc->SetBinContent( i, hRc->GetBinContent( i ) );
-						
 					}
-
 				}
 					
 
