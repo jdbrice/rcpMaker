@@ -10,6 +10,7 @@ import EnergyLoss.make_xml_configs as elossc
 import PidHisto.make_xml_configs as pidhc
 import TofEff.make_xml_configs as tofc
 import FeedDown.make_xml_configs as fdc
+import Fitter.make_xml_configs as fitc
 
 parser = argparse.ArgumentParser( description="Runs the Rcp Analysis" );
 parser.add_argument("exe", help="path to executable")
@@ -81,7 +82,11 @@ if "PidHisto" == args.task :
 		logFile = config + ".log"
 		os.system( args.exe + " "  + config + " >& " + logFile )
 
-
+if "Fit" == args.task :
+	for plc in plcs :
+		config = os.path.join( args.config, "Fitter", fitc.t_config_file.format( plc=plc, ext="xml" ) )
+		logFile = config + ".log"
+		os.system( args.exe + " "  + config + " >& " + logFile )
 
 if "All" == args.task :
 	# not very clean but it will do
@@ -95,4 +100,6 @@ if "All" == args.task :
 	os.system( cmd )
 
 	cmd = "./chain " + args.exe + " PidHisto -config " + args.config
+	os.system( cmd )
+	cmd = "./chain " + args.exe + " Fitter -config " + args.config
 	os.system( cmd )
