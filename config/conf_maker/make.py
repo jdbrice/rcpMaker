@@ -3,6 +3,7 @@ import TpcEff.make_xml_configs as effc
 import EnergyLoss.make_xml_configs as elossc
 import PidHisto.make_xml_configs as pidhc
 import TofEff.make_xml_configs as tofc
+import FeedDown.make_xml_configs as fdc
 import argparse
 import os
 import glob
@@ -30,6 +31,10 @@ effc.write( os.path.join( args.data_path, "embedding" ) , args.output_path, args
 elossc.write( os.path.join( args.data_path, "embedding" ), args.output_path, args.output_config_path, os.path.join( args.config_base_path, "EnergyLoss/") )
 #	Tof Efficiency
 tofc.write( os.path.join( args.data_path, "data", "RcpPicoDst" ), args.output_path, args.output_config_path, os.path.join( args.config_base_path, "TofEff/") )
+#	FeedDown Maker
+fdc.write( os.path.join( args.data_path, "urqmd" ), args.output_path, args.output_config_path, os.path.join( args.config_base_path, "FeedDown/") )
+
+"""Pid Makers"""
 #PidHisto
 pidhc.write( os.path.join( args.data_path, "data", "RcpPicoDst" ), args.output_path, args.output_config_path, os.path.join( args.config_base_path, "PidHisto/") )
 

@@ -8,6 +8,7 @@ using namespace std;
 
 // Roobarb
 #include "TreeAnalyzer.h"
+#include "HistoBins.h"
 
 using namespace jdb;
 
@@ -17,6 +18,36 @@ class FeedDownMaker : public TreeAnalyzer
 protected:
 	//unique_ptr<RefMultCorrection> rmc;
 	float corrRefMult;
+
+
+	// Track cuts loaded from config
+	
+	// nHitsFit
+	unique_ptr<ConfigRange> cut_nHitsFit;
+	// Distance to closest approach [cm]
+	unique_ptr<ConfigRange> cut_dca;
+	// nHitsFit / nHitsPossible
+	unique_ptr<ConfigRange> cut_nHitsFitOverPossible;
+	// nHitDedx
+	unique_ptr<ConfigRange> cut_nHitsDedx;
+	// Minimum pT [GeV/c]
+	unique_ptr<ConfigRange> cut_pt;
+	// ptGlobal / ptPrimary
+	unique_ptr<ConfigRange> cut_ptGlobalOverPrimary;
+	// Rapidity based on mass assumption
+	unique_ptr<ConfigRange> cut_rapidity;
+
+	vector<string> formulas;
+	unique_ptr<HistoBins> rmb;
+
+	// Centrality bins
+	// maps bins from bin9 RMC into some other binning
+	// used to combine bins
+	map<int, int> centralityBinMap;
+	// the vector of bins in the mapped space - makes it easy to loop over
+	vector<int> centralityBins;
+
+	int cBin;
 
 public:
 	FeedDownMaker( XmlConfig * config, string nodePath, string fileList ="", string jobPrefix ="" );
@@ -64,13 +95,6 @@ protected:
 	 */
 	virtual bool keepTrack( Int_t iTrack );
 
-
-	double rapidity( double pt, double eta, double m ){
-		double a = sqrt( m*m + pt*pt*cosh( eta )*cosh( eta ) ) + pt * sinh( eta );
-		double b = sqrt( m*m + pt*pt );
-		return log( a / b );
-	}
-
 	void addGEANTLabels( TH1* h ){
 		TAxis * x = h->GetXaxis();
 
@@ -110,10 +134,8 @@ protected:
 	    x->SetBinLabel( 33, "#bar{#Omega^{+}}" );
 	}
 
-	void exportParams(string name, int plcIndex, float cl, float ch, TF1 * fn, string formula);
-
-
-	void background( string, int, int, int );
+	void exportParams(int bin, TF1 * fn, ofstream &out );
+	void background( string, int, int, ofstream&);
 
 };
 

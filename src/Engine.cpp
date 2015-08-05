@@ -25,7 +25,7 @@ using namespace jdb;
 	#include "Present/PidYieldPresenter.h"
 
 // Feed down
-//	#include "FeedDownMaker.h"
+	#include "McMaker/FeedDownMaker.h"
 
 
 // PID Fitting
@@ -81,8 +81,8 @@ int main( int argc, char* argv[] ) {
 				fr.make();
 
 			}  else if ( "FeedDownMaker" == job ){
-				// FeedDownMaker fdm( &config, "FeedDownMaker." );
-				// fdm.make();
+				FeedDownMaker fdm( &config, "FeedDownMaker." );
+				fdm.make();
 			} else if ( "FeedDownPresentation" == job ){
 				// Logger::setGlobalLogLevel( Logger::llAll );
 				// RooPlotter plt( argv[1] );

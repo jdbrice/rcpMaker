@@ -45,13 +45,6 @@ if "TofEff" == args.task :
 		print( cmd )
 		os.system( cmd )
 
-
-if "PidHisto" == args.task :
-	for plc in plcs :
-		config = os.path.join( args.config, "PidHisto", pidhc.t_config_file.format( plc=plc, ext="xml" ) )
-		logFile = config + ".log"
-		os.system( args.exe + " "  + config + " >& " + logFile )
-
 """ Tpc Efficiency """
 if "TpcEff" == args.task :
 	for plc in plcs :
@@ -72,3 +65,33 @@ if "TpcEff" == args.task :
 	os.system( cmd )
 				
 
+if "FeedDown" == args.task :
+	config = os.path.join( args.config, "FeedDown", fdc.t_config_file.format( ext="xml" ) )
+	logFile = config + ".log"
+	cmd = args.exe + " "  + config + " >& " + logFile
+	print "Running : "
+	print cmd
+	os.system( cmd )
+
+
+if "PidHisto" == args.task :
+	for plc in plcs :
+		config = os.path.join( args.config, "PidHisto", pidhc.t_config_file.format( plc=plc, ext="xml" ) )
+		logFile = config + ".log"
+		os.system( args.exe + " "  + config + " >& " + logFile )
+
+
+
+if "All" == args.task :
+	# not very clean but it will do
+	cmd = "./chain " + args.exe + " EnergyLoss -config " + args.config
+	os.system( cmd )
+	cmd = "./chain " + args.exe + " TofEff -config " + args.config
+	os.system( cmd )
+	cmd = "./chain " + args.exe + " TpcEff -config " + args.config
+	os.system( cmd )
+	cmd = "./chain " + args.exe + " FeedDown -config " + args.config
+	os.system( cmd )
+
+	cmd = "./chain " + args.exe + " PidHisto -config " + args.config
+	os.system( cmd )
