@@ -9,6 +9,7 @@
 
 #remove OS X system files
 *_*
+*.DS_Store
 
 # Remove build files
 *.o
