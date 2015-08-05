@@ -20,6 +20,8 @@ parser.add_argument("task", help="Task to run" )
 
 args = parser.parse_args();
 
+exeMe = "./run.py "
+
 print args
 
 plcs = ( "Pi", "K", "P" )
@@ -90,16 +92,16 @@ if "Fit" == args.task :
 
 if "All" == args.task :
 	# not very clean but it will do
-	cmd = "./chain " + args.exe + " EnergyLoss -config " + args.config
+	cmd = exeMe + args.exe + " EnergyLoss -config " + args.config
 	os.system( cmd )
-	cmd = "./chain " + args.exe + " TofEff -config " + args.config
+	cmd = exeMe + args.exe + " TofEff -config " + args.config
 	os.system( cmd )
-	cmd = "./chain " + args.exe + " TpcEff -config " + args.config
+	cmd = exeMe + args.exe + " TpcEff -config " + args.config
 	os.system( cmd )
-	cmd = "./chain " + args.exe + " FeedDown -config " + args.config
+	cmd = exeMe + args.exe + " FeedDown -config " + args.config
 	os.system( cmd )
 
-	cmd = "./chain " + args.exe + " PidHisto -config " + args.config
+	cmd = exeMe + args.exe + " PidHisto -config " + args.config
 	os.system( cmd )
-	cmd = "./chain " + args.exe + " Fitter -config " + args.config
+	cmd = exeMe + args.exe + " Fitter -config " + args.config
 	os.system( cmd )
