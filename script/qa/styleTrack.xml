@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+
+	<DefaultStyle
+		linewidth="2"
+		optstat="0"
+		/>
+
+	<StylePre lc="black" />
+	<StylePost lc="red" draw="same" />
+</config>

@@ -1,33 +1,21 @@
-#Remove bulky root files
+# Data files
 *.root
 *.log
+*.zip
+*.DataSource*
+/products
 
-# Remove data files in the script folder used for testing 
-/script/*
-!/script/*.C
-!/script/*/*/*.C
 
-#remove OS X system files
-*_*
-*.DS_Store
+# image outputs
+*.eps
+*.pdf
 
-# Remove build files
+
+# build files
 *.o
 *.pyc
 /src/rcp
-
-#remove items in bin used for managing different jobs
-/bin/*.dat
-/bin/*.pdf
-/bin/*.xml
 /bin/rcp
 
-# but keep the sample config
-!/bin/config.xml
 
-/products/*
-/lists/*
-
-
-/ParamFits
 

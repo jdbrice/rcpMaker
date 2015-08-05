@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+
+	<jobType>SimultaneousTPid</jobType>
+
+	<SimultaneousPid>
+		<Logger color="true" logLevel="info" globalLogLevel="info"/>
+		<Reporter> <output width="800" height="800" /> </Reporter>	
+
+		<!-- Path the PidHisto file -->
+		<input> <data url="../products/PidHisto_Pi.root"/> </input>
+		<output path="../products/"> <data>fit_Pi.root</data> </output>
+	
+
+		<!-- fit bins -->
+		<FitRange>
+			<ptBins min="0" max="30" />
+			<centralityBins>0</centralityBins>
+			<charges>-1</charges>
+		</FitRange>
+
+
+		<!-- Guiding parameters -->
+		<Timing zdOnly="0.5" useZdEnhanced="0.5" useZbEnhanced="0.5" nSigZdEnhanced="3.0" nSigZbEnhanced="3.0" />
+
+		<ParameterFixing>
+			<!-- mu can vary +/- nSigma -->
+			<deltaMu zb="2.0" zd="13.0" />
+
+			<!-- the minimum momentum at which the value is fixed -->
+			<Pi zbSigma="0.65" zdSigma="1.915" />
+			<K zbSigma="0.65" zdSigma="1.915" />
+			<P zbSigma="1.33" zdSigma="1.915" />
+
+		</ParameterFixing>
+		
+
+		<Bichsel>
+			<table>dedxBichsel.root</table>
+			<method>0</method>
+		</Bichsel>
+		
+		<ZRecentering>
+			<centerSpecies>Pi</centerSpecies>
+			<sigma tof="0.012" dedx="0.07"/>
+			<method>nonlinear</method>
+		</ZRecentering>
+
+		<Include url="../common/fitSchema.xml" />
+
+		<histograms>
+			<Histo name="yield" title="yield" xBins="binning.pt" />
+		</histograms>
+
+	</SimultaneousPid>
+
+
+	<Include url="../common/binning.xml" />
+
+</config>

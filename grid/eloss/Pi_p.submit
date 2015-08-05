@@ -1,0 +1,9 @@
+####################
+# Energy Loss 
+####################
+
+Executable    = /home/jdb12/work/rcpMaker/bin/rcp 
+initialdir 		= /home/jdb12/work/rcpMaker/bin/
+
+Arguments = config/15GeV/imass/K.xml /data/star/jdb12/rcpPicoDst/15GeV/tpc_all_mb/lists/list_aaa K_aaa_
+Queue
