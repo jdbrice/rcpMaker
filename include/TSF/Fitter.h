@@ -73,13 +73,13 @@ namespace TSF{
 
 		static void updateParameters( int npar = 0, double * pars = 0);
 
-		void loadDatasets( string cs, int charge, int cenBin, int ptBin, int etaBin );
-		void fit( string cs, int charge, int cenBin, int ptBin, int etaBin );
+		void loadDatasets( string cs, int charge, int cenBin, int ptBin );
+		void fit( string cs, int charge, int cenBin, int ptBin );
 		void fixParameters();
 		void releaseParameters();
 
 
-		void fixedFit( string cs, int charge, int cenBin, int ptBin, int etaBin );
+		void fixedFit( string cs, int charge, int cenBin, int ptBin );
 
 		TGraph * plotResult( string dataset );
 		TH1 * getDataHist( string dataset ) { return dataHists[ dataset ]; }
@@ -96,6 +96,10 @@ namespace TSF{
 			}
 		}
 
+		// getter 
+		double currentMu( string var, string plc, int npar, double * pars );
+		// setter
+		void currentMu( string var, string plc, int npar, double * pars, double val );
 		double currentYield( string var, int npar = 0, double * pars = 0 );
 		double currentYield( string var, string plc, int npar = 0, double * pars = 0 );
 		double penalizeYields( int npar = 0, double * pars = 0 );

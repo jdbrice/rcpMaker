@@ -124,26 +124,16 @@ namespace TSF{
 					cout << "No Fit method" << endl;
 				}
 			} // loop on data points
-
-			/*if ( "zd_All" == ds || "zb_All" == ds ){
-				double mYield = modelYield( ds );
-				double dsYield = k.second.yield(self->schema->getRanges());
-				//cout << "ds : " << ds << endl;
-				//cout << "dsYield : " << dsYield << ", " << mYield << " dif = " << abs( dsYield - mYield ) << endl;
-				// subtract off this dataset's (N - E) term
-				fnVal = fnVal - ( dsYield - mYield ) * ( 100.0 / self->norm );
-			}*/
-
 		}
 
-		self->penalizeYields( npar, par );
+		// enforces 1/beta mass ordering
+		double penalty = self->penalizeYields( npar, par );
 
-		//convergence.push_back( fnVal );
-		//cout << " nll = " << fnVal << endl;
-		f = fnVal / normFactor ;		
+		
+		f = (fnVal / normFactor) * penalty;
 	}
 
-	void Fitter::loadDatasets( string cs, int charge, int cenBin, int ptBin, int etaBin ){
+	void Fitter::loadDatasets( string cs, int charge, int cenBin, int ptBin ){
 		logger->info(__FUNCTION__) << endl;
 
 		map< string, TH1D* > zb;
@@ -198,7 +188,7 @@ namespace TSF{
 
 	}
 
-	void Fitter::fixedFit( string cs, int charge, int cenBin, int ptBin, int etaBin ){
+	void Fitter::fixedFit( string cs, int charge, int cenBin, int ptBin ){
 
 		for ( int i = 0; i < parNames.size(); i++ ){
 
@@ -210,7 +200,7 @@ namespace TSF{
 				minuit->FixParameter( i );
 		}
 
-		fit( cs, charge, cenBin, ptBin, etaBin );
+		fit( cs, charge, cenBin, ptBin);
 
 		for ( int i = 0; i < parNames.size(); i++ ){
 
@@ -224,7 +214,7 @@ namespace TSF{
 
 	}
 	
-	void Fitter::fit( string cs, int charge, int cenBin, int ptBin, int etaBin ){
+	void Fitter::fit( string cs, int charge, int cenBin, int ptBin ){
 		logger->info(__FUNCTION__) << endl;
 
 
@@ -235,11 +225,9 @@ namespace TSF{
       	}
 
       	// just let us know what you are doing
-		logger->info(__FUNCTION__) << "OK Starting for ( charge=" << charge << ", cen=" << cenBin << ", ptBin=" << ptBin << ", etaBin=" << etaBin << " ) " << endl;
+		logger->info(__FUNCTION__) << "OK Starting for ( charge=" << charge << ", cen=" << cenBin << ", ptBin=" << ptBin << " ) " << endl;
 
-		// load the current datasets
-		//loadDatasets( cs, charge, cenBin, ptBin, etaBin );
-
+	
 		if ( !sufficienctStatistics ){
 			fitIsGood = false;
 			updateParameters();
@@ -446,6 +434,30 @@ namespace TSF{
 		return 0.0;
 	}
 
+	double Fitter::currentMu( string var, string plc, int npar, double * pars ){
+		// update the variables
+		for ( int i = 0; i < self->parNames.size(); i++ ){
+			
+			if ( self->parNames[ i ].find( var + "_mu_" + plc ) != string::npos ){
+				return pars[ i ];	
+			}
+		}
+		ERROR( "Could not find " << var << "_mu_" << plc )
+		return 0.0;
+	}
+	void Fitter::currentMu( string var, string plc, int npar, double * pars, double val ){
+		// update the variables
+		for ( int i = 0; i < self->parNames.size(); i++ ){
+			
+			if ( self->parNames[ i ].find( var + "_mu_" + plc ) != string::npos ){
+				pars[ i ] = val;
+				return;
+			}
+		}
+		ERROR( "Could not find " << var << "_mu_" << plc )
+		return;
+	}
+
 	double Fitter::currentYield( string enh, string plc2, int npar , double * pars  ){
 		// update the variables
 		for ( int i = 0; i < self->parNames.size(); i++ ){
@@ -459,25 +471,23 @@ namespace TSF{
 
 	double Fitter::penalizeYields( int npar , double * pars ){
 
-		double penalty = 1.0;
-		for( string plc : Common::species ){
-			double cy = currentYield( plc, npar, pars );
-			for( string plc2 : Common::species ){
-				double cey = currentYield( "zb_"+plc2, plc, npar, pars );
-				if ( cey > cy ){
-					penalty *= (1.0 + ( cey - cy )/cey);
-				}
-			}
-		}
 
-		for( string plc : Common::species ){
-			double cy = currentYield( plc, npar, pars );
-			double cey = currentYield( "zb_"+plc, plc, npar, pars );
-			if ( cey < cy * .30 ){
-				penalty *= (1.0 + ( cey - (cy * .30) )/cey);
-			}
-			
+		double penalty = 1.0;
+
+		float muPi 	= currentMu( "zb", "Pi", npar, pars );
+		float muK 	= currentMu( "zb", "K", npar, pars );
+		float muP 	= currentMu( "zb", "P", npar, pars );
+
+		if ( muPi > muK ){
+			penalty *= ( 1.0 + ( muPi - muK ) * ( muPi - muK ) * 1000 );
 		}
+		if ( muPi > muP ){
+			penalty *= ( 1.0 + ( muPi - muP ) * ( muPi - muP ) * 1000 );
+		}
+		if ( muK > muP ){
+			penalty *= ( 1.0 + ( muK - muP ) * ( muK - muP ) * 1000 );
+		}
+		
 		return penalty;
 	}
 

@@ -21,17 +21,18 @@ namespace TSF{
 
 		
 		//Make the momentum transverse, eta, charge binning 
-		binsPt = new HistoBins( cfg, "bin.pt" );
-		binsEta = new HistoBins( cfg, "bin.eta" );
-		binsCharge = new HistoBins( cfg, "bin.charge" );
+		binsPt = new HistoBins( cfg, "binning.pt" );
+		
 
 		logger->setClassSpace( "FitRunner" );
 
 		// setup reporters for the zb and zd fit projections
-		zbReporter = unique_ptr<Reporter>(new Reporter( cfg->getString( nodePath + "output:path" ) + "rpTSF_zb.pdf",
+		zbReporter = unique_ptr<Reporter>(new Reporter( cfg->getString( nodePath + "output:path" ) + "rp_" + centerSpecies + "_TSF_zb.pdf",
 			cfg->getInt( nodePath + "Reporter.output:width", 400 ), cfg->getInt( nodePath + "Reporter.output:height", 400 ) ) );
-		zdReporter = unique_ptr<Reporter>(new Reporter( cfg->getString( nodePath + "output:path" ) + "rpTSF_zd.pdf",
+		zdReporter = unique_ptr<Reporter>(new Reporter( cfg->getString( nodePath + "output:path" ) + "rp_"+ centerSpecies +"_TSF_zd.pdf",
 			cfg->getInt( nodePath + "Reporter.output:width", 400 ), cfg->getInt( nodePath + "Reporter.output:height", 400 ) ) );
+
+		Logger::setGlobalLogLevel( Logger::logLevelFromString( cfg->getString( nodePath + "Logger:globalLogLevel" ) ) );
 
 	}
 
@@ -45,51 +46,47 @@ namespace TSF{
 		 * The bins to fit over
 		 */
 		vector<int> centralityFitBins = cfg->getIntVector( nodePath + "FitRange.centralityBins" );
-		vector<int> etaFitBins = cfg->getIntVector( nodePath + "FitRange.etaBins" );
 		vector<int> chargeFit = cfg->getIntVector( nodePath + "FitRange.charges" );
 
 		book->cd();
 		book->makeAll( nodePath + "histograms" );
 		for ( int iCen : centralityFitBins ){
 			for ( int iCharge : chargeFit ){
-				for ( int iEta : etaFitBins ){
-					
-					for ( string plc : Common::species ){
-						// yield Histos
-						book->cd( plc + "_yield" );
-						string name = yieldName( plc, iCen, iCharge, iEta );
-						book->clone( "/", "yield", plc+"_yield", name );
+				for ( string plc : Common::species ){
+					// yield Histos
+					book->cd( plc + "_yield" );
+					string name = Common::yieldName( plc, iCen, iCharge );
+					book->clone( "/", "yield", plc+"_yield", name );
 
-						// Mean Histos
-						book->cd( plc + "_zbMu" );
-						name = muName( plc, iCen, iCharge, iEta );
-						book->clone( "/", "yield", plc+"_zbMu", name );
+					// Mean Histos
+					book->cd( plc + "_zbMu" );
+					name = Common::muName( plc, iCen, iCharge );
+					book->clone( "/", "yield", plc+"_zbMu", name );
 
-						book->cd( plc + "_zbMu" );
-						name = "delta"+muName( plc, iCen, iCharge, iEta );
-						book->clone( "/", "yield", plc+"_zbMu", name );
+					book->cd( plc + "_zbMu" );
+					name = "delta"+Common::muName( plc, iCen, iCharge );
+					book->clone( "/", "yield", plc+"_zbMu", name );
 
-						book->cd( plc + "_zdMu" );
-						name = muName( plc, iCen, iCharge, iEta );
-						book->clone( "/", "yield", plc+"_zdMu", name );
+					book->cd( plc + "_zdMu" );
+					name = Common::muName( plc, iCen, iCharge );
+					book->clone( "/", "yield", plc+"_zdMu", name );
 
-						book->cd( plc + "_zdMu" );
-						name = "delta" + muName( plc, iCen, iCharge, iEta );
-						book->clone( "/", "yield", plc+"_zdMu", name );
+					book->cd( plc + "_zdMu" );
+					name = "delta" + Common::muName( plc, iCen, iCharge );
+					book->clone( "/", "yield", plc+"_zdMu", name );
 
-						// Sigma Histos
-						book->cd( plc + "_zbSigma" );
-						name = sigmaName( plc, iCen, iCharge, iEta );
-						book->clone( "/", "yield", plc+"_zbSigma", name );
-						name = sigmaName( plc, iCen, iCharge, iEta ) + "_rel";
-						book->clone( "/", "yield", plc+"_zbSigma", name );
+					// Sigma Histos
+					book->cd( plc + "_zbSigma" );
+					name = Common::sigmaName( plc, iCen, iCharge );
+					book->clone( "/", "yield", plc+"_zbSigma", name );
+					name = Common::sigmaName( plc, iCen, iCharge ) + "_rel";
+					book->clone( "/", "yield", plc+"_zbSigma", name );
 
-						book->cd( plc + "_zdSigma" );
-						name = sigmaName( plc, iCen, iCharge, iEta );
-						book->clone( "/", "yield", plc+"_zdSigma", name );
+					book->cd( plc + "_zdSigma" );
+					name = Common::sigmaName( plc, iCen, iCharge );
+					book->clone( "/", "yield", plc+"_zdSigma", name );
 
-					} // loop plc
-				} // loop iEta
+				} // loop plc
 			} // loop iCharge
 		} // loop iCen
 	}
@@ -132,7 +129,7 @@ namespace TSF{
 				schema->fixParameter( "zb_sigma_" + plc, zbSigFix, true );
 			}
 			else {
-				schema->setInitialSigma( "zb_sigma_"+plc, zbSig, 0.005, 0.066);//0.006, 0.025 );
+				schema->setInitialSigma( "zb_sigma_"+plc, zbSig, 0.005, 0.066);
 				schema->setInitialMu( "zb_mu_"+plc, zbMu, zbSig, zbDeltaMu );
 			}
 
@@ -291,9 +288,14 @@ namespace TSF{
 
 	void FitRunner::make(){
 
+		if ( inFile == nullptr || inFile->IsOpen() == false ){
+			ERROR( "Invalid input data file - can't make" )
+			return;
+		}
+
+
 		//The bins to fit over
 		vector<int> centralityFitBins = cfg->getIntVector( nodePath + "FitRange.centralityBins" );
-		vector<int> etaFitBins = cfg->getIntVector( nodePath + "FitRange.etaBins" );
 		vector<int> chargeFit = cfg->getIntVector( nodePath + "FitRange.charges" );
 
 		// Make the histograms for storing the results
@@ -307,43 +309,40 @@ namespace TSF{
 
 		 for ( int iCen : centralityFitBins ){
 			for ( int iCharge : chargeFit ){
-				for ( int iEta : etaFitBins ){
 							
+				//Create the schema and fitter 
+				schema = shared_ptr<FitSchema>(new FitSchema( cfg, nodePath + "FitSchema" ));
+
+
+				for ( int iPt = firstPtBin; iPt <= lastPtBin; iPt++ ){
+
+					double avgP = binAverageP( iPt );
 					
-					//Create the schema and fitter 
-					schema = shared_ptr<FitSchema>(new FitSchema( cfg, nodePath + "FitSchema" ));
+					logger->warn(__FUNCTION__) << "<p> = " << avgP << endl;
 
+					schema->clearRanges();
 
-					for ( int iPt = firstPtBin; iPt <= lastPtBin; iPt++ ){
+					DEBUG( "Creating fitter" );
+					Fitter fitter( schema, inFile );
+					
+					// load the datasets from the file
+					fitter.loadDatasets(centerSpecies, iCharge, iCen, iPt );
 
-						double avgP = averagePt( iPt );
-						
-						logger->warn(__FUNCTION__) << "<p> = " << avgP << endl;
+					// prepare initial values, ranges, etc. for fit
+					prepare( avgP, iCen );
+					// build the minuit interface
+					fitter.setupFit();
+					// assign active players to this fit
+					fitter.addPlayers( activePlayers );
+					// do the fit
+					fitter.fit( centerSpecies, iCharge, iCen, iPt );
 
-						schema->clearRanges();
+					reportFit( &fitter, iPt );
 
-						DEBUG( "Creating fitter" );
-						Fitter fitter( schema, inFile );
-						
-						// load the datasets from the file
-						fitter.loadDatasets(centerSpecies, iCharge, iCen, iPt, iEta);
+					if ( fitter.isFitGood() )
+						fillFitHistograms(iPt, iCen, iCharge );
 
-						// prepare initial values, ranges, etc. for fit
-						prepare( avgP, iCen );
-						// build the minuit interface
-						fitter.setupFit();
-						// assign active players to this fit
-						fitter.addPlayers( activePlayers );
-						// do the fit
-						fitter.fit( centerSpecies, iCharge, iCen, iPt, iEta );
-
-						reportFit( &fitter, iPt );
-
-						if ( fitter.isFitGood() )
-							fillFitHistograms(iPt, iCen, iCharge, iEta );
-
-					}// loop pt Bins
-				} // loop eta bins
+				}// loop pt Bins
 			} // loop charge bins
 		} // loop centrality bins
 	}
@@ -357,6 +356,8 @@ namespace TSF{
 		}
 		h->Draw("pe");
 		h->GetYaxis()->SetRangeUser( schema->getNormalization() * 1e-6, schema->getNormalization() * 2 );
+
+		h->SetTitle( ( dts((*binsPt)[ iPt ]) + " < pT < " + dts( (*binsPt)[ iPt + 1 ] ) ).c_str() );
 
 		TGraph * sum = fitter->plotResult( v );
 		sum->SetLineColor( kBlue );
@@ -414,9 +415,9 @@ namespace TSF{
 	}
 
 
-	void FitRunner::fillFitHistograms(int iPt, int iCen, int iCharge, int iEta ){
+	void FitRunner::fillFitHistograms(int iPt, int iCen, int iCharge ){
 
-		double avgP = averageP( iPt, iEta );
+		double avgP = binAverageP( iPt );
 
 		for ( string plc : Common::species ){
 
@@ -430,7 +431,7 @@ namespace TSF{
 			// shared yield doesnt exist for the pid Parameter fits
 			if ( schema->vars.find( "yield_"+plc ) != schema->vars.end()  ){ 
 				logger->info(__FUNCTION__) << "Filling Yield for " << plc << endl;
-				string name = yieldName( plc, iCen, iCharge, iEta );
+				string name = Common::yieldName( plc, iCen, iCharge );
 				book->cd( plc+"_yield");
 				double sC = schema->vars[ "yield_"+plc ]->val / book->get( name )->GetBinWidth( iiPt );
 				double sE = schema->vars[ "yield_"+plc ]->error / book->get( name )->GetBinWidth( iiPt );
@@ -442,7 +443,7 @@ namespace TSF{
 			logger->info(__FUNCTION__) << "Filling Mus for " << plc << endl;
 			//Mu
 			// zb
-			string name = muName( plc, iCen, iCharge, iEta );
+			string name = Common::muName( plc, iCen, iCharge );
 			book->cd( plc+"_zbMu");
 			double sC = schema->vars[ "zb_mu_"+plc ]->val;
 			double sE = schema->vars[ "zb_mu_"+plc ]->error;
@@ -450,7 +451,7 @@ namespace TSF{
 			book->get( name )->SetBinContent( iiPt, sC );
 			book->get( name )->SetBinError( iiPt, sE );
 
-			name = "delta"+muName( plc, iCen, iCharge, iEta );
+			name = "delta"+Common::muName( plc, iCen, iCharge );
 			book->cd( plc+"_zbMu");
 			sC = schema->vars[ "zb_mu_"+plc ]->val - zbMu;
 			sE = schema->vars[ "zb_mu_"+plc ]->error;
@@ -459,7 +460,7 @@ namespace TSF{
 			book->get( name )->SetBinError( iiPt, sE );
 
 			// zd
-			name = muName( plc, iCen, iCharge, iEta );
+			name = Common::muName( plc, iCen, iCharge );
 			book->cd( plc+"_zdMu");
 			sC = schema->vars[ "zd_mu_"+plc ]->val;
 			sE = schema->vars[ "zd_mu_"+plc ]->error;
@@ -467,7 +468,7 @@ namespace TSF{
 			book->get( name )->SetBinContent( iiPt, sC );
 			book->get( name )->SetBinError( iiPt, sE );
 
-			name = "delta"+muName( plc, iCen, iCharge, iEta );
+			name = "delta"+Common::muName( plc, iCen, iCharge );
 			book->cd( plc+"_zdMu");
 			sC = schema->vars[ "zd_mu_"+plc ]->val - zdMu;
 			sE = schema->vars[ "zd_mu_"+plc ]->error;
@@ -477,7 +478,7 @@ namespace TSF{
 
 			logger->info(__FUNCTION__) << "Filling Sigmas for " << plc << endl;
 			//Sigma
-			name = sigmaName( plc, iCen, iCharge, iEta );;
+			name = Common::sigmaName( plc, iCen, iCharge );;
 			book->cd( plc+"_zbSigma");
 			sC = schema->vars[ "zb_sigma_"+plc ]->val;
 			sE = schema->vars[ "zb_sigma_"+plc ]->error;
@@ -486,7 +487,7 @@ namespace TSF{
 			book->get( name )->SetBinError( iiPt, sE );
 
 
-			name = sigmaName( plc, iCen, iCharge, iEta ) + "_rel";
+			name = Common::sigmaName( plc, iCen, iCharge ) + "_rel";
 			sC = schema->vars[ "zb_sigma_"+plc ]->val / schema->vars[ "zb_mu_"+plc ]->val;
 			sE = schema->vars[ "zb_sigma_"+plc ]->error / schema->vars[ "zb_mu_"+plc ]->val;
 			
@@ -495,7 +496,7 @@ namespace TSF{
 
 
 
-			name = sigmaName( plc, iCen, iCharge, iEta );
+			name = Common::sigmaName( plc, iCen, iCharge );
 			book->cd( plc+"_zdSigma");
 			sC = schema->vars[ "zd_sigma_"+plc ]->val;
 			sE = schema->vars[ "zd_sigma_"+plc ]->error;
@@ -506,22 +507,6 @@ namespace TSF{
 		}
 
 	}
-
-
-
-	string FitRunner::yieldName( string plc, int iCen, int charge, int iEta ){
-		return "yield_" + plc + "_" + ts(iCen) + "_" + Common::chargeString( charge ) + "_" + ts(iEta);
-	}
-	string FitRunner::sigmaName( string plc, int iCen, int charge, int iEta ){
-		return "sigma_" + plc + "_" + ts(iCen) + "_" + Common::chargeString( charge ) + "_" + ts(iEta);
-	}
-	string FitRunner::muName( string plc, int iCen, int charge, int iEta ){
-		return "mu_" + plc + "_" + ts(iCen) + "_" + Common::chargeString( charge ) + "_" + ts(iEta);
-	}
-	string FitRunner::fitName( int iPt, int iCen, int charge, int iEta ){
-		return "fit_" + ts(iPt) + "_" + ts(iCen) + "_" + Common::chargeString( charge ) + "_" + ts(iEta);
-	}
-
 }
 
 

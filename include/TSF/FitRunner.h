@@ -33,8 +33,7 @@ namespace TSF{
 		shared_ptr<FitSchema> schema;
 
 		HistoBins* binsPt;
-		HistoBins* binsEta;
-		HistoBins* binsCharge;
+		
 
 		unique_ptr<Reporter> zbReporter, zdReporter;
 
@@ -53,48 +52,26 @@ namespace TSF{
 		virtual void make();
 
 
-		static string yieldName( string plc, int iCen, int charge, int iEta );
-		static string sigmaName( string plc, int iCen, int charge, int iEta );
-		static string muName( string plc, int iCen, int charge, int iEta );
-		static string fitName( int iPt, int iCen, int charge, int iEta );
-
-
 	protected:
 
 		void makeHistograms();
-		void fillFitHistograms(int iPt, int iCen, int iCharge, int iEta );
+		void fillFitHistograms(int iPt, int iCen, int iCharge );
 		void reportFit( Fitter * fitter, int iPt );
 		void drawSet( string v, Fitter * fitter, int iPt );
 
 		void prepare( double avgP, int iCen );
 		void choosePlayers( double avgP, string plc, double roi );
 
-
-		double p( double pt, double eta ){
-			return pt * cosh( eta );
-		}
-		double averagePt( int ptBin ){
-			if ( ptBin < 0 || ptBin > binsPt->nBins() ){
-				return 0;
+		/* Average P in a bin range assuming a flat distribution
+		 * The distribution is really an exp, but we just need to be consistent
+		 * @param  bin 0 indexed bit 
+		 * @return     average value in the given bin range
+		 */
+		double binAverageP( int bin ){
+			if ( bin < 0 || bin > binsPt->nBins() ){
+				return -1;
 			}
-			double avgPt = ((*binsPt)[ ptBin ] + (*binsPt)[ ptBin + 1 ]) / 2.0;
-			return avgPt;
-		}
-
-		// TODO: Clean up remnants of pt eta binning
-		double averageP( int ptBin, int etaBin ){
-			if ( ptBin < 0 || ptBin > binsPt->nBins() ){
-				return 0;
-			}
-			if ( etaBin < 0 || etaBin > binsEta->nBins() ){
-				return 0;
-			} 
-
-			double avgPt = ((*binsPt)[ ptBin ] + (*binsPt)[ ptBin + 1 ]) / 2.0;
-			double avgEta = ((*binsEta)[ etaBin ] + (*binsEta)[ etaBin + 1 ]) / 2.0;
-
-			return avgPt;//p( avgPt, avgEta );
-
+			return ((*binsPt)[ bin ] + (*binsPt)[ bin + 1 ]) / 2.0;
 		}
 
 		double zbSigma( ){	

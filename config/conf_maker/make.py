@@ -4,6 +4,7 @@ import EnergyLoss.make_xml_configs as elossc
 import PidHisto.make_xml_configs as pidhc
 import TofEff.make_xml_configs as tofc
 import FeedDown.make_xml_configs as fdc
+import Fitter.make_xml_configs as fitc
 import argparse
 import os
 import glob
@@ -34,10 +35,13 @@ tofc.write( os.path.join( args.data_path, "data", "RcpPicoDst" ), args.output_pa
 #	FeedDown Maker
 fdc.write( os.path.join( args.data_path, "urqmd" ), args.output_path, args.output_config_path, os.path.join( args.config_base_path, "FeedDown/") )
 
+
+
 """Pid Makers"""
 #PidHisto
 pidhc.write( os.path.join( args.data_path, "data", "RcpPicoDst" ), args.output_path, args.output_config_path, os.path.join( args.config_base_path, "PidHisto/") )
-
+# Pif Fitter
+fitc.write( args.output_path, os.path.join( args.config_base_path, "Fitter/") )
 
 
 #Install the common configs - you may need to edit these by hand

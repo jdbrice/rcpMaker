@@ -112,6 +112,27 @@ public:
 	 * @return 		string representing the function as XML attributes
 	 */
 	static string toXml( TF1 * f );
+
+
+
+	/* Names used in the PID fitting steps
+	 * @plc 	Particle Species
+	 * @iCen 	Centrality bin
+	 * @charge 	Particle charge
+	 * @return 	A string containg the name for the given property
+	 */
+	static string yieldName( string plc, int iCen, int charge ){
+		return "yield_" + plc + "_" + ts(iCen) + "_" + Common::chargeString( charge );
+	}
+	static string sigmaName( string plc, int iCen, int charge ){
+		return "sigma_" + plc + "_" + ts(iCen) + "_" + Common::chargeString( charge );
+	}
+	static string muName( string plc, int iCen, int charge ){
+		return "mu_" + plc + "_" + ts(iCen) + "_" + Common::chargeString( charge );
+	}
+	static string fitName( int iPt, int iCen, int charge ){
+		return "fit_" + ts(iPt) + "_" + ts(iCen) + "_" + Common::chargeString( charge );
+	}
 	
 };
 
