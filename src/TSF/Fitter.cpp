@@ -442,21 +442,9 @@ namespace TSF{
 				return pars[ i ];	
 			}
 		}
-		ERROR( "Could not find " << var << "_mu_" << plc )
 		return 0.0;
 	}
-	void Fitter::currentMu( string var, string plc, int npar, double * pars, double val ){
-		// update the variables
-		for ( int i = 0; i < self->parNames.size(); i++ ){
-			
-			if ( self->parNames[ i ].find( var + "_mu_" + plc ) != string::npos ){
-				pars[ i ] = val;
-				return;
-			}
-		}
-		ERROR( "Could not find " << var << "_mu_" << plc )
-		return;
-	}
+	
 
 	double Fitter::currentYield( string enh, string plc2, int npar , double * pars  ){
 		// update the variables

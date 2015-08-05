@@ -96,10 +96,8 @@ namespace TSF{
 			}
 		}
 
-		// getter 
+		// getter for current parameters
 		double currentMu( string var, string plc, int npar, double * pars );
-		// setter
-		void currentMu( string var, string plc, int npar, double * pars, double val );
 		double currentYield( string var, int npar = 0, double * pars = 0 );
 		double currentYield( string var, string plc, int npar = 0, double * pars = 0 );
 		double penalizeYields( int npar = 0, double * pars = 0 );
