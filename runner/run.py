@@ -49,6 +49,13 @@ if "TofEff" == args.task :
 		print( cmd )
 		os.system( cmd )
 
+	config = os.path.join( args.config, "TofEff", "fit.xml" )
+	logFile = config + ".log"
+	cmd = args.exe + " "  + config + " >& " + logFile
+	print "Running : "
+	print cmd
+	os.system( cmd )
+
 """ Tpc Efficiency """
 if "TpcEff" == args.task :
 	for plc in plcs :
