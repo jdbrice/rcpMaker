@@ -9,6 +9,7 @@ import TpcEff.make_xml_configs as effc
 import EnergyLoss.make_xml_configs as elossc
 import PidHisto.make_xml_configs as pidhc
 import TofEff.make_xml_configs as tofc
+import FeedDown.make_xml_configs as fdc
 
 parser = argparse.ArgumentParser( description="Runs the Rcp Analysis" );
 parser.add_argument("exe", help="path to executable")
