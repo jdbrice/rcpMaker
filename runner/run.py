@@ -16,7 +16,7 @@ parser = argparse.ArgumentParser( description="Runs the Rcp Analysis" );
 parser.add_argument("exe", help="path to executable")
 parser.add_argument("-config", help="Base path for config files", default="./" )
 
-parser.add_argument("task", help="Task to run" )
+parser.add_argument("task", help="Task to run: can be 'All', 'EnergyLoss', 'TpcEff', 'TofEff', 'FeedDown', 'PidHisto', 'Fit'" )
 
 args = parser.parse_args();
 

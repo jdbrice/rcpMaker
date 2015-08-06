@@ -1,31 +1,23 @@
 #ifndef PID_YIELD_PRESENTER_H
 #define PID_YIELD_PRESENTER_H
 
-/**
- * STL
- */
+// STL
 #include <memory>
 #include <string>
 using namespace std;
 
-/**
- * Roobarb
- */
+// Roobarb
 #include "XmlConfig.h"
 #include "HistoBook.h"
 #include "LoggerConfig.h"
 #include "Reporter.h"
 using namespace jdb;
 
-/**
- * ROOT
- */
+// ROOT
 #include "TFile.h"
 #include "TH1D.h"
 
-/**
- * Local
- */
+// Local
 #include "TSF/FitRunner.h"
 #include "Spectra/PidHistoMaker.h"
 
@@ -52,14 +44,10 @@ protected:
 	vector<double> 		nPart;
 	vector<double> 		nColl;
 
-	
+	string plc = "E";
 
-	/**
-	 * Binning in Config
-	 */
+	// Binning in Config
 	unique_ptr<HistoBins> binsPt;
-	unique_ptr<HistoBins> binsEta;
-	unique_ptr<HistoBins> binsCharge;
 
 
 public:
@@ -68,15 +56,7 @@ public:
 
 
 	/**
-	 * Takes the fit results and produces a single spectra for each centrality, species, charge
-	 * Outputs into the book into directory /raw/yieldName( plc, charge, iCen )
-	 */
-	void integrateEta();
-	void integrateEta( string plc, int charge, int cBin );
-
-	/**
-	 * Takes the eta integrated yields and applies normalization to them
-	 * outputs into book /yield/yieldName( plc, charge, iCen )
+	 * Outputs into book /yield/yieldName( plc, charge, iCen )
 	 */
 	void normalizeYield();
 	void normalizeYield( string plc, int charge, int cBin );

@@ -113,7 +113,7 @@ namespace TSF{
 		double penalty = self->penalizeYields( npar, par );
 
 		
-		f = (fnVal * self->getNorm() / 1e3 ) * penalty;
+		f = (fnVal * self->getNorm() ) * penalty;
 	}
 
 	void Fitter::loadDatasets( string cs, int charge, int cenBin, int ptBin ){
@@ -248,26 +248,6 @@ namespace TSF{
 			minuit->mnexcm( "MINI", arglist, 1, iFlag );
 
 
-
-      	int tries = 0;
-
-      	/********************************************************/
-      	// Run the fractional fit
-   //    	iFlag = 4;
-   //    	while ( iFlag > 0 && tries < 3 ){
-   //    		logger->info(__FUNCTION__) << "Running MINI" << endl;
-   //    		arglist[ 0 ] = -1;
-			// arglist[ 1 ] = 1.0;
-			// minuit->mnexcm( "MINI", arglist, 1, iFlag );
-			// tries++;
-   //    	}
-      	/********************************************************/
-
-  
-
-  
-
-
       	if ( 0 == iFlag )
 			fitIsGood = true;
 		else 
@@ -276,6 +256,8 @@ namespace TSF{
 		minuit->mnexcm( "STATUS", arglist, 1, iFlag ); // get errors
 
 		cout << "iFlag " << iFlag << endl;
+
+		minuit->mnexcm( "HESSE", arglist, 1, iFlag );
 		
 
 		// get the final state of all variables 

@@ -94,11 +94,11 @@ int main( int argc, char* argv[] ) {
 			} else if ( "PresentPidYield" == job ){
 				//cout << "making presenter" << endl;
  
-				// PidYieldPresenter pyp( &config, "PidYieldPresenter." );
-				// pyp.integrateEta();
-				// pyp.normalizeYield();
-				// pyp.compareYields();
-				// pyp.rcp( 5 );
+				PidYieldPresenter pyp( &config, "PidYieldPresenter." );
+				
+				pyp.normalizeYield();
+				pyp.compareYields();
+				pyp.rcp( 6 );
 
 				// pyp.rcpPanel( 0, 5);
 				// pyp.rcpPanel( 1, 5);

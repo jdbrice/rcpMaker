@@ -24,11 +24,7 @@ PidYieldPresenter::PidYieldPresenter( XmlConfig * _cfg, string _nodePath ){
 	reporter = unique_ptr<Reporter>(new Reporter( cfg, np+"Reporter." ) );
 
 	//Make the momentum transverse binning	 
-	binsPt = unique_ptr<HistoBins>(new HistoBins( cfg, "bin.pt" ));
-	//Make the eta binning
-	binsEta = unique_ptr<HistoBins>(new HistoBins( cfg, "bin.eta" ));
-	//Make charge bins
-	binsCharge = unique_ptr<HistoBins>(new HistoBins( cfg, "bin.charge" ));
+	binsPt = unique_ptr<HistoBins>(new HistoBins( cfg, "binning.pt" ));
 
 	book->cd("/");
 	book->add( "eventNorms", (TH1D*)fPidPS->Get( "/EventQA/mappedRefMultBins" )->Clone( "eventNorms" ) );
@@ -42,6 +38,8 @@ PidYieldPresenter::PidYieldPresenter( XmlConfig * _cfg, string _nodePath ){
 
 	nColl = cfg->getDoubleVector( np + "nColl" );
 	nPart = cfg->getDoubleVector( np + "nPart" );
+
+	plc = cfg->getString( np + "input:plc", "ERROR" );
 }
 
 
@@ -51,73 +49,16 @@ PidYieldPresenter::~PidYieldPresenter(){
 	
 }
 
-/**
- * Integrate over eta for a single plc, charge, centrality
- * outputs into the book in /raw/yieldName( plc, charge, iCen )
- */
-void PidYieldPresenter::integrateEta( string plc, int charge, int iCen ) {
-	logger->info(__FUNCTION__) << endl;
-	vector<int> etaFitBins = cfg->getIntVector( np + "FitRange.etaBins" );
-	vector<TH1D *> h;
-	// loop over eta bins and add histos that exist
-	for ( int iEta : etaFitBins ){
-
-		string dir = "/" + plc + "_yield/";
-		string name = TSF::FitRunner::yieldName( plc, iCen, charge, iEta );
-		logger->info( __FUNCTION__ ) << "Looking for " << dir+name << endl;
-
-		TH1D * tmp = (TH1D*)fPidFit->Get( (dir+name).c_str() );
-
-		if ( tmp ){
-			h.push_back( tmp );
-			logger->info(__FUNCTION__) << "found" << endl;
-		}
-
-	}
-
-	logger->info(__FUNCTION__) << "Found " << h.size() << " to combine " << endl;
-
-	if ( h.size() >= 1  ){
-		book->cd("raw");
-		string name = TSF::FitRunner::yieldName( plc, iCen, charge, 0 );
-		book->add( name, (TH1D*) h[ 0 ]->Clone( name.c_str() ) );	
-
-		for ( int i = 1; i < h.size(); i++ ){
-
-			book->get( name )->Add( h[ i ] );
-		}
-	}
-}
-
-
-void PidYieldPresenter::integrateEta() {
-
-	reporter->newPage(1, 2);
-
-	for ( string plc : Common::species ){
-		for ( int charge : charges ){
-			for ( int iCen : cenBins ){
-				integrateEta( plc, charge, iCen );
-				
-				//string name = TSF::FitRunner::yieldName( plc, iCen, charge, 0 );
-				//book->style( name )->set( "title", "#eta Integrated : " + name )->set( "logY", 1 )->draw();
-				//reporter->next();
-
-			} //centralitiy bins
-		} //charges
-	} //species
-
-}
-
 
 void PidYieldPresenter::normalizeYield( string plc, int charge, int iCen ){
 
-	book->cd( "raw" );
-	string name = TSF::FitRunner::yieldName( plc, iCen, charge, 0 );
-	if ( !book->exists( name ) ){
+	
+	string name = Common::yieldName( plc, iCen, charge );
+	if ( !fPidFit->Get( (plc + "_yield/" + name).c_str()  ) ){
 		logger->error(__FUNCTION__) << name << " does not exists" << endl;
+
 	}
-	TH1D * y = (TH1D*)book->get( name );
+	TH1D * y = (TH1D*)fPidFit->Get( (plc + "_yield/" + name).c_str()  );
 
 	// find out which bin is the last with a good fit
 	int lastGoodBin = cfg->getInt( np + "LastYieldBin."+plc+":"+Common::chargeString( charge ), 1000 );
@@ -150,20 +91,20 @@ void PidYieldPresenter::normalizeYield() {
 
 	reporter->newPage(1, 2);
 
-	for ( string plc : Common::species ){
-		for ( int charge : charges ){
-			for ( int iCen : cenBins ){
-				normalizeYield( plc, charge, iCen );
-				
-				string name = TSF::FitRunner::yieldName( plc, iCen, charge, 0 );
-				// book->style( name )->set("lineWidth", 2)->
-				// 	set( "title", "Normalized Yield : " + name )->
-				// 	set( "logY", 1 )->set( "domain", 0, 5 )->draw();
-				// reporter->next();
+	
+	for ( int charge : charges ){
+		for ( int iCen : cenBins ){
+			normalizeYield( plc, charge, iCen );
+			
+			string name = Common::yieldName( plc, iCen, charge );
+			// book->style( name )->set("lineWidth", 2)->
+			// 	set( "title", "Normalized Yield : " + name )->
+			// 	set( "logY", 1 )->set( "domain", 0, 5 )->draw();
+			// reporter->next();
 
-			} //centralitiy bins
-		} //charges
-	} //species
+		} //centralitiy bins
+	} //charges
+	
 
 }
 
@@ -172,11 +113,11 @@ void PidYieldPresenter::normalizeYield() {
 void PidYieldPresenter::compareYields(){
 
 	reporter->newPage( 2, 1 );
-	for ( string plc : Common::species ){
-		for ( int charge : charges ){
-			compareYields( plc, charge);	
-		}
+	
+	for ( int charge : charges ){
+		compareYields( plc, charge);	
 	}
+	
 
 }
 
@@ -189,7 +130,7 @@ void PidYieldPresenter::compareYields( string plc, int charge ){
 	for ( int iCen : cenBins ){
 
 
-		string name = TSF::FitRunner::yieldName( plc, iCen, charge, 0 );
+		string name = Common::yieldName( plc, iCen, charge );
 		TH1D * y = (TH1D*)book->get( name )->Clone( "tmp" );
 		y->SetDirectory( 0 );
 
@@ -233,15 +174,10 @@ void PidYieldPresenter::compareYields( string plc, int charge ){
 
 void PidYieldPresenter::rcp( int iPer ){
 
-	for ( int iCen : cenBins ){
-
-		rcp( "Pi", 1, iCen, iPer );
-		rcp( "K", 1, iCen, iPer );
-		rcp( "P", 1, iCen, iPer );
-
-		rcp( "Pi", -1, iCen, iPer );
-		rcp( "K", -1, iCen, iPer );
-		rcp( "P", -1, iCen, iPer );
+	for ( int charge : charges ){
+		for ( int iCen : cenBins ){
+			rcp( plc, charge, iCen, iPer );
+		}
 	}
 }
 
@@ -250,8 +186,8 @@ void PidYieldPresenter::rcp( string plc, int charge, int iCen, int iPer ){
 
 	book->cd("yield");
 
-	if ( 	!book->exists( TSF::FitRunner::yieldName( plc, iCen, charge, 0 ) ) ||
-			!book->exists( TSF::FitRunner::yieldName( plc, iPer, charge, 0 ) )  ){
+	if ( 	!book->exists( Common::yieldName( plc, iCen, charge ) ) ||
+			!book->exists( Common::yieldName( plc, iPer, charge ) )  ){
 		logger->error( __FUNCTION__ ) << "central or peripheral yield missing" << endl;
 		return;
 	}
@@ -269,8 +205,8 @@ void PidYieldPresenter::rcp( string plc, int charge, int iCen, int iPer ){
 	logger->info( __FUNCTION__ ) << "Scale Central Bin : " << nColl[ iPer ] << endl;
 	logger->info( __FUNCTION__ ) << "Scale Periferal Bin : " << nColl[ iCen ] << endl;
 
-	TH1D * cen = (TH1D*)book->get( TSF::FitRunner::yieldName( plc, iCen, charge, 0 ) );
-	TH1D * per = (TH1D*)book->get( TSF::FitRunner::yieldName( plc, iPer, charge, 0 ) );
+	TH1D * cen = (TH1D*)book->get( Common::yieldName( plc, iCen, charge ) );
+	TH1D * per = (TH1D*)book->get( Common::yieldName( plc, iPer, charge ) );
 
 	book->cd( "rcp" );
 	cen = (TH1D*) cen->Clone( "cen" );
@@ -301,7 +237,7 @@ void PidYieldPresenter::rcp( string plc, int charge, int iCen, int iPer ){
 		book->style( rcpName( plc, charge, iCen, iPer ) )->
 		set("logY", 1)->draw();
 
-	//reporter->savePage();
+	reporter->savePage();
 
 }
 
@@ -343,14 +279,14 @@ void PidYieldPresenter::chargeRatio( string plc, int iCen ){
 
 	book->cd("yield");
 
-	if ( 	!book->exists( TSF::FitRunner::yieldName( plc, iCen, 1, 0 ) ) ||
-			!book->exists( TSF::FitRunner::yieldName( plc, iCen, -1, 0 ) )  ){
+	if ( 	!book->exists( Common::yieldName( plc, iCen, 1 ) ) ||
+			!book->exists( Common::yieldName( plc, iCen, -1 ) )  ){
 		logger->error( __FUNCTION__ ) << "+/- yield missing" << endl;
 		return;
 	}
 
-	TH1D * plus = (TH1D*)book->get( TSF::FitRunner::yieldName( plc, iCen, 1, 0 ) );
-	TH1D * minus = (TH1D*)book->get( TSF::FitRunner::yieldName( plc, iCen, -1, 0 ) );
+	TH1D * plus = (TH1D*)book->get( Common::yieldName( plc, iCen, 1 ) );
+	TH1D * minus = (TH1D*)book->get( Common::yieldName( plc, iCen, -1 ) );
 
 	book->cd( "chargeRatio" );
 

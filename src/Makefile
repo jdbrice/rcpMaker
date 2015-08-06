@@ -21,12 +21,14 @@ sources = 	Engine.cpp 							\
 			Params/FeedDownParams.cpp 			\
 			Params/EnergyLossParams.cpp			\
 			Spectra/PidHistoMaker.cpp			\
+			Present/PidYieldPresenter.cpp 		\
 			Correction/ApplyPostCorr.cpp
+
 
 #			McMaker/TofEffMaker.cpp 			\
 #			FeedDownMaker.cpp  					\
 
-#			PidYieldPresenter.cpp 				\
+
 
 # TODO: Fix broken files
 

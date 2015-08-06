@@ -60,12 +60,19 @@ void ApplyPostCorr::make(){
 	for ( int cg : Common::charges ){
 		for ( int cb : cfg->getIntVector( nodePath + "CentralityBins" ) ){
 
+			TRACE( "Working on charge=" << cg << ", cen=" << cb )
+
 			string scg = Common::chargeString( cg );
 			string scb = ts( cb );
 
 			string cyn = Common::yieldName( plc, cb, cg );
 
 			TH1 * h = (TH1*)inFile->Get( (plc + "_yield/" + cyn ).c_str() );
+
+			if ( !h ){
+				ERROR( "Histogram is invalid" )
+				continue;
+			}
 
 			book->cd( plc + "_yield" );
 
@@ -139,7 +146,7 @@ void ApplyPostCorr::make(){
 				}
 
 
-				book->setBinContent( cyn, iB, fc *  1.0 / ( 2 * 3.1415926 * bCen )  );
+				book->setBinContent( cyn, iB, fc );
 				book->get( cyn )->Sumw2();
 			}
 
