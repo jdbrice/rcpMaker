@@ -113,7 +113,7 @@ namespace TSF{
 		double penalty = self->penalizeYields( npar, par );
 
 		
-		f = fnVal * penalty;
+		f = (fnVal * self->getNorm() / 1e3 ) * penalty;
 	}
 
 	void Fitter::loadDatasets( string cs, int charge, int cenBin, int ptBin ){
@@ -151,7 +151,10 @@ namespace TSF{
 		DEBUG( "Getting norm from : EventQA/mappedRefMultBins" )
 		norm = ((TH1D*)dataFile->Get( "EventQA/mappedRefMultBins" ))->GetBinContent( cenBin + 1 );
 
-		schema->setNormalization( norm );
+		// Used for setting the scale when drawing
+		double maxYield = dataHists[ "zd_All"]->Integral();
+		schema->setNormalization( maxYield / norm );
+
 
 		sufficienctStatistics = true;
 
@@ -208,53 +211,71 @@ namespace TSF{
       		arglist[ 0 ] = 1.0; 
       	else 
       		arglist[ 0 ] = 0.5; 
+
       	minuit->mnexcm( "SET ERR", arglist, 1, iFlag );
+
+
+      	arglist[ 0 ] = -1;
+		arglist[ 1 ] = 1.0;
+
+		fixShapes();
+		minuit->mnexcm( "MINI", arglist, 1, iFlag );
+		minuit->mnexcm( "MINI", arglist, 1, iFlag );
+		minuit->mnexcm( "MINI", arglist, 1, iFlag );
+		releaseShapes();
+
+		fix( "yield" );
+		minuit->mnexcm( "MINI", arglist, 1, iFlag );
+		minuit->mnexcm( "MINI", arglist, 1, iFlag );
+		minuit->mnexcm( "MINI", arglist, 1, iFlag );
+		release( "yield" );
+
+		fix( "sigma" );
+		minuit->mnexcm( "MINI", arglist, 1, iFlag );
+		minuit->mnexcm( "MINI", arglist, 1, iFlag );
+		minuit->mnexcm( "MINI", arglist, 1, iFlag );
+		release( "sigma" );
+
+		fix( "mu" );
+		minuit->mnexcm( "MINI", arglist, 1, iFlag );
+		minuit->mnexcm( "MINI", arglist, 1, iFlag );
+		minuit->mnexcm( "MINI", arglist, 1, iFlag );
+		release( "mu" );
+
+		schema->setMethod( "poisson" );
+		minuit->mnexcm( "MINI", arglist, 1, iFlag );
+		minuit->mnexcm( "MINI", arglist, 1, iFlag );
+		minuit->mnexcm( "MINI", arglist, 1, iFlag );
+
+
 
       	int tries = 0;
 
-      	
-      	iFlag = 4;
-      	while ( iFlag > 0 && tries < 3 ){
-      		logger->info(__FUNCTION__) << "Running MINI" << endl;
-      		arglist[ 0 ] = -1;
-			arglist[ 1 ] = 1.0;
-			minuit->mnexcm( "MINI", arglist, 1, iFlag );
-			tries++;
-      	}
+      	/********************************************************/
+      	// Run the fractional fit
+   //    	iFlag = 4;
+   //    	while ( iFlag > 0 && tries < 3 ){
+   //    		logger->info(__FUNCTION__) << "Running MINI" << endl;
+   //    		arglist[ 0 ] = -1;
+			// arglist[ 1 ] = 1.0;
+			// minuit->mnexcm( "MINI", arglist, 1, iFlag );
+			// tries++;
+   //    	}
+      	/********************************************************/
 
+  
 
-      	schema->setMethod( "poisson" );
-      	logger->info(__FUNCTION__) << "Fit Method : " << self->schema->getMethod() << endl;
-      	//fixShapes();
-      	minuit->mnexcm( "MINI", arglist, 1, iFlag );
-      	minuit->mnexcm( "MINI", arglist, 1, iFlag );
-      	//releaseShapes();
+  
+
 
       	if ( 0 == iFlag )
 			fitIsGood = true;
 		else 
 			fitIsGood = false;
 
-		//minuit->mnexcm( "STATUS", arglist, 1, iFlag ); // get errors
-
-      	// if ( iFlag > 0 )
-      	//minuit->mnexcm( "MINOS", arglist, 1, iFlag );
-      	// else
-      	minuit->mnexcm( "HESSE", arglist, 1, iFlag ); // get errors
-
-      	/*for ( int i = 0; i < parNames.size(); i++ ){
-			//schema->vars[ parNames[ i ] ]->;
-			minuit->Release( i );
-		}*/
+		minuit->mnexcm( "STATUS", arglist, 1, iFlag ); // get errors
 
 		cout << "iFlag " << iFlag << endl;
-		
-
-		//logger->info(__FUNCTION__) << "Calculating errors with HESE" << endl;
-		//minuit->mnexcm( "HESSE", arglist, 1, iFlag );
-
-		//minuit->mnexcm( "MINOS", arglist, 1, iFlag );
-
 		
 
 		// get the final state of all variables 
@@ -458,7 +479,7 @@ namespace TSF{
 
 	}
 
-	void Fitter::release( string var){
+	void Fitter::release( string var, bool check ){
 
 		// loop over parameters
 		for ( int i = 0; i < parNames.size(); i++ ){
@@ -467,7 +488,7 @@ namespace TSF{
 			if ( string::npos != parNames[ i ].find( var ) )
 				shouldRelease = true;
 
-			if ( shouldRelease )
+			if ( shouldRelease && ( !check || !schema->vars[ parNames[ i ] ]->fixed) )
 				minuit->Release( i );
 		} // i
 

@@ -103,7 +103,7 @@ namespace TSF{
 		double normFactor() { return 1000.0; }
 
 		void fix( string var );
-		void release( string var );
+		void release( string var, bool check = true );
 
 		void fixShapes();
 		void releaseShapes();
