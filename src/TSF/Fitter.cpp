@@ -50,23 +50,6 @@ namespace TSF{
 		logger->info(__FUNCTION__) << endl;
 	}
 
-	void Fitter::fixParameters(){
-		for ( int i = 0; i < parNames.size(); i++ ){
-			if (schema->vars[ parNames[ i ] ]->exclude) continue;
-
-			if ( schema->vars[ parNames[ i ] ]->fixed )
-				minuit->FixParameter( i );
-		}
-	}
-
-	void Fitter::releaseParameters(){
-		for ( int i = 0; i < parNames.size(); i++ ){
-			if (schema->vars[ parNames[ i ] ]->exclude) continue;
-
-			if ( schema->vars[ parNames[ i ] ]->fixed )
-				minuit->Release( i );
-		}
-	}
 
 	Fitter::~Fitter(){
 
@@ -130,7 +113,7 @@ namespace TSF{
 		double penalty = self->penalizeYields( npar, par );
 
 		
-		f = (fnVal / normFactor) * penalty;
+		f = fnVal * penalty;
 	}
 
 	void Fitter::loadDatasets( string cs, int charge, int cenBin, int ptBin ){
@@ -165,11 +148,10 @@ namespace TSF{
 		dataHists[ "zb_K" ] 	= (TH1D*)dataFile->Get( ("tof/" + Common::zbName( cs, charge, cenBin, ptBin, "K" )).c_str() );
 		dataHists[ "zb_P" ] 	= (TH1D*)dataFile->Get( ("tof/" + Common::zbName( cs, charge, cenBin, ptBin, "P" )).c_str() );
 		
-		double maxYield = dataHists[ "zd_All"]->Integral();
 		DEBUG( "Getting norm from : EventQA/mappedRefMultBins" )
 		norm = ((TH1D*)dataFile->Get( "EventQA/mappedRefMultBins" ))->GetBinContent( cenBin + 1 );
 
-		schema->setNormalization( maxYield / norm );
+		schema->setNormalization( norm );
 
 		sufficienctStatistics = true;
 
@@ -184,32 +166,6 @@ namespace TSF{
 
 			if ( nObs > 75 )
 				schema->loadDataset( k.first, k.second );
-		}
-
-	}
-
-	void Fitter::fixedFit( string cs, int charge, int cenBin, int ptBin ){
-
-		for ( int i = 0; i < parNames.size(); i++ ){
-
-			bool shouldFix = false;
-			if ( string::npos != parNames[ i ].find( "sig" ) || string::npos != parNames[ i ].find( "mu" ) )
-				shouldFix = true;
-
-			if ( schema->vars[ parNames[ i ] ]->fixed || shouldFix )
-				minuit->FixParameter( i );
-		}
-
-		fit( cs, charge, cenBin, ptBin);
-
-		for ( int i = 0; i < parNames.size(); i++ ){
-
-			bool shouldFix = false;
-			if ( string::npos != parNames[ i ].find( "sig" ) || string::npos != parNames[ i ].find( "mu" ) )
-				shouldFix = true;
-
-			if ( !schema->vars[ parNames[ i ] ]->fixed )
-				minuit->Release( i );
 		}
 
 	}
@@ -305,10 +261,6 @@ namespace TSF{
 		logger->info(__FUNCTION__) << "Updating parameters after Fit" << endl;
 		updateParameters();
 		//schema->reportModels();
-
-
-
-
 	}
 
 
@@ -481,37 +433,44 @@ namespace TSF{
 
 
 	void Fitter::fixShapes(){
-		for ( int i = 0; i < parNames.size(); i++ ){
-
-			bool shouldFix = false;
-			if ( string::npos != parNames[ i ].find( "sig" ) || string::npos != parNames[ i ].find( "mu" ) )
-				shouldFix = true;
-
-			for ( string plc : Common::species ){
-				if ( string::npos != parNames[ i ].find( "zb_" + plc +"_yield_" +plc ) )
-					shouldFix = true;
-			}
-
-			if ( schema->vars[ parNames[ i ] ]->fixed || shouldFix )
-				minuit->FixParameter( i );
-		}
+		fix( "mu" );
+		fix( "sig" );
 	}
 
 	void Fitter::releaseShapes(){
+		release( "mu" );
+		release( "sig" );
+	}
+
+
+	void Fitter::fix( string var){
+
+		// loop over parameters
 		for ( int i = 0; i < parNames.size(); i++ ){
 
 			bool shouldFix = false;
-			if ( string::npos != parNames[ i ].find( "sig" ) || string::npos != parNames[ i ].find( "mu" ) )
+			if ( string::npos != parNames[ i ].find( var ) )
 				shouldFix = true;
 
-			for ( string plc : Common::species ){
-				if ( string::npos != parNames[ i ].find( "zb_" + plc +"_yield_" +plc ) )
-					shouldFix = true;
-			}
+			if ( shouldFix )
+				minuit->FixParameter( i );
+		} // i
 
-			if ( schema->vars[ parNames[ i ] ]->fixed || shouldFix )
+	}
+
+	void Fitter::release( string var){
+
+		// loop over parameters
+		for ( int i = 0; i < parNames.size(); i++ ){
+
+			bool shouldRelease = false;
+			if ( string::npos != parNames[ i ].find( var ) )
+				shouldRelease = true;
+
+			if ( shouldRelease )
 				minuit->Release( i );
-		}
+		} // i
+
 	}
 
 

@@ -75,11 +75,7 @@ namespace TSF{
 
 		void loadDatasets( string cs, int charge, int cenBin, int ptBin );
 		void fit( string cs, int charge, int cenBin, int ptBin );
-		void fixParameters();
-		void releaseParameters();
-
-
-		void fixedFit( string cs, int charge, int cenBin, int ptBin );
+		
 
 		TGraph * plotResult( string dataset );
 		TH1 * getDataHist( string dataset ) { return dataHists[ dataset ]; }
@@ -105,6 +101,9 @@ namespace TSF{
 
 		double getNorm() { return norm; }
 		double normFactor() { return 1000.0; }
+
+		void fix( string var );
+		void release( string var );
 
 		void fixShapes();
 		void releaseShapes();

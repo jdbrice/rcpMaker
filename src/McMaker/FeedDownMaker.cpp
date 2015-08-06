@@ -319,6 +319,7 @@ void FeedDownMaker::postEventLoop(){
 		plcIndex ++;
 	}
 	
+	out << "</config>" << endl;
 	out.close();
 }
 

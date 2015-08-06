@@ -436,6 +436,8 @@ namespace TSF{
 				double sC = schema->vars[ "yield_"+plc ]->val / book->get( name )->GetBinWidth( iiPt );
 				double sE = schema->vars[ "yield_"+plc ]->error / book->get( name )->GetBinWidth( iiPt );
 				
+				sE = sqrt( sC * 7.141120e+05 ) / 7.141120e+05;
+
 				book->get( name )->SetBinContent( iiPt, sC );
 				book->get( name )->SetBinError( iiPt, sE );
 			}

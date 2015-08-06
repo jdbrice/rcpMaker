@@ -20,7 +20,8 @@ sources = 	Engine.cpp 							\
 			McMaker/FeedDownMaker.cpp			\
 			Params/FeedDownParams.cpp 			\
 			Params/EnergyLossParams.cpp			\
-			Spectra/PidHistoMaker.cpp
+			Spectra/PidHistoMaker.cpp			\
+			Correction/ApplyPostCorr.cpp
 
 #			McMaker/TofEffMaker.cpp 			\
 #			FeedDownMaker.cpp  					\

@@ -31,7 +31,8 @@ using namespace jdb;
 // PID Fitting
 	#include "TSF/FitRunner.h"
 
-
+// Corrections
+	#include "Correction/ApplyPostCorr.h"
 
 
 
@@ -83,6 +84,9 @@ int main( int argc, char* argv[] ) {
 			}  else if ( "FeedDownMaker" == job ){
 				FeedDownMaker fdm( &config, "FeedDownMaker." );
 				fdm.make();
+			} else if ( "ApplyPostCorr" == job ){
+				ApplyPostCorr apc( &config, "ApplyPostCorr." );
+				apc.make();
 			} else if ( "FeedDownPresentation" == job ){
 				// Logger::setGlobalLogLevel( Logger::llAll );
 				// RooPlotter plt( argv[1] );
