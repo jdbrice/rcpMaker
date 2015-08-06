@@ -101,7 +101,7 @@ void ApplyPostCorr::make(){
 			string param = plc + "_" + scg + "_" + scb;
 			for ( int iB = 1; iB <= h->GetNbinsX(); iB++ ){
 				double bCon = h->GetBinContent( iB );
-				double bCen = h->GetBinCenter( iB );
+				double bCen = h->GetBinLowEdge( iB );
 				double fc = bCon;
 
 				// apply TPC eff
@@ -131,18 +131,21 @@ void ApplyPostCorr::make(){
 				}
 
 
-				// Feed down
-				if ( tofEff.count( param ) >= 1 ){
-					
-					double weight = 1.0 - feedDown[ param ]->eval( bCen );
-					fc = fc * ( weight );
 
-					book->setBin( "fdCorr_" + cyn, iB, feedDown[ param ]->eval( bCen ), 0 );
-					INFO( "feedDown weight = " << weight )
-					
-					book->setBinContent( "fd_" + cyn, iB, bCon * ( weight ) );
-				} else {
-					ERROR( "Cannot find feedDown[ " << param << " ] "  )
+				// Feed down
+				if ( "K" != plc ) {
+					if ( tofEff.count( param ) >= 1 ){
+						
+						double weight = 1.0 - feedDown[ param ]->eval( bCen );
+						fc = fc * ( weight );
+
+						book->setBin( "fdCorr_" + cyn, iB, feedDown[ param ]->eval( bCen ), 0 );
+						INFO( "feedDown weight = " << weight )
+						
+						book->setBinContent( "fd_" + cyn, iB, bCon * ( weight ) );
+					} else {
+						ERROR( "Cannot find feedDown[ " << param << " ] "  )
+					}
 				}
 
 
