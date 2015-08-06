@@ -44,7 +44,7 @@ namespace TSF{
 
 		}
 
-		minuit->SetPrintLevel( 0 );
+		minuit->SetPrintLevel( schema->getVerbosity() );
 		minuit->SetFCN( tminuitFCN );
 
 		logger->info(__FUNCTION__) << endl;
@@ -218,17 +218,21 @@ namespace TSF{
       	arglist[ 0 ] = -1;
 		arglist[ 1 ] = 1.0;
 
+		if ( schema->tofEff() )
+			fix( "eff" );
 		fixShapes();
 			minuit->mnexcm( "MINI", arglist, 1, iFlag );
 			minuit->mnexcm( "MINI", arglist, 1, iFlag );
 			minuit->mnexcm( "MINI", arglist, 1, iFlag );
 		releaseShapes();
 
+
 		fix( "yield" );
 			minuit->mnexcm( "MINI", arglist, 1, iFlag );
 			minuit->mnexcm( "MINI", arglist, 1, iFlag );
 			minuit->mnexcm( "MINI", arglist, 1, iFlag );
 		release( "yield" );
+		
 
 		fix( "sigma" );
 			minuit->mnexcm( "MINI", arglist, 1, iFlag );
@@ -242,11 +246,32 @@ namespace TSF{
 			minuit->mnexcm( "MINI", arglist, 1, iFlag );
 		release( "mu" );
 
+		if ( schema->tofEff() ){
+			release( "eff" );
+
+			fix( "yield" );
+			fixShapes();
+			minuit->mnexcm( "MINI", arglist, 1, iFlag );
+			minuit->mnexcm( "MINI", arglist, 1, iFlag );
+			minuit->mnexcm( "MINI", arglist, 1, iFlag );
+			release( "yield" );
+			releaseShapes();
+
+			fix( "eff" );
+		}
+
+		
+
 		schema->setMethod( "poisson" );
 			minuit->mnexcm( "MINI", arglist, 1, iFlag );
 			minuit->mnexcm( "MINI", arglist, 1, iFlag );
 			minuit->mnexcm( "MINI", arglist, 1, iFlag );
 
+
+
+		if ( schema->tofEff() )
+			release( "eff" );
+		
 
       	if ( 0 == iFlag )
 			fitIsGood = true;

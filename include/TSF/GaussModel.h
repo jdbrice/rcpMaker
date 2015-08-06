@@ -33,6 +33,9 @@ namespace TSF{
 		string dataset, name, yield, mu, sigma;
 		double y, m, s;
 
+		double e;
+		string eff;
+
 		GaussModel( XmlConfig * cfg, string np, string _dataset = "" ){
 
 
@@ -40,16 +43,18 @@ namespace TSF{
 			yield 	= cfg->getString( np + ":yield" );
 			mu 		= cfg->getString( np + ":mu" );
 			sigma 	= cfg->getString( np + ":sigma" );
+			eff 	= cfg->getString( np + ":eff", "na" );
 
 			dataset = cfg->getString( np + ":dataset", _dataset );
 
 		}
-		GaussModel( string _name, string _yield, string _mu, string _sigma, string _ds ){
+		GaussModel( string _name, string _yield, string _mu, string _sigma, string _ds, string _eff = "na" ){
 
 			name = _name;
 			yield = _yield;
 			mu = _mu;
 			sigma = _sigma;
+			eff = _eff;
 			dataset = _ds;
 
 		}
@@ -59,12 +64,17 @@ namespace TSF{
 			m = vars[ mu ]->val;
 			y = vars[ yield ]->val;
 			s = vars[ sigma ]->val;
+
+			if ( vars.count( eff ) )
+				e = vars[ eff ]->val; 
+			else 
+				e = 1.0;
 		}
 
 		double eval( double x, double bw = 1.0 ){
 
-
-			double a = (y *bw) / ( s * TMath::Sqrt( 2 * TMath::Pi() ) );
+			// e is an efficiency param
+			double a = e * (y * bw) / ( s * TMath::Sqrt( 2 * TMath::Pi() ) );
 			double b = TMath::Exp(  -( x - m ) * ( x - m ) / ( 2 * s * s ) );
 
 			return a * b;
@@ -75,7 +85,10 @@ namespace TSF{
 		}
 
 		string toString() { 
-			return "Gauss( " + name + ": " + dataset + ", mu=" + dts(m) + ", sig=" +dts(s) +", y=" +dts(y);
+			if ( "na" == eff )
+				return "Gauss( " + name + ": " + dataset + ", mu=" + dts(m) + ", sig=" +dts(s) +", y=" +dts(y);
+			else 
+				return "Gauss( " + name + ": " + dataset + ", mu=" + dts(m) + ", sig=" +dts(s) +", y=" +dts(y) + ", e=" + dts(e);
 		}
 
 

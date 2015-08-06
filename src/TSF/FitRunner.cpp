@@ -86,6 +86,11 @@ namespace TSF{
 					name = Common::sigmaName( plc, iCen, iCharge );
 					book->clone( "/", "yield", plc+"_zdSigma", name );
 
+					// Plc Tof Efficiency 
+					book->cd( "tofEff" );
+					book->clone( "/", "yield", "tofEff", Common::effName( plc, iCen, iCharge )  );
+
+
 				} // loop plc
 			} // loop iCharge
 		} // loop iCen
@@ -151,6 +156,11 @@ namespace TSF{
 			} else {
 				schema->vars[ "yield_" + plc ]->min = 0;
 				schema->vars[ "yield_" + plc ]->max = schema->vars[ "yield_" + plc ]->val * 2;	
+			}
+
+			// set the eff to 1.0 if we are using eff
+			if ( schema->vars.count( "eff_" + plc ) ){
+				schema->vars[ "eff_" + plc ]->val = 1.0;
 			}
 			
 		} // loop on plc to set initial vals
@@ -436,6 +446,9 @@ namespace TSF{
 				double sC = schema->vars[ "yield_"+plc ]->val / book->get( name )->GetBinWidth( iiPt );
 				double sE = schema->vars[ "yield_"+plc ]->error / book->get( name )->GetBinWidth( iiPt );
 				
+				// TODO: use the actual number here
+				// this is supposed to set the error to the 
+				// poisson error scaled down
 				sE = sqrt( sC * 7.141120e+05 ) / 7.141120e+05;
 
 				book->get( name )->SetBinContent( iiPt, sC );
@@ -505,6 +518,12 @@ namespace TSF{
 			
 			book->get( name )->SetBinContent( iiPt, sC );
 			book->get( name )->SetBinError( iiPt, sE );
+
+			if ( schema->vars.count( "eff_" + plc ) ){
+				book->cd( "tofEff" );
+				book->setBin( Common::effName( plc, iCen, iCharge ), iiPt, 
+						schema->vars[ "eff_" + plc ]->val, schema->vars[ "eff_" + plc ]->error );
+			}
 
 		}
 

@@ -41,6 +41,8 @@ namespace TSF{
 
 		double normalization;
 
+		int verbosity;
+
 	public:
 		FitSchema( XmlConfig * _cfg, string np );
 		~FitSchema();
@@ -96,6 +98,10 @@ namespace TSF{
 		}
 
 		double enforceMassOrdering(){ return 1.0;};
+
+		int getVerbosity() const { return verbosity; }
+
+		bool tofEff() const { return vars.count( "eff_Pi") >= 1;}
 
 	};
 

@@ -133,6 +133,9 @@ public:
 	static string fitName( int iPt, int iCen, int charge ){
 		return "fit_" + ts(iPt) + "_" + ts(iCen) + "_" + Common::chargeString( charge );
 	}
+	static string effName( string plc, int iCen, int charge ){
+		return "eff_" + plc + "_" + ts(iCen) + "_" + Common::chargeString( charge );
+	}
 	
 };
 

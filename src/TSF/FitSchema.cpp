@@ -14,6 +14,7 @@ namespace TSF{
 		logger->info(__FUNCTION__) << endl;
 
 		method = cfg-> getString( nodePath + ":method", "chi2" );
+		verbosity = cfg->getInt( nodePath + ":v", 0 );
 
 		makeFitVars();
 		makeModels();
