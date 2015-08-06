@@ -219,33 +219,33 @@ namespace TSF{
 		arglist[ 1 ] = 1.0;
 
 		fixShapes();
-		minuit->mnexcm( "MINI", arglist, 1, iFlag );
-		minuit->mnexcm( "MINI", arglist, 1, iFlag );
-		minuit->mnexcm( "MINI", arglist, 1, iFlag );
+			minuit->mnexcm( "MINI", arglist, 1, iFlag );
+			minuit->mnexcm( "MINI", arglist, 1, iFlag );
+			minuit->mnexcm( "MINI", arglist, 1, iFlag );
 		releaseShapes();
 
 		fix( "yield" );
-		minuit->mnexcm( "MINI", arglist, 1, iFlag );
-		minuit->mnexcm( "MINI", arglist, 1, iFlag );
-		minuit->mnexcm( "MINI", arglist, 1, iFlag );
+			minuit->mnexcm( "MINI", arglist, 1, iFlag );
+			minuit->mnexcm( "MINI", arglist, 1, iFlag );
+			minuit->mnexcm( "MINI", arglist, 1, iFlag );
 		release( "yield" );
 
 		fix( "sigma" );
-		minuit->mnexcm( "MINI", arglist, 1, iFlag );
-		minuit->mnexcm( "MINI", arglist, 1, iFlag );
-		minuit->mnexcm( "MINI", arglist, 1, iFlag );
+			minuit->mnexcm( "MINI", arglist, 1, iFlag );
+			minuit->mnexcm( "MINI", arglist, 1, iFlag );
+			minuit->mnexcm( "MINI", arglist, 1, iFlag );
 		release( "sigma" );
 
 		fix( "mu" );
-		minuit->mnexcm( "MINI", arglist, 1, iFlag );
-		minuit->mnexcm( "MINI", arglist, 1, iFlag );
-		minuit->mnexcm( "MINI", arglist, 1, iFlag );
+			minuit->mnexcm( "MINI", arglist, 1, iFlag );
+			minuit->mnexcm( "MINI", arglist, 1, iFlag );
+			minuit->mnexcm( "MINI", arglist, 1, iFlag );
 		release( "mu" );
 
 		schema->setMethod( "poisson" );
-		minuit->mnexcm( "MINI", arglist, 1, iFlag );
-		minuit->mnexcm( "MINI", arglist, 1, iFlag );
-		minuit->mnexcm( "MINI", arglist, 1, iFlag );
+			minuit->mnexcm( "MINI", arglist, 1, iFlag );
+			minuit->mnexcm( "MINI", arglist, 1, iFlag );
+			minuit->mnexcm( "MINI", arglist, 1, iFlag );
 
 
 
