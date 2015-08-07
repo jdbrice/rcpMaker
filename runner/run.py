@@ -18,7 +18,7 @@ parser = argparse.ArgumentParser( description="Runs the Rcp Analysis" );
 parser.add_argument("exe", help="path to executable")
 parser.add_argument("-config", help="Base path for config files", default="./" )
 
-parser.add_argument("task", help="Task to run. Can be one of : \n 'All', 'EnergyLoss', 'TpcEff', 'TofEff', 'FeedDown', 'PidHisto', 'Fit', 'PostCorr', 'Present'" )
+parser.add_argument("task", help="Task to run. Can be one of : \n 'All', 'EnergyLoss', 'TpcEff', 'TofEff', 'FeedDown', 'PidHisto', 'Fit', 'PostCorr', 'Present', 'PostHisto', 'Corrections'" )
 
 args = parser.parse_args();
 
@@ -125,7 +125,18 @@ if "Present" == args.task :
 			os.system( cmd )
 
 
-if "All" == args.task :
+if "PostHisto" == args.task :
+	# not very clean but it will do
+	cmd = exeMe + args.exe + " Fitter -config " + args.config
+	os.system( cmd )
+
+	cmd = exeMe + args.exe + " PostCorr -config " + args.config
+	os.system( cmd )
+	cmd = exeMe + args.exe + " Present -config " + args.config
+	os.system( cmd )
+
+
+if "Corrections" == args.task :
 	# not very clean but it will do
 	cmd = exeMe + args.exe + " EnergyLoss -config " + args.config
 	os.system( cmd )
@@ -136,12 +147,16 @@ if "All" == args.task :
 	cmd = exeMe + args.exe + " FeedDown -config " + args.config
 	os.system( cmd )
 
-	cmd = exeMe + args.exe + " PidHisto -config " + args.config
-	os.system( cmd )
-	cmd = exeMe + args.exe + " Fitter -config " + args.config
+
+if "All" == args.task :
+	# not very clean but it will do
+	cmd = exeMe + args.exe + " Corrections -config " + args.config
 	os.system( cmd )
 
-	cmd = exeMe + args.exe + " PostCorr -config " + args.config
+	cmd = exeMe + args.exe + " PidHisto -config " + args.config
 	os.system( cmd )
-	cmd = exeMe + args.exe + " Present -config " + args.config
+	
+	cmd = exeMe + args.exe + " PostHisto -config " + args.config
 	os.system( cmd )
+
+	
