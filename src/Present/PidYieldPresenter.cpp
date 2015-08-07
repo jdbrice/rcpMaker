@@ -19,6 +19,11 @@ PidYieldPresenter::PidYieldPresenter( XmlConfig * _cfg, string _nodePath ){
 	fPidFit 	= new TFile( cfg->getString( np + "input.fit:url" ).c_str(), "READ" );
 	fPidPS 		= new TFile( cfg->getString( np + "input.ps:url" ).c_str(), "READ" );
 
+	if ( fPidFit->IsOpen() )
+		logger->info( __FUNCTION__ ) << "Fit File Opened" << endl;
+	if ( fPidPS->IsOpen() )
+		logger->info( __FUNCTION__ ) << "Pid File Opened" << endl;
+
 	// Create the book
 	book = unique_ptr<HistoBook>(new HistoBook( cfg->getString( np + "output:path" ) + cfg->getString( np + "output.data:url" ), cfg, "", "" ));
 	reporter = unique_ptr<Reporter>(new Reporter( cfg, np+"Reporter." ) );
