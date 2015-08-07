@@ -42,9 +42,9 @@ def write_conf(  output_path, config_path ="./" ) :
 		</FitRange>
 
 		<LastYieldBin>
-			<Pi p="37" n="37" />
-			<K p="37" n="37"/> 
-			<P p="37" n="37"/> 
+			<Pi p="24" n="24" />
+			<K p="24" n="24"/> 
+			<P p="24" n="24"/> 
 		</LastYieldBin>
 
 		<nColl> 787.915, 633.514, 454.215, 282.678, 167.971, 71.739, 18.3058 </nColl>

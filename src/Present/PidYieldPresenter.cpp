@@ -174,7 +174,7 @@ void PidYieldPresenter::compareYields( string plc, int charge ){
 		y->Scale( scale );
 		y->SetLineColor( colors[ iCen ] );
 		y->SetMarkerColor( colors[ iCen ] );
-		y->GetYaxis()->SetRangeUser( 10e-16, 1000 );
+		y->GetYaxis()->SetRangeUser( 10e-16, 1e4 );
 		y->SetLineWidth( 2 );
 		y->SetMarkerStyle( 20 + iCen );
 
