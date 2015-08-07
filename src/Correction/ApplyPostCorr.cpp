@@ -4,7 +4,7 @@
 #include <algorithm>
 
 ApplyPostCorr::ApplyPostCorr( XmlConfig * _cfg, string _nodePath ) : HistoAnalyzer( _cfg, _nodePath ){
-
+	INFO( "ApplyPostCorr" )
 	if ( cfg == nullptr )
 		ERROR( "Invalid config" )
 	else {
