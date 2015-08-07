@@ -84,7 +84,7 @@ def write_conf(  output_path, config_path ="./" ) :
 				fit_file = pjoin( output_path, postc.t_product_file.format(  plc=plc, ext="root" ) )
 
 			histo_file = pjoin( output_path, pidc.t_product_file.format( state=state, plc=plc, ext="root" ) )
-			product_file = t_product_file.format( state=state, plc=plc, ext="root" )
+			product_file = t_product_file.format( state=state, plc=plc, ext="pdf" )
 			report_file = pjoin( output_path, "rp" + product_file )
 
 			with open( pjoin( config_path, t_config_file.format( state=state, plc=plc, ext="xml" ) ), 'w' ) as f :
