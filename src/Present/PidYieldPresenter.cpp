@@ -169,7 +169,7 @@ void PidYieldPresenter::compareYields( string plc, int charge ){
 			drawOpt = "same pe";
 
 
-		y->SetTitle( ( plcName( plc, charge ) + " : Raw Spectra; pT [GeV] ;d^{2}N / ( N_{evt} 2 #pi pT dpT dy )" ).c_str() );
+		y->SetTitle( ( plcName( plc, charge ) + " : Spectra; pT [GeV] ;d^{2}N / ( N_{evt} 2 #pi pT dpT dy )" ).c_str() );
 		y->GetYaxis()->SetTitleOffset( 1.6 );
 		y->Scale( scale );
 		y->SetLineColor( colors[ iCen ] );
