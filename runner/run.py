@@ -107,7 +107,7 @@ if "Fit" == args.task :
 
 if "PostCorr" == args.task :
 	for plc in plcs :
-		config = os.path.join( args.config, "PostCorr", postc.t_config_file( plc=plc, ext="xml" ) )
+		config = os.path.join( args.config, "PostCorr", postc.t_config_file.format( plc=plc, ext="xml" ) )
 		logFile = config + ".log"
 		cmd = t_cmd.format( exe=args.exe, args=config, log=logFile )
 		print "Running : "
@@ -117,7 +117,7 @@ if "PostCorr" == args.task :
 if "Present" == args.task :
 	for state in ( "Fit", "PostCorr" ) :
 		for plc in plcs :
-			config = os.path.join( args.config, "Present", postc.t_config_file( state=state, plc=plc, ext="xml" ) )
+			config = os.path.join( args.config, "Present", postc.t_config_file.format( state=state, plc=plc, ext="xml" ) )
 			logFile = config + ".log"
 			cmd = t_cmd.format( exe=args.exe, args=config, log=logFile )
 			print "Running : "
@@ -127,7 +127,7 @@ if "Present" == args.task :
 
 if "PostHisto" == args.task :
 	# not very clean but it will do
-	cmd = exeMe + args.exe + " Fitter -config " + args.config
+	cmd = exeMe + args.exe + " Fit -config " + args.config
 	os.system( cmd )
 
 	cmd = exeMe + args.exe + " PostCorr -config " + args.config
