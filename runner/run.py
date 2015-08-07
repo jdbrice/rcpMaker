@@ -94,7 +94,7 @@ if "PidHisto" == args.task :
 		for plc in plcs :
 			config = os.path.join( args.config, "PidHisto", pidhc.t_config_file.format( state=state, plc=plc, ext="xml" ) )
 			logFile = config + ".log"
-			if not os.path.isfile( config )
+			if not os.path.isfile( config ) :
 				print "Skipping :", config
 				continue
 			cmd = t_cmd.format( exe=args.exe, args=config, log=logFile )
@@ -106,7 +106,7 @@ if "Fit" == args.task :
 	for state in states :
 		for plc in plcs :
 			config = os.path.join( args.config, "Fitter", fitc.t_config_file.format( state=state, plc=plc, ext="xml" ) )
-			if not os.path.isfile( config )
+			if not os.path.isfile( config ) :
 				print "Skipping :", config
 				continue
 			logFile = config + ".log"
@@ -129,7 +129,7 @@ if "Present" == args.task :
 		for plc in plcs :
 			config = os.path.join( args.config, "Present", pres.t_config_file.format( state=state, plc=plc, ext="xml" ) )
 			logFile = config + ".log"
-			if not os.path.isfile( config )
+			if not os.path.isfile( config ) :
 				print "Skipping :", config
 				continue
 			cmd = t_cmd.format( exe=args.exe, args=config, log=logFile )
