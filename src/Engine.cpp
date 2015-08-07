@@ -88,20 +88,7 @@ int main( int argc, char* argv[] ) {
 				//cout << "making presenter" << endl;
  
 				PidYieldPresenter pyp( &config, "PidYieldPresenter." );
-				
-				pyp.normalizeYield();
-				pyp.compareYields();
-				pyp.rcp( 6 );
-
-				// pyp.rcpPanel( 0, 5);
-				// pyp.rcpPanel( 1, 5);
-				// pyp.rcpPanel( 2, 5);
-				// pyp.rcpPanel( 3, 5);
-				// pyp.rcpPanel( 4, 5);
-				// pyp.rcpPanel( 5, 5);
-
-				// pyp.chargeRatio();
-				// pyp.chargeRatioCompare( );
+				pyp.make();
 
 			}
 

@@ -54,6 +54,7 @@ public:
 	PidYieldPresenter( XmlConfig * _cfg, string _nodePath );
 	~PidYieldPresenter();
 
+	void make();
 
 	/**
 	 * Outputs into book /yield/yieldName( plc, charge, iCen )

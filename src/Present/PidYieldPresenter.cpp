@@ -55,6 +55,24 @@ PidYieldPresenter::~PidYieldPresenter(){
 }
 
 
+void PidYieldPresenter::make(){
+
+	if ( !fPidFit->IsOpen() ){
+		logger->error( __FUNCTION__ ) << "Fit File NOT Opened" << endl;
+		return;
+	}
+	if ( !fPidPS->IsOpen() ){
+		logger->error( __FUNCTION__ ) << "Pid File NOT Opened" << endl;
+		return;
+	}
+
+	normalizeYield();
+	compareYields();
+	rcp( 6 );
+
+}
+
+
 void PidYieldPresenter::normalizeYield( string plc, int charge, int iCen ){
 
 	
