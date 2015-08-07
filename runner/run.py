@@ -127,7 +127,7 @@ if "PostCorr" == args.task :
 if "Present" == args.task :
 	for state in ( "Corr", "PostCorr" ) :
 		for plc in plcs :
-			config = os.path.join( args.config, "Present", pres.t_config_file.format( state=state, plc=plc, ext="xml" ) )
+			config = os.path.join( args.config, "Present", presc.t_config_file.format( state=state, plc=plc, ext="xml" ) )
 			logFile = config + ".log"
 			if not os.path.isfile( config ) :
 				print "Skipping :", config
