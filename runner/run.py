@@ -29,6 +29,8 @@ print args
 plcs = ( "Pi", "K", "P" )
 charges = ( "p", "n" )
 track_types = ( "mc", "rc" )
+states = ( "Corr", "PostCorr" )
+
 t_cmd = "{exe} {args} >& {log}"
 
 
@@ -88,22 +90,30 @@ if "FeedDown" == args.task :
 
 
 if "PidHisto" == args.task :
-	for plc in plcs :
-		config = os.path.join( args.config, "PidHisto", pidhc.t_config_file.format( plc=plc, ext="xml" ) )
-		logFile = config + ".log"
-		cmd = t_cmd.format( exe=args.exe, args=config, log=logFile )
-		print "Running : "
-		print cmd
-		os.system( cmd )
+	for state in states :
+		for plc in plcs :
+			config = os.path.join( args.config, "PidHisto", pidhc.t_config_file.format( state=state, plc=plc, ext="xml" ) )
+			logFile = config + ".log"
+			if not os.path.isfile( config )
+				print "Skipping :", config
+				continue
+			cmd = t_cmd.format( exe=args.exe, args=config, log=logFile )
+			print "Running : "
+			print cmd
+			os.system( cmd )
 
 if "Fit" == args.task :
-	for plc in plcs :
-		config = os.path.join( args.config, "Fitter", fitc.t_config_file.format( plc=plc, ext="xml" ) )
-		logFile = config + ".log"
-		cmd = t_cmd.format( exe=args.exe, args=config, log=logFile )
-		print "Running : "
-		print cmd
-		os.system( cmd )
+	for state in states :
+		for plc in plcs :
+			config = os.path.join( args.config, "Fitter", fitc.t_config_file.format( state=state, plc=plc, ext="xml" ) )
+			if not os.path.isfile( config )
+				print "Skipping :", config
+				continue
+			logFile = config + ".log"
+			cmd = t_cmd.format( exe=args.exe, args=config, log=logFile )
+			print "Running : "
+			print cmd
+			os.system( cmd )
 
 if "PostCorr" == args.task :
 	for plc in plcs :
@@ -115,10 +125,13 @@ if "PostCorr" == args.task :
 		os.system( cmd )
 
 if "Present" == args.task :
-	for state in ( "Fit", "PostCorr" ) :
+	for state in ( "Corr", "PostCorr" ) :
 		for plc in plcs :
-			config = os.path.join( args.config, "Present", postc.t_config_file.format( state=state, plc=plc, ext="xml" ) )
+			config = os.path.join( args.config, "Present", pres.t_config_file.format( state=state, plc=plc, ext="xml" ) )
 			logFile = config + ".log"
+			if not os.path.isfile( config )
+				print "Skipping :", config
+				continue
 			cmd = t_cmd.format( exe=args.exe, args=config, log=logFile )
 			print "Running : "
 			print cmd
