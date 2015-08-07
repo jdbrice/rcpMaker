@@ -71,9 +71,6 @@ int main( int argc, char* argv[] ) {
 			} else if ( "PidHistoMaker" == job ){
 				PidHistoMaker pps( &config, "PidHistoMaker.", fileList, jobPrefix  );
 				pps.make();
-			} else if ( "TofEffMaker" == job ){
-				// TofEffMaker tem( &config, "TofEffMaker.", fileList, jobPrefix  );
-				// tem.make();
 			} else if ( "TofEffFitter" == job ){
 				TofEffFitter tef( &config, "TofEffFitter." );
 				tef.make();     
@@ -87,10 +84,6 @@ int main( int argc, char* argv[] ) {
 			} else if ( "ApplyPostCorr" == job ){
 				ApplyPostCorr apc( &config, "ApplyPostCorr." );
 				apc.make();
-			} else if ( "FeedDownPresentation" == job ){
-				// Logger::setGlobalLogLevel( Logger::llAll );
-				// RooPlotter plt( argv[1] );
-			} else if ( "test" == job ){
 			} else if ( "PresentPidYield" == job ){
 				//cout << "making presenter" << endl;
  

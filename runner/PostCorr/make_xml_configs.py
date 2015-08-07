@@ -51,7 +51,7 @@ def write_conf(  output_path, config_path ="./" ) :
 
 	plcs 		= ( "Pi", "K", "P" )
 	for plc in plcs :
-		data_file = pjoin( output_path, fitc.t_product_file.format( plc=plc, ext="root" ) )
+		data_file = pjoin( output_path, fitc.t_product_file.format( state="PostCorr", plc=plc, ext="root" ) )
 		product_file = pjoin( output_path, t_product_file.format( plc=plc, ext="root" ) )
 
 		with open( pjoin( config_path, t_config_file.format( plc=plc, ext="xml" ) ), 'w' ) as f :

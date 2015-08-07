@@ -3,10 +3,10 @@ pjoin = os.path.join
 
 
 # all of them should define this
-t_config_file = "{plc}.{ext}"
+t_config_file = "{state}_{plc}.{ext}"
 t_data_file = "{plc}.{ext}"
 # all of them should define this
-t_product_file = "PidHisto_{plc}.{ext}"
+t_product_file = "PidHisto_{state}_{plc}.{ext}"
 
 
 
@@ -73,6 +73,18 @@ def write_conf( data_path, output_path, input_config_path, config_path ="./" ) :
 		<!-- InclusiveSpectra can skip making the combined spectra -->
 		<Spectra all="false" tof="false" />
 
+		<Corrections tof="{corr}" tpc="{corr}" fd="{corr}"/>
+		<!-- Include the corrections files -->
+		<FeedDown>
+			<Include url="../Params/FeedDown.xml" />
+		</FeedDown>
+		<TpcEff>
+			<Include url="../Params/TpcEff.xml" />
+		</TpcEff>
+		<TofEff>
+			<Include url="../Params/TofEff.xml" />
+		</TofEff>
+
 	</PidHistoMaker>
 	
 
@@ -86,17 +98,21 @@ def write_conf( data_path, output_path, input_config_path, config_path ="./" ) :
 
 
 	plcs 		= ( "Pi", "K", "P" )
+	states 		= ("Corr", "PostCorr")
 	# data files must have the name form '{Plc}'
 
+	for state in states :
+		for plc in plcs :
+			product_file = t_product_file.format( state=state, plc=plc, ext="root" )
+			corr = 'false'
+			if "Corr" == state :
+				corr = 'true'
 
-	for plc in plcs :
-		prod_file = pjoin( output_path, t_product_file.format( plc=plc, ext="root" ) )
-		
-		#energy loss params
-		param_file= pjoin( input_config_path, "EnergyLoss_" )
+			#energy loss params
+			param_file= pjoin( input_config_path, "EnergyLoss_" )
 
-		with open( pjoin( config_path, t_config_file.format( plc=plc, ext="xml" ) ), 'w' ) as f :
-			f.write( template.format( plc=plc, data_path=data_path, params_path=param_file, product_path=output_path, product_file=t_product_file.format( plc=plc, ext="root" ) ) )
+			with open( pjoin( config_path, t_config_file.format( state=state, plc=plc, ext="xml" ) ), 'w' ) as f :
+				f.write( template.format( plc=plc, corr=corr, data_path=data_path, params_path=param_file, product_path=output_path, product_file=product_file ) )
 
 
 def write( data_path, output_path, input_config_path, config_path ="./" ) :

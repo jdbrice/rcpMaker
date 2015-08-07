@@ -4,10 +4,10 @@ pjoin = os.path.join
 
 
 # all of them should define this
-t_config_file = "{plc}.{ext}"
+t_config_file = "{state}_{plc}.{ext}"
 t_data_file = "{plc}.{ext}"
 # all of them should define this
-t_product_file = "Fit_{plc}.{ext}"
+t_product_file = "Fit_{state}_{plc}.{ext}"
 
 
 
@@ -76,13 +76,14 @@ def write_conf(  output_path, config_path ="./" ) :
 
 	"""
 
-
+	states 		= ( "Corr", "PostCorr" )
 	plcs 		= ( "Pi", "K", "P" )
-	for plc in plcs :
-		data_file = pjoin( output_path, pidc.t_product_file.format( plc=plc, ext="root" ) )
+	for state in states :
+		for plc in plcs :
+			data_file = pjoin( output_path, pidc.t_product_file.format( state=state, plc=plc, ext="root" ) )
 
-		with open( pjoin( config_path, t_config_file.format( plc=plc, ext="xml" ) ), 'w' ) as f :
-			f.write( template.format( plc=plc, data_file=data_file, output_path=output_path, product_file=t_product_file.format( plc=plc, ext="root" ) ) )
+			with open( pjoin( config_path, t_config_file.format( state=state, plc=plc, ext="xml" ) ), 'w' ) as f :
+				f.write( template.format( plc=plc, data_file=data_file, output_path=output_path, product_file=t_product_file.format( state=state, plc=plc, ext="root" ) ) )
 
 
 def write( output_path, config_path ="./" ) :

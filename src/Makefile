@@ -22,15 +22,9 @@ sources = 	Engine.cpp 							\
 			Params/EnergyLossParams.cpp			\
 			Spectra/PidHistoMaker.cpp			\
 			Present/PidYieldPresenter.cpp 		\
-			Correction/ApplyPostCorr.cpp
+			Correction/ApplyPostCorr.cpp		\
+			Correction/SpectraCorrecter.cpp
 
-
-#			McMaker/TofEffMaker.cpp 			\
-#			FeedDownMaker.cpp  					\
-
-
-
-# TODO: Fix broken files
 
 objects = $(patsubst %.cpp,%.o, $(sources))
 

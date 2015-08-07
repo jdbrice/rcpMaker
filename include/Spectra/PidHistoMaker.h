@@ -60,10 +60,9 @@ protected:
 	bool makeCombinedCharge = false;
 
 	unique_ptr<SpectraCorrecter> sc;
-	float effWeight = 0;
+	float trackPt = 0;
 	map< string, unique_ptr<EnergyLossParams> > elParams;
-	map< string, vector< unique_ptr<FeedDownParams> > > fdParams;
-	double fdWeight = 0;
+	
 
 
 	// apply feed down correction
@@ -127,24 +126,6 @@ public:
 protected:
 
 	void prepareHistograms( string plc );
-
-	double feedDownWeight( int charge, double pt ){
-
-		string name = centerSpecies + "_" + Common::chargeString( charge );
-		if ( fdParams.count( name ) ){
-
-			for ( int i = 0; i < fdParams[ name ].size(); i++ ){
-				if ( fdParams[ name ][ i ]->usable( refMult ) ){
-					return fdParams[ name ][ i ]->weight( pt );
-				}
-			}
-			ERROR( "Feed Down Corrections not found for refMult = " << refMult )	
-		}
-		//ERROR( "Feed Down Corrections not found for " + name )
-		return 1.0;
-
-	}
-	
 	
 };
 

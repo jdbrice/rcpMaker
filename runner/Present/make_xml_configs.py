@@ -73,15 +73,19 @@ def write_conf(  output_path, config_path ="./" ) :
 </config>
 	"""
 
-	states 		= ( fitc.t_product_file, postc.t_product_file )
+	states 		= ( "Corr", "PostCorr" )
 	plcs 		= ( "Pi", "K", "P" )
 	for state in states :
 		for plc in plcs :
 			
-			fit_file = pjoin( output_path, state.format( plc=plc, ext="root" ) )
-			histo_file = pjoin( output_path, pidc.t_product_file.format( plc=plc, ext="root" ) )
-			product_file = "Present_" + state.format( plc=plc, ext="root" )
-			report_file = pjoin( output_path, "rpPresent_" + state.format( plc=plc, ext="pdf" ) )
+			if "Corr" == state :
+				fit_file = pjoin( output_path, pidc.t_product_file.format( state=state, plc=plc, ext="root" ) )
+			else :
+				fit_file = pjoin( output_path, postc.t_product_file.format(  plc=plc, ext="root" ) )
+
+			histo_file = pjoin( output_path, pidc.t_product_file.format( state=state, plc=plc, ext="root" ) )
+			product_file = t_product_file.format( state=state, plc=plc, ext="root" )
+			report_file = pjoin( output_path, "rp" + product_file )
 
 			with open( pjoin( config_path, state.format( plc=plc, ext="xml" ) ), 'w' ) as f :
 				f.write( template.format( plc=plc, fit_file=fit_file, histo_file=histo_file, output_path=output_path, report_file=report_file, product_file=product_file ) )

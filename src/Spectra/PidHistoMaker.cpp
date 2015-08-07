@@ -1,6 +1,6 @@
 // RcpMaker
 #include "Spectra/PidHistoMaker.h"
-#include "Spectra/SpectraCorrecter.h"
+#include "Correction/SpectraCorrecter.h"
 
 // ROOT
 #include "TLine.h"
@@ -62,7 +62,11 @@ PidHistoMaker::PidHistoMaker( XmlConfig* config, string np, string fl, string jp
 	makeCombinedCharge = false;
 
 	// Efficiency corrector
-	sc = unique_ptr<SpectraCorrecter>( new SpectraCorrecter( "config/15GeV/efficiency.xml" ) ); 
+	sc = unique_ptr<SpectraCorrecter>( new SpectraCorrecter( cfg, nodePath ) ); 
+	// Read in the options for corrections
+	correctTpcEff = cfg->getBool( nodePath + "Corrections:tpc", false );
+	correctTofEff = cfg->getBool( nodePath + "Corrections:tof", false );
+	correctFeedDown = cfg->getBool( nodePath + "Corrections:fd", false );
 
 	// make the energy loss params
 	vector<int> charges = { -1, 1 };
@@ -81,35 +85,8 @@ PidHistoMaker::PidHistoMaker( XmlConfig* config, string np, string fl, string jp
 				elParams[ name ] = unique_ptr<EnergyLossParams>( new EnergyLossParams(&cfgEL, "EnergyLossParams[" + ts(cb) + "]") );
 			}
 
-		}
-
-		
-	}
-
-	
-	if ( cfg->exists( np + "FDParams:config" ) ){
-		cfgFeedDown = new XmlConfig( cfg->getString( np + "FDParams:config" ) );
-		
-
-		for ( int c : charges ){
-			string cs = Common::chargeString( c );
-			string name = centerSpecies + "_" + cs;
-			vector<string> children = cfgFeedDown->childrenOf( name );
-			DEBUG( "FOUND : " << children.size() )
-			for ( string path : children ){
-				DEBUG( "\t Checking " << path )
-				fdParams[ name ].push_back(  unique_ptr<FeedDownParams>( new FeedDownParams(cfgFeedDown, path ) ) );
-
-				if ( fdParams[ name ].size() == 1 )
-					DEBUG( "Feed Down Sanity Check : " << name << "@ pt = .6 ==> weight = " <<  fdParams[ name ][ 0 ]->weight( 0.6 )  );
-			}
 		}	
-	} else {
-		ERROR( "Cannot find FeedDownParams" )
 	}
-
-
-
 }
 
 PidHistoMaker::~PidHistoMaker(){
@@ -175,17 +152,15 @@ void PidHistoMaker::analyzeTofTrack( int iTrack ){
 		ERROR( "No Energy Loss Params Given - These must be applied here" )
 	} 
 
-	// Eff
-	effWeight 		= sc->reweight(centerSpecies, charge, refMult, pt);
-	// Feeddown
-	fdWeight 		= feedDownWeight( charge, pt );
-	if ( correctFeedDown && book->exists( "fdWeight_" + Common::chargeString(charge) ) )
-		book->get3D( "fdWeight_" + Common::chargeString(charge) )->Fill( pt, fdWeight, cBin );
+	
+	//if ( correctFeedDown && book->exists( "fdWeight_" + Common::chargeString(charge) ) )
+	//	book->get3D( "fdWeight_" + Common::chargeString(charge) )->Fill( pt, fdWeight, cBin );
 	/************ Corrections **********/
 
 	// Must be done after corrections
 	//double y 	= Common::rapidity( pt, eta, zr->mass( centerSpecies ) );
 	int ptBin 	= binsPt->findBin( pt );
+	trackPt = pt;
 	double avgP = binAverageP( ptBin );
 
 	// Require valid p bin
@@ -245,6 +220,17 @@ void PidHistoMaker::enhanceDistributions( double avgP, int ptBin, int charge, do
 
 	double trackWeight = eventWeight;
 	// TODO: Add options to turn on/off corrections in track weight
+	if ( correctTpcEff ){
+		trackWeight = trackWeight * sc->tpcEffWeight( centerSpecies, trackPt, cBin, charge ) ;
+	}
+	if ( correctTofEff ){
+		trackWeight = trackWeight * sc->tofEffWeight( centerSpecies, trackPt, cBin, charge ) ;
+	}
+	if ( correctFeedDown ){
+		trackWeight = trackWeight * sc->feedDownWeight( centerSpecies, trackPt, cBin, charge ) ;
+	}
+
+
 
 	book->cd( "tof" );
 	// unenhanced - all tof tracks
