@@ -5,6 +5,8 @@ import PidHisto.make_xml_configs as pidhc
 import TofEff.make_xml_configs as tofc
 import FeedDown.make_xml_configs as fdc
 import Fitter.make_xml_configs as fitc
+import PostCorr.make_xml_configs as postc
+import Present.make_xml_configs as presc
 import argparse
 import os
 import glob
@@ -43,6 +45,12 @@ pidhc.write( os.path.join( args.data_path, "data", "RcpPicoDst" ), args.output_p
 # Pif Fitter
 fitc.write( args.output_path, os.path.join( args.config_base_path, "Fitter/") )
 
+
+"""Post Fit Corrections"""
+postc.write( args.output_path, os.path.join( args.config_base_path, "PostCorr/") )
+
+"""Presentation"""
+presc.write(args.output_path, os.path.join( args.config_base_path, "Present/") )
 
 #Install the common configs - you may need to edit these by hand
 

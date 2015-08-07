@@ -130,11 +130,11 @@ namespace TSF{
 			double zbSigFix = schema->vars[ "zb_sigma_"+plc ]->val;
 
 			if ( zbMinParP > 0 && avgP >= zbMinParP){
-				schema->setInitialMu( "zb_mu_"+plc, zbMu, zbSigFix, 2.0 );
+				schema->setInitialMu( "zb_mu_"+plc, zbMu, zbSigFix, zbDeltaMu );
 				schema->fixParameter( "zb_sigma_" + plc, zbSigFix, true );
 			}
 			else {
-				schema->setInitialSigma( "zb_sigma_"+plc, zbSig, 0.005, 0.066);
+				schema->setInitialSigma( "zb_sigma_"+plc, zbSig, zbSig * 0.5, zbSig * 6 );
 				schema->setInitialMu( "zb_mu_"+plc, zbMu, zbSig, zbDeltaMu );
 			}
 

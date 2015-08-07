@@ -40,7 +40,7 @@ def write_conf(  output_path, config_path ="./" ) :
 
 		<ParameterFixing>
 			<!-- mu can vary +/- nSigma -->
-			<deltaMu zb="2.0" zd="13.0" />
+			<deltaMu zb="6.0" zd="13.0" />
 
 			<!-- the minimum momentum at which the value is fixed -->
 			<Pi zbSigma="0.65" zdSigma="1.915" />

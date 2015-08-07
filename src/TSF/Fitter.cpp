@@ -260,8 +260,6 @@ namespace TSF{
 			fix( "eff" );
 		}
 
-		
-
 		schema->setMethod( "poisson" );
 			minuit->mnexcm( "MINI", arglist, 1, iFlag );
 			minuit->mnexcm( "MINI", arglist, 1, iFlag );
