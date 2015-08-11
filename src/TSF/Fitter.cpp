@@ -111,6 +111,8 @@ namespace TSF{
 
 		// enforces 1/beta mass ordering
 		double penalty = self->penalizeYields( npar, par );
+		// enforce the average total tofEff
+		//penalty *= self->enforceEff( npar, par );
 
 		
 		f = (fnVal * self->getNorm() ) * penalty;
@@ -218,15 +220,14 @@ namespace TSF{
       	arglist[ 0 ] = -1;
 		arglist[ 1 ] = 1.0;
 
-		if ( schema->tofEff() )
-			fix( "eff" );
+		
 		fixShapes();
 			minuit->mnexcm( "MINI", arglist, 1, iFlag );
 			minuit->mnexcm( "MINI", arglist, 1, iFlag );
 			minuit->mnexcm( "MINI", arglist, 1, iFlag );
 		releaseShapes();
 
-
+		
 		fix( "yield" );
 			minuit->mnexcm( "MINI", arglist, 1, iFlag );
 			minuit->mnexcm( "MINI", arglist, 1, iFlag );
@@ -246,7 +247,7 @@ namespace TSF{
 			minuit->mnexcm( "MINI", arglist, 1, iFlag );
 		release( "mu" );
 
-		if ( schema->tofEff() ){
+		/*if ( schema->tofEff() ){
 			release( "eff" );
 
 			fix( "yield" );
@@ -257,8 +258,8 @@ namespace TSF{
 			release( "yield" );
 			releaseShapes();
 
-			fix( "eff" );
-		}
+			//fix( "eff" );
+		}*/
 
 		schema->setMethod( "poisson" );
 			minuit->mnexcm( "MINI", arglist, 1, iFlag );
@@ -267,8 +268,8 @@ namespace TSF{
 
 
 
-		if ( schema->tofEff() )
-			release( "eff" );
+		//if ( schema->tofEff() )
+		//	release( "eff" );
 		
 
       	if ( 0 == iFlag )
@@ -401,68 +402,101 @@ namespace TSF{
 		self->schema->updateModels( self->players );		
 	}
 
-	double Fitter::currentYield( string plc, int npar, double * pars ){
-		// update the variables
-		for ( int i = 0; i < self->parNames.size(); i++ ){
+	// double Fitter::currentYield( string plc, int npar, double * pars ){
+	// 	// update the variables
+	// 	for ( int i = 0; i < self->parNames.size(); i++ ){
 			
-			if ( self->parNames[ i ].find( "yield_" + plc ) != string::npos ){
-				return pars[ i ];	
-			}
-		}
-		return 0.0;
-	}
+	// 		if ( self->parNames[ i ].find( "yield_" + plc ) != string::npos ){
+	// 			return pars[ i ];	
+	// 		}
+	// 	}
+	// 	return 0.0;
+	// }
 
-	double Fitter::currentMu( string var, string plc, int npar, double * pars ){
-		// update the variables
-		for ( int i = 0; i < self->parNames.size(); i++ ){
+	// double Fitter::currentMu( string var, string plc, int npar, double * pars ){
+	// 	// update the variables
+	// 	for ( int i = 0; i < self->parNames.size(); i++ ){
 			
-			if ( self->parNames[ i ].find( var + "_mu_" + plc ) != string::npos ){
-				return pars[ i ];	
-			}
-		}
-		return 0.0;
-	}
+	// 		if ( self->parNames[ i ].find( var + "_mu_" + plc ) != string::npos ){
+	// 			return pars[ i ];	
+	// 		}
+	// 	}
+	// 	return 0.0;
+	// }
 	
 
-	double Fitter::currentYield( string enh, string plc2, int npar , double * pars  ){
-		// update the variables
-		for ( int i = 0; i < self->parNames.size(); i++ ){
+	// double Fitter::currentYield( string enh, string plc2, int npar , double * pars  ){
+	// 	// update the variables
+	// 	for ( int i = 0; i < self->parNames.size(); i++ ){
 			
-			if ( self->parNames[ i ].find( enh + "_yield_" + plc2 ) != string::npos ){
-				return pars[ i ];	
-			}
-		}
-		return 0.0;
-	}
+	// 		if ( self->parNames[ i ].find( enh + "_yield_" + plc2 ) != string::npos ){
+	// 			return pars[ i ];	
+	// 		}
+	// 	}
+	// 	return 0.0;
+	// }
 
 	double Fitter::penalizeYields( int npar , double * pars ){
 
-
 		double penalty = 1.0;
 
-		float muPi 	= currentMu( "zb", "Pi", npar, pars );
-		float muK 	= currentMu( "zb", "K", npar, pars );
-		float muP 	= currentMu( "zb", "P", npar, pars );
+		float muPi 	= currentValue( "zb_mu_Pi", npar, pars );
+		float muK 	= currentValue( "zb_mu_K", npar, pars );
+		float muP 	= currentValue( "zb_mu_P", npar, pars );
 
 		if ( muPi > muK ){
-			penalty *= ( 1.0 + ( muPi - muK ) * ( muPi - muK ) * 1000 );
+			penalty *= ( 1.0 + ( muPi - muK ) * ( muPi - muK ) * Fitter::penaltyScale );
 		}
 		if ( muPi > muP ){
-			penalty *= ( 1.0 + ( muPi - muP ) * ( muPi - muP ) * 1000 );
+			penalty *= ( 1.0 + ( muPi - muP ) * ( muPi - muP ) * Fitter::penaltyScale );
 		}
 		if ( muK > muP ){
-			penalty *= ( 1.0 + ( muK - muP ) * ( muK - muP ) * 1000 );
+			penalty *= ( 1.0 + ( muK - muP ) * ( muK - muP ) * Fitter::penaltyScale );
 		}
 		
 		return penalty;
 	}
 
+	double Fitter::enforceEff(int npar , double * pars) {
+		if (!schema->tofEff())
+			return 1.0;
+		double penalty = 1.0;
 
+
+		// we are enforcing the average eff between Pi, K, P to be ~100% - since we already corrected the "total" toff eff
+		float effPi = currentValue( "eff_Pi", npar, pars );
+		float effK 	= currentValue( "eff_K", npar, pars );
+		float effP 	= currentValue( "eff_P", npar, pars );
+
+		float x = 3 - ( effPi + effK + effP );
+
+		penalty = 1.0 + ( x * x * Fitter::penaltyScale ) ;
+
+		return penalty;
+
+	}
+
+	double Fitter::currentValue( string var, int npar, double * pars ){
+		// sanity check
+		if ( npar < parNames.size() )
+			return -9999.999;
+		// update the variables
+		for ( int i = 0; i < parNames.size(); i++ ){
+			
+			if ( parNames[ i ].find( var ) != string::npos ){
+				return pars[ i ];	
+			}
+		}
+		// not found
+		return 9999.999;
+	}
+
+	// just a shortcut function
 	void Fitter::fixShapes(){
 		fix( "mu" );
 		fix( "sig" );
 	}
-
+	// just a shortcut function
 	void Fitter::releaseShapes(){
 		release( "mu" );
 		release( "sig" );
@@ -481,7 +515,6 @@ namespace TSF{
 			if ( shouldFix )
 				minuit->FixParameter( i );
 		} // i
-
 	}
 
 	void Fitter::release( string var, bool check ){
@@ -496,7 +529,6 @@ namespace TSF{
 			if ( shouldRelease && ( !check || !schema->vars[ parNames[ i ] ]->fixed) )
 				minuit->Release( i );
 		} // i
-
 	}
 
 

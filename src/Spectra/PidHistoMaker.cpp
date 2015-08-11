@@ -132,7 +132,7 @@ void PidHistoMaker::analyzeTofTrack( int iTrack ){
 	double pt 		= pico->trackPt( iTrack );
 	double p 		= pico->trackP( iTrack );
 	double eta 		= pico->trackEta( iTrack );
-
+	trackPt 		= pt; // saved for whole track calculations
 
 	/************ Corrections **********/
 	// Apply Energy Loss Corrections if given
@@ -160,7 +160,7 @@ void PidHistoMaker::analyzeTofTrack( int iTrack ){
 	// Must be done after corrections
 	//double y 	= Common::rapidity( pt, eta, zr->mass( centerSpecies ) );
 	int ptBin 	= binsPt->findBin( pt );
-	trackPt = pt;
+	corrTrackPt = pt;
 	double avgP = binAverageP( ptBin );
 
 	// Require valid p bin
@@ -219,7 +219,9 @@ void PidHistoMaker::enhanceDistributions( double avgP, int ptBin, int charge, do
 	vector<string> mSpecies = zr->allSpecies();
 
 	double trackWeight = eventWeight;
-	// TODO: Add options to turn on/off corrections in track weight
+
+	// Here we are intentionally using the pre-EnergyLoss pt because that is what the 
+	// Eff and FeedDown are parameterized in
 	if ( correctTpcEff ){
 		trackWeight = trackWeight * sc->tpcEffWeight( centerSpecies, trackPt, cBin, charge ) ;
 	}
@@ -230,7 +232,7 @@ void PidHistoMaker::enhanceDistributions( double avgP, int ptBin, int charge, do
 		trackWeight = trackWeight * sc->feedDownWeight( centerSpecies, trackPt, cBin, charge ) ;
 	}
 
-
+	
 
 	book->cd( "tof" );
 	// unenhanced - all tof tracks
@@ -248,11 +250,11 @@ void PidHistoMaker::enhanceDistributions( double avgP, int ptBin, int charge, do
 		} // loop on species from centered means
 	}
 
-	
 	// 3 sigma below pi to reject electrons
 	// and 3 sigma above proton to reject deuteron
 	if ( 	tof < tMeans[ 0 ] - tSigma * nSigBelow || tof > tMeans[ 2 ] + tSigma * nSigAbove )
 		return;
+	
 
 
 	book->cd( "dedx" );

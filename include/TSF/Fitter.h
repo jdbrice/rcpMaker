@@ -17,6 +17,8 @@ namespace TSF{
 
 	class Fitter{
 
+		static constexpr double penaltyScale = 1000.0;
+
 		unique_ptr<TMinuit> minuit;
 		unique_ptr<Logger> logger;
 
@@ -93,10 +95,13 @@ namespace TSF{
 		}
 
 		// getter for current parameters
-		double currentMu( string var, string plc, int npar, double * pars );
-		double currentYield( string var, int npar = 0, double * pars = 0 );
-		double currentYield( string var, string plc, int npar = 0, double * pars = 0 );
+		// double currentMu( string var, string plc, int npar, double * pars );
+		// double currentYield( string var, int npar = 0, double * pars = 0 );
+		// double currentYield( string var, string plc, int npar = 0, double * pars = 0 );
+
+		double currentValue( string var, int npar, double * pars );
 		double penalizeYields( int npar = 0, double * pars = 0 );
+		double enforceEff( int npar = 0, double * pars = 0 );
 
 
 		double getNorm() { return norm; }

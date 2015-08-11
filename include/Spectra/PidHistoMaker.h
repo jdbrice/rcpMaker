@@ -60,6 +60,7 @@ protected:
 	bool makeCombinedCharge = false;
 
 	unique_ptr<SpectraCorrecter> sc;
+	float corrTrackPt = 0;
 	float trackPt = 0;
 	map< string, unique_ptr<EnergyLossParams> > elParams;
 	
