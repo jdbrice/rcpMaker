@@ -14,7 +14,7 @@ TofEffFitter::TofEffFitter( XmlConfig * _cfg, string _nodePath ){
 
 	cfg = _cfg;
 	nodePath = _nodePath;
-	outputPath = cfg->getString( nodePath + "output:path", "./" );
+	outputPath = cfg->getString( nodePath + "output:path" );
 
 	book = unique_ptr<HistoBook>( new HistoBook( outputPath + cfg->getString( nodePath +  "output.data", "TofEff.root" ), cfg, "", "" ) );	
 
@@ -73,24 +73,37 @@ void TofEffFitter::make(){
 				book->add( plc + "_" + cs + "_" + ts(b),  &g );
 
 				// do the fit
-				TF1 * fitFunc = new TF1( "effFitFunc", "[0] * exp( - pow( [1] / x, [2] ) )", 0.02, 2.5 );
-				fitFunc->SetParameters( .85, 0.05, 5.0, -0.05 );
+				// TF1 * fitFunc = new TF1( "effFitFunc", "[0] * exp( -pow( [1] / (x), [2] ) )", 0.2, 0.6 );
+				// fitFunc->SetParameters( .6, 0.1, 4.0, 0.6);
+				// fitFunc->SetParLimits( 0, 0.2, 0.99 );
+				// fitFunc->SetParLimits( 1, 0.0, 0.15 );
+				// fitFunc->SetParLimits( 2, 0.0, 30.0 ); 
 				
-				g.Fit( fitFunc, "R" );
-				g.Fit( fitFunc, "R" );
+				// g.Fit( fitFunc, "R" );
 
+				// cout << Common::toXml( &g ) << endl;
+				//g.Fit( fitFunc, "R" );
+				// fitFunc->SetRange( 0, 5 );
+
+				// string fitName = "pt_" + ts( b ) + "_" + cs + "_CL";
+				// TH1F * hCL = (TH1F*)Common::fitCL( fitFunc, fitName, 100, 0.2, 5 );
 
 				RooPlotLib rpl;
 				rp.newPage();
-				rpl.style( &g ).set( "title", plc + "_" + cs + " : centrality bin = " + ts( b ) ).set( "yr", 0, 1.1 ).set( "optfit", 111 )
+				rpl.style( &g ).set( "title", plc + "_" + cs + " : centrality bin = " + ts( b ) ).set( "yr", 0.4, 0.85 ).set( "optfit", 111 )
 					.set("y", "Efficiency").set( "x", "p_{T} [GeV/c]" ).draw();
 					gStyle->SetStatY( 0.9 );
 					gStyle->SetStatX( 0.65 );
-					fitFunc->SetLineColor( kRed );
-					fitFunc->Draw("same");
+					
+					// hCL->SetFillColorAlpha( kRed, 0.66 );
+					// hCL->Draw( "same e3" );
+
+					// fitFunc->SetLineColor( kRed );
+					// fitFunc->Draw("same");
+
 				rp.savePage();
 
-				exportParams( b, fitFunc, out );
+				exportParams( b, &g, out );
 
 			} // loop centrality bins
 			out << "\t</" << plc << "_" << cs << ">" << endl;
@@ -104,8 +117,8 @@ void TofEffFitter::make(){
 }
 
 
-void TofEffFitter::exportParams( int bin, TF1 * f, ofstream &out ){
-	out << "\t\t<TofEffParams bin=\"" << bin << "\" ";
-	out << Common::toXml( f );
-	out << "/>" << endl;
+void TofEffFitter::exportParams( int bin, TGraphAsymmErrors * g, ofstream &out ){
+	out << "\t\t<TofEffParams bin=\"" << bin << "\" />\n";
+	out << Common::toXml( g, "\t\t\t" );
+	out << "\n\t\t</TofEffParams>" << endl;
 }

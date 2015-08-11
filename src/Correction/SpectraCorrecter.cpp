@@ -38,7 +38,7 @@ void SpectraCorrecter::setupCorrections(){
 						if ( "TpcEff" == cPath )
 							tpcEff[ plc + "_" + c + "_" + ts(cb) ] = unique_ptr<ConfigFunction>( new ConfigFunction( cfg, path ) );
 						if ( "TofEff" == cPath )
-							tofEff[ plc + "_" + c + "_" + ts(cb) ] = unique_ptr<ConfigFunction>( new ConfigFunction( cfg, path ) );
+							tofEff[ plc + "_" + c + "_" + ts(cb) ] = unique_ptr<ConfigGraph>( new ConfigGraph( cfg, path ) );
 					}
 				} else {
 					WARN( "Cannot find " + cPath + " params for " << plc + "_" + c )
@@ -63,7 +63,7 @@ double SpectraCorrecter::tofEffWeight( string plc, double pt, int iCen, int char
 	if ( tofEff.count( name ) )
 		return 1.0 / tofEff[ name ]->eval( pt );
 	else
-		ERROR( "Cannot find tpcEff correction for " << name )
+		ERROR( "Cannot find tofEff correction for " << name )
 	return 1.0;
 }
 double SpectraCorrecter::feedDownWeight( string plc, double pt, int iCen, int charge ){
@@ -73,6 +73,6 @@ double SpectraCorrecter::feedDownWeight( string plc, double pt, int iCen, int ch
 	if ( feedDown.count( name ) )
 		return 1.0 - feedDown[ name ]->eval( pt );
 	else
-		ERROR( "Cannot find tpcEff correction for " << name )
+		ERROR( "Cannot find feedDown correction for " << name )
 	return 1.0;
 }

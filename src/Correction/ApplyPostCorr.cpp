@@ -35,7 +35,7 @@ void ApplyPostCorr::setupCorrections(){
 						if ( "TpcEff" == cPath )
 							tpcEff[ plc + "_" + c + "_" + ts(cb) ] = unique_ptr<ConfigFunction>( new ConfigFunction( cfg, path ) );
 						if ( "TofEff" == cPath )
-							tofEff[ plc + "_" + c + "_" + ts(cb) ] = unique_ptr<ConfigFunction>( new ConfigFunction( cfg, path ) );
+							tofEff[ plc + "_" + c + "_" + ts(cb) ] = unique_ptr<ConfigGraph>( new ConfigGraph( cfg, path ) );
 					}
 				} else {
 					WARN( "Cannot find " + cPath + " params for " << plc + "_" + c )

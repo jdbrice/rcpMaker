@@ -3,6 +3,11 @@
 
 // ROOT
 #include "TF1.h"
+#include "TH1.h"
+#include "TH1F.h"
+#include "TGraph.h"
+#include "TGraphErrors.h"
+#include "TGraphAsymmErrors.h"
 
 // ROOBARB
 #include "Utils.h"
@@ -113,6 +118,34 @@ public:
 	 */
 	static string toXml( TF1 * f );
 
+	/* Converts a Root histogram (TH1 or subclass) to 
+	 * an xml data node
+	 * @h 			histogram to export as XML attributes
+	 * @return 		string representing the histogram as XML attributes
+	 */
+	static string toXml( TH1 * h );
+
+	/* Converts a Root Graph (TGraph or subclass) to 
+	 * an xml data node
+	 * @g 			Graph to export as XML attributes
+	 * @return 		string representing the Graph as XML attributes
+	 */
+	static string toXml( TGraph * g, string linePrefix ="" );
+
+	/* Converts a Root Graph with symmetric errors (TGraph or subclass) to 
+	 * an xml data node
+	 * @g 			Graph to export as XML attributes
+	 * @return 		string representing the Graph as XML attributes
+	 */
+	static string toXml( TGraphErrors * g );
+
+	/* Converts a Root Graph with asymmetric errors (TGraphAsymmErrors or subclass) to 
+	 * an xml data node
+	 * @g 			Graph to export as XML attributes
+	 * @return 		string representing the Graph as XML attributes
+	 */
+	static string toXml( TGraphAsymmErrors * g, string linePrefix ="" );
+
 
 
 	/* Names used in the PID fitting steps
@@ -137,6 +170,11 @@ public:
 		return "eff_" + plc + "_" + ts(iCen) + "_" + Common::chargeString( charge );
 	}
 
+	/* Draws the given function with its 95% confidence level
+	 * and returns the histogram containing the confidence level region
+	 * @f 		Function to draw
+	 */
+	static TH1 * fitCL( TF1 * f, string name, int nPoints = 100, double x1 = -1.0, double x2 = -1.0 );
 
 	
 };

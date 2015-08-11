@@ -14,6 +14,7 @@ using namespace jdb;
 
 // ROOT
 #include "TF1.h"
+#include "TGraphAsymmErrors.h"
 
 class TofEffFitter
 {
@@ -32,7 +33,7 @@ public:
 
 	void make();
 
-	void exportParams( int cbin, TF1 * f, ofstream &out );
+	void exportParams( int cbin, TGraphAsymmErrors * g, ofstream &out );
 	
 };
 

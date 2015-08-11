@@ -13,6 +13,7 @@ using namespace std;
 
 // Roobarb
 #include "ConfigFunction.h"
+#include "ConfigGraph.h"
 #include "XmlConfig.h"
 using namespace jdb;
 
@@ -27,7 +28,7 @@ protected:
 	string plc;
 
 	map<string, unique_ptr<ConfigFunction> > tpcEff;
-	map<string, unique_ptr<ConfigFunction> > tofEff;
+	map<string, unique_ptr<ConfigGraph> > tofEff;
 	map<string, unique_ptr<ConfigFunction> > feedDown;
 
 public:
