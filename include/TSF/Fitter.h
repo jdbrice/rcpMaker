@@ -17,22 +17,34 @@ namespace TSF{
 
 	class Fitter{
 
+		// Scaling for configurations that break some constraint
+		// for instance - enforce 1/beta mass ordering with parabolic minimum
 		static constexpr double penaltyScale = 1000.0;
 
+		// the minuit interface
 		unique_ptr<TMinuit> minuit;
+		// logging interface
 		unique_ptr<Logger> logger;
 
+		// fit schema - holds variables etc.
 		shared_ptr<FitSchema> schema;
+		// data file with the 8 distributions
 		TFile * dataFile;
 
+		// ordered list of parameters
+		// these are the parameter names in minuit parameter order
 		vector<string> parNames;
 
+		// singelton since minuit requires a global scoped fit function
 		static Fitter * self;
 
+		// map of data from input file for loading into schema
 		map< string, TH1 * > dataHists;
 
+		// did the fit converge
 		bool fitIsGood;
 
+		// list of models that will contribute to the fit
 		map<string, bool> players;
 
 		double norm;
@@ -95,12 +107,10 @@ namespace TSF{
 		}
 
 		// getter for current parameters
-		// double currentMu( string var, string plc, int npar, double * pars );
-		// double currentYield( string var, int npar = 0, double * pars = 0 );
-		// double currentYield( string var, string plc, int npar = 0, double * pars = 0 );
-
 		double currentValue( string var, int npar, double * pars );
-		double penalizeYields( int npar = 0, double * pars = 0 );
+		
+		double enforceEnhancedYields( int npar = 0, double * pars = 0 );
+		double enforceMassOrder( int npar = 0, double * pars = 0 );
 		double enforceEff( int npar = 0, double * pars = 0 );
 
 

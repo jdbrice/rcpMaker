@@ -118,7 +118,7 @@ void TofEffFitter::make(){
 
 
 void TofEffFitter::exportParams( int bin, TGraphAsymmErrors * g, ofstream &out ){
-	out << "\t\t<TofEffParams bin=\"" << bin << "\" />\n";
+	out << "\t\t<TofEffParams bin=\"" << bin << "\" >\n";
 	out << Common::toXml( g, "\t\t\t" );
 	out << "\n\t\t</TofEffParams>" << endl;
 }

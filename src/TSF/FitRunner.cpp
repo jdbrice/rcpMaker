@@ -158,9 +158,14 @@ namespace TSF{
 				schema->vars[ "yield_" + plc ]->max = schema->vars[ "yield_" + plc ]->val * 2;	
 			}
 
+			double zdOnly = cfg->getDouble( nodePath + "Timing:zdOnly" , 0.5 );
 			// set the eff to 1.0 if we are using eff
 			if ( schema->vars.count( "eff_" + plc ) ){
 				schema->vars[ "eff_" + plc ]->val = 1.0;
+				if ( avgP <= zdOnly )
+					schema->vars[ "eff_" + plc ]->fixed = true;
+				else 
+					schema->vars[ "eff_" + plc ]->fixed = false;
 			}
 			
 		} // loop on plc to set initial vals

@@ -110,7 +110,11 @@ namespace TSF{
 		}
 
 		// enforces 1/beta mass ordering
-		double penalty = self->penalizeYields( npar, par );
+		double penalty = self->enforceMassOrder( npar, par );
+		
+		// enforce the enhanced yield less than total yield
+		//penalty *= self->enforceEnhancedYields( npar, par );
+		
 		// enforce the average total tofEff
 		//penalty *= self->enforceEff( npar, par );
 
@@ -189,6 +193,7 @@ namespace TSF{
 		logger->info(__FUNCTION__) << "OK Starting for ( charge=" << charge << ", cen=" << cenBin << ", ptBin=" << ptBin << " ) " << endl;
 
 	
+		// check for sufficient statistics
 		if ( !sufficienctStatistics ){
 			fitIsGood = false;
 			updateParameters();
@@ -196,9 +201,6 @@ namespace TSF{
 			return;
 		}
 
-
-		//
-		//return;
 
 		double arglist[10];
       	arglist[0] = -1;
@@ -209,6 +211,7 @@ namespace TSF{
       	schema->setMethod( "fractional" );
       	logger->info(__FUNCTION__) << "Fit Method : " << self->schema->getMethod() << endl;
       	
+
       	if ( "nll" != self->schema->getMethod() )
       		arglist[ 0 ] = 1.0; 
       	else 
@@ -217,59 +220,50 @@ namespace TSF{
       	minuit->mnexcm( "SET ERR", arglist, 1, iFlag );
 
 
-      	arglist[ 0 ] = -1;
+      	arglist[ 0 ] = 5000;
 		arglist[ 1 ] = 1.0;
 
-		
-		fixShapes();
-			minuit->mnexcm( "MINI", arglist, 1, iFlag );
-			minuit->mnexcm( "MINI", arglist, 1, iFlag );
-			minuit->mnexcm( "MINI", arglist, 1, iFlag );
-		releaseShapes();
+		int attempts = 0;
+		bool trying = true;
 
-		
-		fix( "yield" );
-			minuit->mnexcm( "MINI", arglist, 1, iFlag );
-			minuit->mnexcm( "MINI", arglist, 1, iFlag );
-			minuit->mnexcm( "MINI", arglist, 1, iFlag );
-		release( "yield" );
-		
-
-		fix( "sigma" );
-			minuit->mnexcm( "MINI", arglist, 1, iFlag );
-			minuit->mnexcm( "MINI", arglist, 1, iFlag );
-			minuit->mnexcm( "MINI", arglist, 1, iFlag );
-		release( "sigma" );
-
-		fix( "mu" );
-			minuit->mnexcm( "MINI", arglist, 1, iFlag );
-			minuit->mnexcm( "MINI", arglist, 1, iFlag );
-			minuit->mnexcm( "MINI", arglist, 1, iFlag );
-		release( "mu" );
-
-		/*if ( schema->tofEff() ){
-			release( "eff" );
-
-			fix( "yield" );
+		while ( attempts < 6 && trying ){
+			schema->setMethod( "fractional" );
 			fixShapes();
-			minuit->mnexcm( "MINI", arglist, 1, iFlag );
-			minuit->mnexcm( "MINI", arglist, 1, iFlag );
-			minuit->mnexcm( "MINI", arglist, 1, iFlag );
-			release( "yield" );
+				minuit->mnexcm( "MINI", arglist, 1, iFlag );
 			releaseShapes();
 
-			//fix( "eff" );
-		}*/
+			// switch to poisson errors
+			schema->setMethod( "poisson" );
+			fixShapes();
+				minuit->mnexcm( "MINI", arglist, 1, iFlag );
+			releaseShapes();
 
-		schema->setMethod( "poisson" );
+			if ( minuit->fCstatu == "CONVERGED " ){
+				trying = false;
+				break;
+			}
+
+			// fix the enhanced yields
+			fix( "_yield_" );
+				minuit->mnexcm( "MINI", arglist, 1, iFlag );
+			release( "_yield_" );
+
+			if ( minuit->fCstatu == "CONVERGED " ){
+				trying = false;
+				break;
+			}
+			attempts ++ ;
+		}
+		logger->info( __FUNCTION__ ) << "Complete after " << attempts << plural( attempts, " attempt", " attempts" ) << endl;
+
+		// final step in the fit
+		// fit the shapes and the enhanced amplitudes
+		fix( "_yield_" );
+		fixShapes();
+			schema->setMethod( "poisson" );
 			minuit->mnexcm( "MINI", arglist, 1, iFlag );
-			minuit->mnexcm( "MINI", arglist, 1, iFlag );
-			minuit->mnexcm( "MINI", arglist, 1, iFlag );
-
-
-
-		//if ( schema->tofEff() )
-		//	release( "eff" );
+		releaseShapes();
+		release( "_yield_" );
 		
 
       	if ( 0 == iFlag )
@@ -402,41 +396,24 @@ namespace TSF{
 		self->schema->updateModels( self->players );		
 	}
 
-	// double Fitter::currentYield( string plc, int npar, double * pars ){
-	// 	// update the variables
-	// 	for ( int i = 0; i < self->parNames.size(); i++ ){
-			
-	// 		if ( self->parNames[ i ].find( "yield_" + plc ) != string::npos ){
-	// 			return pars[ i ];	
-	// 		}
-	// 	}
-	// 	return 0.0;
-	// }
 
-	// double Fitter::currentMu( string var, string plc, int npar, double * pars ){
-	// 	// update the variables
-	// 	for ( int i = 0; i < self->parNames.size(); i++ ){
-			
-	// 		if ( self->parNames[ i ].find( var + "_mu_" + plc ) != string::npos ){
-	// 			return pars[ i ];	
-	// 		}
-	// 	}
-	// 	return 0.0;
-	// }
-	
+	double Fitter::enforceEnhancedYields( int npar , double * pars ){
 
-	// double Fitter::currentYield( string enh, string plc2, int npar , double * pars  ){
-	// 	// update the variables
-	// 	for ( int i = 0; i < self->parNames.size(); i++ ){
-			
-	// 		if ( self->parNames[ i ].find( enh + "_yield_" + plc2 ) != string::npos ){
-	// 			return pars[ i ];	
-	// 		}
-	// 	}
-	// 	return 0.0;
-	// }
-
-	double Fitter::penalizeYields( int npar , double * pars ){
+		double penalty = 1.0;
+		for ( string plc1 : Common::species ){
+			double cy = currentValue( "yield_" + plc1, npar, pars );
+			for ( string pre : { "zb_", "zd_" } ){
+				for ( string plc2 : Common::species ){
+					double cey = currentValue( pre + plc2 + "_yield_" + plc1, npar, pars );
+					if ( cey > cy ){
+						penalty *= ( 1.0 + ( cey - cy ) / cey );
+					}
+				}
+			}
+		}
+		return penalty;
+	}
+	double Fitter::enforceMassOrder( int npar , double * pars ){
 
 		double penalty = 1.0;
 
