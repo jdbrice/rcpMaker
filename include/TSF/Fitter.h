@@ -106,6 +106,8 @@ namespace TSF{
 			}
 		}
 
+		shared_ptr<FitSchema> getSchema() { return schema; }
+
 		// getter for current parameters
 		double currentValue( string var, int npar, double * pars );
 		

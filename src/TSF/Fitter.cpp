@@ -113,7 +113,7 @@ namespace TSF{
 		double penalty = self->enforceMassOrder( npar, par );
 		
 		// enforce the enhanced yield less than total yield
-		//penalty *= self->enforceEnhancedYields( npar, par );
+		penalty *= self->enforceEnhancedYields( npar, par );
 		
 		// enforce the average total tofEff
 		//penalty *= self->enforceEff( npar, par );
@@ -220,24 +220,27 @@ namespace TSF{
       	minuit->mnexcm( "SET ERR", arglist, 1, iFlag );
 
 
-      	arglist[ 0 ] = 5000;
+      	arglist[ 0 ] = 50000;
 		arglist[ 1 ] = 1.0;
 
 		int attempts = 0;
 		bool trying = true;
+		string status = "na";
 
 		while ( attempts < 6 && trying ){
 			schema->setMethod( "fractional" );
 			fixShapes();
 				minuit->mnexcm( "MINI", arglist, 1, iFlag );
+				status = minuit->fCstatu;
 			releaseShapes();
+			logger->info( __FUNCTION__ ) << "Step 1. Status " << status << endl;
 
 			// switch to poisson errors
-			schema->setMethod( "poisson" );
-			fixShapes();
 				minuit->mnexcm( "MINI", arglist, 1, iFlag );
-			releaseShapes();
-
+			schema->setMethod( "poisson" );
+				minuit->mnexcm( "MINI", arglist, 1, iFlag );
+				status = minuit->fCstatu;
+			logger->info( __FUNCTION__ ) << "Step 2. Status " << status << endl;
 			if ( minuit->fCstatu == "CONVERGED " ){
 				trying = false;
 				break;
@@ -246,8 +249,10 @@ namespace TSF{
 			// fix the enhanced yields
 			fix( "_yield_" );
 				minuit->mnexcm( "MINI", arglist, 1, iFlag );
+				status = minuit->fCstatu;
 			release( "_yield_" );
 
+			logger->info( __FUNCTION__ ) << "Step 3. Status " << status << endl;
 			if ( minuit->fCstatu == "CONVERGED " ){
 				trying = false;
 				break;
@@ -262,6 +267,7 @@ namespace TSF{
 		fixShapes();
 			schema->setMethod( "poisson" );
 			minuit->mnexcm( "MINI", arglist, 1, iFlag );
+			status = minuit->fCstatu;
 		releaseShapes();
 		release( "_yield_" );
 		
@@ -273,7 +279,7 @@ namespace TSF{
 
 		minuit->mnexcm( "STATUS", arglist, 1, iFlag ); // get errors
 
-		cout << "iFlag " << iFlag << endl;
+		cout << "Final Status : " << status << " with flag = " << iFlag << endl;
 
 		minuit->mnexcm( "HESSE", arglist, 1, iFlag );
 		

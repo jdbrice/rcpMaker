@@ -232,6 +232,10 @@ void PidHistoMaker::enhanceDistributions( double avgP, int ptBin, int charge, do
 		trackWeight = trackWeight * sc->feedDownWeight( centerSpecies, trackPt, cBin, charge ) ;
 	}
 
+	// 3 sigma below pi to reject electrons
+	// and 3 sigma above proton to reject deuteron
+	if ( 	tof < tMeans[ 0 ] - tSigma * nSigBelow || tof > tMeans[ 2 ] + tSigma * nSigAbove )
+		return;
 	
 
 	book->cd( "tof" );
@@ -250,10 +254,7 @@ void PidHistoMaker::enhanceDistributions( double avgP, int ptBin, int charge, do
 		} // loop on species from centered means
 	}
 
-	// 3 sigma below pi to reject electrons
-	// and 3 sigma above proton to reject deuteron
-	if ( 	tof < tMeans[ 0 ] - tSigma * nSigBelow || tof > tMeans[ 2 ] + tSigma * nSigAbove )
-		return;
+	
 	
 
 

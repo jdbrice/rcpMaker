@@ -3,6 +3,7 @@
 #include "Spectra/PidHistoMaker.h"
 
 #include "TGraph.h"
+#include "TBox.h"
 
 namespace TSF{
 	FitRunner::FitRunner( XmlConfig * _cfg, string _np) 
@@ -139,7 +140,7 @@ namespace TSF{
 			}
 
 			schema->setInitialMu( "zd_mu_"+plc, zdMu, zdSig, zdDeltaMu );
-			zdSigFix = schema->vars[ "zd_sigma_"+plc ]->val;
+			zdSigFix = zdSigma();//schema->vars[ "zd_sigma_"+plc ]->val;
 			if ( zdMinParP > 0 && avgP >= zdMinParP){	
 				//schema->fixParameter( "zd_sigma_" + plc, zdSigFix, true );
 				schema->setInitialSigma( "zd_sigma_"+plc, zdSigFix, zdSigFix - .005, zdSigFix + 0.005);
@@ -370,9 +371,26 @@ namespace TSF{
 			return ;
 		}
 		h->Draw("pe");
-		h->GetYaxis()->SetRangeUser( schema->getNormalization() * 1e-6, schema->getNormalization() * 2 );
+		double scaler = 1e-6;
+		h->GetYaxis()->SetRangeUser( schema->getNormalization() * scaler, schema->getNormalization() * 2 );
 
 		h->SetTitle( ( dts((*binsPt)[ iPt ]) + " < pT < " + dts( (*binsPt)[ iPt + 1 ] ) ).c_str() );
+
+		// draw boxes to show the fit ranges
+		for ( FitRange range : fitter->getSchema()->getRanges() ){
+			if ( range.dataset != v )
+				continue;
+			TBox * b1 = new TBox( range.min, schema->getNormalization() * scaler, range.max, schema->getNormalization() * 2  );
+			b1->SetFillColorAlpha( kBlack, 0.25 );
+			b1->SetFillStyle( 1001 );
+			b1->Draw(  );
+		}
+		
+		
+
+		
+
+		h->Draw("pe same");
 
 		TGraph * sum = fitter->plotResult( v );
 		sum->SetLineColor( kBlue );
@@ -391,6 +409,9 @@ namespace TSF{
 		}
 
 		gPad->SetLogy(1);
+
+		
+
 	}
 
 	
