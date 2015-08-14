@@ -227,6 +227,8 @@ namespace TSF{
 		bool trying = true;
 		string status = "na";
 
+		fix( "eff" );
+
 		while ( attempts < 6 && trying ){
 			schema->setMethod( "fractional" );
 			fixShapes();
@@ -271,6 +273,7 @@ namespace TSF{
 		releaseShapes();
 		release( "_yield_" );
 		
+		release( "eff" );
 
       	if ( 0 == iFlag )
 			fitIsGood = true;

@@ -218,6 +218,9 @@ void PidHistoMaker::enhanceDistributions( double avgP, int ptBin, int charge, do
 	vector<double> dMeans 	= zr->centeredDedxMeans( centerSpecies, avgP );
 	vector<string> mSpecies = zr->allSpecies();
 
+	int indexPi = find( mSpecies.begin(), mSpecies.end(), "Pi" ) - mSpecies.begin();
+	int indexP = find( mSpecies.begin(), mSpecies.end(), "P" ) - mSpecies.begin();
+
 	double trackWeight = eventWeight;
 
 	// Here we are intentionally using the pre-EnergyLoss pt because that is what the 
@@ -232,11 +235,8 @@ void PidHistoMaker::enhanceDistributions( double avgP, int ptBin, int charge, do
 		trackWeight = trackWeight * sc->feedDownWeight( centerSpecies, trackPt, cBin, charge ) ;
 	}
 
-	// 3 sigma below pi to reject electrons
-	// and 3 sigma above proton to reject deuteron
-	if ( 	tof < tMeans[ 0 ] - tSigma * nSigBelow || tof > tMeans[ 2 ] + tSigma * nSigAbove )
-		return;
 	
+
 
 	book->cd( "tof" );
 	// unenhanced - all tof tracks
@@ -255,7 +255,10 @@ void PidHistoMaker::enhanceDistributions( double avgP, int ptBin, int charge, do
 	}
 
 	
-	
+	// 3 sigma below pi to reject electrons
+	// and 3 sigma above proton to reject deuteron
+	if ( tof < tMeans[ indexPi ] - tSigma * nSigBelow || tof > tMeans[ indexP ] + tSigma * nSigAbove )
+		return;
 
 
 	book->cd( "dedx" );
@@ -312,14 +315,16 @@ void PidHistoMaker::prepareHistograms( string plc ){
 					book->make2D( hName, title, dedxBins.size()-1, dedxBins.data(), tofBins.size()-1, tofBins.data() );
 				}
 
+				vector<string> mSpecies = zr->allSpecies();
+
 				// tof projections
 				book->cd( "tof" );
 				book->make1D( Common::zbName( plc, charge, iCen, ptBin ), 
 					"#beta^{-1}", tofBins.size()-1, tofBins.data() );
 				
 				if ( makeEnhanced ){ 
-					for ( int iS = 0; iS < Common::species.size(); iS++ ){
-						book->make1D( Common::zbName( plc, charge, iCen, ptBin, Common::species[ iS ] ), 
+					for ( int iS = 0; iS < mSpecies.size(); iS++ ){
+						book->make1D( Common::zbName( plc, charge, iCen, ptBin, mSpecies[ iS ] ), 
 							"#beta^{-1}", tofBins.size()-1, tofBins.data() );
 					} 
 				}
@@ -331,8 +336,8 @@ void PidHistoMaker::prepareHistograms( string plc ){
 				
 				// Enhanced
 				if ( makeEnhanced ){ 
-					for ( int iS = 0; iS < Common::species.size(); iS++ ){
-						book->make1D( Common::zdName( plc, charge, iCen, ptBin, Common::species[ iS ] ), 
+					for ( int iS = 0; iS < mSpecies.size(); iS++ ){
+						book->make1D( Common::zdName( plc, charge, iCen, ptBin, mSpecies[ iS ] ), 
 							"dEdx", dedxBins.size()-1, dedxBins.data() );
 					}
 				}

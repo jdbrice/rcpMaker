@@ -31,9 +31,8 @@ public:
 	ZRecentering( double dedxSigma, double tofSigma, string bTable = "dedxBichsel.root", int bMethod = 0 );
 	~ZRecentering();
 
-	/**
-	 * Static usage
-	 */
+	// Masses
+	double eMass;		// [GeV]
 	double piMass;		// [GeV]
 	double kaonMass;	// [GeV]
 	double protonMass;	// [GeV]

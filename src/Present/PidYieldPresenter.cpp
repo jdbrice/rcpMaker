@@ -21,8 +21,12 @@ PidYieldPresenter::PidYieldPresenter( XmlConfig * _cfg, string _nodePath ){
 
 	if ( fPidFit->IsOpen() )
 		logger->info( __FUNCTION__ ) << "Fit File Opened" << endl;
+	else
+		ERROR( "Cannot open fit histos" )
 	if ( fPidPS->IsOpen() )
 		logger->info( __FUNCTION__ ) << "Pid File Opened" << endl;
+	else 
+		ERROR( "Cannot open PidHistos" )
 
 	// Create the book
 	book = unique_ptr<HistoBook>(new HistoBook( cfg->getString( np + "output:path" ) + cfg->getString( np + "output.data:url" ), cfg, "", "" ));

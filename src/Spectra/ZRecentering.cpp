@@ -7,9 +7,10 @@ ZRecentering::ZRecentering( double dedxSigma, double tofSigma, string bTable, in
 	dedxGen = new Bichsel( bTable, bMethod);
 	tofGen = new TofGenerator();
 
-	species = { "Pi", "K", "P" };
+	species = { "E", "Pi", "K", "P" };
 
 	// in GeV / c^2
+	eMass 		= 0.000510998;
 	piMass 		= 0.1395702;
 	kaonMass 	= 0.493667;
 	protonMass 	= 0.9382721;
@@ -29,6 +30,8 @@ double ZRecentering::mass( string pType ){
 		return kaonMass;
 	if ( "Pi" == pType )
 		return piMass;
+	if ( "E" == pType )
+		return eMass;
 
 	ERROR( " UNKOWN plc : " << pType )
 	return -10.0;	
@@ -196,7 +199,6 @@ double ZRecentering::nlTof( string centerSpecies, double beta, double p, double 
 		
 		
 		double iL = lh( tof, iMu, sigma );
-		
 		
 		double w = tof + iMuAvg - iMu;
 		

@@ -383,7 +383,7 @@ namespace TSF{
 			TBox * b1 = new TBox( range.min, schema->getNormalization() * scaler, range.max, schema->getNormalization() * 2  );
 			b1->SetFillColorAlpha( kBlack, 0.25 );
 			b1->SetFillStyle( 1001 );
-			b1->Draw(  );
+			//b1->Draw(  );
 		}
 		
 		
@@ -419,12 +419,15 @@ namespace TSF{
 
 	void FitRunner::reportFit( Fitter * fitter, int iPt ){
 
+		gStyle->SetOptStat(0);
 
 		// plot the dedx then tof
 		logger->info(__FUNCTION__) << "Reporting zd" << endl;
 		zdReporter->newPage( 2, 2 );
 		{
+			zdReporter->cd( 1, 1 );
 			drawSet( "zd_All", fitter, iPt );
+			gPad->Print( "zd_All.pdf" ); // TODO: remove print hack
 			zdReporter->cd( 2, 1 );
 			drawSet( "zd_Pi", fitter, iPt );
 			zdReporter->cd( 1, 2 );
@@ -437,7 +440,9 @@ namespace TSF{
 		logger->info(__FUNCTION__) << "Reporting zb" << endl;
 		zbReporter->newPage( 2, 2 );
 		{
+			zbReporter->cd( 1, 1 );
 			drawSet( "zb_All", fitter, iPt );
+			gPad->Print( "zb_All.pdf" );
 			zbReporter->cd( 2, 1 );
 			drawSet( "zb_Pi", fitter, iPt );
 			zbReporter->cd( 1, 2 );
