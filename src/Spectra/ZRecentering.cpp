@@ -38,9 +38,9 @@ double ZRecentering::mass( string pType ){
 }
 vector<string> ZRecentering::otherSpecies( string center ){
 	vector<string> res;
-	for ( int i = 0; i < species.size(); i++ ){
-		if ( species[ i ] != center )
-			res.push_back( species[ i ] );
+	for ( string plc : species ){
+		if ( plc != center )
+			res.push_back( plc );
 	}
 	return res;
 }
@@ -52,8 +52,8 @@ vector<double> ZRecentering::centeredTofMeans( string center, double p, vector<s
 	double cMean = tofGen->mean( p, mass( center ) );
 	
 	vector<double> res;
-	for ( int i = 0; i < others.size(); i++ ){
-		double m = (tofGen->mean( p, mass( others[ i ] ) ) - cMean);
+	for ( string plc : others ){
+		double m = (tofGen->mean( p, mass( plc ) ) - cMean);
 		res.push_back( m );
 	}
 
@@ -64,8 +64,8 @@ vector<double> ZRecentering::centeredTofMeans( string center, double p ){
 	double cMean = tofGen->mean( p, mass( center ) );
 	
 	vector<double> res;
-	for ( int i = 0; i < species.size(); i++ ){
-		double m = (tofGen->mean( p, mass( species[ i ] ) ) - cMean);
+	for ( string plc : species ){
+		double m = (tofGen->mean( p, mass( plc ) ) - cMean);
 		res.push_back( m );
 	}
 
@@ -76,9 +76,9 @@ map<string, double> ZRecentering::centeredTofMap( string center, double p ){
 	double cMean = tofGen->mean( p, mass( center ) );
 	
 	map<string, double> res;
-	for ( int i = 0; i < species.size(); i++ ){
-		double m = (tofGen->mean( p, mass( species[ i ] ) ) - cMean);
-		res[ species[ i ] ] = m;
+	for ( string plc : species ){
+		double m = (tofGen->mean( p, mass( plc ) ) - cMean);
+		res[ plc ] = m;
 	}
 
 	return res;
@@ -90,8 +90,8 @@ vector<double> ZRecentering::centeredDedxMeans( string center, double p, vector<
 	const double cMean = dedxGen->meanLog( p, mass( center ), -1, 1000 );
 
 	vector<double> res;
-	for ( int i = 0; i < others.size(); i++ ){
-		double m = dedxGen->meanLog( p, mass( others[ i ] ), -1, 1000 ) - cMean;
+	for ( string plc : others ){
+		double m = dedxGen->meanLog( p, mass( plc ), -1, 1000 ) - cMean;
 		res.push_back( m );
 	}
 
@@ -102,8 +102,8 @@ vector<double> ZRecentering::centeredDedxMeans( string center, double p ){
 	const double cMean = dedxGen->meanLog( p, mass( center ), -1, 1000 );
 	
 	vector<double> res;
-	for ( int i = 0; i < species.size(); i++ ){
-		double m = dedxGen->meanLog( p, mass( species[ i ] ), -1, 1000 ) - cMean;
+	for ( string plc : species ){
+		double m = dedxGen->meanLog( p, mass( plc ), -1, 1000 ) - cMean;
 		res.push_back( m );
 	}
 	return res;
@@ -114,9 +114,9 @@ map<string, double> ZRecentering::centeredDedxMap( string center, double p ){
 	const double cMean = dedxGen->meanLog( p, mass( center ), -1, 1000 );
 	
 	map<string, double> res;
-	for ( int i = 0; i < species.size(); i++ ){
-		double m = dedxGen->meanLog( p, mass( species[ i ] ), -1, 1000 ) - cMean;
-		res[species[ i ] ] = m ;
+	for ( string plc : species ){
+		double m = dedxGen->meanLog( p, mass( plc ), -1, 1000 ) - cMean;
+		res[ plc ] = m ;
 	}
 	return res;
 }
@@ -143,10 +143,10 @@ double ZRecentering::nlDedx( string centerSpecies, double dedx, double p, double
 	double n1 = 0;
 	double d1 = 0;
 
-	for ( int i = 0; i < species.size(); i++ ){
+	for ( string plc : species ){
 
-		const double iMu = dedxGen->meanLog( p, mass( species[ i ] ), -1, 1000 );
-		const double iMuAvg = dedxGen->meanLog( avgP, mass( species[ i ] ), -1, 1000 );
+		const double iMu = dedxGen->meanLog( p, mass( plc ), -1, 1000 );
+		const double iMuAvg = dedxGen->meanLog( avgP, mass( plc ), -1, 1000 );
 		
 		// may change to a functional dependance 
 		double sigma = dedxSigma; 
@@ -192,10 +192,10 @@ double ZRecentering::nlTof( string centerSpecies, double beta, double p, double 
 	double n1 = 0;
 	double d1 = 0;
 
-	for ( int i = 0; i < species.size(); i++ ){
+	for ( string plc : species ){
 		
-		double iMu =  tofGen->mean( p, mass( species[ i ] ) ) ;
-		double iMuAvg =  tofGen->mean( avgP, mass( species[ i ] ) ) ;
+		double iMu =  tofGen->mean( p, mass( plc ) ) ;
+		double iMuAvg =  tofGen->mean( avgP, mass( plc ) ) ;
 		
 		
 		double iL = lh( tof, iMu, sigma );
@@ -235,10 +235,10 @@ double ZRecentering::nl2Tof( string centerSpecies, double beta, double p, double
 	double n2 = 0;
 	double d2 = 0;
 
-	for ( int i = 0; i < species.size(); i++ ){
+	for ( string plc : species ){
 		
-		double iMu =  tofGen->mean( p, mass( species[ i ] ) ) ;
-		double iMuAvg =  tofGen->mean( avgP, mass( species[ i ] ) ) ;
+		double iMu =  tofGen->mean( p, mass( plc ) ) ;
+		double iMuAvg =  tofGen->mean( avgP, mass( plc ) ) ;
 		
 		
 		double iL = lh( tof, iMu, sigma );

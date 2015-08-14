@@ -214,12 +214,11 @@ void PidHistoMaker::enhanceDistributions( double avgP, int ptBin, int charge, do
 	double dSigma = dedxSigmaIdeal;
 
 	// get the centered tof and dedx means
-	vector<double> tMeans 	= zr->centeredTofMeans( centerSpecies, avgP );
-	vector<double> dMeans 	= zr->centeredDedxMeans( centerSpecies, avgP );
-	vector<string> mSpecies = zr->allSpecies();
+	map< string, double > tMeans 	= zr->centeredTofMap( centerSpecies, avgP );
+	map< string, double > dMeans 	= zr->centeredDedxMap( centerSpecies, avgP );
 
-	int indexPi = find( mSpecies.begin(), mSpecies.end(), "Pi" ) - mSpecies.begin();
-	int indexP = find( mSpecies.begin(), mSpecies.end(), "P" ) - mSpecies.begin();
+	double dCutMinP = cfg->getDouble( nodePath + "Distributions:dCutMinP", 0.5 );
+
 
 	double trackWeight = eventWeight;
 
@@ -236,8 +235,6 @@ void PidHistoMaker::enhanceDistributions( double avgP, int ptBin, int charge, do
 	}
 
 	
-
-
 	book->cd( "tof" );
 	// unenhanced - all tof tracks
 	// combined charge 
@@ -246,18 +243,20 @@ void PidHistoMaker::enhanceDistributions( double avgP, int ptBin, int charge, do
 
 	// enhanced by species
 	if ( makeEnhanced ){
-		for ( int iS = 0; iS < mSpecies.size(); iS++ ){
-			if ( dedx >= dMeans[ iS ] - dSigma && dedx <= dMeans[ iS ] + dSigma ){
-				if ( makeCombinedCharge ) book->fill( Common::zbName( centerSpecies, 0, cBin, ptBin, mSpecies[ iS ] ), tof, trackWeight );
-				book->fill( Common::zbName( centerSpecies, charge, cBin, ptBin, mSpecies[ iS ] ), tof, trackWeight );
+		for ( string plc : Common::species ){
+			if ( dedx >= dMeans[ plc ] - dSigma && dedx <= dMeans[ plc ] + dSigma ){
+				if ( makeCombinedCharge ) book->fill( Common::zbName( centerSpecies, 0, cBin, ptBin, plc ), tof, trackWeight );
+				book->fill( Common::zbName( centerSpecies, charge, cBin, ptBin, plc ), tof, trackWeight );
 			}
 		} // loop on species from centered means
 	}
 
 	
-	// 3 sigma below pi to reject electrons
-	// and 3 sigma above proton to reject deuteron
-	if ( tof < tMeans[ indexPi ] - tSigma * nSigBelow || tof > tMeans[ indexP ] + tSigma * nSigAbove )
+	// N sigma below pi to reject electrons
+	if ( tof < tMeans[ "Pi" ] - tSigma * nSigBelow )
+		return;
+	// and N sigma above proton to reject deuteron
+	if ( avgP >= dCutMinP && tof > tMeans[ "P" ] + tSigma * nSigAbove )
 		return;
 
 
@@ -269,13 +268,13 @@ void PidHistoMaker::enhanceDistributions( double avgP, int ptBin, int charge, do
 
 	// enhanced by species
 	if ( makeEnhanced ){
-		for ( int iS = 0; iS < mSpecies.size(); iS++ ){
+		for ( string plc : Common::species ){
 			
-			double ttMean = tMeans[ iS ];
+			double ttMean = tMeans[ plc ];
 
 			if ( tof >= ttMean - tSigma && tof <= ttMean + tSigma ){
-				if ( makeCombinedCharge ) book->fill( Common::zdName( centerSpecies, 0, cBin, ptBin, mSpecies[ iS ] ), dedx, trackWeight );
-				book->fill( Common::zdName( centerSpecies, charge, cBin, ptBin, mSpecies[ iS ] ), dedx, trackWeight );
+				if ( makeCombinedCharge ) book->fill( Common::zdName( centerSpecies, 0, cBin, ptBin, plc ), dedx, trackWeight );
+				book->fill( Common::zdName( centerSpecies, charge, cBin, ptBin, plc ), dedx, trackWeight );
 			}
 		} // loop on species from centered means	
 	}
@@ -315,7 +314,6 @@ void PidHistoMaker::prepareHistograms( string plc ){
 					book->make2D( hName, title, dedxBins.size()-1, dedxBins.data(), tofBins.size()-1, tofBins.data() );
 				}
 
-				vector<string> mSpecies = zr->allSpecies();
 
 				// tof projections
 				book->cd( "tof" );
@@ -323,8 +321,8 @@ void PidHistoMaker::prepareHistograms( string plc ){
 					"#beta^{-1}", tofBins.size()-1, tofBins.data() );
 				
 				if ( makeEnhanced ){ 
-					for ( int iS = 0; iS < mSpecies.size(); iS++ ){
-						book->make1D( Common::zbName( plc, charge, iCen, ptBin, mSpecies[ iS ] ), 
+					for ( string eplc : Common::species ){
+						book->make1D( Common::zbName( plc, charge, iCen, ptBin, eplc ), 
 							"#beta^{-1}", tofBins.size()-1, tofBins.data() );
 					} 
 				}
@@ -336,8 +334,8 @@ void PidHistoMaker::prepareHistograms( string plc ){
 				
 				// Enhanced
 				if ( makeEnhanced ){ 
-					for ( int iS = 0; iS < mSpecies.size(); iS++ ){
-						book->make1D( Common::zdName( plc, charge, iCen, ptBin, mSpecies[ iS ] ), 
+					for ( string eplc : Common::species ){
+						book->make1D( Common::zdName( plc, charge, iCen, ptBin, eplc ), 
 							"dEdx", dedxBins.size()-1, dedxBins.data() );
 					}
 				}
