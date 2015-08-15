@@ -66,6 +66,15 @@ namespace TSF{
 			}
 			return make_pair( min, max );
 		}
+		
+		double yield(  ){
+
+			double n = 0;
+			for ( FitDataPoint fdp : points ){
+				n += fdp.y;
+			}
+			return n;
+		}
 		double yield( vector<FitRange> &ranges ){
 
 			if ( 0 == ranges.size()  ){

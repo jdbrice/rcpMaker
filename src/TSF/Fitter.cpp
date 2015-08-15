@@ -21,25 +21,25 @@ namespace TSF{
 	void Fitter::setupFit(){
 		minuit = unique_ptr<TMinuit>( new TMinuit( schema->numParams() ) );
 		
-		for ( auto k : schema->vars ){
+		for ( auto k : schema->getVars() ){
 			if ( k.second->exclude ) continue;
 			parNames.push_back( k.first );
 		}
 
 		for ( int i = 0; i < parNames.size(); i++ ){
-			if (schema->vars[ parNames[ i ] ]->exclude) continue;
+			if (schema->var( parNames[ i ] )->exclude) continue;
 
-			if ( 0 <= schema->vars[ parNames[ i ] ]->error )
-				schema->vars[ parNames[ i ] ]->error = 0.001;
+			if ( 0 <= schema->var( parNames[ i ] )->error )
+				schema->var( parNames[ i ] )->error = 0.001;
 
 			minuit->DefineParameter( i, 						// parameter index
 						parNames[ i ].c_str(), 					// name
-						schema->vars[ parNames[ i ] ]->val, 	// initial value
-						schema->vars[ parNames[ i ] ]->error,	// intial step size
-						schema->vars[ parNames[ i ] ]->min,		// limit min
-						schema->vars[ parNames[ i ] ]->max );	// limit max
+						schema->var( parNames[ i ] )->val, 		// initial value
+						schema->var( parNames[ i ] )->error,	// intial step size
+						schema->var( parNames[ i ] )->min,		// limit min
+						schema->var( parNames[ i ] )->max );	// limit max
 
-			if ( schema->vars[ parNames[ i ] ]->fixed )
+			if ( schema->var( parNames[ i ] )->fixed )
 				minuit->FixParameter( i );
 
 		}
@@ -107,6 +107,16 @@ namespace TSF{
 					cout << "No Fit method" << endl;
 				}
 			} // loop on data points
+
+			if ( "nll" != self->schema->getMethod() ){
+				// nothing needed here for chi2
+			} else {
+				double mYield = modelYield( ds );
+				double dsYield = k.second.yield(  );
+
+				// subtract off this dataset's (N - E) term
+				fnVal = fnVal - ( dsYield - mYield );
+			}
 		}
 
 		// enforces 1/beta mass ordering
@@ -227,8 +237,8 @@ namespace TSF{
 		bool trying = true;
 		string status = "na";
 
+		
 		fix( "eff" );
-
 		while ( attempts < 6 && trying ){
 			schema->setMethod( "fractional" );
 			fixShapes();
@@ -262,16 +272,20 @@ namespace TSF{
 			attempts ++ ;
 		}
 		logger->info( __FUNCTION__ ) << "Complete after " << attempts << plural( attempts, " attempt", " attempts" ) << endl;
+		
+	
 
 		// final step in the fit
 		// fit the shapes and the enhanced amplitudes
-		fix( "_yield_" );
+		//fix( "_yield_" );
 		fixShapes();
-			schema->setMethod( "poisson" );
-			minuit->mnexcm( "MINI", arglist, 1, iFlag );
+			schema->setMethod( "nll" );
+				minuit->mnexcm( "MINI", arglist, 1, iFlag );
+				minuit->mnexcm( "MINI", arglist, 1, iFlag );
+				minuit->mnexcm( "MINI", arglist, 1, iFlag );
 			status = minuit->fCstatu;
 		releaseShapes();
-		release( "_yield_" );
+		//release( "_yield_" );
 		
 		release( "eff" );
 
@@ -392,13 +406,13 @@ namespace TSF{
 			
 			if ( npar >= self->parNames.size() ){
 				double val = pars[ i ];
-				self->schema->vars[ self->parNames[ i ] ]->val = val;
+				self->schema->var( self->parNames[ i ] )->val = val;
 
 			} else {
 				double val = 0, err = 0;
 				self->minuit->GetParameter( i, val, err );
-				self->schema->vars[ self->parNames[ i ] ]->val = val;
-				self->schema->vars[ self->parNames[ i ] ]->error = err;
+				self->schema->var( self->parNames[ i ] )->val = val;
+				self->schema->var( self->parNames[ i ] )->error = err;
 
 			}
 		}
@@ -512,7 +526,7 @@ namespace TSF{
 			if ( string::npos != parNames[ i ].find( var ) )
 				shouldRelease = true;
 
-			if ( shouldRelease && ( !check || !schema->vars[ parNames[ i ] ]->fixed) )
+			if ( shouldRelease && ( !check || !schema->var( parNames[ i ] )->fixed) )
 				minuit->Release( i );
 		} // i
 	}

@@ -34,7 +34,6 @@ namespace TSF{
 			cfg->getInt( nodePath + "Reporter.output:width", 400 ), cfg->getInt( nodePath + "Reporter.output:height", 400 ) ) );
 
 		Logger::setGlobalLogLevel( Logger::logLevelFromString( cfg->getString( nodePath + "Logger:globalLogLevel" ) ) );
-
 	}
 
 	FitRunner::~FitRunner(){
@@ -128,7 +127,7 @@ namespace TSF{
 			double zdMinParP = cfg->getDouble( nodePath + "ParameterFixing." + plc + ":zdSigma", 5.0 );
 
 			// value to shich zb sigma should be fixed
-			double zbSigFix = schema->vars[ "zb_sigma_"+plc ]->val;
+			double zbSigFix = schema->var( "zb_sigma_"+plc )->val;
 
 			if ( zbMinParP > 0 && avgP >= zbMinParP){
 				schema->setInitialMu( "zb_mu_"+plc, zbMu, zbSigFix, zbDeltaMu );
@@ -140,7 +139,7 @@ namespace TSF{
 			}
 
 			schema->setInitialMu( "zd_mu_"+plc, zdMu, zdSig, zdDeltaMu );
-			zdSigFix = zdSigma();//schema->vars[ "zd_sigma_"+plc ]->val;
+			zdSigFix = zdSigma();//schema->var( "zd_sigma_"+plc ]->val;
 			if ( zdMinParP > 0 && avgP >= zdMinParP){	
 				//schema->fixParameter( "zd_sigma_" + plc, zdSigFix, true );
 				schema->setInitialSigma( "zd_sigma_"+plc, zdSigFix, zdSigFix - .005, zdSigFix + 0.005);
@@ -152,22 +151,20 @@ namespace TSF{
 			choosePlayers( avgP, plc, roi );
 
 			if ( avgP < 1.5 ){
-				schema->vars[ "yield_" + plc ]->min = 0;
-				schema->vars[ "yield_" + plc ]->max = schema->getNormalization() * 10;	
+				schema->var( "yield_" + plc )->min = 0;
+				schema->var( "yield_" + plc )->max = schema->getNormalization() * 10;	
 			} else {
-				schema->vars[ "yield_" + plc ]->min = 0;
-				schema->vars[ "yield_" + plc ]->max = schema->vars[ "yield_" + plc ]->val * 2;	
+				schema->var( "yield_" + plc )->min = 0;
+				schema->var( "yield_" + plc )->max = schema->var( "yield_" + plc )->val * 2;	
 			}
 
 			double zdOnly = cfg->getDouble( nodePath + "Timing:zdOnly" , 0.5 );
-			// set the eff to 1.0 if we are using eff
-			if ( schema->vars.count( "eff_" + plc ) ){
-				schema->vars[ "eff_" + plc ]->val = 1.0;
-				if ( avgP <= zdOnly )
-					schema->vars[ "eff_" + plc ]->fixed = true;
-				else 
-					schema->vars[ "eff_" + plc ]->fixed = false;
-			}
+			
+			schema->var( "eff_" + plc )->val = 1.0;
+			if ( avgP <= zdOnly )
+				schema->var( "eff_" + plc )->fixed = true;
+			else 
+				schema->var( "eff_" + plc )->fixed = false;
 			
 		} // loop on plc to set initial vals
 	}
@@ -193,28 +190,28 @@ namespace TSF{
 
 		// always include the total yields
 		activePlayers.push_back( "zd_All_g" + plc );
-		schema->vars[ "yield_" + plc ]->exclude = false;
+		schema->var( "yield_" + plc )->exclude = false;
 
 		// exclude all enhanced yields for a clean slate
 		for ( string plc2 : Common::species ){
-			schema->vars[ "zb_"+plc+"_yield_"+plc2 ]->exclude = true;
-			schema->vars[ "zd_"+plc+"_yield_"+plc2 ]->exclude = true;
+			schema->var( "zb_"+plc+"_yield_"+plc2 )->exclude = true;
+			schema->var( "zd_"+plc+"_yield_"+plc2 )->exclude = true;
 		}
 
 
 		if ( avgP >= zdOnly ){
 			// remove the zb variables
 			activePlayers.push_back( "zb_All_g" + plc );
-			schema->vars[ "zb_sigma_" + plc ]->exclude 	= false;
-			schema->vars[ "zb_mu_" + plc ]->exclude 	= false;
+			schema->var( "zb_sigma_" + plc )->exclude 	= false;
+			schema->var( "zb_mu_" + plc )->exclude 	= false;
 		} else {
-			schema->vars[ "zb_sigma_" + plc ]->exclude = true;
-			schema->vars[ "zb_mu_" + plc ]->exclude 	= true;
+			schema->var( "zb_sigma_" + plc )->exclude = true;
+			schema->var( "zb_mu_" + plc )->exclude 	= true;
 		}
 
 		if ( avgP < useZdEnhanced ){
 			for ( string plc2 : Common::species ){
-				schema->vars[ "zd_"+plc+"_yield_"+plc2 ]->exclude = true;
+				schema->var( "zd_"+plc+"_yield_"+plc2 )->exclude = true;
 			}
 		} else {
 
@@ -227,10 +224,10 @@ namespace TSF{
 				double zdMu2 = zdMean( plc2, avgP );
 				double zdSig2 = zdSigma(  );
 				string var = "zd_"+plc+"_yield_"+plc2;
-				double cv = schema->vars[ var ]->val;
+				double cv = schema->var( var )->val;
 				
 				bool firstTimeIncluded = false;
-				if ( schema->vars[ var ]->exclude )
+				if ( schema->var( var )->exclude )
 					firstTimeIncluded = true;
 
 				double zbMu2 = zbMean( plc2, avgP );
@@ -240,19 +237,19 @@ namespace TSF{
 					activePlayers.push_back( "zd_" + plc + "_g" + plc2 );
 					
 
-					schema->vars[ var ]->exclude = false;
-					schema->vars[ var ]->min = 0;
-					schema->vars[ var ]->max = schema->getNormalization();
+					schema->var( var )->exclude = false;
+					schema->var( var )->min = 0;
+					schema->var( var )->max = schema->getNormalization();
 
 					schema->addRange( "zd_" + plc, zdMu2 - zdSig2 * roi, zdMu2 + zdSig2 * roi );
 
 					if ( firstTimeIncluded && plc != plc2 ){
-						schema->vars[ var ]->val = 1/schema->getNormalization();
-						schema->vars[ var ]->error = 0.1/schema->getNormalization();
+						schema->var( var )->val = 1/schema->getNormalization();
+						schema->var( var )->error = 0.1/schema->getNormalization();
 					}
 
 				} else {
-					schema->vars[ "zd_"+plc+"_yield_"+plc2 ]->exclude = true;
+					schema->var( "zd_"+plc+"_yield_"+plc2 )->exclude = true;
 				}
 			}
 
@@ -261,7 +258,7 @@ namespace TSF{
 
 		if ( avgP < useZbEnhanced ){
 			for ( string plc2 : Common::species ){
-				schema->vars[ "zb_"+plc+"_yield_"+plc2 ]->exclude = true;
+				schema->var( "zb_"+plc+"_yield_"+plc2 )->exclude = true;
 			}
 		} else {
 
@@ -274,7 +271,7 @@ namespace TSF{
 
 				string var = "zb_"+plc+"_yield_"+plc2;
 				bool firstTimeIncluded = false;
-				if ( schema->vars[ var ]->exclude )
+				if ( schema->var( var )->exclude )
 					firstTimeIncluded = true;
 
 				double zdMu2 = zdMean( plc2, avgP );
@@ -284,18 +281,18 @@ namespace TSF{
 					activePlayers.push_back( "zb_" + plc + "_g" + plc2 );
 					
 
-					schema->vars[ var ]->exclude = false;
-					schema->vars[ var ]->min = 0;
-					schema->vars[ var ]->max = schema->getNormalization() * 10;
+					schema->var( var )->exclude = false;
+					schema->var( var )->min = 0;
+					schema->var( var )->max = schema->getNormalization() * 10;
 
 					if ( roi > 0 )
 						schema->addRange( "zb_" + plc, zbMu2 - zbSig2 * roi, zbMu2 + zbSig2 * roi );
 
 					if ( firstTimeIncluded && plc != plc2)
-						schema->vars[ var ]->val = 0;
+						schema->var( var )->val = 0;
 
 				} else {
-					schema->vars[ "zb_"+plc+"_yield_"+plc2 ]->exclude = true;;
+					schema->var( "zb_"+plc+"_yield_"+plc2 )->exclude = true;;
 				}
 			}
 
@@ -383,12 +380,10 @@ namespace TSF{
 			TBox * b1 = new TBox( range.min, schema->getNormalization() * scaler, range.max, schema->getNormalization() * 2  );
 			b1->SetFillColorAlpha( kBlack, 0.25 );
 			b1->SetFillStyle( 1001 );
-			//b1->Draw(  );
+			b1->Draw(  );
 		}
 		
-		
-
-		
+	
 
 		h->Draw("pe same");
 
@@ -409,13 +404,7 @@ namespace TSF{
 		}
 
 		gPad->SetLogy(1);
-
-		
-
 	}
-
-	
-
 
 	void FitRunner::reportFit( Fitter * fitter, int iPt ){
 
@@ -427,7 +416,6 @@ namespace TSF{
 		{
 			zdReporter->cd( 1, 1 );
 			drawSet( "zd_All", fitter, iPt );
-			gPad->Print( "zd_All.pdf" ); // TODO: remove print hack
 			zdReporter->cd( 2, 1 );
 			drawSet( "zd_Pi", fitter, iPt );
 			zdReporter->cd( 1, 2 );
@@ -442,7 +430,6 @@ namespace TSF{
 		{
 			zbReporter->cd( 1, 1 );
 			drawSet( "zb_All", fitter, iPt );
-			gPad->Print( "zb_All.pdf" );
 			zbReporter->cd( 2, 1 );
 			drawSet( "zb_Pi", fitter, iPt );
 			zbReporter->cd( 1, 2 );
@@ -451,8 +438,6 @@ namespace TSF{
 			drawSet( "zb_P", fitter, iPt );
 		}
 		zbReporter->savePage();
-
-
 	}
 
 
@@ -469,38 +454,52 @@ namespace TSF{
 			int iiPt = iPt + 1;
 
 			// Yield			
-			// shared yield doesnt exist for the pid Parameter fits
-			if ( schema->vars.find( "yield_"+plc ) != schema->vars.end()  ){ 
-				logger->info(__FUNCTION__) << "Filling Yield for " << plc << endl;
+			logger->info(__FUNCTION__) << "Filling Yield for " << plc << endl;
+			string name = Common::yieldName( plc, iCen, iCharge );
+			book->cd( plc+"_yield");
+			double sC = schema->var( "yield_"+plc )->val / book->get( name )->GetBinWidth( iiPt );
+			double sE = schema->var( "yield_"+plc )->error / book->get( name )->GetBinWidth( iiPt );
+			
+			// TODO: use the actual number here
+			// this is supposed to set the error to the 
+			// poisson error scaled down
+			sE = sqrt( sC * 7.141120e+05 ) / 7.141120e+05;
+
+			book->get( name )->SetBinContent( iiPt, sC );
+			book->get( name )->SetBinError( iiPt, sE );
+
+			// block for sep yields
+			if ( schema->exists( "zd_yield_" + plc ) && schema->exists( "zb_yield_" + plc ) ){
 				string name = Common::yieldName( plc, iCen, iCharge );
 				book->cd( plc+"_yield");
-				double sC = schema->vars[ "yield_"+plc ]->val / book->get( name )->GetBinWidth( iiPt );
-				double sE = schema->vars[ "yield_"+plc ]->error / book->get( name )->GetBinWidth( iiPt );
-				
-				// TODO: use the actual number here
-				// this is supposed to set the error to the 
-				// poisson error scaled down
-				sE = sqrt( sC * 7.141120e+05 ) / 7.141120e+05;
+				double zdC = schema->var( "zd_yield_"+plc )->val / book->get( name )->GetBinWidth( iiPt );
+				double zdE = schema->var( "zd_yield_"+plc )->error / book->get( name )->GetBinWidth( iiPt );
+				book->setBin( name, iiPt, zdC, zdE );
 
-				book->get( name )->SetBinContent( iiPt, sC );
-				book->get( name )->SetBinError( iiPt, sE );
+				double zbC = schema->var( "zb_yield_"+plc )->val / book->get( name )->GetBinWidth( iiPt );
+				double zbE = schema->var( "zb_yield_"+plc )->error / book->get( name )->GetBinWidth( iiPt );
+
+				book->cd( "tofEff" );
+				book->setBin( Common::effName( plc, iCen, iCharge ), iiPt, 
+					zbC / zdC, ((zbE / zbC) + ( zdE / zdC )) * ( zbC / zdC )  );
+
 			}
 
 			logger->info(__FUNCTION__) << "Filling Mus for " << plc << endl;
 			//Mu
 			// zb
-			string name = Common::muName( plc, iCen, iCharge );
+			name = Common::muName( plc, iCen, iCharge );
 			book->cd( plc+"_zbMu");
-			double sC = schema->vars[ "zb_mu_"+plc ]->val;
-			double sE = schema->vars[ "zb_mu_"+plc ]->error;
+			sC = schema->var( "zb_mu_"+plc )->val;
+			sE = schema->var( "zb_mu_"+plc )->error;
 			
 			book->get( name )->SetBinContent( iiPt, sC );
 			book->get( name )->SetBinError( iiPt, sE );
 
 			name = "delta"+Common::muName( plc, iCen, iCharge );
 			book->cd( plc+"_zbMu");
-			sC = schema->vars[ "zb_mu_"+plc ]->val - zbMu;
-			sE = schema->vars[ "zb_mu_"+plc ]->error;
+			sC = schema->var( "zb_mu_"+plc )->val - zbMu;
+			sE = schema->var( "zb_mu_"+plc )->error;
 			
 			book->get( name )->SetBinContent( iiPt, sC );
 			book->get( name )->SetBinError( iiPt, sE );
@@ -508,16 +507,16 @@ namespace TSF{
 			// zd
 			name = Common::muName( plc, iCen, iCharge );
 			book->cd( plc+"_zdMu");
-			sC = schema->vars[ "zd_mu_"+plc ]->val;
-			sE = schema->vars[ "zd_mu_"+plc ]->error;
+			sC = schema->var( "zd_mu_"+plc )->val;
+			sE = schema->var( "zd_mu_"+plc )->error;
 			
 			book->get( name )->SetBinContent( iiPt, sC );
 			book->get( name )->SetBinError( iiPt, sE );
 
 			name = "delta"+Common::muName( plc, iCen, iCharge );
 			book->cd( plc+"_zdMu");
-			sC = schema->vars[ "zd_mu_"+plc ]->val - zdMu;
-			sE = schema->vars[ "zd_mu_"+plc ]->error;
+			sC = schema->var( "zd_mu_"+plc )->val - zdMu;
+			sE = schema->var( "zd_mu_"+plc )->error;
 			
 			book->get( name )->SetBinContent( iiPt, sC );
 			book->get( name )->SetBinError( iiPt, sE );
@@ -526,16 +525,16 @@ namespace TSF{
 			//Sigma
 			name = Common::sigmaName( plc, iCen, iCharge );;
 			book->cd( plc+"_zbSigma");
-			sC = schema->vars[ "zb_sigma_"+plc ]->val;
-			sE = schema->vars[ "zb_sigma_"+plc ]->error;
+			sC = schema->var( "zb_sigma_"+plc )->val;
+			sE = schema->var( "zb_sigma_"+plc )->error;
 			
 			book->get( name )->SetBinContent( iiPt, sC );
 			book->get( name )->SetBinError( iiPt, sE );
 
 
 			name = Common::sigmaName( plc, iCen, iCharge ) + "_rel";
-			sC = schema->vars[ "zb_sigma_"+plc ]->val / schema->vars[ "zb_mu_"+plc ]->val;
-			sE = schema->vars[ "zb_sigma_"+plc ]->error / schema->vars[ "zb_mu_"+plc ]->val;
+			sC = schema->var( "zb_sigma_"+plc )->val / schema->var( "zb_mu_"+plc )->val;
+			sE = schema->var( "zb_sigma_"+plc )->error / schema->var( "zb_mu_"+plc )->val;
 			
 			book->get( name )->SetBinContent( iiPt, sC );
 			book->get( name )->SetBinError( iiPt, sE );
@@ -544,20 +543,20 @@ namespace TSF{
 
 			name = Common::sigmaName( plc, iCen, iCharge );
 			book->cd( plc+"_zdSigma");
-			sC = schema->vars[ "zd_sigma_"+plc ]->val;
-			sE = schema->vars[ "zd_sigma_"+plc ]->error;
+			sC = schema->var( "zd_sigma_"+plc )->val;
+			sE = schema->var( "zd_sigma_"+plc )->error;
 			
 			book->get( name )->SetBinContent( iiPt, sC );
 			book->get( name )->SetBinError( iiPt, sE );
 
-			if ( schema->vars.count( "eff_" + plc ) ){
+			if ( schema->exists( "eff_" + plc ) ){
 				book->cd( "tofEff" );
 				book->setBin( Common::effName( plc, iCen, iCharge ), iiPt, 
-						schema->vars[ "eff_" + plc ]->val, schema->vars[ "eff_" + plc ]->error );
+						schema->var( "eff_" + plc )->val, schema->var( "eff_" + plc )->error );
 			}
+			
 
 		}
-
 	}
 }
 

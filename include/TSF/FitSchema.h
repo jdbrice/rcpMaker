@@ -43,13 +43,27 @@ namespace TSF{
 
 		int verbosity;
 
+		map<string, shared_ptr<FitVar> > vars;
+
 	public:
 		FitSchema( XmlConfig * _cfg, string np );
 		~FitSchema();
 
-		map<string, shared_ptr<FitVar> > vars;
+		
 		map<string, shared_ptr<GaussModel> > models;
 		map<string, FitDataset > datasets;
+
+		shared_ptr<FitVar> var( string name ) {
+			if ( vars.count( name ) ){
+				return vars[ name ];
+			} 
+			WARN( name << " DNE" )
+			return shared_ptr<FitVar>( new FitVar( "DNE", 0, 0, 0, 0 ) );
+		}
+
+		map<string, shared_ptr<FitVar> > getVars() { return vars; }
+
+		bool exists( string name ) { return  vars.count( name ) >= 1; }
 
 		void setMethod( string m = "chi2" ) { method = m; }
 		string getMethod() { return method; }
@@ -79,7 +93,7 @@ namespace TSF{
 		void fixParameter( string var, double val, bool fixed = true );
 		void setYieldRange( string var, double low, double high );
 
-	
+		// Fit Ranges
 		void addRange( string dataset, double _min, double _max );
 		void clearRanges(  );
 		bool constrainFitRange() { return fitInRange; }
