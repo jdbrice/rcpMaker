@@ -151,14 +151,9 @@ void PidHistoMaker::analyzeTofTrack( int iTrack ){
 	} else {
 		ERROR( "No Energy Loss Params Given - These must be applied here" )
 	} 
-
-	
-	//if ( correctFeedDown && book->exists( "fdWeight_" + Common::chargeString(charge) ) )
-	//	book->get3D( "fdWeight_" + Common::chargeString(charge) )->Fill( pt, fdWeight, cBin );
 	/************ Corrections **********/
 
 	// Must be done after corrections
-	//double y 	= Common::rapidity( pt, eta, zr->mass( centerSpecies ) );
 	int ptBin 	= binsPt->findBin( pt );
 	corrTrackPt = pt;
 	double avgP = binAverageP( ptBin );
