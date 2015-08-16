@@ -242,6 +242,9 @@ bool InclusiveSpectra::keepEvent(){
 			
 		}
 
+		if ( cBin < 0 )
+			return false;
+
 		return true;
 	}
 
