@@ -114,6 +114,7 @@ namespace TSF{
 		activePlayers.clear();
 		for ( string plc : Common::species ){
 
+			INFO( "Setting up " << plc )
 			// zb Parameters
 			double zbMu = zbMean( plc, avgP );
 			double zbSig = zbSigma( );
@@ -128,6 +129,8 @@ namespace TSF{
 
 			// value to shich zb sigma should be fixed
 			double zbSigFix = schema->var( "zb_sigma_"+plc )->val;
+
+			INFO( "zb_sigma_Pi = " << zbSigFix )
 
 			if ( zbMinParP > 0 && avgP >= zbMinParP){
 				schema->setInitialMu( "zb_mu_"+plc, zbMu, zbSigFix, zbDeltaMu );

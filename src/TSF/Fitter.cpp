@@ -176,6 +176,11 @@ namespace TSF{
 
 		for ( auto k : dataHists ){
 
+			if ( !k.second ){
+				ERROR( "dataHist " << k.first << " : " << k.second )
+				continue;
+			}
+
 			double nObs = k.second->GetEntries();
 			logger->info(__FUNCTION__) << "Num Entries in " << k.first << " : " << nObs << endl;
 
