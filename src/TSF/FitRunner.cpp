@@ -341,7 +341,7 @@ namespace TSF{
 
 					schema->clearRanges();
 
-					DEBUG( "Creating fitter" );
+					DEBUG( "Fitter", "Creating fitter" );
 					Fitter fitter( schema, inFile );
 					
 					// load the datasets from the file
@@ -355,6 +355,7 @@ namespace TSF{
 					fitter.addPlayers( activePlayers );
 					// do the fit
 					fitter.fit( centerSpecies, iCharge, iCen, iPt );
+
 
 					reportFit( &fitter, iPt );
 

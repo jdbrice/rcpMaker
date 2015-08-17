@@ -195,7 +195,8 @@ namespace TSF{
 	}
 	
 	void Fitter::fit( string cs, int charge, int cenBin, int ptBin ){
-		logger->info(__FUNCTION__) << endl;
+		INFO( "Fitter", "" )
+
 
 
 		// are we using fit ranges?
@@ -205,14 +206,14 @@ namespace TSF{
       	}
 
       	// just let us know what you are doing
-		logger->info(__FUNCTION__) << "OK Starting for ( charge=" << charge << ", cen=" << cenBin << ", ptBin=" << ptBin << " ) " << endl;
+		INFO( "OK Starting for ( charge=" << charge << ", cen=" << cenBin << ", ptBin=" << ptBin << " ) " );
 
 	
 		// check for sufficient statistics
 		if ( !sufficienctStatistics ){
 			fitIsGood = false;
 			updateParameters();
-			logger->warn( __FUNCTION__ ) << "Insufficient Statistics : Skipping " << endl;
+			WARN( "Insufficient Statistics : Skipping " );
 			return;
 		}
 
@@ -224,7 +225,7 @@ namespace TSF{
 
       	
       	schema->setMethod( "fractional" );
-      	logger->info(__FUNCTION__) << "Fit Method : " << self->schema->getMethod() << endl;
+      	INFO( "Error Mode : " << self->schema->getMethod() );
       	
 
       	if ( "nll" != self->schema->getMethod() )
@@ -235,7 +236,7 @@ namespace TSF{
       	minuit->mnexcm( "SET ERR", arglist, 1, iFlag );
 
 
-      	arglist[ 0 ] = 50000;
+      	arglist[ 0 ] = 5000;
 		arglist[ 1 ] = 1.0;
 
 		int attempts = 0;
@@ -250,18 +251,26 @@ namespace TSF{
 				minuit->mnexcm( "MINI", arglist, 1, iFlag );
 				status = minuit->fCstatu;
 			releaseShapes();
-			logger->info( __FUNCTION__ ) << "Step 1. Status " << status << endl;
+
+			INFO( "Step 1. Status " << status );
+			// if ( status == "CONVERGED " ){
+			// 	trying = false;
+			// 	break;
+			// }
+			
 
 			// switch to poisson errors
-				minuit->mnexcm( "MINI", arglist, 1, iFlag );
-			schema->setMethod( "poisson" );
-				minuit->mnexcm( "MINI", arglist, 1, iFlag );
-				status = minuit->fCstatu;
-			logger->info( __FUNCTION__ ) << "Step 2. Status " << status << endl;
-			if ( minuit->fCstatu == "CONVERGED " ){
-				trying = false;
-				break;
-			}
+			// INFO( "Error Mode : " << self->schema->getMethod() );
+			// 	minuit->mnexcm( "MINI", arglist, 1, iFlag );
+			// schema->setMethod( "poisson" );
+			// INFO( "Error Mode : " << self->schema->getMethod() );
+			// 	minuit->mnexcm( "MINI", arglist, 1, iFlag );
+			// 	status = minuit->fCstatu;
+			// logger->info( __FUNCTION__ ) << "Step 2. Status " << status << endl;
+			// if ( status == "CONVERGED " ){
+			// 	trying = false;
+			// 	break;
+			// }
 
 			// fix the enhanced yields
 			fix( "_yield_" );
@@ -269,7 +278,7 @@ namespace TSF{
 				status = minuit->fCstatu;
 			release( "_yield_" );
 
-			logger->info( __FUNCTION__ ) << "Step 3. Status " << status << endl;
+			INFO ( "Step 3. Status " << status );
 			if ( minuit->fCstatu == "CONVERGED " ){
 				trying = false;
 				break;
@@ -279,14 +288,12 @@ namespace TSF{
 		logger->info( __FUNCTION__ ) << "Complete after " << attempts << plural( attempts, " attempt", " attempts" ) << endl;
 		
 	
-
+		INFO( "Attempting Yield Fit" )
 		// final step in the fit
 		// fit the shapes and the enhanced amplitudes
 		//fix( "_yield_" );
 		fixShapes();
 			schema->setMethod( "nll" );
-				minuit->mnexcm( "MINI", arglist, 1, iFlag );
-				minuit->mnexcm( "MINI", arglist, 1, iFlag );
 				minuit->mnexcm( "MINI", arglist, 1, iFlag );
 			status = minuit->fCstatu;
 		releaseShapes();
