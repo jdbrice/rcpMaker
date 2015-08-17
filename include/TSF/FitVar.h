@@ -34,7 +34,7 @@ namespace TSF{
 					);
 
 			} else {
-				Logger::log.error(__FUNCTION__) << "Invalid Config" << endl;
+				ERROR( "FitVar", "Invalid Config" );
 			}
 			fixed = false;
 			exclude = false;

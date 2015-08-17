@@ -78,10 +78,6 @@ namespace TSF{
 		datasets[ ds ].clear();
 		datasets[ ds ].setName( ds );
 
-		// // normalize h first
-		//h->Sumw2();
-		//h->Scale( 100.0 / h->Integral() );
-
 		for ( int i = 1; i <= h->GetNbinsX(); i++ ){
 
 			double center = h->GetBinCenter( i );
@@ -99,10 +95,7 @@ namespace TSF{
 	void FitSchema::updateModels( map<string, bool> &act  ){
 
 		for ( auto k : models ){
-
 			k.second->setVars( vars ); 
-			//if ( !act[ k.first ] )
-			//	k.second->y = 0.0001;
 		}
 	}
 
@@ -114,6 +107,11 @@ namespace TSF{
 	}
 
 	void FitSchema::setInitialMu( string var, double _mu, double _sigma, double _dmu ){
+		if ( !exists( var ) ){
+			WARN( var << "DNE" )
+			return;
+		}
+
 		vars[ var ]->val = _mu;
 		
 		if ( 0 == _sigma || 0 == _dmu ){ // unconstrained
@@ -134,6 +132,10 @@ namespace TSF{
 	 * @_dsig   The variation in sigma allowed from ( 0 -> 1.0) => percent / 100
 	 */ 
 	void FitSchema::setInitialSigma( string var, double _sigma, double _dsig ){
+		if ( !exists( var ) ){
+			WARN( var << "DNE" )
+			return;
+		}
 		vars[ var ]->val = _sigma;
 
 		// set the range
@@ -151,6 +153,10 @@ namespace TSF{
 	 * @_max 	The max sigma value
 	 */ 
 	void FitSchema::setInitialSigma( string var, double _sigma, double _min, double _max ){
+		if ( !exists( var ) ){
+			WARN( var << "DNE" )
+			return;
+		}
 		vars[ var ]->val = _sigma;
 
 		// set the range

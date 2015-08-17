@@ -112,6 +112,7 @@ namespace TSF{
 		double roi = cfg->getDouble( nodePath + "FitSchema:roi", -1 );
 
 		activePlayers.clear();
+		
 		for ( string plc : Common::species ){
 
 			INFO( "Setting up " << plc )
@@ -133,10 +134,12 @@ namespace TSF{
 			INFO( "zb_sigma_Pi = " << zbSigFix )
 
 			if ( zbMinParP > 0 && avgP >= zbMinParP){
+				
 				schema->setInitialMu( "zb_mu_"+plc, zbMu, zbSigFix, zbDeltaMu );
 				schema->fixParameter( "zb_sigma_" + plc, zbSigFix, true );
 			}
 			else {
+				
 				schema->setInitialSigma( "zb_sigma_"+plc, zbSig, zbSig * 0.5, zbSig * 6 );
 				schema->setInitialMu( "zb_mu_"+plc, zbMu, zbSig, zbDeltaMu );
 			}
@@ -395,8 +398,9 @@ namespace TSF{
 		sum->Draw( "same" );
 		
 		vector<TGraph*> comps;
-		vector<double> colors = { kRed, kOrange, kBlack };
+		vector<double> colors = { kRed, kOrange, kBlack, kGreen };
 		int i = 0;
+		
 		for ( string plc : Common::species ){
 			TGraph * g = fitter->plotResult( v+"_g"+plc );
 			comps.push_back( g );

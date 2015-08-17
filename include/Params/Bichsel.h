@@ -21,9 +21,10 @@ protected:
 	int method;
 	TFile* table;
 
-	TH1D *hP, *hPi, *hK;
+	TH1D *hP, *hPi, *hK, *hE;
 
 
+	double eMass;
 	double piMass;
 	double kaonMass;
 	double protonMass;
@@ -31,6 +32,7 @@ protected:
 public:
 	Bichsel( string tableFile = "dedxBichsel.root", int method = 0 ){
 
+		eMass = 0.000510998;
 		piMass = 0.1395702;
 		kaonMass = 0.493667;
 		protonMass = 0.9382721;
@@ -98,6 +100,7 @@ public:
 			hP = (TH1D*)table->Get( "mpmP" );
 			hK = (TH1D*)table->Get( "mpmK" );
 			hPi = (TH1D*)table->Get( "mpmPi" );
+			hE = (TH1D*)table->Get( "mpmE" );
 		}
 	}
 
@@ -111,7 +114,10 @@ public:
 		}
 		else if ( abs(mass - protonMass) < epsilon  ){
 			return hP;
+		} else if ( abs(mass - eMass) < epsilon  ){
+			return hE;
 		}
+
 		return hP;
 	}
 
