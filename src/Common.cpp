@@ -3,7 +3,7 @@
 // ROOT
 #include "TVirtualFitter.h"
 
- vector<string> Common::species = { "Pi", "K", "P" };
+ vector<string> Common::species = { "E", "Pi", "K", "P" };
 
  vector<int> Common::charges = { -1, 1 };
  vector<string> Common::sCharges = { "n", "p" };

@@ -358,6 +358,7 @@ bool InclusiveSpectra::keepTofTrack( Int_t iTrack ){
 	// alias
 	double 	yLocal 			= pico->trackYLocal( iTrack );
 	double 	zLocal 			= pico->trackZLocal( iTrack );
+	double  beta 			= pico->trackBeta( iTrack );
 	int 	matchFlag		= pico->trackTofMatch( iTrack );
 	
 
@@ -382,6 +383,11 @@ bool InclusiveSpectra::keepTofTrack( Int_t iTrack ){
 	if ( makeTrackQA )
 		book->fill( "cuts", "yLocal" );
 	
+	if ( zLocal < cut_zLocal->min || zLocal > cut_zLocal->max )
+		return false;
+	if ( makeTrackQA )
+		book->fill( "cuts", "zLocal" );
+
 	if ( zLocal < cut_zLocal->min || zLocal > cut_zLocal->max )
 		return false;
 	if ( makeTrackQA )
