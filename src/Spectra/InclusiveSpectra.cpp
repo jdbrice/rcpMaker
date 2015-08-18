@@ -388,10 +388,11 @@ bool InclusiveSpectra::keepTofTrack( Int_t iTrack ){
 	if ( makeTrackQA )
 		book->fill( "cuts", "zLocal" );
 
-	if ( zLocal < cut_zLocal->min || zLocal > cut_zLocal->max )
+	// reject tracks that pass the above but have no timing info
+	if ( beta <= 0 ) 
 		return false;
 	if ( makeTrackQA )
-		book->fill( "cuts", "zLocal" );
+		book->fill( "cuts", "beta" );
 
 
 	// Post Track Cut QA
