@@ -108,7 +108,7 @@ namespace TSF{
 
 	void FitSchema::setInitialMu( string var, double _mu, double _sigma, double _dmu ){
 		if ( !exists( var ) ){
-			WARN( var << "DNE" )
+			WARN( var << " DNE" )
 			return;
 		}
 
@@ -133,7 +133,7 @@ namespace TSF{
 	 */ 
 	void FitSchema::setInitialSigma( string var, double _sigma, double _dsig ){
 		if ( !exists( var ) ){
-			WARN( var << "DNE" )
+			WARN( var << " DNE" )
 			return;
 		}
 		vars[ var ]->val = _sigma;
@@ -154,7 +154,7 @@ namespace TSF{
 	 */ 
 	void FitSchema::setInitialSigma( string var, double _sigma, double _min, double _max ){
 		if ( !exists( var ) ){
-			WARN( var << "DNE" )
+			WARN( var << " DNE" )
 			return;
 		}
 		vars[ var ]->val = _sigma;
@@ -167,19 +167,40 @@ namespace TSF{
 	}
 
 	void FitSchema::fixParameter( string var, double val, bool fixed ){
+		if ( !exists( var ) ){
+			WARN( "FitSchema", var << " DNE" )
+			return;
+		}
 		vars[ var ]->val = val;
 		vars[ var ]->fixed = fixed;
 
 	}
 
 
-	void FitSchema::addRange( string ds, double min, double max ){
+	void FitSchema::addRange( string ds, double min, double max, string centerOn, string widthFrom, double roi ){
 
-		FitRange fr( ds, min, max );
+		FitRange fr( ds, min, max, centerOn, widthFrom, roi );
 		ranges.push_back( fr );
 
 		fitInRange = true;
 	}
+
+
+	void FitSchema::updateRanges(  ){
+
+
+		for ( FitRange &r : ranges ){
+
+			if ( exists( r.centerOn ) && exists( r.widthFrom ) ){
+				//INFO( "FitSchema", "should dynamically update the range around " << r.centerOn << " +- " << r.widthFrom )
+				r.min = var( r.centerOn )->val - var( r.widthFrom )->val * r.roi;
+				r.max = var( r.centerOn )->val + var( r.widthFrom )->val * r.roi;
+
+				INFO( "FitSchema", "Updating Range " << r.centerOn << " +- " << r.widthFrom << "(" << r.min << ", " << r.max << " )"  )
+			}
+		}
+	}
+
 
 	void FitSchema::clearRanges(){
 		ranges.clear();

@@ -12,11 +12,20 @@ namespace TSF{
 		string dataset;
 		double min, max;
 
-		FitRange( string ds, double _min, double _max ){
+		// for dynamically tracking a variable in the fit
+		string centerOn, widthFrom;
+		double roi;
+
+
+		FitRange( string ds, double _min, double _max, string centerOn = "", string widthFrom = "", double roi = 1.0 ){
 
 			dataset = ds;
 			min = _min;
 			max = _max;
+
+			this->centerOn = centerOn;
+			this->widthFrom = widthFrom;
+			this->roi = roi;
 		}
 		~FitRange(){}
 
@@ -27,7 +36,10 @@ namespace TSF{
 		}
 
 		string toString(){
-			return "( " + dts(min) + " < " + dataset + " < " + dts(max) + " )";
+			if ( "" == centerOn || "" == widthFrom )
+				return "( " + dts(min) + " < " + dataset + " < " + dts(max) + " )";
+			else 
+				return "( " + dts(min) + " < " + dataset + " < " + dts(max) + " ) Tracking " + centerOn + " +/- " + widthFrom + " * " + dts(roi) ;
 		}
 		
 	};	

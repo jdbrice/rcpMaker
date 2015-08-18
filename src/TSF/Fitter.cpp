@@ -252,7 +252,7 @@ namespace TSF{
 				status = minuit->fCstatu;
 			releaseShapes();
 
-			INFO( "Step 1. Status " << status );
+			INFO( "Fitter", "Step 1. Status " << status );
 			// if ( status == "CONVERGED " ){
 			// 	trying = false;
 			// 	break;
@@ -273,19 +273,21 @@ namespace TSF{
 			// }
 
 			// fix the enhanced yields
-			fix( "_yield_" );
+			fix( "yield_" );
 				minuit->mnexcm( "MINI", arglist, 1, iFlag );
 				status = minuit->fCstatu;
-			release( "_yield_" );
-
+			release( "yield_" );
+		
 			INFO ( "Step 3. Status " << status );
-			if ( minuit->fCstatu == "CONVERGED " ){
+			schema->updateRanges();
+			
+			if ( minuit->fCstatu == "CONVERGED " && attempts > 0){
 				trying = false;
 				break;
 			}
 			attempts ++ ;
 		}
-		logger->info( __FUNCTION__ ) << "Complete after " << attempts << plural( attempts, " attempt", " attempts" ) << endl;
+		INFO( "Fitter", "Complete after " << attempts << plural( attempts, " attempt", " attempts" ) );
 		
 	
 		INFO( "Attempting Yield Fit" )
@@ -293,7 +295,8 @@ namespace TSF{
 		// fit the shapes and the enhanced amplitudes
 		//fix( "_yield_" );
 		fixShapes();
-			schema->setMethod( "nll" );
+			schema->setMethod( "poisson" );
+				minuit->mnexcm( "MINI", arglist, 1, iFlag );
 				minuit->mnexcm( "MINI", arglist, 1, iFlag );
 			status = minuit->fCstatu;
 		releaseShapes();
@@ -308,14 +311,15 @@ namespace TSF{
 
 		minuit->mnexcm( "STATUS", arglist, 1, iFlag ); // get errors
 
-		cout << "Final Status : " << status << " with flag = " << iFlag << endl;
+		INFO( "Fitter", "Final Status : " << status << " with flag = " << iFlag );
 
 		minuit->mnexcm( "HESSE", arglist, 1, iFlag );
 		
 
 		// get the final state of all variables 
-		logger->info(__FUNCTION__) << "Updating parameters after Fit" << endl;
+		INFO(  "Updating parameters after Fit" );
 		updateParameters();
+
 		//schema->reportModels();
 	}
 

@@ -151,7 +151,7 @@ namespace TSF{
 				schema->setInitialSigma( "zd_sigma_"+plc, zdSigFix, zdSigFix - .005, zdSigFix + 0.005);
 			}
 			else 
-				schema->setInitialSigma( "zd_sigma_"+plc, zdSig, 0.06, 0.08);
+				schema->setInitialSigma( "zd_sigma_"+plc, zdSig, 0.04, 0.14);
 				
 			
 			choosePlayers( avgP, plc, roi );
@@ -190,8 +190,9 @@ namespace TSF{
 			double zdSig = zdSigma(  );
 
 			if ( avgP > zdOnly )
-				schema->addRange( "zb_All", zbMu - zbSig * roi, zbMu + zbSig * roi );
-			schema->addRange( "zd_All", zdMu - zdSig * roi, zdMu + zdSig * roi );	
+				schema->addRange( "zb_All", zbMu - zbSig * roi, zbMu + zbSig * roi, "zb_mu_" + plc, "zb_sigma_" + plc, roi );
+			
+			schema->addRange( "zd_All", zdMu - zdSig * roi, zdMu + zdSig * roi, "zd_mu_" + plc, "zd_sigma_" + plc, roi );	
 		}
 
 		// always include the total yields
@@ -223,8 +224,6 @@ namespace TSF{
 
 			double zbSig = zbSigma(  );
 			double zbMu = zbMean( plc, avgP);
-
-			
 
 			for ( string plc2 : Common::species ){
 				double zdMu2 = zdMean( plc2, avgP );

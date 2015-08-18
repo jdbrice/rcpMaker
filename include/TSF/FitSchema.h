@@ -94,7 +94,8 @@ namespace TSF{
 		void setYieldRange( string var, double low, double high );
 
 		// Fit Ranges
-		void addRange( string dataset, double _min, double _max );
+		void addRange( string dataset, double _min, double _max, string centerOn = "", string widthFrom = "", double roi = 1.0 );
+		void updateRanges();
 		void clearRanges(  );
 		bool constrainFitRange() { return fitInRange; }
 		bool inRange( string ds, double x );
