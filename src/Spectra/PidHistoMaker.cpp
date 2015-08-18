@@ -247,12 +247,12 @@ void PidHistoMaker::enhanceDistributions( double avgP, int ptBin, int charge, do
 	}
 
 	
-	// N sigma below pi to reject electrons
-	if ( tof < tMeans[ "Pi" ] - tSigma * nSigBelow )
-		return;
-	// and N sigma above proton to reject deuteron
-	if ( avgP >= dCutMinP && tof > tMeans[ "P" ] + tSigma * nSigAbove )
-		return;
+	// // N sigma below pi to reject electrons
+	// if ( tof < tMeans[ "Pi" ] - tSigma * nSigBelow )
+	// 	return;
+	// // and N sigma above proton to reject deuteron
+	// if ( avgP >= dCutMinP && tof > tMeans[ "P" ] + tSigma * nSigAbove )
+	// 	return;
 
 
 	book->cd( "dedx" );
