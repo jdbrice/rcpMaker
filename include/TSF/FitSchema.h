@@ -45,6 +45,8 @@ namespace TSF{
 
 		map<string, shared_ptr<FitVar> > vars;
 
+		static constexpr auto tag = "FitSchema";
+
 	public:
 		FitSchema( XmlConfig * _cfg, string np );
 		~FitSchema();

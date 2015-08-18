@@ -17,6 +17,8 @@ namespace TSF{
 
 	class Fitter{
 
+		static constexpr auto tag = "Fitter";
+
 		// Scaling for configurations that break some constraint
 		// for instance - enforce 1/beta mass ordering with parabolic minimum
 		static constexpr double penaltyScale = 1000.0;

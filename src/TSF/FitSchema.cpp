@@ -5,7 +5,7 @@ namespace TSF{
 
 
 	FitSchema::FitSchema( XmlConfig * _cfg, string _nodePath ){
-
+		INFO( tag, "")
 		cfg = _cfg;
 		nodePath = _nodePath;
 
@@ -21,12 +21,13 @@ namespace TSF{
 	}
 
 	FitSchema::~FitSchema(){
-
+		INFO( tag, "")
 
 	}
    
 
 	void FitSchema::makeFitVars(){
+		INFO( tag, "")
 
 		vector<string> fvPaths = cfg->childrenOf( nodePath, "FitVar" );
 		for ( string path : fvPaths ){
@@ -38,9 +39,7 @@ namespace TSF{
 
 
 	void FitSchema::makeModels(){
-
-		logger->info(__FUNCTION__)<< endl;
-
+		INFO( tag, "")
 		vector<string> paths = cfg->childrenOf( nodePath, "Model" );
 		for ( string path : paths ){
 
@@ -50,7 +49,7 @@ namespace TSF{
 	}
 
 	void FitSchema::makeGauss( string mpath ){
-
+		INFO( tag, "")
 		string dataset 		= cfg->getString( mpath + ":dataset" );
 		string modelName 	= cfg->getString( mpath + ":name" );
 
@@ -68,10 +67,10 @@ namespace TSF{
 	}
 
 	void FitSchema::loadDataset( string ds, TH1 * h ){
+		INFO( tag, "( dataset=" << ds << ", TH1*=" << h << ")")
 
-		logger->info(__FUNCTION__) << "Loading Dataset " << ds << " from " << h << endl;
 		if ( !h ){
-			logger->error( __FUNCTION__ ) << "Cannot load dataset " << ds << endl;
+			ERROR( tag, "Cannot load " << ds  )
 			return;
 		}
 
@@ -93,6 +92,7 @@ namespace TSF{
 	}
 
 	void FitSchema::updateModels( map<string, bool> &act  ){
+		DEBUG( tag, "")
 
 		for ( auto k : models ){
 			k.second->setVars( vars ); 
@@ -100,7 +100,7 @@ namespace TSF{
 	}
 
 	void FitSchema::reportModels(){
-
+		INFO( tag, "")
 		for ( auto k : models ){
 			logger->info(__FUNCTION__) << k.second->toString() << endl;  
 		}
@@ -108,7 +108,7 @@ namespace TSF{
 
 	void FitSchema::setInitialMu( string var, double _mu, double _sigma, double _dmu ){
 		if ( !exists( var ) ){
-			WARN( var << " DNE" )
+			WARN( tag, var << " DNE" )
 			return;
 		}
 
@@ -133,7 +133,7 @@ namespace TSF{
 	 */ 
 	void FitSchema::setInitialSigma( string var, double _sigma, double _dsig ){
 		if ( !exists( var ) ){
-			WARN( var << " DNE" )
+			WARN( tag, var << " DNE" )
 			return;
 		}
 		vars[ var ]->val = _sigma;
@@ -154,7 +154,7 @@ namespace TSF{
 	 */ 
 	void FitSchema::setInitialSigma( string var, double _sigma, double _min, double _max ){
 		if ( !exists( var ) ){
-			WARN( var << " DNE" )
+			WARN( tag, var << " DNE" )
 			return;
 		}
 		vars[ var ]->val = _sigma;
@@ -168,7 +168,7 @@ namespace TSF{
 
 	void FitSchema::fixParameter( string var, double val, bool fixed ){
 		if ( !exists( var ) ){
-			WARN( "FitSchema", var << " DNE" )
+			WARN( tag, var << " DNE" )
 			return;
 		}
 		vars[ var ]->val = val;
@@ -196,13 +196,14 @@ namespace TSF{
 				r.min = var( r.centerOn )->val - var( r.widthFrom )->val * r.roi;
 				r.max = var( r.centerOn )->val + var( r.widthFrom )->val * r.roi;
 
-				INFO( "FitSchema", "Updating Range " << r.centerOn << " +- " << r.widthFrom << "(" << r.min << ", " << r.max << " )"  )
+				INFO( tag, "Updating Range " << r.centerOn << " +- " << r.widthFrom << "(" << r.min << ", " << r.max << " )"  )
 			}
 		}
 	}
 
 
 	void FitSchema::clearRanges(){
+		INFO( tag, "")
 		ranges.clear();
 		fitInRange = false;
 	}
@@ -226,7 +227,7 @@ namespace TSF{
 
 	void FitSchema::reportFitRanges(  ){
 
-		logger->info(__FUNCTION__) << "FitRanges : " << endl;
+		INFO( tag, "")
 		for ( FitRange fr : ranges ){
 			logger->info( __FUNCTION__ ) << fr.toString() << endl;
 		}

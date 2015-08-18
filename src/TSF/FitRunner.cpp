@@ -25,7 +25,7 @@ namespace TSF{
 		binsPt = new HistoBins( cfg, "binning.pt" );
 		
 
-		logger->setClassSpace( "FitRunner" );
+		logger->setClassSpace( tag );
 
 		// setup reporters for the zb and zd fit projections
 		zbReporter = unique_ptr<Reporter>(new Reporter( cfg->getString( nodePath + "output:path" ) + "rp_" + centerSpecies + "_TSF_zb.pdf",
@@ -97,6 +97,7 @@ namespace TSF{
 	}
 
 	void FitRunner::prepare( double avgP, int iCen ){
+		TRACE( tag, "( avgP=" << avgP << ", iCen=" << iCen << ")" )
 
 		//Constraints on the mu 	 
 		double zbDeltaMu = cfg->getDouble( nodePath + "ParameterFixing.deltaMu:zb", 1.5 );
@@ -115,7 +116,12 @@ namespace TSF{
 		
 		for ( string plc : Common::species ){
 
-			INFO( "Setting up " << plc )
+			INFO( tag, "Setting up " << plc )
+			if ( !schema->exists( "yield_" + plc ) ){
+				WARN( "No Yield exists for " << plc << " so we are skipping it" )
+				continue;
+			}
+
 			// zb Parameters
 			double zbMu = zbMean( plc, avgP );
 			double zbSig = zbSigma( );
@@ -131,21 +137,19 @@ namespace TSF{
 			// value to shich zb sigma should be fixed
 			double zbSigFix = schema->var( "zb_sigma_"+plc )->val;
 
-			INFO( "zb_sigma_Pi = " << zbSigFix )
-
 			if ( zbMinParP > 0 && avgP >= zbMinParP){
 				
 				schema->setInitialMu( "zb_mu_"+plc, zbMu, zbSigFix, zbDeltaMu );
 				schema->fixParameter( "zb_sigma_" + plc, zbSigFix, true );
 			}
 			else {
-				
+
 				schema->setInitialSigma( "zb_sigma_"+plc, zbSig, zbSig * 0.5, zbSig * 6 );
 				schema->setInitialMu( "zb_mu_"+plc, zbMu, zbSig, zbDeltaMu );
 			}
 
 			schema->setInitialMu( "zd_mu_"+plc, zdMu, zdSig, zdDeltaMu );
-			zdSigFix = zdSigma();//schema->var( "zd_sigma_"+plc ]->val;
+			zdSigFix = zdSigma(); //schema->var( "zd_sigma_"+plc )->val;
 			if ( zdMinParP > 0 && avgP >= zdMinParP){	
 				//schema->fixParameter( "zd_sigma_" + plc, zdSigFix, true );
 				schema->setInitialSigma( "zd_sigma_"+plc, zdSigFix, zdSigFix - .005, zdSigFix + 0.005);

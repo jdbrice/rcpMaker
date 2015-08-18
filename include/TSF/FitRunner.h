@@ -23,6 +23,7 @@ using namespace jdb;
 namespace TSF{
 	class FitRunner : public HistoAnalyzer
 	{
+		static constexpr auto tag = "FitRunner";
 	protected:
 
 		string centerSpecies;
