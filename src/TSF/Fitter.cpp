@@ -197,8 +197,6 @@ namespace TSF{
 	void Fitter::fit( string cs, int charge, int cenBin, int ptBin ){
 		INFO( "Fitter", "" )
 
-
-
 		// are we using fit ranges?
 		// if so lets report
 		if ( schema->constrainFitRange() ){

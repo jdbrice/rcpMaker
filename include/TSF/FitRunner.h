@@ -55,7 +55,7 @@ namespace TSF{
 	protected:
 
 		void makeHistograms();
-		void fillFitHistograms(int iPt, int iCen, int iCharge );
+		void fillFitHistograms(int iPt, int iCen, int iCharge, Fitter &fitter );
 		void reportFit( Fitter * fitter, int iPt );
 		void drawSet( string v, Fitter * fitter, int iPt );
 

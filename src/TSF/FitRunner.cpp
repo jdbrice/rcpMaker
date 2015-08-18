@@ -359,7 +359,7 @@ namespace TSF{
 					reportFit( &fitter, iPt );
 
 					if ( fitter.isFitGood() )
-						fillFitHistograms(iPt, iCen, iCharge );
+						fillFitHistograms(iPt, iCen, iCharge, fitter );
 
 				}// loop pt Bins
 			} // loop charge bins
@@ -448,7 +448,7 @@ namespace TSF{
 	}
 
 
-	void FitRunner::fillFitHistograms(int iPt, int iCen, int iCharge ){
+	void FitRunner::fillFitHistograms(int iPt, int iCen, int iCharge, Fitter &fitter ){
 
 		double avgP = binAverageP( iPt );
 
@@ -465,12 +465,11 @@ namespace TSF{
 			string name = Common::yieldName( plc, iCen, iCharge );
 			book->cd( plc+"_yield");
 			double sC = schema->var( "yield_"+plc )->val / book->get( name )->GetBinWidth( iiPt );
-			double sE = schema->var( "yield_"+plc )->error / book->get( name )->GetBinWidth( iiPt );
+			double sE = schema->var( "yield_"+plc )->error;
 			
-			// TODO: use the actual number here
-			// this is supposed to set the error to the 
-			// poisson error scaled down
-			sE = sqrt( sC * 7.141120e+05 ) / 7.141120e+05;
+			// TODO: add the fit error in quadrature ?
+			double N = sC * fitter.getNorm();
+			sE = sqrt( 1/N + sE*sE );
 
 			book->get( name )->SetBinContent( iiPt, sC );
 			book->get( name )->SetBinError( iiPt, sE );
