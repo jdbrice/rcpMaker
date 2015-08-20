@@ -27,13 +27,13 @@ Queue
 """
 
 print args.config_file
-plc = args.config_file[-4:]
+plc = os.path.basename( args.config_file ).split( "." )[ 0 ]
 print plc
 
 list_files = glob.glob( os.path.join( args.list_path, "list_*" ) )
 print "Found", len(list_files), "list files"
-# for f in list_files :
-# 	print f
-# 	prefix = f.split( '_' )[-1]
-# 	print prefix + "_" + plc
+for f in list_files :
+	print f
+	prefix = f.split( '_' )[-1]
+	print prefix + "_" + plc
 
