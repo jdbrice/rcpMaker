@@ -50,5 +50,5 @@ with open( name, 'w' ) as of :
 
 	for f in list_files :
 		prefix = f.split( '_' )[-1]
-		of.write( t_arg.format( cfg=args.config_file, list = f, prefix = plc + "_" + prefix  ) )
+		of.write( t_arg.format( cfg=args.config_file, list = f, prefix = plc + "_" + prefix +"_" ) )
 
