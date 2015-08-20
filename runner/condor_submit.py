@@ -5,7 +5,8 @@ import glob
 import os
 
 parser = argparse.ArgumentParser( description="Creates the configs for Tasks" );
-parser.add_argument( "name", default="PidHisto_PostCorr_K", help="name")
+parser.add_argument( "project", default="nominal", help="nominal, test, systematic etc.")
+parser.add_argument( "job", default="PidHisto_PostCorr_K", help="name")
 parser.add_argument( "list_path", default="./config", help="creates the folder and stores all configs within")
 parser.add_argument( "config_file", default="K.xml", help="path to config file used for this job, should end in '.xml'")
 parser.add_argument( "working_dir", default="./config", help="working directory - must contain dedxBischel.root")
@@ -28,11 +29,13 @@ Queue
 
 if not os.path.exists("grid"):
     os.makedirs("grid")
+if not os.path.exists(os.path.join( "grid", args.project ) ):
+    os.makedirs(os.path.join( "grid", args.project ) )
 
-if args.name.endswith( ".submit" ):
-	name = os.path.join( "grid", args.name )
+if args.job.endswith( ".submit" ):
+	name = os.path.join( "grid", args.project, args.job )
 else :
-	name = os.path.join( "grid",args.name + ".submit" )
+	name = os.path.join( "grid", args.project, args.job + ".submit" )
 
 print "writing to", name
 
