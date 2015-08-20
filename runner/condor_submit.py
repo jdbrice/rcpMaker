@@ -31,5 +31,6 @@ list_files = glob.glob( os.path.join( args.list_path, "list_*" ) )
 
 for f in list_files :
 	print f
-
+	prefix = f.split( '_' )[-1]
+	print prefix + "_config.xml"
 
