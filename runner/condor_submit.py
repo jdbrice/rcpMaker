@@ -27,7 +27,7 @@ Queue
 """
 
 
-list_files = glob.glob( os.path.join( list_path, "list_*" ) )
+list_files = glob.glob( os.path.join( args.list_path, "list_*" ) )
 
 for f in list_files :
 	print f
