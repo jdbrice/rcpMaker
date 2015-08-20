@@ -26,8 +26,10 @@ initialdir 		= {wd}
 t_arg = """Arguments = {cfg} {list} {prefix}
 Queue
 """
-t_job = """JOB {id} {file}"""
-t_parent = """PARENT {p_id} CHILD {c_id} """
+t_job = """
+JOB {id} {file}"""
+t_parent = """
+PARENT {p_id} CHILD {c_id} """
 
 
 if not os.path.exists("grid"):
