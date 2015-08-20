@@ -57,7 +57,7 @@ with open( name, 'w' ) as of :
 		of.write( t_arg.format( cfg=args.config_file, list = f, prefix = plc + "_" + prefix +"_" ) )
 
 with open( hadd, 'w' ) as of :
-	of.write( t_header.format( exe="hadd", pd=args.product_path ) )
+	of.write( t_header.format( exe="hadd", wd=args.product_path ) )
 	of.write( t_arg.format( cfg="output.root", list=(plc + "_*.root"), prefix="" ) )
 
 
