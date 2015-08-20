@@ -62,7 +62,7 @@ with open( hadd, 'w' ) as of :
 
 
 with open( dag, 'w' ) as of :
-	of.write( t_job.foramat( id="A", file=os.path.join( wd, name ) ) )
-	of.write( t_job.foramat( id="B", file=os.path.join( wd, hadd ) ) )
+	of.write( t_job.format( id="A", file=os.path.join( wd, name ) ) )
+	of.write( t_job.format( id="B", file=os.path.join( wd, hadd ) ) )
 	of.write( t_parent.format( p_id="A", c_id="B" ) )
 
