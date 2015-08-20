@@ -229,6 +229,7 @@ double ZRecentering::nl2Tof( string centerSpecies, double beta, double p, double
 	// mean for this species
 	//const double mu =  tofGen->mean( p, mass( centerSpecies ) );
 	const double muAvg =  tofGen->mean( avgP, mass( centerSpecies ) );
+	const double mu =  tofGen->mean( p, mass( centerSpecies ) );
 	
 	double n1 = 0;
 	double d1 = 0;
@@ -240,9 +241,8 @@ double ZRecentering::nl2Tof( string centerSpecies, double beta, double p, double
 		double iMu =  tofGen->mean( p, mass( plc ) ) ;
 		double iMuAvg =  tofGen->mean( avgP, mass( plc ) ) ;
 		
-		
 		double iL = lh( tof, iMu, sigma );
-		double iL2 = lh( muAvg, iMu, sigma );
+		double iL2 = lh( mu, iMu, sigma );
 		
 		double w = tof + iMuAvg - iMu;
 		
@@ -259,26 +259,37 @@ double ZRecentering::nl2Tof( string centerSpecies, double beta, double p, double
 	
 	if ( d1 != 0 )
 		p1 = n1 / d1;
-	else 
-		ERROR("oh no1 : " << tof)
+	// else 
+	// 	ERROR("oh no1 : " << tof)
+	
 	if ( d2 != 0 )
 		p2 = n2 / d2;
 	else
 		ERROR("oh no2")
 
-	double nTof = p1 - p2;
+	double nTof = p1 - ( tof + muAvg - mu  );
 	
-	return nTof;
+	return nTof + tof;
 
 }
 
 
 double ZRecentering::lh( double x, double mu, double sigma ){
 
-	double a = sigma * TMath::Sqrt( 2 * TMath::Pi() );
+	double a = sigma * sqrt( 2 * TMath::Pi() );
 	double b = ( x - mu );
 	double c = 2 * sigma*sigma;
-	double d = (1/a) * TMath::Exp( -b*b / c );
+	double d = (1/a) * exp( -b*b / c );
+
+	return d;
+}
+
+double ZRecentering::lh2( double x, double mu, double sigma ){
+
+
+	double b = ( x - mu );
+	double c = 9 * sigma*sigma;
+	double d = exp( -b*b / c ) * 1e9;
 
 	return d;
 }

@@ -160,12 +160,13 @@ namespace TSF{
 			
 			choosePlayers( avgP, plc, roi );
 
+			
 			if ( avgP < 1.5 ){
 				schema->var( "yield_" + plc )->min = 0;
 				schema->var( "yield_" + plc )->max = schema->getNormalization() * 10;	
 			} else {
 				schema->var( "yield_" + plc )->min = 0;
-				schema->var( "yield_" + plc )->max = schema->var( "yield_" + plc )->val * 2;	
+				schema->var( "yield_" + plc )->max = schema->var( "yield_" + plc )->val * 10;	
 			}
 
 			double zdOnly = cfg->getDouble( nodePath + "Timing:zdOnly" , 0.5 );
@@ -250,7 +251,8 @@ namespace TSF{
 					schema->var( var )->min = 0;
 					schema->var( var )->max = schema->getNormalization();
 
-					schema->addRange( "zd_" + plc, zdMu2 - zdSig2 * roi, zdMu2 + zdSig2 * roi );
+					if ( roi > 0 )
+						schema->addRange( "zd_" + plc, zdMu2 - zdSig2 * roi, zdMu2 + zdSig2 * roi );
 
 					if ( firstTimeIncluded && plc != plc2 ){
 						schema->var( var )->val = 1/schema->getNormalization();
@@ -378,8 +380,9 @@ namespace TSF{
 			return ;
 		}
 		h->Draw("pe");
+		h->SetLineColor( kBlack );
 		double scaler = 1e-6;
-		h->GetYaxis()->SetRangeUser( schema->getNormalization() * scaler, schema->getNormalization() * 2 );
+		h->GetYaxis()->SetRangeUser( schema->getNormalization() * scaler, schema->getNormalization() * 0.2 );
 
 		h->SetTitle( ( dts((*binsPt)[ iPt ]) + " < pT < " + dts( (*binsPt)[ iPt + 1 ] ) ).c_str() );
 
@@ -387,7 +390,7 @@ namespace TSF{
 		for ( FitRange range : fitter->getSchema()->getRanges() ){
 			if ( range.dataset != v )
 				continue;
-			TBox * b1 = new TBox( range.min, schema->getNormalization() * scaler, range.max, schema->getNormalization() * 2  );
+			TBox * b1 = new TBox( range.min, schema->getNormalization() * scaler, range.max, schema->getNormalization() * 0.2  );
 			b1->SetFillColorAlpha( kBlack, 0.25 );
 			b1->SetFillStyle( 1001 );
 			b1->Draw(  );
@@ -399,21 +402,24 @@ namespace TSF{
 
 		TGraph * sum = fitter->plotResult( v );
 		sum->SetLineColor( kBlue );
+		sum->SetLineWidth( 1 );
 		sum->Draw( "same" );
 		
 		vector<TGraph*> comps;
-		vector<double> colors = { kRed, kOrange, kBlack, kGreen };
+		vector<double> colors = { kOrange, kRed - 3, kGreen - 3, kBlue - 3 };
 		int i = 0;
 		
 		for ( string plc : Common::species ){
 			TGraph * g = fitter->plotResult( v+"_g"+plc );
 			comps.push_back( g );
 			g->SetLineColor( colors[ i ] );
+			g->SetLineWidth( 1 );
 			g->Draw( "same" );
 
 			i++;
 		}
 
+		gPad->SetGrid( 1, 1 );
 		gPad->SetLogy(1);
 	}
 

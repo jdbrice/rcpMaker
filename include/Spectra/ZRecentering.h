@@ -104,6 +104,7 @@ public:
 	 * @return       the unnormalized likelihood
 	 */
 	static double lh( double x, double mu, double sigma );
+	static double lh2( double x, double mu, double sigma );
 	
 };
 
