@@ -13,10 +13,10 @@ parser.add_argument( "exe_path", default="./config", help="creates the folder an
 
 args = parser.parse_args()
 
-t_submit="""
-#############################################
-# Create PidHisto files for PID Rcp Analysis
-#############################################
+t_header="""
+##################################################
+# Create Condor Submit files for PID Rcp Analysis
+##################################################
 
 Executable    = {exe}
 initialdir 		= {wd}
@@ -35,14 +35,22 @@ else :
 
 print "writing to", name
 
-print args.config_file
 plc = os.path.basename( args.config_file ).split( "." )[ 0 ]
-print plc
 
-list_files = glob.glob( os.path.join( args.list_path, "list_*" ) )
-print "Found", len(list_files), "list files"
-for f in list_files :
-	print f
-	prefix = f.split( '_' )[-1]
-	print plc + "_" + prefix 
+
+with open( name, 'w' ) as of :
+	list_files = glob.glob( os.path.join( args.list_path, "list_*" ) )
+	print "Found", len(list_files), "list files"
+	
+	of.write( t_header.format( exe="./rcp", wd="./" ) )
+
+	for f in list_files :
+
+		
+
+		print f
+		prefix = f.split( '_' )[-1]
+		print plc + "_" + prefix 
+
+		of.write( t_arg.format( cfg=args.config_file, list = f, prefix = plc + "_" + prefix  ) )
 
