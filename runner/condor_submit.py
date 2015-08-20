@@ -27,7 +27,7 @@ Queue
 """
 
 plc = args.config_file[-4:]
-
+print plc
 
 list_files = glob.glob( os.path.join( args.list_path, "list_*" ) )
 
