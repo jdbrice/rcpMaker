@@ -8,8 +8,7 @@ parser = argparse.ArgumentParser( description="Creates the configs for Tasks" );
 parser.add_argument( "name", default="PidHisto_PostCorr_K", help="name")
 parser.add_argument( "list_path", default="./config", help="creates the folder and stores all configs within")
 parser.add_argument( "config_file", default="K.xml", help="path to config file used for this job, should end in '.xml'")
-parser.add_argument( "submit_path", default="./config", help="creates the folder and stores all configs within")
-parser.add_argument( "exe_path", default="./config", help="creates the folder and stores all configs within")
+parser.add_argument( "working_dir", default="./config", help="working directory - must contain dedxBischel.root")
 
 args = parser.parse_args()
 
@@ -22,16 +21,18 @@ Executable    = {exe}
 initialdir 		= {wd}
 """
 
-t_arg = """
-Arguments = {cfg} {list} {prefix}
+t_arg = """Arguments = {cfg} {list} {prefix}
 Queue
 """
 
 
+if not os.path.exists("grid"):
+    os.makedirs("grid")
+
 if args.name.endswith( ".submit" ):
-	name = args.name
+	name = os.path.join( "grid", args.name )
 else :
-	name = args.name + ".submit"
+	name = os.path.join( "grid",args.name + ".submit" )
 
 print "writing to", name
 
@@ -42,15 +43,9 @@ with open( name, 'w' ) as of :
 	list_files = glob.glob( os.path.join( args.list_path, "list_*" ) )
 	print "Found", len(list_files), "list files"
 	
-	of.write( t_header.format( exe="./rcp", wd="./" ) )
+	of.write( t_header.format( exe=os.path.join( args.working_dir, "rcp" ), wd=args.working_dir ) )
 
 	for f in list_files :
-
-		
-
-		print f
 		prefix = f.split( '_' )[-1]
-		print plc + "_" + prefix 
-
 		of.write( t_arg.format( cfg=args.config_file, list = f, prefix = plc + "_" + prefix  ) )
 
