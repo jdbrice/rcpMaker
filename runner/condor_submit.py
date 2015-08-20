@@ -5,6 +5,7 @@ import glob
 import os
 
 parser = argparse.ArgumentParser( description="Creates the configs for Tasks" );
+parser.add_argument( "name", default="PidHisto_PostCorr_K", help="name")
 parser.add_argument( "list_path", default="./config", help="creates the folder and stores all configs within")
 parser.add_argument( "config_file", default="K.xml", help="path to config file used for this job, should end in '.xml'")
 parser.add_argument( "submit_path", default="./config", help="creates the folder and stores all configs within")
@@ -26,6 +27,14 @@ Arguments = {cfg} {list} {prefix}
 Queue
 """
 
+
+if args.name.endswith( ".submit" ):
+	name = args.name
+else :
+	name = args.name + ".submit"
+
+print "writing to", name
+
 print args.config_file
 plc = os.path.basename( args.config_file ).split( "." )[ 0 ]
 print plc
@@ -35,5 +44,5 @@ print "Found", len(list_files), "list files"
 for f in list_files :
 	print f
 	prefix = f.split( '_' )[-1]
-	print prefix + "_" + plc
+	print plc + "_" + prefix 
 
