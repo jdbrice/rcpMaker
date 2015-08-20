@@ -5,12 +5,12 @@ import glob
 import os
 
 parser = argparse.ArgumentParser( description="Creates the configs for Tasks" );
+parser.add_argument( "list_path", default="./config", help="creates the folder and stores all configs within")
 parser.add_argument( "config_path", default="./config", help="creates the folder and stores all configs within")
 parser.add_argument( "submit_path", default="./config", help="creates the folder and stores all configs within")
-parser.add_argument( "list_path", default="./config", help="creates the folder and stores all configs within")
 parser.add_argument( "exe_path", default="./config", help="creates the folder and stores all configs within")
 
-
+args = parser.parse_args()
 
 t_submit="""
 #############################################
