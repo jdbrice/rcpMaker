@@ -133,7 +133,7 @@ namespace TSF{
 	}
 
 	void Fitter::loadDatasets( string cs, int charge, int cenBin, int ptBin ){
-		logger->info(__FUNCTION__) << endl;
+		INFO( tag, "( cs=" << cs << ", charge=" << charge << ", iCen=" <<cenBin << ", ptBin=" << ptBin << ")" )
 
 		map< string, TH1D* > zb;
 		map< string, TH1D* > zd;
@@ -328,12 +328,24 @@ namespace TSF{
 			status = minuit->fCstatu;
 			INFO ( tag, "Step 2. Status " << status );
 		release( "yield" );
-		//schema->updateRanges();
+		schema->updateRanges();
 
 
 		minuit->mnexcm( "MINI", arglist, 1, iFlag );
 		minuit->mnexcm( "MINI", arglist, 1, iFlag );
-		//schema->updateRanges();
+
+		fix( "sigma" );
+		fix( "_yield_" );
+			minuit->mnexcm( "MINI", arglist, 1, iFlag );
+			minuit->mnexcm( "MINI", arglist, 1, iFlag );			
+			status = minuit->fCstatu;
+		release( "_yield_" );
+		release( "sigma" );
+		
+		
+
+		INFO ( tag, "Final Status " << status );
+		schema->updateRanges();
 
 
 
@@ -505,12 +517,12 @@ namespace TSF{
 		for ( string plc1 : Common::species ){
 			double cy = currentValue( "yield_" + plc1, npar, pars );
 			for ( string pre : { "zb_", "zd_" } ){
-				for ( string plc2 : Common::species ){
-					double cey = currentValue( pre + plc2 + "_yield_" + plc1, npar, pars );
+				//for ( string plc2 : Common::species ){
+					double cey = currentValue( pre + plc1 + "_yield_" + plc1, npar, pars );
 					if ( cey > cy ){
-						penalty *= ( 1.0 + ( cey - cy ) / cey );
+						penalty *= ( 1.0 + ( cey - cy ) );
 					}
-				}
+				//}
 			}
 		}
 		return penalty;

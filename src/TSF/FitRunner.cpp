@@ -151,8 +151,8 @@ namespace TSF{
 			schema->setInitialMu( "zd_mu_"+plc, zdMu, zdSig, zdDeltaMu );
 			zdSigFix = zdSigma(); //schema->var( "zd_sigma_"+plc )->val;
 			if ( zdMinParP > 0 && avgP >= zdMinParP){	
-				//schema->fixParameter( "zd_sigma_" + plc, zdSigFix, true );
-				schema->setInitialSigma( "zd_sigma_"+plc, zdSigFix, zdSigFix - .005, zdSigFix + 0.005);
+				//schema->setInitialSigma( "zd_sigma_"+plc, zdSigFix, zdSigFix , zdSigFix);
+				schema->fixParameter( "zd_sigma_" + plc, zdSigFix, true );
 			}
 			else 
 				schema->setInitialSigma( "zd_sigma_"+plc, zdSig, 0.04, 0.14);
@@ -161,12 +161,12 @@ namespace TSF{
 			choosePlayers( avgP, plc, roi );
 
 			
-			if ( avgP < 1.5 ){
+			if ( avgP < 0.5 ){
 				schema->var( "yield_" + plc )->min = 0;
 				schema->var( "yield_" + plc )->max = schema->getNormalization() * 10;	
 			} else {
-				schema->var( "yield_" + plc )->min = 0;
-				schema->var( "yield_" + plc )->max = schema->var( "yield_" + plc )->val * 10;	
+				schema->var( "yield_" + plc )->min = schema->var( "yield_" + plc )->val / 10.0;
+				schema->var( "yield_" + plc )->max = schema->var( "yield_" + plc )->val * 10.0;	
 			}
 
 			double zdOnly = cfg->getDouble( nodePath + "Timing:zdOnly" , 0.5 );
@@ -249,7 +249,7 @@ namespace TSF{
 
 					schema->var( var )->exclude = false;
 					schema->var( var )->min = 0;
-					schema->var( var )->max = schema->getNormalization();
+					schema->var( var )->max = schema->var( "yield_"  + plc2 )->val * 10;
 
 					if ( roi > 0 )
 						schema->addRange( "zd_" + plc, zdMu2 - zdSig2 * roi, zdMu2 + zdSig2 * roi );
@@ -294,13 +294,15 @@ namespace TSF{
 
 					schema->var( var )->exclude = false;
 					schema->var( var )->min = 0;
-					schema->var( var )->max = schema->getNormalization() * 10;
+					schema->var( var )->max = schema->var( "yield_"  + plc2 )->val * 10;
 
 					if ( roi > 0 )
 						schema->addRange( "zb_" + plc, zbMu2 - zbSig2 * roi, zbMu2 + zbSig2 * roi );
 
-					if ( firstTimeIncluded && plc != plc2)
-						schema->var( var )->val = 0;
+					if ( firstTimeIncluded && plc != plc2){
+						schema->var( var )->val = 1/schema->getNormalization();
+						schema->var( var )->error = 0.1/schema->getNormalization();
+					}
 
 				} else {
 					schema->var( "zb_"+plc+"_yield_"+plc2 )->exclude = true;;
