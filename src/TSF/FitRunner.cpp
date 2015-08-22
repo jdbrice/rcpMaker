@@ -34,10 +34,13 @@ namespace TSF{
 			cfg->getInt( nodePath + "Reporter.output:width", 400 ), cfg->getInt( nodePath + "Reporter.output:height", 400 ) ) );
 
 		Logger::setGlobalLogLevel( Logger::logLevelFromString( cfg->getString( nodePath + "Logger:globalLogLevel" ) ) );
+
+
+
 	}
 
 	FitRunner::~FitRunner(){
-	}
+	} 
 
 
 	void FitRunner::makeHistograms(){
@@ -90,6 +93,14 @@ namespace TSF{
 					book->cd( "tofEff" );
 					book->clone( "/", "yield", "tofEff", Common::effName( plc, iCen, iCharge )  );
 
+					for ( string plc2 : Common::species ){
+						book->cd( "zb_enhanced" );
+						book->clone("/", "yield", "zb_enhanced", Common::yieldName( plc, iCen, iCharge, plc2 ) );
+
+						book->cd( "zd_enhanced" );
+						book->clone("/", "yield", "zd_enhanced", Common::yieldName( plc, iCen, iCharge, plc2 ) );
+					}
+
 
 				} // loop plc
 			} // loop iCharge
@@ -137,22 +148,21 @@ namespace TSF{
 			// value to shich zb sigma should be fixed
 			double zbSigFix = schema->var( "zb_sigma_"+plc )->val;
 
-			if ( zbMinParP > 0 && avgP >= zbMinParP){
-				
-				schema->setInitialMu( "zb_mu_"+plc, zbMu, zbSigFix, zbDeltaMu );
-				schema->fixParameter( "zb_sigma_" + plc, zbSigFix, true );
+			if ( zbMinParP > 0 && avgP >= zbMinParP){	
+				schema->setInitialMu( "zb_mu_"+plc, zbMu, zbSigFix, 10 );
+				INFO( tag, "Fixing zb_sigma_" << plc << " to " << sigmaSets[ "zb_" + plc ].mean() )
+				schema->fixParameter( "zb_sigma_" + plc, sigmaSets[ "zb_" + plc ].mean(), true );
 			}
 			else {
-
 				schema->setInitialSigma( "zb_sigma_"+plc, zbSig, zbSig * 0.5, zbSig * 6 );
 				schema->setInitialMu( "zb_mu_"+plc, zbMu, zbSig, zbDeltaMu );
 			}
 
-			schema->setInitialMu( "zd_mu_"+plc, zdMu, zdSig, zdDeltaMu );
+			schema->setInitialMu( "zd_mu_"+plc, zdMu, zdSig, 10 );
 			zdSigFix = zdSigma(); //schema->var( "zd_sigma_"+plc )->val;
 			if ( zdMinParP > 0 && avgP >= zdMinParP){	
-				//schema->setInitialSigma( "zd_sigma_"+plc, zdSigFix, zdSigFix , zdSigFix);
-				schema->fixParameter( "zd_sigma_" + plc, zdSigFix, true );
+				schema->setInitialMu( "zd_mu_"+plc, zdMu, zdSig, zdDeltaMu);
+				schema->fixParameter( "zd_sigma_" + plc, sigmaSets[ "zd_" + plc ].mean(), true );
 			}
 			else 
 				schema->setInitialSigma( "zd_sigma_"+plc, zdSig, 0.04, 0.14);
@@ -160,19 +170,15 @@ namespace TSF{
 			
 			choosePlayers( avgP, plc, roi );
 
-			
-			if ( avgP < 0.5 ){
-				schema->var( "yield_" + plc )->min = 0;
-				schema->var( "yield_" + plc )->max = schema->getNormalization() * 10;	
-			} else {
-				schema->var( "yield_" + plc )->min = schema->var( "yield_" + plc )->val / 10.0;
-				schema->var( "yield_" + plc )->max = schema->var( "yield_" + plc )->val * 10.0;	
-			}
+		
+			schema->var( "yield_" + plc )->min = 0;
+			schema->var( "yield_" + plc )->max = schema->getNormalization() * 10;	
+			schema->var( "yield_" + plc )->val = .0001;
 
 			double zdOnly = cfg->getDouble( nodePath + "Timing:zdOnly" , 0.5 );
 			
 			schema->var( "eff_" + plc )->val = 1.0;
-			if ( avgP <= zdOnly )
+			if ( avgP <= 0.5 )
 				schema->var( "eff_" + plc )->fixed = true;
 			else 
 				schema->var( "eff_" + plc )->fixed = false;
@@ -196,8 +202,9 @@ namespace TSF{
 
 			if ( avgP > zdOnly )
 				schema->addRange( "zb_All", zbMu - zbSig * roi, zbMu + zbSig * roi, "zb_mu_" + plc, "zb_sigma_" + plc, roi );
-			
+		
 			schema->addRange( "zd_All", zdMu - zdSig * roi, zdMu + zdSig * roi, "zd_mu_" + plc, "zd_sigma_" + plc, roi );	
+
 		}
 
 		// always include the total yields
@@ -249,10 +256,10 @@ namespace TSF{
 
 					schema->var( var )->exclude = false;
 					schema->var( var )->min = 0;
-					schema->var( var )->max = schema->var( "yield_"  + plc2 )->val * 10;
+					schema->var( var )->max = schema->getNormalization() * 10;
 
 					if ( roi > 0 )
-						schema->addRange( "zd_" + plc, zdMu2 - zdSig2 * roi, zdMu2 + zdSig2 * roi );
+						schema->addRange( "zd_" + plc, zdMu2 - zdSig2 * roi, zdMu2 + zdSig2 * roi, "zd_mu_" + plc2, "zd_sigma_" + plc2, roi );
 
 					if ( firstTimeIncluded && plc != plc2 ){
 						schema->var( var )->val = 1/schema->getNormalization();
@@ -294,10 +301,10 @@ namespace TSF{
 
 					schema->var( var )->exclude = false;
 					schema->var( var )->min = 0;
-					schema->var( var )->max = schema->var( "yield_"  + plc2 )->val * 10;
+					schema->var( var )->max = schema->getNormalization() * 10;
 
 					if ( roi > 0 )
-						schema->addRange( "zb_" + plc, zbMu2 - zbSig2 * roi, zbMu2 + zbSig2 * roi );
+						schema->addRange( "zb_" + plc, zbMu2 - zbSig2 * roi, zbMu2 + zbSig2 * roi, "zb_mu_" + plc2, "zb_sigma_" + plc2, roi );
 
 					if ( firstTimeIncluded && plc != plc2){
 						schema->var( var )->val = 1/schema->getNormalization();
@@ -339,7 +346,7 @@ namespace TSF{
 				//Create the schema and fitter 
 				schema = shared_ptr<FitSchema>(new FitSchema( cfg, nodePath + "FitSchema" ));
 
-
+				sigmaSets.clear();
 				for ( int iPt = firstPtBin; iPt <= lastPtBin; iPt++ ){
 
 					double avgP = binAverageP( iPt );
@@ -361,13 +368,56 @@ namespace TSF{
 					// assign active players to this fit
 					fitter.addPlayers( activePlayers );
 					// do the fit
-					fitter.fit( centerSpecies, iCharge, iCen, iPt );
-
-
+					fitter.nop();
 					reportFit( &fitter, iPt );
+					
+					for ( int i = 0; i < 3; i++ ){
+						
+						fitter.fit1( centerSpecies, iCharge, iCen, iPt );
+						reportFit( &fitter, iPt );
 
+						fitter.fit2( centerSpecies, iCharge, iCen, iPt );
+						reportFit( &fitter, iPt );
+					}
+
+					for ( int i = 0; i < 3; i++ ){
+						fitter.fit3( centerSpecies, iCharge, iCen, iPt );
+						reportFit( &fitter, iPt );
+					}
+
+					for ( int i = 0; i < 3; i++ ){
+						fitter.fit4( centerSpecies, iCharge, iCen, iPt );
+						reportFit( &fitter, iPt );
+					}
+
+
+
+					schema->reportModels();
+
+				
 					if ( fitter.isFitGood() )
 						fillFitHistograms(iPt, iCen, iCharge, fitter );
+
+					
+					for ( string pre : {"zb", "zd"} ){
+						for ( string plc : Common::species ){
+
+							double r1 = 0.6;
+							double r2 = 1.0;
+
+							INFO( tag, "SigmaHistory for " << pre << "_" << plc )
+							if ( "zb" == pre && "P" == plc ){
+								r1 = 1.2;
+								r2 = 2.0;
+							} else if ( "zb" == pre ){
+								r1 = 0.7;
+								r2 = 1.2;
+							}
+							
+							sigmaSets[ pre+"_"+plc ].setRange( r1, r2 );
+							sigmaSets[ pre+"_"+plc ].add( avgP, schema->var( pre + "_sigma_" + plc )->val ); 
+						}
+					}
 
 				}// loop pt Bins
 			} // loop charge bins
@@ -428,6 +478,39 @@ namespace TSF{
 	void FitRunner::reportFit( Fitter * fitter, int iPt ){
 
 		gStyle->SetOptStat(0);
+		bool drawBig = false;
+		bool drawFitRatios=false;
+
+		if ( drawBig ){
+			INFO( tag, "Reporting zd" );
+			zdReporter->newPage( 1, 2 );
+			{
+				zdReporter->cd( 1, 1 );
+				drawSet( "zd_All", fitter, iPt );
+			}
+		
+			INFO( tag, "Drawing fit vs. data ratios for zd" )
+			{
+				zdReporter->cd( 1, 2 );
+				drawFitRatio( "zd_All", fitter, iPt );
+			}
+			zdReporter->savePage();
+
+
+			INFO( tag, "Reporting zb" );
+			zbReporter->newPage( 1, 2 );
+			{
+				zbReporter->cd( 1, 1 );
+				drawSet( "zb_All", fitter, iPt );
+			}
+		
+			INFO( tag, "Drawing fit vs. data ratios for zb" )
+			{
+				zbReporter->cd( 1, 2 );
+				drawFitRatio( "zb_All", fitter, iPt );
+			}
+			zbReporter->savePage();
+		}
 
 		// plot the dedx then tof
 		logger->info(__FUNCTION__) << "Reporting zd" << endl;
@@ -444,7 +527,25 @@ namespace TSF{
 		}
 		zdReporter->savePage();
 
-		logger->info(__FUNCTION__) << "Reporting zb" << endl;
+		if ( drawFitRatios ){
+			INFO( tag, "Drawing fit vs. data ratios for zd" )
+			zdReporter->newPage( 2, 2 );
+			{
+				zdReporter->cd( 1, 1 );
+				drawFitRatio( "zd_All", fitter, iPt );
+				zdReporter->cd( 2, 1 );
+				drawFitRatio( "zd_Pi", fitter, iPt );
+				zdReporter->cd( 1, 2 );
+				drawFitRatio( "zd_K", fitter, iPt );
+				zdReporter->cd( 2, 2 );
+				drawFitRatio( "zd_P", fitter, iPt );
+			}
+			zdReporter->savePage();
+		}
+
+
+
+		INFO( tag, "Reporting zb" )
 		zbReporter->newPage( 2, 2 );
 		{
 			zbReporter->cd( 1, 1 );
@@ -457,6 +558,24 @@ namespace TSF{
 			drawSet( "zb_P", fitter, iPt );
 		}
 		zbReporter->savePage();
+
+		if ( drawFitRatios ){
+			INFO( tag, "Drawing fit vs. data ratios for zb" )
+			zbReporter->newPage( 2, 2 );
+			{
+				zbReporter->cd( 1, 1 );
+				drawFitRatio( "zb_All", fitter, iPt );
+				zbReporter->cd( 2, 1 );
+				drawFitRatio( "zb_Pi", fitter, iPt );
+				zbReporter->cd( 1, 2 );
+				drawFitRatio( "zb_K", fitter, iPt );
+				zbReporter->cd( 2, 2 );
+				drawFitRatio( "zb_P", fitter, iPt );
+			}
+			zbReporter->savePage();
+		}
+
+
 	}
 
 
@@ -480,8 +599,8 @@ namespace TSF{
 			double sE = schema->var( "yield_"+plc )->error;
 			
 			// TODO: add the fit error in quadrature ?
-			double N = sC * fitter.getNorm();
-			sE = sqrt( 1/N + sE*sE );
+			//double N = sC * fitter.getNorm();
+			//sE = sqrt( 1/N + sE*sE );
 
 			book->get( name )->SetBinContent( iiPt, sC );
 			book->get( name )->SetBinError( iiPt, sE );
@@ -572,9 +691,72 @@ namespace TSF{
 				book->setBin( Common::effName( plc, iCen, iCharge ), iiPt, 
 						schema->var( "eff_" + plc )->val, schema->var( "eff_" + plc )->error );
 			}
+
+			for ( string plc2 : Common::species ){
+				fillEnhancedYieldHistogram( plc, iiPt, iCen, iCharge, plc2, fitter );
+			}
 			
 
 		}
+	}
+
+	void FitRunner::fillEnhancedYieldHistogram( string plc1, int iPt, int iCen, int iCharge, string plc2, Fitter &fitter ){
+		
+		for ( string pre : { "zb_", "zd_" } ){
+			book->cd( pre + "enhanced");
+			
+			string vName = pre + plc1 + "_yield_" + plc2;
+			string hName = Common::yieldName( plc1, iCen, iCharge, plc2 );
+
+			double sC = schema->var( vName )->val / book->get( hName )->GetBinWidth( iPt );
+			double sE = schema->var( vName )->error;
+			book->setBin( hName, iPt, sC, sE );
+		}
+	}
+
+
+
+	void FitRunner::drawFitRatio( string ds, Fitter * fitter, int iPt ){
+
+		book->cd();
+		// clone and renaim to avoid naming clashes
+		TH1 * h = (TH1*)fitter->getDataHist( ds )->Clone( (ds + "_vs_" + ts(iPt) ).c_str() );
+		TH1 * h2 = (TH1*)fitter->getDataHist( ds )->Clone( (ds + "_vs2_" + ts(iPt) ).c_str() );
+		h->SetTitle( (ts(iPt) + "; z;(fit - data) / K_{yield}").c_str() );
+		h->Reset();
+
+		h2->SetTitle( " ; z;(fit - data)^{2} / K_{yield}" );
+		h2->Reset();
+
+		shared_ptr<FitSchema> schema = fitter->getSchema();
+		for ( auto dp : schema->datasets[ ds ]){
+			
+
+			double yTh = fitter->modelEval( ds, dp.x );
+			
+			double ratio = yTh - dp.y;
+
+
+			int bin = h->GetXaxis()->FindBin( dp.x );
+			DEBUG( tag, "x, y = " << dp.x << ", " << dp.y )
+			DEBUG( tag, "yTh = " << yTh )
+			DEBUG( tag, "ratio = " << ratio )
+			
+			double scale = schema->var( "yield_K" )->val;
+			double r = 0.02;
+			h->GetYaxis()->SetRangeUser( -r, r );
+			h->SetBinContent( bin, ratio / scale );
+			h->SetBinError( bin, dp.ey);
+
+			h2->SetBinContent( bin, ratio*ratio * 10 );
+			h2->SetBinError( bin, dp.ey);
+
+		}
+
+		h->Draw();
+		//h2->SetMarkerColor( kRed );
+		//h2->SetLineColor( kRed );
+		//h2->Draw("same");
 	}
 }
 

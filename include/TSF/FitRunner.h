@@ -16,7 +16,7 @@ using namespace jdb;
 #include "TSF/FitSchema.h"
 #include "TSF/Fitter.h"
 #include "Spectra/ZRecentering.h"
-
+#include "TSF/SigmaHistory.h"
 
 
 
@@ -43,7 +43,7 @@ namespace TSF{
 		double zdSigFix = 0;
 
 		map<string, vector<double> > zbSigMem;
-		map< string, double> lockedZbSig;
+		map< string, SigmaHistory > sigmaSets;
 
 	public:
 		FitRunner( XmlConfig * _cfg, string _np  );
@@ -57,8 +57,11 @@ namespace TSF{
 
 		void makeHistograms();
 		void fillFitHistograms(int iPt, int iCen, int iCharge, Fitter &fitter );
+		void fillEnhancedYieldHistogram( string plc1, int iPt, int iCen, int iCharge, string plc2, Fitter &fitter );
+
 		void reportFit( Fitter * fitter, int iPt );
 		void drawSet( string v, Fitter * fitter, int iPt );
+		void drawFitRatio( string ds, Fitter * fitter, int iPt );
 
 		void prepare( double avgP, int iCen );
 		void choosePlayers( double avgP, string plc, double roi );

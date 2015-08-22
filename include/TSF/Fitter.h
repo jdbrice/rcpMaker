@@ -44,7 +44,7 @@ namespace TSF{
 		map< string, TH1 * > dataHists;
 
 		// did the fit converge
-		bool fitIsGood;
+		bool fitIsGood = true;
 
 		// list of models that will contribute to the fit
 		map<string, bool> players;
@@ -62,7 +62,7 @@ namespace TSF{
 
 		static void tminuitFCN(int &npar, double *gin, double &f, double *par, int flag);
 
-		static double modelEval( string dataset, double x );
+		double modelEval( string dataset, double x );
 		static double modelYield( string dataset );
 
 		static double chi2( double data, double pred, double ey ){
@@ -90,7 +90,13 @@ namespace TSF{
 		static void updateParameters( int npar = 0, double * pars = 0);
 
 		void loadDatasets( string cs, int charge, int cenBin, int ptBin );
+		
+		void nop(  );
 		void fit( string cs, int charge, int cenBin, int ptBin );
+		void fit1( string cs, int charge, int cenBin, int ptBin );
+		void fit2( string cs, int charge, int cenBin, int ptBin );
+		void fit3( string cs, int charge, int cenBin, int ptBin );
+		void fit4( string cs, int charge, int cenBin, int ptBin );
 		
 
 		TGraph * plotResult( string dataset );
@@ -126,6 +132,9 @@ namespace TSF{
 
 		void fixShapes();
 		void releaseShapes();
+
+
+		void fsNominal();
 
 
 	};

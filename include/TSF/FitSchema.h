@@ -59,7 +59,7 @@ namespace TSF{
 			if ( vars.count( name ) ){
 				return vars[ name ];
 			} 
-			WARN( name << " DNE" )
+			WARN( tag, name << " DNE" )
 			return shared_ptr<FitVar>( new FitVar( "DNE", 0, 0, 0, 0 ) );
 		}
 
@@ -100,6 +100,7 @@ namespace TSF{
 		void updateRanges();
 		void clearRanges(  );
 		bool constrainFitRange() { return fitInRange; }
+		void useFitRange( bool fr = true ) { fitInRange = fr; }
 		bool inRange( string ds, double x );
 		void reportFitRanges();
 

@@ -154,8 +154,11 @@ public:
 	 * @charge 	Particle charge
 	 * @return 	A string containg the name for the given property
 	 */
-	static string yieldName( string plc, int iCen, int charge ){
-		return "yield_" + plc + "_" + ts(iCen) + "_" + Common::chargeString( charge );
+	static string yieldName( string plc, int iCen, int charge, string plc2 = "" ){
+		if ( "" != plc2 )
+			plc2 = "_" + plc2;
+
+		return "yield_" + plc + "_" + ts(iCen) + "_" + Common::chargeString( charge ) + plc2;
 	}
 	static string sigmaName( string plc, int iCen, int charge ){
 		return "sigma_" + plc + "_" + ts(iCen) + "_" + Common::chargeString( charge );
