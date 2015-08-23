@@ -97,6 +97,7 @@ namespace TSF{
 		void fit2( string cs, int charge, int cenBin, int ptBin );
 		void fit3( string cs, int charge, int cenBin, int ptBin );
 		void fit4( string cs, int charge, int cenBin, int ptBin );
+		void fitErrors(  );
 		
 
 		TGraph * plotResult( string dataset );

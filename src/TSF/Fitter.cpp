@@ -237,6 +237,7 @@ namespace TSF{
 
 		schema->setMethod( "chi2" );
 
+		fix( "zd" );
 		fix( "eff" );
 		fix( "yield" );
 			minuit->mnexcm( "MINI", arglist, 1, iFlag );
@@ -246,6 +247,20 @@ namespace TSF{
 			INFO ( tag, "Step 1. Status " << status );
 		release( "yield" );
 		release( "eff" );
+		release( "zd" );
+		schema->updateRanges();
+
+		fix( "zb" );
+		fix( "eff" );
+		fix( "yield" );
+			minuit->mnexcm( "MINI", arglist, 1, iFlag );
+			minuit->mnexcm( "MINI", arglist, 1, iFlag );
+			minuit->mnexcm( "MINI", arglist, 1, iFlag );
+			status = minuit->fCstatu;
+			INFO ( tag, "Step 1. Status " << status );
+		release( "yield" );
+		release( "eff" );
+		release( "zb" );
 		schema->updateRanges();
 
 
@@ -256,6 +271,7 @@ namespace TSF{
 	}
 
 
+	// work on the enhancedyields and shapes
 	void Fitter::fit3( string cs, int charge, int cenBin, int ptBin ){
 
 		double arglist[10];
@@ -266,7 +282,9 @@ namespace TSF{
 
 		schema->setMethod( "chi2" );
 
-		//fixShapes();
+		
+
+		fixShapes();
 		fix( "yield" );
 			minuit->mnexcm( "MINI", arglist, 1, iFlag );
 			minuit->mnexcm( "MINI", arglist, 1, iFlag );
@@ -274,7 +292,8 @@ namespace TSF{
 			status = minuit->fCstatu;
 			INFO ( tag, "Step 1. Status " << status );
 		release( "yield" );
-		//releaseShapes();
+		releaseShapes();
+		
 		schema->updateRanges();
 
 
@@ -303,6 +322,29 @@ namespace TSF{
 		release( "_yield_" );
 		releaseShapes();
 		schema->updateRanges();
+
+
+		// get the final state of all variables 
+		INFO( tag, "Updating parameters after Fit" );
+		updateParameters();
+	}
+
+	void Fitter::fitErrors(  ){
+
+		double arglist[10];
+		arglist[ 0 ] = 50000;
+		arglist[ 1 ] = 1.0;
+		int iFlag = -1;
+		string status = "na";
+
+		schema->setMethod( "chi2" );
+
+		
+		minuit->mnexcm( "HESSE", arglist, 1, iFlag );
+		minuit->mnexcm( "HESSE", arglist, 1, iFlag );
+		status = minuit->fCstatu;
+		INFO ( tag, "Errors Status " << status );
+	
 
 
 		// get the final state of all variables 

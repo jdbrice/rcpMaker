@@ -36,6 +36,7 @@ public:
 	double piMass;		// [GeV]
 	double kaonMass;	// [GeV]
 	double protonMass;	// [GeV]
+	double deuteronMass;// [GeV]
 	
 	 /**
 	 * Get the expected mass from the string identifier

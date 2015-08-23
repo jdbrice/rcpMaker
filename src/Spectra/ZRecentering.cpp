@@ -7,13 +7,14 @@ ZRecentering::ZRecentering( double dedxSigma, double tofSigma, string bTable, in
 	dedxGen = new Bichsel( bTable, bMethod);
 	tofGen = new TofGenerator();
 
-	species = { "E", "Pi", "K", "P" };
+	species = { "E", "Pi", "K", "P", "D" };
 
 	// in GeV / c^2
 	eMass 		= 0.000510998;
 	piMass 		= 0.1395702;
 	kaonMass 	= 0.493667;
 	protonMass 	= 0.9382721;
+	deuteronMass= 1.875612928 ; // from nist http://physics.nist.gov/cgi-bin/cuu/Value?mdc2mev
 }
 ZRecentering::~ZRecentering(){
 	delete dedxGen;
@@ -24,6 +25,8 @@ TofGenerator * ZRecentering::tofGenerator() { return tofGen; }
 Bichsel * ZRecentering::dedxGenerator() { return dedxGen; }
 
 double ZRecentering::mass( string pType ){
+	if ( "D" == pType )
+		return deuteronMass;
 	if ( "P" == pType )
 		return protonMass;
 	if ( "K" == pType )

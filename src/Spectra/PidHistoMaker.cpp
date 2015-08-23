@@ -1,4 +1,4 @@
-// RcpMaker
+ // RcpMaker
 #include "Spectra/PidHistoMaker.h"
 #include "Correction/SpectraCorrecter.h"
 
@@ -172,8 +172,8 @@ void PidHistoMaker::analyzeTofTrack( int iTrack ){
 	double dedxNL 	= zr->nlDedx(centerSpecies, pico->trackDedx(iTrack), p, avgP );
 
 	// Genral QA
-	book->fill( "betaRaw", p, 1.0/pico->trackBeta( iTrack ) );
-	book->fill( "dedxRaw", p, pico->trackDedx( iTrack ) );
+	book->fill( "betaRaw", p * charge, 1.0/pico->trackBeta( iTrack ) );
+	book->fill( "dedxRaw", p * charge, pico->trackDedx( iTrack ) );
 	book->fill( "eta", eta );
 
 	book->fill( "trBeta", p, tof );

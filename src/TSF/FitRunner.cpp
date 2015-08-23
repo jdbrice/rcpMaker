@@ -151,7 +151,9 @@ namespace TSF{
 			if ( zbMinParP > 0 && avgP >= zbMinParP){	
 				schema->setInitialMu( "zb_mu_"+plc, zbMu, zbSigFix, 10 );
 				INFO( tag, "Fixing zb_sigma_" << plc << " to " << sigmaSets[ "zb_" + plc ].mean() )
-				schema->fixParameter( "zb_sigma_" + plc, sigmaSets[ "zb_" + plc ].mean(), true );
+				double hm = sigmaSets[ "zb_" + plc ].mean();
+				//schema->fixParameter( "zb_sigma_" + plc, sigmaSets[ "zb_" + plc ].mean(), true );
+				schema->setInitialSigma( "zb_sigma_"+plc, hm, hm - 0.0006, hm + 0.0006 );
 			}
 			else {
 				schema->setInitialSigma( "zb_sigma_"+plc, zbSig, zbSig * 0.5, zbSig * 6 );
@@ -162,7 +164,9 @@ namespace TSF{
 			zdSigFix = zdSigma(); //schema->var( "zd_sigma_"+plc )->val;
 			if ( zdMinParP > 0 && avgP >= zdMinParP){	
 				schema->setInitialMu( "zd_mu_"+plc, zdMu, zdSig, zdDeltaMu);
-				schema->fixParameter( "zd_sigma_" + plc, sigmaSets[ "zd_" + plc ].mean(), true );
+				//schema->fixParameter( "zd_sigma_" + plc, sigmaSets[ "zd_" + plc ].mean(), true );
+				double hm = sigmaSets[ "zd_" + plc ].mean();
+				schema->setInitialSigma( "zd_sigma_"+plc, hm, hm - 0.004, hm + 0.004 );
 			}
 			else 
 				schema->setInitialSigma( "zd_sigma_"+plc, zdSig, 0.04, 0.14);
@@ -371,16 +375,17 @@ namespace TSF{
 					fitter.nop();
 					reportFit( &fitter, iPt );
 					
-					for ( int i = 0; i < 3; i++ ){
+					for ( int i = 0; i < 10; i++ ){
 						
 						fitter.fit1( centerSpecies, iCharge, iCen, iPt );
 						reportFit( &fitter, iPt );
 
 						fitter.fit2( centerSpecies, iCharge, iCen, iPt );
 						reportFit( &fitter, iPt );
+
 					}
 
-					for ( int i = 0; i < 3; i++ ){
+					for ( int i : { 0, 1, 2 } ){
 						fitter.fit3( centerSpecies, iCharge, iCen, iPt );
 						reportFit( &fitter, iPt );
 					}
@@ -390,6 +395,7 @@ namespace TSF{
 						reportFit( &fitter, iPt );
 					}
 
+					fitter.fitErrors();
 
 
 					schema->reportModels();

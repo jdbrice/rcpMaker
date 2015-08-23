@@ -47,8 +47,8 @@ def write_conf( data_path, output_path, input_config_path, config_path ="./" ) :
 		<MakeQA event="true" track="false" tof="false" dedx="false"/>
 
 		<histograms>
-			<Histo name="betaRaw" title="#beta^{{-1}}" xBins="binning.pt" yBins="binning.tofRaw" />
-			<Histo name="dedxRaw" title="dEdx" xBins="binning.pt" yBins="binning.dedxRaw" />
+			<Histo name="betaRaw" title="#beta^{{-1}}" xBins="binning.rid" yBins="binning.tofRaw" />
+			<Histo name="dedxRaw" title="dEdx" xBins="binning.rid" yBins="binning.dedxRaw" />
 			<Histo name="eta" type="1D" title="eta" nBinsX="200" minX="-2" maxX="2" />
 			<Histo name="pt" title="p_{{T}} [GeV]; p_{{T}} [GeV]; #Events"  xBins="binning.pt"/>
 
