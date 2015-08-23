@@ -186,7 +186,7 @@ namespace TSF{
 
 			// normalize
 			k.second->Sumw2();
-			k.second->Scale( 1.0 / k.second->Integral() );
+			k.second->Scale( 1.0 / norm );
 
 			if ( nObs > 75 )
 				schema->loadDataset( k.first, k.second );

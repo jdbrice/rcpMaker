@@ -181,6 +181,7 @@ namespace TSF{
 
 			double zdOnly = cfg->getDouble( nodePath + "Timing:zdOnly" , 0.5 );
 			
+			// TODO: decide on eff scheme
 			schema->var( "eff_" + plc )->val = 1.0;
 			// if ( avgP <= 0.5 )
 			// 	schema->var( "eff_" + plc )->fixed = true;
@@ -269,6 +270,9 @@ namespace TSF{
 						schema->var( var )->val = 1/schema->getNormalization();
 						schema->var( var )->error = 0.1/schema->getNormalization();
 					}
+					// TODO: initial yield?
+					// schema->var( var )->val = 0.00001;
+					
 
 				} else {
 					schema->var( "zd_"+plc+"_yield_"+plc2 )->exclude = true;
@@ -314,6 +318,8 @@ namespace TSF{
 						schema->var( var )->val = 1/schema->getNormalization();
 						schema->var( var )->error = 0.1/schema->getNormalization();
 					}
+					// TODO: initial yield?
+					// schema->var( var )->val = 0.00001;
 
 				} else {
 					schema->var( "zb_"+plc+"_yield_"+plc2 )->exclude = true;;
@@ -390,10 +396,10 @@ namespace TSF{
 						reportFit( &fitter, iPt );
 					}
 
-					// for ( int i = 0; i < 3; i++ ){
-					// 	fitter.fit4(  );
-					// 	reportFit( &fitter, iPt );
-					// }
+					for ( int i = 0; i < 3; i++ ){
+						fitter.fit4(  );
+						reportFit( &fitter, iPt );
+					}
 
 					//fitter.fitErrors();
 
