@@ -8,7 +8,7 @@ parser = argparse.ArgumentParser( description="Creates the configs for Tasks" );
 parser.add_argument( "project", default="nominal", help="nominal, test, systematic etc.")
 parser.add_argument( "job", default="PidHisto_PostCorr_K", help="name")
 parser.add_argument( "list_path", default="./config", help="creates the folder and stores all configs within")
-parser.add_argument( "config_file", default="K.xml", help="path to config file used for this job, should end in '.xml'")
+parser.add_argument( "config_path", default="K.xml", help="path to config file used for this job, should end in '.xml'")
 parser.add_argument( "working_dir", default="./config", help="working directory - must contain dedxBischel.root")
 parser.add_argument( "product_path", default="./config", help="working directory - must contain dedxBischel.root")
 
@@ -32,12 +32,15 @@ t_parent = """
 PARENT {p_id} CHILD {c_id} """
 
 
+plcs = ( "Pi", "K", "P" )
+states = ( "PostCorr_", "Corr_" )
+
 if not os.path.exists("grid"):
     os.makedirs("grid")
 if not os.path.exists(os.path.join( "grid", args.project ) ):
     os.makedirs(os.path.join( "grid", args.project ) )
 
-name = os.path.join( "grid", args.project, args.job  )
+
 hadd = os.path.join( "grid", args.project, args.job + ".hadd" )
 dag = os.path.join( "grid", args.project, args.job + ".dag" )
 wd = os.path.dirname(os.path.realpath(__file__))
@@ -47,24 +50,26 @@ print "writing to", name
 
 plc = os.path.basename( args.config_file ).split( "." )[ 0 ]
 
+for plc in plcs :
+	for state in states :
+		name = os.path.join( "grid", ( args.job  + "_" + state + "_" + plc ) )
+		with open( name, 'w' ) as of :
+			list_files = glob.glob( os.path.join( args.list_path, "list_*" ) )
+			print "Found", len(list_files), "list files"
+			
+			of.write( t_header.format( exe=os.path.join( args.working_dir, "rcp" ), wd=args.working_dir ) )
 
-with open( name, 'w' ) as of :
-	list_files = glob.glob( os.path.join( args.list_path, "list_*" ) )
-	print "Found", len(list_files), "list files"
-	
-	of.write( t_header.format( exe=os.path.join( args.working_dir, "rcp" ), wd=args.working_dir ) )
+			for f in list_files :
+				prefix = f.split( '_' )[-1]
+				of.write( t_arg.format( cfg=os.path.join( args.config_file, state + "_" + plc + ".xml"), list = f, prefix = plc + "_" + prefix +"_" ) )
 
-	for f in list_files :
-		prefix = f.split( '_' )[-1]
-		of.write( t_arg.format( cfg=args.config_file, list = f, prefix = plc + "_" + prefix +"_" ) )
-
-with open( hadd, 'w' ) as of :
-	of.write( t_header.format( exe="hadd", wd=args.product_path ) )
-	of.write( t_arg.format( cfg="output.root", list=(plc + "_*.root"), prefix="" ) )
+# with open( hadd, 'w' ) as of :
+# 	of.write( t_header.format( exe="hadd", wd=args.product_path ) )
+# 	of.write( t_arg.format( cfg="output.root", list=(plc + "_*.root"), prefix="" ) )
 
 
-with open( dag, 'w' ) as of :
-	of.write( t_job.format( id="A", file=os.path.join( wd, name ) ) )
-	of.write( t_job.format( id="B", file=os.path.join( wd, hadd ) ) )
-	of.write( t_parent.format( p_id="A", c_id="B" ) )
+# with open( dag, 'w' ) as of :
+# 	of.write( t_job.format( id="A", file=os.path.join( wd, name ) ) )
+# 	of.write( t_job.format( id="B", file=os.path.join( wd, hadd ) ) )
+# 	of.write( t_parent.format( p_id="A", c_id="B" ) )
 
