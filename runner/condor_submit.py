@@ -33,7 +33,7 @@ PARENT {p_id} CHILD {c_id} """
 
 
 plcs = ( "Pi", "K", "P" )
-states = ( "PostCorr_", "Corr_" )
+states = ( "PostCorr", "Corr" )
 
 if not os.path.exists("grid"):
     os.makedirs("grid")
@@ -48,7 +48,7 @@ wd = os.path.dirname(os.path.realpath(__file__))
 
 for plc in plcs :
 	for state in states :
-		name = os.path.join( "grid", ( args.job  + "_" + state + "_" + plc ) )
+		name = os.path.join( "grid", ( args.job  + "_" + state + "_" + plc + ".submit" ) )
 		print "writing to", name
 		with open( name, 'w' ) as of :
 			list_files = glob.glob( os.path.join( args.list_path, "list_*" ) )
