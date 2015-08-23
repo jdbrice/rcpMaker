@@ -86,8 +86,11 @@ public:
 	virtual void preEventLoop();
 	virtual void postEventLoop();
 	
-
-	void enhanceDistributions( double avgP, int pBin, int charge, double dedx, double tof );
+	/* Produces the 1D PID plots
+	 *
+	 * @return 		True / False : pass tof acceptance
+	 */
+	bool enhanceDistributions( double avgP, int pBin, int charge, double dedx, double tof );
 
 
 	/* Average P in a bin range assuming a flat distribution

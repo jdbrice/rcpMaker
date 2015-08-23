@@ -43,6 +43,8 @@ void TpcEffFitter::make(){
 
 	DEBUG( "Starting plc loop" )
 	for ( string plc : Common::species ){
+		if ( "E" == plc || "D" == plc )
+			continue;
 		for ( string c : Common::sCharges ){
 
 			out << "\t<" << plc << "_" << c << ">" << endl;

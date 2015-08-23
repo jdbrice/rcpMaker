@@ -173,7 +173,7 @@ void PidHistoMaker::analyzeTofTrack( int iTrack ){
 
 	// Genral QA
 	book->fill( "betaRaw", p * charge, 1.0/pico->trackBeta( iTrack ) );
-	book->fill( "dedxRaw", p * charge, pico->trackDedx( iTrack ) );
+	book->fill( "dedxRaw", p * charge, log( pico->trackDedx( iTrack ) ) );
 	book->fill( "eta", eta );
 
 	book->fill( "trBeta", p, tof );
@@ -198,27 +198,36 @@ void PidHistoMaker::analyzeTofTrack( int iTrack ){
 			
 	}
 	
-	enhanceDistributions(avgP, ptBin, charge, dedx, tof );
+	if ( enhanceDistributions(avgP, ptBin, charge, dedx, tof ) ){
+		book->cd();
+		book->fill( "cutBeta", p * charge, 1.0/pico->trackBeta( iTrack ) );
+		book->fill( "cutDedx", p * charge, log( pico->trackDedx( iTrack ) ) );
+	}
 
 	book->cd();
+
+	
 }
 
-void PidHistoMaker::enhanceDistributions( double avgP, int ptBin, int charge, double dedx, double tof ){
+bool PidHistoMaker::enhanceDistributions( double avgP, int ptBin, int charge, double dedx, double tof ){
 	
-	double tSigma = tofSigmaIdeal;
-	double dSigma = dedxSigmaIdeal;
-
 	// get the centered tof and dedx means
 	map< string, double > tMeans 	= zr->centeredTofMap( centerSpecies, avgP );
 	map< string, double > dMeans 	= zr->centeredDedxMap( centerSpecies, avgP );
 
-	double dCutMinP = cfg->getDouble( nodePath + "Distributions:dCutMinP", 0.5 );
+
+	// Cut either N sigma above protons or N sigma below deuterons
+	// since the sigma of the Proton peak is very large at low momentum
+	// the N (ideal sigma) cut is far too tight
+	double deuteronCut = tMeans[ "P" ] + tofSigmaIdeal * nSigAbove;
+	if ( tMeans[ "D" ] - tofSigmaIdeal * nSigAbove > deuteronCut )
+		deuteronCut = tMeans[ "D" ] - tofSigmaIdeal * nSigAbove;
 
 
 	double trackWeight = eventWeight;
 
 	// Here we are intentionally using the pre-EnergyLoss pt because that is what the 
-	// Eff and FeedDown are parameterized in
+	// Efficiencies and FeedDown are parameterized in
 	if ( correctTpcEff ){
 		trackWeight = trackWeight * sc->tpcEffWeight( centerSpecies, trackPt, cBin, charge ) ;
 	}
@@ -239,7 +248,7 @@ void PidHistoMaker::enhanceDistributions( double avgP, int ptBin, int charge, do
 	// enhanced by species
 	if ( makeEnhanced ){
 		for ( string plc : Common::species ){
-			if ( dedx >= dMeans[ plc ] - dSigma && dedx <= dMeans[ plc ] + dSigma ){
+			if ( dedx >= dMeans[ plc ] - dedxSigmaIdeal && dedx <= dMeans[ plc ] + dedxSigmaIdeal ){
 				if ( makeCombinedCharge ) book->fill( Common::zbName( centerSpecies, 0, cBin, ptBin, plc ), tof, trackWeight );
 				book->fill( Common::zbName( centerSpecies, charge, cBin, ptBin, plc ), tof, trackWeight );
 			}
@@ -247,12 +256,14 @@ void PidHistoMaker::enhanceDistributions( double avgP, int ptBin, int charge, do
 	}
 
 	
-	// // N sigma below pi to reject electrons
-	if ( tof < tMeans[ "Pi" ] - tSigma * nSigBelow )
-		return;
-	// and N sigma above proton to reject deuteron
-	if ( tof > tMeans[ "P" ] + tSigma * nSigAbove )
-		return;
+	// reject electrons
+	if ( tof < tMeans[ "Pi" ] - tofSigmaIdeal * nSigBelow )
+		return false;
+	// reject deuteron
+	if ( tof > deuteronCut )
+		return false;
+
+	
 
 
 	book->cd( "dedx" );
@@ -267,12 +278,14 @@ void PidHistoMaker::enhanceDistributions( double avgP, int ptBin, int charge, do
 			
 			double ttMean = tMeans[ plc ];
 
-			if ( tof >= ttMean - tSigma && tof <= ttMean + tSigma ){
+			if ( tof >= ttMean - tofSigmaIdeal && tof <= ttMean + tofSigmaIdeal ){
 				if ( makeCombinedCharge ) book->fill( Common::zdName( centerSpecies, 0, cBin, ptBin, plc ), dedx, trackWeight );
 				book->fill( Common::zdName( centerSpecies, charge, cBin, ptBin, plc ), dedx, trackWeight );
 			}
 		} // loop on species from centered means	
 	}
+
+	return true;
 }
 
 void PidHistoMaker::prepareHistograms( string plc ){

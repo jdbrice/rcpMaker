@@ -14,7 +14,7 @@ ZRecentering::ZRecentering( double dedxSigma, double tofSigma, string bTable, in
 	piMass 		= 0.1395702;
 	kaonMass 	= 0.493667;
 	protonMass 	= 0.9382721;
-	deuteronMass= 1.875612928 ; // from nist http://physics.nist.gov/cgi-bin/cuu/Value?mdc2mev
+	deuteronMass= 1.875612928; // from nist http://physics.nist.gov/cgi-bin/cuu/Value?mdc2mev
 }
 ZRecentering::~ZRecentering(){
 	delete dedxGen;
