@@ -49,6 +49,10 @@ def write_conf( data_path, output_path, input_config_path, config_path ="./" ) :
 		<histograms>
 			<Histo name="betaRaw" title="#beta^{{-1}}" xBins="binning.rid" yBins="binning.tofRaw" />
 			<Histo name="dedxRaw" title="dEdx" xBins="binning.rid" yBins="binning.dedxRaw" />
+
+			<Histo name="cutBeta" title="#beta^{-1}" xBins="binning.rid" yBins="binning.tofRaw" />
+			<Histo name="cutDedx" title="dE/dx" xBins="binning.rid" yBins="binning.dedxRaw" />
+
 			<Histo name="eta" type="1D" title="eta" nBinsX="200" minX="-2" maxX="2" />
 			<Histo name="pt" title="p_{{T}} [GeV]; p_{{T}} [GeV]; #Events"  xBins="binning.pt"/>
 
