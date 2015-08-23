@@ -46,13 +46,14 @@ dag = os.path.join( "grid", args.project, args.job + ".dag" )
 wd = os.path.dirname(os.path.realpath(__file__))
 
 
-print "writing to", name
+
 
 plc = os.path.basename( args.config_file ).split( "." )[ 0 ]
 
 for plc in plcs :
 	for state in states :
 		name = os.path.join( "grid", ( args.job  + "_" + state + "_" + plc ) )
+		print "writing to", name
 		with open( name, 'w' ) as of :
 			list_files = glob.glob( os.path.join( args.list_path, "list_*" ) )
 			print "Found", len(list_files), "list files"
