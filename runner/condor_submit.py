@@ -48,7 +48,7 @@ wd = os.path.dirname(os.path.realpath(__file__))
 
 for plc in plcs :
 	for state in states :
-		name = os.path.join( "grid", ( args.job  + "_" + state + "_" + plc + ".submit" ) )
+		name = os.path.join( "grid", project, ( args.job  + "_" + state + "_" + plc + ".submit" ) )
 		print "writing to", name
 		with open( name, 'w' ) as of :
 			list_files = glob.glob( os.path.join( args.list_path, "list_*" ) )
