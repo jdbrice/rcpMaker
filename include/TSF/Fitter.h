@@ -93,10 +93,10 @@ namespace TSF{
 		
 		void nop(  );
 		void fit( string cs, int charge, int cenBin, int ptBin );
-		void fit1( string cs, int charge, int cenBin, int ptBin );
-		void fit2( string cs, int charge, int cenBin, int ptBin );
-		void fit3( string cs, int charge, int cenBin, int ptBin );
-		void fit4( string cs, int charge, int cenBin, int ptBin );
+		void fit1(  );
+		void fit2(  );
+		void fit3(  );
+		void fit4(  );
 		void fitErrors(  );
 		
 

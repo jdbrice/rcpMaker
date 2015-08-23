@@ -186,7 +186,7 @@ namespace TSF{
 
 			// normalize
 			k.second->Sumw2();
-			k.second->Scale( 1.0 / norm );
+			k.second->Scale( 1.0 / k.second->Integral() );
 
 			if ( nObs > 75 )
 				schema->loadDataset( k.first, k.second );
@@ -196,12 +196,16 @@ namespace TSF{
 	
 	void Fitter::nop( ){
 
+		INFO( "DATASETS:" )
+		INFO( "yield_zb_All = " << schema->datasets[ "zb_All" ].yield() )
+		INFO( "yield_zd_All = " << schema->datasets[ "zd_All" ].yield() )
+
 		// get the final state of all variables 
-		INFO( tag, "Updating parameters after Fit" );
+		INFO( tag, "Updating parameters after setup" );
 		updateParameters();
 	}
 
-	void Fitter::fit1( string cs, int charge, int cenBin, int ptBin ){
+	void Fitter::fit1( ){
 
 		double arglist[10];
 		arglist[ 0 ] = 50000;
@@ -227,7 +231,7 @@ namespace TSF{
 		updateParameters();
 	}
 
-	void Fitter::fit2( string cs, int charge, int cenBin, int ptBin ){
+	void Fitter::fit2(  ){
 
 		double arglist[10];
 		arglist[ 0 ] = 50000;
@@ -272,7 +276,7 @@ namespace TSF{
 
 
 	// work on the enhancedyields and shapes
-	void Fitter::fit3( string cs, int charge, int cenBin, int ptBin ){
+	void Fitter::fit3( ){
 
 		double arglist[10];
 		arglist[ 0 ] = 50000;
@@ -302,7 +306,7 @@ namespace TSF{
 		updateParameters();
 	}
 
-	void Fitter::fit4( string cs, int charge, int cenBin, int ptBin ){
+	void Fitter::fit4(  ){
 
 		double arglist[10];
 		arglist[ 0 ] = 50000;

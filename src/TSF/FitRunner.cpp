@@ -182,9 +182,9 @@ namespace TSF{
 			double zdOnly = cfg->getDouble( nodePath + "Timing:zdOnly" , 0.5 );
 			
 			schema->var( "eff_" + plc )->val = 1.0;
-			if ( avgP <= 0.5 )
-				schema->var( "eff_" + plc )->fixed = true;
-			else 
+			// if ( avgP <= 0.5 )
+			// 	schema->var( "eff_" + plc )->fixed = true;
+			// else 
 				schema->var( "eff_" + plc )->fixed = false;
 			
 		} // loop on plc to set initial vals
@@ -377,25 +377,25 @@ namespace TSF{
 					
 					for ( int i = 0; i < 10; i++ ){
 						
-						fitter.fit1( centerSpecies, iCharge, iCen, iPt );
+						fitter.fit1(  );
 						reportFit( &fitter, iPt );
 
-						fitter.fit2( centerSpecies, iCharge, iCen, iPt );
+						fitter.fit2(  );
 						reportFit( &fitter, iPt );
 
 					}
 
 					for ( int i : { 0, 1, 2 } ){
-						fitter.fit3( centerSpecies, iCharge, iCen, iPt );
+						fitter.fit3(  );
 						reportFit( &fitter, iPt );
 					}
 
-					for ( int i = 0; i < 3; i++ ){
-						fitter.fit4( centerSpecies, iCharge, iCen, iPt );
-						reportFit( &fitter, iPt );
-					}
+					// for ( int i = 0; i < 3; i++ ){
+					// 	fitter.fit4(  );
+					// 	reportFit( &fitter, iPt );
+					// }
 
-					fitter.fitErrors();
+					//fitter.fitErrors();
 
 
 					schema->reportModels();
