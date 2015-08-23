@@ -62,7 +62,7 @@ for plc in plcs :
 
 			for f in list_files :
 				prefix = f.split( '_' )[-1]
-				of.write( t_arg.format( cfg=os.path.join( args.config_path, state + "_" + plc + ".xml"), list = f, prefix = plc + "_" + prefix +"_" ) )
+				of.write( t_arg.format( cfg=os.path.join( args.config_path, state + "_" + plc + ".xml"), list = f, prefix = state + "_" + plc + "_" + prefix +"_" ) )
 
 # with open( hadd, 'w' ) as of :
 # 	of.write( t_header.format( exe="hadd", wd=args.product_path ) )
