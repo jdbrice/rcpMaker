@@ -46,10 +46,6 @@ dag = os.path.join( "grid", args.project, args.job + ".dag" )
 wd = os.path.dirname(os.path.realpath(__file__))
 
 
-
-
-plc = os.path.basename( args.config_file ).split( "." )[ 0 ]
-
 for plc in plcs :
 	for state in states :
 		name = os.path.join( "grid", ( args.job  + "_" + state + "_" + plc ) )
