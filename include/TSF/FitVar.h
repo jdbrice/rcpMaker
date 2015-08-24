@@ -46,6 +46,19 @@ namespace TSF{
 			fixed = false;
 			exclude = false;
 		}
+
+		FitVar( const FitVar &other ){
+
+			this->name = other.name;
+			this->val = other.name;
+			this->min = other.min;
+			this->max = other.max;
+			this->error = other.error;
+
+			this->fixed = other.fixed;
+			this->exclude = other.exclude;
+		}
+
 		~FitVar(){}
 
 		void set( double _val, double _min, double _max, double _error ){

@@ -9,9 +9,8 @@ namespace TSF{
 		cfg = _cfg;
 		nodePath = _nodePath;
 
-		logger = unique_ptr<Logger>(LoggerConfig::makeLogger( cfg, nodePath + "Logger" ));
-		logger->setClassSpace( "FitSchema" );
-		logger->info(__FUNCTION__) << endl;
+		
+		INFO( tag, "" )
 
 		method = cfg-> getString( nodePath + ":method", "chi2" );
 		verbosity = cfg->getInt( nodePath + ":v", 0 );
@@ -31,7 +30,7 @@ namespace TSF{
 
 		vector<string> fvPaths = cfg->childrenOf( nodePath, "FitVar" );
 		for ( string path : fvPaths ){
-			logger->info( __FUNCTION__ ) << cfg->getString( path + ":name" ) << endl;
+			INFO( tag, cfg->getString( path + ":name" ) );
 			vars[ cfg->getString( path + ":name" ) ] = shared_ptr<FitVar>(new FitVar( cfg, path ));
 			nPars++;
 		}
@@ -43,7 +42,7 @@ namespace TSF{
 		vector<string> paths = cfg->childrenOf( nodePath, "Model" );
 		for ( string path : paths ){
 
-			logger->info(__FUNCTION__ ) << path << " : " << cfg->getString( path + ":name" )<< endl;
+			INFO( tag, path << " : " << cfg->getString( path + ":name" ) );
 			makeGauss( path );
 		}
 	}
@@ -53,7 +52,7 @@ namespace TSF{
 		string dataset 		= cfg->getString( mpath + ":dataset" );
 		string modelName 	= cfg->getString( mpath + ":name" );
 
-		logger->info(__FUNCTION__) << "dataset : " << dataset << endl;
+		INFO( tag, "dataset : " << dataset )
 
 		vector<string> paths = cfg->childrenOf( mpath, "GaussModel" );
 		for ( string path : paths ){
@@ -102,7 +101,7 @@ namespace TSF{
 	void FitSchema::reportModels(){
 		INFO( tag, "")
 		for ( auto k : models ){
-			logger->info(__FUNCTION__) << k.second->toString() << endl;  
+			INFO( tag, k.second->toString() )
 		}
 	}
 
@@ -122,7 +121,7 @@ namespace TSF{
 			vars[ var ]->max = _mu + _sigma * _dmu;
 		}
 
-		logger->info(__FUNCTION__) <<  vars[ var ]->toString() << endl;
+		INFO( tag,  vars[ var ]->toString() )
 	}
 
 	/**
@@ -141,7 +140,7 @@ namespace TSF{
 		// set the range
 		vars[ var ]->min = _sigma * ( 1 - _dsig );
 		vars[ var ]->max = _sigma * ( 1 + _dsig );
-		logger->info(__FUNCTION__) <<  vars[ var ]->toString() << endl;
+		INFO( tag,  vars[ var ]->toString() )
 
 	}
 
@@ -162,7 +161,7 @@ namespace TSF{
 		// set the range
 		vars[ var ]->min = _min;
 		vars[ var ]->max = _max;
-		logger->info(__FUNCTION__) <<  vars[ var ]->toString() << endl;
+		INFO( tag,  vars[ var ]->toString() )
 
 	}
 
@@ -186,15 +185,21 @@ namespace TSF{
 	}
 
 
-	void FitSchema::updateRanges(  ){
+	void FitSchema::updateRanges( double roi ){
 
 
 		for ( FitRange &r : ranges ){
 
 			if ( exists( r.centerOn ) && exists( r.widthFrom ) ){
-				//INFO( "FitSchema", "should dynamically update the range around " << r.centerOn << " +- " << r.widthFrom )
-				r.min = var( r.centerOn )->val - var( r.widthFrom )->val * r.roi;
-				r.max = var( r.centerOn )->val + var( r.widthFrom )->val * r.roi;
+
+				if ( roi < 0 ){
+					r.min = var( r.centerOn )->val - var( r.widthFrom )->val * r.roi;
+					r.max = var( r.centerOn )->val + var( r.widthFrom )->val * r.roi;
+				} else if ( r.dataset == "zd_All" ){
+					INFO( tag, "Overriding ROI" )
+					r.min = var( r.centerOn )->val - var( r.widthFrom )->val * roi;
+					r.max = var( r.centerOn )->val + var( r.widthFrom )->val * roi;
+				}
 
 				INFO( tag, "Updating Range " << r.centerOn << " +- " << r.widthFrom << "(" << r.min << ", " << r.max << " )"  )
 			}
@@ -229,7 +234,7 @@ namespace TSF{
 
 		INFO( tag, "")
 		for ( FitRange fr : ranges ){
-			logger->info( __FUNCTION__ ) << fr.toString() << endl;
+			INFO( tag, fr.toString() );
 		}
 	}
 

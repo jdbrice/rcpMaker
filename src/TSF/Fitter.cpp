@@ -213,8 +213,9 @@ namespace TSF{
 		int iFlag = -1;
 		string status = "na";
 
-		fix( "eff" );
 		schema->setMethod( "chi2" );
+
+		fix( "eff" );
 		fixShapes();
 			minuit->mnexcm( "MINI", arglist, 1, iFlag );
 			minuit->mnexcm( "MINI", arglist, 1, iFlag );
@@ -244,7 +245,7 @@ namespace TSF{
 		
 		fix( "eff" );
 		fix( "yield" );
-		fix( "_yield_" );
+		release( "_yield_" );
 			minuit->mnexcm( "MINI", arglist, 1, iFlag );
 			minuit->mnexcm( "MINI", arglist, 1, iFlag );
 			minuit->mnexcm( "MINI", arglist, 1, iFlag );
@@ -317,7 +318,9 @@ namespace TSF{
 
 		schema->setMethod( "chi2" );
 
-		fix( "sigma" );
+		schema->updateRanges( 0.5 );
+		// fix("eff");
+		fixShapes();
 		fix( "_yield_" );
 			minuit->mnexcm( "MINI", arglist, 1, iFlag );
 			minuit->mnexcm( "MINI", arglist, 1, iFlag );
@@ -325,8 +328,9 @@ namespace TSF{
 			status = minuit->fCstatu;
 			INFO ( tag, "Step 1. Status " << status );
 		release( "_yield_" );
-		release( "sigma" );
-		schema->updateRanges();
+		releaseShapes();
+		// release( "eff" );
+		//schema->updateRanges();
 
 
 		// get the final state of all variables 

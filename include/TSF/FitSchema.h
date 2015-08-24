@@ -30,8 +30,6 @@ namespace TSF{
 		XmlConfig * cfg;
 		string nodePath;
 
-		unique_ptr<Logger> logger;
-
 		int nPars = 0;
 
 		string method;
@@ -97,7 +95,7 @@ namespace TSF{
 
 		// Fit Ranges
 		void addRange( string dataset, double _min, double _max, string centerOn = "", string widthFrom = "", double roi = 1.0 );
-		void updateRanges();
+		void updateRanges( double roi = -1);
 		void clearRanges(  );
 		bool constrainFitRange() { return fitInRange; }
 		void useFitRange( bool fr = true ) { fitInRange = fr; }

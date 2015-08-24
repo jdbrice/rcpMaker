@@ -28,9 +28,10 @@ namespace TSF{
 		logger->setClassSpace( tag );
 
 		// setup reporters for the zb and zd fit projections
-		zbReporter = unique_ptr<Reporter>(new Reporter( cfg->getString( nodePath + "output:path" ) + "rp_" + centerSpecies + "_TSF_zb.pdf",
+		string rpre = cfg->getString( nodePath + "output:prefix", "" );
+		zbReporter = unique_ptr<Reporter>(new Reporter( cfg->getString( nodePath + "output:path" ) + "rp_" + rpre + "_" + centerSpecies + "_TSF_zb.pdf",
 			cfg->getInt( nodePath + "Reporter.output:width", 400 ), cfg->getInt( nodePath + "Reporter.output:height", 400 ) ) );
-		zdReporter = unique_ptr<Reporter>(new Reporter( cfg->getString( nodePath + "output:path" ) + "rp_"+ centerSpecies +"_TSF_zd.pdf",
+		zdReporter = unique_ptr<Reporter>(new Reporter( cfg->getString( nodePath + "output:path" ) + "rp_" + rpre + "_" + centerSpecies +"_TSF_zd.pdf",
 			cfg->getInt( nodePath + "Reporter.output:width", 400 ), cfg->getInt( nodePath + "Reporter.output:height", 400 ) ) );
 
 		Logger::setGlobalLogLevel( Logger::logLevelFromString( cfg->getString( nodePath + "Logger:globalLogLevel" ) ) );
@@ -145,31 +146,32 @@ namespace TSF{
 			double zbMinParP = cfg->getDouble( nodePath + "ParameterFixing." + plc + ":zbSigma", 5.0 );
 			double zdMinParP = cfg->getDouble( nodePath + "ParameterFixing." + plc + ":zdSigma", 5.0 );
 
-			// value to shich zb sigma should be fixed
-			double zbSigFix = schema->var( "zb_sigma_"+plc )->val;
+
 
 			if ( zbMinParP > 0 && avgP >= zbMinParP){	
-				schema->setInitialMu( "zb_mu_"+plc, zbMu, zbSigFix, 10 );
-				INFO( tag, "Fixing zb_sigma_" << plc << " to " << sigmaSets[ "zb_" + plc ].mean() )
+				
 				double hm = sigmaSets[ "zb_" + plc ].mean();
-				//schema->fixParameter( "zb_sigma_" + plc, sigmaSets[ "zb_" + plc ].mean(), true );
-				schema->setInitialSigma( "zb_sigma_"+plc, hm, hm - 0.0006, hm + 0.0006 );
+
+				schema->setInitialMu( "zb_mu_"+plc, zbMu, hm, zbDeltaMu );
+
+				INFO( tag, "Fixing zb_sigma_" << plc << " to " << sigmaSets[ "zb_" + plc ].mean() )
+				schema->setInitialSigma( "zb_sigma_"+plc, hm, hm - 0.004, hm + 0.004 );
 			}
 			else {
 				schema->setInitialSigma( "zb_sigma_"+plc, zbSig, zbSig * 0.5, zbSig * 6 );
-				schema->setInitialMu( "zb_mu_"+plc, zbMu, zbSig, zbDeltaMu );
+				schema->setInitialMu( "zb_mu_"+plc, zbMu, zbSig, 10 );
 			}
 
-			schema->setInitialMu( "zd_mu_"+plc, zdMu, zdSig, 10 );
-			zdSigFix = zdSigma(); //schema->var( "zd_sigma_"+plc )->val;
+			schema->setInitialMu( "zd_mu_"+plc, zdMu, zdSig, zdDeltaMu );
+			
 			if ( zdMinParP > 0 && avgP >= zdMinParP){	
-				schema->setInitialMu( "zd_mu_"+plc, zdMu, zdSig, zdDeltaMu);
-				//schema->fixParameter( "zd_sigma_" + plc, sigmaSets[ "zd_" + plc ].mean(), true );
+				
 				double hm = sigmaSets[ "zd_" + plc ].mean();
-				schema->setInitialSigma( "zd_sigma_"+plc, hm, hm - 0.004, hm  );
+				schema->setInitialMu( "zd_mu_"+plc, zdMu, hm, zdDeltaMu);
+				schema->setInitialSigma( "zd_sigma_"+plc, hm, hm - 0.004, hm + 0.004  );
 			}
 			else 
-				schema->setInitialSigma( "zd_sigma_"+plc, zdSig, 0.04, 0.14);
+				schema->setInitialSigma( "zd_sigma_"+plc, zdSig, 0.04, 0.24);
 				
 			
 			choosePlayers( avgP, plc, roi );
@@ -177,7 +179,7 @@ namespace TSF{
 		
 			schema->var( "yield_" + plc )->min = 0;
 			schema->var( "yield_" + plc )->max = schema->getNormalization() * 10;	
-			schema->var( "yield_" + plc )->val = .0001;
+			//schema->var( "yield_" + plc )->val = .0001;
 
 			double zdOnly = cfg->getDouble( nodePath + "Timing:zdOnly" , 0.5 );
 			
@@ -205,10 +207,10 @@ namespace TSF{
 			double zdMu = zdMean( plc, avgP );
 			double zdSig = zdSigma(  );
 
-			if ( avgP > zdOnly )
+			if ( avgP > zdOnly ){
 				schema->addRange( "zb_All", zbMu - zbSig * roi, zbMu + zbSig * roi, "zb_mu_" + plc, "zb_sigma_" + plc, roi );
-		
-			schema->addRange( "zd_All", zdMu - zdSig * roi, zdMu + zdSig * roi, "zd_mu_" + plc, "zd_sigma_" + plc, roi );	
+			}
+			schema->addRange( "zd_All", zdMu - zdSig * roi, zdMu + zdSig * roi, "zd_mu_" + plc, "zd_sigma_" + plc, roi );
 
 		}
 
@@ -364,6 +366,7 @@ namespace TSF{
 					logger->warn(__FUNCTION__) << "<p> = " << avgP << endl;
 
 					schema->clearRanges();
+					FitSchema schemaSys = (*schema);
 
 					DEBUG( "Fitter", "Creating fitter" );
 					Fitter fitter( schema, inFile );
@@ -392,14 +395,14 @@ namespace TSF{
 					}
 
 					// for ( int i : { 0, 1, 2 } ){
-						fitter.fit3(  );
-						reportFit( &fitter, iPt );
+						// fitter.fit3(  );
+						// reportFit( &fitter, iPt );
 					// }
 
-					// for ( int i = 0; i < 3; i++ ){
-					// 	fitter.fit4(  );
-					// 	reportFit( &fitter, iPt );
-					// }
+					for ( int i = 0; i < 3; i++ ){
+						fitter.fit4(  );
+						reportFit( &fitter, iPt );
+					}
 
 					//fitter.fitErrors();
 
@@ -431,6 +434,15 @@ namespace TSF{
 						}
 					}
 
+
+					// do systematics
+					for ( int i = 0; i < 3; i++ ){
+						fitter.fit4(  );
+						reportFit( &fitter, iPt );
+					}
+
+
+
 				}// loop pt Bins
 			} // loop charge bins
 		} // loop centrality bins
@@ -446,7 +458,7 @@ namespace TSF{
 		h->Draw("pe");
 		h->SetLineColor( kBlack );
 		double scaler = 1e-6;
-		h->GetYaxis()->SetRangeUser( schema->getNormalization() * scaler, schema->getNormalization() * 0.2 );
+		h->GetYaxis()->SetRangeUser( schema->getNormalization() * scaler, schema->getNormalization() );
 
 		h->SetTitle( ( dts((*binsPt)[ iPt ]) + " < pT < " + dts( (*binsPt)[ iPt + 1 ] ) ).c_str() );
 
@@ -454,7 +466,7 @@ namespace TSF{
 		for ( FitRange range : fitter->getSchema()->getRanges() ){
 			if ( range.dataset != v )
 				continue;
-			TBox * b1 = new TBox( range.min, schema->getNormalization() * scaler, range.max, schema->getNormalization() * 0.2  );
+			TBox * b1 = new TBox( range.min, schema->getNormalization() * scaler, range.max, schema->getNormalization()  );
 			b1->SetFillColorAlpha( kBlack, 0.25 );
 			b1->SetFillStyle( 1001 );
 			b1->Draw(  );
