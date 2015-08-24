@@ -288,15 +288,15 @@ namespace TSF{
 
 		
 
-		fixShapes();
-		fix( "yield" );
+		// fixShapes();
+		fix( "_yield_" );
 			minuit->mnexcm( "MINI", arglist, 1, iFlag );
 			minuit->mnexcm( "MINI", arglist, 1, iFlag );
 			minuit->mnexcm( "MINI", arglist, 1, iFlag );
 			status = minuit->fCstatu;
 			INFO ( tag, "Step 1. Status " << status );
-		release( "yield" );
-		releaseShapes();
+		release( "_yield_" );
+		// releaseShapes();
 		
 		schema->updateRanges();
 
@@ -316,7 +316,7 @@ namespace TSF{
 
 		schema->setMethod( "chi2" );
 
-		fixShapes();
+		fix( "sigma" );
 		fix( "_yield_" );
 			minuit->mnexcm( "MINI", arglist, 1, iFlag );
 			minuit->mnexcm( "MINI", arglist, 1, iFlag );
@@ -324,7 +324,7 @@ namespace TSF{
 			status = minuit->fCstatu;
 			INFO ( tag, "Step 1. Status " << status );
 		release( "_yield_" );
-		releaseShapes();
+		release( "sigma" );
 		schema->updateRanges();
 
 

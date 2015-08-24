@@ -166,7 +166,7 @@ namespace TSF{
 				schema->setInitialMu( "zd_mu_"+plc, zdMu, zdSig, zdDeltaMu);
 				//schema->fixParameter( "zd_sigma_" + plc, sigmaSets[ "zd_" + plc ].mean(), true );
 				double hm = sigmaSets[ "zd_" + plc ].mean();
-				schema->setInitialSigma( "zd_sigma_"+plc, hm, hm - 0.004, hm + 0.004 );
+				schema->setInitialSigma( "zd_sigma_"+plc, hm, hm - 0.004, hm  );
 			}
 			else 
 				schema->setInitialSigma( "zd_sigma_"+plc, zdSig, 0.04, 0.14);
@@ -183,9 +183,9 @@ namespace TSF{
 			
 			// TODO: decide on eff scheme
 			schema->var( "eff_" + plc )->val = 1.0;
-			// if ( avgP <= 0.5 )
-			// 	schema->var( "eff_" + plc )->fixed = true;
-			// else 
+			if ( avgP <= 0.5 )
+				schema->var( "eff_" + plc )->fixed = true;
+			else 
 				schema->var( "eff_" + plc )->fixed = false;
 			
 		} // loop on plc to set initial vals
@@ -319,7 +319,7 @@ namespace TSF{
 						schema->var( var )->error = 0.1/schema->getNormalization();
 					}
 					// TODO: initial yield?
-					// schema->var( var )->val = 0.00001;
+					// schema->var( var )->val = 0.01;
 
 				} else {
 					schema->var( "zb_"+plc+"_yield_"+plc2 )->exclude = true;;
@@ -381,7 +381,7 @@ namespace TSF{
 					fitter.nop();
 					reportFit( &fitter, iPt );
 					
-					for ( int i = 0; i < 10; i++ ){
+					for ( int i = 0; i < 1; i++ ){
 						
 						fitter.fit1(  );
 						reportFit( &fitter, iPt );
@@ -391,15 +391,15 @@ namespace TSF{
 
 					}
 
-					for ( int i : { 0, 1, 2 } ){
+					// for ( int i : { 0, 1, 2 } ){
 						fitter.fit3(  );
 						reportFit( &fitter, iPt );
-					}
+					// }
 
-					for ( int i = 0; i < 3; i++ ){
-						fitter.fit4(  );
-						reportFit( &fitter, iPt );
-					}
+					// for ( int i = 0; i < 3; i++ ){
+					// 	fitter.fit4(  );
+					// 	reportFit( &fitter, iPt );
+					// }
 
 					//fitter.fitErrors();
 
@@ -414,8 +414,8 @@ namespace TSF{
 					for ( string pre : {"zb", "zd"} ){
 						for ( string plc : Common::species ){
 
-							double r1 = 0.6;
-							double r2 = 1.0;
+							double r1 = 0.4;
+							double r2 = 0.6;
 
 							INFO( tag, "SigmaHistory for " << pre << "_" << plc )
 							if ( "zb" == pre && "P" == plc ){
