@@ -381,7 +381,7 @@ namespace TSF{
 					fitter.nop();
 					reportFit( &fitter, iPt );
 					
-					for ( int i = 0; i < 1; i++ ){
+					for ( int i = 0; i < 5; i++ ){
 						
 						fitter.fit1(  );
 						reportFit( &fitter, iPt );
@@ -414,8 +414,8 @@ namespace TSF{
 					for ( string pre : {"zb", "zd"} ){
 						for ( string plc : Common::species ){
 
-							double r1 = 0.4;
-							double r2 = 0.6;
+							double r1 = 0.6;
+							double r2 = 1.0;
 
 							INFO( tag, "SigmaHistory for " << pre << "_" << plc )
 							if ( "zb" == pre && "P" == plc ){
@@ -440,7 +440,7 @@ namespace TSF{
 		logger->info(__FUNCTION__) << v << ", fitter=" << fitter << ", iPt=" << iPt << endl;
 		TH1 * h = fitter->getDataHist( v );
 		if ( !h ){
-			logger->error(__FUNCTION__) << "Data histogram not found" << endl;
+			WARN( tag, "Data histogram not found" );
 			return ;
 		}
 		h->Draw("pe");

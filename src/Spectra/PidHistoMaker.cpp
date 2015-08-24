@@ -220,8 +220,8 @@ bool PidHistoMaker::enhanceDistributions( double avgP, int ptBin, int charge, do
 	// since the sigma of the Proton peak is very large at low momentum
 	// the N (ideal sigma) cut is far too tight
 	double deuteronCut = tMeans[ "P" ] + tofSigmaIdeal * nSigAbove;
-	if ( tMeans[ "D" ] - tofSigmaIdeal * ( nSigAbove + 1 ) > deuteronCut )
-		deuteronCut = tMeans[ "D" ] - tofSigmaIdeal * ( nSigAbove + 1 );
+	//if ( tMeans[ "D" ] - tofSigmaIdeal * ( nSigAbove * 2 ) > deuteronCut )
+	//	deuteronCut = tMeans[ "D" ] - tofSigmaIdeal * ( nSigAbove * 2 );
 
 
 	double trackWeight = eventWeight;
@@ -260,7 +260,7 @@ bool PidHistoMaker::enhanceDistributions( double avgP, int ptBin, int charge, do
 	if ( tof < tMeans[ "Pi" ] - tofSigmaIdeal * nSigBelow )
 		return false;
 	// reject deuteron
-	if ( tof > deuteronCut )
+	if ( tof > deuteronCut && avgP >= 0.5 )
 		return false;
 
 	

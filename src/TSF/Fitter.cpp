@@ -241,9 +241,10 @@ namespace TSF{
 
 		schema->setMethod( "chi2" );
 
-		fix( "zd" );
+		
 		fix( "eff" );
 		fix( "yield" );
+		fix( "_yield_" );
 			minuit->mnexcm( "MINI", arglist, 1, iFlag );
 			minuit->mnexcm( "MINI", arglist, 1, iFlag );
 			minuit->mnexcm( "MINI", arglist, 1, iFlag );
@@ -251,21 +252,21 @@ namespace TSF{
 			INFO ( tag, "Step 1. Status " << status );
 		release( "yield" );
 		release( "eff" );
-		release( "zd" );
+		
 		schema->updateRanges();
 
-		fix( "zb" );
-		fix( "eff" );
-		fix( "yield" );
-			minuit->mnexcm( "MINI", arglist, 1, iFlag );
-			minuit->mnexcm( "MINI", arglist, 1, iFlag );
-			minuit->mnexcm( "MINI", arglist, 1, iFlag );
-			status = minuit->fCstatu;
-			INFO ( tag, "Step 1. Status " << status );
-		release( "yield" );
-		release( "eff" );
-		release( "zb" );
-		schema->updateRanges();
+		// fix( "zb" );
+		// fix( "eff" );
+		// fix( "yield" );
+		// 	minuit->mnexcm( "MINI", arglist, 1, iFlag );
+		// 	minuit->mnexcm( "MINI", arglist, 1, iFlag );
+		// 	minuit->mnexcm( "MINI", arglist, 1, iFlag );
+		// 	status = minuit->fCstatu;
+		// 	INFO ( tag, "Step 1. Status " << status );
+		// release( "yield" );
+		// release( "eff" );
+		// release( "zb" );
+		// schema->updateRanges();
 
 
 
@@ -279,7 +280,7 @@ namespace TSF{
 	void Fitter::fit3( ){
 
 		double arglist[10];
-		arglist[ 0 ] = 50000;
+		arglist[ 0 ] = 5000;
 		arglist[ 1 ] = 1.0;
 		int iFlag = -1;
 		string status = "na";
@@ -633,7 +634,7 @@ namespace TSF{
 
 
 	TGraph * Fitter::plotResult( string datasetOrModel ){
-		logger->debug(__FUNCTION__) << "Plotting : " << datasetOrModel << endl;
+		DEBUG( tag, "Plotting : " << datasetOrModel );
 
 		string datasetName = "";
 		string modelName = "";
@@ -655,7 +656,7 @@ namespace TSF{
 		}
 
 		if ( !found ){
-			Logger::log.error( __FUNCTION__ ) << "Invalid Request : " << datasetOrModel << endl;
+			WARN( tag, "Invalid Request : " << datasetOrModel );
 			return new TGraph();
 		}
 
@@ -666,7 +667,7 @@ namespace TSF{
 
 		pair<double, double> xBounds = schema->datasets[ datasetName ].rangeX(  );
 
-		logger->debug(__FUNCTION__) << "Plotting from ( " << xBounds.first << ", " << xBounds.second <<" ) "<< endl;	
+		DEBUG( tag, "Plotting from ( " << xBounds.first << ", " << xBounds.second <<" ) " );	
 		double stepsize = (xBounds.second - xBounds.first) / 500.0;
 		vector<double> vx, vy;
 
