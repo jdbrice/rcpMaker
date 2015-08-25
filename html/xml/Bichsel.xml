@@ -111,6 +111,15 @@
   <field access="protected" id="Bichsel::hK" name="hK">
     <type name="TH1D" qualifier="*" />
   </field>
+  <field access="protected" id="Bichsel::hE" name="hE">
+    <type name="TH1D" qualifier="*" />
+  </field>
+  <field access="protected" id="Bichsel::hD" name="hD">
+    <type name="TH1D" qualifier="*" />
+  </field>
+  <field access="protected" id="Bichsel::eMass" name="eMass">
+    <type builtin="yes" name="double" />
+  </field>
   <field access="protected" id="Bichsel::piMass" name="piMass">
     <type builtin="yes" name="double" />
   </field>
@@ -118,6 +127,9 @@
     <type builtin="yes" name="double" />
   </field>
   <field access="protected" id="Bichsel::protonMass" name="protonMass">
+    <type builtin="yes" name="double" />
+  </field>
+  <field access="protected" id="Bichsel::deuteronMass" name="deuteronMass">
     <type builtin="yes" name="double" />
   </field>
 </class>

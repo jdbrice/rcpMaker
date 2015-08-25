@@ -23,6 +23,12 @@
   <field id="TSF::GaussModel::s" name="s">
     <type builtin="yes" name="double" />
   </field>
+  <field id="TSF::GaussModel::e" name="e">
+    <type builtin="yes" name="double" />
+  </field>
+  <field id="TSF::GaussModel::eff" name="eff">
+    <type name="string" />
+  </field>
   <constructor id="TSF::GaussModel::GaussModel" name="GaussModel">
     <argument id="TSF::GaussModel::GaussModel::cfg" name="cfg">
       <type name="jdb::XmlConfig" qualifier="*" />
@@ -49,6 +55,14 @@
     </argument>
     <argument id="TSF::GaussModel::GaussModel::_ds" name="_ds">
       <type name="string" />
+    </argument>
+    <argument id="TSF::GaussModel::GaussModel::_eff" name="_eff">
+      <type name="string" />
+    </argument>
+  </constructor>
+  <constructor id="TSF::GaussModel::GaussModel" name="GaussModel">
+    <argument id="TSF::GaussModel::GaussModel::other" name="other">
+      <type name="GaussModel" qualifier=" const &amp;" ref="TSF::GaussModel#TSF::GaussModel" />
     </argument>
   </constructor>
   <destructor id="TSF::GaussModel::~GaussModel" name="~GaussModel" />

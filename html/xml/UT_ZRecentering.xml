@@ -1,0 +1,218 @@
+<class xmlns="http://jessevdk.github.com/cldoc/1.0" abstract="true" id="UT_ZRecentering" name="UT_ZRecentering">
+  <base access="public">
+    <type name="InclusiveSpectra" ref="InclusiveSpectra#InclusiveSpectra" />
+  </base>
+  <constructor abstract="yes" id="UT_ZRecentering::UT_ZRecentering" name="UT_ZRecentering">
+    <argument id="UT_ZRecentering::UT_ZRecentering::config" name="config">
+      <type name="jdb::XmlConfig" qualifier="*" />
+    </argument>
+    <argument id="UT_ZRecentering::UT_ZRecentering::np" name="np">
+      <type name="string" />
+    </argument>
+    <argument id="UT_ZRecentering::UT_ZRecentering::fl" name="fl">
+      <type name="string" />
+    </argument>
+    <argument id="UT_ZRecentering::UT_ZRecentering::jp" name="jp">
+      <type name="string" />
+    </argument>
+  </constructor>
+  <destructor abstract="yes" id="UT_ZRecentering::~UT_ZRecentering" name="~UT_ZRecentering" />
+  <method abstract="yes" id="UT_ZRecentering::analyzeTofTrack" name="analyzeTofTrack" override="yes" virtual="yes">
+    <brief>*</brief>
+    <doc>Analyze a track in the current Event
+</doc>
+    <return>
+      <type builtin="yes" name="void" />
+    </return>
+    <argument id="UT_ZRecentering::analyzeTofTrack::iTrack" name="iTrack">
+      <type name="Int_t" />
+    </argument>
+    <override name="InclusiveSpectra::analyzeTofTrack" ref="InclusiveSpectra#InclusiveSpectra::analyzeTofTrack" />
+  </method>
+  <method abstract="yes" id="UT_ZRecentering::autoViewport" name="autoViewport" static="yes">
+    <brief>*</brief>
+    <doc>Computes the upper and lower limits in tof and dedx histogram space
+</doc>
+    <return>
+      <type builtin="yes" name="void" />
+    </return>
+    <argument id="UT_ZRecentering::autoViewport::pType" name="pType">
+      <type name="string" />
+    </argument>
+    <argument id="UT_ZRecentering::autoViewport::p" name="p">
+      <type builtin="yes" name="double" />
+    </argument>
+    <argument id="UT_ZRecentering::autoViewport::lpsr" name="lpsr">
+      <type name="ZRecentering" qualifier="*" ref="ZRecentering#ZRecentering" />
+    </argument>
+    <argument id="UT_ZRecentering::autoViewport::tofLow" name="tofLow">
+      <type builtin="yes" name="double" qualifier="*" />
+    </argument>
+    <argument id="UT_ZRecentering::autoViewport::tofHigh" name="tofHigh">
+      <type builtin="yes" name="double" qualifier="*" />
+    </argument>
+    <argument id="UT_ZRecentering::autoViewport::dedxLow" name="dedxLow">
+      <type builtin="yes" name="double" qualifier="*" />
+    </argument>
+    <argument id="UT_ZRecentering::autoViewport::dedxHigh" name="dedxHigh">
+      <type builtin="yes" name="double" qualifier="*" />
+    </argument>
+    <argument id="UT_ZRecentering::autoViewport::tofPadding" name="tofPadding">
+      <type builtin="yes" name="double" />
+    </argument>
+    <argument id="UT_ZRecentering::autoViewport::dedxPadding" name="dedxPadding">
+      <type builtin="yes" name="double" />
+    </argument>
+    <argument id="UT_ZRecentering::autoViewport::tofScaledPadding" name="tofScaledPadding">
+      <type builtin="yes" name="double" />
+    </argument>
+    <argument id="UT_ZRecentering::autoViewport::dedxScaledPadding" name="dedxScaledPadding">
+      <type builtin="yes" name="double" />
+    </argument>
+  </method>
+  <method id="UT_ZRecentering::binAverageP" name="binAverageP">
+    <brief>Average P in a bin range assuming a flat distribution</brief>
+    <doc>The distribution is really an exp, but we just need to be consistent
+</doc>
+    <return>
+      <doc>average value in the given bin range</doc>
+      <type builtin="yes" name="double" />
+    </return>
+    <argument id="UT_ZRecentering::binAverageP::bin" name="bin">
+      <type builtin="yes" name="int" />
+    </argument>
+  </method>
+  <method abstract="yes" id="UT_ZRecentering::enhanceDistributions" name="enhanceDistributions">
+    <return>
+      <type builtin="yes" name="void" />
+    </return>
+    <argument id="UT_ZRecentering::enhanceDistributions::avgP" name="avgP">
+      <type builtin="yes" name="double" />
+    </argument>
+    <argument id="UT_ZRecentering::enhanceDistributions::pBin" name="pBin">
+      <type builtin="yes" name="int" />
+    </argument>
+    <argument id="UT_ZRecentering::enhanceDistributions::charge" name="charge">
+      <type builtin="yes" name="int" />
+    </argument>
+    <argument id="UT_ZRecentering::enhanceDistributions::dedx" name="dedx">
+      <type builtin="yes" name="double" />
+    </argument>
+    <argument id="UT_ZRecentering::enhanceDistributions::tof" name="tof">
+      <type builtin="yes" name="double" />
+    </argument>
+  </method>
+  <method abstract="yes" id="UT_ZRecentering::postEventLoop" name="postEventLoop" override="yes" virtual="yes">
+    <return>
+      <type builtin="yes" name="void" />
+    </return>
+    <override name="InclusiveSpectra::postEventLoop" ref="InclusiveSpectra#InclusiveSpectra::postEventLoop" />
+  </method>
+  <method abstract="yes" id="UT_ZRecentering::preEventLoop" name="preEventLoop" override="yes" virtual="yes">
+    <return>
+      <type builtin="yes" name="void" />
+    </return>
+    <override name="InclusiveSpectra::preEventLoop" ref="InclusiveSpectra#InclusiveSpectra::preEventLoop" />
+  </method>
+  <method abstract="yes" id="UT_ZRecentering::reportAll" name="reportAll">
+    <return>
+      <type builtin="yes" name="void" />
+    </return>
+    <argument id="UT_ZRecentering::reportAll::n" name="n">
+      <type name="string" />
+    </argument>
+  </method>
+  <field access="protected" id="UT_ZRecentering::binsTof" name="binsTof">
+    <brief>Binning</brief>
+    <type name="unique_ptr&lt;jdb::HistoBins, default_delete&lt;jdb::HistoBins&gt; &gt;" />
+  </field>
+  <field access="protected" id="UT_ZRecentering::binsDedx" name="binsDedx">
+    <type name="unique_ptr&lt;jdb::HistoBins, default_delete&lt;jdb::HistoBins&gt; &gt;" />
+  </field>
+  <field access="protected" id="UT_ZRecentering::binsPt" name="binsPt">
+    <type name="unique_ptr&lt;jdb::HistoBins, default_delete&lt;jdb::HistoBins&gt; &gt;" />
+  </field>
+  <field access="protected" id="UT_ZRecentering::charges" name="charges">
+    <type name="vector&lt;int&gt;" />
+  </field>
+  <field access="protected" id="UT_ZRecentering::tofBinWidth" name="tofBinWidth">
+    <brief>these are made on the fly based on the config options</brief>
+    <type builtin="yes" name="double" />
+  </field>
+  <field access="protected" id="UT_ZRecentering::dedxBinWidth" name="dedxBinWidth">
+    <brief>these are made on the fly based on the config options</brief>
+    <type builtin="yes" name="double" />
+  </field>
+  <field access="protected" id="UT_ZRecentering::tofPadding" name="tofPadding">
+    <brief>Plot Ranges</brief>
+    <type builtin="yes" name="double" />
+  </field>
+  <field access="protected" id="UT_ZRecentering::dedxPadding" name="dedxPadding">
+    <brief>Plot Ranges</brief>
+    <type builtin="yes" name="double" />
+  </field>
+  <field access="protected" id="UT_ZRecentering::tofScalePadding" name="tofScalePadding">
+    <brief>Plot Ranges</brief>
+    <type builtin="yes" name="double" />
+  </field>
+  <field access="protected" id="UT_ZRecentering::dedxScalePadding" name="dedxScalePadding">
+    <brief>Plot Ranges</brief>
+    <type builtin="yes" name="double" />
+  </field>
+  <field access="protected" id="UT_ZRecentering::centerSpecies" name="centerSpecies">
+    <brief>Z Recentering</brief>
+    <doc>Which cpecies are we centering around</doc>
+    <type name="string" />
+  </field>
+  <field access="protected" id="UT_ZRecentering::zrMethod" name="zrMethod">
+    <brief>traditional or nonlinear</brief>
+    <type name="string" />
+  </field>
+  <field access="protected" id="UT_ZRecentering::dedxSigmaIdeal" name="dedxSigmaIdeal">
+    <brief>ideal sigma for 1/beta and dEdx</brief>
+    <type builtin="yes" name="double" />
+  </field>
+  <field access="protected" id="UT_ZRecentering::tofSigmaIdeal" name="tofSigmaIdeal">
+    <brief>ideal sigma for 1/beta and dEdx</brief>
+    <type builtin="yes" name="double" />
+  </field>
+  <field access="protected" id="UT_ZRecentering::zr" name="zr">
+    <brief>recentering object</brief>
+    <type name="ZRecentering" qualifier="*" ref="ZRecentering#ZRecentering" />
+  </field>
+  <field access="protected" id="UT_ZRecentering::tofCut" name="tofCut">
+    <brief>cuts used for enhancing distributions</brief>
+    <type builtin="yes" name="double" />
+  </field>
+  <field access="protected" id="UT_ZRecentering::dedxCut" name="dedxCut">
+    <brief>cuts used for enhancing distributions</brief>
+    <type builtin="yes" name="double" />
+  </field>
+  <field access="protected" id="UT_ZRecentering::make2D" name="make2D">
+    <brief>options for histogram creation</brief>
+    <type builtin="yes" name="bool" />
+  </field>
+  <field access="protected" id="UT_ZRecentering::makeEnhanced" name="makeEnhanced">
+    <brief>options for histogram creation</brief>
+    <type builtin="yes" name="bool" />
+  </field>
+  <field access="protected" id="UT_ZRecentering::nSigBelow" name="nSigBelow">
+    <brief># of sigma to cut above and below</brief>
+    <type builtin="yes" name="double" />
+  </field>
+  <field access="protected" id="UT_ZRecentering::nSigAbove" name="nSigAbove">
+    <brief># of sigma to cut above and below</brief>
+    <type builtin="yes" name="double" />
+  </field>
+  <field access="protected" id="UT_ZRecentering::makeCombinedCharge" name="makeCombinedCharge">
+    <type builtin="yes" name="bool" />
+  </field>
+  <method abstract="yes" access="protected" id="UT_ZRecentering::prepareHistograms" name="prepareHistograms">
+    <return>
+      <type builtin="yes" name="void" />
+    </return>
+    <argument id="UT_ZRecentering::prepareHistograms::plc" name="plc">
+      <type name="string" />
+    </argument>
+  </method>
+</class>

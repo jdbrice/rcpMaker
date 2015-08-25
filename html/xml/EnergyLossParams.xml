@@ -22,19 +22,13 @@
   <variable access="protected" id="EnergyLossParams::instances" name="instances">
     <type builtin="yes" name="int" />
   </variable>
-  <field access="protected" id="EnergyLossParams::cfg" name="cfg">
-    <type name="jdb::XmlConfig" qualifier="*" />
-  </field>
-  <field access="protected" id="EnergyLossParams::nodePath" name="nodePath">
-    <type name="string" />
-  </field>
-  <field access="protected" id="EnergyLossParams::log" name="log">
-    <type name="jdb::Logger" />
-  </field>
   <field access="protected" id="EnergyLossParams::formula" name="formula">
     <type name="string" />
   </field>
   <field access="protected" id="EnergyLossParams::fn" name="fn">
     <type name="TF1" qualifier="*" />
+  </field>
+  <field access="protected" id="EnergyLossParams::centralityBin" name="centralityBin">
+    <type builtin="yes" name="int" />
   </field>
 </class>

@@ -26,6 +26,11 @@
       <type builtin="yes" name="double" />
     </argument>
   </constructor>
+  <constructor id="TSF::FitDataPoint::FitDataPoint" name="FitDataPoint">
+    <argument id="TSF::FitDataPoint::FitDataPoint::other" name="other">
+      <type name="FitDataPoint" qualifier=" const &amp;" ref="TSF::FitDataPoint#TSF::FitDataPoint" />
+    </argument>
+  </constructor>
   <destructor id="TSF::FitDataPoint::~FitDataPoint" name="~FitDataPoint" />
   <method id="TSF::FitDataPoint::toString" name="toString">
     <return>

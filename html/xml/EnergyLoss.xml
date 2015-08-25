@@ -26,6 +26,26 @@
     </argument>
     <override name="InclusiveSpectra::analyzeTrack" ref="InclusiveSpectra#InclusiveSpectra::analyzeTrack" />
   </method>
+  <method abstract="yes" id="EnergyLoss::exportParams" name="exportParams">
+    <return>
+      <type builtin="yes" name="void" />
+    </return>
+    <argument id="EnergyLoss::exportParams::cbin" name="cbin">
+      <type builtin="yes" name="int" />
+    </argument>
+    <argument id="EnergyLoss::exportParams::f" name="f">
+      <type name="TF1" qualifier="*" />
+    </argument>
+    <argument id="EnergyLoss::exportParams::out" name="out">
+      <type name="ofstream" qualifier=" &amp;" />
+    </argument>
+  </method>
+  <method abstract="yes" id="EnergyLoss::postEventLoop" name="postEventLoop" override="yes" virtual="yes">
+    <return>
+      <type builtin="yes" name="void" />
+    </return>
+    <override name="InclusiveSpectra::postEventLoop" ref="InclusiveSpectra#InclusiveSpectra::postEventLoop" />
+  </method>
   <method abstract="yes" id="EnergyLoss::preEventLoop" name="preEventLoop" override="yes" virtual="yes">
     <return>
       <type builtin="yes" name="void" />

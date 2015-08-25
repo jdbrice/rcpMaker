@@ -1,5 +1,10 @@
 <class xmlns="http://jessevdk.github.com/cldoc/1.0" id="TSF::FitDataset" name="FitDataset">
   <constructor id="TSF::FitDataset::FitDataset" name="FitDataset" />
+  <constructor id="TSF::FitDataset::FitDataset" name="FitDataset">
+    <argument id="TSF::FitDataset::FitDataset::other" name="other">
+      <type name="FitDataset" qualifier=" const &amp;" ref="TSF::FitDataset#TSF::FitDataset" />
+    </argument>
+  </constructor>
   <destructor id="TSF::FitDataset::~FitDataset" name="~FitDataset" />
   <method id="TSF::FitDataset::begin" name="begin">
     <return>
@@ -68,6 +73,11 @@
     <argument id="TSF::FitDataset::setName::_name" name="_name">
       <type name="string" />
     </argument>
+  </method>
+  <method id="TSF::FitDataset::yield" name="yield">
+    <return>
+      <type builtin="yes" name="double" />
+    </return>
   </method>
   <method id="TSF::FitDataset::yield" name="yield">
     <return>

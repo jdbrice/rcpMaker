@@ -7,4 +7,5 @@
   <class name="Fitter" ref="TSF::Fitter#TSF::Fitter" />
   <class name="FitVar" ref="TSF::FitVar#TSF::FitVar" />
   <class name="GaussModel" ref="TSF::GaussModel#TSF::GaussModel" />
+  <class name="SigmaHistory" ref="TSF::SigmaHistory#TSF::SigmaHistory" />
 </namespace>

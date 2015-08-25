@@ -48,6 +48,12 @@
       <type builtin="yes" name="double" />
     </argument>
   </constructor>
+  <constructor id="TSF::FitVar::FitVar" name="FitVar" />
+  <constructor id="TSF::FitVar::FitVar" name="FitVar">
+    <argument id="TSF::FitVar::FitVar::other" name="other">
+      <type name="FitVar" qualifier=" const &amp;" ref="TSF::FitVar#TSF::FitVar" />
+    </argument>
+  </constructor>
   <destructor id="TSF::FitVar::~FitVar" name="~FitVar" />
   <method id="TSF::FitVar::set" name="set">
     <return>

@@ -37,7 +37,9 @@
     <class name="Fitter" ref="TSF::Fitter#TSF::Fitter" />
     <class name="FitVar" ref="TSF::FitVar#TSF::FitVar" />
     <class name="GaussModel" ref="TSF::GaussModel#TSF::GaussModel" />
+    <class name="SigmaHistory" ref="TSF::SigmaHistory#TSF::SigmaHistory" />
   </namespace>
+  <class name="ApplyPostCorr" ref="ApplyPostCorr#ApplyPostCorr" />
   <class name="Bichsel" ref="Bichsel#Bichsel" />
   <class name="EffParams" ref="EffParams#EffParams" />
   <class name="EnergyLoss" ref="EnergyLoss#EnergyLoss" />
@@ -55,8 +57,8 @@
   <class name="TofEffFitter" ref="TofEffFitter#TofEffFitter" />
   <class name="TofEffMaker" ref="TofEffMaker#TofEffMaker" />
   <class name="TofGenerator" ref="TofGenerator#TofGenerator" />
-  <class name="TpcEffMcHistoMaker" ref="TpcEffMcHistoMaker#TpcEffMcHistoMaker" />
-  <class name="TpcEffRcHistoMaker" ref="TpcEffRcHistoMaker#TpcEffRcHistoMaker" />
+  <class name="TpcEffFitter" ref="TpcEffFitter#TpcEffFitter" />
+  <class name="UT_ZRecentering" ref="UT_ZRecentering#UT_ZRecentering" />
   <class name="ZRecentering" ref="ZRecentering#ZRecentering" />
   <report name="Documentation generator" ref="report" />
 </index>

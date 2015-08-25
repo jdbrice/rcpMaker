@@ -1,0 +1,77 @@
+<class xmlns="http://jessevdk.github.com/cldoc/1.0" id="TSF::SigmaHistory" name="SigmaHistory">
+  <variable id="TSF::SigmaHistory::tag" name="tag">
+    <type name="tag" qualifier=" const" />
+  </variable>
+  <constructor id="TSF::SigmaHistory::SigmaHistory" name="SigmaHistory" />
+  <constructor id="TSF::SigmaHistory::SigmaHistory" name="SigmaHistory">
+    <argument id="TSF::SigmaHistory::SigmaHistory::other" name="other">
+      <type name="SigmaHistory" qualifier=" const &amp;" ref="TSF::SigmaHistory#TSF::SigmaHistory" />
+    </argument>
+  </constructor>
+  <destructor id="TSF::SigmaHistory::~SigmaHistory" name="~SigmaHistory" />
+  <method id="TSF::SigmaHistory::add" name="add">
+    <return>
+      <type builtin="yes" name="void" />
+    </return>
+    <argument id="TSF::SigmaHistory::add::pt" name="pt">
+      <type builtin="yes" name="double" />
+    </argument>
+    <argument id="TSF::SigmaHistory::add::sigma" name="sigma">
+      <type builtin="yes" name="double" />
+    </argument>
+  </method>
+  <method id="TSF::SigmaHistory::calcMean" name="calcMean">
+    <return>
+      <type builtin="yes" name="void" />
+    </return>
+  </method>
+  <method id="TSF::SigmaHistory::calcStd" name="calcStd">
+    <return>
+      <type builtin="yes" name="void" />
+    </return>
+  </method>
+  <method id="TSF::SigmaHistory::mean" name="mean">
+    <return>
+      <type builtin="yes" name="double" />
+    </return>
+  </method>
+  <method id="TSF::SigmaHistory::pastRange" name="pastRange">
+    <return>
+      <type builtin="yes" name="bool" />
+    </return>
+    <argument id="TSF::SigmaHistory::pastRange::pt" name="pt">
+      <type builtin="yes" name="double" />
+    </argument>
+  </method>
+  <method id="TSF::SigmaHistory::setRange" name="setRange">
+    <return>
+      <type builtin="yes" name="void" />
+    </return>
+    <argument id="TSF::SigmaHistory::setRange::min" name="min">
+      <type builtin="yes" name="double" />
+    </argument>
+    <argument id="TSF::SigmaHistory::setRange::max" name="max">
+      <type builtin="yes" name="double" />
+    </argument>
+  </method>
+  <method id="TSF::SigmaHistory::std" name="std">
+    <return>
+      <type builtin="yes" name="double" />
+    </return>
+  </method>
+  <field access="protected" id="TSF::SigmaHistory::_min" name="_min">
+    <type builtin="yes" name="double" />
+  </field>
+  <field access="protected" id="TSF::SigmaHistory::_max" name="_max">
+    <type builtin="yes" name="double" />
+  </field>
+  <field access="protected" id="TSF::SigmaHistory::_mean" name="_mean">
+    <type builtin="yes" name="double" />
+  </field>
+  <field access="protected" id="TSF::SigmaHistory::_std" name="_std">
+    <type builtin="yes" name="double" />
+  </field>
+  <field access="protected" id="TSF::SigmaHistory::vals" name="vals">
+    <type name="vector&lt;double&gt;" />
+  </field>
+</class>

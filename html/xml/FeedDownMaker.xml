@@ -27,6 +27,53 @@
     <brief>unique_ptr&amp;lt;RefMultCorrection&amp;gt; rmc;</brief>
     <type builtin="yes" name="float" />
   </field>
+  <field access="protected" id="FeedDownMaker::cut_nHitsFit" name="cut_nHitsFit">
+    <brief>nHitsFit</brief>
+    <type name="unique_ptr&lt;jdb::ConfigRange, default_delete&lt;jdb::ConfigRange&gt; &gt;" />
+  </field>
+  <field access="protected" id="FeedDownMaker::cut_dca" name="cut_dca">
+    <brief>Distance to closest approach [cm]</brief>
+    <type name="unique_ptr&lt;jdb::ConfigRange, default_delete&lt;jdb::ConfigRange&gt; &gt;" />
+  </field>
+  <field access="protected" id="FeedDownMaker::cut_nHitsFitOverPossible" name="cut_nHitsFitOverPossible">
+    <brief>nHitsFit / nHitsPossible</brief>
+    <type name="unique_ptr&lt;jdb::ConfigRange, default_delete&lt;jdb::ConfigRange&gt; &gt;" />
+  </field>
+  <field access="protected" id="FeedDownMaker::cut_nHitsDedx" name="cut_nHitsDedx">
+    <brief>nHitDedx</brief>
+    <type name="unique_ptr&lt;jdb::ConfigRange, default_delete&lt;jdb::ConfigRange&gt; &gt;" />
+  </field>
+  <field access="protected" id="FeedDownMaker::cut_pt" name="cut_pt">
+    <brief>Minimum pT [GeV/c]</brief>
+    <type name="unique_ptr&lt;jdb::ConfigRange, default_delete&lt;jdb::ConfigRange&gt; &gt;" />
+  </field>
+  <field access="protected" id="FeedDownMaker::cut_ptGlobalOverPrimary" name="cut_ptGlobalOverPrimary">
+    <brief>ptGlobal / ptPrimary</brief>
+    <type name="unique_ptr&lt;jdb::ConfigRange, default_delete&lt;jdb::ConfigRange&gt; &gt;" />
+  </field>
+  <field access="protected" id="FeedDownMaker::cut_rapidity" name="cut_rapidity">
+    <brief>Rapidity based on mass assumption</brief>
+    <type name="unique_ptr&lt;jdb::ConfigRange, default_delete&lt;jdb::ConfigRange&gt; &gt;" />
+  </field>
+  <field access="protected" id="FeedDownMaker::formulas" name="formulas">
+    <type name="vector&lt;string&gt;" />
+  </field>
+  <field access="protected" id="FeedDownMaker::rmb" name="rmb">
+    <type name="unique_ptr&lt;jdb::HistoBins, default_delete&lt;jdb::HistoBins&gt; &gt;" />
+  </field>
+  <field access="protected" id="FeedDownMaker::centralityBinMap" name="centralityBinMap">
+    <brief>Centrality bins</brief>
+    <doc>maps bins from bin9 RMC into some other binning
+used to combine bins</doc>
+    <type name="map&lt;int, int&gt;" />
+  </field>
+  <field access="protected" id="FeedDownMaker::centralityBins" name="centralityBins">
+    <brief>the vector of bins in the mapped space - makes it easy to loop over</brief>
+    <type name="vector&lt;int&gt;" />
+  </field>
+  <field access="protected" id="FeedDownMaker::cBin" name="cBin">
+    <type builtin="yes" name="int" />
+  </field>
   <field access="protected" id="FeedDownMaker::plcName" name="plcName">
     <type name="map&lt;int, string&gt;" />
   </field>
@@ -71,30 +118,21 @@
       <type builtin="yes" name="int" />
     </argument>
     <argument id="FeedDownMaker::background::" name="">
-      <type builtin="yes" name="int" />
+      <type name="ofstream" qualifier=" &amp;" />
     </argument>
   </method>
   <method abstract="yes" access="protected" id="FeedDownMaker::exportParams" name="exportParams">
     <return>
       <type builtin="yes" name="void" />
     </return>
-    <argument id="FeedDownMaker::exportParams::name" name="name">
-      <type name="string" />
-    </argument>
-    <argument id="FeedDownMaker::exportParams::plcIndex" name="plcIndex">
+    <argument id="FeedDownMaker::exportParams::bin" name="bin">
       <type builtin="yes" name="int" />
-    </argument>
-    <argument id="FeedDownMaker::exportParams::cl" name="cl">
-      <type builtin="yes" name="float" />
-    </argument>
-    <argument id="FeedDownMaker::exportParams::ch" name="ch">
-      <type builtin="yes" name="float" />
     </argument>
     <argument id="FeedDownMaker::exportParams::fn" name="fn">
       <type name="TF1" qualifier="*" />
     </argument>
-    <argument id="FeedDownMaker::exportParams::formula" name="formula">
-      <type name="string" />
+    <argument id="FeedDownMaker::exportParams::out" name="out">
+      <type name="ofstream" qualifier=" &amp;" />
     </argument>
   </method>
   <method abstract="yes" access="protected" id="FeedDownMaker::keepEvent" name="keepEvent" virtual="yes">
@@ -135,19 +173,5 @@
     <return>
       <type builtin="yes" name="void" />
     </return>
-  </method>
-  <method access="protected" id="FeedDownMaker::rapidity" name="rapidity">
-    <return>
-      <type builtin="yes" name="double" />
-    </return>
-    <argument id="FeedDownMaker::rapidity::pt" name="pt">
-      <type builtin="yes" name="double" />
-    </argument>
-    <argument id="FeedDownMaker::rapidity::eta" name="eta">
-      <type builtin="yes" name="double" />
-    </argument>
-    <argument id="FeedDownMaker::rapidity::m" name="m">
-      <type builtin="yes" name="double" />
-    </argument>
   </method>
 </class>

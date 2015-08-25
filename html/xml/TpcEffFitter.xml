@@ -1,0 +1,42 @@
+<class xmlns="http://jessevdk.github.com/cldoc/1.0" abstract="true" id="TpcEffFitter" name="TpcEffFitter">
+  <constructor abstract="yes" id="TpcEffFitter::TpcEffFitter" name="TpcEffFitter">
+    <argument id="TpcEffFitter::TpcEffFitter::_cfg" name="_cfg">
+      <type name="jdb::XmlConfig" qualifier="*" />
+    </argument>
+    <argument id="TpcEffFitter::TpcEffFitter::nodePath" name="nodePath">
+      <type name="string" />
+    </argument>
+  </constructor>
+  <destructor id="TpcEffFitter::~TpcEffFitter" name="~TpcEffFitter" />
+  <method abstract="yes" id="TpcEffFitter::exportParams" name="exportParams">
+    <return>
+      <type builtin="yes" name="void" />
+    </return>
+    <argument id="TpcEffFitter::exportParams::cbin" name="cbin">
+      <type builtin="yes" name="int" />
+    </argument>
+    <argument id="TpcEffFitter::exportParams::f" name="f">
+      <type name="TF1" qualifier="*" />
+    </argument>
+    <argument id="TpcEffFitter::exportParams::out" name="out">
+      <type name="ofstream" qualifier=" &amp;" />
+    </argument>
+  </method>
+  <method abstract="yes" id="TpcEffFitter::make" name="make">
+    <return>
+      <type builtin="yes" name="void" />
+    </return>
+  </method>
+  <field access="protected" id="TpcEffFitter::cfg" name="cfg">
+    <type name="jdb::XmlConfig" qualifier="*" />
+  </field>
+  <field access="protected" id="TpcEffFitter::nodePath" name="nodePath">
+    <type name="string" />
+  </field>
+  <field access="protected" id="TpcEffFitter::outputPath" name="outputPath">
+    <type name="string" />
+  </field>
+  <field access="protected" id="TpcEffFitter::book" name="book">
+    <type name="unique_ptr&lt;jdb::HistoBook, default_delete&lt;jdb::HistoBook&gt; &gt;" />
+  </field>
+</class>

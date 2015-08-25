@@ -11,78 +11,10 @@
     </argument>
   </constructor>
   <destructor abstract="yes" id="TSF::FitRunner::~FitRunner" name="~FitRunner" />
-  <method abstract="yes" id="TSF::FitRunner::fitName" name="fitName" static="yes">
-    <return>
-      <type name="string" />
-    </return>
-    <argument id="TSF::FitRunner::fitName::iPt" name="iPt">
-      <type builtin="yes" name="int" />
-    </argument>
-    <argument id="TSF::FitRunner::fitName::iCen" name="iCen">
-      <type builtin="yes" name="int" />
-    </argument>
-    <argument id="TSF::FitRunner::fitName::charge" name="charge">
-      <type builtin="yes" name="int" />
-    </argument>
-    <argument id="TSF::FitRunner::fitName::iEta" name="iEta">
-      <type builtin="yes" name="int" />
-    </argument>
-  </method>
   <method abstract="yes" id="TSF::FitRunner::make" name="make" virtual="yes">
     <return>
       <type builtin="yes" name="void" />
     </return>
-  </method>
-  <method abstract="yes" id="TSF::FitRunner::muName" name="muName" static="yes">
-    <return>
-      <type name="string" />
-    </return>
-    <argument id="TSF::FitRunner::muName::plc" name="plc">
-      <type name="string" />
-    </argument>
-    <argument id="TSF::FitRunner::muName::iCen" name="iCen">
-      <type builtin="yes" name="int" />
-    </argument>
-    <argument id="TSF::FitRunner::muName::charge" name="charge">
-      <type builtin="yes" name="int" />
-    </argument>
-    <argument id="TSF::FitRunner::muName::iEta" name="iEta">
-      <type builtin="yes" name="int" />
-    </argument>
-  </method>
-  <method abstract="yes" id="TSF::FitRunner::sigmaName" name="sigmaName" static="yes">
-    <return>
-      <type name="string" />
-    </return>
-    <argument id="TSF::FitRunner::sigmaName::plc" name="plc">
-      <type name="string" />
-    </argument>
-    <argument id="TSF::FitRunner::sigmaName::iCen" name="iCen">
-      <type builtin="yes" name="int" />
-    </argument>
-    <argument id="TSF::FitRunner::sigmaName::charge" name="charge">
-      <type builtin="yes" name="int" />
-    </argument>
-    <argument id="TSF::FitRunner::sigmaName::iEta" name="iEta">
-      <type builtin="yes" name="int" />
-    </argument>
-  </method>
-  <method abstract="yes" id="TSF::FitRunner::yieldName" name="yieldName" static="yes">
-    <return>
-      <type name="string" />
-    </return>
-    <argument id="TSF::FitRunner::yieldName::plc" name="plc">
-      <type name="string" />
-    </argument>
-    <argument id="TSF::FitRunner::yieldName::iCen" name="iCen">
-      <type builtin="yes" name="int" />
-    </argument>
-    <argument id="TSF::FitRunner::yieldName::charge" name="charge">
-      <type builtin="yes" name="int" />
-    </argument>
-    <argument id="TSF::FitRunner::yieldName::iEta" name="iEta">
-      <type builtin="yes" name="int" />
-    </argument>
   </method>
   <field access="protected" id="TSF::FitRunner::centerSpecies" name="centerSpecies">
     <type name="string" />
@@ -105,12 +37,6 @@
   <field access="protected" id="TSF::FitRunner::binsPt" name="binsPt">
     <type name="jdb::HistoBins" qualifier="*" />
   </field>
-  <field access="protected" id="TSF::FitRunner::binsEta" name="binsEta">
-    <type name="jdb::HistoBins" qualifier="*" />
-  </field>
-  <field access="protected" id="TSF::FitRunner::binsCharge" name="binsCharge">
-    <type name="jdb::HistoBins" qualifier="*" />
-  </field>
   <field access="protected" id="TSF::FitRunner::zbReporter" name="zbReporter">
     <type name="unique_ptr&lt;jdb::Reporter, default_delete&lt;jdb::Reporter&gt; &gt;" />
   </field>
@@ -126,26 +52,18 @@
   <field access="protected" id="TSF::FitRunner::zbSigMem" name="zbSigMem">
     <type name="map&lt;string, vector&lt;double&gt;" />
   </field>
-  <field access="protected" id="TSF::FitRunner::lockedZbSig" name="lockedZbSig">
-    <type name="map&lt;string, double&gt;" />
+  <field access="protected" id="TSF::FitRunner::sigmaSets" name="sigmaSets">
+    <type name="map&lt;string, TSF::SigmaHistory&gt;" />
   </field>
-  <method access="protected" id="TSF::FitRunner::averageP" name="averageP">
-    <brief>TODO: Clean up remnants of pt eta binning</brief>
+  <method access="protected" id="TSF::FitRunner::binAverageP" name="binAverageP">
+    <brief> Average P in a bin range assuming a flat distribution</brief>
+    <doc>The distribution is really an exp, but we just need to be consistent
+</doc>
     <return>
+      <doc>average value in the given bin range</doc>
       <type builtin="yes" name="double" />
     </return>
-    <argument id="TSF::FitRunner::averageP::ptBin" name="ptBin">
-      <type builtin="yes" name="int" />
-    </argument>
-    <argument id="TSF::FitRunner::averageP::etaBin" name="etaBin">
-      <type builtin="yes" name="int" />
-    </argument>
-  </method>
-  <method access="protected" id="TSF::FitRunner::averagePt" name="averagePt">
-    <return>
-      <type builtin="yes" name="double" />
-    </return>
-    <argument id="TSF::FitRunner::averagePt::ptBin" name="ptBin">
+    <argument id="TSF::FitRunner::binAverageP::bin" name="bin">
       <type builtin="yes" name="int" />
     </argument>
   </method>
@@ -163,6 +81,20 @@
       <type builtin="yes" name="double" />
     </argument>
   </method>
+  <method abstract="yes" access="protected" id="TSF::FitRunner::drawFitRatio" name="drawFitRatio">
+    <return>
+      <type builtin="yes" name="void" />
+    </return>
+    <argument id="TSF::FitRunner::drawFitRatio::ds" name="ds">
+      <type name="string" />
+    </argument>
+    <argument id="TSF::FitRunner::drawFitRatio::fitter" name="fitter">
+      <type name="Fitter" qualifier="*" ref="TSF::Fitter#TSF::Fitter" />
+    </argument>
+    <argument id="TSF::FitRunner::drawFitRatio::iPt" name="iPt">
+      <type builtin="yes" name="int" />
+    </argument>
+  </method>
   <method abstract="yes" access="protected" id="TSF::FitRunner::drawSet" name="drawSet">
     <return>
       <type builtin="yes" name="void" />
@@ -175,6 +107,29 @@
     </argument>
     <argument id="TSF::FitRunner::drawSet::iPt" name="iPt">
       <type builtin="yes" name="int" />
+    </argument>
+  </method>
+  <method abstract="yes" access="protected" id="TSF::FitRunner::fillEnhancedYieldHistogram" name="fillEnhancedYieldHistogram">
+    <return>
+      <type builtin="yes" name="void" />
+    </return>
+    <argument id="TSF::FitRunner::fillEnhancedYieldHistogram::plc1" name="plc1">
+      <type name="string" />
+    </argument>
+    <argument id="TSF::FitRunner::fillEnhancedYieldHistogram::iPt" name="iPt">
+      <type builtin="yes" name="int" />
+    </argument>
+    <argument id="TSF::FitRunner::fillEnhancedYieldHistogram::iCen" name="iCen">
+      <type builtin="yes" name="int" />
+    </argument>
+    <argument id="TSF::FitRunner::fillEnhancedYieldHistogram::iCharge" name="iCharge">
+      <type builtin="yes" name="int" />
+    </argument>
+    <argument id="TSF::FitRunner::fillEnhancedYieldHistogram::plc2" name="plc2">
+      <type name="string" />
+    </argument>
+    <argument id="TSF::FitRunner::fillEnhancedYieldHistogram::fitter" name="fitter">
+      <type name="Fitter" qualifier=" &amp;" ref="TSF::Fitter#TSF::Fitter" />
     </argument>
   </method>
   <method abstract="yes" access="protected" id="TSF::FitRunner::fillFitHistograms" name="fillFitHistograms">
@@ -190,25 +145,14 @@
     <argument id="TSF::FitRunner::fillFitHistograms::iCharge" name="iCharge">
       <type builtin="yes" name="int" />
     </argument>
-    <argument id="TSF::FitRunner::fillFitHistograms::iEta" name="iEta">
-      <type builtin="yes" name="int" />
+    <argument id="TSF::FitRunner::fillFitHistograms::fitter" name="fitter">
+      <type name="Fitter" qualifier=" &amp;" ref="TSF::Fitter#TSF::Fitter" />
     </argument>
   </method>
   <method abstract="yes" access="protected" id="TSF::FitRunner::makeHistograms" name="makeHistograms">
     <return>
       <type builtin="yes" name="void" />
     </return>
-  </method>
-  <method access="protected" id="TSF::FitRunner::p" name="p">
-    <return>
-      <type builtin="yes" name="double" />
-    </return>
-    <argument id="TSF::FitRunner::p::pt" name="pt">
-      <type builtin="yes" name="double" />
-    </argument>
-    <argument id="TSF::FitRunner::p::eta" name="eta">
-      <type builtin="yes" name="double" />
-    </argument>
   </method>
   <method abstract="yes" access="protected" id="TSF::FitRunner::prepare" name="prepare">
     <return>
@@ -219,6 +163,23 @@
     </argument>
     <argument id="TSF::FitRunner::prepare::iCen" name="iCen">
       <type builtin="yes" name="int" />
+    </argument>
+  </method>
+  <method abstract="yes" access="protected" id="TSF::FitRunner::prepareSystematic" name="prepareSystematic">
+    <return>
+      <type builtin="yes" name="void" />
+    </return>
+    <argument id="TSF::FitRunner::prepareSystematic::sysSchema" name="sysSchema">
+      <type name="FitSchema" qualifier="*" ref="TSF::FitSchema#TSF::FitSchema" />
+    </argument>
+    <argument id="TSF::FitRunner::prepareSystematic::avgP" name="avgP">
+      <type builtin="yes" name="double" />
+    </argument>
+    <argument id="TSF::FitRunner::prepareSystematic::iCen" name="iCen">
+      <type builtin="yes" name="int" />
+    </argument>
+    <argument id="TSF::FitRunner::prepareSystematic::sys" name="sys">
+      <type name="string" />
     </argument>
   </method>
   <method abstract="yes" access="protected" id="TSF::FitRunner::reportFit" name="reportFit">

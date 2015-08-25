@@ -1,7 +1,4 @@
 <class xmlns="http://jessevdk.github.com/cldoc/1.0" abstract="true" id="TSF::FitSchema" name="FitSchema">
-  <field id="TSF::FitSchema::vars" name="vars">
-    <type name="map&lt;string, shared_ptr&lt;TSF::FitVar&gt;&gt;" />
-  </field>
   <field id="TSF::FitSchema::models" name="models">
     <type name="map&lt;string, shared_ptr&lt;TSF::GaussModel&gt;&gt;" />
   </field>
@@ -16,8 +13,14 @@
       <type name="string" />
     </argument>
   </constructor>
+  <constructor abstract="yes" id="TSF::FitSchema::FitSchema" name="FitSchema">
+    <argument id="TSF::FitSchema::FitSchema::other" name="other">
+      <type name="FitSchema" qualifier=" const &amp;" ref="TSF::FitSchema#TSF::FitSchema" />
+    </argument>
+  </constructor>
   <destructor abstract="yes" id="TSF::FitSchema::~FitSchema" name="~FitSchema" />
   <method abstract="yes" id="TSF::FitSchema::addRange" name="addRange">
+    <brief>Fit Ranges</brief>
     <return>
       <type builtin="yes" name="void" />
     </return>
@@ -28,6 +31,15 @@
       <type builtin="yes" name="double" />
     </argument>
     <argument id="TSF::FitSchema::addRange::_max" name="_max">
+      <type builtin="yes" name="double" />
+    </argument>
+    <argument id="TSF::FitSchema::addRange::centerOn" name="centerOn">
+      <type name="string" />
+    </argument>
+    <argument id="TSF::FitSchema::addRange::widthFrom" name="widthFrom">
+      <type name="string" />
+    </argument>
+    <argument id="TSF::FitSchema::addRange::roi" name="roi">
       <type builtin="yes" name="double" />
     </argument>
   </method>
@@ -59,6 +71,14 @@
       <type builtin="yes" name="double" />
     </return>
   </method>
+  <method id="TSF::FitSchema::exists" name="exists">
+    <return>
+      <type builtin="yes" name="bool" />
+    </return>
+    <argument id="TSF::FitSchema::exists::name" name="name">
+      <type name="string" />
+    </argument>
+  </method>
   <method abstract="yes" id="TSF::FitSchema::fixParameter" name="fixParameter">
     <return>
       <type builtin="yes" name="void" />
@@ -86,6 +106,16 @@
   <method id="TSF::FitSchema::getRanges" name="getRanges">
     <return>
       <type name="vector&lt;TSF::FitRange&gt;" qualifier=" &amp;" />
+    </return>
+  </method>
+  <method id="TSF::FitSchema::getVars" name="getVars">
+    <return>
+      <type name="map&lt;string, shared_ptr&lt;TSF::FitVar&gt;&gt;" />
+    </return>
+  </method>
+  <method id="TSF::FitSchema::getVerbosity" name="getVerbosity">
+    <return>
+      <type builtin="yes" name="int" />
     </return>
   </method>
   <method abstract="yes" id="TSF::FitSchema::inRange" name="inRange">
@@ -221,6 +251,11 @@
       <type builtin="yes" name="double" />
     </argument>
   </method>
+  <method id="TSF::FitSchema::tofEff" name="tofEff">
+    <return>
+      <type builtin="yes" name="bool" />
+    </return>
+  </method>
   <method abstract="yes" id="TSF::FitSchema::updateModels" name="updateModels">
     <return>
       <type builtin="yes" name="void" />
@@ -229,14 +264,38 @@
       <type name="map&lt;string, bool&gt;" qualifier=" &amp;" />
     </argument>
   </method>
+  <method abstract="yes" id="TSF::FitSchema::updateRanges" name="updateRanges">
+    <return>
+      <type builtin="yes" name="void" />
+    </return>
+    <argument id="TSF::FitSchema::updateRanges::roi" name="roi">
+      <type builtin="yes" name="double" />
+    </argument>
+  </method>
+  <method id="TSF::FitSchema::useFitRange" name="useFitRange">
+    <return>
+      <type builtin="yes" name="void" />
+    </return>
+    <argument id="TSF::FitSchema::useFitRange::fr" name="fr">
+      <type builtin="yes" name="bool" />
+    </argument>
+  </method>
+  <method id="TSF::FitSchema::var" name="var">
+    <return>
+      <type name="shared_ptr&lt;TSF::FitVar&gt;" />
+    </return>
+    <argument id="TSF::FitSchema::var::name" name="name">
+      <type name="string" />
+    </argument>
+  </method>
+  <variable access="protected" id="TSF::FitSchema::tag" name="tag">
+    <type name="tag" qualifier=" const" />
+  </variable>
   <field access="protected" id="TSF::FitSchema::cfg" name="cfg">
     <type name="jdb::XmlConfig" qualifier="*" />
   </field>
   <field access="protected" id="TSF::FitSchema::nodePath" name="nodePath">
     <type name="string" />
-  </field>
-  <field access="protected" id="TSF::FitSchema::logger" name="logger">
-    <type name="unique_ptr&lt;jdb::Logger, default_delete&lt;jdb::Logger&gt; &gt;" />
   </field>
   <field access="protected" id="TSF::FitSchema::nPars" name="nPars">
     <type builtin="yes" name="int" />
@@ -252,5 +311,11 @@
   </field>
   <field access="protected" id="TSF::FitSchema::normalization" name="normalization">
     <type builtin="yes" name="double" />
+  </field>
+  <field access="protected" id="TSF::FitSchema::verbosity" name="verbosity">
+    <type builtin="yes" name="int" />
+  </field>
+  <field access="protected" id="TSF::FitSchema::vars" name="vars">
+    <type name="map&lt;string, shared_ptr&lt;TSF::FitVar&gt;&gt;" />
   </field>
 </class>

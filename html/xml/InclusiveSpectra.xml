@@ -2,9 +2,9 @@
   <base access="public">
     <type name="jdb::TreeAnalyzer" />
   </base>
-  <subclass access="public" name="TpcEffRcHistoMaker" ref="TpcEffRcHistoMaker#TpcEffRcHistoMaker" />
   <subclass access="public" name="TofEffMaker" ref="TofEffMaker#TofEffMaker" />
   <subclass access="public" name="PidHistoMaker" ref="PidHistoMaker#PidHistoMaker" />
+  <subclass access="public" name="UT_ZRecentering" ref="UT_ZRecentering#UT_ZRecentering" />
   <subclass access="public" name="EnergyLoss" ref="EnergyLoss#EnergyLoss" />
   <constructor abstract="yes" id="InclusiveSpectra::InclusiveSpectra" name="InclusiveSpectra">
     <argument id="InclusiveSpectra::InclusiveSpectra::config" name="config">
@@ -21,6 +21,10 @@
     </argument>
   </constructor>
   <destructor abstract="yes" id="InclusiveSpectra::~InclusiveSpectra" name="~InclusiveSpectra" />
+  <variable access="protected" id="InclusiveSpectra::badRuns" name="badRuns">
+    <brief>checking bad runs</brief>
+    <type name="vector&lt;int&gt;" />
+  </variable>
   <field access="protected" id="InclusiveSpectra::plc" name="plc">
     <brief>Assume all particles are of given species for Rapidity determination</brief>
     <doc>Used to calculate the mass</doc>
@@ -79,12 +83,24 @@
 used to combine bins</doc>
     <type name="map&lt;int, int&gt;" />
   </field>
+  <field access="protected" id="InclusiveSpectra::centralityBins" name="centralityBins">
+    <brief>the vector of bins in the mapped space - makes it easy to loop over</brief>
+    <type name="vector&lt;int&gt;" />
+  </field>
   <field access="protected" id="InclusiveSpectra::makeTrackQA" name="makeTrackQA">
     <brief>Make QA for  Track distributions</brief>
     <type builtin="yes" name="bool" />
   </field>
   <field access="protected" id="InclusiveSpectra::makeEventQA" name="makeEventQA">
     <brief>Make QA for Event info</brief>
+    <type builtin="yes" name="bool" />
+  </field>
+  <field access="protected" id="InclusiveSpectra::makeSpectra" name="makeSpectra">
+    <brief>make spectra - subclasses may not need the inclusive spectra histos</brief>
+    <type builtin="yes" name="bool" />
+  </field>
+  <field access="protected" id="InclusiveSpectra::makeTofSpectra" name="makeTofSpectra">
+    <brief>make the tof spectra</brief>
     <type builtin="yes" name="bool" />
   </field>
   <field access="protected" id="InclusiveSpectra::refMult" name="refMult">
@@ -136,6 +152,14 @@ used to combine bins</doc>
     </return>
     <argument id="InclusiveSpectra::histoForCentrality::centralityCut" name="centralityCut">
       <type name="string" />
+    </argument>
+  </method>
+  <method access="protected" id="InclusiveSpectra::isRunBad" name="isRunBad">
+    <return>
+      <type builtin="yes" name="bool" />
+    </return>
+    <argument id="InclusiveSpectra::isRunBad::runId" name="runId">
+      <type builtin="yes" name="int" />
     </argument>
   </method>
   <method abstract="yes" access="protected" id="InclusiveSpectra::keepEvent" name="keepEvent" virtual="yes">

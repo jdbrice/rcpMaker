@@ -1,0 +1,36 @@
+<class xmlns="http://jessevdk.github.com/cldoc/1.0" abstract="true" id="ApplyPostCorr" name="ApplyPostCorr">
+  <base access="public">
+    <type name="jdb::HistoAnalyzer" />
+  </base>
+  <constructor abstract="yes" id="ApplyPostCorr::ApplyPostCorr" name="ApplyPostCorr">
+    <argument id="ApplyPostCorr::ApplyPostCorr::_cfg" name="_cfg">
+      <type name="jdb::XmlConfig" qualifier="*" />
+    </argument>
+    <argument id="ApplyPostCorr::ApplyPostCorr::_nodePath" name="_nodePath">
+      <type name="string" />
+    </argument>
+  </constructor>
+  <destructor id="ApplyPostCorr::~ApplyPostCorr" name="~ApplyPostCorr" />
+  <method abstract="yes" id="ApplyPostCorr::make" name="make" virtual="yes">
+    <return>
+      <type builtin="yes" name="void" />
+    </return>
+  </method>
+  <method abstract="yes" id="ApplyPostCorr::setupCorrections" name="setupCorrections">
+    <return>
+      <type builtin="yes" name="void" />
+    </return>
+  </method>
+  <field access="protected" id="ApplyPostCorr::tpcEff" name="tpcEff">
+    <type name="map&lt;string, unique_ptr&lt;jdb::ConfigFunction&gt;" />
+  </field>
+  <field access="protected" id="ApplyPostCorr::tofEff" name="tofEff">
+    <type name="map&lt;string, unique_ptr&lt;ConfigGraph&gt;" />
+  </field>
+  <field access="protected" id="ApplyPostCorr::feedDown" name="feedDown">
+    <type name="map&lt;string, unique_ptr&lt;jdb::ConfigFunction&gt;" />
+  </field>
+  <field access="protected" id="ApplyPostCorr::plc" name="plc">
+    <type name="string" />
+  </field>
+</class>

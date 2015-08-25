@@ -8,6 +8,17 @@
   <field id="TSF::FitRange::max" name="max">
     <type builtin="yes" name="double" />
   </field>
+  <field id="TSF::FitRange::centerOn" name="centerOn">
+    <brief>for dynamically tracking a variable in the fit</brief>
+    <type name="string" />
+  </field>
+  <field id="TSF::FitRange::widthFrom" name="widthFrom">
+    <brief>for dynamically tracking a variable in the fit</brief>
+    <type name="string" />
+  </field>
+  <field id="TSF::FitRange::roi" name="roi">
+    <type builtin="yes" name="double" />
+  </field>
   <constructor id="TSF::FitRange::FitRange" name="FitRange">
     <argument id="TSF::FitRange::FitRange::ds" name="ds">
       <type name="string" />
@@ -17,6 +28,20 @@
     </argument>
     <argument id="TSF::FitRange::FitRange::_max" name="_max">
       <type builtin="yes" name="double" />
+    </argument>
+    <argument id="TSF::FitRange::FitRange::centerOn" name="centerOn">
+      <type name="string" />
+    </argument>
+    <argument id="TSF::FitRange::FitRange::widthFrom" name="widthFrom">
+      <type name="string" />
+    </argument>
+    <argument id="TSF::FitRange::FitRange::roi" name="roi">
+      <type builtin="yes" name="double" />
+    </argument>
+  </constructor>
+  <constructor id="TSF::FitRange::FitRange" name="FitRange">
+    <argument id="TSF::FitRange::FitRange::other" name="other">
+      <type name="FitRange" qualifier=" const &amp;" ref="TSF::FitRange#TSF::FitRange" />
     </argument>
   </constructor>
   <destructor id="TSF::FitRange::~FitRange" name="~FitRange" />

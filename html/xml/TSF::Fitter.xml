@@ -46,34 +46,51 @@
       <type builtin="yes" name="void" />
     </return>
   </method>
-  <method abstract="yes" id="TSF::Fitter::currentYield" name="currentYield">
+  <method abstract="yes" id="TSF::Fitter::currentValue" name="currentValue">
+    <brief>getter for current parameters</brief>
     <return>
       <type builtin="yes" name="double" />
     </return>
-    <argument id="TSF::Fitter::currentYield::var" name="var">
+    <argument id="TSF::Fitter::currentValue::var" name="var">
       <type name="string" />
     </argument>
-    <argument id="TSF::Fitter::currentYield::npar" name="npar">
+    <argument id="TSF::Fitter::currentValue::npar" name="npar">
       <type builtin="yes" name="int" />
     </argument>
-    <argument id="TSF::Fitter::currentYield::pars" name="pars">
+    <argument id="TSF::Fitter::currentValue::pars" name="pars">
       <type builtin="yes" name="double" qualifier="*" />
     </argument>
   </method>
-  <method abstract="yes" id="TSF::Fitter::currentYield" name="currentYield">
+  <method abstract="yes" id="TSF::Fitter::enforceEff" name="enforceEff">
     <return>
       <type builtin="yes" name="double" />
     </return>
-    <argument id="TSF::Fitter::currentYield::var" name="var">
-      <type name="string" />
-    </argument>
-    <argument id="TSF::Fitter::currentYield::plc" name="plc">
-      <type name="string" />
-    </argument>
-    <argument id="TSF::Fitter::currentYield::npar" name="npar">
+    <argument id="TSF::Fitter::enforceEff::npar" name="npar">
       <type builtin="yes" name="int" />
     </argument>
-    <argument id="TSF::Fitter::currentYield::pars" name="pars">
+    <argument id="TSF::Fitter::enforceEff::pars" name="pars">
+      <type builtin="yes" name="double" qualifier="*" />
+    </argument>
+  </method>
+  <method abstract="yes" id="TSF::Fitter::enforceEnhancedYields" name="enforceEnhancedYields">
+    <return>
+      <type builtin="yes" name="double" />
+    </return>
+    <argument id="TSF::Fitter::enforceEnhancedYields::npar" name="npar">
+      <type builtin="yes" name="int" />
+    </argument>
+    <argument id="TSF::Fitter::enforceEnhancedYields::pars" name="pars">
+      <type builtin="yes" name="double" qualifier="*" />
+    </argument>
+  </method>
+  <method abstract="yes" id="TSF::Fitter::enforceMassOrder" name="enforceMassOrder">
+    <return>
+      <type builtin="yes" name="double" />
+    </return>
+    <argument id="TSF::Fitter::enforceMassOrder::npar" name="npar">
+      <type builtin="yes" name="int" />
+    </argument>
+    <argument id="TSF::Fitter::enforceMassOrder::pars" name="pars">
       <type builtin="yes" name="double" qualifier="*" />
     </argument>
   </method>
@@ -93,34 +110,39 @@
     <argument id="TSF::Fitter::fit::ptBin" name="ptBin">
       <type builtin="yes" name="int" />
     </argument>
-    <argument id="TSF::Fitter::fit::etaBin" name="etaBin">
-      <type builtin="yes" name="int" />
-    </argument>
   </method>
-  <method abstract="yes" id="TSF::Fitter::fixedFit" name="fixedFit">
+  <method abstract="yes" id="TSF::Fitter::fit1" name="fit1">
     <return>
       <type builtin="yes" name="void" />
     </return>
-    <argument id="TSF::Fitter::fixedFit::cs" name="cs">
+  </method>
+  <method abstract="yes" id="TSF::Fitter::fit2" name="fit2">
+    <return>
+      <type builtin="yes" name="void" />
+    </return>
+  </method>
+  <method abstract="yes" id="TSF::Fitter::fit3" name="fit3">
+    <return>
+      <type builtin="yes" name="void" />
+    </return>
+  </method>
+  <method abstract="yes" id="TSF::Fitter::fit4" name="fit4">
+    <return>
+      <type builtin="yes" name="void" />
+    </return>
+  </method>
+  <method abstract="yes" id="TSF::Fitter::fitErrors" name="fitErrors">
+    <return>
+      <type builtin="yes" name="void" />
+    </return>
+  </method>
+  <method abstract="yes" id="TSF::Fitter::fix" name="fix">
+    <return>
+      <type builtin="yes" name="void" />
+    </return>
+    <argument id="TSF::Fitter::fix::var" name="var">
       <type name="string" />
     </argument>
-    <argument id="TSF::Fitter::fixedFit::charge" name="charge">
-      <type builtin="yes" name="int" />
-    </argument>
-    <argument id="TSF::Fitter::fixedFit::cenBin" name="cenBin">
-      <type builtin="yes" name="int" />
-    </argument>
-    <argument id="TSF::Fitter::fixedFit::ptBin" name="ptBin">
-      <type builtin="yes" name="int" />
-    </argument>
-    <argument id="TSF::Fitter::fixedFit::etaBin" name="etaBin">
-      <type builtin="yes" name="int" />
-    </argument>
-  </method>
-  <method abstract="yes" id="TSF::Fitter::fixParameters" name="fixParameters">
-    <return>
-      <type builtin="yes" name="void" />
-    </return>
   </method>
   <method abstract="yes" id="TSF::Fitter::fixShapes" name="fixShapes">
     <return>
@@ -138,6 +160,11 @@
       <type builtin="yes" name="double" />
     </argument>
   </method>
+  <method abstract="yes" id="TSF::Fitter::fsNominal" name="fsNominal">
+    <return>
+      <type builtin="yes" name="void" />
+    </return>
+  </method>
   <method id="TSF::Fitter::getDataHist" name="getDataHist">
     <return>
       <type name="TH1" qualifier="*" />
@@ -149,6 +176,11 @@
   <method id="TSF::Fitter::getNorm" name="getNorm">
     <return>
       <type builtin="yes" name="double" />
+    </return>
+  </method>
+  <method id="TSF::Fitter::getSchema" name="getSchema">
+    <return>
+      <type name="shared_ptr&lt;TSF::FitSchema&gt;" />
     </return>
   </method>
   <method id="TSF::Fitter::isFitGood" name="isFitGood">
@@ -172,11 +204,8 @@
     <argument id="TSF::Fitter::loadDatasets::ptBin" name="ptBin">
       <type builtin="yes" name="int" />
     </argument>
-    <argument id="TSF::Fitter::loadDatasets::etaBin" name="etaBin">
-      <type builtin="yes" name="int" />
-    </argument>
   </method>
-  <method abstract="yes" id="TSF::Fitter::modelEval" name="modelEval" static="yes">
+  <method abstract="yes" id="TSF::Fitter::modelEval" name="modelEval">
     <return>
       <type builtin="yes" name="double" />
     </return>
@@ -206,21 +235,15 @@
       <type builtin="yes" name="double" />
     </argument>
   </method>
+  <method abstract="yes" id="TSF::Fitter::nop" name="nop">
+    <return>
+      <type builtin="yes" name="void" />
+    </return>
+  </method>
   <method id="TSF::Fitter::normFactor" name="normFactor">
     <return>
       <type builtin="yes" name="double" />
     </return>
-  </method>
-  <method abstract="yes" id="TSF::Fitter::penalizeYields" name="penalizeYields">
-    <return>
-      <type builtin="yes" name="double" />
-    </return>
-    <argument id="TSF::Fitter::penalizeYields::npar" name="npar">
-      <type builtin="yes" name="int" />
-    </argument>
-    <argument id="TSF::Fitter::penalizeYields::pars" name="pars">
-      <type builtin="yes" name="double" qualifier="*" />
-    </argument>
   </method>
   <method abstract="yes" id="TSF::Fitter::plotResult" name="plotResult">
     <return>
@@ -241,10 +264,16 @@
       <type builtin="yes" name="double" />
     </argument>
   </method>
-  <method abstract="yes" id="TSF::Fitter::releaseParameters" name="releaseParameters">
+  <method abstract="yes" id="TSF::Fitter::release" name="release">
     <return>
       <type builtin="yes" name="void" />
     </return>
+    <argument id="TSF::Fitter::release::var" name="var">
+      <type name="string" />
+    </argument>
+    <argument id="TSF::Fitter::release::check" name="check">
+      <type builtin="yes" name="bool" />
+    </argument>
   </method>
   <method abstract="yes" id="TSF::Fitter::releaseShapes" name="releaseShapes">
     <return>

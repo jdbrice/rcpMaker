@@ -72,33 +72,14 @@
       <type builtin="yes" name="int" />
     </argument>
   </method>
-  <method abstract="yes" id="PidYieldPresenter::integrateEta" name="integrateEta">
-    <brief>*</brief>
-    <doc>Takes the fit results and produces a single spectra for each centrality, species, charge
-Outputs into the book into directory /raw/yieldName( plc, charge, iCen )
-</doc>
+  <method abstract="yes" id="PidYieldPresenter::make" name="make">
     <return>
       <type builtin="yes" name="void" />
     </return>
-  </method>
-  <method abstract="yes" id="PidYieldPresenter::integrateEta" name="integrateEta">
-    <return>
-      <type builtin="yes" name="void" />
-    </return>
-    <argument id="PidYieldPresenter::integrateEta::plc" name="plc">
-      <type name="string" />
-    </argument>
-    <argument id="PidYieldPresenter::integrateEta::charge" name="charge">
-      <type builtin="yes" name="int" />
-    </argument>
-    <argument id="PidYieldPresenter::integrateEta::cBin" name="cBin">
-      <type builtin="yes" name="int" />
-    </argument>
   </method>
   <method abstract="yes" id="PidYieldPresenter::normalizeYield" name="normalizeYield">
     <brief>*</brief>
-    <doc>Takes the eta integrated yields and applies normalization to them
-outputs into book /yield/yieldName( plc, charge, iCen )
+    <doc>Outputs into book /yield/yieldName( plc, charge, iCen )
 </doc>
     <return>
       <type builtin="yes" name="void" />
@@ -274,16 +255,11 @@ outputs into book /yield/yieldName( plc, charge, iCen )
   <field access="protected" id="PidYieldPresenter::nColl" name="nColl">
     <type name="vector&lt;double&gt;" />
   </field>
+  <field access="protected" id="PidYieldPresenter::plc" name="plc">
+    <type name="string" />
+  </field>
   <field access="protected" id="PidYieldPresenter::binsPt" name="binsPt">
-    <brief>*</brief>
-    <doc>Binning in Config
-</doc>
-    <type name="unique_ptr&lt;jdb::HistoBins, default_delete&lt;jdb::HistoBins&gt; &gt;" />
-  </field>
-  <field access="protected" id="PidYieldPresenter::binsEta" name="binsEta">
-    <type name="unique_ptr&lt;jdb::HistoBins, default_delete&lt;jdb::HistoBins&gt; &gt;" />
-  </field>
-  <field access="protected" id="PidYieldPresenter::binsCharge" name="binsCharge">
+    <brief>Binning in Config</brief>
     <type name="unique_ptr&lt;jdb::HistoBins, default_delete&lt;jdb::HistoBins&gt; &gt;" />
   </field>
 </class>
