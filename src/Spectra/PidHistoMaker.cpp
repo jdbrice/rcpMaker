@@ -296,7 +296,7 @@ bool PidHistoMaker::enhanceDistributions( double avgP, int ptBin, int charge, do
 	if ( tof < tMeans[ "Pi" ] - tofSigmaIdeal * nSigBelow )
 		return false;
 	// reject deuteron
-	if ( tof > deuteronCut && avgP >= 0.5 )
+	if ( tof > deuteronCut )
 		return false;
 
 	
