@@ -13,9 +13,7 @@ namespace TSF{
 		schema = _schema;
 		dataFile = _dataFile;
 
-		logger = unique_ptr<Logger>( new Logger() );
-		logger->setClassSpace( tag );
-		logger->info(__FUNCTION__) << endl;
+		INFO( tag, "( schema=" << _schema << ", datafile=" << _dataFile << " )" )
 	}
 
 	void Fitter::setupFit(){
@@ -47,7 +45,7 @@ namespace TSF{
 		minuit->SetPrintLevel( schema->getVerbosity() );
 		minuit->SetFCN( tminuitFCN );
 
-		logger->info(__FUNCTION__) << endl;
+		INFO( tag, "" )
 	}
 
 
@@ -112,7 +110,7 @@ namespace TSF{
 				// nothing needed here for chi2
 			} else {
 				double mYield = modelYield( ds );
-				double dsYield = k.second.yield( );
+				double dsYield = k.second.yield( self->schema->getRanges() );
 
 				// subtract off this dataset's (N - E) term
 				fnVal = fnVal - ( dsYield - mYield );
@@ -121,12 +119,14 @@ namespace TSF{
 
 		// enforces 1/beta mass ordering
 		double penalty = self->enforceMassOrder( npar, par );
-		
+		penalty = 1.0;
 		// enforce the enhanced yield less than total yield
 		// penalty *= self->enforceEnhancedYields( npar, par );
 		
 		// enforce the average total tofEff
-		// penalty *= self->enforceEff( npar, par );
+		// if ( !self->fixedEff ){
+		// 	penalty *= self->enforceEff( npar, par );
+		// }
 
 		
 		f = (fnVal ) * penalty;
@@ -182,7 +182,7 @@ namespace TSF{
 			}
 
 			double nObs = k.second->GetEntries();
-			logger->info(__FUNCTION__) << "Num Entries in " << k.first << " : " << nObs << endl;
+			INFO( tag, "Num Entries in " << k.first << " : " << nObs );
 
 			// normalize
 			k.second->Sumw2();
@@ -288,18 +288,32 @@ namespace TSF{
 
 		schema->setMethod( "chi2" );
 
+		schema->updateRanges( 1 );
+		// fix("eff");
 		
-
-		// fixShapes();
-		fix( "_yield_" );
-			minuit->mnexcm( "MINI", arglist, 1, iFlag );
-			minuit->mnexcm( "MINI", arglist, 1, iFlag );
+		fix( "yield" );
+		// fix( "eff" );
+		// release( "eff_Pi" );
 			minuit->mnexcm( "MINI", arglist, 1, iFlag );
 			status = minuit->fCstatu;
 			INFO ( tag, "Step 1. Status " << status );
-		release( "_yield_" );
-		// releaseShapes();
+		// fix( "eff_Pi" );
+
+		// release( "eff_P" );
+			minuit->mnexcm( "MINI", arglist, 1, iFlag );
+			status = minuit->fCstatu;
+			INFO ( tag, "Step 2. Status " << status );
+		// fix( "eff_Pi" );
+
+		// release( "eff_K" );
+			minuit->mnexcm( "MINI", arglist, 1, iFlag );
+			status = minuit->fCstatu;
+			INFO ( tag, "Step 3. Status " << status );
+		// fix( "eff_K" );
+
+		release( "yield" );
 		
+		release( "eff" );
 		schema->updateRanges();
 
 
@@ -311,26 +325,23 @@ namespace TSF{
 	void Fitter::fit4(  ){
 
 		double arglist[10];
-		arglist[ 0 ] = 50000;
+		arglist[ 0 ] = 5000;
 		arglist[ 1 ] = 1.0;
 		int iFlag = -1;
 		string status = "na";
 
 		schema->setMethod( "chi2" );
 
-		schema->updateRanges( 0.5 );
+		schema->updateRanges( 1 );
 		// fix("eff");
 		fixShapes();
-		fix( "_yield_" );
-			minuit->mnexcm( "MINI", arglist, 1, iFlag );
-			minuit->mnexcm( "MINI", arglist, 1, iFlag );
+		fix( "eff" );
 			minuit->mnexcm( "MINI", arglist, 1, iFlag );
 			status = minuit->fCstatu;
 			INFO ( tag, "Step 1. Status " << status );
-		release( "_yield_" );
 		releaseShapes();
-		// release( "eff" );
-		//schema->updateRanges();
+		release( "eff" );
+		schema->updateRanges();
 
 
 		// get the final state of all variables 
@@ -665,7 +676,7 @@ namespace TSF{
 		}
 
 		if ( "" != modelName && !self->players[ modelName ] ){
-			logger->info(__FUNCTION__) << "Skipping inactive Player" << endl;
+			INFO( tag, "Skipping inactive Player" );
 			return new TGraph();
 		}
 
@@ -766,21 +777,40 @@ namespace TSF{
 
 		// we are enforcing the average eff between Pi, K, P to be ~100% - since we already corrected the "total" toff eff
 		float effPi = currentValue( "eff_Pi", npar, pars );
+		// float yPi = currentValue( "yield_Pi", npar, pars );
 		float effK 	= currentValue( "eff_K", npar, pars );
+		// float yK = currentValue( "yield_K", npar, pars );
 		float effP 	= currentValue( "eff_P", npar, pars );
+		// float yP = currentValue( "yield_P", npar, pars );
 
-		float x = 3 - ( effPi + effK + effP );
+		//DEBUG( "Fitter_Eff", "eff_Pi = " << effPi )
+		//DEBUG( "Fitter_Eff", "eff_K = " << effK )
+		//DEBUG( "Fitter_Eff", "eff_P = " << effP )
 
-		penalty = 1.0 + ( x * x * Fitter::penaltyScale ) ;
+		float fudge = 0.01;
+		float sum = (effPi  + effK  + effP) ;
+		if ( sum >= 3.0 - fudge && sum <= 3.0 + fudge ){
+			return 1.0;
+		}
 
+		float x = 3.0 + fudge - ( sum );
+		if ( sum > 3.0 + fudge ){
+			x = 3.0 + fudge - ( sum );
+		} else if ( sum < 3.0 - fudge ){
+			x = 3.0 - fudge - ( sum );
+		}
+		penalty = 1.0 + ( x * x * penaltyScale ) ;
 		return penalty;
 
 	}
 
 	double Fitter::currentValue( string var, int npar, double * pars ){
 		// sanity check
-		if ( npar < parNames.size() )
+		if ( npar > parNames.size() ){
+			ERROR( tag, "npar = " << npar << ", parNames.size() = " << parNames.size() )
+			ERROR( tag, "npar vs. parNames mismatch in size for " << var )
 			return -9999.999;
+		}
 		// update the variables
 		for ( int i = 0; i < parNames.size(); i++ ){
 			
@@ -788,6 +818,8 @@ namespace TSF{
 				return pars[ i ];	
 			}
 		}
+
+		ERROR( tag, var << " not found" )
 		// not found
 		return 9999.999;
 	}
@@ -806,6 +838,9 @@ namespace TSF{
 
 	void Fitter::fix( string var){
 
+		if ( "eff" == var || "eff_P" == var || "eff_Pi" == var || "eff_K" == var)
+			fixedEff = true;
+
 		// loop over parameters
 		for ( int i = 0; i < parNames.size(); i++ ){
 
@@ -819,6 +854,9 @@ namespace TSF{
 	}
 
 	void Fitter::release( string var, bool check ){
+
+		if ( "eff" == var || "eff_P" == var || "eff_Pi" == var || "eff_K" == var)
+			fixedEff = false;
 
 		// loop over parameters
 		for ( int i = 0; i < parNames.size(); i++ ){

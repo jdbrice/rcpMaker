@@ -52,7 +52,10 @@ protected:
 	double tofCut, dedxCut;
 
 	// options for histogram creation
-	bool make2D, makeEnhanced;
+	bool make2D, make1D, makeEnhanced;
+
+	// for electron / tof noise rejection
+	double nSigE, nSigPi, nSigK;
 
 	// # of sigma to cut above and below
 	double nSigBelow, nSigAbove;
@@ -92,6 +95,7 @@ public:
 	 */
 	bool enhanceDistributions( double avgP, int pBin, int charge, double dedx, double tof );
 
+	bool rejectElectron( double avgP, double dedx, double tof );
 
 	/* Average P in a bin range assuming a flat distribution
 	 * The distribution is really an exp, but we just need to be consistent

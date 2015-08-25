@@ -47,10 +47,17 @@ namespace TSF{
 			exclude = false;
 		}
 
+		FitVar() {
+			name = "error";
+			set( 0, 0, 0, 0 );
+			fixed = false;
+			exclude = false;
+		}
+
 		FitVar( const FitVar &other ){
 
 			this->name = other.name;
-			this->val = other.name;
+			this->val = other.val;
 			this->min = other.min;
 			this->max = other.max;
 			this->error = other.error;

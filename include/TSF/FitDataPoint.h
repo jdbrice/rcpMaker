@@ -26,6 +26,13 @@ namespace TSF{
 			ey = _ey;
 			bw = _bw;
 		}
+
+		FitDataPoint( const FitDataPoint &other ){
+			this->x = other.x;
+			this->y = other.y;
+			this->ey = other.ey;
+			this->bw = other.bw;
+		}
 		~FitDataPoint(){}
 
 		string toString(){

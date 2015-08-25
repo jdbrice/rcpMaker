@@ -23,6 +23,10 @@ namespace TSF{
 
 	public:
 		FitDataset( ){}
+		FitDataset( const FitDataset &other ){
+			this->name = other.name;
+			this->points = other.points;
+		}
 		~FitDataset(){}
 
 		vector<FitDataPoint>::iterator begin(){

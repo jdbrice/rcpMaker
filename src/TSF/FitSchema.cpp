@@ -23,6 +23,31 @@ namespace TSF{
 		INFO( tag, "")
 
 	}
+
+	FitSchema::FitSchema( const FitSchema &other ){
+		// basic copies
+		this->nodePath = other.nodePath;
+		this->cfg = other.cfg;
+		this->nPars = other.nPars;
+		this->method = other.method;
+		this->fitInRange = other.fitInRange;
+		this->normalization = other.normalization;
+		this->verbosity = other.verbosity;
+		this->ranges = other.ranges;
+
+		// copy the a variables
+		for ( auto k : other.vars ){
+			this->vars[ k.first ] = shared_ptr<FitVar>( new FitVar( *k.second ) );
+		}
+
+		for ( auto ds : other.datasets ){
+			this->datasets[ ds.first ] = ds.second;
+		}
+
+		for ( auto m : other.models ){
+			this->models[ m.first ] = m.second;
+		}
+	}
    
 
 	void FitSchema::makeFitVars(){

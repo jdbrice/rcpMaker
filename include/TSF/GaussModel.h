@@ -58,6 +58,20 @@ namespace TSF{
 			dataset = _ds;
 
 		}
+
+		GaussModel( const GaussModel &other ){
+			this->dataset = other.dataset;
+			this->name = other.name;
+			this->yield = other.yield;
+			this->mu = other.mu;
+			this->eff = other.eff;
+			this->y = other.y;
+			this->m = other.m;
+			this->s = other.s;
+			this->s = other.s;
+			this->sigma = other.sigma;
+		}
+
 		~GaussModel(){}
 
 		void setVars( map< string, shared_ptr<FitVar> > &vars ){

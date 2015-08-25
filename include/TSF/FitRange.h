@@ -27,6 +27,18 @@ namespace TSF{
 			this->widthFrom = widthFrom;
 			this->roi = roi;
 		}
+
+		FitRange( const FitRange &other ){
+			this->dataset = other.dataset;
+			this->min = other.min;
+			this->max = other.max;
+
+			this->centerOn = other.centerOn;
+			this->widthFrom = other.widthFrom;
+			this->roi = other.roi;
+		}
+
+		
 		~FitRange(){}
 
 		bool inRange( double x ){

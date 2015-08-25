@@ -20,6 +20,13 @@ namespace TSF{
 		SigmaHistory(){
 			DEBUG( tag, "()" )
 		}
+		SigmaHistory( const SigmaHistory &other ){
+			this->_min = other._min;
+			this->_max = other._max;
+			this->_mean = other._mean;
+			this->_std = other._std;
+			this->vals = other.vals;
+		}
 		~SigmaHistory(){
 			DEBUG( tag, "()" )
 		}

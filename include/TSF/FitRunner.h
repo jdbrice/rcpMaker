@@ -64,6 +64,7 @@ namespace TSF{
 		void drawFitRatio( string ds, Fitter * fitter, int iPt );
 
 		void prepare( double avgP, int iCen );
+		void prepareSystematic( FitSchema * sysSchema, double avgP, int iCen, string sys );
 		void choosePlayers( double avgP, string plc, double roi );
 
 		/* Average P in a bin range assuming a flat distribution

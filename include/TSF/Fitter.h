@@ -25,9 +25,7 @@ namespace TSF{
 
 		// the minuit interface
 		unique_ptr<TMinuit> minuit;
-		// logging interface
-		unique_ptr<Logger> logger;
-
+		
 		// fit schema - holds variables etc.
 		shared_ptr<FitSchema> schema;
 		// data file with the 8 distributions
@@ -51,6 +49,7 @@ namespace TSF{
 
 		double norm;
 		bool sufficienctStatistics;
+		bool fixedEff = false;
 
 	public:
 		Fitter( shared_ptr<FitSchema> _schema, TFile * dataFile );

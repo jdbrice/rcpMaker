@@ -35,9 +35,6 @@ namespace TSF{
 			cfg->getInt( nodePath + "Reporter.output:width", 400 ), cfg->getInt( nodePath + "Reporter.output:height", 400 ) ) );
 
 		Logger::setGlobalLogLevel( Logger::logLevelFromString( cfg->getString( nodePath + "Logger:globalLogLevel" ) ) );
-
-
-
 	}
 
 	FitRunner::~FitRunner(){
@@ -155,7 +152,7 @@ namespace TSF{
 				schema->setInitialMu( "zb_mu_"+plc, zbMu, hm, zbDeltaMu );
 
 				INFO( tag, "Fixing zb_sigma_" << plc << " to " << sigmaSets[ "zb_" + plc ].mean() )
-				schema->setInitialSigma( "zb_sigma_"+plc, hm, hm - 0.004, hm + 0.004 );
+				schema->setInitialSigma( "zb_sigma_"+plc, hm, hm - 0.0006, hm + 0.0006 );
 			}
 			else {
 				schema->setInitialSigma( "zb_sigma_"+plc, zbSig, zbSig * 0.5, zbSig * 6 );
@@ -174,6 +171,8 @@ namespace TSF{
 				schema->setInitialSigma( "zd_sigma_"+plc, zdSig, 0.04, 0.24);
 				
 			
+			//schema->fixParameter( "zd_mu_"+plc, zdMu );
+
 			choosePlayers( avgP, plc, roi );
 
 		
@@ -366,7 +365,7 @@ namespace TSF{
 					logger->warn(__FUNCTION__) << "<p> = " << avgP << endl;
 
 					schema->clearRanges();
-					FitSchema schemaSys = (*schema);
+					FitSchema originalSchema(*schema);
 
 					DEBUG( "Fitter", "Creating fitter" );
 					Fitter fitter( schema, inFile );
@@ -395,14 +394,14 @@ namespace TSF{
 					}
 
 					// for ( int i : { 0, 1, 2 } ){
-						// fitter.fit3(  );
-						// reportFit( &fitter, iPt );
+						fitter.fit3(  );
+						reportFit( &fitter, iPt );
 					// }
 
-					for ( int i = 0; i < 3; i++ ){
+					//for ( int i = 0; i < 3; i++ ){
 						fitter.fit4(  );
 						reportFit( &fitter, iPt );
-					}
+					// }
 
 					//fitter.fitErrors();
 
@@ -435,11 +434,11 @@ namespace TSF{
 					}
 
 
-					// do systematics
-					for ( int i = 0; i < 3; i++ ){
-						fitter.fit4(  );
-						reportFit( &fitter, iPt );
-					}
+					// // do systematics
+					// for ( int i = 0; i < 3; i++ ){
+					// 	fitter.fit4(  );
+					// 	reportFit( &fitter, iPt );
+					// }
 
 
 
@@ -781,6 +780,24 @@ namespace TSF{
 		//h2->SetMarkerColor( kRed );
 		//h2->SetLineColor( kRed );
 		//h2->Draw("same");
+	}
+
+
+
+	void prepareSystematic( FitSchema *sysSchema, double avgP, int iCen, string sys, string plc ){
+
+		string var = sys + "_" + plc;
+		// sigma_zb
+		// we want to fix sigma zb to given value and repeat the fit
+		
+
+
+		// eff
+		// we want to fix the tof eff parameter
+		// fixed systematic of +/- 6 %
+		if ( "eff" == sys ){
+			
+		}
 	}
 }
 

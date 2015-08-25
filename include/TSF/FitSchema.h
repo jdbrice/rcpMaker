@@ -47,7 +47,10 @@ namespace TSF{
 
 	public:
 		FitSchema( XmlConfig * _cfg, string np );
+
 		~FitSchema();
+
+		FitSchema( const FitSchema &other );
 
 		
 		map<string, shared_ptr<GaussModel> > models;

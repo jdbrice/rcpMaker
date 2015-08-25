@@ -36,8 +36,17 @@ PidHistoMaker::PidHistoMaker( XmlConfig* config, string np, string fl, string jp
 	dedxCut 		= cfg->getDouble( np+"Distributions:dedx", 1.0 );
 
 	// Flags to turn on and off certain histos
+	make1D 			= cfg->getBool( np + "Distributions:1D", false );
 	make2D 			= cfg->getBool( np + "Distributions:2D", false );
 	makeEnhanced 	= cfg->getBool( np + "Distributions:enhanced", false );
+
+	if ( makeEnhanced && !make1D )
+		make1D = true;
+
+	// n sigmas for electron rejection
+	nSigE 			= cfg->getDouble( np+"Electrons:nSigE", 3.0 );
+	nSigPi 			= cfg->getDouble( np+"Electrons:nSigPi", 3.0 );
+	nSigK 			= cfg->getDouble( np+"Electrons:nSigK", 3.0 );
 
 	// Make the dedx + tof binning 
 	// Only the bin width is used for dynamic bins
@@ -187,7 +196,7 @@ void PidHistoMaker::analyzeTofTrack( int iTrack ){
 		dedx = dedxNL;
 	} 
 
-	if ( make2D ){
+	if ( make2D && rejectElectron(avgP, dedx, tof ) ){
 		book->cd( "dedx_tof" );
 
 		// combined charge 
@@ -207,6 +216,31 @@ void PidHistoMaker::analyzeTofTrack( int iTrack ){
 	book->cd();
 
 	
+}
+
+bool PidHistoMaker::rejectElectron( double avgP, double dedx, double tof ){
+
+	map< string, double > tMeans 	= zr->centeredTofMap( centerSpecies, avgP );
+	map< string, double > dMeans 	= zr->centeredDedxMap( centerSpecies, avgP );
+
+	double dxe = dMeans["E"] - dedx;
+	double dye = tMeans["E"] - tof;
+	double dse = sqrt( dxe*dxe / ( dedxSigmaIdeal * dedxSigmaIdeal ) + dye*dye / ( tofSigmaIdeal*tofSigmaIdeal ) );
+
+	double dxpi = dMeans["Pi"] - dedx;
+	double dypi = tMeans["Pi"] - tof;
+	double dspi = sqrt( dxpi*dxpi / ( dedxSigmaIdeal * dedxSigmaIdeal ) + dypi*dypi / ( tofSigmaIdeal*tofSigmaIdeal ) );
+
+	double dxk = dMeans["K"] - dedx;
+	double dyk = tMeans["K"] - tof;
+	double dsk = sqrt( dxk*dxk / ( dedxSigmaIdeal * dedxSigmaIdeal ) + dyk*dyk / ( tofSigmaIdeal*tofSigmaIdeal ) );
+
+
+	if ( dse < nSigE && dspi > nSigPi && dsk > nSigK ){
+		return false;
+	}
+
+	return true;
 }
 
 bool PidHistoMaker::enhanceDistributions( double avgP, int ptBin, int charge, double dedx, double tof ){
@@ -242,8 +276,10 @@ bool PidHistoMaker::enhanceDistributions( double avgP, int ptBin, int charge, do
 	book->cd( "tof" );
 	// unenhanced - all tof tracks
 	// combined charge 
-	if ( makeCombinedCharge ) book->fill( Common::zbName( centerSpecies, 0, cBin, ptBin ), tof, trackWeight );
-	book->fill( Common::zbName( centerSpecies, charge, cBin, ptBin ), tof, trackWeight );
+	if ( make1D ){
+		if ( makeCombinedCharge ) book->fill( Common::zbName( centerSpecies, 0, cBin, ptBin ), tof, trackWeight );
+		book->fill( Common::zbName( centerSpecies, charge, cBin, ptBin ), tof, trackWeight );
+	}
 
 	// enhanced by species
 	if ( makeEnhanced ){
@@ -269,8 +305,10 @@ bool PidHistoMaker::enhanceDistributions( double avgP, int ptBin, int charge, do
 	book->cd( "dedx" );
 	// unenhanced - all dedx
 	// combined charge 
-	if ( makeCombinedCharge ) book->fill( Common::zdName( centerSpecies, 0, cBin, ptBin ), dedx, trackWeight );
-	book->fill( Common::zdName( centerSpecies, charge, cBin, ptBin ), dedx, trackWeight );
+	if ( make1D ){
+		if ( makeCombinedCharge ) book->fill( Common::zdName( centerSpecies, 0, cBin, ptBin ), dedx, trackWeight );
+		book->fill( Common::zdName( centerSpecies, charge, cBin, ptBin ), dedx, trackWeight );
+	}
 
 	// enhanced by species
 	if ( makeEnhanced ){
@@ -325,8 +363,10 @@ void PidHistoMaker::prepareHistograms( string plc ){
 
 				// tof projections
 				book->cd( "tof" );
-				book->make1D( Common::zbName( plc, charge, iCen, ptBin ), 
-					"#beta^{-1}", tofBins.size()-1, tofBins.data() );
+				if ( make1D ){
+					book->make1D( Common::zbName( plc, charge, iCen, ptBin ), 
+						"#beta^{-1}", tofBins.size()-1, tofBins.data() );
+				}
 				
 				if ( makeEnhanced ){ 
 					for ( string eplc : Common::species ){
@@ -337,8 +377,10 @@ void PidHistoMaker::prepareHistograms( string plc ){
 
 				// dedx projections
 				book->cd( "dedx" );		
-				book->make1D( Common::zdName( plc, charge, iCen, ptBin ), 
+				if ( make1D ){
+					book->make1D( Common::zdName( plc, charge, iCen, ptBin ), 
 								"dEdx", dedxBins.size()-1, dedxBins.data() );
+				}
 				
 				// Enhanced
 				if ( makeEnhanced ){ 
