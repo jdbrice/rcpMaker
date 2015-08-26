@@ -207,10 +207,13 @@ void PidHistoMaker::analyzeTofTrack( int iTrack ){
 			
 	}
 	
-	if ( enhanceDistributions(avgP, ptBin, charge, dedx, tof ) ){
-		book->cd();
-		book->fill( "cutBeta", p * charge, 1.0/pico->trackBeta( iTrack ) );
-		book->fill( "cutDedx", p * charge, log( pico->trackDedx( iTrack ) ) );
+	// show the order 
+	if ( rejectElectron(avgP, dedx, tof ) ){
+		if ( enhanceDistributions(avgP, ptBin, charge, dedx, tof ) ){
+			book->cd();
+			book->fill( "cutBeta", p * charge, 1.0/pico->trackBeta( iTrack ) );
+			book->fill( "cutDedx", p * charge, log( pico->trackDedx( iTrack ) ) );
+		}
 	}
 
 	book->cd();
