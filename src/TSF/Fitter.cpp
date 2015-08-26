@@ -287,35 +287,18 @@ namespace TSF{
 		string status = "na";
 
 		schema->setMethod( "chi2" );
-
-		schema->updateRanges( 1 );
-		// fix("eff");
-		
+	
+		fix( "sigma" );
 		fix( "yield" );
-		// fix( "eff" );
-		// release( "eff_Pi" );
+		
 			minuit->mnexcm( "MINI", arglist, 1, iFlag );
 			status = minuit->fCstatu;
-			INFO ( tag, "Step 1. Status " << status );
-		// fix( "eff_Pi" );
-
-		// release( "eff_P" );
-			minuit->mnexcm( "MINI", arglist, 1, iFlag );
-			status = minuit->fCstatu;
-			INFO ( tag, "Step 2. Status " << status );
-		// fix( "eff_Pi" );
-
-		// release( "eff_K" );
-			minuit->mnexcm( "MINI", arglist, 1, iFlag );
-			status = minuit->fCstatu;
-			INFO ( tag, "Step 3. Status " << status );
-		// fix( "eff_K" );
+			INFO ( tag, "Eff Fit. Status " << status );
 
 		release( "yield" );
+		release( "sigma" );
 		
-		release( "eff" );
 		schema->updateRanges();
-
 
 		// get the final state of all variables 
 		INFO( tag, "Updating parameters after Fit" );
@@ -342,7 +325,6 @@ namespace TSF{
 		releaseShapes();
 		release( "eff" );
 		schema->updateRanges();
-
 
 		// get the final state of all variables 
 		INFO( tag, "Updating parameters after Fit" );

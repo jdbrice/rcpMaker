@@ -365,7 +365,7 @@ namespace TSF{
 					logger->warn(__FUNCTION__) << "<p> = " << avgP << endl;
 
 					schema->clearRanges();
-					FitSchema originalSchema(*schema);
+					//FitSchema originalSchema(*schema);
 
 					DEBUG( "Fitter", "Creating fitter" );
 					Fitter fitter( schema, inFile );
