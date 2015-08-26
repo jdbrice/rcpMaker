@@ -5,6 +5,7 @@
 #include "TGraph.h"
 #include "TBox.h"
 
+
 namespace TSF{
 	FitRunner::FitRunner( XmlConfig * _cfg, string _np) 
 	: HistoAnalyzer( _cfg, _np ){
@@ -35,6 +36,20 @@ namespace TSF{
 			cfg->getInt( nodePath + "Reporter.output:width", 400 ), cfg->getInt( nodePath + "Reporter.output:height", 400 ) ) );
 
 		Logger::setGlobalLogLevel( Logger::logLevelFromString( cfg->getString( nodePath + "Logger:globalLogLevel" ) ) );
+
+		for ( string pre : { "zb", "zd" } ){
+			for ( string plc : Common::species ){
+				if ( cfg->exists( nodePath + "ParameterFixing." + pre + "." + plc ) ){
+					INFO( tag, "Creating Sigma Fixing range for " << pre << "_" << plc );
+					ConfigRange cr( cfg, nodePath + "ParameterFixing." + pre + "." + plc );
+					sigmaRanges[ pre + "_" + plc ] = cr;
+					INFO(tag, cr.toString() )
+				}
+			}
+		}
+
+
+		rnd = unique_ptr<TRandom3>( new TRandom3() );
 	}
 
 	FitRunner::~FitRunner(){
@@ -111,12 +126,6 @@ namespace TSF{
 		//Constraints on the mu 	 
 		double zbDeltaMu = cfg->getDouble( nodePath + "ParameterFixing.deltaMu:zb", 1.5 );
 		double zdDeltaMu = cfg->getDouble( nodePath + "ParameterFixing.deltaMu:zd", 1.5 );
-		
-		//Constraints on the sigma  
-		double zbDeltaSigma = cfg->getDouble( nodePath + "ParameterFixing.deltaSigma:zb", -1 );
-		double zdDeltaSigma = cfg->getDouble( nodePath + "ParameterFixing.deltaSigma:zd", -1 );
-
-		bool paramFixing = cfg->getBool( nodePath + "ParameterFixing:apply", true );
 
 		// fit roi
 		double roi = cfg->getDouble( nodePath + "FitSchema:roi", -1 );
@@ -139,51 +148,44 @@ namespace TSF{
 			double zdMu = zdMean( plc, avgP );
 			double zdSig = zdSigma( );
 			
-			// check if the sigmas should be fixed
-			double zbMinParP = cfg->getDouble( nodePath + "ParameterFixing." + plc + ":zbSigma", 5.0 );
-			double zdMinParP = cfg->getDouble( nodePath + "ParameterFixing." + plc + ":zdSigma", 5.0 );
 
+			// default low pt settings
+			schema->setInitialSigma( "zb_sigma_"+plc, zbSig, zbSig * 0.5, zbSig * 6 );
+			schema->setInitialMu( "zb_mu_"+plc, zbMu, zbSig, 5.0 );
 
-
-			if ( zbMinParP > 0 && avgP >= zbMinParP){	
+			if ( sigmaRanges[ "zb_" + plc ].above( avgP ) ){	
 				
 				double hm = sigmaSets[ "zb_" + plc ].mean();
 
 				schema->setInitialMu( "zb_mu_"+plc, zbMu, hm, zbDeltaMu );
 
 				INFO( tag, "Fixing zb_sigma_" << plc << " to " << sigmaSets[ "zb_" + plc ].mean() )
-				schema->setInitialSigma( "zb_sigma_"+plc, hm, hm - 0.0006, hm + 0.0006 );
-			}
-			else {
-				schema->setInitialSigma( "zb_sigma_"+plc, zbSig, zbSig * 0.5, zbSig * 6 );
-				schema->setInitialMu( "zb_mu_"+plc, zbMu, zbSig, 10 );
+				//schema->setInitialSigma( "zb_sigma_"+plc, hm, hm, hm );
+				schema->fixParameter( "zb_sigma_"+plc, hm );
 			}
 
-			schema->setInitialMu( "zd_mu_"+plc, zdMu, zdSig, zdDeltaMu );
-			
-			if ( zdMinParP > 0 && avgP >= zdMinParP){	
+			// default low pt settings for zd
+			schema->setInitialMu( "zd_mu_"+plc, zdMu, zdSig, 5.0 );
+			schema->setInitialSigma( "zd_sigma_"+plc, zdSig, 0.04, 0.24);
+
+			if ( sigmaRanges[ "zd_" + plc ].above( avgP ) ){	
 				
 				double hm = sigmaSets[ "zd_" + plc ].mean();
 				schema->setInitialMu( "zd_mu_"+plc, zdMu, hm, zdDeltaMu);
-				schema->setInitialSigma( "zd_sigma_"+plc, hm, hm - 0.004, hm + 0.004  );
+				schema->setInitialSigma( "zd_sigma_"+plc, hm, hm - 0.002, hm + 0.002  );
 			}
-			else 
-				schema->setInitialSigma( "zd_sigma_"+plc, zdSig, 0.04, 0.24);
 				
-			
-			//schema->fixParameter( "zd_mu_"+plc, zdMu );
-
+				
+			// choose the active players
 			choosePlayers( avgP, plc, roi );
 
 		
 			schema->var( "yield_" + plc )->min = 0;
-			schema->var( "yield_" + plc )->max = schema->getNormalization() * 10;	
-			//schema->var( "yield_" + plc )->val = .0001;
-
-			double zdOnly = cfg->getDouble( nodePath + "Timing:zdOnly" , 0.5 );
+			schema->var( "yield_" + plc )->max = schema->getNormalization() * 2;	
 			
 			// TODO: decide on eff scheme
-			schema->var( "eff_" + plc )->val = 1.0;
+			double eff_fudge = 0.01;
+			schema->var( "eff_" + plc )->val = 1.0 ;//+ ( rnd->Rndm() * (2 * eff_fudge) - eff_fudge );
 			if ( avgP <= 0.5 )
 				schema->var( "eff_" + plc )->fixed = true;
 			else 
@@ -223,7 +225,6 @@ namespace TSF{
 			schema->var( "zd_"+plc+"_yield_"+plc2 )->exclude = true;
 		}
 
-
 		if ( avgP >= zdOnly ){
 			// remove the zb variables
 			activePlayers.push_back( "zb_All_g" + plc );
@@ -247,7 +248,6 @@ namespace TSF{
 				double zdMu2 = zdMean( plc2, avgP );
 				double zdSig2 = zdSigma(  );
 				string var = "zd_"+plc+"_yield_"+plc2;
-				double cv = schema->var( var )->val;
 				
 				bool firstTimeIncluded = false;
 				if ( schema->var( var )->exclude )
@@ -393,15 +393,10 @@ namespace TSF{
 
 					}
 
-					// for ( int i : { 0, 1, 2 } ){
-						fitter.fit3(  );
-						reportFit( &fitter, iPt );
-					// }
-
-					//for ( int i = 0; i < 3; i++ ){
-						fitter.fit4(  );
-						reportFit( &fitter, iPt );
-					// }
+					
+					fitter.fit3(  );
+					reportFit( &fitter, iPt );
+					
 
 					//fitter.fitErrors();
 
@@ -413,23 +408,14 @@ namespace TSF{
 						fillFitHistograms(iPt, iCen, iCharge, fitter );
 
 					
+					// Keep track of the sigma for each species for fixing at high pt
 					for ( string pre : {"zb", "zd"} ){
 						for ( string plc : Common::species ){
 
-							double r1 = 0.6;
-							double r2 = 1.0;
-
-							INFO( tag, "SigmaHistory for " << pre << "_" << plc )
-							if ( "zb" == pre && "P" == plc ){
-								r1 = 1.2;
-								r2 = 2.0;
-							} else if ( "zb" == pre ){
-								r1 = 0.7;
-								r2 = 1.2;
-							}
-							
-							sigmaSets[ pre+"_"+plc ].setRange( r1, r2 );
-							sigmaSets[ pre+"_"+plc ].add( avgP, schema->var( pre + "_sigma_" + plc )->val ); 
+							ConfigRange &range = sigmaRanges[ pre + "_" + plc ];
+							// if we are in the good p range then add this value to the set
+							if ( range.inInclusiveRange( avgP ) )
+								sigmaSets[ pre+"_"+plc ].add( avgP, schema->var( pre + "_sigma_" + plc )->val ); 	
 						}
 					}
 

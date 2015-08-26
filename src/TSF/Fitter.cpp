@@ -124,11 +124,11 @@ namespace TSF{
 		// penalty *= self->enforceEnhancedYields( npar, par );
 		
 		// enforce the average total tofEff
-		// if ( !self->fixedEff ){
-		// 	penalty *= self->enforceEff( npar, par );
-		// }
+		if ( !self->fixedEff ){
+			penalty *= self->enforceEff( npar, par );
+		}
 
-		
+		INFO( tag, "Penalty : " << penalty )
 		f = (fnVal ) * penalty;
 	}
 
@@ -281,24 +281,44 @@ namespace TSF{
 	void Fitter::fit3( ){
 
 		double arglist[10];
-		arglist[ 0 ] = 5000;
+		arglist[ 0 ] = 50000;
 		arglist[ 1 ] = 1.0;
 		int iFlag = -1;
 		string status = "na";
 
 		schema->setMethod( "chi2" );
-	
-		fix( "sigma" );
-		fix( "yield" );
-		
-			minuit->mnexcm( "MINI", arglist, 1, iFlag );
-			status = minuit->fCstatu;
-			INFO ( tag, "Eff Fit. Status " << status );
 
-		release( "yield" );
-		release( "sigma" );
+		double m_fmin = 0, m_fedm = 0, m_errdef = 0;
+		int m_npari = 0, m_nparx = 0, m_istat = 0;
+
+		minuit->mnstat( m_fmin, m_fedm, m_errdef, m_npari, m_nparx, m_istat );
+		INFO( tag, "BEFORE FMIN = " << m_fmin );
+	
+		fixShapes();
+		fix( "_yield_" );
 		
-		schema->updateRanges();
+
+			// release( "eff_Pi" );
+				minuit->mnexcm( "MINI", arglist, 1, iFlag );
+			// fix( "eff_Pi" );
+			// release( "eff_P" );
+				minuit->mnexcm( "MINI", arglist, 1, iFlag );
+			// fix( "eff_P" );
+			// release( "eff_K" );
+				minuit->mnexcm( "MINI", arglist, 1, iFlag );
+			status = minuit->fCstatu;
+
+			INFO ( tag, "Final + Eff Fit. Status " << status );
+
+		
+
+		release( "_yield_" );
+		releaseShapes();
+
+		minuit->mnstat( m_fmin, m_fedm, m_errdef, m_npari, m_nparx, m_istat );
+		INFO( tag, "AFTER FMIN = " << m_fmin );
+		
+		// schema->updateRanges();
 
 		// get the final state of all variables 
 		INFO( tag, "Updating parameters after Fit" );
@@ -759,21 +779,22 @@ namespace TSF{
 
 		// we are enforcing the average eff between Pi, K, P to be ~100% - since we already corrected the "total" toff eff
 		float effPi = currentValue( "eff_Pi", npar, pars );
-		// float yPi = currentValue( "yield_Pi", npar, pars );
+		float yPi = currentValue( "yield_Pi", npar, pars );
 		float effK 	= currentValue( "eff_K", npar, pars );
-		// float yK = currentValue( "yield_K", npar, pars );
+		float yK = currentValue( "yield_K", npar, pars );
 		float effP 	= currentValue( "eff_P", npar, pars );
-		// float yP = currentValue( "yield_P", npar, pars );
+		float yP = currentValue( "yield_P", npar, pars );
 
-		//DEBUG( "Fitter_Eff", "eff_Pi = " << effPi )
-		//DEBUG( "Fitter_Eff", "eff_K = " << effK )
-		//DEBUG( "Fitter_Eff", "eff_P = " << effP )
+		// DEBUG( "Fitter_Eff", "eff_Pi = " << effPi )
+		// DEBUG( "Fitter_Eff", "eff_K = " << effK )
+		// DEBUG( "Fitter_Eff", "eff_P = " << effP )
 
-		float fudge = 0.01;
-		float sum = (effPi  + effK  + effP) ;
-		if ( sum >= 3.0 - fudge && sum <= 3.0 + fudge ){
-			return 1.0;
-		}
+		float fudge = 0.00;
+		float sum = (effPi   + effK   + effP ) ;/// ( yPi + yK + yP) ;
+		INFO( tag, "Eff weighted sum : " << sum )
+		//if ( sum >= 3.0 - fudge && sum <= 3.0 + fudge ){
+		//	return 1.0;
+		//}
 
 		float x = 3.0 + fudge - ( sum );
 		if ( sum > 3.0 + fudge ){
@@ -781,7 +802,8 @@ namespace TSF{
 		} else if ( sum < 3.0 - fudge ){
 			x = 3.0 - fudge - ( sum );
 		}
-		penalty = 1.0 + ( x * x * penaltyScale ) ;
+		penalty = 1.0 + ( x * x ) ;
+		
 		return penalty;
 
 	}

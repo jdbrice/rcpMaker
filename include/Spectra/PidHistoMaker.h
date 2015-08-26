@@ -55,7 +55,7 @@ protected:
 	bool make2D, make1D, makeEnhanced;
 
 	// for electron / tof noise rejection
-	double nSigE, nSigPi, nSigK;
+	double nSigE, nSigPi, nSigK, nSigP;
 
 	// # of sigma to cut above and below
 	double nSigBelow, nSigAbove;

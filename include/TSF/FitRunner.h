@@ -18,6 +18,8 @@ using namespace jdb;
 #include "Spectra/ZRecentering.h"
 #include "TSF/SigmaHistory.h"
 
+// ROOT
+#include "TRandom3.h"
 
 
 namespace TSF{
@@ -35,15 +37,15 @@ namespace TSF{
 
 		HistoBins* binsPt;
 		
-
 		unique_ptr<Reporter> zbReporter, zdReporter;
 
 		vector<string> activePlayers;
 
-		double zdSigFix = 0;
-
-		map<string, vector<double> > zbSigMem;
 		map< string, SigmaHistory > sigmaSets;
+
+		map< string, ConfigRange > sigmaRanges;
+
+		unique_ptr<TRandom3> rnd;
 
 	public:
 		FitRunner( XmlConfig * _cfg, string _np  );

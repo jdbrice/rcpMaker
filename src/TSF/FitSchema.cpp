@@ -220,7 +220,7 @@ namespace TSF{
 				if ( roi < 0 ){
 					r.min = var( r.centerOn )->val - var( r.widthFrom )->val * r.roi;
 					r.max = var( r.centerOn )->val + var( r.widthFrom )->val * r.roi;
-				} else if ( r.dataset == "zd_All" ){
+				} else if ( r.dataset == "zd_All" || r.dataset == "zb_All" ){
 					INFO( tag, "Overriding ROI" )
 					r.min = var( r.centerOn )->val - var( r.widthFrom )->val * roi;
 					r.max = var( r.centerOn )->val + var( r.widthFrom )->val * roi;

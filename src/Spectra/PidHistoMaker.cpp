@@ -47,6 +47,7 @@ PidHistoMaker::PidHistoMaker( XmlConfig* config, string np, string fl, string jp
 	nSigE 			= cfg->getDouble( np+"Electrons:nSigE", 3.0 );
 	nSigPi 			= cfg->getDouble( np+"Electrons:nSigPi", 3.0 );
 	nSigK 			= cfg->getDouble( np+"Electrons:nSigK", 3.0 );
+	nSigP 			= cfg->getDouble( np+"Electrons:nSigP", 3.0 );
 
 	// Make the dedx + tof binning 
 	// Only the bin width is used for dynamic bins
@@ -238,12 +239,20 @@ bool PidHistoMaker::rejectElectron( double avgP, double dedx, double tof ){
 	double dyk = tMeans["K"] - tof;
 	double dsk = sqrt( dxk*dxk / ( dedxSigmaIdeal * dedxSigmaIdeal ) + dyk*dyk / ( tofSigmaIdeal*tofSigmaIdeal ) );
 
+	double dxp = dMeans["P"] - dedx;
+	double dyp = tMeans["P"] - tof;
+	double dsp = sqrt( dxp*dxp / ( dedxSigmaIdeal * dedxSigmaIdeal ) + dyp*dyp / ( tofSigmaIdeal*tofSigmaIdeal ) );	
 
-	if ( dse < nSigE && dspi > nSigPi && dsk > nSigK ){
-		return false;
-	}
+	if ( dspi < nSigPi || dsk < nSigK || dsp < nSigP )
+		return true;
 
-	return true;
+	// if ( dse < nSigE && dspi > nSigPi && dsk > nSigK ){
+	// 	return false;
+	// }
+
+	// if ( dspi > nSigPi  )
+
+	return false;
 }
 
 bool PidHistoMaker::enhanceDistributions( double avgP, int ptBin, int charge, double dedx, double tof ){

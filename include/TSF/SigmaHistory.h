@@ -12,7 +12,6 @@ namespace TSF{
 	class SigmaHistory
 	{
 	protected:
-		double _min, _max;
 		double _mean = 0, _std = 0;
 		vector<double> vals;
 	public:
@@ -21,8 +20,6 @@ namespace TSF{
 			DEBUG( tag, "()" )
 		}
 		SigmaHistory( const SigmaHistory &other ){
-			this->_min = other._min;
-			this->_max = other._max;
 			this->_mean = other._mean;
 			this->_std = other._std;
 			this->vals = other.vals;
@@ -31,21 +28,11 @@ namespace TSF{
 			DEBUG( tag, "()" )
 		}
 
-		void setRange( double min, double max ){
-			INFO( tag, "(" << min << ", "<< max << ")" )
-			_min = min;
-			_max = max;
-		}
-
 		void add( double pt, double sigma ){
 			INFO( tag, "( pt=" << pt << ", sigma=" << sigma << " )" )
-			if ( pt < _min || pt > _max ){
-				
-			} else {
-				vals.push_back( sigma );
-				INFO( tag, "Added" );
-			}
-
+			
+			vals.push_back( sigma );
+			
 			// update these values
 			calcMean();
 			calcStd();
@@ -71,8 +58,10 @@ namespace TSF{
 			for ( double v : vals ){
 				total += ( v - _mean ) * ( v - _mean );
 			}
+			if ( vals.size() > 0 )
+				_std = total / vals.size();
 
-			_std = total / vals.size();
+			INFO( tag, "Std dev = " << _std );
 
 		}
 
@@ -81,10 +70,6 @@ namespace TSF{
 		}
 		double std(){
 			return _std;
-		}
-
-		bool pastRange( double pt ){
-			return ( pt >= _max );
 		}
 		
 	};
