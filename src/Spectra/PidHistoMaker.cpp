@@ -243,16 +243,17 @@ bool PidHistoMaker::rejectElectron( double avgP, double dedx, double tof ){
 	double dyp = tMeans["P"] - tof;
 	double dsp = sqrt( dxp*dxp / ( dedxSigmaIdeal * dedxSigmaIdeal ) + dyp*dyp / ( tofSigmaIdeal*tofSigmaIdeal ) );	
 
+	// if we are within nSigma from a plc peak then keep no matter what
 	if ( dspi < nSigPi || dsk < nSigK || dsp < nSigP )
 		return true;
 
-	// if ( dse < nSigE && dspi > nSigPi && dsk > nSigK ){
-	// 	return false;
-	// }
+	// if we are within nSigma from electron peak but away from those others then reject
+	if ( dse < nSigE  ){
+		return false;
+	}
 
-	// if ( dspi > nSigPi  )
-
-	return false;
+	// keep everything else
+	return true;
 }
 
 bool PidHistoMaker::enhanceDistributions( double avgP, int ptBin, int charge, double dedx, double tof ){

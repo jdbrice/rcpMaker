@@ -91,7 +91,6 @@ namespace TSF{
 		void loadDatasets( string cs, int charge, int cenBin, int ptBin );
 		
 		void nop(  );
-		void fit( string cs, int charge, int cenBin, int ptBin );
 		void fit1(  );
 		void fit2(  );
 		void fit3(  );
@@ -118,7 +117,8 @@ namespace TSF{
 
 		// getter for current parameters
 		double currentValue( string var, int npar, double * pars );
-		
+		void setValue( string var, double value );
+
 		double enforceEnhancedYields( int npar = 0, double * pars = 0 );
 		double enforceMassOrder( int npar = 0, double * pars = 0 );
 		double enforceEff( int npar = 0, double * pars = 0 );
@@ -135,6 +135,14 @@ namespace TSF{
 
 
 		void fsNominal();
+
+		void reportFitStatus(){
+			double m_fmin = 0, m_fedm = 0, m_errdef = 0;
+			int m_npari = 0, m_nparx = 0, m_istat = 0;
+
+			minuit->mnstat( m_fmin, m_fedm, m_errdef, m_npari, m_nparx, m_istat );
+			INFO( tag, "FMIN = " << m_fmin );
+		}
 
 
 	};

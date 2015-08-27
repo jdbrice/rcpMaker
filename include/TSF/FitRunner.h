@@ -61,13 +61,14 @@ namespace TSF{
 		void fillFitHistograms(int iPt, int iCen, int iCharge, Fitter &fitter );
 		void fillEnhancedYieldHistogram( string plc1, int iPt, int iCen, int iCharge, string plc2, Fitter &fitter );
 
+		void reportYields();
 		void reportFit( Fitter * fitter, int iPt );
 		void drawSet( string v, Fitter * fitter, int iPt );
 		void drawFitRatio( string ds, Fitter * fitter, int iPt );
 
 		void prepare( double avgP, int iCen );
 		void prepareSystematic( FitSchema * sysSchema, double avgP, int iCen, string sys );
-		void choosePlayers( double avgP, string plc, double roi );
+		void choosePlayers( double avgP, string plc );
 
 		/* Average P in a bin range assuming a flat distribution
 		 * The distribution is really an exp, but we just need to be consistent

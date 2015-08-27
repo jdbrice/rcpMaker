@@ -141,7 +141,7 @@ namespace TSF{
 		if ( 0 == _sigma || 0 == _dmu ){ // unconstrained
 			vars[ var ]->min = 0;
 			vars[ var ]->max = 0;
-		} else { // set the range
+		} else{ // set the range
 			vars[ var ]->min = _mu - _sigma * _dmu;
 			vars[ var ]->max = _mu + _sigma * _dmu;
 		}
@@ -221,12 +221,12 @@ namespace TSF{
 					r.min = var( r.centerOn )->val - var( r.widthFrom )->val * r.roi;
 					r.max = var( r.centerOn )->val + var( r.widthFrom )->val * r.roi;
 				} else if ( r.dataset == "zd_All" || r.dataset == "zb_All" ){
-					INFO( tag, "Overriding ROI" )
+					DEBUG( tag, "Overriding ROI" )
 					r.min = var( r.centerOn )->val - var( r.widthFrom )->val * roi;
 					r.max = var( r.centerOn )->val + var( r.widthFrom )->val * roi;
 				}
 
-				INFO( tag, "Updating Range " << r.centerOn << " +- " << r.widthFrom << "(" << r.min << ", " << r.max << " )"  )
+				DEBUG( tag, "Updating Range " << r.centerOn << " +- " << r.widthFrom << "(" << r.min << ", " << r.max << " )"  )
 			}
 		}
 	}

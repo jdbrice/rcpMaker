@@ -34,8 +34,8 @@ def write_conf( data_path, output_path, input_config_path, config_path ="./" ) :
 			<method>0</method>
 		</Bichsel>
 
-		<Distributions 2D="false" 1D="true" enhanced="true" tof="1.0" dedx="1.0" nSigBelow="3.0" nSigAbove="3.0"/>
-		<Electrons nSigE="3" nSigPi="3" nSigK="3" nSigP="6" />
+		<Distributions 2D="true" 1D="true" enhanced="true" tof="1.0" dedx="1.0" nSigBelow="3.0" nSigAbove="6.0"/>
+		<Electrons nSigE="3" nSigPi="3" nSigK="3" nSigP="3" />
 		
 		<ZRecentering>
 			<centerSpecies>{plc}</centerSpecies>

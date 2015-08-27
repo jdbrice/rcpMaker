@@ -128,7 +128,7 @@ namespace TSF{
 		double zdDeltaMu = cfg->getDouble( nodePath + "ParameterFixing.deltaMu:zd", 1.5 );
 
 		// fit roi
-		double roi = cfg->getDouble( nodePath + "FitSchema:roi", -1 );
+		
 
 		activePlayers.clear();
 		
@@ -151,13 +151,20 @@ namespace TSF{
 
 			// default low pt settings
 			schema->setInitialSigma( "zb_sigma_"+plc, zbSig, zbSig * 0.5, zbSig * 6 );
-			schema->setInitialMu( "zb_mu_"+plc, zbMu, zbSig, 5.0 );
+
+			if ( 0 >= zbDeltaMu ) // only used for testing
+				schema->fixParameter( "zb_mu_"+plc, zbMu );
+			else	// actual default for running
+				schema->setInitialMu( "zb_mu_"+plc, zbMu, zbSig, 5.0 );
 
 			if ( sigmaRanges[ "zb_" + plc ].above( avgP ) ){	
 				
 				double hm = sigmaSets[ "zb_" + plc ].mean();
 
-				schema->setInitialMu( "zb_mu_"+plc, zbMu, hm, zbDeltaMu );
+				if ( 0 >= zbDeltaMu )
+					schema->fixParameter( "zb_mu_"+plc, zbMu );
+				else
+					schema->setInitialMu( "zb_mu_"+plc, zbMu, hm, zbDeltaMu );
 
 				INFO( tag, "Fixing zb_sigma_" << plc << " to " << sigmaSets[ "zb_" + plc ].mean() )
 				//schema->setInitialSigma( "zb_sigma_"+plc, hm, hm, hm );
@@ -165,19 +172,27 @@ namespace TSF{
 			}
 
 			// default low pt settings for zd
-			schema->setInitialMu( "zd_mu_"+plc, zdMu, zdSig, 5.0 );
+			if ( 0 >= zdDeltaMu ) // for testing
+				schema->fixParameter( "zd_mu_"+plc, zdMu );
+			else
+				schema->setInitialMu( "zd_mu_"+plc, zdMu, zdSig, 5.0 );
+
 			schema->setInitialSigma( "zd_sigma_"+plc, zdSig, 0.04, 0.24);
 
 			if ( sigmaRanges[ "zd_" + plc ].above( avgP ) ){	
 				
 				double hm = sigmaSets[ "zd_" + plc ].mean();
-				schema->setInitialMu( "zd_mu_"+plc, zdMu, hm, zdDeltaMu);
+
+				if ( 0 >= zdDeltaMu )
+					schema->fixParameter( "zd_mu_"+plc, zdMu );
+				else
+					schema->setInitialMu( "zd_mu_"+plc, zdMu, hm, zdDeltaMu);
 				schema->setInitialSigma( "zd_sigma_"+plc, hm, hm - 0.002, hm + 0.002  );
 			}
 				
 				
 			// choose the active players
-			choosePlayers( avgP, plc, roi );
+			choosePlayers( avgP, plc );
 
 		
 			schema->var( "yield_" + plc )->min = 0;
@@ -186,7 +201,7 @@ namespace TSF{
 			// TODO: decide on eff scheme
 			double eff_fudge = 0.01;
 			schema->var( "eff_" + plc )->val = 1.0 ;//+ ( rnd->Rndm() * (2 * eff_fudge) - eff_fudge );
-			if ( avgP <= 0.5 )
+			if ( avgP <= 0.01 )
 				schema->var( "eff_" + plc )->fixed = true;
 			else 
 				schema->var( "eff_" + plc )->fixed = false;
@@ -194,13 +209,14 @@ namespace TSF{
 		} // loop on plc to set initial vals
 	}
 
-	void FitRunner::choosePlayers( double avgP, string plc, double roi ){
+	void FitRunner::choosePlayers( double avgP, string plc ){
 
 		double zdOnly = cfg->getDouble( nodePath + "Timing:zdOnly" , 0.5 );
 		double useZdEnhanced = cfg->getDouble( nodePath + "Timing:useZdEnhanced" , 0.6 );
 		double useZbEnhanced = cfg->getDouble( nodePath + "Timing:useZbEnhanced" , 0.6 );
 		double nSigZbEnhanced = cfg->getDouble( nodePath + "Timing:nSigZbEnhanced" , 3.0 );
 		double nSigZdEnhanced = cfg->getDouble( nodePath + "Timing:nSigZdEnhanced" , 3.0 );
+		double roi = cfg->getDouble( nodePath + "FitSchema:roi", -1 );
 
 		if ( roi > 0 ){
 			double zbSig = zbSigma( );
@@ -380,6 +396,7 @@ namespace TSF{
 					// assign active players to this fit
 					fitter.addPlayers( activePlayers );
 					// do the fit
+					
 					fitter.nop();
 					reportFit( &fitter, iPt );
 					
@@ -393,15 +410,25 @@ namespace TSF{
 
 					}
 
-					
 					fitter.fit3(  );
 					reportFit( &fitter, iPt );
+
+					
+					
+					// fitter.fit4(  );
+					// reportFit( &fitter, iPt );
+
+					// for ( string plc : { "Pi", "K", "P"} )
+					// 	fitter.setValue( "eff_" + plc, 1.0 );
+
+					// fitter.nop(  );
+					// reportFit( &fitter, iPt );
 					
 
 					//fitter.fitErrors();
 
 
-					schema->reportModels();
+					reportYields();
 
 				
 					if ( fitter.isFitGood() )
@@ -443,7 +470,18 @@ namespace TSF{
 		h->Draw("pe");
 		h->SetLineColor( kBlack );
 		double scaler = 1e-6;
-		h->GetYaxis()->SetRangeUser( schema->getNormalization() * scaler, schema->getNormalization() );
+
+		int binmax = h->GetMaximumBin();
+		double max = h->GetBinContent( binmax ) * 1.05;
+		h->GetYaxis()->SetRangeUser( schema->getNormalization() * scaler, max );
+
+		int fb = h->FindFirstBinAbove( 0 ) - 10;
+		int lb = h->FindLastBinAbove( 0 ) + 10;
+		if ( fb <= 0 )
+			fb = 1;
+		if ( lb >= h->GetNbinsX() + 1 )
+			lb = h->GetNbinsX();
+		h->GetXaxis()->SetRange( fb, lb );
 
 		h->SetTitle( ( dts((*binsPt)[ iPt ]) + " < pT < " + dts( (*binsPt)[ iPt + 1 ] ) ).c_str() );
 
@@ -451,7 +489,7 @@ namespace TSF{
 		for ( FitRange range : fitter->getSchema()->getRanges() ){
 			if ( range.dataset != v )
 				continue;
-			TBox * b1 = new TBox( range.min, schema->getNormalization() * scaler, range.max, schema->getNormalization()  );
+			TBox * b1 = new TBox( range.min, schema->getNormalization() * scaler, range.max, max  );
 			b1->SetFillColorAlpha( kBlack, 0.25 );
 			b1->SetFillStyle( 1001 );
 			b1->Draw(  );
@@ -583,7 +621,26 @@ namespace TSF{
 			}
 			zbReporter->savePage();
 		}
+	}
 
+	void FitRunner::reportYields(){
+
+		double total = 0;
+		for ( string plc  : Common::species ){
+			if ( !schema->exists("yield_" + plc ) )
+				continue;
+			
+			INFO( tag, "Yield of " << plc << " = " << schema->var( "yield_" + plc )->val );
+			total += schema->var( "yield_" + plc )->val;
+		}
+
+		INFO( tag, "Total Fit Yield  = " <<  total );
+		double yzb = schema->datasets[ "zb_All" ].yield();
+		double yzd = schema->datasets[ "zd_All" ].yield();
+		INFO( tag, "Total Yield in zb_All = " << yzb );
+		INFO( tag, "Total Yield in zd_All = " << yzd );
+
+		INFO( tag, "Total Fit Yield / Total Data Yield = " << total / yzd );
 
 	}
 

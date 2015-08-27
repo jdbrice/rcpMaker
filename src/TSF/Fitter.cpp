@@ -48,7 +48,7 @@ namespace TSF{
 		INFO( tag, "" )
 	}
 
-
+ 
 	Fitter::~Fitter(){
 
 	}
@@ -107,7 +107,14 @@ namespace TSF{
 			} // loop on data points
 
 			if ( "nll" != self->schema->getMethod() ){
-				// nothing needed here for chi2
+
+				if ( "zb_All" == k.first ){
+					double mYield = modelYield( ds );
+					double dsYield = k.second.yield( );
+					// nothing needed here for chi2
+					fnVal = fnVal + ( dsYield - mYield )*( dsYield - mYield ) * penaltyScale;
+					//INFO( tag, "Extended chi2 component = " << ( dsYield - mYield )*( dsYield - mYield ) * penaltyScale )
+				}
 			} else {
 				double mYield = modelYield( ds );
 				double dsYield = k.second.yield( self->schema->getRanges() );
@@ -124,11 +131,10 @@ namespace TSF{
 		// penalty *= self->enforceEnhancedYields( npar, par );
 		
 		// enforce the average total tofEff
-		if ( !self->fixedEff ){
-			penalty *= self->enforceEff( npar, par );
-		}
+		// if ( !self->fixedEff ){
+		// 	penalty *= self->enforceEff( npar, par );
+		// }
 
-		INFO( tag, "Penalty : " << penalty )
 		f = (fnVal ) * penalty;
 	}
 
@@ -197,8 +203,31 @@ namespace TSF{
 	void Fitter::nop( ){
 
 		INFO( "DATASETS:" )
-		INFO( "yield_zb_All = " << schema->datasets[ "zb_All" ].yield() )
-		INFO( "yield_zd_All = " << schema->datasets[ "zd_All" ].yield() )
+		INFO( "yield_zb_All = " << schema->datasets[ "zb_All" ].yield() );
+		INFO( "yield_zd_All = " << schema->datasets[ "zd_All" ].yield() );
+		INFO( tag, "yield for zb_All inside roi = " << schema->datasets[ "zb_All" ].yield( schema->getRanges() ) );
+		INFO( tag, "yield for zd_All inside roi = " << schema->datasets[ "zd_All" ].yield( schema->getRanges() ) );
+
+		INFO( tag, "1 Sigma : " );
+		schema->updateRanges( 1.0 );
+		INFO( tag, "yield fraction in roi zb = " << schema->datasets[ "zb_All" ].yield( schema->getRanges() ) /schema->datasets[ "zb_All" ].yield()  );
+		INFO( tag, "yield fraction in roi zd = " << schema->datasets[ "zd_All" ].yield( schema->getRanges() ) /schema->datasets[ "zd_All" ].yield()  );
+
+		INFO( tag, "2 Sigma : " );
+		schema->updateRanges( 2.0 );
+		INFO( tag, "yield fraction in roi zb = " << schema->datasets[ "zb_All" ].yield( schema->getRanges() ) /schema->datasets[ "zb_All" ].yield()  );
+		INFO( tag, "yield fraction in roi zd = " << schema->datasets[ "zd_All" ].yield( schema->getRanges() ) /schema->datasets[ "zd_All" ].yield()  );
+
+		INFO( tag, "3 Sigma : " );
+		schema->updateRanges( 3.0 );
+		INFO( tag, "yield fraction in roi zb = " << schema->datasets[ "zb_All" ].yield( schema->getRanges() ) /schema->datasets[ "zb_All" ].yield()  );
+		INFO( tag, "yield fraction in roi zd = " << schema->datasets[ "zd_All" ].yield( schema->getRanges() ) /schema->datasets[ "zd_All" ].yield()  );
+
+		INFO( tag, "4 Sigma : " );
+		schema->updateRanges( 4.0 );
+		INFO( tag, "yield fraction in roi zb = " << schema->datasets[ "zb_All" ].yield( schema->getRanges() ) /schema->datasets[ "zb_All" ].yield()  );
+		INFO( tag, "yield fraction in roi zd = " << schema->datasets[ "zd_All" ].yield( schema->getRanges() ) /schema->datasets[ "zd_All" ].yield()  );
+		
 
 		// get the final state of all variables 
 		INFO( tag, "Updating parameters after setup" );
@@ -256,69 +285,37 @@ namespace TSF{
 		
 		schema->updateRanges();
 
-		// fix( "zb" );
-		// fix( "eff" );
-		// fix( "yield" );
-		// 	minuit->mnexcm( "MINI", arglist, 1, iFlag );
-		// 	minuit->mnexcm( "MINI", arglist, 1, iFlag );
-		// 	minuit->mnexcm( "MINI", arglist, 1, iFlag );
-		// 	status = minuit->fCstatu;
-		// 	INFO ( tag, "Step 1. Status " << status );
-		// release( "yield" );
-		// release( "eff" );
-		// release( "zb" );
-		// schema->updateRanges();
-
-
-
 		// get the final state of all variables 
 		INFO( tag, "Updating parameters after Fit" );
 		updateParameters();
 	}
 
-
-	// work on the enhancedyields and shapes
-	void Fitter::fit3( ){
+	void Fitter::fit3(  ){
 
 		double arglist[10];
-		arglist[ 0 ] = 50000;
+		arglist[ 0 ] = 5000;
 		arglist[ 1 ] = 1.0;
 		int iFlag = -1;
 		string status = "na";
 
+		INFO( tag, "BEFORE" );
+		reportFitStatus();
+
 		schema->setMethod( "chi2" );
 
-		double m_fmin = 0, m_fedm = 0, m_errdef = 0;
-		int m_npari = 0, m_nparx = 0, m_istat = 0;
-
-		minuit->mnstat( m_fmin, m_fedm, m_errdef, m_npari, m_nparx, m_istat );
-		INFO( tag, "BEFORE FMIN = " << m_fmin );
-	
-		fixShapes();
-		fix( "_yield_" );
-		
-
-			// release( "eff_Pi" );
-				minuit->mnexcm( "MINI", arglist, 1, iFlag );
-			// fix( "eff_Pi" );
-			// release( "eff_P" );
-				minuit->mnexcm( "MINI", arglist, 1, iFlag );
-			// fix( "eff_P" );
-			// release( "eff_K" );
-				minuit->mnexcm( "MINI", arglist, 1, iFlag );
+		fixShapes( );
+		fix( "eff" );
+			minuit->mnexcm( "MINI", arglist, 1, iFlag );
+			minuit->mnexcm( "MINI", arglist, 1, iFlag );
+			minuit->mnexcm( "MINI", arglist, 1, iFlag );
 			status = minuit->fCstatu;
+			INFO ( tag, "Step 1. Status " << status );
+		releaseShapes(  );
+		release( "eff" );
+		schema->updateRanges();
 
-			INFO ( tag, "Final + Eff Fit. Status " << status );
-
-		
-
-		release( "_yield_" );
-		releaseShapes();
-
-		minuit->mnstat( m_fmin, m_fedm, m_errdef, m_npari, m_nparx, m_istat );
-		INFO( tag, "AFTER FMIN = " << m_fmin );
-		
-		// schema->updateRanges();
+		INFO( tag, "BEFORE" );
+		reportFitStatus();
 
 		// get the final state of all variables 
 		INFO( tag, "Updating parameters after Fit" );
@@ -335,14 +332,18 @@ namespace TSF{
 
 		schema->setMethod( "chi2" );
 
-		schema->updateRanges( 1 );
-		// fix("eff");
-		fixShapes();
-		fix( "eff" );
+		
+		fix("eff");
+		release( "eff_Pi" );
+		// fixShapes();
+		fix( "_yield_" );
+			minuit->mnexcm( "MINI", arglist, 1, iFlag );
+			minuit->mnexcm( "MINI", arglist, 1, iFlag );
 			minuit->mnexcm( "MINI", arglist, 1, iFlag );
 			status = minuit->fCstatu;
 			INFO ( tag, "Step 1. Status " << status );
-		releaseShapes();
+		// releaseShapes();
+		release( "_yield_" );
 		release( "eff" );
 		schema->updateRanges();
 
@@ -374,254 +375,20 @@ namespace TSF{
 		updateParameters();
 	}
 
+	void Fitter::setValue( string var, double val ){
+		int pos = find( parNames.begin(), parNames.end(), var ) - parNames.begin();
+		if ( pos >= parNames.size() ){
+			ERROR( tag, "Parameter " << var << " not found" ); 
+		} else {
 
-	void Fitter::fit( string cs, int charge, int cenBin, int ptBin ){
-		INFO( tag, "( cs=" << cs << ", charge=" << charge << ", iCen=" <<cenBin << ", ptBin=" << ptBin << ")" )
-
-		INFO( "DATASETS:" )
-		INFO( "yield_zb_All = " << schema->datasets[ "zb_All" ].yield() )
-		INFO( "yield_zd_All = " << schema->datasets[ "zd_All" ].yield() )
-
-		// are we using fit ranges?
-		// if so lets report
-		if ( schema->constrainFitRange() ){
-      		schema->reportFitRanges();
-      	}
-
-      	// just let us know what you are doing
-		INFO( tag, "OK Starting for ( charge=" << charge << ", cen=" << cenBin << ", ptBin=" << ptBin << " ) " );
-
-	
-		// check for sufficient statistics
-		if ( !sufficienctStatistics ){
-			fitIsGood = false;
-			updateParameters();
-			WARN( "Insufficient Statistics : Skipping " );
-			return;
+			WARN( tag, "Setting value (parno=" << pos << ", value = " << val << " )"  )
+			double arglist[10];
+			arglist[ 0 ] = pos + 1;
+			arglist[ 1 ] = val;
+			int iFlag = 0;
+			minuit->mnexcm( "SET PAR", arglist, 2, iFlag );
 		}
-
-
-		double arglist[10];
-      	arglist[0] = -1;
-      	int iFlag = 0;
-      	fitIsGood = false; 
-
-      	
-      	schema->setMethod( "fractional" );
-      	INFO(  tag, "Error Mode : " << self->schema->getMethod() );
-      	
-
-      	if ( "nll" != self->schema->getMethod() )
-      		arglist[ 0 ] = 1.0; 
-      	else 
-      		arglist[ 0 ] = 0.5; 
-
-      	minuit->mnexcm( "SET ERR", arglist, 1, iFlag );
-
-
-      	arglist[ 0 ] = 50000;
-		arglist[ 1 ] = 1.0;
-
-		int attempts = 0;
-		bool trying = true;
-		string status = "na";
-
-		
-		/*
-		while ( attempts < 6 && trying ){
-			schema->setMethod( "fractional" );
-			INFO( tag, "Error Mode : " << self->schema->getMethod() );
-			fixShapes();
-				minuit->mnexcm( "MINI", arglist, 1, iFlag );
-				status = minuit->fCstatu;
-			releaseShapes();
-
-			INFO( tag, "Step 1. Status " << status );
-			
-
-			// try a free fit with fractional errors
-			//minuit->mnexcm( "MINI", arglist, 1, iFlag );
-			
-			// switch to poisson errors
-			schema->setMethod( "poisson" );
-				INFO( tag, "Error Mode : " << self->schema->getMethod() );
-				minuit->mnexcm( "MINI", arglist, 1, iFlag );
-				minuit->mnexcm( "MINI", arglist, 1, iFlag );
-				minuit->mnexcm( "MINI", arglist, 1, iFlag );
-				status = minuit->fCstatu;
-			
-			INFO( tag, "Step 2. Status " << status );
-			if ( status == "CONVERGED " ){
-				schema->updateRanges();
-				trying = false;
-				break;
-			}
-
-			// fix the enhanced yields
-			fix( "_yield_" );
-				minuit->mnexcm( "MINI", arglist, 1, iFlag );
-				minuit->mnexcm( "MINI", arglist, 1, iFlag );
-				minuit->mnexcm( "MINI", arglist, 1, iFlag );
-				status = minuit->fCstatu;
-			release( "_yield_" );
-		
-			INFO ( tag, "Step 3. Status " << status );
-			
-			
-			if ( minuit->fCstatu == "CONVERGED " && attempts > 0){
-				schema->updateRanges();
-				trying = false;
-				break;
-			}
-			attempts ++ ;
-		}
-		INFO( tag, "Complete after " << attempts << plural( attempts, " attempt", " attempts" ) );
-		
-	
-		INFO( tag, "Attempting Yield Fit" )
-		// final step in the fit
-		schema->setMethod( "poisson" );
-			minuit->mnexcm( "MINI", arglist, 1, iFlag );
-			minuit->mnexcm( "MINI", arglist, 1, iFlag );
-		status = minuit->fCstatu;
-		INFO ( tag, "Final Status " << status );
-		*/
-	
-
-		
-		
-		fix( "eff" );
-		schema->setMethod( "fractional" );
-		fixShapes();
-			minuit->mnexcm( "MINI", arglist, 1, iFlag );
-			minuit->mnexcm( "MINI", arglist, 1, iFlag );
-			minuit->mnexcm( "MINI", arglist, 1, iFlag );
-			status = minuit->fCstatu;
-			INFO ( tag, "Step 1. Status " << status );
-		releaseShapes();
-
-		schema->setMethod( "chi2" );
-		fix( "yield" );
-		fix( "_yield_" );
-			minuit->mnexcm( "MINI", arglist, 1, iFlag );
-			minuit->mnexcm( "MINI", arglist, 1, iFlag );
-			minuit->mnexcm( "MINI", arglist, 1, iFlag );
-			status = minuit->fCstatu;
-			INFO ( tag, "Step 2. Status " << status );
-		release( "_yield_" );
-		release( "yield" );
-		schema->updateRanges();
-
-		fixShapes();
-			minuit->mnexcm( "MINI", arglist, 1, iFlag );
-			minuit->mnexcm( "MINI", arglist, 1, iFlag );
-			minuit->mnexcm( "MINI", arglist, 1, iFlag );
-			status = minuit->fCstatu;
-			INFO ( tag, "Step 1. Status " << status );
-		releaseShapes();
-
-		fix( "yield" );
-		fix( "_yield_" );
-			minuit->mnexcm( "MINI", arglist, 1, iFlag );
-			minuit->mnexcm( "MINI", arglist, 1, iFlag );
-			minuit->mnexcm( "MINI", arglist, 1, iFlag );
-			status = minuit->fCstatu;
-			INFO ( tag, "Step 2. Status " << status );
-		release( "_yield_" );
-		release( "yield" );
-		schema->updateRanges();
-
-		release( "eff" );
-
-
-		fix( "yield" );
-			minuit->mnexcm( "MINI", arglist, 1, iFlag );
-			minuit->mnexcm( "MINI", arglist, 1, iFlag );
-			minuit->mnexcm( "MINI", arglist, 1, iFlag );
-			status = minuit->fCstatu;
-			INFO ( tag, "Step 3. chi2 Status " << status );
-		release( "yield" );
-
-		fixShapes();
-		fix( "_yield_" );
-			minuit->mnexcm( "MINI", arglist, 1, iFlag );
-			minuit->mnexcm( "MINI", arglist, 1, iFlag );
-			minuit->mnexcm( "MINI", arglist, 1, iFlag );
-			status = minuit->fCstatu;
-			INFO ( tag, "Step 3. chi2 Status " << status );
-		release( "_yield_" );
-		releaseShapes();
-		release( "eff" );
-			
-		// schema->setMethod( "poisson" );
-		// 	minuit->mnexcm( "MINI", arglist, 1, iFlag );
-		// 	minuit->mnexcm( "MINI", arglist, 1, iFlag );
-
-		// fix( "sigma" );
-		// fix( "_yield_" );
-		// 	minuit->mnexcm( "MINI", arglist, 1, iFlag );
-		// 	minuit->mnexcm( "MINI", arglist, 1, iFlag );			
-		// 	status = minuit->fCstatu;
-		// release( "_yield_" );
-		// release( "sigma" );
-		
-		
-
-		INFO ( tag, "Final Status " << status );
-		schema->updateRanges();
-
-
-
-		
-		// fix( "sigma" );
-		// 	minuit->mnexcm( "MINI", arglist, 1, iFlag );
-		// 	minuit->mnexcm( "MINI", arglist, 1, iFlag );
-		// 	minuit->mnexcm( "MINI", arglist, 1, iFlag );
-		// release( "sigma" );
-		// schema->updateRanges();
-
-		
-		// fix( "mu" );
-		// 	minuit->mnexcm( "MINI", arglist, 1, iFlag );
-		// 	minuit->mnexcm( "MINI", arglist, 1, iFlag );
-		// 	minuit->mnexcm( "MINI", arglist, 1, iFlag );
-		// release( "mu" );
-
-		// schema->updateRanges();
-
-		// // fix( "_yield_" );
-		// fixShapes();
-		// 	schema->setMethod( "nll" );
-		// 		minuit->mnexcm( "MINI", arglist, 1, iFlag );
-		// 		minuit->mnexcm( "MINI", arglist, 1, iFlag );
-		// 		minuit->mnexcm( "MINI", arglist, 1, iFlag );
-
-		// 		status = minuit->fCstatu;
-		// releaseShapes();
-		// // release( "_yield_" );
-		
-
-      	if ( 0 == iFlag )
-			fitIsGood = true;
-		else 
-			fitIsGood = false;
-
-		
-		minuit->mnexcm( "STATUS", arglist, 1, iFlag ); // get errors
-
-		INFO( tag, "Final Status : " << status << " with flag = " << iFlag );
-
-		minuit->mnexcm( "HESSE", arglist, 1, iFlag );
-		
-
-		// get the final state of all variables 
-		INFO( tag, "Updating parameters after Fit" );
-		updateParameters();
-
-		//schema->reportModels();
 	}
-
-
 
 	// evaluate all the models for a given dataset
 	double Fitter::modelEval( string dataset, double x ){
@@ -750,9 +517,13 @@ namespace TSF{
 		}
 		return penalty;
 	}
+
 	double Fitter::enforceMassOrder( int npar , double * pars ){
 
 		double penalty = 1.0;
+
+		if ( !schema->exists( "zb_mu_Pi" ) )
+			return 1.0;
 
 		float muPi 	= currentValue( "zb_mu_Pi", npar, pars );
 		float muK 	= currentValue( "zb_mu_K", npar, pars );
@@ -805,7 +576,6 @@ namespace TSF{
 		penalty = 1.0 + ( x * x ) ;
 		
 		return penalty;
-
 	}
 
 	double Fitter::currentValue( string var, int npar, double * pars ){
@@ -833,6 +603,7 @@ namespace TSF{
 		fix( "mu" );
 		fix( "sig" );
 	}
+
 	// just a shortcut function
 	void Fitter::releaseShapes(){
 		release( "mu" );
@@ -873,6 +644,5 @@ namespace TSF{
 				minuit->Release( i );
 		} // i
 	}
-
 
 }
