@@ -34,7 +34,7 @@ void setlines( TLine * l, int c, int w  ){
 double sigTof = 0.012;
 double sigTpc = 0.07;
 void drawTofLines( double center, int c, double x1, double x2 ){
-	float n = 3;
+	float n = 10;
 	TLine * l1 = new TLine( x1, center-sigTof*n, x2, center-sigTof*n );
 	setlines( l1, c, 2 );
 	TLine * l2 = new TLine( x1, center+sigTof*n, x2, center+sigTof*n );

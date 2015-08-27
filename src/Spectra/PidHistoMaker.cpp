@@ -197,16 +197,6 @@ void PidHistoMaker::analyzeTofTrack( int iTrack ){
 		dedx = dedxNL;
 	} 
 
-	if ( make2D && rejectElectron(avgP, dedx, tof ) ){
-		book->cd( "dedx_tof" );
-
-		// combined charge 
-		if ( makeCombinedCharge ) 
-			book->fill( Common::speciesName( centerSpecies, 0, cBin, ptBin ), dedx, tof );
-		
-		book->fill( Common::speciesName( centerSpecies, charge, cBin, ptBin), dedx, tof );
-			
-	}
 	
 	// show the order 
 	if ( rejectElectron(avgP, dedx, tof ) ){
@@ -312,7 +302,15 @@ bool PidHistoMaker::enhanceDistributions( double avgP, int ptBin, int charge, do
 	if ( tof > deuteronCut )
 		return false;
 
-	
+	if ( make2D ){
+		book->cd( "dedx_tof" );
+		// combined charge 
+		if ( makeCombinedCharge ) 
+			book->fill( Common::speciesName( centerSpecies, 0, cBin, ptBin ), dedx, tof );
+		
+		book->fill( Common::speciesName( centerSpecies, charge, cBin, ptBin), dedx, tof );
+			
+	}
 
 
 	book->cd( "dedx" );

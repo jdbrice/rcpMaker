@@ -33,6 +33,7 @@ namespace TSF{
 		int nPars = 0;
 
 		string method;
+		bool extended = false;
 
 		bool fitInRange = false;
 		vector<FitRange> ranges;
@@ -121,6 +122,9 @@ namespace TSF{
 		int getVerbosity() const { return verbosity; }
 
 		bool tofEff() const { return vars.count( "eff_Pi") >= 1;}
+
+		bool extendedFit(  ) const { return extended; }
+		void setExtended( bool efit = true ) { extended = efit; }
 
 	};
 

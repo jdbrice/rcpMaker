@@ -3,6 +3,90 @@
 
 
 namespace TSF{
+
+	void Fitter::tminuitFCN(int &npar, double *gin, double &f, double *par, int flag){
+
+		double fnVal = 0.0;
+		updateParameters( npar, par );
+
+		bool useRange = self->schema->constrainFitRange();
+		string method = self->schema->getMethod();
+
+		// loop on datasets
+		for ( auto k : self->schema->datasets ){
+
+			string ds = k.first;
+
+			// loop on datapoints
+			for ( auto d : k.second ){
+				
+				// test for ranges
+				if ( useRange && !self->schema->inRange( ds, d.x )){
+					continue;
+				}
+
+
+				if ( "chi2" == method){
+					// Minimize by chi^2
+					if ( 0 == d.ey  )
+						continue;
+					double modelVal = self->modelEval( ds, d.x );
+					fnVal += chi2( d.y, modelVal, d.ey );	
+				} else if ( "nll" == method ){
+					// Minimize by negative log likelihood
+					double modelVal = self->modelEval( ds, d.x );
+					fnVal += nll( d.y, modelVal );
+				} else if ( "poisson" == method ){
+					// Minimize by poisson errors ie error = sqrt( N )
+					if ( 0 >= d.y || 0 >= d.ey )
+						continue;
+					double modelVal = self->modelEval( ds, d.x );
+					fnVal += poisson( d.y, modelVal );	
+				} else if ( "fractional" == method ){
+					// Minimize by fractional errors ie error =  N 
+					if ( 0 >= d.y || 0 >= d.ey )
+						continue;
+					double modelVal = self->modelEval( ds, d.x );
+					fnVal += fractional( d.y, modelVal );	
+				} else {
+					cout << "No Fit method" << endl;
+				}
+				
+			} // loop on data points
+
+
+
+			if ( "nll" != self->schema->getMethod() ){
+
+				if ( false && self->schema->extendedFit() && "zb_All" == k.first){
+					double mYield = modelYield( ds );
+					double dsYield = k.second.yield( ); // full yield, can also ask for yield in roi
+					fnVal = fnVal + ( dsYield - mYield )*( dsYield - mYield ) * 100;
+				}
+					
+				
+			} else {
+				double mYield = modelYield( ds );
+				double dsYield = k.second.yield( self->schema->getRanges() );
+
+				// subtract off this dataset's (N - E) term
+				fnVal = fnVal - ( dsYield - mYield );
+			}
+		}
+
+		// enforces 1/beta mass ordering
+		double penalty = self->enforceMassOrder( npar, par );
+		penalty = 1.0;
+		// enforce the enhanced yield less than total yield
+		// penalty *= self->enforceEnhancedYields( npar, par );
+		
+		// enforce the average total tofEff
+		// if ( !self->fixedEff ){
+		// 	penalty *= self->enforceEff( npar, par );
+		// }
+
+		f = (fnVal ) * penalty;
+	}
 	
 	vector<double> Fitter::convergence;
 
@@ -50,92 +134,6 @@ namespace TSF{
 
  
 	Fitter::~Fitter(){
-
-	}
-
-	void Fitter::tminuitFCN(int &npar, double *gin, double &f, double *par, int flag){
-
-		double fnVal = 0.0;
-		updateParameters( npar, par );
-
-		bool useRange = self->schema->constrainFitRange();
-		string method = self->schema->getMethod();
-
-		double normFactor = ( self->normFactor() / self->getNorm() );
-
-		// loop on datasets
-		for ( auto k : self->schema->datasets ){
-
-			string ds = k.first;
-
-			// loop on datapoints
-			for ( auto d : k.second ){
-				
-				if ( useRange && !self->schema->inRange( ds, d.x )){
-					//double modelVal = modelEval( ds, d.x );
-					//fnVal += modelVal;
-					continue;
-				}
-
-
-				if ( "chi2" == method ){
-					// Minimize by chi^2
-					if ( 0 == d.ey  )
-						continue;
-					double modelVal = self->modelEval( ds, d.x );
-					fnVal += chi2( d.y, modelVal, d.ey );	
-				} else if ( "nll" == method ){
-					// Minimize by negative log likelihood
-					double modelVal = self->modelEval( ds, d.x );
-					
-					fnVal += nll( d.y, modelVal );
-				} else if ( "poisson" == method ){
-					// Minimize by poisson errors ie error = sqrt( N )
-					if ( 0 >= d.y || 0 >= d.ey )
-						continue;
-					double modelVal = self->modelEval( ds, d.x );
-					fnVal += poisson( d.y, modelVal );	
-				} else if ( "fractional" == method ){
-					// Minimize by fractional errors ie error =  N 
-					if ( 0 >= d.y || 0 >= d.ey )
-						continue;
-					double modelVal = self->modelEval( ds, d.x );
-					fnVal += fractional( d.y, modelVal );	
-				} else {
-					cout << "No Fit method" << endl;
-				}
-			} // loop on data points
-
-			if ( "nll" != self->schema->getMethod() ){
-
-				if ( "zb_All" == k.first ){
-					double mYield = modelYield( ds );
-					double dsYield = k.second.yield( );
-					// nothing needed here for chi2
-					fnVal = fnVal + ( dsYield - mYield )*( dsYield - mYield ) * penaltyScale;
-					//INFO( tag, "Extended chi2 component = " << ( dsYield - mYield )*( dsYield - mYield ) * penaltyScale )
-				}
-			} else {
-				double mYield = modelYield( ds );
-				double dsYield = k.second.yield( self->schema->getRanges() );
-
-				// subtract off this dataset's (N - E) term
-				fnVal = fnVal - ( dsYield - mYield );
-			}
-		}
-
-		// enforces 1/beta mass ordering
-		double penalty = self->enforceMassOrder( npar, par );
-		penalty = 1.0;
-		// enforce the enhanced yield less than total yield
-		// penalty *= self->enforceEnhancedYields( npar, par );
-		
-		// enforce the average total tofEff
-		// if ( !self->fixedEff ){
-		// 	penalty *= self->enforceEff( npar, par );
-		// }
-
-		f = (fnVal ) * penalty;
 	}
 
 	void Fitter::loadDatasets( string cs, int charge, int cenBin, int ptBin ){
@@ -302,19 +300,20 @@ namespace TSF{
 		reportFitStatus();
 
 		schema->setMethod( "chi2" );
+		schema->setExtended( true );
 
-		fixShapes( );
-		fix( "eff" );
+		// fixShapes( );
+		//fix( "eff" );
 			minuit->mnexcm( "MINI", arglist, 1, iFlag );
 			minuit->mnexcm( "MINI", arglist, 1, iFlag );
 			minuit->mnexcm( "MINI", arglist, 1, iFlag );
 			status = minuit->fCstatu;
 			INFO ( tag, "Step 1. Status " << status );
-		releaseShapes(  );
-		release( "eff" );
+		// releaseShapes(  );
+		//release( "eff" );
 		schema->updateRanges();
 
-		INFO( tag, "BEFORE" );
+		INFO( tag, "AFTER" );
 		reportFitStatus();
 
 		// get the final state of all variables 
@@ -322,7 +321,7 @@ namespace TSF{
 		updateParameters();
 	}
 
-	void Fitter::fit4(  ){
+	void Fitter::fit4( string plc ){
 
 		double arglist[10];
 		arglist[ 0 ] = 5000;
@@ -334,17 +333,18 @@ namespace TSF{
 
 		
 		fix("eff");
-		release( "eff_Pi" );
-		// fixShapes();
-		fix( "_yield_" );
+		fix( "yield" );
+		fixShapes();
+		release( "eff_" + plc );
+		release( "yield_" + plc );
+		
 			minuit->mnexcm( "MINI", arglist, 1, iFlag );
 			minuit->mnexcm( "MINI", arglist, 1, iFlag );
 			minuit->mnexcm( "MINI", arglist, 1, iFlag );
 			status = minuit->fCstatu;
 			INFO ( tag, "Step 1. Status " << status );
-		// releaseShapes();
-		release( "_yield_" );
-		release( "eff" );
+
+		releaseAll();
 		schema->updateRanges();
 
 		// get the final state of all variables 
@@ -641,6 +641,16 @@ namespace TSF{
 				shouldRelease = true;
 
 			if ( shouldRelease && ( !check || !schema->var( parNames[ i ] )->fixed) )
+				minuit->Release( i );
+		} // i
+	}
+
+	void Fitter::releaseAll( bool check ){
+
+		fixedEff = false;
+		// loop over parameters
+		for ( int i = 0; i < parNames.size(); i++ ){
+			if (  !check || !schema->var( parNames[ i ] )->fixed )
 				minuit->Release( i );
 		} // i
 	}

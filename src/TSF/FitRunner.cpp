@@ -410,7 +410,13 @@ namespace TSF{
 
 					}
 
-					fitter.fit3(  );
+					fitter.fit4( "Pi" );
+					reportFit( &fitter, iPt );
+
+					fitter.fit4( "P" );
+					reportFit( &fitter, iPt );
+
+					fitter.fit4( "K" );
 					reportFit( &fitter, iPt );
 
 					
@@ -640,7 +646,8 @@ namespace TSF{
 		INFO( tag, "Total Yield in zb_All = " << yzb );
 		INFO( tag, "Total Yield in zd_All = " << yzd );
 
-		INFO( tag, "Total Fit Yield / Total Data Yield = " << total / yzd );
+		INFO( tag, "Total Fit Yield / Total Data Yield (zd) = " << total / yzd );
+		INFO( tag, "Total Fit Yield / Total Data Yield (zb) = " << total / yzb );
 
 	}
 

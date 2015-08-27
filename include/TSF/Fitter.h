@@ -94,7 +94,7 @@ namespace TSF{
 		void fit1(  );
 		void fit2(  );
 		void fit3(  );
-		void fit4(  );
+		void fit4( string plc );
 		void fitErrors(  );
 		
 
@@ -129,6 +129,7 @@ namespace TSF{
 
 		void fix( string var );
 		void release( string var, bool check = true );
+		void releaseAll( bool check = true );
 
 		void fixShapes();
 		void releaseShapes();
