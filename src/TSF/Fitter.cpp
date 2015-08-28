@@ -1,6 +1,7 @@
 #include "TSF/Fitter.h"
 #include "Spectra/PidHistoMaker.h"
 
+#include "TFitter.h"
 
 namespace TSF{
 
@@ -11,6 +12,7 @@ namespace TSF{
 
 		bool useRange = self->schema->constrainFitRange();
 		string method = self->schema->getMethod();
+		double norm = self->getNorm();
 
 		// loop on datasets
 		for ( auto k : self->schema->datasets ){
@@ -33,12 +35,25 @@ namespace TSF{
 					double modelVal = self->modelEval( ds, d.x );
 					fnVal += chi2( d.y, modelVal, d.ey );	
 				} else if ( "nll" == method ){
+					
+					double fobs = 0, fsub = 0;
 					// Minimize by negative log likelihood
-					double modelVal = self->modelEval( ds, d.x );
-					fnVal += nll( d.y, modelVal );
+					double fu = self->modelEval( ds, d.x ) * norm;
+					
+					if ( fu < 1.0e-9 ) fu = 1.0e-9;
+					double cu = d.y * norm;
+					int icu = (int) cu ;
+					fsub = -fu +cu*TMath::Log(fu);
+					if ( icu < 10000 ) 
+						fobs = self->getSumLog( icu );
+					else
+						fobs = TMath::LnGamma( cu + 1 );
+					fsub -= fobs;
+
+					fnVal -= fsub;
 				} else if ( "poisson" == method ){
 					// Minimize by poisson errors ie error = sqrt( N )
-					if ( 0 >= d.y || 0 >= d.ey )
+					if ( 0 >= d.y  )
 						continue;
 					double modelVal = self->modelEval( ds, d.x );
 					fnVal += poisson( d.y, modelVal );	
@@ -58,19 +73,20 @@ namespace TSF{
 
 			if ( "nll" != self->schema->getMethod() ){
 
-				if ( false && self->schema->extendedFit() && "zb_All" == k.first){
-					double mYield = modelYield( ds );
-					double dsYield = k.second.yield( ); // full yield, can also ask for yield in roi
-					fnVal = fnVal + ( dsYield - mYield )*( dsYield - mYield ) * 100;
-				}
+				// if ( self->schema->extendedFit() && "zb_All" == k.first){
+				// 	double mYield = modelYield( ds );
+				// 	double dsYield = k.second.yield( ); // full yield, can also ask for yield in roi
+				// 	fnVal = fnVal + ( dsYield - mYield )*( dsYield - mYield ) * 100;
+				// }
 					
 				
 			} else {
-				double mYield = modelYield( ds );
-				double dsYield = k.second.yield( self->schema->getRanges() );
+				fnVal *= 2;
+				// double mYield = modelYield( ds );
+				// double dsYield = k.second.yield( self->schema->getRanges() );
 
-				// subtract off this dataset's (N - E) term
-				fnVal = fnVal - ( dsYield - mYield );
+				// // subtract off this dataset's (N - E) term
+				// fnVal = fnVal - ( dsYield - mYield );
 			}
 		}
 
@@ -85,7 +101,7 @@ namespace TSF{
 		// 	penalty *= self->enforceEff( npar, par );
 		// }
 
-		f = (fnVal ) * penalty;
+		f = (fnVal * norm ) * penalty;
 	}
 	
 	vector<double> Fitter::convergence;
@@ -206,25 +222,28 @@ namespace TSF{
 		INFO( tag, "yield for zb_All inside roi = " << schema->datasets[ "zb_All" ].yield( schema->getRanges() ) );
 		INFO( tag, "yield for zd_All inside roi = " << schema->datasets[ "zd_All" ].yield( schema->getRanges() ) );
 
-		INFO( tag, "1 Sigma : " );
-		schema->updateRanges( 1.0 );
-		INFO( tag, "yield fraction in roi zb = " << schema->datasets[ "zb_All" ].yield( schema->getRanges() ) /schema->datasets[ "zb_All" ].yield()  );
-		INFO( tag, "yield fraction in roi zd = " << schema->datasets[ "zd_All" ].yield( schema->getRanges() ) /schema->datasets[ "zd_All" ].yield()  );
+		bool doBinCount = false;
+		if ( doBinCount ){
+			INFO( tag, "1 Sigma : " );
+			schema->updateRanges( 1.0 );
+			INFO( tag, "yield fraction in roi zb = " << schema->datasets[ "zb_All" ].yield( schema->getRanges() ) /schema->datasets[ "zb_All" ].yield()  );
+			INFO( tag, "yield fraction in roi zd = " << schema->datasets[ "zd_All" ].yield( schema->getRanges() ) /schema->datasets[ "zd_All" ].yield()  );
 
-		INFO( tag, "2 Sigma : " );
-		schema->updateRanges( 2.0 );
-		INFO( tag, "yield fraction in roi zb = " << schema->datasets[ "zb_All" ].yield( schema->getRanges() ) /schema->datasets[ "zb_All" ].yield()  );
-		INFO( tag, "yield fraction in roi zd = " << schema->datasets[ "zd_All" ].yield( schema->getRanges() ) /schema->datasets[ "zd_All" ].yield()  );
+			INFO( tag, "2 Sigma : " );
+			schema->updateRanges( 2.0 );
+			INFO( tag, "yield fraction in roi zb = " << schema->datasets[ "zb_All" ].yield( schema->getRanges() ) /schema->datasets[ "zb_All" ].yield()  );
+			INFO( tag, "yield fraction in roi zd = " << schema->datasets[ "zd_All" ].yield( schema->getRanges() ) /schema->datasets[ "zd_All" ].yield()  );
 
-		INFO( tag, "3 Sigma : " );
-		schema->updateRanges( 3.0 );
-		INFO( tag, "yield fraction in roi zb = " << schema->datasets[ "zb_All" ].yield( schema->getRanges() ) /schema->datasets[ "zb_All" ].yield()  );
-		INFO( tag, "yield fraction in roi zd = " << schema->datasets[ "zd_All" ].yield( schema->getRanges() ) /schema->datasets[ "zd_All" ].yield()  );
+			INFO( tag, "3 Sigma : " );
+			schema->updateRanges( 3.0 );
+			INFO( tag, "yield fraction in roi zb = " << schema->datasets[ "zb_All" ].yield( schema->getRanges() ) /schema->datasets[ "zb_All" ].yield()  );
+			INFO( tag, "yield fraction in roi zd = " << schema->datasets[ "zd_All" ].yield( schema->getRanges() ) /schema->datasets[ "zd_All" ].yield()  );
 
-		INFO( tag, "4 Sigma : " );
-		schema->updateRanges( 4.0 );
-		INFO( tag, "yield fraction in roi zb = " << schema->datasets[ "zb_All" ].yield( schema->getRanges() ) /schema->datasets[ "zb_All" ].yield()  );
-		INFO( tag, "yield fraction in roi zd = " << schema->datasets[ "zd_All" ].yield( schema->getRanges() ) /schema->datasets[ "zd_All" ].yield()  );
+			INFO( tag, "4 Sigma : " );
+			schema->updateRanges( 4.0 );
+			INFO( tag, "yield fraction in roi zb = " << schema->datasets[ "zb_All" ].yield( schema->getRanges() ) /schema->datasets[ "zb_All" ].yield()  );
+			INFO( tag, "yield fraction in roi zd = " << schema->datasets[ "zd_All" ].yield( schema->getRanges() ) /schema->datasets[ "zd_All" ].yield()  );
+		}
 		
 
 		// get the final state of all variables 
@@ -240,7 +259,7 @@ namespace TSF{
 		int iFlag = -1;
 		string status = "na";
 
-		schema->setMethod( "chi2" );
+		schema->setMethod( "poisson" );
 
 		fix( "eff" );
 		fixShapes();
@@ -267,7 +286,7 @@ namespace TSF{
 		int iFlag = -1;
 		string status = "na";
 
-		schema->setMethod( "chi2" );
+		schema->setMethod( "poisson" );
 
 		
 		fix( "eff" );
@@ -288,7 +307,42 @@ namespace TSF{
 		updateParameters();
 	}
 
-	void Fitter::fit3(  ){
+	void Fitter::fit3( string plc ){
+
+		double arglist[10];
+		arglist[ 0 ] = 5000;
+		arglist[ 1 ] = 1.0;
+		int iFlag = -1;
+		string status = "na";
+
+		INFO( tag, "BEFORE" );
+		reportFitStatus();
+
+		schema->setMethod( "poisson" );
+		//schema->updateRanges( 1 );
+
+		// fixShapes();
+		fix( "_yield_" );
+		//fix( "eff" );
+		//release( "eff_" + plc );
+		//release( "yield_" + plc );
+		
+			minuit->mnexcm( "MINI", arglist, 1, iFlag );
+			status = minuit->fCstatu;
+			INFO ( tag, "Step 1. Status " << status );
+		
+		// releaseAll(  );
+		//schema->updateRanges();
+
+		INFO( tag, "AFTER" );
+		reportFitStatus();
+
+		// get the final state of all variables 
+		INFO( tag, "Updating parameters after Fit" );
+		updateParameters();
+	}
+
+	void Fitter::fit4( string plc ){
 
 		double arglist[10];
 		arglist[ 0 ] = 5000;
@@ -302,15 +356,14 @@ namespace TSF{
 		schema->setMethod( "chi2" );
 		schema->setExtended( true );
 
-		// fixShapes( );
-		//fix( "eff" );
-			minuit->mnexcm( "MINI", arglist, 1, iFlag );
+		fixShapes( );
+		fix( "eff" );
+		release( "yield_" + plc );
 			minuit->mnexcm( "MINI", arglist, 1, iFlag );
 			minuit->mnexcm( "MINI", arglist, 1, iFlag );
 			status = minuit->fCstatu;
 			INFO ( tag, "Step 1. Status " << status );
-		// releaseShapes(  );
-		//release( "eff" );
+		releaseAll(  );
 		schema->updateRanges();
 
 		INFO( tag, "AFTER" );
@@ -321,7 +374,7 @@ namespace TSF{
 		updateParameters();
 	}
 
-	void Fitter::fit4( string plc ){
+	void Fitter::fit5( string plc ){
 
 		double arglist[10];
 		arglist[ 0 ] = 5000;

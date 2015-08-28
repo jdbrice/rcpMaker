@@ -168,7 +168,7 @@ namespace TSF{
 
 				INFO( tag, "Fixing zb_sigma_" << plc << " to " << sigmaSets[ "zb_" + plc ].mean() )
 				//schema->setInitialSigma( "zb_sigma_"+plc, hm, hm, hm );
-				schema->fixParameter( "zb_sigma_"+plc, hm );
+				schema->fixParameter( "zb_sigma_"+plc, zbSig );
 			}
 
 			// default low pt settings for zd
@@ -188,6 +188,7 @@ namespace TSF{
 				else
 					schema->setInitialMu( "zd_mu_"+plc, zdMu, hm, zdDeltaMu);
 				schema->setInitialSigma( "zd_sigma_"+plc, hm, hm - 0.002, hm + 0.002  );
+				// schema->fixParameter( "zd_sigma_"+plc, hm  );
 			}
 				
 				
@@ -200,7 +201,7 @@ namespace TSF{
 			
 			// TODO: decide on eff scheme
 			double eff_fudge = 0.01;
-			schema->var( "eff_" + plc )->val = 1.0 ;//+ ( rnd->Rndm() * (2 * eff_fudge) - eff_fudge );
+			schema->var( "eff_" + plc )->val = 1.0 + ( rnd->Rndm() * (2 * eff_fudge) - eff_fudge );
 			if ( avgP <= 0.01 )
 				schema->var( "eff_" + plc )->fixed = true;
 			else 
@@ -400,24 +401,33 @@ namespace TSF{
 					fitter.nop();
 					reportFit( &fitter, iPt );
 					
-					for ( int i = 0; i < 5; i++ ){
-						
-						fitter.fit1(  );
-						reportFit( &fitter, iPt );
+					
+					// for ( int i = 0; i < 5; i ++){
+					// 	fitter.fit1(  );
+					// 	reportFit( &fitter, iPt );
 
-						fitter.fit2(  );
-						reportFit( &fitter, iPt );
+					// 	fitter.fit2(  );
+					// 	reportFit( &fitter, iPt );
+					// }
 
-					}
+					
 
-					fitter.fit4( "Pi" );
-					reportFit( &fitter, iPt );
+					
+					// // for ( string plc : { "Pi", "P", "K" } ){
+					// fitter.fit3( "");
+					// fitter.fit3( "");
+					// fitter.fit3( "");
+					// reportFit( &fitter, iPt );
+					// }
+					// 	
 
-					fitter.fit4( "P" );
-					reportFit( &fitter, iPt );
+					// 	fitter.fit4( plc );
+					// 	reportFit( &fitter, iPt );
+					// }
+					
 
-					fitter.fit4( "K" );
-					reportFit( &fitter, iPt );
+
+					
 
 					
 					
@@ -478,7 +488,7 @@ namespace TSF{
 		double scaler = 1e-6;
 
 		int binmax = h->GetMaximumBin();
-		double max = h->GetBinContent( binmax ) * 1.05;
+		double max = h->GetBinContent( binmax ) * 5;
 		h->GetYaxis()->SetRangeUser( schema->getNormalization() * scaler, max );
 
 		int fb = h->FindFirstBinAbove( 0 ) - 10;
@@ -599,16 +609,16 @@ namespace TSF{
 
 
 		INFO( tag, "Reporting zb" )
-		zbReporter->newPage( 2, 2 );
+		zbReporter->newPage( 1, 1 );
 		{
 			zbReporter->cd( 1, 1 );
 			drawSet( "zb_All", fitter, iPt );
-			zbReporter->cd( 2, 1 );
-			drawSet( "zb_Pi", fitter, iPt );
-			zbReporter->cd( 1, 2 );
-			drawSet( "zb_K", fitter, iPt );
-			zbReporter->cd( 2, 2 );
-			drawSet( "zb_P", fitter, iPt );
+			// zbReporter->cd( 2, 1 );
+			// drawSet( "zb_Pi", fitter, iPt );
+			// zbReporter->cd( 1, 2 );
+			// drawSet( "zb_K", fitter, iPt );
+			// zbReporter->cd( 2, 2 );
+			// drawSet( "zb_P", fitter, iPt );
 		}
 		zbReporter->savePage();
 
@@ -648,6 +658,10 @@ namespace TSF{
 
 		INFO( tag, "Total Fit Yield / Total Data Yield (zd) = " << total / yzd );
 		INFO( tag, "Total Fit Yield / Total Data Yield (zb) = " << total / yzb );
+
+		double roiyzb = schema->datasets[ "zb_All" ].yield( schema->getRanges() );
+		double roiyzd = schema->datasets[ "zd_All" ].yield( schema->getRanges() );
+		INFO( tag, "zb_All / zd_All in roi = " << roiyzb / roiyzd );
 
 	}
 

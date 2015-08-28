@@ -88,13 +88,30 @@ namespace TSF{
 
 		static void updateParameters( int npar = 0, double * pars = 0);
 
+		vector<double> sumLog;
+		double getSumLog( int n ){
+			if ( n < 0 ) return 0;
+			if ( n >= sumLog.size() ){
+				sumLog.clear();
+				int nLog = 2 * n + 1000;
+				double fobs = 0;
+
+				for ( int j = 1; j < nLog; j++ ){
+					if ( j > 1 ) fobs += log( j );
+					sumLog.push_back( fobs );
+				}
+			}
+			return sumLog[ n ];
+		}
+
 		void loadDatasets( string cs, int charge, int cenBin, int ptBin );
 		
 		void nop(  );
 		void fit1(  );
 		void fit2(  );
-		void fit3(  );
+		void fit3( string plc );
 		void fit4( string plc );
+		void fit5( string plc );
 		void fitErrors(  );
 		
 
