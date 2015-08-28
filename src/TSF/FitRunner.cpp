@@ -168,7 +168,7 @@ namespace TSF{
 
 				INFO( tag, "Fixing zb_sigma_" << plc << " to " << sigmaSets[ "zb_" + plc ].mean() )
 				//schema->setInitialSigma( "zb_sigma_"+plc, hm, hm, hm );
-				schema->fixParameter( "zb_sigma_"+plc, zbSig );
+				schema->fixParameter( "zb_sigma_"+plc, hm );
 			}
 
 			// default low pt settings for zd
@@ -279,14 +279,14 @@ namespace TSF{
 
 					schema->var( var )->exclude = false;
 					schema->var( var )->min = 0;
-					schema->var( var )->max = schema->getNormalization() * 10;
+					schema->var( var )->max = 1.0;
 
 					if ( roi > 0 )
 						schema->addRange( "zd_" + plc, zdMu2 - zdSig2 * roi, zdMu2 + zdSig2 * roi, "zd_mu_" + plc2, "zd_sigma_" + plc2, roi );
 
 					if ( firstTimeIncluded && plc != plc2 ){
-						schema->var( var )->val = 1/schema->getNormalization();
-						schema->var( var )->error = 0.1/schema->getNormalization();
+						schema->var( var )->val = 0.75;
+						schema->var( var )->error = 0.1;
 					}
 					// TODO: initial yield?
 					// schema->var( var )->val = 0.00001;
@@ -327,14 +327,14 @@ namespace TSF{
 
 					schema->var( var )->exclude = false;
 					schema->var( var )->min = 0;
-					schema->var( var )->max = schema->getNormalization() * 10;
+					schema->var( var )->max = 1.0;
 
 					if ( roi > 0 )
 						schema->addRange( "zb_" + plc, zbMu2 - zbSig2 * roi, zbMu2 + zbSig2 * roi, "zb_mu_" + plc2, "zb_sigma_" + plc2, roi );
 
 					if ( firstTimeIncluded && plc != plc2){
-						schema->var( var )->val = 1/schema->getNormalization();
-						schema->var( var )->error = 0.1/schema->getNormalization();
+						schema->var( var )->val = 0.75;
+						schema->var( var )->error = 0.1;
 					}
 					// TODO: initial yield?
 					// schema->var( var )->val = 0.01;
@@ -402,22 +402,22 @@ namespace TSF{
 					reportFit( &fitter, iPt );
 					
 					
-					// for ( int i = 0; i < 5; i ++){
-					// 	fitter.fit1(  );
-					// 	reportFit( &fitter, iPt );
+					for ( int i = 0; i < 5; i ++){
+						fitter.fit1(  );
+						reportFit( &fitter, iPt );
 
-					// 	fitter.fit2(  );
-					// 	reportFit( &fitter, iPt );
-					// }
+						fitter.fit2(  );
+						reportFit( &fitter, iPt );
+					}
 
-					
+					fitter.fit3( "");
+					reportFit( &fitter, iPt );
 
 					
 					// // for ( string plc : { "Pi", "P", "K" } ){
 					// fitter.fit3( "");
 					// fitter.fit3( "");
-					// fitter.fit3( "");
-					// reportFit( &fitter, iPt );
+					
 					// }
 					// 	
 
@@ -609,16 +609,16 @@ namespace TSF{
 
 
 		INFO( tag, "Reporting zb" )
-		zbReporter->newPage( 1, 1 );
+		zbReporter->newPage( 2, 2 );
 		{
 			zbReporter->cd( 1, 1 );
 			drawSet( "zb_All", fitter, iPt );
-			// zbReporter->cd( 2, 1 );
-			// drawSet( "zb_Pi", fitter, iPt );
-			// zbReporter->cd( 1, 2 );
-			// drawSet( "zb_K", fitter, iPt );
-			// zbReporter->cd( 2, 2 );
-			// drawSet( "zb_P", fitter, iPt );
+			zbReporter->cd( 2, 1 );
+			drawSet( "zb_Pi", fitter, iPt );
+			zbReporter->cd( 1, 2 );
+			drawSet( "zb_K", fitter, iPt );
+			zbReporter->cd( 2, 2 );
+			drawSet( "zb_P", fitter, iPt );
 		}
 		zbReporter->savePage();
 
@@ -795,7 +795,7 @@ namespace TSF{
 			string vName = pre + plc1 + "_yield_" + plc2;
 			string hName = Common::yieldName( plc1, iCen, iCharge, plc2 );
 
-			double sC = schema->var( vName )->val / book->get( hName )->GetBinWidth( iPt );
+			double sC = schema->var( vName )->val;
 			double sE = schema->var( vName )->error;
 			book->setBin( hName, iPt, sC, sE );
 		}

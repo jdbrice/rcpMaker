@@ -328,6 +328,8 @@ namespace TSF{
 		//release( "yield_" + plc );
 		
 			minuit->mnexcm( "MINI", arglist, 1, iFlag );
+			minuit->mnexcm( "MINI", arglist, 1, iFlag );
+			minuit->mnexcm( "MINI", arglist, 1, iFlag );
 			status = minuit->fCstatu;
 			INFO ( tag, "Step 1. Status " << status );
 		
