@@ -21,6 +21,7 @@ sources = 	Engine.cpp 							\
 			Params/FeedDownParams.cpp 			\
 			Params/EnergyLossParams.cpp			\
 			Spectra/PidHistoMaker.cpp			\
+			Spectra/PidDataMaker.cpp			\
 			Present/PidYieldPresenter.cpp 		\
 			Correction/ApplyPostCorr.cpp		\
 			Correction/SpectraCorrecter.cpp
@@ -38,7 +39,7 @@ ROOTGLIBS     	= $(shell root-config --glibs)
 
 # Custom Project includes and libs
 includes		= -I../include -I. -I$(ROOTSYS)/include -I$(JDB_LIB)/include/jdb -I$(JDB_LIB)/include 
-libraries 		= $(ROOTLIBS) -lRooFitCore -lRooFit -lMinuit $(CERNLIBS) $(SYSLIBS)
+libraries 		= $(ROOTLIBS) -lRooFitCore -lRooFit -lMinuit $(CERNLIBS) $(SYSLIBS) 
 staticLibs 		= $(JDB_LIB)/lib/libJDB.a
 
 cxx 		= g++ -std=c++11

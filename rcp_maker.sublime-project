@@ -1,0 +1,18 @@
+{
+	"folders":
+	[
+		{
+			"path": "/Users/danielbrandenburg/bnl/local/work/rcpMaker",
+			"file_exclude_patterns":[
+    			"*.root",
+    			"*.o",
+    			"*.pdf"
+			]
+		}
+	],
+	"settings":
+    {
+        "tab_size": 4,
+        "word_wrap": true,
+    },
+}

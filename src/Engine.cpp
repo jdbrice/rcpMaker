@@ -12,7 +12,9 @@ using namespace jdb;
 
 // Spectra 
 	#include "Spectra/InclusiveSpectra.h"
-//	#include "Spectra/PidHistoMaker.h"
+	#include "Spectra/PidHistoMaker.h"
+	#include "Spectra/PidDataMaker.h"
+	// #include "Spectra/PidPoint.h"
 
 
 // McMaker
@@ -71,6 +73,9 @@ int main( int argc, char* argv[] ) {
 			} else if ( "PidHistoMaker" == job ){
 				PidHistoMaker pps( &config, "PidHistoMaker.", fileList, jobPrefix  );
 				pps.make();
+			} else if ( "PidDataMaker" == job ){
+				PidDataMaker pdm( &config, "PidDataMaker.", fileList, jobPrefix  );
+				pdm.make();
 			} else if ( "TofEffFitter" == job ){
 				TofEffFitter tef( &config, "TofEffFitter." );
 				tef.make();     
@@ -97,5 +102,19 @@ int main( int argc, char* argv[] ) {
 		}
 
 	}
+
+
+	// TFile * f = new TFile( "test.root", "RECREATE" );
+
+	// PidPoint p;
+
+	// p.zb.push_back( 100 );
+	// p.zd.push_back( 200 );
+
+	// p.Write( "test_point" );
+
+	// f->Close();
+
+
 	return 0;
 }

@@ -86,7 +86,7 @@ public:
 		return "dedx_tof_" + centerSpecies + "_" + Common::chargeString(charge) + "_" + ts(cenBin);
 	}
 	static string speciesName( string centerSpecies, int charge, int cenBin, int pBin ){
-		return "dedx_tof_" + centerSpecies + "_" + Common::chargeString(charge) + "_" + ts(cenBin) + "_" + ts(pBin);
+		return centerSpecies + "_" + Common::chargeString(charge) + "_" + ts(cenBin) + "_" + ts(pBin);
 	}
 	static string zbName( string centerSpecies, int charge, int cenBin, int pBin, string eSpecies = "" ){
 		string ePart = "";
