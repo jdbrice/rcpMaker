@@ -80,7 +80,7 @@ void PidDataMaker::preEventLoop() {
 				
 					// create a PidPoint
 					string nname = Common::speciesName( centerSpecies, c, cb, iPt );
-					pidPoints[ nname ] = unique_ptr<TNtuple>( new TNtuple( nname.c_str(), "PidData", "zb:zd" ) );
+					pidPoints[ nname ] = unique_ptr<TNtuple>( new TNtuple( nname.c_str(), "PidData", "zb:zd:w" ) );
 				}
 			}
 		}
@@ -152,12 +152,10 @@ void PidDataMaker::analyzeTofTrack( int iTrack ){
 		dedx = dedxNL;
 	} 
 
-	// i have :
-	// pT_bin
-	// charge
-	// centrality bin
+	double trackWeight = eventWeight;
+	trackWeight = trackWeight * sc->tpcEffWeight( centerSpecies, trackPt, cBin, charge );
 	string name = Common::speciesName( centerSpecies, charge, cBin, ptBin );
-	pidPoints[ name ]->Fill( tof, dedx );
+	pidPoints[ name ]->Fill( tof, dedx, trackWeight );
 	
 	book->cd();
 }

@@ -25,9 +25,7 @@ void UnitTest( string df ){
 	TCanvas * c3 = newCan( "1D projection of zd" );
 	pp.project1D( "PidPoints/Pi_p_0_15", "zd" );
 
-	TCanvas * c4 = newCan( "1D projection of zd with 1sigma Pi cut on zb" );
-	pp.project1D( "PidPoints/Pi_p_0_15", "zd", "abs(zb) < 0.012" );
-
-	INFO( tag, "UT_EQ : " <<  UT_EQ( 2, 3 ) );
+	TCanvas * c4 = newCan( "1D projection of zd with 1sigma Kaon cut on zb" );
+	pp.projectEnhanced( "PidPoints/Pi_p_0_15", "zd", 0.14-0.012, 0.14+0.012 );
 
 }

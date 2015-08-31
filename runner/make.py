@@ -2,6 +2,7 @@
 import TpcEff.make_xml_configs as effc
 import EnergyLoss.make_xml_configs as elossc
 import PidHisto.make_xml_configs as pidhc
+import PidTree.make_xml_configs as pidtc
 import TofEff.make_xml_configs as tofc
 import FeedDown.make_xml_configs as fdc
 import Fitter.make_xml_configs as fitc
@@ -42,6 +43,8 @@ fdc.write( os.path.join( args.data_path, "urqmd" ), args.output_path, args.outpu
 """Pid Makers"""
 #PidHisto
 pidhc.write( os.path.join( args.data_path, "data", "RcpPicoDst" ), args.output_path, args.output_config_path, os.path.join( args.config_base_path, "PidHisto/") )
+#PidTree
+pidtc.write( os.path.join( args.data_path, "data", "RcpPicoDst" ), args.output_path, args.output_config_path, os.path.join( args.config_base_path, "PidTree/") )
 # Pif Fitter
 fitc.write( args.output_path, os.path.join( args.config_base_path, "Fitter/") )
 
