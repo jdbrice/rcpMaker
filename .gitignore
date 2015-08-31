@@ -4,7 +4,7 @@
 *.zip
 *.DataSource*
 /products
-
+/config
 
 # image outputs
 *.eps
