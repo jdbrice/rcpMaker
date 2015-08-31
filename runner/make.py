@@ -44,7 +44,7 @@ fdc.write( os.path.join( args.data_path, "urqmd" ), args.output_path, args.outpu
 #PidHisto
 pidhc.write( os.path.join( args.data_path, "data", "RcpPicoDst" ), args.output_path, args.output_config_path, os.path.join( args.config_base_path, "PidHisto/") )
 #PidTree
-pidtc.write( os.path.join( args.data_path, "data", "RcpPicoDst" ), args.output_path, args.output_config_path, os.path.join( args.config_base_path, "PidTree/") )
+pidtc.write( os.path.join( args.data_path, "data", "RcpPicoDst" ), args.output_path, args.output_config_path, os.path.join( args.config_base_path, "PidData/") )
 # Pif Fitter
 fitc.write( args.output_path, os.path.join( args.config_base_path, "Fitter/") )
 

@@ -6,7 +6,7 @@ pjoin = os.path.join
 t_config_file = "{state}_{plc}.{ext}"
 t_data_file = "{plc}.{ext}"
 # all of them should define this
-t_product_file = "PidTree_{state}_{plc}.{ext}"
+t_product_file = "PidData_{state}_{plc}.{ext}"
 
 
 
