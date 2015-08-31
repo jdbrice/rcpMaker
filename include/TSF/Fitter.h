@@ -104,12 +104,12 @@ namespace TSF{
 			return sumLog[ n ];
 		}
 
-		void loadDatasets( string cs, int charge, int cenBin, int ptBin );
+		void loadDatasets( string cs, int charge, int cenBin, int ptBin, bool enhanced = false );
 		
 		void nop(  );
 		void fit1(  );
 		void fit2(  );
-		void fit3( string plc );
+		void fit3( );
 		void fit4( string plc );
 		void fit5( string plc );
 		void fitErrors(  );

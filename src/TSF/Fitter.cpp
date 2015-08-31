@@ -1,5 +1,6 @@
 #include "TSF/Fitter.h"
 #include "Spectra/PidHistoMaker.h"
+#include "Spectra/PidProjector.h"
 
 #include "TFitter.h"
 
@@ -152,48 +153,68 @@ namespace TSF{
 	Fitter::~Fitter(){
 	}
 
-	void Fitter::loadDatasets( string cs, int charge, int cenBin, int ptBin ){
+	void Fitter::loadDatasets( string cs, int charge, int cenBin, int ptBin, bool enhanced ){
 		INFO( tag, "( cs=" << cs << ", charge=" << charge << ", iCen=" <<cenBin << ", ptBin=" << ptBin << ")" )
 
-		map< string, TH1D* > zb;
-		map< string, TH1D* > zd;
+		dataFile->cd();
+		double zbBinWidth = 0.006; // TODO: fix hardcode
+		double zdBinWidth = 0.035; // TODO: fix hardcode
+		PidProjector proj( dataFile, zbBinWidth, zdBinWidth );
 
 		schema->clearDatasets();
 
 		DEBUG( "Loading " << "tof/" + Common::zbName( cs, charge, cenBin, ptBin ) );
 		DEBUG( "Loading " << "dedx/" + Common::zbName( cs, charge, cenBin, ptBin ) );
-		dataHists[ "zb_All"] = (TH1*)dataFile->Get( ("tof/" + Common::zbName( cs, charge, cenBin, ptBin )).c_str() 		);
-		dataHists[ "zd_All"] = (TH1*)dataFile->Get( ("dedx/" + Common::zdName( cs, charge, cenBin, ptBin )).c_str() 	);
-		DEBUG( "got zb_All = " << dataHists[ "zb_All"] )
-		DEBUG( "got zd_All = " << dataHists[ "zd_All"] )
 
+		double nSigAboveP = 3.0; // TODO: fix hardcode
+		double sigmaP = schema->var( "zb_sigma_P" )->val;
+		if ( !enhanced )
+			sigmaP = 0.012; // TODO: fix hardcode
 
-		// dEdx enhanced distributions
-		DEBUG( "Loading " << "dedx/" + Common::zbName( cs, charge, cenBin, ptBin, "Pi" ) );
-		DEBUG( "Loading " << "dedx/" + Common::zbName( cs, charge, cenBin, ptBin, "K" ) );
-		DEBUG( "Loading " << "dedx/" + Common::zbName( cs, charge, cenBin, ptBin, "P" ) );
-		dataHists[ "zd_K" ]		= (TH1D*)dataFile->Get( ("dedx/" + Common::zdName( cs, charge, cenBin, ptBin, "K" )).c_str() );
-		dataHists[ "zd_Pi" ]	= (TH1D*)dataFile->Get( ("dedx/" + Common::zdName( cs, charge, cenBin, ptBin, "Pi" )).c_str() );
-		dataHists[ "zd_P" ]		= (TH1D*)dataFile->Get( ("dedx/" + Common::zdName( cs, charge, cenBin, ptBin, "P" )).c_str() );
-
-		// 1/beta enhanced distributions
-		DEBUG( "Loading " << "tof/" + Common::zbName( cs, charge, cenBin, ptBin, "Pi" ) );
-		DEBUG( "Loading " << "tof/" + Common::zbName( cs, charge, cenBin, ptBin, "K" ) );
-		DEBUG( "Loading " << "tof/" + Common::zbName( cs, charge, cenBin, ptBin, "P" ) );
-		dataHists[ "zb_Pi" ] 	= (TH1D*)dataFile->Get( ("tof/" + Common::zbName( cs, charge, cenBin, ptBin, "Pi" )).c_str() );
-		dataHists[ "zb_K" ] 	= (TH1D*)dataFile->Get( ("tof/" + Common::zbName( cs, charge, cenBin, ptBin, "K" )).c_str() );
-		dataHists[ "zb_P" ] 	= (TH1D*)dataFile->Get( ("tof/" + Common::zbName( cs, charge, cenBin, ptBin, "P" )).c_str() );
+		proj.cutDeuterons( schema->var( "zb_mu_P" )->val, sigmaP, nSigAboveP );
+		string name = Common::speciesName( cs, charge, cenBin, ptBin );
+		dataHists[ "zb_All" ] = proj.project1D( name, "zb" );
+		dataHists[ "zd_All" ] = proj.project1D( name, "zd" );
 		
-		DEBUG( "Getting norm from : EventQA/mappedRefMultBins" )
-		norm = ((TH1D*)dataFile->Get( "EventQA/mappedRefMultBins" ))->GetBinContent( cenBin + 1 );
+		if ( enhanced ){
+			// load the enhanced distributions
+			for ( string var : { "zb", "zd" } ){
+				for ( string plc : Common::species ){
+
+					string other = "zb";
+					if ( "zb" == var )
+						other = "zd";
+
+					INFO( tag, "Attempting to load " << var + "_" + plc );
+					if ( schema->exists( other + "_mu_" + plc ) != true )
+						continue;
+
+					double center = schema->var( other + "_mu_" + plc )->val;
+					double sigma = schema->var( other + "_sigma_" + plc )->val;      
+					INFO( tag, "center = " << center << ", sigma=" << sigma );
+
+					dataHists[ var + "_" + plc ] = proj.projectEnhanced( name, var, plc, center - sigma, center + sigma ); 
+					INFO( tag, "Got " << var + "_" + plc );
+				}
+			}
+		}
+		
+		// get N_evnts for normalization
+		INFO( "Getting norm from : EventQA/mappedRefMultBins" );
+			norm = ((TH1D*)dataFile->Get( "EventQA/mappedRefMultBins" ))->GetBinContent( cenBin + 1 );
+		INFO( tag, "N_evts = " << norm );
 
 		// Used for setting the scale when drawing
+		INFO( tag, "zd_All = " << dataHists[ "zd_All"] );
 		double maxYield = dataHists[ "zd_All"]->Integral();
+		INFO( tag, "Integral of zd_All (used for drawing) = " << maxYield );
 		schema->setNormalization( maxYield / norm );
+		INFO( tag, "Schema norm : " << maxYield / norm );
 
 
 		sufficienctStatistics = true;
 
+		// load the histograms into the schema
 		for ( auto k : dataHists ){
 
 			if ( !k.second ){
@@ -213,6 +234,7 @@ namespace TSF{
 		}
 
 	}
+
 	
 	void Fitter::nop( ){
 
@@ -221,30 +243,6 @@ namespace TSF{
 		INFO( "yield_zd_All = " << schema->datasets[ "zd_All" ].yield() );
 		INFO( tag, "yield for zb_All inside roi = " << schema->datasets[ "zb_All" ].yield( schema->getRanges() ) );
 		INFO( tag, "yield for zd_All inside roi = " << schema->datasets[ "zd_All" ].yield( schema->getRanges() ) );
-
-		bool doBinCount = false;
-		if ( doBinCount ){
-			INFO( tag, "1 Sigma : " );
-			schema->updateRanges( 1.0 );
-			INFO( tag, "yield fraction in roi zb = " << schema->datasets[ "zb_All" ].yield( schema->getRanges() ) /schema->datasets[ "zb_All" ].yield()  );
-			INFO( tag, "yield fraction in roi zd = " << schema->datasets[ "zd_All" ].yield( schema->getRanges() ) /schema->datasets[ "zd_All" ].yield()  );
-
-			INFO( tag, "2 Sigma : " );
-			schema->updateRanges( 2.0 );
-			INFO( tag, "yield fraction in roi zb = " << schema->datasets[ "zb_All" ].yield( schema->getRanges() ) /schema->datasets[ "zb_All" ].yield()  );
-			INFO( tag, "yield fraction in roi zd = " << schema->datasets[ "zd_All" ].yield( schema->getRanges() ) /schema->datasets[ "zd_All" ].yield()  );
-
-			INFO( tag, "3 Sigma : " );
-			schema->updateRanges( 3.0 );
-			INFO( tag, "yield fraction in roi zb = " << schema->datasets[ "zb_All" ].yield( schema->getRanges() ) /schema->datasets[ "zb_All" ].yield()  );
-			INFO( tag, "yield fraction in roi zd = " << schema->datasets[ "zd_All" ].yield( schema->getRanges() ) /schema->datasets[ "zd_All" ].yield()  );
-
-			INFO( tag, "4 Sigma : " );
-			schema->updateRanges( 4.0 );
-			INFO( tag, "yield fraction in roi zb = " << schema->datasets[ "zb_All" ].yield( schema->getRanges() ) /schema->datasets[ "zb_All" ].yield()  );
-			INFO( tag, "yield fraction in roi zd = " << schema->datasets[ "zd_All" ].yield( schema->getRanges() ) /schema->datasets[ "zd_All" ].yield()  );
-		}
-		
 
 		// get the final state of all variables 
 		INFO( tag, "Updating parameters after setup" );
@@ -307,10 +305,10 @@ namespace TSF{
 		updateParameters();
 	}
 
-	void Fitter::fit3( string plc ){
+	void Fitter::fit3( ){
 
 		double arglist[10];
-		arglist[ 0 ] = 5000;
+		arglist[ 0 ] = 50000;
 		arglist[ 1 ] = 1.0;
 		int iFlag = -1;
 		string status = "na";
@@ -319,13 +317,12 @@ namespace TSF{
 		reportFitStatus();
 
 		schema->setMethod( "poisson" );
-		//schema->updateRanges( 1 );
 
 		// fixShapes();
-		fix( "_yield_" );
-		//fix( "eff" );
-		//release( "eff_" + plc );
-		//release( "yield_" + plc );
+		// fix( "_yield_" );
+		fix( "eff" );
+		// release( "eff_" + plc );
+		// release( "yield_" + plc );
 		
 			minuit->mnexcm( "MINI", arglist, 1, iFlag );
 			minuit->mnexcm( "MINI", arglist, 1, iFlag );
@@ -333,8 +330,8 @@ namespace TSF{
 			status = minuit->fCstatu;
 			INFO ( tag, "Step 1. Status " << status );
 		
-		// releaseAll(  );
-		//schema->updateRanges();
+		releaseAll(  );
+		schema->updateRanges();
 
 		INFO( tag, "AFTER" );
 		reportFitStatus();

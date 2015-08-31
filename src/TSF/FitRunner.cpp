@@ -201,7 +201,7 @@ namespace TSF{
 			
 			// TODO: decide on eff scheme
 			double eff_fudge = 0.01;
-			schema->var( "eff_" + plc )->val = 1.0 + ( rnd->Rndm() * (2 * eff_fudge) - eff_fudge );
+			schema->var( "eff_" + plc )->val = 1.0 ;//+ ( rnd->Rndm() * (2 * eff_fudge) - eff_fudge );
 			if ( avgP <= 0.01 )
 				schema->var( "eff_" + plc )->fixed = true;
 			else 
@@ -273,7 +273,7 @@ namespace TSF{
 				double zbMu2 = zbMean( plc2, avgP );
 				double zbNd = ( zbMu - zbMu2 ) / zbSig;
 
-				if ( abs( zbNd ) < nSigZbEnhanced && schema->datasetActive( "zd_" + plc ) ){
+				if ( abs( zbNd ) < nSigZbEnhanced /*&& schema->datasetActive( "zd_" + plc )*/ ){ // TODO: remove broke codes
 					activePlayers.push_back( "zd_" + plc + "_g" + plc2 );
 					
 
@@ -321,7 +321,7 @@ namespace TSF{
 				double zdMu2 = zdMean( plc2, avgP );
 				double zdNd = ( zdMu - zdMu2 ) / zdSig;
 
-				if ( abs( zdNd ) < nSigZdEnhanced && schema->datasetActive( "zb_" + plc ) ){
+				if ( abs( zdNd ) < nSigZdEnhanced /*&& schema->datasetActive( "zb_" + plc ) */ ){ // TODO: remove broke codes
 					activePlayers.push_back( "zb_" + plc + "_g" + plc2 );
 					
 
@@ -392,6 +392,10 @@ namespace TSF{
 
 					// prepare initial values, ranges, etc. for fit
 					prepare( avgP, iCen );
+
+					// load the datasets from the file
+					fitter.loadDatasets(centerSpecies, iCharge, iCen, iPt, true );
+
 					// build the minuit interface
 					fitter.setupFit();
 					// assign active players to this fit
@@ -402,49 +406,32 @@ namespace TSF{
 					reportFit( &fitter, iPt );
 					
 					
-					for ( int i = 0; i < 5; i ++){
+					for ( int i = 0; i < 3; i ++){
 						fitter.fit1(  );
 						reportFit( &fitter, iPt );
 
 						fitter.fit2(  );
 						reportFit( &fitter, iPt );
+
+						// reload the datasets from the file
+						// now that we have better idea of mu, sigma ( for enhancement cuts )
+						fitter.loadDatasets(centerSpecies, iCharge, iCen, iPt, true );
 					}
 
-					fitter.fit3( "");
-					reportFit( &fitter, iPt );
-
 					
-					// // for ( string plc : { "Pi", "P", "K" } ){
-					// fitter.fit3( "");
-					// fitter.fit3( "");
-					
-					// }
-					// 	
-
-					// 	fitter.fit4( plc );
-					// 	reportFit( &fitter, iPt );
-					// }
-					
+					for ( int i = 0; i < 3; i ++ ){
+						fitter.fit3( );
+						reportFit( &fitter, iPt );
+						// reload the datasets from the file
+						// now that we have better idea of mu, sigma ( for enhancement cuts )
+						fitter.loadDatasets(centerSpecies, iCharge, iCen, iPt, true );
+					}
 
 
-					
-
-					
-					
-					// fitter.fit4(  );
-					// reportFit( &fitter, iPt );
-
-					// for ( string plc : { "Pi", "K", "P"} )
-					// 	fitter.setValue( "eff_" + plc, 1.0 );
-
-					// fitter.nop(  );
-					// reportFit( &fitter, iPt );
-					
-
-					//fitter.fitErrors();
+					fitter.fitErrors();
 
 
-					reportYields();
+					//reportYields();
 
 				
 					if ( fitter.isFitGood() )
@@ -492,7 +479,7 @@ namespace TSF{
 		h->GetYaxis()->SetRangeUser( schema->getNormalization() * scaler, max );
 
 		int fb = h->FindFirstBinAbove( 0 ) - 10;
-		int lb = h->FindLastBinAbove( 0 ) + 10;
+		int lb = h->FindLastBinAbove( schema->getNormalization() * scaler * 100 ) + 10; // just a fudge
 		if ( fb <= 0 )
 			fb = 1;
 		if ( lb >= h->GetNbinsX() + 1 )

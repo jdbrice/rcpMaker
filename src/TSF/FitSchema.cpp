@@ -116,7 +116,7 @@ namespace TSF{
 	}
 
 	void FitSchema::updateModels( map<string, bool> &act  ){
-		DEBUG( tag, "")
+		//DEBUG( tag, "")
 
 		for ( auto k : models ){
 			k.second->setVars( vars ); 
