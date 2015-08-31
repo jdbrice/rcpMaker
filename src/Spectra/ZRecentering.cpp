@@ -7,7 +7,12 @@ ZRecentering::ZRecentering( double dedxSigma, double tofSigma, string bTable, in
 	dedxGen = new Bichsel( bTable, bMethod);
 	tofGen = new TofGenerator();
 
-	species = { "E", "Pi", "K", "P", "D" };
+	species = { "Pi", "K", "P" };
+	// just add E / D to include electrons / deuterons
+	// but I decided to remove electrons especially 
+	// bc i worried that it was double weighting pions in 1/beta etc.
+	//species = { "E", "Pi", "K", "P", "D" };
+	
 
 	// in GeV / c^2
 	eMass 		= 0.000510998;

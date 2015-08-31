@@ -137,13 +137,14 @@ void PidDataMaker::analyzeTofTrack( int iTrack ){
 
 	// Must be done after corrections
 	int ptBin 	= binsPt->findBin( pt );
-	double ptBinWidth = binsPt->binWidth( ptBin );
 	corrTrackPt = pt;
 	double avgP = binAverageP( ptBin );
 
 	// Require valid p bin
 	if ( ptBin < 0 )
 		return;
+
+	double ptBinWidth = binsPt->binWidth( ptBin );
 
 	book->cd();
 
