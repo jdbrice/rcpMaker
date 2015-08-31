@@ -5,6 +5,10 @@
 // ROOT
 #include "TLine.h"
 
+// STL
+#define _USE_MATH_DEFINES
+#include <cmath> // for M_1_PI etc.
+
 
 PidDataMaker::PidDataMaker( XmlConfig* config, string np, string fl, string jp ) : InclusiveSpectra( config, np, fl, jp ) {
 
@@ -51,6 +55,7 @@ PidDataMaker::PidDataMaker( XmlConfig* config, string np, string fl, string jp )
 
 		}	
 	}
+
 }
 
 PidDataMaker::~PidDataMaker(){
@@ -90,6 +95,8 @@ void PidDataMaker::preEventLoop() {
 void PidDataMaker::postEventLoop() {
 	logger->info(__FUNCTION__) << endl;
 	book->cd();
+
+	// write the PidData trees to the file
 	book->cd( "PidPoints" );
 	for ( auto &k : pidPoints ){
 		k.second->Write( k.first.c_str() );
@@ -130,6 +137,7 @@ void PidDataMaker::analyzeTofTrack( int iTrack ){
 
 	// Must be done after corrections
 	int ptBin 	= binsPt->findBin( pt );
+	double ptBinWidth = binsPt->binWidth( ptBin );
 	corrTrackPt = pt;
 	double avgP = binAverageP( ptBin );
 
@@ -152,8 +160,19 @@ void PidDataMaker::analyzeTofTrack( int iTrack ){
 		dedx = dedxNL;
 	} 
 
+	// event weight from RefMult correction
 	double trackWeight = eventWeight;
+	
+	// standard dN/dpT normalization
+	trackWeight = trackWeight * M_1_PI * 0.5; 			// 1.0 / ( 2 pi )
+	trackWeight = trackWeight * ( 1.0 / corrTrackPt ); 	// 1.0 / pT
+	trackWeight = trackWeight * ( 1.0 / ptBinWidth ); 	// 1.0 / ( bin width )
+	trackWeight = trackWeight * ( 1.0 / ( cut_rapidity->max - cut_rapidity->min ) ); 	// 1.0 / dy
+
+	// correct for TPC matching efficiency
 	trackWeight = trackWeight * sc->tpcEffWeight( centerSpecies, trackPt, cBin, charge );
+	
+	// fill the tree
 	string name = Common::speciesName( centerSpecies, charge, cBin, ptBin );
 	pidPoints[ name ]->Fill( tof, dedx, trackWeight );
 	
