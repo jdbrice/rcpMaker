@@ -136,7 +136,7 @@ public:
 
 		TCut allCuts = cut.c_str();
 		if ( "zd" == var )
-			allCuts = allCuts && _deuteronCut;
+			allCuts = allCuts && _deuteronCut && _electronCut;
 
 		TCut wCut = "w";
 		allCuts = allCuts * wCut;
@@ -167,7 +167,7 @@ public:
 		// include deuteron cut if needed
 		TCut allCuts = cut.c_str();
 		if ( "zd" == var )
-			allCuts = allCuts && _deuteronCut;
+			allCuts = allCuts && _deuteronCut && _electronCut;
 
 		double max = data->GetMaximum( var.c_str() );
 		double min = data->GetMinimum( var.c_str() );

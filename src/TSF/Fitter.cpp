@@ -294,18 +294,14 @@ namespace TSF{
 		string status = "na";
 
 		schema->setMethod( "poisson" );
-
-		fix( "eff" );
+		
 		fixShapes();
 			minuit->mnexcm( "MINI", arglist, 1, iFlag );
 			minuit->mnexcm( "MINI", arglist, 1, iFlag );
 			minuit->mnexcm( "MINI", arglist, 1, iFlag );
 			status = minuit->fCstatu;
 			INFO ( tag, "Step 1. Status " << status );
-		releaseShapes();
-		release( "eff" );
-
-
+		releaseAll();
 
 		// get the final state of all variables 
 		INFO( tag, "Updating parameters after Fit" );
@@ -322,17 +318,14 @@ namespace TSF{
 
 		schema->setMethod( "poisson" );
 
-		
-		fix( "eff" );
 		fix( "yield" );
 		release( "_yield_" );
 			minuit->mnexcm( "MINI", arglist, 1, iFlag );
 			minuit->mnexcm( "MINI", arglist, 1, iFlag );
 			minuit->mnexcm( "MINI", arglist, 1, iFlag );
 			status = minuit->fCstatu;
-			INFO ( tag, "Step 1. Status " << status );
-		release( "yield" );
-		release( "eff" );
+			INFO ( tag, "Step 2. Status " << status );
+		releaseAll();
 		
 		schema->updateRanges();
 
@@ -345,7 +338,6 @@ namespace TSF{
 
 		double arglist[10];
 		arglist[ 0 ] = 50000;
-		arglist[ 1 ] = 1.0;
 		int iFlag = -1;
 		string status = "na";
 
@@ -354,23 +346,22 @@ namespace TSF{
 
 		schema->setMethod( "poisson" );
 
-		// fixShapes();
-		// fix( "_yield_" );
-		fix( "eff" );
-		// release( "eff_" + plc );
-		// release( "yield_" + plc );
+		minuit->mnexcm( "MINI", arglist, 1, iFlag );
+		minuit->mnexcm( "MINI", arglist, 1, iFlag );
+		minuit->mnexcm( "MINI", arglist, 1, iFlag );
+		status = minuit->fCstatu;
+		INFO ( tag, "Step 3. Status " << status );
 		
-			minuit->mnexcm( "MINI", arglist, 1, iFlag );
-			minuit->mnexcm( "MINI", arglist, 1, iFlag );
-			minuit->mnexcm( "MINI", arglist, 1, iFlag );
-			status = minuit->fCstatu;
-			INFO ( tag, "Step 1. Status " << status );
-		
-		releaseAll(  );
 		schema->updateRanges();
 
 		INFO( tag, "AFTER" );
 		reportFitStatus();
+
+		if ( 0 == iFlag )
+			fitIsGood = true;
+		else 
+			fitIsGood = false;
+		
 
 		// get the final state of all variables 
 		INFO( tag, "Updating parameters after Fit" );
@@ -625,42 +616,6 @@ namespace TSF{
 		if ( muK > muP ){
 			penalty *= ( 1.0 + ( muK - muP ) * ( muK - muP ) * Fitter::penaltyScale );
 		}
-		
-		return penalty;
-	}
-
-	double Fitter::enforceEff(int npar , double * pars) {
-		if (!schema->tofEff())
-			return 1.0;
-		double penalty = 1.0;
-
-
-		// we are enforcing the average eff between Pi, K, P to be ~100% - since we already corrected the "total" toff eff
-		float effPi = currentValue( "eff_Pi", npar, pars );
-		float yPi = currentValue( "yield_Pi", npar, pars );
-		float effK 	= currentValue( "eff_K", npar, pars );
-		float yK = currentValue( "yield_K", npar, pars );
-		float effP 	= currentValue( "eff_P", npar, pars );
-		float yP = currentValue( "yield_P", npar, pars );
-
-		// DEBUG( "Fitter_Eff", "eff_Pi = " << effPi )
-		// DEBUG( "Fitter_Eff", "eff_K = " << effK )
-		// DEBUG( "Fitter_Eff", "eff_P = " << effP )
-
-		float fudge = 0.00;
-		float sum = (effPi   + effK   + effP ) ;/// ( yPi + yK + yP) ;
-		INFO( tag, "Eff weighted sum : " << sum )
-		//if ( sum >= 3.0 - fudge && sum <= 3.0 + fudge ){
-		//	return 1.0;
-		//}
-
-		float x = 3.0 + fudge - ( sum );
-		if ( sum > 3.0 + fudge ){
-			x = 3.0 + fudge - ( sum );
-		} else if ( sum < 3.0 - fudge ){
-			x = 3.0 - fudge - ( sum );
-		}
-		penalty = 1.0 + ( x * x ) ;
 		
 		return penalty;
 	}

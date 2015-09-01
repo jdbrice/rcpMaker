@@ -47,6 +47,7 @@ namespace TSF{
 
 		unique_ptr<TRandom3> rnd;
 
+
 	public:
 		FitRunner( XmlConfig * _cfg, string _np  );
 
@@ -67,8 +68,11 @@ namespace TSF{
 		void drawFitRatio( string ds, Fitter * fitter, int iPt );
 
 		void prepare( double avgP, int iCen );
-		void prepareSystematic( FitSchema * sysSchema, double avgP, int iCen, string sys );
+		shared_ptr<FitSchema> prepareSystematic( string sys, string plc, double delta );
 		void choosePlayers( double avgP, string plc );
+
+		void runNominal( int iCharge, int iCen, int iPt );
+		map<string, double> runSystematic( shared_ptr<FitSchema>, int iCharge, int iCen, int iPt );
 
 		/* Average P in a bin range assuming a flat distribution
 		 * The distribution is really an exp, but we just need to be consistent

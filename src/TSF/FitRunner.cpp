@@ -197,15 +197,12 @@ namespace TSF{
 
 		
 			schema->var( "yield_" + plc )->min = 0;
-			schema->var( "yield_" + plc )->max = schema->getNormalization() * 2;	
+			schema->var( "yield_" + plc )->max = 10000;	
 			
-			// TODO: decide on eff scheme
-			double eff_fudge = 0.01;
+			// double eff_fudge = 0.01;
 			schema->var( "eff_" + plc )->val = 1.0 ;//+ ( rnd->Rndm() * (2 * eff_fudge) - eff_fudge );
-			if ( avgP <= 0.01 )
-				schema->var( "eff_" + plc )->fixed = true;
-			else 
-				schema->var( "eff_" + plc )->fixed = false;
+			schema->var( "eff_" + plc )->fixed = true;
+			
 			
 		} // loop on plc to set initial vals
 	}
@@ -347,6 +344,67 @@ namespace TSF{
 		}
 	}
 
+	void FitRunner::runNominal( int iCharge, int iCen, int iPt ) {
+		WARN( tag, "(iCharge=" << iCharge << ", iCen=" << iCen << ", iPt=" << iPt << ")" );
+
+		double avgP = binAverageP( iPt );
+		auto zbMu = psr->centeredTofMap( centerSpecies, avgP );
+		auto zdMu = psr->centeredDedxMap( centerSpecies, avgP );
+
+		schema->clearRanges();
+		FitSchema originalSchema(*schema);
+
+		// create the fitter
+		Fitter fitter( schema, inFile );
+
+		// loads the default values used for data projection
+		fitter.registerDefaults( cfg, nodePath );
+		
+		// prepare initial values, ranges, etc. for fit
+		prepare( avgP, iCen );
+
+		// load the datasets from the file
+		fitter.loadDatasets(centerSpecies, iCharge, iCen, iPt, true, zbMu, zdMu );
+
+		// build the minuit interface
+		fitter.setupFit();
+		// assign active players to this fit
+		fitter.addPlayers( activePlayers );
+			
+		
+		for ( int i = 0; i < 3; i ++){
+			// gets close on yield with fixed shapes
+			fitter.fit1(  );
+			// gets close on shapes with fixed yields
+			fitter.fit2(  );
+		}
+
+		// reload the datasets from the file
+		// now that we have better idea of mu, sigma ( for enhancement cuts )
+		fitter.loadDatasets(centerSpecies, iCharge, iCen, iPt, true, zbMu, zdMu );
+
+		fitter.fit3( );
+		reportFit( &fitter, iPt );
+	
+
+
+		// fill histograms if we converged
+		if ( fitter.isFitGood() )
+			fillFitHistograms(iPt, iCen, iCharge, fitter );
+
+		
+		// Keep track of the sigma for each species for fixing at high pt
+		for ( string pre : {"zb", "zd"} ){
+			for ( string plc : Common::species ){
+
+				ConfigRange &range = sigmaRanges[ pre + "_" + plc ];
+				// if we are in the good p range then add this value to the set
+				if ( range.inInclusiveRange( avgP ) )
+					sigmaSets[ pre+"_"+plc ].add( avgP, schema->var( pre + "_sigma_" + plc )->val ); 	
+			} // plc
+		} // pre
+	} // runNominal(...)
+
 	void FitRunner::make(){
 
 		if ( inFile == nullptr || inFile->IsOpen() == false ){
@@ -377,96 +435,40 @@ namespace TSF{
 				sigmaSets.clear();
 				for ( int iPt = firstPtBin; iPt <= lastPtBin; iPt++ ){
 
+					FitSchema originalSchema( *schema );
+					runNominal( iCharge, iCen, iPt );
+
+
+
+					map<string, vector<double> > systematics;
 					double avgP = binAverageP( iPt );
-					auto zbMu = psr->centeredTofMap( centerSpecies, avgP );
-					auto zdMu = psr->centeredDedxMap( centerSpecies, avgP );
-					
-					logger->warn(__FUNCTION__) << "<p> = " << avgP << endl;
-
-					schema->clearRanges();
-					//FitSchema originalSchema(*schema);
-
-					DEBUG( "Fitter", "Creating fitter" );
-					Fitter fitter( schema, inFile );
-
-					// loads the default values used for data projection
-					fitter.registerDefaults( cfg, nodePath );
-					
-					// load the datasets from the file
-					fitter.loadDatasets(centerSpecies, iCharge, iCen, iPt, false, zbMu, zdMu );
-
-					// prepare initial values, ranges, etc. for fit
-					prepare( avgP, iCen );
-
-					// load the datasets from the file
-					fitter.loadDatasets(centerSpecies, iCharge, iCen, iPt, true, zbMu, zdMu );
-
-					// build the minuit interface
-					fitter.setupFit();
-					// assign active players to this fit
-					fitter.addPlayers( activePlayers );
-					// do the fit
-					
-					fitter.nop();
-					reportFit( &fitter, iPt );
-					
-					
-					for ( int i = 0; i < 3; i ++){
-						fitter.fit1(  );
-						reportFit( &fitter, iPt );
-
-						fitter.fit2(  );
-						reportFit( &fitter, iPt );
-
-						// reload the datasets from the file
-						// now that we have better idea of mu, sigma ( for enhancement cuts )
-						fitter.loadDatasets(centerSpecies, iCharge, iCen, iPt, true, zbMu, zdMu );
-					}
-
-					
-					for ( int i = 0; i < 3; i ++ ){
-						fitter.fit3( );
-						reportFit( &fitter, iPt );
-						// reload the datasets from the file
-						// now that we have better idea of mu, sigma ( for enhancement cuts )
-						fitter.loadDatasets(centerSpecies, iCharge, iCen, iPt, true, zbMu, zdMu );
-					}
-
-
-					fitter.fitErrors();
-
-
-					//reportYields();
-
-				
-					if ( fitter.isFitGood() )
-						fillFitHistograms(iPt, iCen, iCharge, fitter );
-
-					
-					// Keep track of the sigma for each species for fixing at high pt
-					for ( string pre : {"zb", "zd"} ){
+					for ( string pre : { "zb", "zd" } ){
 						for ( string plc : Common::species ){
-
+							INFO( tag, "Do Systematics for " << pre << "_" << plc );
 							ConfigRange &range = sigmaRanges[ pre + "_" + plc ];
-							// if we are in the good p range then add this value to the set
-							if ( range.inInclusiveRange( avgP ) )
-								sigmaSets[ pre+"_"+plc ].add( avgP, schema->var( pre + "_sigma_" + plc )->val ); 	
+
+							if ( !range.above( avgP ) )
+								continue;
+
+							double delta = sigmaSets[ pre+"_"+plc ].std();
+							shared_ptr<FitSchema> sysSchema = prepareSystematic( pre + "_sigma", plc, delta );
+
+							map<string, double> deltas = runSystematic( sysSchema, iCharge, iCen, iPt );	
+
+							systematics[ "Pi" ].push_back( deltas[ "Pi" ] );
+							systematics[ "K" ].push_back( deltas[ "K" ] );
+							systematics[ "P" ].push_back( deltas[ "P" ] );
 						}
 					}
 
-
-					// // do systematics
-					// for ( int i = 0; i < 3; i++ ){
-					// 	fitter.fit4(  );
-					// 	reportFit( &fitter, iPt );
-					// }
+					// do something with them now
+					
 
 
-
-				}// loop pt Bins
-			} // loop charge bins
-		} // loop centrality bins
-	}
+				}// loop iPt
+			} // loop iCharge
+		} // loop iCen
+	} // make()
 
 	void FitRunner::drawSet( string v, Fitter * fitter, int iPt ){
 		logger->info(__FUNCTION__) << v << ", fitter=" << fitter << ", iPt=" << iPt << endl;
@@ -477,18 +479,21 @@ namespace TSF{
 		}
 		h->Draw("pe");
 		h->SetLineColor( kBlack );
-		double scaler = 1e-6;
+		double scaler = 1e-8;
 
 		int binmax = h->GetMaximumBin();
 		double max = h->GetBinContent( binmax ) * 5;
 		h->GetYaxis()->SetRangeUser( schema->getNormalization() * scaler, max );
 
-		int fb = h->FindFirstBinAbove( 0 ) - 10;
-		int lb = h->FindLastBinAbove( schema->getNormalization() * scaler * 100 ) + 10; // just a fudge
+		int fb = h->FindFirstBinAbove( 1.0 / fitter->getNorm() * 50 ) - 5;
+		int lb = h->FindLastBinAbove( 1.0 / fitter->getNorm() * 50 ) + 5; // just a fudge
+		
 		if ( fb <= 0 )
 			fb = 1;
+
 		if ( lb >= h->GetNbinsX() + 1 )
 			lb = h->GetNbinsX();
+
 		h->GetXaxis()->SetRange( fb, lb );
 
 		h->SetTitle( ( dts((*binsPt)[ iPt ]) + " < pT < " + dts( (*binsPt)[ iPt + 1 ] ) ).c_str() );
@@ -528,7 +533,7 @@ namespace TSF{
 
 		gPad->SetGrid( 1, 1 );
 		gPad->SetLogy(1);
-	}
+	} // drawSet(...)
 
 	void FitRunner::reportFit( Fitter * fitter, int iPt ){
 
@@ -629,7 +634,7 @@ namespace TSF{
 			}
 			zbReporter->savePage();
 		}
-	}
+	} // reportFit(...)
 
 	void FitRunner::reportYields(){
 
@@ -654,8 +659,7 @@ namespace TSF{
 		double roiyzb = schema->datasets[ "zb_All" ].yield( schema->getRanges() );
 		double roiyzd = schema->datasets[ "zd_All" ].yield( schema->getRanges() );
 		INFO( tag, "zb_All / zd_All in roi = " << roiyzb / roiyzd );
-
-	}
+	} // reportYields()
 
 
 	void FitRunner::fillFitHistograms(int iPt, int iCen, int iCharge, Fitter &fitter ){
@@ -674,13 +678,9 @@ namespace TSF{
 			logger->info(__FUNCTION__) << "Filling Yield for " << plc << endl;
 			string name = Common::yieldName( plc, iCen, iCharge );
 			book->cd( plc+"_yield");
-			double sC = schema->var( "yield_"+plc )->val / book->get( name )->GetBinWidth( iiPt );
+			double sC = schema->var( "yield_"+plc )->val;
 			double sE = schema->var( "yield_"+plc )->error;
 			
-			// TODO: add the fit error in quadrature ?
-			//double N = sC * fitter.getNorm();
-			//sE = sqrt( 1/N + sE*sE );
-
 			book->get( name )->SetBinContent( iiPt, sC );
 			book->get( name )->SetBinError( iiPt, sE );
 
@@ -777,7 +777,7 @@ namespace TSF{
 			
 
 		}
-	}
+	} // fillFitHistograms(...)
 
 	void FitRunner::fillEnhancedYieldHistogram( string plc1, int iPt, int iCen, int iCharge, string plc2, Fitter &fitter ){
 		
@@ -791,7 +791,7 @@ namespace TSF{
 			double sE = schema->var( vName )->error;
 			book->setBin( hName, iPt, sC, sE );
 		}
-	}
+	} // fillEnhancedYieldHistogram(...)
 
 
 
@@ -836,25 +836,63 @@ namespace TSF{
 		//h2->SetMarkerColor( kRed );
 		//h2->SetLineColor( kRed );
 		//h2->Draw("same");
-	}
+	} // drawFitRatio(...)
 
 
 
-	void prepareSystematic( FitSchema *sysSchema, double avgP, int iCen, string sys, string plc ){
+	shared_ptr<FitSchema> FitRunner::prepareSystematic( string sys, string plc, double delta ){
+		INFO( tag, "(sys=" << sys << ", plc=" << plc << ", delta=" << delta << ")" );
+
+		shared_ptr <FitSchema> rSchema = shared_ptr<FitSchema>( new FitSchema( *schema ) );
 
 		string var = sys + "_" + plc;
-		// sigma_zb
+		// for instance zb_sigma
 		// we want to fix sigma zb to given value and repeat the fit
+
+		INFO( tag, var << " (was) = " << schema->var( var )->val );
+
+		rSchema->var( var )->val += delta;
+
+		INFO( tag, var << " (now) = " << rSchema->var( var )->val );
+
+		return rSchema;
+	} // prepareSystematic(...)
+
+	map<string, double> FitRunner::runSystematic( shared_ptr<FitSchema> tmpSchema, int iCharge, int iCen, int iPt ){
+		WARN( tag, "(schema=" << tmpSchema << "iCharge=" << iCharge << ", iCen=" << iCen << ", iPt=" << iPt << ")" );
+
+	
+		double avgP = binAverageP( iPt );
+		auto zbMu = psr->centeredTofMap( centerSpecies, avgP );
+		auto zdMu = psr->centeredDedxMap( centerSpecies, avgP );
+
+		schema->clearRanges();
+
+		// create the fitter
+		Fitter fitter( tmpSchema, inFile );
+
+		// loads the default values used for data projection
+		fitter.registerDefaults( cfg, nodePath );
 		
+		// load the datasets from the file
+		fitter.loadDatasets(centerSpecies, iCharge, iCen, iPt, true, zbMu, zdMu );
 
+		// build the minuit interface
+		fitter.setupFit();
+		// assign active players to this fit
+		fitter.addPlayers( activePlayers );
 
-		// eff
-		// we want to fix the tof eff parameter
-		// fixed systematic of +/- 6 %
-		if ( "eff" == sys ){
-			
+		fitter.fit3( );
+
+		// now we should compare our schema to the nominal result
+		map<string, double> deltas;
+		for ( string plc : Common::species ){
+			deltas[ plc ] = tmpSchema->var( "yield_" + plc )->val - schema->var( "yield_" + plc )->val;
+			INFO( tag, "Systematic yield_" << plc << " = " << deltas[ plc ] << " ==> " << (deltas[plc] / schema->var( "yield_" + plc )->val) << "% " );
 		}
-	}
+
+		return deltas;
+	} // runSystematic(...)
 }
 
 

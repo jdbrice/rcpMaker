@@ -58,8 +58,10 @@ namespace TSF{
 			for ( double v : vals ){
 				total += ( v - _mean ) * ( v - _mean );
 			}
-			if ( vals.size() > 0 )
-				_std = total / vals.size();
+			if ( vals.size() > 1 )
+				_std = total / (vals.size() - 1.0);
+
+			_std = sqrt( _std );
 
 			INFO( tag, "Std dev = " << _std );
 

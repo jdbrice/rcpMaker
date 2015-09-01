@@ -144,7 +144,6 @@ namespace TSF{
 
 		double enforceEnhancedYields( int npar = 0, double * pars = 0 );
 		double enforceMassOrder( int npar = 0, double * pars = 0 );
-		double enforceEff( int npar = 0, double * pars = 0 );
 
 
 		double getNorm() { return norm; }
