@@ -378,8 +378,8 @@ namespace TSF{
 				for ( int iPt = firstPtBin; iPt <= lastPtBin; iPt++ ){
 
 					double avgP = binAverageP( iPt );
-					auto zbMu = psr->centeredTofMap( centerSpecies, p );
-					auto zdMu = psr->centeredDedxMap( centerSpecies. p );
+					auto zbMu = psr->centeredTofMap( centerSpecies, avgP );
+					auto zdMu = psr->centeredDedxMap( centerSpecies, avgP );
 					
 					logger->warn(__FUNCTION__) << "<p> = " << avgP << endl;
 
@@ -390,13 +390,13 @@ namespace TSF{
 					Fitter fitter( schema, inFile );
 					
 					// load the datasets from the file
-					fitter.loadDatasets(centerSpecies, iCharge, iCen, iPt );
+					fitter.loadDatasets(centerSpecies, iCharge, iCen, iPt, false, zbMu, zdMu );
 
 					// prepare initial values, ranges, etc. for fit
 					prepare( avgP, iCen );
 
 					// load the datasets from the file
-					fitter.loadDatasets(centerSpecies, iCharge, iCen, iPt, true );
+					fitter.loadDatasets(centerSpecies, iCharge, iCen, iPt, true, zbMu, zdMu );
 
 					// build the minuit interface
 					fitter.setupFit();
@@ -417,7 +417,7 @@ namespace TSF{
 
 						// reload the datasets from the file
 						// now that we have better idea of mu, sigma ( for enhancement cuts )
-						fitter.loadDatasets(centerSpecies, iCharge, iCen, iPt, true );
+						fitter.loadDatasets(centerSpecies, iCharge, iCen, iPt, true, zbMu, zdMu );
 					}
 
 					
@@ -426,7 +426,7 @@ namespace TSF{
 						reportFit( &fitter, iPt );
 						// reload the datasets from the file
 						// now that we have better idea of mu, sigma ( for enhancement cuts )
-						fitter.loadDatasets(centerSpecies, iCharge, iCen, iPt, true );
+						fitter.loadDatasets(centerSpecies, iCharge, iCen, iPt, true, zbMu, zdMu );
 					}
 
 

@@ -153,12 +153,28 @@ namespace TSF{
 	Fitter::~Fitter(){
 	}
 
-	void Fitter::loadDatasets( string cs, int charge, int cenBin, int ptBin, bool enhanced ){
+	void Fitter::registerDefaults(  ){
+
+		// TODO : pass in config and load these from the proper places in xml
+		zbBinWidth = 0.006; 
+		zdBinWidth = 0.035; 
+		nSigAboveP = 3.0; 
+		zbSigmaIdeal = 0.012; 
+		zdSigmaIdeal = 0.07; 
+		cut_nSigma_Pi = 3.0; 
+		cut_nSigma_K = 3.0; 
+		cut_nSigma_E = 3.0; 
+	}
+
+	void Fitter::loadDatasets( string cs, int charge, int cenBin, int ptBin, bool enhanced, map<string, double> zbMu, map<string, double> zdMu ){
 		INFO( tag, "( cs=" << cs << ", charge=" << charge << ", iCen=" <<cenBin << ", ptBin=" << ptBin << ")" )
 
+		// TODO: call once from FitRunner passing in the config
+		registerDefaults();
+
 		dataFile->cd();
-		double zbBinWidth = 0.006; // TODO: fix hardcode
-		double zdBinWidth = 0.035; // TODO: fix hardcode
+
+
 		PidProjector proj( dataFile, zbBinWidth, zdBinWidth );
 
 		schema->clearDatasets();
@@ -166,10 +182,9 @@ namespace TSF{
 		DEBUG( "Loading " << "tof/" + Common::zbName( cs, charge, cenBin, ptBin ) );
 		DEBUG( "Loading " << "dedx/" + Common::zbName( cs, charge, cenBin, ptBin ) );
 
-		double nSigAboveP = 3.0; // TODO: fix hardcode
 		double sigmaP = schema->var( "zb_sigma_P" )->val;
 		if ( !enhanced )
-			sigmaP = 0.012; // TODO: fix hardcode
+			sigmaP = zbSigmaIdeal;
 
 		// sets the deuteron rejection cut for all zd related projections (including 2D )
 		proj.cutDeuterons( schema->var( "zb_mu_P" )->val, sigmaP, nSigAboveP );
@@ -178,9 +193,8 @@ namespace TSF{
 		// very verbose
 		proj.cutElectrons( 	schema->var( "zb_mu_Pi" )->val, schema->var( "zd_mu_Pi" )->val, schema->var( "zb_sigma_Pi" )->val, schema->var( "zd_sigma_Pi" )->val,
 							schema->var( "zb_mu_K" )->val, schema->var( "zd_mu_K" )->val, schema->var( "zb_sigma_K" )->val, schema->var( "zd_sigma_K" )->val,
-							zbMu[ "E" ], zdMu[ "E" ], 0.012, 0.07,
-							3, 3, 3 
-		 	);
+							zbMu[ "E" ], zdMu[ "E" ], zbSigmaIdeal, zdSigmaIdeal,
+							cut_nSigma_Pi, cut_nSigma_K, cut_nSigma_E );
 
 
 		string name = Common::speciesName( cs, charge, cenBin, ptBin );
@@ -246,7 +260,6 @@ namespace TSF{
 
 	}
 
-	
 	void Fitter::nop( ){
 
 		INFO( "DATASETS:" )

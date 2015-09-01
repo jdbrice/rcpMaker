@@ -51,6 +51,10 @@ namespace TSF{
 		bool sufficienctStatistics;
 		bool fixedEff = false;
 
+		// defaults used in the data projection steps
+		// should be loaded from config but not yet
+		double zbBinWidth, zdBinWidth, nSigAboveP, zbSigmaIdeal, zdSigmaIdeal, cut_nSigma_Pi, cut_nSigma_K, cut_nSigma_E;
+
 	public:
 		Fitter( shared_ptr<FitSchema> _schema, TFile * dataFile );
 
@@ -104,6 +108,7 @@ namespace TSF{
 			return sumLog[ n ];
 		}
 
+		void registerDefaults();
 		void loadDatasets( string cs, int charge, int cenBin, int ptBin, bool enhanced, map<string, double> zbMu, map<string, double> zdMu );
 		
 		void nop(  );
