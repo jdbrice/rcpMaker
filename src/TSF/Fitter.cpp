@@ -153,24 +153,36 @@ namespace TSF{
 	Fitter::~Fitter(){
 	}
 
-	void Fitter::registerDefaults(  ){
+	void Fitter::registerDefaults(  XmlConfig * cfg, string nodePath  ){
+		INFO( tag, "( cfg=" << cfg << ", nodePath=" << nodePath << " )" );
 
-		// TODO : pass in config and load these from the proper places in xml
-		zbBinWidth = 0.006; 
-		zdBinWidth = 0.035; 
-		nSigAboveP = 3.0; 
-		zbSigmaIdeal = 0.012; 
-		zdSigmaIdeal = 0.07; 
-		cut_nSigma_Pi = 3.0; 
-		cut_nSigma_K = 3.0; 
-		cut_nSigma_E = 3.0; 
+		zbBinWidth 		= cfg->getDouble( "binning.tof:width", 0.006 ); 
+		zdBinWidth 		= cfg->getDouble( "binning.dedx:width", 0.035 ); 
+		zbSigmaIdeal 	= cfg->getDouble( nodePath + "ZRecentering.sigma:tof", 0.012 ); 
+		zdSigmaIdeal 	= cfg->getDouble( nodePath + "ZRecentering.sigma:dedx", 0.07 ); 
+
+		// used to cut deuterons
+		nSigAboveP 		= cfg->getDouble( nodePath + "DataPurity:nSigmaAboveP", 3.0 ); 
+
+		// used to cut electrons
+		cut_nSigma_Pi 	= cfg->getDouble( nodePath + "DataPurity:nSigmaPi", 3.0 ); ; 
+		cut_nSigma_K 	= cfg->getDouble( nodePath + "DataPurity:nSigmaK", 3.0 ); ; 
+		cut_nSigma_E 	= cfg->getDouble( nodePath + "DataPurity:nSigmaE", 3.0 ); ; 
+
+
+		// report them
+		INFO( tag, "zbBinWidth = " << zbBinWidth );
+		INFO( tag, "zdBinWidth = " << zdBinWidth );
+		INFO( tag, "zbSigmaIdeal = " << zbSigmaIdeal );
+		INFO( tag, "zdSigmaIdeal = " << zdSigmaIdeal );
+		INFO( tag, "nSigAboveP = " << nSigAboveP );
+		INFO( tag, "cut_nSigma_Pi = " << cut_nSigma_Pi );
+		INFO( tag, "cut_nSigma_K = " << cut_nSigma_K );
+		INFO( tag, "cut_nSigma_E = " << cut_nSigma_E );
 	}
 
 	void Fitter::loadDatasets( string cs, int charge, int cenBin, int ptBin, bool enhanced, map<string, double> zbMu, map<string, double> zdMu ){
 		INFO( tag, "( cs=" << cs << ", charge=" << charge << ", iCen=" <<cenBin << ", ptBin=" << ptBin << ")" )
-
-		// TODO: call once from FitRunner passing in the config
-		registerDefaults();
 
 		dataFile->cd();
 
@@ -439,7 +451,6 @@ namespace TSF{
 		schema->setMethod( "chi2" );
 
 		
-		minuit->mnexcm( "HESSE", arglist, 1, iFlag );
 		minuit->mnexcm( "HESSE", arglist, 1, iFlag );
 		status = minuit->fCstatu;
 		INFO ( tag, "Errors Status " << status );

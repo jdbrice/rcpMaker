@@ -70,6 +70,8 @@ def write_conf(  output_path, config_path ="./" ) :
 			<method>nonlinear</method>
 		</ZRecentering>
 
+		<DataPurity nSigmaPi="3.0" nSigmaK="3.0" nSigmaE="3.0" nSigmaAboveP="3.0" />
+
 		<Include url="../common/fitSchema.xml" />
 
 		<histograms>

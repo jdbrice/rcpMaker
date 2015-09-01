@@ -388,6 +388,9 @@ namespace TSF{
 
 					DEBUG( "Fitter", "Creating fitter" );
 					Fitter fitter( schema, inFile );
+
+					// loads the default values used for data projection
+					fitter.registerDefaults( cfg, nodePath );
 					
 					// load the datasets from the file
 					fitter.loadDatasets(centerSpecies, iCharge, iCen, iPt, false, zbMu, zdMu );

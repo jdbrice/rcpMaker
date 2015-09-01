@@ -1,6 +1,7 @@
 #ifndef TSF_FITTER_H
 #define TSF_FITTER_H
 
+#include "XmlConfig.h"
 #include "Logger.h"
 using namespace jdb;
 
@@ -108,7 +109,7 @@ namespace TSF{
 			return sumLog[ n ];
 		}
 
-		void registerDefaults();
+		void registerDefaults( XmlConfig * cfg, string nodePath );
 		void loadDatasets( string cs, int charge, int cenBin, int ptBin, bool enhanced, map<string, double> zbMu, map<string, double> zdMu );
 		
 		void nop(  );
