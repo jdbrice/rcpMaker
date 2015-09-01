@@ -171,7 +171,18 @@ namespace TSF{
 		if ( !enhanced )
 			sigmaP = 0.012; // TODO: fix hardcode
 
+		// sets the deuteron rejection cut for all zd related projections (including 2D )
 		proj.cutDeuterons( schema->var( "zb_mu_P" )->val, sigmaP, nSigAboveP );
+		
+		// sets the electron rejection for this pt bin
+		// very verbose
+		proj.cutElectrons( 	schema->var( "zb_mu_Pi" )->val, schema->var( "zd_mu_Pi" )->val, schema->var( "zb_sigma_Pi" )->val, schema->var( "zd_sigma_Pi" )->val,
+							schema->var( "zb_mu_K" )->val, schema->var( "zd_mu_K" )->val, schema->var( "zb_sigma_K" )->val, schema->var( "zd_sigma_K" )->val,
+							zbMu[ "E" ], zdMu[ "E" ], 0.012, 0.07,
+							3, 3, 3 
+		 	);
+
+
 		string name = Common::speciesName( cs, charge, cenBin, ptBin );
 		dataHists[ "zb_All" ] = proj.project1D( name, "zb" );
 		dataHists[ "zd_All" ] = proj.project1D( name, "zd" );

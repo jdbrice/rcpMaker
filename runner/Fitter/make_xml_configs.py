@@ -1,5 +1,5 @@
 import os
-import PidHisto.make_xml_configs as pidc
+import PidData.make_xml_configs as pidc
 pjoin = os.path.join
 
 
@@ -36,16 +36,25 @@ def write_conf(  output_path, config_path ="./" ) :
 
 
 		<!-- Guiding parameters -->
-		<Timing zdOnly="0.5" useZdEnhanced="0.5" useZbEnhanced="0.5" nSigZdEnhanced="3.0" nSigZbEnhanced="3.0" />
+		<Timing zdOnly="0.2" useZdEnhanced="0.2" useZbEnhanced="0.2" nSigZdEnhanced="3.0" nSigZbEnhanced="30.0" />
 
 		<ParameterFixing>
 			<!-- mu can vary +/- nSigma -->
-			<deltaMu zb="6.0" zd="13.0" />
+			<deltaMu zb="2.0" zd="2.0" />
 
-			<!-- the minimum momentum at which the value is fixed -->
-			<Pi zbSigma="0.65" zdSigma="1.915" />
-			<K zbSigma="0.65" zdSigma="1.915" />
-			<P zbSigma="1.33" zdSigma="1.915" />
+			<!-- 
+				The ranges for width determination and fixing. The value if free to float below max. It's mean is taken between min and max and used as the value above max. The std deviation in this range is used as the systematic unct.
+			-->
+			<zb>
+				<Pi min="0.6" max="1.0"/>
+				<K min="0.6" max="1.0" />
+				<P min="1.0" max="1.4" />
+			</zb>
+			<zd>
+				<Pi min="0.6" max="1.0"/>
+				<K min="0.6" max="1.0" />
+				<P min="0.6" max="1.0" />
+			</zd>
 
 		</ParameterFixing>
 		

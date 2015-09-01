@@ -104,7 +104,7 @@ namespace TSF{
 			return sumLog[ n ];
 		}
 
-		void loadDatasets( string cs, int charge, int cenBin, int ptBin, bool enhanced = false );
+		void loadDatasets( string cs, int charge, int cenBin, int ptBin, bool enhanced, map<string, double> zbMu, map<string, double> zdMu );
 		
 		void nop(  );
 		void fit1(  );

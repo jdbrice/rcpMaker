@@ -1,4 +1,6 @@
 #include "Spectra/ZRecentering.h"
+#include "Common.h"
+
 
 ZRecentering::ZRecentering( double dedxSigma, double tofSigma, string bTable, int bMethod ){
 	this->dedxSigma = dedxSigma;
@@ -7,11 +9,12 @@ ZRecentering::ZRecentering( double dedxSigma, double tofSigma, string bTable, in
 	dedxGen = new Bichsel( bTable, bMethod);
 	tofGen = new TofGenerator();
 
-	species = { "Pi", "K", "P" };
-	// just add E / D to include electrons / deuterons
-	// but I decided to remove electrons especially 
-	// bc i worried that it was double weighting pions in 1/beta etc.
-	//species = { "E", "Pi", "K", "P", "D" };
+	// these are used for making maps of centers etc.
+	// They are NOT used for the nonlinear recentering weights
+	// I was worried that including E was double weighting Piin 1/b etc.
+	species = { "E", "Pi", "K", "P", "D" };
+
+	// the nonlinear recentering uses COMMON:species
 	
 
 	// in GeV / c^2
@@ -151,7 +154,7 @@ double ZRecentering::nlDedx( string centerSpecies, double dedx, double p, double
 	double n1 = 0;
 	double d1 = 0;
 
-	for ( string plc : species ){
+	for ( string plc : Common::species ){
 
 		const double iMu = dedxGen->meanLog( p, mass( plc ), -1, 1000 );
 		const double iMuAvg = dedxGen->meanLog( avgP, mass( plc ), -1, 1000 );
@@ -200,7 +203,7 @@ double ZRecentering::nlTof( string centerSpecies, double beta, double p, double 
 	double n1 = 0;
 	double d1 = 0;
 
-	for ( string plc : species ){
+	for ( string plc : Common::species ){
 		
 		double iMu =  tofGen->mean( p, mass( plc ) ) ;
 		double iMuAvg =  tofGen->mean( avgP, mass( plc ) ) ;
@@ -244,7 +247,7 @@ double ZRecentering::nl2Tof( string centerSpecies, double beta, double p, double
 	double n2 = 0;
 	double d2 = 0;
 
-	for ( string plc : species ){
+	for ( string plc : Common::species ){
 		
 		double iMu =  tofGen->mean( p, mass( plc ) ) ;
 		double iMuAvg =  tofGen->mean( avgP, mass( plc ) ) ;

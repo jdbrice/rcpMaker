@@ -8,25 +8,22 @@
 
 using namespace jdb;
 
-
 // ROOT
 #include "TH2D.h"
 #include "TH1D.h"
 #include "TNtuple.h"
 #include "TCut.h"
 
-// TODO : include the track weight!!!!
-
-
 class PidProjector {
 protected:
 
+	// bin width
 	double _zbBinWidth, _zdBinWidth;
 	TFile * _f;
 
-
 	TCut _deuteronCut;
-	double _zbCutMax = -1;
+	TCut _electronCut;
+	double _zbCutMax = 1000;
 
 public:
 	static constexpr auto tag = "PidProjector";
@@ -36,10 +33,17 @@ public:
 		_f = inFile;
 		_zbBinWidth = zbBinWidth;
 		_zdBinWidth = zdBinWidth;
+
+		_deuteronCut = "";
+		_electronCut = "";
 	}
 
 	~PidProjector(){
 		INFO( tag, "()" );
+	}
+
+	string path( string name ){
+		return "PidPoints/" + name;
 	}
 
 	void cutDeuterons( double protonCenter, double protonSigma, float nSigma = 3 ){
@@ -53,11 +57,21 @@ public:
 		_zbCutMax = protonCenter + protonSigma * nSigma;
 	}
 
+	void cutElectrons( 	double zb_Pi, double zd_Pi, double zb_Pi_sigma, double zd_Pi_sigma, 
+						double zb_K, double zd_K, double zb_K_sigma, double zd_K_sigma, 
+						double zb_E, double zd_E, double zb_E_sigma, double zd_E_sigma, 
+						double nSigma_Pi, double nSigma_K, double nSigma_E ){
 
+		TCut cut_Pi = ("sqrt( ((zb - "+dts(zb_Pi)+") / " + dts(zb_Pi_sigma) + ")^2 + ((zd - "+dts(zd_Pi)+") / " + dts(zd_Pi_sigma) + ")^2 ) < " + dts( nSigma_Pi )).c_str();
+		TCut cut_K = ("sqrt( ((zb - "+dts(zb_K)+") / " + dts(zb_K_sigma) + ")^2 + ((zd - "+dts(zd_K)+") / " + dts(zd_K_sigma) + ")^2 ) < " + dts( nSigma_K )).c_str();
+		TCut cut_E = ("sqrt( ((zb - "+dts(zb_E)+") / " + dts(zb_E_sigma) + ")^2 + ((zd - "+dts(zd_E)+") / " + dts(zd_E_sigma) + ")^2 ) > " + dts( nSigma_E )).c_str();
+
+		_electronCut = cut_Pi || cut_K || cut_E;
+	}
 
 	TH2D * project2D( string name, string cut = "" ){
 
-		TNtuple * data = (TNtuple*)_f->Get( ("PidPoints/" + name).c_str() );
+		TNtuple * data = (TNtuple*)_f->Get( path(name).c_str() );
 		if ( !data ){
 			ERROR( tag, "ubable to open " << name );
 			return new TH2D( "err", "err", 1, 0, 1, 1, 0, 1 );
@@ -66,6 +80,7 @@ public:
 		double zbMax = data->GetMaximum( "zb" );
 		double zdMax = data->GetMaximum( "zd" );
 
+		INFO( tag, "Max from tree zbMax = " << zbMax );
 		if ( zbMax > _zbCutMax )
 			zbMax = _zbCutMax;
 
@@ -79,16 +94,22 @@ public:
 		INFO ( tag, "zb from ( " << zbMin <<", " << zbMax << " ) / " << _zbBinWidth << ", = " << zbNBins << " bins" << ")" );
 		INFO ( tag, "zd from ( " << zdMin <<", " << zdMax << " ) / " << _zdBinWidth << ", = " << zdNBins << " bins" << ")" );
 
-		string hist = name + "_2D ( " + ts(zdNBins) + ", " + dts( zdMin ) + ", " + dts(zdMax) + ", " + ts(zbNBins) + ", " + dts( zbMin ) + ", " + dts(zbMax) + " )";
+		TCut allCuts = _deuteronCut && _electronCut && TCut( cut.c_str() );
+		allCuts = allCuts * TCut( "w" ); // apply the track weight
 
-		data->Draw( ("zb:zd >> " + hist).c_str(), _deuteronCut && TCut( cut.c_str() ), "colz"  );
+		INFO( tag, "Cut string : " << allCuts );
 
-		TH2D * h = (TH2D*)gDirectory->Get( (name + "_2D").c_str() );
+		TH2D * h = new TH2D( (name + "_2D").c_str(), (name + "_2D").c_str(), zdNBins, zdMin, zdMax, zbNBins, zbMin, zbMax );
+		h->GetDirectory()->cd();
+		string hist = name + "_2D";
+
+		data->Draw( ("zb:zd >> " + hist).c_str(), allCuts, "colz"  );
+
 		return h;
 	}
 
 	TH1D * project1D( string name, string var, string cut = "" ){
-		TNtuple * data = (TNtuple*)_f->Get( ("PidPoints/" + name).c_str() );
+		TNtuple * data = (TNtuple*)_f->Get( path(name).c_str() );
 		if ( !data ){
 			ERROR( tag, "ubable to open " << name );
 			return new TH1D( "err", "err", 1, 0, 1 );
@@ -117,7 +138,12 @@ public:
 		if ( "zd" == var )
 			allCuts = allCuts && _deuteronCut;
 
-		data->Draw( ( var + " >>" + hist).c_str(), allCuts );
+		TCut wCut = "w";
+		allCuts = allCuts * wCut;
+		INFO( tag, "Cut string : " << allCuts );
+
+		data->Draw( ( var + " >>" + hist).c_str(),  allCuts );
+
 
 		INFO( tag, "Integral(h) = " << h->Integral() );
 
@@ -125,9 +151,9 @@ public:
 	}
 
 	TH1D * projectEnhanced( string name, string var, string plc, double cl, double cr ){
-		TNtuple * data = (TNtuple*)_f->Get( ("PidPoints/" + name).c_str() );
+		TNtuple * data = (TNtuple*)_f->Get( path(name).c_str() );
 		if ( !data ){
-			ERROR( tag, "ubable to open " << name );
+			ERROR( tag, "unable to open " << name );
 			return new TH1D( "err", "err", 1, 0, 1 );
 		}
 

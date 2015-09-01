@@ -378,6 +378,8 @@ namespace TSF{
 				for ( int iPt = firstPtBin; iPt <= lastPtBin; iPt++ ){
 
 					double avgP = binAverageP( iPt );
+					auto zbMu = psr->centeredTofMap( centerSpecies, p );
+					auto zdMu = psr->centeredDedxMap( centerSpecies. p );
 					
 					logger->warn(__FUNCTION__) << "<p> = " << avgP << endl;
 
