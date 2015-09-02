@@ -8,7 +8,7 @@
 
 namespace TSF{
 	FitRunner::FitRunner( XmlConfig * _cfg, string _np, int iCharge, int iCen) 
-	: HistoAnalyzer( _cfg, _np ){
+	: HistoAnalyzer( _cfg, _np, false ){
 		
 		// Initialize the Phase Space Recentering Object
 		tofSigmaIdeal = cfg->getDouble( nodePath+"ZRecentering.sigma:tof", 0.0012);
@@ -24,15 +24,23 @@ namespace TSF{
 		
 		//Make the momentum transverse, eta, charge binning 
 		binsPt = new HistoBins( cfg, "binning.pt" );
-		
-
-		logger->setClassSpace( tag );
 
 		// setup reporters for the zb and zd fit projections
 		string rpre = cfg->getString( nodePath + "output:prefix", "" );
-		zbReporter = unique_ptr<Reporter>(new Reporter( cfg->getString( nodePath + "output:path" ) + "rp_" + rpre + "_" + centerSpecies + "_TSF_zb.pdf",
+
+		if ( iCen >= 0 && iCen <= 6 && (iCharge == -1 || iCharge == 1) ){
+			rpre = Common::chargeString( iCharge ) + "_iCen_" + ts(iCen); 
+
+			map<string, string> overrides;
+			overrides[ nodePath + "output.data" ] = "Fit_" + cfg->getString( nodePath + "ZRecentering.centerSpecies" ) + "_" + rpre + ".root";
+			cfg->applyOverrides( overrides );
+		}
+
+
+
+		zbReporter = unique_ptr<Reporter>(new Reporter( cfg->getString( nodePath + "output:path" ) + "rp_" + centerSpecies + "_" + rpre + "_TSF_zb.pdf",
 			cfg->getInt( nodePath + "Reporter.output:width", 400 ), cfg->getInt( nodePath + "Reporter.output:height", 400 ) ) );
-		zdReporter = unique_ptr<Reporter>(new Reporter( cfg->getString( nodePath + "output:path" ) + "rp_" + rpre + "_" + centerSpecies +"_TSF_zd.pdf",
+		zdReporter = unique_ptr<Reporter>(new Reporter( cfg->getString( nodePath + "output:path" ) + "rp_" + centerSpecies + "_" + rpre + "_TSF_zd.pdf",
 			cfg->getInt( nodePath + "Reporter.output:width", 400 ), cfg->getInt( nodePath + "Reporter.output:height", 400 ) ) );
 
 		Logger::setGlobalLogLevel( Logger::logLevelFromString( cfg->getString( nodePath + "Logger:globalLogLevel" ) ) );
@@ -64,6 +72,8 @@ namespace TSF{
 			chargeFit.clear();
 			chargeFit.push_back( iCharge );
 		}
+
+		HistoAnalyzer::setup();
 	}
 
 	FitRunner::~FitRunner(){
@@ -475,7 +485,7 @@ namespace TSF{
 	} // make()
 
 	void FitRunner::drawSet( string v, Fitter * fitter, int iPt ){
-		logger->info(__FUNCTION__) << v << ", fitter=" << fitter << ", iPt=" << iPt << endl;
+		INFO( tag,  v << ", fitter=" << fitter << ", iPt=" << iPt );
 		TH1 * h = fitter->getDataHist( v );
 		if ( !h ){
 			WARN( tag, "Data histogram not found" );
@@ -577,7 +587,7 @@ namespace TSF{
 		}
 
 		// plot the dedx then tof
-		logger->info(__FUNCTION__) << "Reporting zd" << endl;
+		INFO( tag, "Reporting zd" );
 		zdReporter->newPage( 2, 2 );
 		{
 			zdReporter->cd( 1, 1 );
@@ -674,11 +684,11 @@ namespace TSF{
 			double zbMu = zbMean( plc, avgP );
 			double zdMu = zdMean( plc, avgP );
 
-			logger->info(__FUNCTION__) << "Filling Histograms for " << plc << endl;
+			INFO( tag, "Filling Histograms for " << plc );
 			int iiPt = iPt + 1;
 
 			// Yield			
-			logger->info(__FUNCTION__) << "Filling Yield for " << plc << endl;
+			INFO( tag, "Filling Yield for " << plc );
 			string name = Common::yieldName( plc, iCen, iCharge );
 			book->cd( plc+"_yield");
 			double sC = schema->var( "yield_"+plc )->val;
@@ -704,7 +714,7 @@ namespace TSF{
 
 			}
 
-			logger->info(__FUNCTION__) << "Filling Mus for " << plc << endl;
+			INFO( tag, "Filling Mus for " << plc );
 			//Mu
 			// zb
 			name = Common::muName( plc, iCen, iCharge );
@@ -740,7 +750,7 @@ namespace TSF{
 			book->get( name )->SetBinContent( iiPt, sC );
 			book->get( name )->SetBinError( iiPt, sE );
 
-			logger->info(__FUNCTION__) << "Filling Sigmas for " << plc << endl;
+			INFO( tag, "Filling Sigmas for " << plc );
 			//Sigma
 			name = Common::sigmaName( plc, iCen, iCharge );;
 			book->cd( plc+"_zbSigma");
