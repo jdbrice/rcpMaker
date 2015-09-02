@@ -101,15 +101,15 @@ void PidYieldPresenter::normalizeYield( string plc, int charge, int iCen ){
 	for ( int iBin = 1; iBin < y->GetNbinsX() + 1; iBin++ ){
 
 	
-		double pt = ny->GetBinCenter( iBin );
-		double sc = 1.0 / ( 2 * pt * 3.1415926 );
+		// double pt = ny->GetBinCenter( iBin );
+		// double sc = 1.0 / ( 2 * pt * 3.1415926 );
 
-		if ( iBin > lastGoodBin || iBin ==1 ){
-			sc = 0;	
-		}
+		// if ( iBin > lastGoodBin || iBin ==1 ){
+		// 	sc = 0;	
+		// }
 
-		ny->SetBinContent( iBin, ny->GetBinContent( iBin ) * sc );
-		ny->SetBinError( iBin, ny->GetBinError( iBin ) * sc );
+		// ny->SetBinContent( iBin, ny->GetBinContent( iBin ) * sc );
+		// ny->SetBinError( iBin, ny->GetBinError( iBin ) * sc );
 	}
 
 }

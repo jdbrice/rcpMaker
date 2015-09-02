@@ -18,7 +18,7 @@ class ApplyPostCorr : public HistoAnalyzer
 {
 protected:
 
-	map<string, unique_ptr<ConfigFunction> > tpcEff;
+	// map<string, unique_ptr<ConfigFunction> > tpcEff;
 	map<string, unique_ptr<ConfigGraph> > tofEff;
 	map<string, unique_ptr<ConfigFunction> > feedDown;
 
