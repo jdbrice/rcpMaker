@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+
+	<FitSchema method="poisson" roi="2" v="1">
+
+		<!-- 1/beta -->
+		<!-- Mus -->
+		<FitVar name="zb_mu_Pi" value="-1.20"  min="-1.5" max="-0.2" error=".001"/>
+		<FitVar name="zb_mu_K"  value="0.0"    min="-0.05" max="0.05" error=".001"/>
+		<FitVar name="zb_mu_P"  value="1.35"    min="0.4" max="1.8" error=".01"/>
+		<!-- Sigma -->
+		<FitVar name="zb_sigma_Pi" value=".04" min="0.006" max=".11" error=".001"/>
+		<FitVar name="zb_sigma_K" value=".04" min="0.006" max=".11" error=".001"/>
+		<FitVar name="zb_sigma_P" value=".04" min="0.006" max=".11" error=".001"/>
+
+		<!-- dEdx -->
+		<!-- Mus -->
+		<FitVar name="zd_mu_Pi" value="-1.6" error=".01" min="-1.8" max="-0.3" />
+		<FitVar name="zd_mu_K" value="0.0" error=".01" min="-0.1" max="0.1" />
+		<FitVar name="zd_mu_P" value="0.4" error=".01" min="0.25" max="0.65" />
+		<!-- Sigma -->
+		<FitVar name="zd_sigma_Pi" value=".08" error=".001" min=".008" max=".15" />
+		<FitVar name="zd_sigma_K" value=".08" error=".001" min=".008" max=".15" />
+		<FitVar name="zd_sigma_P" value=".08" error=".001" min=".008" max=".15" />
+
+		<!-- 1/beta and dEdx shared yields -->
+		<FitVar name="yield_K"  value="2" 	 error="1"   min="0" max="10e3" />
+		<FitVar name="yield_Pi" value="8"  error="1" 	 min="0" max="10e3" />
+		<FitVar name="yield_P"  value="2" 	 error="1"   min="0" max="10e3" />
+
+		<!-- Enahnced yields -->
+		<!-- dEdx Kaon enhanced -->
+		<FitVar name="zd_K_yield_Pi" value="10"      error="1"   min="0" max="10e3" />
+		<FitVar name="zd_K_yield_K" value="10"    	 error="1"   min="0" max="10e3" />
+		<FitVar name="zd_K_yield_P" value="10"       error="1"   min="0" max="10e3" />
+		<!-- dEdx Pion enhanced -->
+		<FitVar name="zd_Pi_yield_Pi" value="10" 	 error="1"  min="0" max="10e3" />
+		<FitVar name="zd_Pi_yield_K" value="10"      error="1"  min="0" max="10e3" />
+		<FitVar name="zd_Pi_yield_P" value="10"      error="1"  min="0" max="10e3" />	
+		<!-- dEdx Proton enhanced -->
+		<FitVar name="zd_P_yield_Pi" value="10"      error="1"  min="0" max="10e3" />
+		<FitVar name="zd_P_yield_K"  value="10"      error="1"  min="0" max="10e3" />
+		<FitVar name="zd_P_yield_P"  value="10"   	 error="1"  min="0" max="10e3" />
+
+		<!-- 1/beta Kaon enhanced -->
+		<FitVar name="zb_K_yield_Pi" value="10" 	 error="1"  min="0" max="10e3" />
+		<FitVar name="zb_K_yield_K"  value="10" 	 error="1"  min="0" max="10e3" />
+		<FitVar name="zb_K_yield_P"  value="10"  	 error="1"  min="0" max="10e3" />	
+		<!-- 1/beta Pion enhanced -->
+		<FitVar name="zb_Pi_yield_Pi" value="10"  	 error="1"  min="0" max="10e3" />
+		<FitVar name="zb_Pi_yield_K" value="10"  	 error="1"  min="0" max="10e3" />
+		<FitVar name="zb_Pi_yield_P" value="10"   	 error="1"  min="0" max="10e3" />	
+		<!-- 1/beta Proton enhanced -->
+		<FitVar name="zb_P_yield_Pi" value="10" 	 error="1"  min="0" max="10e3" />
+		<FitVar name="zb_P_yield_K" value="10"  	 error="1"  min="0" max="10e3" />
+		<FitVar name="zb_P_yield_P" value="10"  	 error="1"  min="0" max="10e3" />
+
+		<!-- Tof Eff parameters -->
+		<FitVar name="eff_Pi" value="1.0" error=".001"  min="0.90" max="1.10" />
+		<FitVar name="eff_K" value="1.0" error=".001"  min="0.90" max="1.10" />
+		<FitVar name="eff_P" value="1.0" error=".001"  min="0.90" max="1.10" />
+
+
+
+			<!-- Models -->
+		<Model name="zb_All" dataset="zb_All" >
+			<GaussModel name="gPi" mu="zb_mu_Pi" sigma="zb_sigma_Pi" yield="yield_Pi" eff="eff_Pi" />
+			<GaussModel name="gK" mu="zb_mu_K" sigma="zb_sigma_K" yield="yield_K" eff="eff_K" />
+			<GaussModel name="gP" mu="zb_mu_P" sigma="zb_sigma_P" yield="yield_P" eff="eff_P" />
+		</Model>
+		<Model name="zd_All" dataset="zd_All" >
+			<GaussModel name="gPi" mu="zd_mu_Pi" sigma="zd_sigma_Pi" yield="yield_Pi" />
+			<GaussModel name="gK" mu="zd_mu_K" sigma="zd_sigma_K" yield="yield_K" />
+			<GaussModel name="gP" mu="zd_mu_P" sigma="zd_sigma_P" yield="yield_P" />
+		</Model>
+
+		<!-- dEdx distributions enhanced by 1/beta cuts -->
+		<Model name="zd_K" dataset="zd_K" >
+			<GaussModel name="gPi" mu="zd_mu_Pi" sigma="zd_sigma_Pi" yield="zd_K_yield_Pi" />
+			<GaussModel name="gK" mu="zd_mu_K" sigma="zd_sigma_K" yield="zd_K_yield_K" />
+			<GaussModel name="gP" mu="zd_mu_P" sigma="zd_sigma_P" yield="zd_K_yield_P" />
+		</Model>
+		<Model name="zd_Pi" dataset="zd_Pi" >
+			<GaussModel name="gPi" mu="zd_mu_Pi" sigma="zd_sigma_Pi" yield="zd_Pi_yield_Pi" />
+			<GaussModel name="gK" mu="zd_mu_K" sigma="zd_sigma_K" yield="zd_Pi_yield_K" />
+			<GaussModel name="gP" mu="zd_mu_P" sigma="zd_sigma_P" yield="zd_Pi_yield_P" />
+		</Model>
+		<Model name="zd_P" dataset="zd_P" >
+			<GaussModel name="gPi" mu="zd_mu_Pi" sigma="zd_sigma_Pi" yield="zd_P_yield_Pi" />
+			<GaussModel name="gK" mu="zd_mu_K" sigma="zd_sigma_K" yield="zd_P_yield_K" />
+			<GaussModel name="gP" mu="zd_mu_P" sigma="zd_sigma_P" yield="zd_P_yield_P" />
+		</Model>
+
+		<!-- 1/beta distributions enhanced by dEdx cuts -->
+		<Model name="zb_K" dataset="zb_K" >
+			<GaussModel name="gPi" mu="zb_mu_Pi" sigma="zb_sigma_Pi" yield="zb_K_yield_Pi" />
+			<GaussModel name="gK" mu="zb_mu_K" sigma="zb_sigma_K" yield="zb_K_yield_K" />
+			<GaussModel name="gP" mu="zb_mu_P" sigma="zb_sigma_P" yield="zb_K_yield_P"  />
+		</Model>
+		<Model name="zb_Pi" dataset="zb_Pi" >
+			<GaussModel name="gPi" mu="zb_mu_Pi" sigma="zb_sigma_Pi" yield="zb_Pi_yield_Pi" />
+			<GaussModel name="gK" mu="zb_mu_K" sigma="zb_sigma_K" yield="zb_Pi_yield_K"  />
+			<GaussModel name="gP" mu="zb_mu_P" sigma="zb_sigma_P" yield="zb_Pi_yield_P"  />
+		</Model>
+		<Model name="zb_P" dataset="zb_P" >
+			<GaussModel name="gPi" mu="zb_mu_Pi" sigma="zb_sigma_Pi" yield="zb_P_yield_Pi"  />
+			<GaussModel name="gK" mu="zb_mu_K" sigma="zb_sigma_K" yield="zb_P_yield_K"  />
+			<GaussModel name="gP" mu="zb_mu_P" sigma="zb_sigma_P" yield="zb_P_yield_P" />
+		</Model>
+		
+	</FitSchema>
+</config>
