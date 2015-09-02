@@ -7,7 +7,7 @@
 
 
 namespace TSF{
-	FitRunner::FitRunner( XmlConfig * _cfg, string _np) 
+	FitRunner::FitRunner( XmlConfig * _cfg, string _np, int iCharge, int iCen) 
 	: HistoAnalyzer( _cfg, _np ){
 		
 		// Initialize the Phase Space Recentering Object
@@ -50,6 +50,20 @@ namespace TSF{
 
 
 		rnd = unique_ptr<TRandom3>( new TRandom3() );
+
+		//The bins to fit over
+		centralityFitBins = cfg->getIntVector( nodePath + "FitRange.centralityBins" );
+		chargeFit = cfg->getIntVector( nodePath + "FitRange.charges" );
+
+		// override if we are running parallel jobs
+		if ( iCen >= 0 && iCen <= 6){
+			centralityFitBins.clear();
+			centralityFitBins.push_back( iCen );
+		}
+		if ( -1 == iCharge || 1 == iCharge){
+			chargeFit.clear();
+			chargeFit.push_back( iCharge );
+		}
 	}
 
 	FitRunner::~FitRunner(){
@@ -57,12 +71,6 @@ namespace TSF{
 
 
 	void FitRunner::makeHistograms(){
-
-		/**
-		 * The bins to fit over
-		 */
-		vector<int> centralityFitBins = cfg->getIntVector( nodePath + "FitRange.centralityBins" );
-		vector<int> chargeFit = cfg->getIntVector( nodePath + "FitRange.charges" );
 
 		book->cd();
 		book->makeAll( nodePath + "histograms" );
@@ -412,10 +420,6 @@ namespace TSF{
 			return;
 		}
 
-
-		//The bins to fit over
-		vector<int> centralityFitBins = cfg->getIntVector( nodePath + "FitRange.centralityBins" );
-		vector<int> chargeFit = cfg->getIntVector( nodePath + "FitRange.charges" );
 
 		// Make the histograms for storing the results
 		makeHistograms();

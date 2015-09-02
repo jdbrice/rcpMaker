@@ -2,6 +2,7 @@
 // STL
 #include <iostream>
 #include <exception>
+#include <stdlib.h> // for atoi
 
 // RooBarb
 #include "Logger.h"
@@ -80,7 +81,14 @@ int main( int argc, char* argv[] ) {
 				TofEffFitter tef( &config, "TofEffFitter." );
 				tef.make();     
 			} else if ( "SimultaneousTPid" == job ){
-				FitRunner fr( &config, "SimultaneousPid." );
+				int iCharge = atoi( fileList.c_str() );
+				if ( "" == fileList )
+					iCharge = -2;
+				int iCen = atoi( jobPrefix.c_str() );
+				if ( "" == jobPrefix )
+					iCen = -1;
+
+				FitRunner fr( &config, "SimultaneousPid.", iCharge, iCen );
 				fr.make();
 
 			}  else if ( "FeedDownMaker" == job ){

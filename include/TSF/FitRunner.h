@@ -47,9 +47,12 @@ namespace TSF{
 
 		unique_ptr<TRandom3> rnd;
 
+		vector<int> centralityFitBins;
+		vector<int> chargeFit;
+
 
 	public:
-		FitRunner( XmlConfig * _cfg, string _np  );
+		FitRunner( XmlConfig * _cfg, string _np, int iCharge = -10, int iCen = -1  );
 
 		~FitRunner();
 
