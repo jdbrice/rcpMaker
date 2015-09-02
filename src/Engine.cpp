@@ -6,6 +6,7 @@
 
 // RooBarb
 #include "Logger.h"
+#include "LoggerConfig.h"
 #include "XmlConfig.h"
 using namespace jdb;
 
@@ -51,6 +52,8 @@ int main( int argc, char* argv[] ) {
 		try{
 			XmlConfig config( argv[ 1 ] );
 			//config.report();
+
+			LoggerConfig::setup( &config, "Logger" );
 
 			string fileList = "";
 			string jobPrefix = "";

@@ -20,7 +20,7 @@ def write_conf(  output_path, config_path ="./" ) :
 
 	<SimultaneousPid>
 		<Logger color="true" logLevel="info" globalLogLevel="info"/>
-		<Reporter> <output width="800" height="800" /> </Reporter>	
+		<Reporter> <output width="1600" height="1200" /> </Reporter>	
 
 		<!-- Path the PidHisto file -->
 		<input> <data url="{data_file}"/> </input>
@@ -36,7 +36,7 @@ def write_conf(  output_path, config_path ="./" ) :
 
 
 		<!-- Guiding parameters -->
-		<Timing zdOnly="0.2" useZdEnhanced="0.2" useZbEnhanced="0.2" nSigZdEnhanced="3.0" nSigZbEnhanced="30.0" />
+		<Timing zdOnly="0.2" useZdEnhanced="0.2" useZbEnhanced="0.2" nSigZdEnhanced="3.0" nSigZbEnhanced="6.0" />
 
 		<ParameterFixing>
 			<!-- mu can vary +/- nSigma -->
