@@ -499,8 +499,8 @@ namespace TSF{
 		double max = h->GetBinContent( binmax ) * 5;
 		h->GetYaxis()->SetRangeUser( schema->getNormalization() * scaler, max );
 
-		int fb = h->FindFirstBinAbove( 1.0 / fitter->getNorm() * 50 ) - 5;
-		int lb = h->FindLastBinAbove( 1.0 / fitter->getNorm() * 50 ) + 5; // just a fudge
+		int fb = h->FindFirstBinAbove( 1.0 / fitter->getNorm()  ) - 5;
+		int lb = h->FindLastBinAbove( 1.0 / fitter->getNorm()  ) + 5; // just a fudge
 		
 		if ( fb <= 0 )
 			fb = 1;
