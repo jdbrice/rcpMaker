@@ -8,42 +8,35 @@ PidYieldPresenter::PidYieldPresenter( XmlConfig * _cfg, string _nodePath ){
 	cfg = _cfg;
 	np = _nodePath;
 
-	logger = unique_ptr<Logger>(LoggerConfig::makeLogger( cfg, np + "Logger" ));
-	
-	logger->setClassSpace( "PidYieldPresenter" );
-
-	logger->info(__FUNCTION__) << endl;
-
-
 	// create the input files
 	fPidFit 	= new TFile( cfg->getString( np + "input.fit:url" ).c_str(), "READ" );
-	fPidPS 		= new TFile( cfg->getString( np + "input.ps:url" ).c_str(), "READ" );
 
-	if ( fPidFit->IsOpen() )
-		logger->info( __FUNCTION__ ) << "Fit File Opened" << endl;
-	else
-		ERROR( "Cannot open fit histos" )
-	if ( fPidPS->IsOpen() )
-		logger->info( __FUNCTION__ ) << "Pid File Opened" << endl;
-	else 
-		ERROR( "Cannot open PidHistos" )
+	if ( fPidFit->IsOpen() ){
+		INFO (tag,  "Fit File Opened" );
+	}
+	else{
+		ERROR( tag, "Cannot open fit histos" );
+	}
 
 	// Create the book
+	INFO( tag, "Making book" );
 	book = unique_ptr<HistoBook>(new HistoBook( cfg->getString( np + "output:path" ) + cfg->getString( np + "output.data:url" ), cfg, "", "" ));
+
+	INFO( tag, "Making Reporter" );
 	reporter = unique_ptr<Reporter>(new Reporter( cfg, np+"Reporter." ) );
 
-	//Make the momentum transverse binning	 
+	//Make the momentum transverse binning
+	INFO( tag, "Making pt Bins" );	 
 	binsPt = unique_ptr<HistoBins>(new HistoBins( cfg, "binning.pt" ));
 
 	book->cd("/");
-	book->add( "eventNorms", (TH1D*)fPidPS->Get( "/EventQA/mappedRefMultBins" )->Clone( "eventNorms" ) );
 
 	gStyle->SetOptStat( 0 );
 
 	cenBins = cfg->getIntVector( np + "FitRange.centralityBins" );
-	cenLabels = cfg->getStringVector( np+"centralityLabels" );
+	cenLabels = cfg->getStringVector( np + "centralityLabels" );
 	charges = cfg->getIntVector( np + "FitRange.charges" );
-	colors = cfg->getIntVector( np+"colors" );
+	colors = cfg->getIntVector( np + "colors" );
 
 	nColl = cfg->getDoubleVector( np + "nColl" );
 	nPart = cfg->getDoubleVector( np + "nPart" );
@@ -53,7 +46,7 @@ PidYieldPresenter::PidYieldPresenter( XmlConfig * _cfg, string _nodePath ){
 
 
 PidYieldPresenter::~PidYieldPresenter(){
-	logger->info(__FUNCTION__) << endl;
+	INFO( tag, "()" );
 
 	
 }
@@ -62,14 +55,10 @@ PidYieldPresenter::~PidYieldPresenter(){
 void PidYieldPresenter::make(){
 
 	if ( !fPidFit->IsOpen() ){
-		logger->error( __FUNCTION__ ) << "Fit File NOT Opened" << endl;
+		ERROR( tag, "Fit File NOT Opened" );
 		return;
 	}
-	if ( !fPidPS->IsOpen() ){
-		logger->error( __FUNCTION__ ) << "Pid File NOT Opened" << endl;
-		return;
-	}
-
+	
 	normalizeYield();
 	compareYields();
 	rcp( 6 );
@@ -82,17 +71,15 @@ void PidYieldPresenter::normalizeYield( string plc, int charge, int iCen ){
 	
 	string name = Common::yieldName( plc, iCen, charge );
 	if ( !fPidFit->Get( (plc + "_yield/" + name).c_str()  ) ){
-		logger->error(__FUNCTION__) << name << " does not exists" << endl;
+		ERROR( tag, name << " does not exists" );
 
 	}
 	TH1D * y = (TH1D*)fPidFit->Get( (plc + "_yield/" + name).c_str()  );
 
 	// find out which bin is the last with a good fit
 	int lastGoodBin = cfg->getInt( np + "LastYieldBin."+plc+":"+Common::chargeString( charge ), 1000 );
-	logger->info(__FUNCTION__) << "Last Good Bin : " << lastGoodBin << endl;
+	INFO( tag, "Last Good Bin : " << lastGoodBin );
 
-	book->cd( "/" );
-	double nEvents = book->get( "eventNorms" )->GetBinContent( iCen+1 );
 
 	book->cd( "yield" );
 	book->add( name, (TH1D*)y->Clone( name.c_str() ) );
@@ -163,9 +150,9 @@ void PidYieldPresenter::compareYields( string plc, int charge ){
 
 		int pow10 = iCen;
 
-		logger->info(__FUNCTION__) << "Scale Factor: " << pow10 << endl;
+		INFO( tag, "Scale Factor: " << pow10 );
 		double scale = TMath::Power( 10, -pow10 );
-		logger->info(__FUNCTION__) << "Scale : " << scale << endl;
+		INFO( tag, "Scale : " << scale );
 
 
 		string drawOpt = "pe";
@@ -215,22 +202,22 @@ void PidYieldPresenter::rcp( string plc, int charge, int iCen, int iPer ){
 
 	if ( 	!book->exists( Common::yieldName( plc, iCen, charge ) ) ||
 			!book->exists( Common::yieldName( plc, iPer, charge ) )  ){
-		logger->error( __FUNCTION__ ) << "central or peripheral yield missing" << endl;
+		ERROR( tag, "central or peripheral yield missing" );
 		return;
 	}
 
 	// get the vector of ncolls mapped to centrality bins
 	
 	if ( nColl.size() <= iCen || nColl.size() <= iPer ){
-		logger->error(__FUNCTION__) << "nColl doesnt contain value for this bin" << endl;
+		ERROR( tag, "nColl doesnt contain value for this bin" );
 		return;
 	}
 
-	logger->info( __FUNCTION__ ) << "Central Bin : " << iCen << endl;
-	logger->info( __FUNCTION__ ) << "Periferal Bin : " << iPer << endl;
+	INFO( tag, "Central Bin : " << iCen );
+	INFO( tag, "Periferal Bin : " << iPer );
 
-	logger->info( __FUNCTION__ ) << "Scale Central Bin : " << nColl[ iPer ] << endl;
-	logger->info( __FUNCTION__ ) << "Scale Periferal Bin : " << nColl[ iCen ] << endl;
+	INFO( tag, "Scale Central Bin : " << nColl[ iPer ] );
+	INFO( tag, "Scale Periferal Bin : " << nColl[ iCen ] );
 
 	TH1D * cen = (TH1D*)book->get( Common::yieldName( plc, iCen, charge ) );
 	TH1D * per = (TH1D*)book->get( Common::yieldName( plc, iPer, charge ) );
@@ -308,7 +295,7 @@ void PidYieldPresenter::chargeRatio( string plc, int iCen ){
 
 	if ( 	!book->exists( Common::yieldName( plc, iCen, 1 ) ) ||
 			!book->exists( Common::yieldName( plc, iCen, -1 ) )  ){
-		logger->error( __FUNCTION__ ) << "+/- yield missing" << endl;
+		ERROR( tag,  "+/- yield missing" );
 		return;
 	}
 

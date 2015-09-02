@@ -26,7 +26,6 @@ class PidYieldPresenter
 
 protected:
 
-	unique_ptr<Logger> logger;
 	XmlConfig * cfg = nullptr;
 	string np;
 
@@ -34,7 +33,6 @@ protected:
 	unique_ptr<HistoBook> book;
 
 	TFile * fPidFit;
-	TFile * fPidPS;
 
 
 	vector<int> 		cenBins;
@@ -51,6 +49,8 @@ protected:
 
 
 public:
+
+	static constexpr auto tag = "PidYieldPresenter";
 	PidYieldPresenter( XmlConfig * _cfg, string _nodePath );
 	~PidYieldPresenter();
 

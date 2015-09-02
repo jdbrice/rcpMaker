@@ -48,7 +48,7 @@ def hadd( files, n, prefix="tmp_" ) :
 
 parser = argparse.ArgumentParser( description="Creates the configs for Tasks" );
 parser.add_argument( "needle", default="*.root", help="selects all of the files that match the glob" )
-parser.add_argument( "N", default=50, type=int, help="split the hadd into N files per batch" )
+parser.add_argument( "N", default=50, nargs='?' type=int, help="split the hadd into N files per batch" )
 
 
 args = parser.parse_args()
