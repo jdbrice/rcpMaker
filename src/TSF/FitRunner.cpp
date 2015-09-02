@@ -118,7 +118,7 @@ namespace TSF{
 				} // loop plc
 			} // loop iCharge
 		} // loop iCen
-	}
+	} // makeHistograms()
 
 	void FitRunner::prepare( double avgP, int iCen ){
 		TRACE( tag, "( avgP=" << avgP << ", iCen=" << iCen << ")" )
@@ -205,7 +205,7 @@ namespace TSF{
 			
 			
 		} // loop on plc to set initial vals
-	}
+	} // perpare(...)
 
 	void FitRunner::choosePlayers( double avgP, string plc ){
 
@@ -342,7 +342,7 @@ namespace TSF{
 			}
 
 		}
-	}
+	} // choosePlayers(...)
 
 	void FitRunner::runNominal( int iCharge, int iCen, int iPt ) {
 		WARN( tag, "(iCharge=" << iCharge << ", iCen=" << iCen << ", iPt=" << iPt << ")" );
@@ -440,26 +440,26 @@ namespace TSF{
 
 
 
-					map<string, vector<double> > systematics;
-					double avgP = binAverageP( iPt );
-					for ( string pre : { "zb", "zd" } ){
-						for ( string plc : Common::species ){
-							INFO( tag, "Do Systematics for " << pre << "_" << plc );
-							ConfigRange &range = sigmaRanges[ pre + "_" + plc ];
+					// map<string, vector<double> > systematics;
+					// double avgP = binAverageP( iPt );
+					// for ( string pre : { "zb", "zd" } ){
+					// 	for ( string plc : Common::species ){
+					// 		INFO( tag, "Do Systematics for " << pre << "_" << plc );
+					// 		ConfigRange &range = sigmaRanges[ pre + "_" + plc ];
 
-							if ( !range.above( avgP ) )
-								continue;
+					// 		if ( !range.above( avgP ) )
+					// 			continue;
 
-							double delta = sigmaSets[ pre+"_"+plc ].std();
-							shared_ptr<FitSchema> sysSchema = prepareSystematic( pre + "_sigma", plc, delta );
+					// 		double delta = sigmaSets[ pre+"_"+plc ].std();
+					// 		shared_ptr<FitSchema> sysSchema = prepareSystematic( pre + "_sigma", plc, delta );
 
-							map<string, double> deltas = runSystematic( sysSchema, iCharge, iCen, iPt );	
+					// 		map<string, double> deltas = runSystematic( sysSchema, iCharge, iCen, iPt );	
 
-							systematics[ "Pi" ].push_back( deltas[ "Pi" ] );
-							systematics[ "K" ].push_back( deltas[ "K" ] );
-							systematics[ "P" ].push_back( deltas[ "P" ] );
-						}
-					}
+					// 		systematics[ "Pi" ].push_back( deltas[ "Pi" ] );
+					// 		systematics[ "K" ].push_back( deltas[ "K" ] );
+					// 		systematics[ "P" ].push_back( deltas[ "P" ] );
+					// 	}
+					// }
 
 					// do something with them now
 					
@@ -661,7 +661,6 @@ namespace TSF{
 		INFO( tag, "zb_All / zd_All in roi = " << roiyzb / roiyzd );
 	} // reportYields()
 
-
 	void FitRunner::fillFitHistograms(int iPt, int iCen, int iCharge, Fitter &fitter ){
 
 		double avgP = binAverageP( iPt );
@@ -793,8 +792,6 @@ namespace TSF{
 		}
 	} // fillEnhancedYieldHistogram(...)
 
-
-
 	void FitRunner::drawFitRatio( string ds, Fitter * fitter, int iPt ){
 
 		book->cd();
@@ -837,8 +834,6 @@ namespace TSF{
 		//h2->SetLineColor( kRed );
 		//h2->Draw("same");
 	} // drawFitRatio(...)
-
-
 
 	shared_ptr<FitSchema> FitRunner::prepareSystematic( string sys, string plc, double delta ){
 		INFO( tag, "(sys=" << sys << ", plc=" << plc << ", delta=" << delta << ")" );
