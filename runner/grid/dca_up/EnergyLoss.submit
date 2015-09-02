@@ -1,0 +1,24 @@
+##############################
+# Energy Loss Makers
+##############################
+
+Executable = /home/jdb12/work/rcpMaker/runner/rcp
+Initialdir = /home/jdb12/work/rcpMaker/runner/
+
+Arguments 	= /data/star/jdb12/RcpAnalysis/config/dca_up/PidData/K_n.xml
+Queue
+
+Arguments 	= /data/star/jdb12/RcpAnalysis/config/dca_up/PidData/K_p.xml
+Queue
+
+Arguments 	= /data/star/jdb12/RcpAnalysis/config/dca_up/PidData/Pi_n.xml
+Queue
+
+Arguments 	= /data/star/jdb12/RcpAnalysis/config/dca_up/PidData/Pi_p.xml
+Queue
+
+Arguments 	= /data/star/jdb12/RcpAnalysis/config/dca_up/PidData/P_n.xml
+Queue
+
+Arguments 	= /data/star/jdb12/RcpAnalysis/config/dca_up/PidData/P_p.xml
+Queue

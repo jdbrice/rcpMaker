@@ -1,0 +1,42 @@
+##############################
+# TPC Histogram Makers
+##############################
+
+Executable = /home/jdb12/work/rcpMaker/runner/rcp
+Initialdir = /home/jdb12/work/rcpMaker/runner/
+
+Arguments 	= /data/star/jdb12/RcpAnalysis/config/dca_up/PidData/K_n_mc.xml
+Queue
+
+Arguments 	= /data/star/jdb12/RcpAnalysis/config/dca_up/PidData/K_p_mc.xml
+Queue
+
+Arguments 	= /data/star/jdb12/RcpAnalysis/config/dca_up/PidData/K_n_rc.xml
+Queue
+
+Arguments 	= /data/star/jdb12/RcpAnalysis/config/dca_up/PidData/K_p_rc.xml
+Queue
+
+Arguments 	= /data/star/jdb12/RcpAnalysis/config/dca_up/PidData/Pi_n_mc.xml
+Queue
+
+Arguments 	= /data/star/jdb12/RcpAnalysis/config/dca_up/PidData/Pi_p_mc.xml
+Queue
+
+Arguments 	= /data/star/jdb12/RcpAnalysis/config/dca_up/PidData/Pi_n_rc.xml
+Queue
+
+Arguments 	= /data/star/jdb12/RcpAnalysis/config/dca_up/PidData/Pi_p_rc.xml
+Queue
+
+Arguments 	= /data/star/jdb12/RcpAnalysis/config/dca_up/PidData/P_n_mc.xml
+Queue
+
+Arguments 	= /data/star/jdb12/RcpAnalysis/config/dca_up/PidData/P_p_mc.xml
+Queue
+
+Arguments 	= /data/star/jdb12/RcpAnalysis/config/dca_up/PidData/P_n_rc.xml
+Queue
+
+Arguments 	= /data/star/jdb12/RcpAnalysis/config/dca_up/PidData/P_p_rc.xml
+Queue
