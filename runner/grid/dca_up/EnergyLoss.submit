@@ -5,32 +5,32 @@
 Executable = /home/jdb12/work/rcpMaker/runner/rcp
 Initialdir = /home/jdb12/work/rcpMaker/runner/
 
-Arguments 	= /data/star/jdb12/RcpAnalysis/config/dca_up/PidData/K_n.xml
-Output 		= /data/star/jdb12/RcpAnalysis/config/dca_up/PidData/K_n.xml.log
-Log 		= /data/star/jdb12/RcpAnalysis/config/dca_up/PidData/K_n.xml.condor.log
+Arguments 	= /data/star/jdb12/RcpAnalysis/config/dca_up/EnergyLoss/K_n.xml
+Output 		= /data/star/jdb12/RcpAnalysis/config/dca_up/EnergyLoss/K_n.xml.log
+Log 		= /data/star/jdb12/RcpAnalysis/config/dca_up/EnergyLoss/K_n.xml.condor.log
 Queue
 
-Arguments 	= /data/star/jdb12/RcpAnalysis/config/dca_up/PidData/K_p.xml
-Output 		= /data/star/jdb12/RcpAnalysis/config/dca_up/PidData/K_p.xml.log
-Log 		= /data/star/jdb12/RcpAnalysis/config/dca_up/PidData/K_p.xml.condor.log
+Arguments 	= /data/star/jdb12/RcpAnalysis/config/dca_up/EnergyLoss/K_p.xml
+Output 		= /data/star/jdb12/RcpAnalysis/config/dca_up/EnergyLoss/K_p.xml.log
+Log 		= /data/star/jdb12/RcpAnalysis/config/dca_up/EnergyLoss/K_p.xml.condor.log
 Queue
 
-Arguments 	= /data/star/jdb12/RcpAnalysis/config/dca_up/PidData/Pi_n.xml
-Output 		= /data/star/jdb12/RcpAnalysis/config/dca_up/PidData/Pi_n.xml.log
-Log 		= /data/star/jdb12/RcpAnalysis/config/dca_up/PidData/Pi_n.xml.condor.log
+Arguments 	= /data/star/jdb12/RcpAnalysis/config/dca_up/EnergyLoss/Pi_n.xml
+Output 		= /data/star/jdb12/RcpAnalysis/config/dca_up/EnergyLoss/Pi_n.xml.log
+Log 		= /data/star/jdb12/RcpAnalysis/config/dca_up/EnergyLoss/Pi_n.xml.condor.log
 Queue
 
-Arguments 	= /data/star/jdb12/RcpAnalysis/config/dca_up/PidData/Pi_p.xml
-Output 		= /data/star/jdb12/RcpAnalysis/config/dca_up/PidData/Pi_p.xml.log
-Log 		= /data/star/jdb12/RcpAnalysis/config/dca_up/PidData/Pi_p.xml.condor.log
+Arguments 	= /data/star/jdb12/RcpAnalysis/config/dca_up/EnergyLoss/Pi_p.xml
+Output 		= /data/star/jdb12/RcpAnalysis/config/dca_up/EnergyLoss/Pi_p.xml.log
+Log 		= /data/star/jdb12/RcpAnalysis/config/dca_up/EnergyLoss/Pi_p.xml.condor.log
 Queue
 
-Arguments 	= /data/star/jdb12/RcpAnalysis/config/dca_up/PidData/P_n.xml
-Output 		= /data/star/jdb12/RcpAnalysis/config/dca_up/PidData/P_n.xml.log
-Log 		= /data/star/jdb12/RcpAnalysis/config/dca_up/PidData/P_n.xml.condor.log
+Arguments 	= /data/star/jdb12/RcpAnalysis/config/dca_up/EnergyLoss/P_n.xml
+Output 		= /data/star/jdb12/RcpAnalysis/config/dca_up/EnergyLoss/P_n.xml.log
+Log 		= /data/star/jdb12/RcpAnalysis/config/dca_up/EnergyLoss/P_n.xml.condor.log
 Queue
 
-Arguments 	= /data/star/jdb12/RcpAnalysis/config/dca_up/PidData/P_p.xml
-Output 		= /data/star/jdb12/RcpAnalysis/config/dca_up/PidData/P_p.xml.log
-Log 		= /data/star/jdb12/RcpAnalysis/config/dca_up/PidData/P_p.xml.condor.log
+Arguments 	= /data/star/jdb12/RcpAnalysis/config/dca_up/EnergyLoss/P_p.xml
+Output 		= /data/star/jdb12/RcpAnalysis/config/dca_up/EnergyLoss/P_p.xml.log
+Log 		= /data/star/jdb12/RcpAnalysis/config/dca_up/EnergyLoss/P_p.xml.condor.log
 Queue
