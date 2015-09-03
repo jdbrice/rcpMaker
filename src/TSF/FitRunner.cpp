@@ -417,6 +417,8 @@ namespace TSF{
 		while( fitter.isFitGood() == false && tries < 3 ){
 			fitter.fit3( );
 			tries ++;
+
+			fitter.loadDatasets(centerSpecies, iCharge, iCen, iPt, true, zbMu, zdMu );
 		}
 		reportFit( &fitter, iPt );
 	
