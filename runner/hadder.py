@@ -16,7 +16,7 @@ def chunks(l, n):
     for i in xrange(0, len(l), n):
         yield l[i:i+n]
 
-def hadd( files, n, prefix="tmp_" ) :
+def hadd( files, n, prefix="tmp_", final_name="merged.root" ) :
 
 	chunky = list( chunks( files, n ) )
 
@@ -30,7 +30,7 @@ def hadd( files, n, prefix="tmp_" ) :
 		if n_to_make > 1 :
 			new_name = prefix + str(index) + ".root"
 		else :
-			new_name = "merged.root"
+			new_name = final_name
 
 		new_files.append( new_name )
 		cmd = "hadd " + new_name + " " + " ".join(c)
@@ -40,8 +40,12 @@ def hadd( files, n, prefix="tmp_" ) :
 	print " created :", " ".join( new_files )
 
 	if len( new_files ) > 1 :
-		hadd( new_files, n, prefix + "tmp_" )
-		
+		hadd( new_files, n, prefix + "tmp_", final_name )
+
+	# remove our tmp files
+	for tmp_f in new_files :
+		print "Removing temp file", tmp_f
+		os.remove( tmp_f )
 
 
 
@@ -49,6 +53,7 @@ def hadd( files, n, prefix="tmp_" ) :
 parser = argparse.ArgumentParser( description="Creates the configs for Tasks" );
 parser.add_argument( "needle", default="*.root", help="selects all of the files that match the glob" )
 parser.add_argument( "N", default=50, nargs='?' type=int, help="split the hadd into N files per batch" )
+parser.add_argument( "name", default="merged.root", nargs='?' type=str, help="name of final output file" )
 
 
 args = parser.parse_args()
