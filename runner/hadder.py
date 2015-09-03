@@ -60,4 +60,4 @@ parser.add_argument( "name", default="merged.root", nargs='?', type=str, help="n
 args = parser.parse_args()
 files = glob.glob( args.needle )
 
-hadd( files, args.N, args.name )
+hadd( files, args.N, "tmp_", args.name )
