@@ -146,6 +146,8 @@ namespace TSF{
 		minuit->SetPrintLevel( schema->getVerbosity() );
 		minuit->SetFCN( tminuitFCN );
 
+		fitIsGood = false;
+
 		INFO( tag, "" )
 	}
 
@@ -346,15 +348,12 @@ namespace TSF{
 
 		schema->setMethod( "poisson" );
 
-		fixShapes();
-
-		minuit->mnexcm( "MINI", arglist, 1, iFlag );
-		minuit->mnexcm( "MINI", arglist, 1, iFlag );
+		fix( "_yield_" );
 		minuit->mnexcm( "MINI", arglist, 1, iFlag );
 		status = minuit->fCstatu;
-		INFO ( tag, "Step 3. Status " << status );
-	
-		releaseShapes();		
+		INFO ( tag, "Step 3. Status " << status );	
+
+		release( "_yield_" );
 		schema->updateRanges();
 
 		INFO( tag, "AFTER" );

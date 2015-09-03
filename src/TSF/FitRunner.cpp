@@ -402,7 +402,7 @@ namespace TSF{
 		fitter.addPlayers( activePlayers );
 			
 		
-		for ( int i = 0; i < 3; i ++){
+		for ( int i = 0; i < 6; i ++){
 			// gets close on yield with fixed shapes
 			fitter.fit1(  );
 			// gets close on shapes with fixed yields
@@ -413,7 +413,11 @@ namespace TSF{
 		// now that we have better idea of mu, sigma ( for enhancement cuts )
 		fitter.loadDatasets(centerSpecies, iCharge, iCen, iPt, true, zbMu, zdMu );
 
-		fitter.fit3( );
+		int tries = 0;
+		while( fitter.isFitGood() == false && tries < 10 ){
+			fitter.fit3( );
+			tries ++;
+		}
 		reportFit( &fitter, iPt );
 	
 
