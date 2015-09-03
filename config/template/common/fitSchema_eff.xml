@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
 
-	<FitSchema method="poisson" roi="2" v="1">
+	<FitSchema method="poisson" roi="2" v="-1">
 
 		<!-- 1/beta -->
 		<!-- Mus -->

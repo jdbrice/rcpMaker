@@ -24,6 +24,7 @@ protected:
 	TCut _deuteronCut;
 	TCut _electronCut;
 	double _zbCutMax = 1000;
+	double _zbCutMin = -1000;
 
 public:
 	static constexpr auto tag = "PidProjector";
@@ -57,16 +58,12 @@ public:
 		_zbCutMax = protonCenter + protonSigma * nSigma;
 	}
 
-	void cutElectrons( 	double zb_Pi, double zd_Pi, double zb_Pi_sigma, double zd_Pi_sigma, 
-						double zb_K, double zd_K, double zb_K_sigma, double zd_K_sigma, 
-						double zb_E, double zd_E, double zb_E_sigma, double zd_E_sigma, 
-						double nSigma_Pi, double nSigma_K, double nSigma_E ){
+	void cutElectrons( 	double zb_Pi, double zb_Pi_sigma, double nSigma = 3 ){
 
-		TCut cut_Pi = ("sqrt( ((zb - "+dts(zb_Pi)+") / " + dts(zb_Pi_sigma) + ")^2 + ((zd - "+dts(zd_Pi)+") / " + dts(zd_Pi_sigma) + ")^2 ) < " + dts( nSigma_Pi )).c_str();
-		TCut cut_K = ("sqrt( ((zb - "+dts(zb_K)+") / " + dts(zb_K_sigma) + ")^2 + ((zd - "+dts(zd_K)+") / " + dts(zd_K_sigma) + ")^2 ) < " + dts( nSigma_K )).c_str();
-		TCut cut_E = ("sqrt( ((zb - "+dts(zb_E)+") / " + dts(zb_E_sigma) + ")^2 + ((zd - "+dts(zd_E)+") / " + dts(zd_E_sigma) + ")^2 ) > " + dts( nSigma_E )).c_str();
+		string cutstr = "zb - " + dts(zb_Pi) + " >= " + dts( - zb_Pi_sigma * nSigma );
 
-		_electronCut = cut_Pi || cut_K || cut_E;
+		_electronCut = TCut( cutstr.c_str() );
+
 	}
 
 	TH2D * project2D( string name, string cut = "" ){
@@ -86,6 +83,9 @@ public:
 
 		double zbMin = data->GetMinimum( "zb" );
 		double zdMin = data->GetMinimum( "zd" );
+
+		if ( zbMin < _zbCutMin )
+			zbMin = _zbCutMin;
 
 		int zbNBins = (int) ((zbMax - zbMin) / _zbBinWidth + 0.5 );
 		int zdNBins = (int) ((zdMax - zdMin) / _zdBinWidth + 0.5 );
@@ -120,6 +120,9 @@ public:
 
 		if ( "zb" == var && max > _zbCutMax )
 			max = _zbCutMax + (_zbCutMax - min) * .10;
+
+		if ( "zb" == var && min < _zbCutMin )
+			min = _zbCutMin - (max - _zbCutMin) * .10;
 		
 		double binWidth = _zbBinWidth;
 		if ( "zd" == var )
@@ -174,6 +177,8 @@ public:
 
 		if ( "zb" == var && max > _zbCutMax )
 			max = _zbCutMax + (_zbCutMax - min) * .10;
+		if ( "zb" == var && min < _zbCutMin )
+			min = _zbCutMin - (max - _zbCutMin) * .10;
 		
 		double binWidth = _zbBinWidth;
 		if ( "zd" == var )

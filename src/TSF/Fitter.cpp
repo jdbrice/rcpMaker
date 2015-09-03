@@ -205,10 +205,7 @@ namespace TSF{
 		
 		// sets the electron rejection for this pt bin
 		// very verbose
-		proj.cutElectrons( 	schema->var( "zb_mu_Pi" )->val, schema->var( "zd_mu_Pi" )->val, schema->var( "zb_sigma_Pi" )->val, schema->var( "zd_sigma_Pi" )->val,
-							schema->var( "zb_mu_K" )->val, schema->var( "zd_mu_K" )->val, schema->var( "zb_sigma_K" )->val, schema->var( "zd_sigma_K" )->val,
-							zbMu[ "E" ], zdMu[ "E" ], zbSigmaIdeal, zdSigmaIdeal,
-							cut_nSigma_Pi, cut_nSigma_K, cut_nSigma_E );
+		proj.cutElectrons( 	schema->var( "zb_mu_Pi" )->val, schema->var( "zb_sigma_Pi" )->val, 3 );
 
 
 		string name = Common::speciesName( cs, charge, cenBin, ptBin );
@@ -360,10 +357,10 @@ namespace TSF{
 		INFO( tag, "AFTER" );
 		reportFitStatus();
 
-		if ( 0 == iFlag )
+		//if ( 0 == iFlag )
 			fitIsGood = true;
-		else 
-			fitIsGood = false;
+		//else 
+		//	fitIsGood = false;
 		
 
 		// get the final state of all variables 

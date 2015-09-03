@@ -212,10 +212,6 @@ namespace TSF{
 				
 			// choose the active players
 			choosePlayers( avgP, plc );
-
-		
-			schema->var( "yield_" + plc )->min = 0;
-			schema->var( "yield_" + plc )->max = 10000;	
 			
 			// double eff_fudge = 0.01;
 			schema->var( "eff_" + plc )->val = 1.0 ;//+ ( rnd->Rndm() * (2 * eff_fudge) - eff_fudge );
@@ -366,10 +362,13 @@ namespace TSF{
 	void FitRunner::respondToStats(double avgP){
 		for ( string plc : Common::species ){
 
-			if ( !schema->datasetActive( "zd_" + plc ) ){
-				double zdMu = zdMean( plc, avgP );
-				schema->fixParameter( "zd_mu_"+plc, zdMu );
-			}
+			schema->var( "yield_" + plc )->min = 0;
+			schema->var( "yield_" + plc )->max = schema->getNormalization() * 2;
+
+			// if ( !schema->datasetActive( "zd_" + plc ) ){
+			// 	double zdMu = zdMean( plc, avgP );
+			// 	schema->fixParameter( "zd_mu_"+plc, zdMu );
+			// }
 
 		}
 	}
@@ -396,6 +395,8 @@ namespace TSF{
 		// load the datasets from the file
 		fitter.loadDatasets(centerSpecies, iCharge, iCen, iPt, true, zbMu, zdMu );
 
+		respondToStats( avgP ); 
+
 		// build the minuit interface
 		fitter.setupFit();
 		// assign active players to this fit
@@ -411,7 +412,8 @@ namespace TSF{
 
 		// reload the datasets from the file
 		// now that we have better idea of mu, sigma ( for enhancement cuts )
-		fitter.loadDatasets(centerSpecies, iCharge, iCen, iPt, true, zbMu, zdMu );
+		if ( avgP < 1.0 )
+			fitter.loadDatasets(centerSpecies, iCharge, iCen, iPt, true, zbMu, zdMu );
 
 		int tries = 0;
 		while( fitter.isFitGood() == false && tries < 3 ){
@@ -420,7 +422,6 @@ namespace TSF{
 		}
 		reportFit( &fitter, iPt );
 	
-
 
 		// fill histograms if we converged
 		if ( fitter.isFitGood() )
@@ -502,6 +503,20 @@ namespace TSF{
 
 	void FitRunner::drawSet( string v, Fitter * fitter, int iPt ){
 		INFO( tag,  v << ", fitter=" << fitter << ", iPt=" << iPt );
+
+		double avgP = binAverageP( iPt );
+		auto zbMu = psr->centeredTofMap( centerSpecies, avgP );
+		auto zdMu = psr->centeredDedxMap( centerSpecies, avgP );
+
+		double zbMin = 100;
+		double zbMax = 100;
+		for ( auto k : zbMu ){
+			if ( k.second < zbMin )
+				zbMin = k.second;
+			if ( k.second > zbMax )
+				zbMax = k.second;
+		}
+
 		TH1 * h = fitter->getDataHist( v );
 		if ( !h ){
 			WARN( tag, "Data histogram not found" );
@@ -524,7 +539,7 @@ namespace TSF{
 		if ( lb >= h->GetNbinsX() + 1 )
 			lb = h->GetNbinsX();
 
-		h->GetXaxis()->SetRange( fb, lb );
+		//h->GetXaxis()->SetRange( fb, lb );
 
 		h->SetTitle( ( dts((*binsPt)[ iPt ]) + " < pT < " + dts( (*binsPt)[ iPt + 1 ] ) ).c_str() );
 
