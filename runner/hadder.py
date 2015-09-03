@@ -52,8 +52,8 @@ def hadd( files, n, prefix="tmp_", final_name="merged.root" ) :
 
 parser = argparse.ArgumentParser( description="Creates the configs for Tasks" );
 parser.add_argument( "needle", default="*.root", help="selects all of the files that match the glob" )
-parser.add_argument( "N", default=50, nargs='?' type=int, help="split the hadd into N files per batch" )
-parser.add_argument( "name", default="merged.root", nargs='?' type=str, help="name of final output file" )
+parser.add_argument( "N", default=50, nargs='?', type=int, help="split the hadd into N files per batch" )
+parser.add_argument( "name", default="merged.root", nargs='?', type=str, help="name of final output file" )
 
 
 args = parser.parse_args()
