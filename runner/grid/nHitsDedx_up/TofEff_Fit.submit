@@ -1,0 +1,10 @@
+###################
+# Tof Eff Fit
+###################
+
+Executable = /home/jdb12/work/rcpMaker/runner/rcp
+Initialdir = /home/jdb12/work/rcpMaker/runner/
+
+Arguments 	= /data/star/jdb12/RcpAnalysis/config/nHitsDedx_up/TofEff/fit.xml
+Output 	 	= /data/star/jdb12/RcpAnalysis/config/nHitsDedx_up/TofEff/fit.xml.log
+Queue

@@ -1,0 +1,16 @@
+######################
+# Tof Eff Merge
+######################
+
+Getenv = True
+Executable = /home/jdb12/work/rcpMaker/runner/hadder.py
+Initialdir = /home/jdb12/work/rcpMaker/runner/grid/nHitsDedx_up/
+
+Arguments = "/home/jdb12/work/rcpMaker/runner/grid/nHitsDedx_up/TofEff_K_a*.root" 50 TofEff_K.root
+Queue
+
+Arguments = "/home/jdb12/work/rcpMaker/runner/grid/nHitsDedx_up/TofEff_Pi_a*.root" 50 TofEff_Pi.root
+Queue
+
+Arguments = "/home/jdb12/work/rcpMaker/runner/grid/nHitsDedx_up/TofEff_P_a*.root" 50 TofEff_P.root
+Queue
