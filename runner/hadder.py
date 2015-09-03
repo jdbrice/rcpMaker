@@ -43,9 +43,10 @@ def hadd( files, n, prefix="tmp_", final_name="merged.root" ) :
 		hadd( new_files, n, prefix + "tmp_", final_name )
 
 	# remove our tmp files
-	for tmp_f in new_files :
-		print "Removing temp file", tmp_f
-		os.remove( tmp_f )
+	if len( new_files ) > 1 :
+		for tmp_f in new_files :
+			print "Removing temp file", tmp_f
+			os.remove( tmp_f )
 
 
 
@@ -59,4 +60,4 @@ parser.add_argument( "name", default="merged.root", nargs='?', type=str, help="n
 args = parser.parse_args()
 files = glob.glob( args.needle )
 
-hadd( files, args.N )
+hadd( files, args.N, args.name )
