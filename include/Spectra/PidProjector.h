@@ -64,6 +64,8 @@ public:
 
 		_electronCut = TCut( cutstr.c_str() );
 
+		_zbCutMin = zb_Pi - zb_Pi_sigma * nSigma;
+
 	}
 
 	TH2D * project2D( string name, string cut = "" ){

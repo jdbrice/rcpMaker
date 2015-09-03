@@ -26,7 +26,7 @@ def write_conf( data_path, output_path, config_path ="./" ) :
 		<input plc="{plc}" >
 			<dst treeName="rcpPicoDst" url="{data_path}" />
 		</input>
-		<output>
+		<output path="{product_path}">
 			<data>{product_file}</data>
 		</output>
 
@@ -57,10 +57,9 @@ def write_conf( data_path, output_path, config_path ="./" ) :
 
 
 	for plc in plcs :
-		prod_file = pjoin( output_path, t_histo_file.format( plc=plc, ext="root" ) )
 		
 		with open( pjoin( config_path, t_config_file.format( plc=plc, ext="xml" ) ), 'w' ) as f :
-			f.write( template.format( plc=plc, data_path=data_path, product_file=prod_file ) )
+			f.write( template.format( plc=plc, data_path=data_path, product_path=output_path, product_file=t_histo_file.format( plc=plc, ext="root" ) ) )
 
 
 def write_fit_config( input_path, output_path, output_config_path, config_path ="./" ) :
