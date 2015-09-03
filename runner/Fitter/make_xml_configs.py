@@ -40,7 +40,7 @@ def write_conf(  output_path, config_path ="./" ) :
 
 		<ParameterFixing>
 			<!-- mu can vary +/- nSigma -->
-			<deltaMu zb="0.75" zd="0.75" />
+			<deltaMu zb="0.5" zd="0.5" />
 
 			<!-- 
 				The ranges for width determination and fixing. The value if free to float below max. It's mean is taken between min and max and used as the value above max. The std deviation in this range is used as the systematic unct.
