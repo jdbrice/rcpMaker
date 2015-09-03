@@ -396,8 +396,6 @@ namespace TSF{
 		// load the datasets from the file
 		fitter.loadDatasets(centerSpecies, iCharge, iCen, iPt, true, zbMu, zdMu );
 
-		respondToStats( avgP );
-
 		// build the minuit interface
 		fitter.setupFit();
 		// assign active players to this fit
