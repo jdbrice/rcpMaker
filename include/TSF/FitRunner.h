@@ -73,6 +73,7 @@ namespace TSF{
 		void prepare( double avgP, int iCen );
 		shared_ptr<FitSchema> prepareSystematic( string sys, string plc, double delta );
 		void choosePlayers( double avgP, string plc );
+		void respondToStats( double avgP );
 
 		void runNominal( int iCharge, int iCen, int iPt );
 		map<string, double> runSystematic( shared_ptr<FitSchema>, int iCharge, int iCen, int iPt );

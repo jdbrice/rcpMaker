@@ -362,6 +362,18 @@ namespace TSF{
 		}
 	} // choosePlayers(...)
 
+
+	void FitRunner::respondToStats(double avgP){
+		for ( string plc : Common::species ){
+
+			if ( !schema->datasetActive( "zd_" + plc ) ){
+				double zdMu = zdMean( plc, avgP );
+				schema->fixParameter( "zd_mu_"+plc, zdMu );
+			}
+
+		}
+	}
+
 	void FitRunner::runNominal( int iCharge, int iCen, int iPt ) {
 		WARN( tag, "(iCharge=" << iCharge << ", iCen=" << iCen << ", iPt=" << iPt << ")" );
 
@@ -383,6 +395,8 @@ namespace TSF{
 
 		// load the datasets from the file
 		fitter.loadDatasets(centerSpecies, iCharge, iCen, iPt, true, zbMu, zdMu );
+
+		respondToStats( avgP );
 
 		// build the minuit interface
 		fitter.setupFit();
