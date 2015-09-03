@@ -16,7 +16,7 @@ def chunks(l, n):
     for i in xrange(0, len(l), n):
         yield l[i:i+n]
 
-def hadd( files, n, prefix="tmp_", final_name="merged.root" ) :
+def hadd( files, n, final_name="merged.root", prefix="tmp_" ) :
 
 	chunky = list( chunks( files, n ) )
 
@@ -28,7 +28,7 @@ def hadd( files, n, prefix="tmp_", final_name="merged.root" ) :
 	for c in chunky :
 		
 		if n_to_make > 1 :
-			new_name = prefix + str(index) + ".root"
+			new_name = prefix + str(index) + "_" + final_name
 		else :
 			new_name = final_name
 
@@ -40,7 +40,7 @@ def hadd( files, n, prefix="tmp_", final_name="merged.root" ) :
 	print " created :", " ".join( new_files )
 
 	if len( new_files ) > 1 :
-		hadd( new_files, n, prefix + "tmp_", final_name )
+		hadd( new_files, n, final_name, "tmp_" + prefix )
 
 	# remove our tmp files
 	if len( new_files ) > 1 :
@@ -60,4 +60,4 @@ parser.add_argument( "name", default="merged.root", nargs='?', type=str, help="n
 args = parser.parse_args()
 files = glob.glob( args.needle )
 
-hadd( files, args.N, "tmp_", args.name )
+hadd( files, args.N, args.name )

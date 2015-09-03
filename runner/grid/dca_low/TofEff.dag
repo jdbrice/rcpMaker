@@ -1,0 +1,12 @@
+####################
+# Tof Eff DAG
+####################
+
+JOB A TofEff_K.condor
+JOB B TofEff_Pi.condor
+JOB C TofEff_P.condor
+JOB D TofEff_Merge.condor
+JOB E TofEff_Fit.condor
+
+PARENT A B C CHILD D
+PARENT D CHILD E
