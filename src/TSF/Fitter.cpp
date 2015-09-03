@@ -351,6 +351,7 @@ namespace TSF{
 		
 		minuit->mnexcm( "MINI", arglist, 1, iFlag );
 		minuit->mnexcm( "MINI", arglist, 1, iFlag );
+		minuit->mnexcm( "MINI", arglist, 1, iFlag );
 		status = minuit->fCstatu;
 		INFO ( tag, "Step 3. Status " << status );	
 
