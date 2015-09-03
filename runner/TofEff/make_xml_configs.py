@@ -21,7 +21,7 @@ def write_conf( data_path, output_path, config_path ="./" ) :
 	<jobType>InclusiveSpectra</jobType>
 
 	<InclusiveSpectra>
-		<Logger color="true" globalLogLevel="info" logLevel="all" />
+		<Logger color="true" globalLogLevel="warning" logLevel="warning" />
 		
 		<input plc="{plc}" >
 			<dst treeName="rcpPicoDst" url="{data_path}" />
