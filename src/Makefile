@@ -18,6 +18,7 @@ sources = 	Engine.cpp 							\
 			McMaker/TpcEffFitter.cpp 			\
 			McMaker/TofEffFitter.cpp 			\
 			McMaker/FeedDownMaker.cpp			\
+			McMaker/FeedDownFitter.cpp			\
 			Params/FeedDownParams.cpp 			\
 			Params/EnergyLossParams.cpp			\
 			Spectra/PidHistoMaker.cpp			\

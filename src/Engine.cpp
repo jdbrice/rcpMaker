@@ -30,6 +30,7 @@ using namespace jdb;
 
 // Feed down
 	#include "McMaker/FeedDownMaker.h"
+	#include "McMaker/FeedDownFitter.h"
 
 
 // PID Fitting
@@ -95,8 +96,11 @@ int main( int argc, char* argv[] ) {
 				fr.make();
 
 			}  else if ( "FeedDownMaker" == job ){
-				FeedDownMaker fdm( &config, "FeedDownMaker." );
+				FeedDownMaker fdm( &config, "FeedDownMaker.", fileList, jobPrefix );
 				fdm.make();
+			} else if ( "FeedDownFitter" == job ){
+				FeedDownFitter fdf( &config, "FeedDownFitter." );
+				fdf.make();
 			} else if ( "ApplyPostCorr" == job ){
 				ApplyPostCorr apc( &config, "ApplyPostCorr." );
 				apc.make();

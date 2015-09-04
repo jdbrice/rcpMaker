@@ -1,40 +1,30 @@
-#ifndef FEED_DOWN_MAKER_H
-#define FEED_DOWN_MAKER_H
+#ifndef FEED_DOWN_FITTER_H
+#define FEED_DOWN_FITTER_H
+
+#include "Common.h"
 
 // STL
+#include <string>
 #include <map>
 #include <vector>
 using namespace std;
 
 // Roobarb
-#include "TreeAnalyzer.h"
+#include "HistoBook.h"
 #include "HistoBins.h"
+#include "XmlConfig.h"
+#include "Reporter.h"
 using namespace jdb;
 
-
-class FeedDownMaker : public TreeAnalyzer
+class FeedDownFitter
 {
 protected:
-	//unique_ptr<RefMultCorrection> rmc;
-	float corrRefMult;
+	XmlConfig * cfg;
+	string nodePath;
+	string outputPath;
 
-
-	// Track cuts loaded from config
-	
-	// nHitsFit
-	unique_ptr<ConfigRange> cut_nHitsFit;
-	// Distance to closest approach [cm]
-	unique_ptr<ConfigRange> cut_dca;
-	// nHitsFit / nHitsPossible
-	unique_ptr<ConfigRange> cut_nHitsFitOverPossible;
-	// nHitDedx
-	unique_ptr<ConfigRange> cut_nHitsDedx;
-	// Minimum pT [GeV/c]
-	unique_ptr<ConfigRange> cut_pt;
-	// ptGlobal / ptPrimary
-	unique_ptr<ConfigRange> cut_ptGlobalOverPrimary;
-	// Rapidity based on mass assumption
-	unique_ptr<ConfigRange> cut_rapidity;
+	unique_ptr<HistoBook> book;
+	unique_ptr<Reporter> reporter;
 
 	vector<string> formulas;
 	unique_ptr<HistoBins> rmb;
@@ -46,53 +36,19 @@ protected:
 	// the vector of bins in the mapped space - makes it easy to loop over
 	vector<int> centralityBins;
 
-	int cBin;
-
-public:
-	FeedDownMaker( XmlConfig * config, string nodePath, string fileList ="", string jobPrefix ="" );
-	~FeedDownMaker();
-	
-
-protected:
-
 	map<int, string> plcName; 
 	static vector<int> plcID;
 	static vector<float> plcMass;
 
-	/**
-	 * Before the event loop starts - for subclass init
-	 */
-	virtual void preEventLoop();
+public:
 
-	/**
-	 * After the event loop starts - for subclass reporting
-	 */
-	virtual void postEventLoop();
+	static constexpr auto tag = "FeedDownFitter";
+	FeedDownFitter( XmlConfig * cfg, string nodePath );
+	~FeedDownFitter();
+	
 
-	/**
-	 * Analyze an Event
-	 */
-	virtual void analyzeEvent( );
 
-	/**
-	 * Analyze a track in the current Event
-	 * @param	iTrack 	- Track index 
-	 */
-	virtual void analyzeTrack( Int_t iTrack );
-
-	/**
-	 * Performs event based cuts
-	 * @return 	True 	- Keep Event 
-	 *          False 	- Reject Event
-	 */
-	virtual bool keepEvent();
-
-	/**
-	 * Performs track based cuts
-	 * @return 	True 	- Keep Track 
-	 *          False 	- Reject Track
-	 */
-	virtual bool keepTrack( Int_t iTrack );
+	void make();
 
 	void addGEANTLabels( TH1* h ){
 		TAxis * x = h->GetXaxis();
@@ -135,7 +91,6 @@ protected:
 
 	void exportParams(int bin, TF1 * fn, ofstream &out );
 	void background( string, int, int, ofstream&);
-
 };
 
 #endif
