@@ -1,0 +1,486 @@
+
+##################################################
+# Create Condor Submit files for PID Rcp Analysis
+##################################################
+Getenv = True
+Executable    = /home/jdb12/work/rcpMaker/bin/rcp
+initialdir 		= /home/jdb12/work/rcpMaker/bin/
+
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_aaa TofEff_P_aaa_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_aab TofEff_P_aab_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_aac TofEff_P_aac_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_aad TofEff_P_aad_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_aae TofEff_P_aae_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_aaf TofEff_P_aaf_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_aag TofEff_P_aag_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_aah TofEff_P_aah_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_aai TofEff_P_aai_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_aaj TofEff_P_aaj_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_aak TofEff_P_aak_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_aal TofEff_P_aal_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_aam TofEff_P_aam_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_aan TofEff_P_aan_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_aao TofEff_P_aao_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_aap TofEff_P_aap_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_aaq TofEff_P_aaq_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_aar TofEff_P_aar_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_aas TofEff_P_aas_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_aat TofEff_P_aat_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_aau TofEff_P_aau_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_aav TofEff_P_aav_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_aaw TofEff_P_aaw_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_aax TofEff_P_aax_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_aay TofEff_P_aay_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_aaz TofEff_P_aaz_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_aba TofEff_P_aba_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_abb TofEff_P_abb_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_abc TofEff_P_abc_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_abd TofEff_P_abd_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_abe TofEff_P_abe_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_abf TofEff_P_abf_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_abg TofEff_P_abg_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_abh TofEff_P_abh_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_abi TofEff_P_abi_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_abj TofEff_P_abj_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_abk TofEff_P_abk_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_abl TofEff_P_abl_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_abm TofEff_P_abm_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_abn TofEff_P_abn_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_abo TofEff_P_abo_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_abp TofEff_P_abp_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_abq TofEff_P_abq_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_abr TofEff_P_abr_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_abs TofEff_P_abs_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_abt TofEff_P_abt_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_abu TofEff_P_abu_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_abv TofEff_P_abv_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_abw TofEff_P_abw_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_abx TofEff_P_abx_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_aby TofEff_P_aby_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_abz TofEff_P_abz_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_aca TofEff_P_aca_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_acb TofEff_P_acb_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_acc TofEff_P_acc_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_acd TofEff_P_acd_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_ace TofEff_P_ace_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_acf TofEff_P_acf_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_acg TofEff_P_acg_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_ach TofEff_P_ach_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_aci TofEff_P_aci_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_acj TofEff_P_acj_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_ack TofEff_P_ack_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_acl TofEff_P_acl_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_acm TofEff_P_acm_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_acn TofEff_P_acn_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_aco TofEff_P_aco_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_acp TofEff_P_acp_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_acq TofEff_P_acq_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_acr TofEff_P_acr_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_acs TofEff_P_acs_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_act TofEff_P_act_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_acu TofEff_P_acu_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_acv TofEff_P_acv_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_acw TofEff_P_acw_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_acx TofEff_P_acx_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_acy TofEff_P_acy_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_acz TofEff_P_acz_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_ada TofEff_P_ada_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_adb TofEff_P_adb_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_adc TofEff_P_adc_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_add TofEff_P_add_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_ade TofEff_P_ade_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_adf TofEff_P_adf_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_adg TofEff_P_adg_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_adh TofEff_P_adh_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_adi TofEff_P_adi_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_adj TofEff_P_adj_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_adk TofEff_P_adk_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_adl TofEff_P_adl_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_adm TofEff_P_adm_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_adn TofEff_P_adn_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_ado TofEff_P_ado_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_adp TofEff_P_adp_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_adq TofEff_P_adq_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_adr TofEff_P_adr_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_ads TofEff_P_ads_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_adt TofEff_P_adt_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_adu TofEff_P_adu_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_adv TofEff_P_adv_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_adw TofEff_P_adw_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_adx TofEff_P_adx_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_ady TofEff_P_ady_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_adz TofEff_P_adz_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_aea TofEff_P_aea_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_aeb TofEff_P_aeb_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_aec TofEff_P_aec_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_aed TofEff_P_aed_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_aee TofEff_P_aee_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_aef TofEff_P_aef_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_aeg TofEff_P_aeg_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_aeh TofEff_P_aeh_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_aei TofEff_P_aei_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_aej TofEff_P_aej_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_aek TofEff_P_aek_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_ael TofEff_P_ael_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_aem TofEff_P_aem_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_aen TofEff_P_aen_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_aeo TofEff_P_aeo_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_aep TofEff_P_aep_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_aeq TofEff_P_aeq_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_aer TofEff_P_aer_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_aes TofEff_P_aes_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_aet TofEff_P_aet_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_aeu TofEff_P_aeu_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_aev TofEff_P_aev_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_aew TofEff_P_aew_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_aex TofEff_P_aex_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_aey TofEff_P_aey_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_aez TofEff_P_aez_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_afa TofEff_P_afa_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_afb TofEff_P_afb_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_afc TofEff_P_afc_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_afd TofEff_P_afd_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_afe TofEff_P_afe_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_aff TofEff_P_aff_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_afg TofEff_P_afg_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_afh TofEff_P_afh_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_afi TofEff_P_afi_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_afj TofEff_P_afj_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_afk TofEff_P_afk_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_afl TofEff_P_afl_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_afm TofEff_P_afm_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_afn TofEff_P_afn_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_afo TofEff_P_afo_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_afp TofEff_P_afp_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_afq TofEff_P_afq_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_afr TofEff_P_afr_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_afs TofEff_P_afs_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_aft TofEff_P_aft_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_afu TofEff_P_afu_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_afv TofEff_P_afv_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_afw TofEff_P_afw_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_afx TofEff_P_afx_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_afy TofEff_P_afy_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_afz TofEff_P_afz_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_aga TofEff_P_aga_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_agb TofEff_P_agb_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_agc TofEff_P_agc_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_agd TofEff_P_agd_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_age TofEff_P_age_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_agf TofEff_P_agf_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_agg TofEff_P_agg_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_agh TofEff_P_agh_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_agi TofEff_P_agi_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_agj TofEff_P_agj_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_agk TofEff_P_agk_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_agl TofEff_P_agl_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_agm TofEff_P_agm_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_agn TofEff_P_agn_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_ago TofEff_P_ago_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_agp TofEff_P_agp_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_agq TofEff_P_agq_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_agr TofEff_P_agr_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_ags TofEff_P_ags_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_agt TofEff_P_agt_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_agu TofEff_P_agu_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_agv TofEff_P_agv_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_agw TofEff_P_agw_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_agx TofEff_P_agx_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_agy TofEff_P_agy_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_agz TofEff_P_agz_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_aha TofEff_P_aha_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_ahb TofEff_P_ahb_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_ahc TofEff_P_ahc_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_ahd TofEff_P_ahd_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_ahe TofEff_P_ahe_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_ahf TofEff_P_ahf_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_ahg TofEff_P_ahg_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_ahh TofEff_P_ahh_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_ahi TofEff_P_ahi_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_ahj TofEff_P_ahj_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_ahk TofEff_P_ahk_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_ahl TofEff_P_ahl_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_ahm TofEff_P_ahm_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_ahn TofEff_P_ahn_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_aho TofEff_P_aho_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_ahp TofEff_P_ahp_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_ahq TofEff_P_ahq_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_ahr TofEff_P_ahr_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_ahs TofEff_P_ahs_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_aht TofEff_P_aht_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_ahu TofEff_P_ahu_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_ahv TofEff_P_ahv_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_ahw TofEff_P_ahw_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_ahx TofEff_P_ahx_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_ahy TofEff_P_ahy_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_ahz TofEff_P_ahz_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_aia TofEff_P_aia_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_aib TofEff_P_aib_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_aic TofEff_P_aic_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_aid TofEff_P_aid_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_aie TofEff_P_aie_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_aif TofEff_P_aif_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_aig TofEff_P_aig_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_aih TofEff_P_aih_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_aii TofEff_P_aii_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_aij TofEff_P_aij_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_aik TofEff_P_aik_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_ail TofEff_P_ail_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_aim TofEff_P_aim_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_ain TofEff_P_ain_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_aio TofEff_P_aio_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_aip TofEff_P_aip_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_aiq TofEff_P_aiq_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_air TofEff_P_air_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_ais TofEff_P_ais_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_ait TofEff_P_ait_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_aiu TofEff_P_aiu_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_aiv TofEff_P_aiv_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_aiw TofEff_P_aiw_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_aix TofEff_P_aix_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_aiy TofEff_P_aiy_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_aiz TofEff_P_aiz_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_aja TofEff_P_aja_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_ajb TofEff_P_ajb_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_ajc TofEff_P_ajc_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_ajd TofEff_P_ajd_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/zb_sigma_large/TofEff/P.xml /data/star/jdb12/RcpAnalysis/data/list/list_aje TofEff_P_aje_
+Queue

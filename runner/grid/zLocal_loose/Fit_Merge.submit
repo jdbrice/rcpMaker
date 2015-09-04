@@ -1,0 +1,19 @@
+#########################
+# Fit Merger
+#########################
+
+Getenv = True
+Executable = /home/jdb12/work/rcpMaker/runner/hadder.py
+Initialdir = /data/star/jdb12/RcpAnalysis/products/zLocal_loose/
+
+Arguments = Fit_Pi_*.root 50 Fit_PostCorr_Pi.root
+output = Fit_PostCorr_Pi.merge.log
+Queue
+
+Arguments = Fit_K_*.root 50 Fit_PostCorr_K.root
+output = Fit_PostCorr_K.merge.log
+Queue
+
+Arguments = Fit_P_*.root 50 Fit_PostCorr_P.root
+output = Fit_PostCorr_P.merge.log
+Queue

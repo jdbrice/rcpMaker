@@ -1,0 +1,10 @@
+#########################
+# TPC Eff Fitter
+#########################
+
+Executable = /home/jdb12/work/rcpMaker/runner/rcp
+Initialdir = /home/jdb12/work/rcpMaker/runner/
+
+Arguments 	= /data/star/jdb12/RcpAnalysis/config/zd_sigma_large/TpcEff/fit.xml
+Output 	 	= /data/star/jdb12/RcpAnalysis/config/zd_sigma_large/TpcEff/fit.xml.log
+Queue
