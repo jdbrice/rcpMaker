@@ -4,13 +4,16 @@
 
 Getenv = True
 Executable = /home/jdb12/work/rcpMaker/runner/hadder.py
-Initialdir = /home/jdb12/work/rcpMaker/runner/grid/nHitsFit_low/
+Initialdir = /data/star/jdb12/RcpAnalysis/products/nHitsFit_low/
 
-Arguments = "/home/jdb12/work/rcpMaker/runner/grid/nHitsFit_low/TofEff_K_a*.root" 50 TofEff_K.root
+Arguments = TofEff_K_a*.root 50 TofEff_K.root
+output = TofEff_K_merge.log
 Queue
 
-Arguments = "/home/jdb12/work/rcpMaker/runner/grid/nHitsFit_low/TofEff_Pi_a*.root" 50 TofEff_Pi.root
+Arguments = TofEff_Pi_a*.root 50 TofEff_Pi.root
+output = TofEff_Pi_merge.log
 Queue
 
-Arguments = "/home/jdb12/work/rcpMaker/runner/grid/nHitsFit_low/TofEff_P_a*.root" 50 TofEff_P.root
+Arguments = TofEff_P_a*.root 50 TofEff_P.root
+output = TofEff_P_merge.log
 Queue
