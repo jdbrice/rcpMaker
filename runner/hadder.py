@@ -60,7 +60,8 @@ parser.add_argument( "name", default="merged.root", nargs='?', type=str, help="n
 args = parser.parse_args()
 files = glob.glob( args.needle )
 
-print "files: ", files
+print "needle =", args.needle
+print "files =", files
 print "N =", args.N
 print "output =", args.name
 hadd( files, args.N, args.name )
