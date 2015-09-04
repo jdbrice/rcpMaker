@@ -7,7 +7,7 @@ Initialdir = /home/jdb12/work/rcpMaker/runner/
 
 Arguments = /data/star/jdb12/RcpAnalysis/config/dca_up/FeedDown/make.xml /data/star/jdb12/RcpAnalysis/urqmd/list/urqmd_aaaa FeedDown_urqmd_aaaa
 Output = FeedDown.log
-Output = FeedDown.error
+error = FeedDown.error
 Queue
 
 # Arguments = /data/star/jdb12/RcpAnalysis/config/dca_up/FeedDown/make.xml /data/star/jdb12/RcpAnalysis/urqmd/list/urqmd_aaab FeedDown_urqmd_aaab
