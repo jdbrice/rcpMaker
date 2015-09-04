@@ -4,15 +4,14 @@
 
 Getenv = True
 Executable = /home/jdb12/work/rcpMaker/runner/hadder.py
-Initialdir = /data/star/jdb12/RcpAnalysis/products/dca_low/
 
-Arguments = \"TofEff_K_a*.root\" 50 TofEff_K.root
+Arguments = \"/data/star/jdb12/RcpAnalysis/products/dca_low/TofEff_K_a*.root\" 50 TofEff_K.root
 output = TofEff_K_merge.log
 log = TofEff_K_merge.condor.log
 Queue
 
-Arguments = \"TofEff_Pi_a*.root\" 50 TofEff_Pi.root
+Arguments = \"/data/star/jdb12/RcpAnalysis/products/dca_low/TofEff_Pi_a*.root\" 50 TofEff_Pi.root
 Queue
 
-Arguments = \"TofEff_P_a*.root\" 50 TofEff_P.root
+Arguments = \"/data/star/jdb12/RcpAnalysis/products/dca_low/TofEff_P_a*.root\" 50 TofEff_P.root
 Queue
