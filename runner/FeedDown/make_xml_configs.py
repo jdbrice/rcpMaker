@@ -115,7 +115,7 @@ def write_conf( data_path, output_path, output_config_path, config_path ="./" ) 
 
 	
 	report_file = pjoin( output_path, "rp" + t_product_file.format( ext="pdf" ) )
-	product_file = pjoin( output_path, t_product_file.format( ext="root" ) )
+	product_file = t_product_file.format( ext="root" )
 	params_file= pjoin( output_config_path, t_product_file.format( ext="xml" ) )
 
 	with open( pjoin( config_path, t_config_file.format( ext="xml" ) ), 'w' ) as f :
