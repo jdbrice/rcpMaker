@@ -40,7 +40,7 @@ def write_conf( data_path, output_path, output_config_path, config_path ="./" ) 
 			<output url="{report_file}" width="1400" height="700"/>
 		</Reporter>
 		<Logger logLevel="info" globalLogLevel="warning" />
-		<output>
+		<output path="{output_path}">
 			<data>{product_file}</data>
 			<param>{params_file}</param>
 		</output>
@@ -119,7 +119,7 @@ def write_conf( data_path, output_path, output_config_path, config_path ="./" ) 
 	params_file= pjoin( output_config_path, t_product_file.format( ext="xml" ) )
 
 	with open( pjoin( config_path, t_config_file.format( ext="xml" ) ), 'w' ) as f :
-		f.write( template.format( data_path=data_path, params_file=params_file, product_file=product_file, report_file=report_file ) )
+		f.write( template.format( data_path=data_path, params_file=params_file, product_file=product_file, report_file=report_file, output_path=output_path ) )
 
 
 def write_fit_conf( data_path, output_path, output_config_path, config_path ="./" ) :
