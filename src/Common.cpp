@@ -4,83 +4,6 @@
 #include "TVirtualFitter.h"
 
 
-
-void cCalcCholesky(int NP, double* fCov, double* fCovSqrt)
-{
- double *C = fCovSqrt;
- double *V = fCov;
- // calculate sqrt(V) as lower diagonal matrix
- for( int i = 0; i < NP; ++i )
- {
-   for( int j = 0; j < NP; ++j )
-   {
-     C[i*NP+j] = 0;
-   }
- }
- for( int j = 0; j < NP; ++j )
- {
-   // diagonal terms first
-   double Ck = 0;
-   for( int k = 0; k < j; ++k )
-   {
-     Ck += C[j*NP+k] * C[j*NP+k];
-   } // k
-   C[j*NP+j] = sqrt( fabs( V[j*NP+j] - Ck ) );
-
-   // off-diagonal terms
-   for( int i = j+1; i < NP; ++i )
-   {
-     Ck = 0;
-     for( int k = 0; k < j; ++k )
-     {
-       Ck += C[i*NP+k] * C[j*NP+k];
-     } //k
-     if(C[j*NP+j]!=0 ) C[i*NP+j] = ( V[i*NP+j] - Ck ) / C[j*NP+j];
-     else C[i*NP+j] = 0;
-   }// i
- } // j
-}
-
-double cRANDOM(double xx, TF1* F, int NP, double* fCovSqrt)
-{
-
- double * z = new double[NP];
- double * x = new double[NP];
- double * p = new double[NP];
-
- for( int i = 0; i < NP; ++i )
- {
-   z[i] = gRandom->Gaus( 0.0, 1.0 );
-   p[i] = F->GetParameter(i);
- }
-
- for( int i = 0; i < NP; ++i )
- {
-   x[i] = 0;
-   for( int j = 0; j <= i; ++j )
-   {
-     x[i] += fCovSqrt[i*NP+j] * z[j];
-   } // j
- }
-
- for( int i = 0; i < NP; ++i )
- {
-   F->SetParameter(i,x[i]+p[i]);
- }
- double value = F->Eval(xx);
- for( int i = 0; i < NP; ++i )
- {
-   F->SetParameter(i,p[i]);
- }
-
- delete [] z;
- delete [] x;
- delete [] p;
- return value;
-
-}
-
-
  vector<string> Common::species = { "Pi", "K", "P" };
 
  vector<int> Common::charges = { -1, 1 };
@@ -299,14 +222,14 @@ double Common::choleskyUncertainty( double xx, TFitResultPtr fitResult, TF1 * f,
 	double *fCov = new double[ nP * nP ];
 	fCov = cov.GetMatrixArray();
 	double *fCovSqrt = new double[ nP * nP ];
-	cCalcCholesky( nP, fCov, fCovSqrt );
+	calcCholesky( nP, fCov, fCovSqrt );
 
 	double yerr = 0;
 
 	TH1D *hDistributionAtX = new TH1D("hDistributionAtX","",200,f->Eval(xx) - .2,f->Eval(xx) + .2);
 	
 	for (int n = 0; n < nSamples; n++ ) {
-		double val = cRANDOM(xx,f,nP,fCovSqrt);
+		double val = randomSqrtCov(xx,f,nP,fCovSqrt);
 		hDistributionAtX->Fill( val );
 	}
 	yerr = hDistributionAtX->GetRMS();
