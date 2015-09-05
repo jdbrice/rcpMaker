@@ -32,6 +32,7 @@ protected:
 	map<string, unique_ptr<ConfigFunction> > feedDown;
 
 public:
+	static constexpr auto tag = "SpectraCorrecter";
 
 	SpectraCorrecter( XmlConfig * cfg, string _nodePath );
 	~SpectraCorrecter();
