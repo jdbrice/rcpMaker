@@ -509,13 +509,27 @@ namespace TSF{
 		auto zdMu = psr->centeredDedxMap( centerSpecies, avgP );
 
 		double zbMin = 100;
-		double zbMax = 100;
+		double zbMax = -100;
 		for ( auto k : zbMu ){
+			if ( k.first == "D" || k.first == "E" )
+				continue;
 			if ( k.second < zbMin )
 				zbMin = k.second;
 			if ( k.second > zbMax )
 				zbMax = k.second;
 		}
+
+		double zdMin = 100;
+		double zdMax = -100;
+		for ( auto k : zdMu ){
+			if ( k.first == "D" || k.first == "E" )
+				continue;
+			if ( k.second < zdMin )
+				zdMin = k.second;
+			if ( k.second > zdMax )
+				zdMax = k.second;
+		}
+
 
 		TH1 * h = fitter->getDataHist( v );
 		if ( !h ){
@@ -530,16 +544,19 @@ namespace TSF{
 		double max = h->GetBinContent( binmax ) * 5;
 		h->GetYaxis()->SetRangeUser( schema->getNormalization() * scaler, max );
 
-		int fb = h->FindFirstBinAbove( 1.0 / fitter->getNorm()  ) - 5;
-		int lb = h->FindLastBinAbove( 1.0 / fitter->getNorm()  ) + 5; // just a fudge
-		
-		if ( fb <= 0 )
-			fb = 1;
+		double xMin = 0, xMax = 0;
+		float nSigPad = 10;
+		if ( v.substr(0, 2) == "zb" ){
+			INFO( tag, "Using zb range ( " << zbMin << " -> " << zbMax << " )" );
+			xMin = zbMin - 0.05;
+			xMax = zbMax + 0.05;
+		} else {
+			INFO( tag, "Using zd range( " << zdMin << " -> " << zdMax << " )" );
+			xMin = zdMin - 0.4;
+			xMax = zdMax + 0.4;
+		}
 
-		if ( lb >= h->GetNbinsX() + 1 )
-			lb = h->GetNbinsX();
-
-		//h->GetXaxis()->SetRange( fb, lb );
+		h->GetXaxis()->SetRangeUser( xMin, xMax );
 
 		h->SetTitle( ( dts((*binsPt)[ iPt ]) + " < pT < " + dts( (*binsPt)[ iPt + 1 ] ) ).c_str() );
 
@@ -552,8 +569,6 @@ namespace TSF{
 			b1->SetFillStyle( 1001 );
 			b1->Draw(  );
 		}
-		
-	
 
 		h->Draw("pe same");
 

@@ -1,22 +1,45 @@
 
 
-void singleCompare( string fn1, string fn2, string plc = "Pi" ){
+void singleCompare( string source1, string source2, string plc = "Pi" ){
+
+	string base = "/Users/danielbrandenburg/bnl/local/data/RcpAnalysis/products/";
+	string fn1 = base + source1 + "/PostCorr_" + plc +".root";
+	string fn2 = base + source2 + "/PostCorr_" + plc +".root";
+
 	TFile * f1 = new TFile( fn1.c_str(), "READ" );
 	TFile * f2 = new TFile( fn2.c_str(), "READ" );
 
-	string name = plc + "_yield/yield_" + plc + "_0_p";
+	string name = plc + "_yield/yield_" + plc + "_6_p";
 	TH1D * h1 = (TH1D*)f1->Get( name.c_str() );
 	TH1D * h2 = (TH1D*)f2->Get( name.c_str() );
 	h2->SetLineColor( kRed );
 
+	TCanvas * c1 = new TCanvas( "c1", "c1" );
 	h1->Draw();
 	h2->Draw("same");
 
+	TCanvas * c2 = new TCanvas( "c2", "Difference" );
 	TH1D * dif = (TH1D*) h1->Clone( "dif" );
 
 	dif->Add( h2, -1 );
 
 	dif->Draw();
+
+	TCanvas * c3 = new TCanvas( "c3", "Ratio" );
+	TH1D * ratio = (TH1D*) h1->Clone( "ratio" );
+
+	ratio->Divide( h2 );
+
+	ratio->Draw();
+
+	TCanvas * c4 = new TCanvas( "c4", "Rel" );
+	TH1D * rel = (TH1D*) dif->Clone( "rel" );
+
+	rel->Divide( h1 );
+
+	rel->Draw();
+
+
 
 	
 }

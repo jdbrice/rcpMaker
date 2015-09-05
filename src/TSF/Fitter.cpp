@@ -302,8 +302,6 @@ namespace TSF{
 			INFO ( tag, "Step 1. Status " << status );
 		releaseAll();
 
-		// get the final state of all variables 
-		INFO( tag, "Updating parameters after Fit" );
 		updateParameters();
 	}
 
@@ -328,8 +326,6 @@ namespace TSF{
 		
 		schema->updateRanges();
 
-		// get the final state of all variables 
-		INFO( tag, "Updating parameters after Fit" );
 		updateParameters();
 	}
 
