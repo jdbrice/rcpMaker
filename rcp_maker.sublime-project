@@ -13,6 +13,6 @@
 	"settings":
     {
         "tab_size": 4,
-        "word_wrap": true,
+        "word_wrap": false,
     },
 }

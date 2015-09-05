@@ -31,7 +31,7 @@ void ConfidenceIntervals()
    //Create the fitting function
    TF1 *fpol = new TF1("fpol", "pol1", -1, 1);
    fpol->SetLineWidth(2);
-   gr->Fit(fpol, "Q");
+   gr->Fit(fpol, "QWW");
 
    //Create a TGraphErrors to hold the confidence intervals
    TGraphErrors *grint = new TGraphErrors(ngr);
@@ -99,7 +99,7 @@ void ConfidenceIntervals()
 
    //Fit the graph
    f2->SetParameters(0.5,1.5);
-   gr2->Fit(f2, "Q");
+   gr2->Fit(f2, "WW");
    //Compute the confidence intervals
    (TVirtualFitter::GetFitter())->GetConfidenceIntervals(grint2);
    //Now the "grint2" graph contains function values as z-coordinates
