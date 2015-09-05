@@ -56,7 +56,9 @@ double SpectraCorrecter::tpcEffWeight( string plc, double pt, int iCen, int char
 
 		if ( sysNSigma != 0 ){
 			double sys = Common::choleskyUncertainty( pt, tpcEff[ name ]->getCov().data(), tpcEff[ name ]->getTF1().get(), 500 );
-			double val = tpcEff[ name ]->eval( pt ) + sys * sysNSigma;
+			double val = tpcEff[ name ]->eval( pt );
+			val += sys * sysNSigma;
+		
 			return 1.0 / val;
 		}
 		return 1.0 / tpcEff[ name ]->eval( pt );

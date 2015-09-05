@@ -47,11 +47,13 @@ protected:
 	float trackPt = 0;
 	map< string, unique_ptr<EnergyLossParams> > elParams;
 	
+	double tpcSysNSigma = 0;
 
 	map<string, unique_ptr<TNtuple>> pidPoints;
 
 
 public:
+	static constexpr auto tag = "PidDataMaker";
 	PidDataMaker( XmlConfig* config, string np, string fl ="", string jp ="" );
 	~PidDataMaker();
 

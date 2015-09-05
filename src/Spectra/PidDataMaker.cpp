@@ -56,6 +56,9 @@ PidDataMaker::PidDataMaker( XmlConfig* config, string np, string fl, string jp )
 		}	
 	}
 
+	tpcSysNSigma = cfg->getDouble( nodePath + "TpcEff:systematics", 0 );
+	INFO( tag, "Systematic uncertainty on TpcEff = " << tpcSysNSigma << " sigma" );
+
 }
 
 PidDataMaker::~PidDataMaker(){
@@ -171,7 +174,7 @@ void PidDataMaker::analyzeTofTrack( int iTrack ){
 	trackWeight = trackWeight * ( 1.0 / ( cut_rapidity->max - cut_rapidity->min ) ); 	// 1.0 / dy
 
 	// correct for TPC matching efficiency
-	trackWeight = trackWeight * sc->tpcEffWeight( centerSpecies, trackPt, cBin, charge );
+	trackWeight = trackWeight * sc->tpcEffWeight( centerSpecies, trackPt, cBin, charge, tpcSysNSigma );
 	
 	// fill the tree
 	string name = Common::speciesName( centerSpecies, charge, cBin, ptBin );
