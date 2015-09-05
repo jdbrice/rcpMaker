@@ -1,4 +1,5 @@
 
+#include "Logger.h"
 
 void singleCompare( string source1, string source2, string plc = "Pi" ){
 
@@ -9,10 +10,19 @@ void singleCompare( string source1, string source2, string plc = "Pi" ){
 	TFile * f1 = new TFile( fn1.c_str(), "READ" );
 	TFile * f2 = new TFile( fn2.c_str(), "READ" );
 
+	if ( !f1->IsOpen() || !f2->IsOpen() ){
+		ERROR( "Could not open a file" );
+		return;
+	}
+
 	string name = plc + "_yield/yield_" + plc + "_6_p";
 	TH1D * h1 = (TH1D*)f1->Get( name.c_str() );
 	TH1D * h2 = (TH1D*)f2->Get( name.c_str() );
 	h2->SetLineColor( kRed );
+
+	cout << " I_h1  = " << h1->Integral() << endl;
+	cout << " I_h2  = " << h2->Integral() << endl;
+	//h2->Scale( h1->Integral() / h2->Integral() );
 
 	TCanvas * c1 = new TCanvas( "c1", "c1" );
 	h1->Draw();

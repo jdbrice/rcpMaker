@@ -8,6 +8,9 @@
 #include "TGraph.h"
 #include "TGraphErrors.h"
 #include "TGraphAsymmErrors.h"
+#include "TMatrixDSym.h"
+#include "TFitResult.h"
+#include "TRandom.h"
 
 // ROOBARB
 #include "Utils.h"
@@ -17,6 +20,7 @@ using namespace jdb;
 #include <string>
 #include <math.h>
 #include <vector>
+#include <numeric>
 using namespace std;
 
 class Common
@@ -177,9 +181,161 @@ public:
 	 * and returns the histogram containing the confidence level region
 	 * @f 		Function to draw
 	 */
-	static TH1 * fitCL( TF1 * f, string name, int nPoints = 100, double x1 = -1.0, double x2 = -1.0 );
+	static TH1 * fitCL( TF1 * f, string name, double cl = 0.95, int nPoints = 100, double x1 = -1.0, double x2 = -1.0 );
 
+
+	// TODO: template instead of  double
+	static double mean( std::vector<double> &v ){
+		double sum = std::accumulate(std::begin(v), std::end(v), 0.0);
+		double m =  sum / v.size();
+		return m;
+	}
+
+	// TODO: template instead of  double
+	static double stdev( std::vector<double> &v ){
+		
+		if ( v.size() < 1 )
+			return 0.0;
+
+		double m = mean( v );
+
+		double accum = 0.0;
+		std::for_each (std::begin(v), std::end(v), [&](const double d) {
+		    accum += (d - m) * (d - m);
+		});
+
+		return sqrt( accum / v.size() );
+	}
+
+	/* Computes the Cholesky parameters for the given function
+	 *
+	 * @nP 			Number of parameters
+	 * @fCov 		Covariance matrix - passed in
+	 * @fCovSqrt	Sqrt(Cov) matrix - passed out
+	 *
+	 */
+	static void calcCholesky( int nP, double * fCov, double* fCovSqrt ){
+
+		double *C = fCovSqrt;
+		double *V = fCov;
+
+		// calculate sqrt(V) as lower diagonal matrix
+		for( int i = 0; i < nP; ++i ) {
+			for( int j = 0; j < nP; ++j ) {
+				C[i*nP+j] = 0;
+			}
+		}
+
+		for( int j = 0; j < nP; ++j ) {
+			// diagonal terms first
+			double Ck = 0;
+			for( int k = 0; k < j; ++k ) {
+				Ck += C[j*nP+k] * C[j*nP+k];
+			} // k
+			C[j*nP+j] = sqrt( fabs( V[j*nP+j] - Ck ) );
+
+			// off-diagonal terms
+			for( int i = j+1; i < nP; ++i ) {
+				Ck = 0;
+				for( int k = 0; k < j; ++k ) {
+					Ck += C[i*nP+k] * C[j*nP+k];
+				} //k
+				if( C[ j * nP + j ] != 0 ) 
+					C[ i * nP + j ] = ( V[ i * nP + j ] - Ck ) / C[ j * nP + j ];
+				else 
+					C[ i * nP + j ] = 0;
+			}// i
+		} // j
+	} // calcCholesky
 	
+	/* Calculates random variations in a function from the sqrt of the cov matrix
+	 *
+	 * @xx 			x value at which to evaluate function
+	 * @f 			TF1 * to function
+	 * @nP 			number of parameters
+	 * @fCovSqrt 	sqrt(cov) given by calcCholesky
+	 *
+	 * @return 		function evaluated within a random gaussian distribution at the given point
+	 */
+	static double randomSqrtCov( double xx, TF1 * f, int nP, double * fCovSqrt ){
+		double * z = new double[nP];
+		double * x = new double[nP];
+		double * p = new double[nP];
+
+		for( int i = 0; i < nP; ++i ) {
+			z[i] = gRandom->Gaus( 0.0, 1.0 );
+			p[i] = f->GetParameter(i);
+		}
+
+		for( int i = 0; i < nP; ++i ) {
+			x[i] = 0;
+			for( int j = 0; j <= i; ++j ) {
+				x[i] += fCovSqrt[i*nP+j] * z[j];
+			} // j
+		}
+
+		for( int i = 0; i < nP; ++i ) {
+			f->SetParameter( i, x[i] + p[i] );
+		}
+
+		double value = f->Eval(xx);
+		for( int i = 0; i < nP; ++i ) {
+			f->SetParameter( i, p[i] );
+		}
+
+		delete [] z;
+		delete [] x;
+		delete [] p;
+		return value;
+	}
+
+
+	static TGraphErrors *choleskyBands( TFitResultPtr fitResult, TF1 * f, int nSamples = 50, int nPoints = 100, double x1 = -1.0, double x2 = -1.0 ){
+
+		int nP = f->GetNpar();
+		TMatrixDSym cov = fitResult->GetCovarianceMatrix();
+		double *covArray = new double[ nP * nP ]; // number of parameters x number of parameters
+		covArray = cov.GetMatrixArray();
+
+		double *fCov = new double[ nP * nP ];
+		fCov = cov.GetMatrixArray();
+		double *fCovSqrt = new double[ nP * nP ];
+		calcCholesky( nP, fCov, fCovSqrt );
+
+		vector<double> x, yup, ydown, yerr, y;
+
+		// calculate instead
+ 		if ( -1.0 == x1  && -1.0 == x2 )
+ 			f->GetRange( x1, x2 );
+ 		double step = ( x2 - x1 ) / (double) nPoints;
+
+ 		for ( double xx = x1; xx < x2; xx += step ){
+ 			x.push_back( xx );
+
+ 			vector<double> samples;
+ 			for ( int n = 0; n < nSamples; n++ ){
+ 				samples.push_back( randomSqrtCov( xx, f, nP, fCovSqrt ) );
+ 			}
+
+ 			double sampleStdev = stdev( samples );
+ 			double yy = f->Eval( xx );
+
+ 			y.push_back( yy );
+
+ 			yerr.push_back( sampleStdev );
+ 			yup.push_back( yy + sampleStdev );
+ 			ydown.push_back( yy - sampleStdev );
+
+ 		}
+
+ 		TGraphErrors * g = new TGraphErrors( x.size() - 1, x.data(), y.data(), 0, yerr.data() );
+
+ 		return g;
+
+	}
+
+
+
 };
 
 

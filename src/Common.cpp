@@ -126,7 +126,7 @@ string Common::toXml( TGraphAsymmErrors * g, string linePrefix ){
 	return a + "\n" + linePrefix + lexh + "\n" + linePrefix + leyh +"\n" + linePrefix + lexl + "\n" + linePrefix + leyl;
 }
 
- TH1 * Common::fitCL( TF1 * f, string name, int nPoints, double x1, double x2 ){
+ TH1 * Common::fitCL( TF1 * f, string name, double cl, int nPoints, double x1, double x2 ){
 
  	// calculate instead
  	if ( -1.0 == x1  && -1.0 == x2 )
@@ -137,7 +137,7 @@ string Common::toXml( TGraphAsymmErrors * g, string linePrefix ){
 
  	// histo to hold CL
  	TH1F * hCL = new TH1F( name.c_str(), name.c_str(), nPoints, x1, x2 );
- 	(TVirtualFitter::GetFitter())->GetConfidenceIntervals(hCL);
+ 	(TVirtualFitter::GetFitter())->GetConfidenceIntervals(hCL, cl);
 
 
  	return hCL;

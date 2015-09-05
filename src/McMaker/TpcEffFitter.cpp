@@ -85,14 +85,15 @@ void TpcEffFitter::make(){
 				book->add( plc + "_" + c + "_" + ts(b),  &g );
 
 				// do the fit
-				TF1 * fitFunc = new TF1( "effFitFunc", "[0] * exp( - pow( [1] / x, [2] ) )", 0.00, 2.5 );
+				TF1 * fitFunc = new TF1( "effFitFunc", "[0] * exp( - pow( [1] / x, [2] ) )", 0.00, 4.5 );
 				fitFunc->SetParameters( .85, 0.05, 5.0, -0.05 );
 				fitFunc->SetParLimits( 0, 0.5, 1.0 );
 				fitFunc->SetParLimits( 1, 0.0, 0.5 );
 				fitFunc->SetParLimits( 2, 0.0, 10 );
 
-				g.Fit( fitFunc, "R" );
+				TFitResultPtr fitResult = g.Fit( fitFunc, "RS" );
 
+				fitFunc->SetRange( 0.0, 4.5 );
 
 				RooPlotLib rpl;
 				rp.newPage();
@@ -101,7 +102,14 @@ void TpcEffFitter::make(){
 					gStyle->SetStatY( 0.5 );
 					gStyle->SetStatX( 0.85 );
 					fitFunc->SetLineColor( kRed );
-					fitFunc->Draw("same");
+					fitFunc->Draw("same");	
+
+				TGraphErrors * band = Common::choleskyBands( fitResult, fitFunc );
+				//TH1 * band = Common::fitCL( fitFunc, "bands", 0.68 );
+				band->SetFillColorAlpha( 1, 0.5 );
+				band->Draw( "same e3" );
+
+
 				rp.savePage();
 
 				exportParams( b, fitFunc, out );
