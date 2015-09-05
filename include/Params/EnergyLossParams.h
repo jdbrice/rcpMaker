@@ -21,6 +21,7 @@ protected:
 
 
 public:
+	static constexpr auto tag = "EnergyLossParams";
 	EnergyLossParams( XmlConfig * cfg, string nodePath, int ll = Logger::llGlobal);
 	~EnergyLossParams() {}
 

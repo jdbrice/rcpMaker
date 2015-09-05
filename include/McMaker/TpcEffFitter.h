@@ -14,6 +14,7 @@ using namespace jdb;
 
 // ROOT
 #include "TF1.h"
+#include "TFitResultPtr.h"
 
 class TpcEffFitter
 {
@@ -33,7 +34,7 @@ public:
 
 	void make();
 
-	void exportParams( int cbin, TF1 * f, ofstream &out );
+	void exportParams( int cbin, TF1 * f, TFitResultPtr result, ofstream &out );
 	
 };
 

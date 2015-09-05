@@ -56,7 +56,8 @@ def write_conf( data_path, output_path, input_config_path, config_path ="./" ) :
 		<Spectra all="false" tof="false" />
 
 		<!-- Include the corrections files -->
-		<TpcEff>
+		<!-- systematics = nSigma ==> nSigma to vary for systematics : default is 0 -->
+		<TpcEff systematics="0" >
 			<Include url="../Params/TpcEff.xml" />
 		</TpcEff>
 

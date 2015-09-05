@@ -12,13 +12,13 @@ EnergyLossParams::EnergyLossParams( XmlConfig * cfg, string nodePath, int ll){
 	int p = 0;
 	while ( cfg->exists( nodePath + ":p" + ts(p) ) ){
 		double val = cfg->getDouble( nodePath + ":p" + ts(p) );
-		INFO( "p" << p << " = " << val )
+		INFO( tag, "p" << p << " = " << val )
 		fn->SetParameter( p, val );
 		p++;
 	}
 
 	centralityBin = cfg->getInt( nodePath + ":bin" );
 
-	INFO( "EnergyLossParams( formula=\"" << formula <<"\" cenbin=" << centralityBin <<" )" )
+	INFO( tag, "EnergyLossParams( formula=\"" << formula <<"\" cenbin=" << centralityBin <<" )" )
 
 }

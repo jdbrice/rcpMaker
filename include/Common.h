@@ -120,12 +120,17 @@ public:
 
 	static string toString( vector<double> vals ){
 		stringstream sstr;
+
+		int i = 0; 
 		for ( auto v : vals ){
-			sstr << v << ", ";
+			if ( i < vals.size() - 1 ) 
+				sstr << v << ", ";
+			else 
+				sstr << v;
+			i++;
 		}
 		return sstr.str();
 	}
-
 
 	/* Converts a Root function (TF1 or subclass) to 
 	 * a list of xml attributes
@@ -133,6 +138,7 @@ public:
 	 * @return 		string representing the function as XML attributes
 	 */
 	static string toXml( TF1 * f );
+	static string toXml( TF1 * f, TFitResultPtr result );
 
 	/* Converts a Root histogram (TH1 or subclass) to 
 	 * an xml data node
@@ -240,6 +246,7 @@ public:
 	static double randomSqrtCov( double xx, TF1 * f, int nP, double * fCovSqrt );
 
 	static double choleskyUncertainty( double xx, TFitResultPtr fitResult, TF1 * f, int nSamples );
+	static double choleskyUncertainty( double xx, double * fCov, TF1 * f, int nSamples );
 
 	static TGraphErrors *choleskyBands( TFitResultPtr fitResult, TF1 * f, int nSamples = 50, int nPoints = 100, Reporter * rp = nullptr, double x1 = -1.0, double x2 = -1.0 );
 

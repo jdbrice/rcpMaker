@@ -30,6 +30,40 @@
  	return line;
  }
 
+ string Common::toXml( TF1 * f, TFitResultPtr result ){
+
+ 	string line = "";
+ 	line += "formula=\"";
+ 	line += f->GetTitle();
+ 	line += "\"";
+
+ 	for ( int ip = 0; ip < f->GetNpar(); ip++ ){
+
+ 		line += " p" + ts(ip) + "=\"";
+ 		line += dts(f->GetParameter(ip));
+ 		line += "\"";
+
+ 		line += " e" + ts(ip) + "=\"";
+ 		line += dts(f->GetParError(ip));
+ 		line += "\"";
+ 	}
+
+ 	// include covariance matrix if available
+	int nP = f->GetNpar();
+
+	TMatrixDSym cov = result->GetCovarianceMatrix();
+
+	double *covArray = new double[ nP * nP ]; // number of parameters x number of parameters
+	covArray = cov.GetMatrixArray();
+
+	vector<double> cv;
+	cv.assign( covArray, covArray + nP*nP );
+	line += " cov=\"" + toString( cv ) + "\"";
+
+
+ 	return line;
+ }
+
 // TODO: finish the histogram toXml
 string Common::toXml( TH1 * h ){
 
@@ -211,16 +245,23 @@ double Common::randomSqrtCov( double xx, TF1 * f, int nP, double * fCovSqrt ){
 	return value;
 }
 
+
 double Common::choleskyUncertainty( double xx, TFitResultPtr fitResult, TF1 * f, int nSamples ){
 	int nP = f->GetNpar();
-	INFO( tag, "Num Params : " << nP  );
-	
+
 	TMatrixDSym cov = fitResult->GetCovarianceMatrix();
 	double *covArray = new double[ nP * nP ]; // number of parameters x number of parameters
 	covArray = cov.GetMatrixArray();
 
-	double *fCov = new double[ nP * nP ];
-	fCov = cov.GetMatrixArray();
+
+	choleskyUncertainty( xx, covArray, f, nSamples );
+}
+
+
+double Common::choleskyUncertainty( double xx, double * fCov, TF1 * f, int nSamples ){
+	int nP = f->GetNpar();
+	INFO( tag, "Num Params : " << nP  );
+	
 	double *fCovSqrt = new double[ nP * nP ];
 	calcCholesky( nP, fCov, fCovSqrt );
 
@@ -242,23 +283,23 @@ double Common::choleskyUncertainty( double xx, TFitResultPtr fitResult, TF1 * f,
 TGraphErrors *Common::choleskyBands( TFitResultPtr fitResult, TF1 * f, int nSamples, int nPoints, Reporter* rp,  double x1, double x2 ){
 
 	int nP = f->GetNpar();
-	INFO( tag, "Num Params : " << nP  );
+	// INFO( tag, "Num Params : " << nP  );
 	TMatrixDSym cov = fitResult->GetCovarianceMatrix();
 	double *covArray = new double[ nP * nP ]; // number of parameters x number of parameters
 	covArray = cov.GetMatrixArray();
 
-	for ( int i = 0; i < 9; i++ ){
-		INFO( tag, "[" << i << "] = " << covArray[ i ] );
-	}
+	// for ( int i = 0; i < 9; i++ ){
+	// 	INFO( tag, "[" << i << "] = " << covArray[ i ] );
+	// }
 
 	double *fCov = new double[ nP * nP ];
 	fCov = cov.GetMatrixArray();
 	double *fCovSqrt = new double[ nP * nP ];
 	calcCholesky( nP, fCov, fCovSqrt );
 
-	for ( int i = 0; i < 9; i++ ){
-		INFO( tag, "[" << i << "] = " << fCovSqrt[ i ] );
-	}
+	// for ( int i = 0; i < 9; i++ ){
+	// 	INFO( tag, "[" << i << "] = " << fCovSqrt[ i ] );
+	// }
 
 	
 

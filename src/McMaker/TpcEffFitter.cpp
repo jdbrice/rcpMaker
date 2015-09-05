@@ -101,7 +101,7 @@ void TpcEffFitter::make(){
 				fitFunc->SetParLimits( 2, 0.0, 10 );
 
 				TFitResultPtr fitPointer = g.Fit( fitFunc, "BNRSWW" );
-
+				INFO( tag, "FitPointer = " << fitPointer );
 				TGraphErrors * band = Common::choleskyBands( fitPointer, fitFunc, 5000, 200, &rp );
 
 				RooPlotLib rpl;
@@ -124,7 +124,7 @@ void TpcEffFitter::make(){
 
 				rp.savePage();
 
-				exportParams( b, fitFunc, out );
+				exportParams( b, fitFunc, fitPointer, out );
 
 			} // loop centrality bins
 
@@ -139,8 +139,9 @@ void TpcEffFitter::make(){
 
 }
 
-void TpcEffFitter::exportParams( int bin, TF1 * f, ofstream &out ){
+void TpcEffFitter::exportParams( int bin, TF1 * f, TFitResultPtr result, ofstream &out ){
+	INFO( tag, "(bin=" << bin << ", f=" << f << ", fPtr=" << result << " )" )
 	out << "\t\t<TpcEffParams bin=\"" << bin << "\" ";
-	out << Common::toXml( f );
+	out << Common::toXml( f, result );
 	out << "/>" << endl;
 }
