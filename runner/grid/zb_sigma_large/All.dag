@@ -19,6 +19,7 @@ JOB TofEff_Merge TofEff_Merge.submit
 JOB TofEff_Fit TofEff_Fit.submit
 
 JOB FeedDown_Make FeedDown_Maker.submit
+JOB FeedDown_Merge FeedDown_Merge.submit
 JOB FeedDown_Fit FeedDown_Fit.submit
 
 JOB Fit_all Fit.submit
@@ -33,7 +34,8 @@ PARENT TofEff_K TofEff_Pi TofEff_P CHILD TofEff_Merge
 PARENT TofEff_Merge CHILD TofEff_Fit
 
 # FeedDown
-PARENT FeedDown_Make CHILD FeedDown_Fit
+PARENT FeedDown_Make CHILD FeedDown_Merge
+PARENT FeedDown_Merge CHILD FeedDown_Fit
 
 # Tpc Eff
 PARENT TPC_Make CHILD TPC_Fit

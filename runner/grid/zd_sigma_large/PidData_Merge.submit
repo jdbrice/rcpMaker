@@ -11,9 +11,9 @@ output = PidData_PostCorr_K_merge.log
 Queue
 
 Arguments = PostCorr_Pi_a*.root 50 PidData_PostCorr_Pi.root
-output = PidData_PostCorr_K_merge.log
+output = PidData_PostCorr_Pi_merge.log
 Queue
 
 Arguments = PostCorr_P_a*.root 50 PidData_PostCorr_P.root
-output = PidData_PostCorr_K_merge.log
+output = PidData_PostCorr_P_merge.log
 Queue

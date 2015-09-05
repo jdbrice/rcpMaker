@@ -3,6 +3,8 @@
 #######################
 
 JOB FeedDown_Make FeedDown_Maker.submit
+JOB FeedDown_Merge FeedDown_Merge.submit
 JOB FeedDown_Fit FeedDown_Fit.submit
 
-PARENT FeedDown_Make FeedDown_Fit
+PARENT FeedDown_Make CHILD FeedDown_Merge
+PARENT FeedDown_Merge CHILD FeedDown_Fit
