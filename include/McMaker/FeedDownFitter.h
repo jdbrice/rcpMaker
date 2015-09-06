@@ -16,6 +16,9 @@ using namespace std;
 #include "Reporter.h"
 using namespace jdb;
 
+#include "TFitResultPtr.h"
+#include "TF1.h"
+
 class FeedDownFitter
 {
 protected:
@@ -89,7 +92,7 @@ public:
 	    x->SetBinLabel( 33, "#bar{#Omega^{+}}" );
 	}
 
-	void exportParams(int bin, TF1 * fn, ofstream &out );
+	void exportParams(int bin, TF1 * fn, TFitResultPtr res,  ofstream &out );
 	void background( string, int, int, ofstream&);
 };
 

@@ -118,10 +118,10 @@ void FeedDownFitter::make(){
 	out.close();
 }
 
-void FeedDownFitter::exportParams( int bin, TF1 * fn, ofstream &out){
+void FeedDownFitter::exportParams( int bin, TF1 * fn, TFitResultPtr result,  ofstream &out){
 	out << "\t\t<FeedDownParams ";
 	out << "bin=\"" << bin << "\" ";
-	out << Common::toXml( fn );
+	out << Common::toXml( fn, result );
 	out << "/>" << endl;
 }
 
@@ -208,7 +208,7 @@ void FeedDownFitter::background( string name, int plcIndex, int bin, ofstream &o
 	TGraphErrors * band = Common::choleskyBands( fitPointer, fracFun, 5000, 200, reporter.get() );
 
 	fracFun->SetRange( 0.0, 5 );
-	exportParams( bin, fracFun, out );
+	exportParams( bin, fracFun, fitPointer,  out );
 
 	book->cd( "results" );
 	g->SetName( ("y" + name + "_" + ts(bin) ).c_str() );
