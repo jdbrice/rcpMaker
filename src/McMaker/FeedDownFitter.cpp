@@ -27,8 +27,8 @@ FeedDownFitter::FeedDownFitter( XmlConfig * cfg, string nodePath ){
 	plcName[ 14 ] = "P_p";
 	plcName[ 15 ] = "P_n";
 
-	formulas =	{ "[0]*exp( -[1] * x ) + [2] * exp( -[3] * x )",
-				"[0]*pow( x, - abs( [1] ) )",
+	formulas =	{ "[0]*pow( x, -abs( [1] ) ) + [2] * exp( -[3] * x )",
+				"[0]*exp( -[1] * x ) + [2] * exp( -[3] * x )",
 				"[0]*exp( -[1] * x ) + [2] * exp( -[3] * x )",
 				"[0]*exp( -[1] * x ) + [2] * exp( -[3] * x )",
 				"[0]*exp( -[1] * x ) + [2] * exp( -[3] * x * x )",
@@ -99,7 +99,7 @@ void FeedDownFitter::make(){
 			}
 		}
 
-		if ( "K_p" == k.second || "K_n" == k.second ){
+		if ( "K_p" == k.second || "K_n" == k.second /*|| "P_n" == k.second || "P_p" == k.second || "Pi_n" == k.second*/ ){
 			plcIndex ++;
 			continue;
 		}
@@ -163,30 +163,48 @@ void FeedDownFitter::background( string name, int plcIndex, int bin, ofstream &o
 	rpl.style( g ).set( cfg, "Style.frac_" + name ).set( cfg, "Style.frac" ).set( "title", hNames[ plcIndex ] + " : bin " + ts(bin) ).draw();
 
 	INFO( "Fitting to : " << formulas[ plcIndex ]  )
-	TF1 * fracFun = new TF1( "fn", formulas[ plcIndex ].c_str() , 0.0, 3.0 );
+	TF1 * fracFun = new TF1( "fn", formulas[ plcIndex ].c_str() , 0.01, 4.5 );
 	
 	if ( "Pi_n" == name ){
-		fracFun->SetParameters( 0.025, 0.005 );
 		fracFun->SetParLimits( 0, 0, 1 );
-		fracFun->SetParLimits( 1, 0, 1 );
+		fracFun->SetParLimits( 1, 0, 50 );
+		fracFun->SetParLimits( 2, 0, 1 );
+		fracFun->SetParLimits( 3, 0, 50 );
+
+		fracFun->SetParameters( .1, 0.005, .01, 0.002, 0.1, 0.002 );
 
 	} else  if ( "Pi_p" == name ){
 		INFO( name )
 		fracFun->SetParameters( 0.025, 0.75, 0.25, 4 );
+
 		fracFun->SetParLimits( 0, 0.0, 1 );
 		fracFun->SetParLimits( 1, 0, 5 );
 		fracFun->SetParLimits( 2, 0, 1 );
 		fracFun->SetParLimits( 3, 0, 50 );
-	} else if ( "P_p" ){
-		fracFun->SetParLimits( 4, 0, 1 );
-		fracFun->SetParLimits( 5, 0, 50 );
-		fracFun->SetParameters( .1, 0.005, .01, 0.002, 0.1, 0.002, 0.1, 0.002 );
+	} else if ( "P_p" == name ){
+		
+		fracFun->SetParLimits( 0, 0, 1 );
+		fracFun->SetParLimits( 1, 0, 50 );
+		fracFun->SetParLimits( 2, 0, 1 );
+		fracFun->SetParLimits( 3, 0, 50 );
+
+		fracFun->SetParameters( .1, 0.005, .01, 0.002 );
+		
+	} else if ( "P_n" == name ){
+		
+		fracFun->SetParLimits( 0, 0, 2 );
+		fracFun->SetParLimits( 1, 0, 10 );
+		fracFun->SetParLimits( 2, 0, 2 );
+	
+		fracFun->SetParameters( 1, 5.0, 1.1 );
+		
 	}
 
 	g->Fit( fracFun, "RNQ" );
 	g->Fit( fracFun, "RNQ" );
 	TFitResultPtr fitPointer = g->Fit( fracFun, "QRS" );
 
+	
 	TGraphErrors * band = Common::choleskyBands( fitPointer, fracFun, 5000, 200, reporter.get() );
 
 	fracFun->SetRange( 0.0, 5 );
@@ -207,13 +225,20 @@ void FeedDownFitter::background( string name, int plcIndex, int bin, ofstream &o
 	back->Divide( total );
 	TH1 * ratio = (TH1*)back->Clone( "ratio" );
 
+	gStyle->SetStatY( 0.9 );
+	gStyle->SetStatX( 0.65 );
+
+	
 	for ( int i = 2; i < ratio->GetNbinsX() + 1; i++ ){
 		float bc = ratio->GetBinCenter( i );
 		float fv = fracFun->Eval( bc );
-		float bv = g->GetY()[ i - 2 ];
-		float be = g->GetErrorYlow( i - 2) ;
+		float bv = g->GetY()[ i - 3 ];
+		float be = g->GetErrorYlow( i - 3 ) ;
 		
-
+	
+		INFO( "stupid", "value = " << (bv/fv) << ", bv=" << bv << ", fv ="<< fv <<", be=" << be );
+		if ( isinf( bv ) || isinf( bv/fv ) || isinf( be ) || isinf( be/fv ) || be < 0 )
+			continue;
 		ratio->SetBinContent( i, bv / fv );
 
 		ratio->SetBinError( i, be / fv );
