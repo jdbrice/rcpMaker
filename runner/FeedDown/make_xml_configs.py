@@ -65,8 +65,8 @@ def write_conf( data_path, output_path, output_config_path, config_path ="./" ) 
 			<Histo name="eta" title="eta" widthX=".02" minX="-2.0" maxX="2.0" />
 			<Histo name="rapidity" title="rapidity" widthX=".01" minX="-0.3" maxX="0.3" />
 
-			<Histo name="parents" widthX="1" minX="-0.5" maxX="51.5" yBins="bins.pt" />
-			<Histo name="spectra" xBins="bins.pt" />
+			<Histo name="parents" widthX="1" minX="-0.5" maxX="51.5" yBins="binning.ptEff" />
+			<Histo name="spectra" xBins="binning.ptEff" />
 
 			<Histo name="refMultVz" xBins="bins.vZ" yBins="bins.rm" />
 
@@ -151,31 +151,17 @@ def write_fit_conf( data_path, output_path, output_config_path, config_path ="./
 	</FeedDownFitter>
 
 
-	<bins>
-		<vR width="0.01" min="0.0" max="3.0" />
-		<vX width="0.01" min="-1.5" max="1.5" />
-		<vZ width="1" min="-30.0" max="30.0" />
-
-		<rm width="1" min="0" max="400" />
-		<rmb width="1" min="0" max="10" />
-
-		<pt> 0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2.0, 2.2, 2.4, 2.6, 2.8, 3.0, 3.5, 4.5 </pt>
-	</bins>
-
-
 	<Style>
 		<energyLoss draw="colz" logz="1" optstat="0" xr="0, 2.0" yr="-0.1, 0.1" />
 		<energyLoss1D draw="pe same" logz="0" optstat="0" xr="0, 2.0" mst="8" mc="black" ms="1.5" lc="black" lw="3" yr="-0.1, 0.1"/>
 		<logy1D draw="" logy="1" optstat="0" fc="red" xr="-0.5, 33.5"/>
 
-		<frac title="Background Fraction" y="Background / Total" logy="1" xr="0.0, 2.5" ms="2" mst="8" xr="0, 2.0" yto="0.5" yts="0.06" optstat="0"/>
-		<frac_P_Plus  yr="2e-2, 1" />
-		<frac_P_Minus  yr="2e-2, 1" />
+		<frac title="Background Fraction" y="Background / Total" logy="1" ms="2" mst="1" xr="0, 3.0" yto="0.5" yts="0.06" optstat="0" />
+	
+		<frac_P_p  yr="2e-2, 2" />
+		<frac_P_n  yr="2e-2, 2" />
 
-		<frac_Pi_Plus  yr="5e-3, 2e-1" />
-		<frac_Pi_Minus  yr="5e-3, 2e-1" />
-
-		<ratio title="" y="data / fit"  yls="0.1" xls="0.1" logy="0" yr="0.8, 1.25" xr="0, 2.0" mst="8" mc="black" lc="black" yto="0.2" yts="0.15" />
+		<ratio title="" y="data / fit"  yls="0.1" xls="0.1" logy="0" yr="0.8, 1.25" xr="0, 3.0" mst="8" mc="black" lc="black" yto="0.2" yts="0.15" />
 	</Style>
 
 	<!-- Include common resources -->
