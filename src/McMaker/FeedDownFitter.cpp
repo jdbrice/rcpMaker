@@ -28,11 +28,11 @@ FeedDownFitter::FeedDownFitter( XmlConfig * cfg, string nodePath ){
 	plcName[ 15 ] = "P_n";
 
 	formulas =	{ "[0]*exp( -[1] * x ) + [2] * exp( -[3] * x )",
-				"[0]*exp( -[1] * x ) + [2] * exp( -[3] * x )",
+				"[0]*pow( x, - abs( [1] ) )",
 				"[0]*exp( -[1] * x ) + [2] * exp( -[3] * x )",
 				"[0]*exp( -[1] * x ) + [2] * exp( -[3] * x )",
 				"[0]*exp( -[1] * x ) + [2] * exp( -[3] * x * x )",
-				"(1-[0]*exp( -[1] * x ) ) * [2] * exp( -[3] * x )" };
+				"pow( [0] + [1] * pow( x, [2] ), -1 )" };
 
 	rmb = unique_ptr<HistoBins>( new HistoBins( cfg, nodePath + "RefMultBins" ) );
 
@@ -70,7 +70,7 @@ void FeedDownFitter::make(){
 	out << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" << endl;
 	out << "<config>" << endl;
 
-
+	gStyle->SetOptFit( 1111 );
 
 	int plcIndex = 0;
 	for ( auto k : plcName ){
@@ -99,7 +99,7 @@ void FeedDownFitter::make(){
 			}
 		}
 
-		if ( "K_Plus" == k.second || "K_Minus" == k.second ){
+		if ( "K_p" == k.second || "K_n" == k.second ){
 			plcIndex ++;
 			continue;
 		}
@@ -163,36 +163,31 @@ void FeedDownFitter::background( string name, int plcIndex, int bin, ofstream &o
 	rpl.style( g ).set( cfg, "Style.frac_" + name ).set( cfg, "Style.frac" ).set( "title", hNames[ plcIndex ] + " : bin " + ts(bin) ).draw();
 
 	INFO( "Fitting to : " << formulas[ plcIndex ]  )
-	TF1 * fracFun = new TF1( "fn", formulas[ plcIndex ].c_str() , 0.0, 2.0 );
+	TF1 * fracFun = new TF1( "fn", formulas[ plcIndex ].c_str() , 0.0, 3.0 );
 	
-	fracFun->SetParLimits( 0, 0, 1 );
-	fracFun->SetParLimits( 1, 0, 50 );
-	fracFun->SetParLimits( 2, 0, 1 );
-	fracFun->SetParLimits( 3, 0, 50 );
+	if ( "Pi_n" == name ){
+		fracFun->SetParameters( 0.025, 0.005 );
+		fracFun->SetParLimits( 0, 0, 1 );
+		fracFun->SetParLimits( 1, 0, 1 );
 
-	fracFun->SetParameters( .1, 0.005, .01, 0.002, 0.1, 0.002 );
-	if ( "P_Plus" == name ){
-		fracFun->SetParameters( .1, 0.005, .01, 0.002 );
-	} else  if ( "P_Minus" == name ){
+	} else  if ( "Pi_p" == name ){
 		INFO( name )
-		fracFun->SetParLimits( 0, 0.001, 1 );
-		fracFun->SetParLimits( 1, 0, 50 );
-		//fracFun->SetParLimits( 2, 0.05, 0.4 );
+		fracFun->SetParameters( 0.025, 0.75, 0.25, 4 );
+		fracFun->SetParLimits( 0, 0.0, 1 );
+		fracFun->SetParLimits( 1, 0, 5 );
 		fracFun->SetParLimits( 2, 0, 1 );
 		fracFun->SetParLimits( 3, 0, 50 );
-
-		fracFun->SetParameters( .1, 10, 0.1, 0.3, .75 );
-		fracFun->SetRange( 0.0, 1.5 );
-
-	} else if ( "P_Plus" == name ){
+	} else if ( "P_p" ){
 		fracFun->SetParLimits( 4, 0, 1 );
 		fracFun->SetParLimits( 5, 0, 50 );
 		fracFun->SetParameters( .1, 0.005, .01, 0.002, 0.1, 0.002, 0.1, 0.002 );
 	}
 
-	g->Fit( fracFun, "RN" );
-	g->Fit( fracFun, "RN" );
-	g->Fit( fracFun, "RN" );
+	g->Fit( fracFun, "RNQ" );
+	g->Fit( fracFun, "RNQ" );
+	TFitResultPtr fitPointer = g->Fit( fracFun, "QRS" );
+
+	TGraphErrors * band = Common::choleskyBands( fitPointer, fracFun, 5000, 200, reporter.get() );
 
 	fracFun->SetRange( 0.0, 5 );
 	exportParams( bin, fracFun, out );
@@ -202,61 +197,10 @@ void FeedDownFitter::background( string name, int plcIndex, int bin, ofstream &o
 	book->add( name + "_" + ts(bin), g );
 	book->cd("");
 
-
-
-
-	// Draw the components of the Proton fit
-	if ( "P_Plus" == name ){
-		TF1 * fc1 = new TF1( "fc1", "[0]*exp( -[1] * x )" );
-		double * pars = fracFun->GetParameters();
-		fc1->SetParameters( pars[0], pars[1] );
-		fc1->SetLineColor( kGreen );
-		fc1->Draw("same");
-
-		TF1 * fc2 = new TF1( "fc2", "[0]*exp( -[1] * x * x )" );
-		fc2->SetParameters( pars[2], pars[3] );
-		fc2->SetLineColor( kBlue );
-		fc2->Draw("same");
-
-		TLegend * leg = new TLegend( 0.6, 0.5, 0.9, 0.9 );
-		leg->AddEntry( fc1, "ae^{-b pT}", "l" );
-		leg->AddEntry( fc2, "ae^{-b pT^{2}}", "l" );
-		leg->Draw("same");
-	}
-
-	// Draw the components of the Anti-Proton fit
-	if ( "P_Minus" == name ){
-		TF1 * fc1 = new TF1( "fc1", "1-[0]*exp( -[1] * ( x ) )", 0, 5 );
-		double * pars = fracFun->GetParameters();
-		fc1->SetParameters( pars[0], pars[1] );
-		fc1->SetLineColor( kGreen );
-		fc1->Draw("same");
-
-		TF1 * fc2 = new TF1( "fc2", "[0]*exp( -[1] * x )", 0, 5 );
-		fc2->SetParameters( pars[2], pars[3] );
-		fc2->SetLineColor( kBlue );
-		fc2->Draw("same");
-
-		TLegend * leg = new TLegend( 0.6, 0.5, 0.9, 0.9 );
-		leg->AddEntry( fc1, "1 - ae^{-bpT}", "l" );
-		leg->AddEntry( fc2, "ae^{-bpT}", "l" );
-		leg->Draw("same");
-	}
-
-	// Draw the components of the Pion fit
-	if ( "Pi_Plus" == name || "Pi_Minus" == name ){
-		TF1 * fc1 = new TF1( "fc1", "[0]*exp( -[1] * x )", 0, 5 );
-		double * pars = fracFun->GetParameters();
-		fc1->SetParameters( pars[0], pars[1] );
-		fc1->SetLineColor( kGreen );
-		fc1->Draw("same");
-
-		TF1 * fc2 = new TF1( "fc2", "[0]*exp( -[1] * x )", 0, 5 );
-		fc2->SetParameters( pars[2], pars[3] );
-		fc2->SetLineColor( kBlue );
-		fc2->Draw("same");
-	}
 	fracFun->Draw("same");
+
+	band->SetFillColorAlpha( kRed, 0.5 );
+	band->Draw( "same e3" );
 
 
 	p2->cd();
@@ -280,7 +224,7 @@ void FeedDownFitter::background( string name, int plcIndex, int bin, ofstream &o
 	rpl.style( ratio ).set( cfg, "Style.ratio" ).draw();
 	
 
-	TLine * l = new TLine( 0.0, 1, 2, 1  );
+	TLine * l = new TLine( 0.0, 1, 3, 1  );
 	l->SetLineStyle( kDotted );
 	l->Draw("same");
 	
