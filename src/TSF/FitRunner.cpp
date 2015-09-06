@@ -92,6 +92,14 @@ namespace TSF{
 					string name = Common::yieldName( plc, iCen, iCharge );
 					book->clone( "/", "yield", plc+"_yield", name );
 
+					book->cd( "sys_sigma" );
+					name = Common::yieldName( plc, iCen, iCharge );
+					book->clone( "/", "yield", "sys_sigma", name );
+
+					book->cd( "sys_tofEff" );
+					name = Common::yieldName( plc, iCen, iCharge );
+					book->clone( "/", "yield", "sys_tofEff", name );
+
 					// Mean Histos
 					book->cd( plc + "_zbMu" );
 					name = Common::muName( plc, iCen, iCharge );
@@ -214,7 +222,8 @@ namespace TSF{
 			choosePlayers( avgP, plc );
 			
 			// double eff_fudge = 0.01;
-			schema->var( "eff_" + plc )->val = 1.0 ;//+ ( rnd->Rndm() * (2 * eff_fudge) - eff_fudge );
+			// leave it as whatever it is in config
+			// schema->var( "eff_" + plc )->val = 1.0 ;//+ ( rnd->Rndm() * (2 * eff_fudge) - eff_fudge );
 			schema->var( "eff_" + plc )->fixed = true;
 			
 			
@@ -371,7 +380,7 @@ namespace TSF{
 			// }
 
 		}
-	}
+	} // respondToStats(...)
 
 	void FitRunner::runNominal( int iCharge, int iCen, int iPt ) {
 		WARN( tag, "(iCharge=" << iCharge << ", iCen=" << iCen << ", iPt=" << iPt << ")" );
@@ -471,62 +480,103 @@ namespace TSF{
 
 
 
-					map<string, vector<double> > systematics;
-					double avgP = binAverageP( iPt );
+					// map<string, vector<double> > systematics_sigma;
+					// double avgP = binAverageP( iPt );
 
-					for ( string pre : { "zb", "zd" } ){
-						for ( string plc : Common::species ){
-							INFO( tag, "Do Systematics for " << pre << "_" << plc );
-							ConfigRange &range = sigmaRanges[ pre + "_" + plc ];
+					// for ( string pre : { "zb", "zd" } ){
+					// 	for ( string plc : Common::species ){
+					// 		INFO( tag, "Do Systematics for " << pre << "_" << plc );
+					// 		ConfigRange &range = sigmaRanges[ pre + "_" + plc ];
 
-							if ( !range.above( avgP ) )
-								continue;
+					// 		if ( !range.above( avgP ) )
+					// 			continue;
 
-							double delta = sigmaSets[ pre+"_"+plc ].std();
-							shared_ptr<FitSchema> sysSchema = prepareSystematic( pre + "_sigma", plc, delta );
+					// 		double delta = sigmaSets[ pre+"_"+plc ].std();
+					// 		shared_ptr<FitSchema> sysSchema = prepareSystematic( pre + "_sigma", plc, delta );
 
+					// 		map<string, double> deltas = runSystematic( sysSchema, iCharge, iCen, iPt );	
+
+					// 		systematics_sigma[ "Pi" ].push_back( deltas[ "Pi" ] );
+					// 		systematics_sigma[ "K" ].push_back( deltas[ "K" ] );
+					// 		systematics_sigma[ "P" ].push_back( deltas[ "P" ] );
+					// 	}
+					// }
+
+					// INFO( tag, "SYSTEMATIC from sigma" );
+					// for ( auto k : systematics_sigma ){
+					// 	INFO( tag, "Systematics for " << k.first );
+					// 	for ( auto v : k.second ){
+					// 		INFO( tag, "systematic = " << v );
+					// 	}
+					// 	vector<double> v = k.second;
+					// 	double sum = std::accumulate(v.begin(), v.end(), 0.0);
+					// 	double mean = sum / v.size();
+
+					// 	double max = *std::max_element( v.begin(), v.end() );
+
+					// 	double sq_sum = std::inner_product(v.begin(), v.end(), v.begin(), 0.0);
+					// 	double stdev = std::sqrt(sq_sum / v.size() - mean * mean);
+
+					// 	INFO( tag, "MAX = " << max );
+
+					// 	fillSystematicHistogram( "sigma", k.first, iPt, iCen, iCharge, max );
+
+					// 	INFO( tag, "AVG = " << mean );
+					// 	INFO( tag, "STDEV = " << stdev );
+
+					// } 
+
+					map<string, vector<double> > systematics_toffEff;
+					for ( string plc : {"K"} ){
+						INFO( tag, "Doing TofEff Systematics for " << plc );
+						
+						{ // high
+							double delta = 0.10;
+							shared_ptr<FitSchema> sysSchema = prepareSystematic( "eff", plc, delta );
 							map<string, double> deltas = runSystematic( sysSchema, iCharge, iCen, iPt );	
 
-							systematics[ "Pi" ].push_back( deltas[ "Pi" ] );
-							systematics[ "K" ].push_back( deltas[ "K" ] );
-							systematics[ "P" ].push_back( deltas[ "P" ] );
+							systematics_toffEff[ "Pi" ].push_back( deltas[ "Pi" ] );
+							systematics_toffEff[ "K" ].push_back( deltas[ "K" ] );
+							systematics_toffEff[ "P" ].push_back( deltas[ "P" ] );
+						}
+
+						{ // low
+							double delta = -0.10;
+							shared_ptr<FitSchema> sysSchema = prepareSystematic( "eff", plc, delta );
+							map<string, double> deltas = runSystematic( sysSchema, iCharge, iCen, iPt );	
+
+							systematics_toffEff[ "Pi" ].push_back( deltas[ "Pi" ] );
+							systematics_toffEff[ "K" ].push_back( deltas[ "K" ] );
+							systematics_toffEff[ "P" ].push_back( deltas[ "P" ] );
 						}
 					}
 
-
-					// for ( string plc : {"K"} ){
-					// 	INFO( tag, "Doing TofEff Systematics for " << plc );
-						
-					// 	{ // high
-					// 		double delta = 0.10;
-					// 		shared_ptr<FitSchema> sysSchema = prepareSystematic( "eff", plc, delta );
-					// 		map<string, double> deltas = runSystematic( sysSchema, iCharge, iCen, iPt );	
-
-					// 		systematics[ "Pi" ].push_back( deltas[ "Pi" ] );
-					// 		systematics[ "K" ].push_back( deltas[ "K" ] );
-					// 		systematics[ "P" ].push_back( deltas[ "P" ] );
-					// 	}
-
-					// 	{ // low
-					// 		double delta = -0.10;
-					// 		shared_ptr<FitSchema> sysSchema = prepareSystematic( "eff", plc, delta );
-					// 		map<string, double> deltas = runSystematic( sysSchema, iCharge, iCen, iPt );	
-
-					// 		systematics[ "Pi" ].push_back( deltas[ "Pi" ] );
-					// 		systematics[ "K" ].push_back( deltas[ "K" ] );
-					// 		systematics[ "P" ].push_back( deltas[ "P" ] );
-					// 	}
-
-			
-					// }
-					
-
-					for ( auto k : systematics ){
+					INFO( tag, "SYSTEMATIC from TofEff" );
+					for ( auto k : systematics_toffEff ){
 						INFO( tag, "Systematics for " << k.first );
 						for ( auto v : k.second ){
 							INFO( tag, "systematic = " << v );
 						}
+						vector<double> v = k.second;
+						double sum = std::accumulate(v.begin(), v.end(), 0.0);
+						double mean = sum / v.size();
+
+						double max = *std::max_element( v.begin(), v.end() );
+
+						double sq_sum = std::inner_product(v.begin(), v.end(), v.begin(), 0.0);
+						double stdev = std::sqrt(sq_sum / v.size() - mean * mean);
+
+						INFO( tag, "MAX = " << max );
+
+						fillSystematicHistogram( "tofEff", k.first, iPt, iCen, iCharge, max );
+
+						INFO( tag, "AVG = " << mean );
+						INFO( tag, "STDEV = " << stdev );
+
 					} 
+					
+
+					
 
 					// do something with them now
 					
@@ -888,6 +938,13 @@ namespace TSF{
 		}
 	} // fillEnhancedYieldHistogram(...)
 
+	void FitRunner::fillSystematicHistogram( string type, string plc, int iPt, int iCen, int iCharge, double sys ){
+		
+		book->cd( "sys_" + type );
+		string hName = Common::yieldName( plc, iCen, iCharge );
+		book->setBin( hName, iPt, sys, 0 );	
+	} // fillEnhancedYieldHistogram(...)
+
 	void FitRunner::drawFitRatio( string ds, Fitter * fitter, int iPt ){
 
 		book->cd();
@@ -973,7 +1030,23 @@ namespace TSF{
 		// assign active players to this fit
 		fitter.addPlayers( activePlayers );
 
-		fitter.fit3( );
+		for ( int i = 0; i < 3; i ++){
+			// gets close on yield with fixed shapes
+			fitter.fit1(  );
+			// gets close on shapes with fixed yields
+			fitter.fit2(  );
+		}
+
+		// reload the datasets from the file
+		// now that we have better idea of mu, sigma ( for enhancement cuts )
+		if ( avgP < 1.0 )
+			fitter.loadDatasets(centerSpecies, iCharge, iCen, iPt, true, zbMu, zdMu );
+
+		int tries = 0;
+		while( fitter.isFitGood() == false && tries < 3 ){
+			fitter.fit3( );
+			tries ++;
+		}
 
 		// now we should compare our schema to the nominal result
 		map<string, double> deltas;

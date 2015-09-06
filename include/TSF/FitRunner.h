@@ -64,6 +64,7 @@ namespace TSF{
 		void makeHistograms();
 		void fillFitHistograms(int iPt, int iCen, int iCharge, Fitter &fitter );
 		void fillEnhancedYieldHistogram( string plc1, int iPt, int iCen, int iCharge, string plc2, Fitter &fitter );
+		void fillSystematicHistogram( string type, string plc, int iPt, int iCen, int iCharge, double sys );
 
 		void reportYields();
 		void reportFit( Fitter * fitter, int iPt );

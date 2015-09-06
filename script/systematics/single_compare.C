@@ -1,7 +1,7 @@
 
 #include "Logger.h"
 
-void singleCompare( string source1, string source2, string plc = "Pi" ){
+void single_compare( string source1, string source2, string plc = "Pi" ){
 
 	string base = "/Users/danielbrandenburg/bnl/local/data/RcpAnalysis/products/";
 	string fn1 = base + source1 + "/PostCorr_" + plc +".root";
@@ -15,7 +15,7 @@ void singleCompare( string source1, string source2, string plc = "Pi" ){
 		return;
 	}
 
-	string name = plc + "_yield/yield_" + plc + "_6_p";
+	string name = plc + "_yield/yield_" + plc + "_0_p";
 	TH1D * h1 = (TH1D*)f1->Get( name.c_str() );
 	TH1D * h2 = (TH1D*)f2->Get( name.c_str() );
 	h2->SetLineColor( kRed );

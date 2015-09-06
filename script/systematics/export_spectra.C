@@ -1,0 +1,132 @@
+#include "Logger.h"
+
+
+map< string, double> max_yield = {
+	/* Pi Plus */
+	{ "Pi_p_0", 3.5 },
+	{ "Pi_p_1", 3.5 },
+	{ "Pi_p_2", 3.5 },
+	{ "Pi_p_3", 3.5 },
+	{ "Pi_p_4", 3.5 },
+	{ "Pi_p_5", 3.5 },
+	{ "Pi_p_6", 3.5 },
+	/* Pi Minus */
+	{ "Pi_n_0", 3.0 },
+	{ "Pi_n_1", 3.0 },
+	{ "Pi_n_2", 3.0 },
+	{ "Pi_n_3", 3.0 },
+	{ "Pi_n_4", 2.9 },
+	{ "Pi_n_5", 2.8 },
+	{ "Pi_n_6", 2.8 },
+
+	/* P Plus */
+	{ "P_p_0", 3.5 },
+	{ "P_p_1", 3.5 },
+	{ "P_p_2", 3.5 },
+	{ "P_p_3", 3.5 },
+	{ "P_p_4", 3.5 },
+	{ "P_p_5", 3.5 },
+	{ "P_p_6", 3.0 },
+	/* P Minus */
+	{ "P_n_0", 3.5 },
+	{ "P_n_1", 3.5 },
+	{ "P_n_2", 3.5 },
+	{ "P_n_3", 3.5 },
+	{ "P_n_4", 3.0 },
+	{ "P_n_5", 2.8 },
+	{ "P_n_6", 2.8 },
+
+	/* K Plus */
+	{ "K_p_0", 3.5 },
+	{ "K_p_1", 3.5 },
+	{ "K_p_2", 3.0 },
+	{ "K_p_3", 3.0 },
+	{ "K_p_4", 3.0 },
+	{ "K_p_5", 3.0 },
+	{ "K_p_6", 3.0 },
+	/* K Minus */
+	{ "K_n_0", 3.5 },
+	{ "K_n_1", 3.0 },
+	{ "K_n_2", 3.0 },
+	{ "K_n_3", 3.0 },
+	{ "K_n_4", 3.0 },
+	{ "K_n_5", 3.0 },
+	{ "K_n_6", 2.4 },
+};
+
+
+vector<string> plcs 	= { "Pi", "K", "P" };
+vector<string> charges 	= { "p", "n" };
+vector<string> centralities = { "0", "1", "2", "3", "4", "5", "6" };
+
+string energy = "14.5";
+string tag = "export_spectra";
+
+
+string file_name( string source, string plc ){
+	string base ="/Users/danielbrandenburg/bnl/local/data/RcpAnalysis/products/";
+	return base + source +"/PostCorr_" + plc + ".root";
+}
+
+TH1 * yield_hist_for( string source, string plc, string charge, string iCen ){
+	string fn = file_name( source, plc );
+	TFile * f = new TFile( fn.c_str(), "READ" );
+
+	string name = plc + "_yield/yield_" + plc + "_" + iCen + "_" + charge;
+	string nname = "spectra_" + source + "_" + plc + "_" + iCen + "_" + charge;
+	TH1 * h = (TH1*)f->Get( name.c_str() )->Clone( nname.c_str() );
+	h->SetDirectory( 0 );
+
+	f->Close();	
+
+	return h;
+}
+
+
+void write_spectra( string plc, string charge, string iCen, int last_bin = -1 ){
+	INFO( tag, "(plc=" << plc << ", charge=" << charge << ", iCen=" << iCen <<", last_bin=" << last_bin <<" )" );
+
+
+	string base = "/Users/danielbrandenburg/bnl/local/data/RcpAnalysis/spectra/";
+	TH1 * h = yield_hist_for( "nominal", plc, charge, iCen );
+
+	string name = base + "spectra_" + energy + "_" + plc + "_" + charge + "_" + iCen + ".dat";
+
+	ofstream fout( name.c_str() );
+
+	fout << std::left << std::setw(20) << "pT" << std::setw(20) << "value" << std::setw(20) << "stat_unc" << std::setw(20) << "sys_unc" << endl;
+
+	for ( int i = 1; i <= h->GetNbinsX(); i++ ){
+
+		double pT = h->GetBinCenter( i );
+		if ( pT < 0.5 )
+			continue;
+		double max_pT = max_yield[ plc + "_" + charge + "_" + iCen ];
+		if ( pT > max_pT )
+			continue;
+		
+		double value = h->GetBinContent( i );
+		double stat = h->GetBinError( i );
+		double sys = value * 0.1;
+
+		fout << std::setprecision( 10 ) << std::left << std::setw(20) << pT << std::left << std::setw(20) << value << std::left << std::setw(20) << stat << std::left << std::setw(20) << sys << endl; 
+
+	}
+
+
+
+	fout.close();
+
+}
+
+void export_spectra(  ){
+	Logger::setGlobalLogLevel( Logger::llAll );
+	
+	for ( string plc : plcs ){
+		for ( string charge : charges  ){
+			for ( string iCen : centralities ){
+				write_spectra( plc, charge, iCen );			
+			}
+		}
+	}
+}
