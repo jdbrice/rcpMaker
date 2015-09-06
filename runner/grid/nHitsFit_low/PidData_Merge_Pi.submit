@@ -1,9 +1,0 @@
-########################
-# Merging
-########################
-
-Executable = /data/star/jdb12/RcpAnalysis/products/nHitsFit_low/hadder.py
-InitialDir = /data/star/jdb12/RcpAnalysis/products/nHitsFit_low/
-
-
-Arguments 	= "PostCorr_Pi_*.root" 50

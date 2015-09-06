@@ -77,6 +77,7 @@ namespace TSF{
 		void respondToStats( double avgP );
 
 		void runNominal( int iCharge, int iCen, int iPt );
+		void runSigmaSystematic( int iCharge, int iCen, int iPt );
 		map<string, double> runSystematic( shared_ptr<FitSchema>, int iCharge, int iCen, int iPt );
 
 		/* Average P in a bin range assuming a flat distribution

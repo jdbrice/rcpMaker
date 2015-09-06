@@ -449,6 +449,55 @@ namespace TSF{
 		} // pre
 	} // runNominal(...)
 
+	void FitRunner::runSigmaSystematic( int iCharge, int iCen, int iPt ){
+		// Run systematics on sigma
+		map<string, vector<double> > systematics_sigma;
+		double avgP = binAverageP( iPt );
+
+		for ( string pre : { "zb", "zd" } ){
+			for ( string plc : Common::species ){
+				INFO( tag, "Do Systematics for " << pre << "_" << plc );
+				ConfigRange &range = sigmaRanges[ pre + "_" + plc ];
+
+				if ( !range.above( avgP ) )
+					continue;
+
+				double delta = sigmaSets[ pre+"_"+plc ].std();
+				shared_ptr<FitSchema> sysSchema = prepareSystematic( pre + "_sigma", plc, delta );
+
+				map<string, double> deltas = runSystematic( sysSchema, iCharge, iCen, iPt );	
+
+				systematics_sigma[ "Pi" ].push_back( deltas[ "Pi" ] );
+				systematics_sigma[ "K" ].push_back( deltas[ "K" ] );
+				systematics_sigma[ "P" ].push_back( deltas[ "P" ] );
+			}
+		}
+
+		INFO( tag, "SYSTEMATIC from sigma" );
+		for ( auto k : systematics_sigma ){
+			INFO( tag, "Systematics for " << k.first );
+			for ( auto v : k.second ){
+				INFO( tag, "systematic = " << v );
+			}
+			vector<double> v = k.second;
+			double sum = std::accumulate(v.begin(), v.end(), 0.0);
+			double mean = sum / v.size();
+
+			double max = *std::max_element( v.begin(), v.end() );
+
+			double sq_sum = std::inner_product(v.begin(), v.end(), v.begin(), 0.0);
+			double stdev = std::sqrt(sq_sum / v.size() - mean * mean);
+
+			INFO( tag, "MAX = " << max );
+
+			fillSystematicHistogram( "sigma", k.first, iPt, iCen, iCharge, max );
+
+			INFO( tag, "AVG = " << mean );
+			INFO( tag, "STDEV = " << stdev );
+
+		} 
+	} // runSigmaSystematic(...)
+
 	void FitRunner::make(){
 
 		if ( inFile == nullptr || inFile->IsOpen() == false ){
@@ -478,32 +527,37 @@ namespace TSF{
 					FitSchema originalSchema( *schema );
 					runNominal( iCharge, iCen, iPt );
 
+					bool doSystematic = false; // TODO: config
+					if ( doSystematic )
+						runSigmaSystematic( iCharge, iCen, iPt );
 
-
-					// map<string, vector<double> > systematics_sigma;
-					// double avgP = binAverageP( iPt );
-
-					// for ( string pre : { "zb", "zd" } ){
-					// 	for ( string plc : Common::species ){
-					// 		INFO( tag, "Do Systematics for " << pre << "_" << plc );
-					// 		ConfigRange &range = sigmaRanges[ pre + "_" + plc ];
-
-					// 		if ( !range.above( avgP ) )
-					// 			continue;
-
-					// 		double delta = sigmaSets[ pre+"_"+plc ].std();
-					// 		shared_ptr<FitSchema> sysSchema = prepareSystematic( pre + "_sigma", plc, delta );
-
+					// map<string, vector<double> > systematics_toffEff;
+					// for ( string plc : {"K"} ){
+					// 	INFO( tag, "Doing TofEff Systematics for " << plc );
+						
+					// 	{ // high
+					// 		double delta = 0.10;
+					// 		shared_ptr<FitSchema> sysSchema = prepareSystematic( "eff", plc, delta );
 					// 		map<string, double> deltas = runSystematic( sysSchema, iCharge, iCen, iPt );	
 
-					// 		systematics_sigma[ "Pi" ].push_back( deltas[ "Pi" ] );
-					// 		systematics_sigma[ "K" ].push_back( deltas[ "K" ] );
-					// 		systematics_sigma[ "P" ].push_back( deltas[ "P" ] );
+					// 		systematics_toffEff[ "Pi" ].push_back( deltas[ "Pi" ] );
+					// 		systematics_toffEff[ "K" ].push_back( deltas[ "K" ] );
+					// 		systematics_toffEff[ "P" ].push_back( deltas[ "P" ] );
+					// 	}
+
+					// 	{ // low
+					// 		double delta = -0.10;
+					// 		shared_ptr<FitSchema> sysSchema = prepareSystematic( "eff", plc, delta );
+					// 		map<string, double> deltas = runSystematic( sysSchema, iCharge, iCen, iPt );	
+
+					// 		systematics_toffEff[ "Pi" ].push_back( deltas[ "Pi" ] );
+					// 		systematics_toffEff[ "K" ].push_back( deltas[ "K" ] );
+					// 		systematics_toffEff[ "P" ].push_back( deltas[ "P" ] );
 					// 	}
 					// }
 
-					// INFO( tag, "SYSTEMATIC from sigma" );
-					// for ( auto k : systematics_sigma ){
+					// INFO( tag, "SYSTEMATIC from TofEff" );
+					// for ( auto k : systematics_toffEff ){
 					// 	INFO( tag, "Systematics for " << k.first );
 					// 	for ( auto v : k.second ){
 					// 		INFO( tag, "systematic = " << v );
@@ -519,61 +573,11 @@ namespace TSF{
 
 					// 	INFO( tag, "MAX = " << max );
 
-					// 	fillSystematicHistogram( "sigma", k.first, iPt, iCen, iCharge, max );
+					// 	fillSystematicHistogram( "tofEff", k.first, iPt, iCen, iCharge, max );
 
 					// 	INFO( tag, "AVG = " << mean );
 					// 	INFO( tag, "STDEV = " << stdev );
-
 					// } 
-
-					map<string, vector<double> > systematics_toffEff;
-					for ( string plc : {"K"} ){
-						INFO( tag, "Doing TofEff Systematics for " << plc );
-						
-						{ // high
-							double delta = 0.10;
-							shared_ptr<FitSchema> sysSchema = prepareSystematic( "eff", plc, delta );
-							map<string, double> deltas = runSystematic( sysSchema, iCharge, iCen, iPt );	
-
-							systematics_toffEff[ "Pi" ].push_back( deltas[ "Pi" ] );
-							systematics_toffEff[ "K" ].push_back( deltas[ "K" ] );
-							systematics_toffEff[ "P" ].push_back( deltas[ "P" ] );
-						}
-
-						{ // low
-							double delta = -0.10;
-							shared_ptr<FitSchema> sysSchema = prepareSystematic( "eff", plc, delta );
-							map<string, double> deltas = runSystematic( sysSchema, iCharge, iCen, iPt );	
-
-							systematics_toffEff[ "Pi" ].push_back( deltas[ "Pi" ] );
-							systematics_toffEff[ "K" ].push_back( deltas[ "K" ] );
-							systematics_toffEff[ "P" ].push_back( deltas[ "P" ] );
-						}
-					}
-
-					INFO( tag, "SYSTEMATIC from TofEff" );
-					for ( auto k : systematics_toffEff ){
-						INFO( tag, "Systematics for " << k.first );
-						for ( auto v : k.second ){
-							INFO( tag, "systematic = " << v );
-						}
-						vector<double> v = k.second;
-						double sum = std::accumulate(v.begin(), v.end(), 0.0);
-						double mean = sum / v.size();
-
-						double max = *std::max_element( v.begin(), v.end() );
-
-						double sq_sum = std::inner_product(v.begin(), v.end(), v.begin(), 0.0);
-						double stdev = std::sqrt(sq_sum / v.size() - mean * mean);
-
-						INFO( tag, "MAX = " << max );
-
-						fillSystematicHistogram( "tofEff", k.first, iPt, iCen, iCharge, max );
-
-						INFO( tag, "AVG = " << mean );
-						INFO( tag, "STDEV = " << stdev );
-
-					} 
 					
 
 					
