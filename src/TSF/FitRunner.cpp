@@ -471,26 +471,62 @@ namespace TSF{
 
 
 
-					// map<string, vector<double> > systematics;
-					// double avgP = binAverageP( iPt );
-					// for ( string pre : { "zb", "zd" } ){
-					// 	for ( string plc : Common::species ){
-					// 		INFO( tag, "Do Systematics for " << pre << "_" << plc );
-					// 		ConfigRange &range = sigmaRanges[ pre + "_" + plc ];
+					map<string, vector<double> > systematics;
+					double avgP = binAverageP( iPt );
 
-					// 		if ( !range.above( avgP ) )
-					// 			continue;
+					for ( string pre : { "zb", "zd" } ){
+						for ( string plc : Common::species ){
+							INFO( tag, "Do Systematics for " << pre << "_" << plc );
+							ConfigRange &range = sigmaRanges[ pre + "_" + plc ];
 
-					// 		double delta = sigmaSets[ pre+"_"+plc ].std();
-					// 		shared_ptr<FitSchema> sysSchema = prepareSystematic( pre + "_sigma", plc, delta );
+							if ( !range.above( avgP ) )
+								continue;
 
+							double delta = sigmaSets[ pre+"_"+plc ].std();
+							shared_ptr<FitSchema> sysSchema = prepareSystematic( pre + "_sigma", plc, delta );
+
+							map<string, double> deltas = runSystematic( sysSchema, iCharge, iCen, iPt );	
+
+							systematics[ "Pi" ].push_back( deltas[ "Pi" ] );
+							systematics[ "K" ].push_back( deltas[ "K" ] );
+							systematics[ "P" ].push_back( deltas[ "P" ] );
+						}
+					}
+
+
+					// for ( string plc : {"K"} ){
+					// 	INFO( tag, "Doing TofEff Systematics for " << plc );
+						
+					// 	{ // high
+					// 		double delta = 0.10;
+					// 		shared_ptr<FitSchema> sysSchema = prepareSystematic( "eff", plc, delta );
 					// 		map<string, double> deltas = runSystematic( sysSchema, iCharge, iCen, iPt );	
 
 					// 		systematics[ "Pi" ].push_back( deltas[ "Pi" ] );
 					// 		systematics[ "K" ].push_back( deltas[ "K" ] );
 					// 		systematics[ "P" ].push_back( deltas[ "P" ] );
 					// 	}
+
+					// 	{ // low
+					// 		double delta = -0.10;
+					// 		shared_ptr<FitSchema> sysSchema = prepareSystematic( "eff", plc, delta );
+					// 		map<string, double> deltas = runSystematic( sysSchema, iCharge, iCen, iPt );	
+
+					// 		systematics[ "Pi" ].push_back( deltas[ "Pi" ] );
+					// 		systematics[ "K" ].push_back( deltas[ "K" ] );
+					// 		systematics[ "P" ].push_back( deltas[ "P" ] );
+					// 	}
+
+			
 					// }
+					
+
+					for ( auto k : systematics ){
+						INFO( tag, "Systematics for " << k.first );
+						for ( auto v : k.second ){
+							INFO( tag, "systematic = " << v );
+						}
+					} 
 
 					// do something with them now
 					

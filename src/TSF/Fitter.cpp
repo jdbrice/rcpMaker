@@ -375,12 +375,9 @@ namespace TSF{
 		INFO( tag, "BEFORE" );
 		reportFitStatus();
 
-		schema->setMethod( "chi2" );
-		schema->setExtended( true );
-
-		fixShapes( );
-		fix( "eff" );
-		release( "yield_" + plc );
+		schema->setMethod( "poisson" );
+		
+		release( "eff_", false );
 			minuit->mnexcm( "MINI", arglist, 1, iFlag );
 			minuit->mnexcm( "MINI", arglist, 1, iFlag );
 			status = minuit->fCstatu;
