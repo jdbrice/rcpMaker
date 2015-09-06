@@ -30,7 +30,7 @@ def write_conf(  output_path, config_path ="./" ) :
 
 
 		<!-- Include the corrections files -->
-		<FeedDown systematic="0" >
+		<FeedDown systematic="0" bin="0">
 			<Include url="../Params/FeedDown.xml" />
 		</FeedDown>
 		<TpcEff>

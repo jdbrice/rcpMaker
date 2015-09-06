@@ -13,11 +13,17 @@ ApplyPostCorr::ApplyPostCorr( XmlConfig * _cfg, string _nodePath ) : HistoAnalyz
 	}
 
 
+
+
 }
 
 void ApplyPostCorr::setupCorrections(){
 	INFO("")
-	vector<string> cfgPaths = { "FeedDown", "TpcEff", "TofEff" };
+	// Efficiency corrector
+	sc = unique_ptr<SpectraCorrecter>( new SpectraCorrecter( cfg, nodePath ) ); 
+
+
+	vector<string> cfgPaths = { "TofEff" };
 
 	for ( string cPath : cfgPaths ){
 		for ( string plc : Common::species ){
@@ -30,8 +36,8 @@ void ApplyPostCorr::setupCorrections(){
 						if ( cb != cfg->getInt( path + ":bin" ) )
 							ERROR( "Centrality Bin Mismatch" )
 
-						if ( "FeedDown" == cPath )
-							feedDown[ plc + "_" + c + "_" + ts(cb) ] = unique_ptr<ConfigFunction>( new ConfigFunction( cfg, path ) );
+						// if ( "FeedDown" == cPath )
+						// 	feedDown[ plc + "_" + c + "_" + ts(cb) ] = unique_ptr<ConfigFunction>( new ConfigFunction( cfg, path ) );
 						// if ( "TpcEff" == cPath )
 						// 	tpcEff[ plc + "_" + c + "_" + ts(cb) ] = unique_ptr<ConfigFunction>( new ConfigFunction( cfg, path ) );
 						if ( "TofEff" == cPath )
@@ -56,6 +62,9 @@ void ApplyPostCorr::make(){
 		ERROR( "InFile is invalid" )
 		return;
 	}
+
+	double feedDownSysNSigma = cfg->getDouble( nodePath + "FeedDown:systematic", 0 );
+	INFO( "ApplyPostCorr", "FeedDown Systematic " << feedDownSysNSigma << " sigma" );
 
 	for ( int cg : Common::charges ){
 		for ( int cb : cfg->getIntVector( nodePath + "CentralityBins" ) ){
@@ -120,32 +129,30 @@ void ApplyPostCorr::make(){
 				// apply Tof Eff
 				if ( tofEff.count( param ) >= 1 ){
 					
-					double weight = 1.0 / tofEff[ param ]->eval( bCen );
+					double weight = 1.0 / tofEff[ param ]->eval( bCen, "closest" );
 					fc = fc * ( weight );
 
-					book->setBin( "effTof_" + cyn, iB, tofEff[ param ]->eval( bCen ), 0 );
+					book->setBin( "effTof_" + cyn, iB, tofEff[ param ]->eval( bCen, "closest" ), 0 );
 					INFO( "tofEff weight = " << weight )
 					book->setBinContent( "tof_" + cyn, iB, bCon * ( weight ) );
 				} else {
 					ERROR( "Cannot find tofEff[ " << param << " ] "  )
 				}
+				
 
 
 
 				// Feed down
 				if ( "K" != plc ) {
-					if ( tofEff.count( param ) >= 1 ){
-						
-						double weight = 1.0 - feedDown[ param ]->eval( bCen );
-						fc = fc * ( weight );
+							
+					double weight = sc->feedDownWeight( plc, bCen, cb, cg, feedDownSysNSigma );
+					fc = fc * ( weight );
 
-						book->setBin( "fdCorr_" + cyn, iB, feedDown[ param ]->eval( bCen ), 0 );
-						INFO( "feedDown weight = " << weight )
-						
-						book->setBinContent( "fd_" + cyn, iB, bCon * ( weight ) );
-					} else {
-						ERROR( "Cannot find feedDown[ " << param << " ] "  )
-					}
+					book->setBin( "fdCorr_" + cyn, iB, weight, 0 );
+					INFO( "feedDown weight = " << weight )
+					
+					book->setBinContent( "fd_" + cyn, iB, bCon * ( weight ) );
+					
 				}
 
 
