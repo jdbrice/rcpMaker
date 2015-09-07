@@ -190,17 +190,14 @@ namespace TSF{
 
 			if ( 0 >= zbDeltaMu ) // only used for testing
 				schema->fixParameter( "zb_mu_"+plc, zbMu );
-			else	// actual default for running
+			else if ( !sigmaRanges[ "zb_" + plc ].above( avgP ) )	// actual default for running
 				schema->setInitialMu( "zb_mu_"+plc, zbMu, zbSig, 5.0 );
 
 			if ( sigmaRanges[ "zb_" + plc ].above( avgP ) ){	
 				
 				double hm = sigmaSets[ "zb_" + plc ].mean();
 
-				if ( 0 >= zbDeltaMu )
-					schema->fixParameter( "zb_mu_"+plc, zbMu );
-				else
-					schema->setInitialMu( "zb_mu_"+plc, zbMu, hm, zbDeltaMu );
+				schema->setInitialMuLimits( "zb_mu_"+plc, zbMu, hm, zbDeltaMu );
 
 				INFO( tag, "Fixing zb_sigma_" << plc << " to " << sigmaSets[ "zb_" + plc ].mean() )
 				//schema->setInitialSigma( "zb_sigma_"+plc, hm, hm, hm );
@@ -210,7 +207,7 @@ namespace TSF{
 			// default low pt settings for zd
 			if ( 0 >= zdDeltaMu ) // for testing
 				schema->fixParameter( "zd_mu_"+plc, zdMu );
-			else
+			else if ( !sigmaRanges[ "zd_" + plc ].above( avgP ) )
 				schema->setInitialMu( "zd_mu_"+plc, zdMu, zdSig, 5.0 );
 
 			schema->setInitialSigma( "zd_sigma_"+plc, zdSig, 0.04, 0.24);
@@ -218,13 +215,8 @@ namespace TSF{
 			if ( sigmaRanges[ "zd_" + plc ].above( avgP ) ){	
 				
 				double hm = sigmaSets[ "zd_" + plc ].mean();
-
-				if ( 0 >= zdDeltaMu )
-					schema->fixParameter( "zd_mu_"+plc, zdMu );
-				else
-					schema->setInitialMu( "zd_mu_"+plc, zdMu, hm, zdDeltaMu);
 				schema->setInitialSigma( "zd_sigma_"+plc, hm, hm - 0.002, hm + 0.002  );
-				// schema->fixParameter( "zd_sigma_"+plc, hm  );
+				schema->setInitialMuLimits( "zd_mu_"+plc, zdMu, hm, zbDeltaMu );
 			}
 				
 				
@@ -679,8 +671,8 @@ namespace TSF{
 
 					reportYields();
 
-					if ( doSystematic )
-						runTofEffSystematic( iCharge, iCen, iPt );
+					// if ( doSystematic )
+					// 	runTofEffSystematic( iCharge, iCen, iPt );
 					
 						
 

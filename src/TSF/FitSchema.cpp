@@ -149,6 +149,23 @@ namespace TSF{
 		INFO( tag,  vars[ var ]->toString() )
 	}
 
+	void FitSchema::setInitialMuLimits( string var, double _mu, double _sigma, double _dmu ){
+		if ( !exists( var ) ){
+			WARN( tag, var << " DNE" )
+			return;
+		}
+
+		if ( 0 == _sigma || 0 == _dmu ){ // unconstrained
+			vars[ var ]->min = 0;
+			vars[ var ]->max = 0;
+		} else{ // set the range
+			vars[ var ]->min = _mu - _sigma * _dmu;
+			vars[ var ]->max = _mu + _sigma * _dmu;
+		}
+
+		INFO( tag,  vars[ var ]->toString() )
+	}
+
 	/**
 	 * Sets the inital value of the sigma parameter
 	 * @var   	the string name of the parameter
