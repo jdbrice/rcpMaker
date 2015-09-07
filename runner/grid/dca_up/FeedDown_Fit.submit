@@ -5,6 +5,6 @@
 Executable = /home/jdb12/work/rcpMaker/runner/rcp
 Initialdir = /home/jdb12/work/rcpMaker/runner/
 
-Arguments 	= /data/star/jdb12/RcpAnalysis/config/template/FeedDown/fit.xml
-Output 	 	= /data/star/jdb12/RcpAnalysis/config/template/FeedDown/fit.xml.log
+Arguments 	= /data/star/jdb12/RcpAnalysis/config/dca_up/FeedDown/fit.xml
+Output 	 	= /data/star/jdb12/RcpAnalysis/config/dca_up/FeedDown/fit.xml.log
 Queue

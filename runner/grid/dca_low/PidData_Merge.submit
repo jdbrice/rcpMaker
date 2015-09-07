@@ -4,7 +4,7 @@
 
 Getenv = True
 Executable = /home/jdb12/work/rcpMaker/runner/hadder.py
-Initialdir = /data/star/jdb12/RcpAnalysis/products/template/
+Initialdir = /data/star/jdb12/RcpAnalysis/products/dca_low/
 
 Arguments = PostCorr_K_a*.root 50 PidData_PostCorr_K.root
 output = PidData_PostCorr_K_merge.log

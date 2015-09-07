@@ -4,7 +4,7 @@
 
 Getenv = True
 Executable = /home/jdb12/work/rcpMaker/runner/hadder.py
-Initialdir = /data/star/jdb12/RcpAnalysis/products/template/
+Initialdir = /data/star/jdb12/RcpAnalysis/products/dca_low/
 
 Arguments = TofEff_K_a*.root 50 TofEff_K.root
 output = TofEff_K_merge.log
