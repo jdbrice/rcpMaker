@@ -1,6 +1,25 @@
 
 #include "Logger.h"
 
+
+string file_name( string source, string plc ){
+	string base = "/Users/danielbrandenburg/bnl/local/data/RcpAnalysis/products/";
+	return base + source + "/PostCorr_" + plc +".root";
+}
+
+
+TH1 * yield_hist_for( string source, string plc, string charge, string iCen ){
+
+	string name = plc + "_yield/yield_" + plc + "_" + iCen + "_" + charge;
+	TFile * f = new TFile( file_name( source, plc ).c_str(), "READ" );
+
+	TH1 * h = (TH1*) f->Get( name.c_str() );
+	h->SetDirectory( 0 );
+
+	return h;
+}
+
+
 void single_compare( string source1, string source2, string plc = "Pi" ){
 
 	string base = "/Users/danielbrandenburg/bnl/local/data/RcpAnalysis/products/";
