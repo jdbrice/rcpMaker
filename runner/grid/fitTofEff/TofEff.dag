@@ -1,0 +1,12 @@
+####################
+# Tof Eff DAG
+####################
+
+JOB A TofEff_K.submit
+JOB B TofEff_Pi.submit
+JOB C TofEff_P.submit
+JOB D TofEff_Merge.submit
+JOB E TofEff_Fit.submit
+
+PARENT A B C CHILD D
+PARENT D CHILD E
