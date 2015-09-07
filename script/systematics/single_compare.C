@@ -8,13 +8,21 @@ string file_name( string source, string plc ){
 }
 
 
-TH1 * yield_hist_for( string source, string plc, string charge, string iCen ){
-
+TH1 * yield_hist_for( string source, string plc, string charge, string iCen, string rndm = "" ){
+	
+	string fn = file_name( source, plc );
+	TRACE( "Loading from " << fn );
 	string name = plc + "_yield/yield_" + plc + "_" + iCen + "_" + charge;
-	TFile * f = new TFile( file_name( source, plc ).c_str(), "READ" );
+	TFile * f = new TFile( fn.c_str(), "READ" );
 
 	TH1 * h = (TH1*) f->Get( name.c_str() );
+	TRACE( "Hist = " << h );
+	if ( !h ){
+		return new TH1D( "err", "err", 100, 0, 1 );
+	}
+
 	h->SetDirectory( 0 );
+	f->Close();
 
 	return h;
 }

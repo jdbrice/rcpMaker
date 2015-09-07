@@ -122,7 +122,7 @@ void export_spectra(  ){
 	Logger::setGlobalLogLevel( Logger::llAll );
 	
 	// first calculate the cov matrix for our cut variables
-	vector<string> sources = { "yLocal_left", "zLocal_right", "dca_low", "nHitsFit_low", "nHitsDedx_low", "nHitsRatio_low" };
+	vector<string> sources = { "yLocal_left", "zLocal_right", "dca_low", "nHitsFit_low", "nHitsDedx_low", "nHitsRatio_low", "tpcEff_low" };
 	vector<string> source_vars = { "yLocal", "zLocal", "dca", "nHitsFit", "nHitsDedx", "nHitsPossible" };
 
 	TMatrixD cut_cov = cov_matrix( source_vars, "matchFlag>=1" );
@@ -132,9 +132,7 @@ void export_spectra(  ){
 		INFO( "w[" << source_vars[ i ] << "] = " << weights[ i ] );
 	}	
 
-	cout << "total_sys = " << total_systematics( 12, weights, sources );
-
-	return;
+	weights.push_back( 1.0 );
 
 	for ( string plc : plcs ){
 		for ( string charge : charges  ){

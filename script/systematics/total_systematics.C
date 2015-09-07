@@ -4,14 +4,6 @@
 
 double total_systematics( int iPt, vector<double> &weights, vector<string> &sources, string plc ="Pi", string charge="p", string iCen="0" ){
 
-
-	// vector<string> sources = { "yLocal_left", "zLocal_right", "dca_low", "nHitsFit_low", "nHitsDedx_low", "nHitsRatio_low" };
-	// vector<string> source_vars = { "yLocal", "zLocal", "dca", "nHitsFit", "nHitsDedx", "nHitsPossible" };
-	
-	// Unit Test - Passes 
-	// vector<string> sources = { "nHitsFit_low", "nHitsFit_low" };
-	// vector<string> source_vars = { "nHitsFit", "nHitsFit" };
-
 	vector<double> sigma;
 	vector<double> sigmaNW;
 
@@ -23,10 +15,15 @@ double total_systematics( int iPt, vector<double> &weights, vector<string> &sour
 	int i = 0;
 	for ( string source : sources ){
 
+		TRACE( "getting hist for " << source  );
 		TH1 * h = yield_hist_for( source, plc, charge, iCen );
 		TRACE( "" << source << "Yield = " << h->GetBinContent( iPt ) );
 
 		double delta = nominal->GetBinContent( iPt ) - h->GetBinContent( iPt );
+		
+		// is it consistent with zero?
+		if ( nominal->GetBinError( iPt ) + h->GetBinError( iPt ) > delta )
+				delta = 0.0;
 		TRACE( "\t\tRealtive = " << delta / yNominal );
 
 		TRACE( "\t\tDelta = " << delta );
