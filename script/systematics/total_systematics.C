@@ -1,10 +1,11 @@
 #include "single_compare.C"
 
-vector<string> sources = { "yLocal_left", "zLocal_right", "dca_low", "nHitsFit_low" };
+
 
 double total_systematics( int iPt, string plc ="Pi", string charge="p", string iCen="0" ){
 	Logger::setGlobalLogLevel( Logger::llAll );
 
+	vector<string> sources = { "yLocal_left", "zLocal_right", "dca_low", "nHitsFit_low", "nHitsDedx_low", "nHitsRatio_low" };
 
 	vector<double> sigma;
 
@@ -16,11 +17,12 @@ double total_systematics( int iPt, string plc ="Pi", string charge="p", string i
 	for ( string source : sources ){
 
 		TH1 * h = yield_hist_for( source, plc, charge, iCen );
-		INFO( source << " Yield = " << h->GetBinContent( iPt + 1 ) );
+		INFO( "" << source << "Yield = " << h->GetBinContent( iPt + 1 ) );
 
 		double delta = nominal->GetBinContent( iPt + 1 ) - h->GetBinContent( iPt + 1 );
+		INFO( "\t\tRealtive = " << delta / yNominal );
 
-		INFO( "Delta = " << delta );
+		INFO( "\t\tDelta = " << delta );
 		sigma.push_back( delta );
 
 	}
@@ -32,7 +34,7 @@ double total_systematics( int iPt, string plc ="Pi", string charge="p", string i
 	}
 	double total = sqrt( total_sqr );
 
-	INFO( "Realtive = " << total / yNominal );
+	INFO( "Total Realtive = " << total / yNominal );
 
 	return total;
 }

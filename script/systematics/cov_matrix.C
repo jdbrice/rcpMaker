@@ -2,9 +2,9 @@
 #include "Reporter.h"
 #include "RooPlotLib.h"
 
-map< string, double> cov_matrix( vector<string> sources ){
+map< string, double> cov_matrix( vector<string> sources, string cut ){
 
-	Reporter rp( "rp_cov_matrix.pdf" );
+	Reporter rp( "rp_cov_matrix.pdf", 600, 600 );
 	RooPlotLib rpl;
 
 	TChain * c = new TChain( "rcpPicoDst" );
@@ -16,7 +16,7 @@ map< string, double> cov_matrix( vector<string> sources ){
 	map< string, double > sigma;
 
 	for ( string source : sources ){
-		c->Draw( (source + " >> h_" + source).c_str() );
+		c->Draw( (source + " >> h_" + source).c_str(), cut.c_str() );
 		hSource[ source ] = (TH1*) gDirectory->Get( ("h_" + source ).c_str() );
 
 		mu[ source ] = hSource[ source ]->GetMean();
@@ -44,7 +44,7 @@ map< string, double> cov_matrix( vector<string> sources ){
 				break;
 
 			string expr = "( " + source1 + " - " + dts( mu[source1] ) + " ) * ( " + source2 + " - " + dts( mu[source2] ) + " ) / ( " + dts( sigma[source1] * sigma[source2] ) + " ) >> h_" + source1 + "_" + source2 ;
-			c->Draw( expr.c_str() );
+			c->Draw( expr.c_str(), cut.c_str() );
 
 			string pName = source1+"_"+source2;
 			pairs[ pName ] = (TH1*)gDirectory->Get( ("h_" + source1 + "_" + source2).c_str() );

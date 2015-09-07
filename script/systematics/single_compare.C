@@ -20,7 +20,7 @@ TH1 * yield_hist_for( string source, string plc, string charge, string iCen ){
 }
 
 
-void single_compare( string source1, string source2, string plc = "Pi" ){
+void single_compare( string source2, string source1 = "nominal", string plc = "Pi" ){
 
 	string base = "/Users/danielbrandenburg/bnl/local/data/RcpAnalysis/products/";
 	string fn1 = base + source1 + "/PostCorr_" + plc +".root";
