@@ -72,7 +72,7 @@ def write_conf(  output_path, config_path ="./" ) :
 
 		<DataPurity nSigmaPi="3.0" nSigmaK="3.0" nSigmaE="3.0" nSigmaAboveP="3.0" />
 
-		<Include url="../common/fitSchema_eff_1.xml" />
+		<Include url="../common/fitSchema_eff.xml" />
 
 		<histograms>
 			<Histo name="yield" title="yield" xBins="binning.pt" />
