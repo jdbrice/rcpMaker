@@ -311,8 +311,8 @@ namespace TSF{
 						schema->addRange( "zd_" + plc, zdMu2 - zdSig2 * roi, zdMu2 + zdSig2 * roi, "zd_mu_" + plc2, "zd_sigma_" + plc2, roi );
 
 					if ( firstTimeIncluded && plc != plc2 ){
-						schema->var( var )->val = 0.75;
-						schema->var( var )->error = 0.1;
+						schema->var( var )->val = 0.01;
+						schema->var( var )->error = 0.001;
 					}
 					// TODO: initial yield?
 					// schema->var( var )->val = 0.00001;
@@ -359,8 +359,8 @@ namespace TSF{
 						schema->addRange( "zb_" + plc, zbMu2 - zbSig2 * roi, zbMu2 + zbSig2 * roi, "zb_mu_" + plc2, "zb_sigma_" + plc2, roi );
 
 					if ( firstTimeIncluded && plc != plc2){
-						schema->var( var )->val = 0.75;
-						schema->var( var )->error = 0.1;
+						schema->var( var )->val = 0.01;
+						schema->var( var )->error = 0.001;
 					}
 					// TODO: initial yield?
 					// schema->var( var )->val = 0.01;
@@ -384,9 +384,6 @@ namespace TSF{
 				for ( string pplc : Common::species ){
 					schema->var( pre + pplc + "_yield_" + plc )->min = 0;
 					schema->var( pre + pplc + "_yield_" + plc )->max = schema->getNormalization() * 2;
-
-					if ( pplc != plc )
-						schema->var( pre + pplc + "_yield_" + plc )->val = 0;
 				}
 			}
 
