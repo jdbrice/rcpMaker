@@ -1,5 +1,5 @@
 #include "Logger.h"
-
+#include "total_systematics.C"
 
 map< string, double> max_yield = {
 	/* Pi Plus */
@@ -63,29 +63,28 @@ string energy = "14.5";
 string tag = "export_spectra";
 
 
-string file_name( string source, string plc ){
-	string base ="/Users/danielbrandenburg/bnl/local/data/RcpAnalysis/products/";
-	return base + source +"/PostCorr_" + plc + ".root";
-}
+// string file_name( string source, string plc ){
+// 	string base ="/Users/danielbrandenburg/bnl/local/data/RcpAnalysis/products/";
+// 	return base + source +"/PostCorr_" + plc + ".root";
+// }
 
-TH1 * yield_hist_for( string source, string plc, string charge, string iCen ){
-	string fn = file_name( source, plc );
-	TFile * f = new TFile( fn.c_str(), "READ" );
+// TH1 * yield_hist_for( string source, string plc, string charge, string iCen ){
+// 	string fn = file_name( source, plc );
+// 	TFile * f = new TFile( fn.c_str(), "READ" );
 
-	string name = plc + "_yield/yield_" + plc + "_" + iCen + "_" + charge;
-	string nname = "spectra_" + source + "_" + plc + "_" + iCen + "_" + charge;
-	TH1 * h = (TH1*)f->Get( name.c_str() )->Clone( nname.c_str() );
-	h->SetDirectory( 0 );
+// 	string name = plc + "_yield/yield_" + plc + "_" + iCen + "_" + charge;
+// 	string nname = "spectra_" + source + "_" + plc + "_" + iCen + "_" + charge;
+// 	TH1 * h = (TH1*)f->Get( name.c_str() )->Clone( nname.c_str() );
+// 	h->SetDirectory( 0 );
 
-	f->Close();	
+// 	f->Close();	
 
-	return h;
-}
+// 	return h;
+// }
 
 
-void write_spectra( string plc, string charge, string iCen, int last_bin = -1 ){
-	INFO( tag, "(plc=" << plc << ", charge=" << charge << ", iCen=" << iCen <<", last_bin=" << last_bin <<" )" );
-
+void write_spectra( string plc, string charge, string iCen, vector<string> &sources, vector<double> &weights ){
+	INFO( tag, "(plc=" << plc << ", charge=" << charge << ", iCen=" << iCen <<" )" );
 
 	string base = "/Users/danielbrandenburg/bnl/local/data/RcpAnalysis/spectra/";
 	TH1 * h = yield_hist_for( "nominal", plc, charge, iCen );
@@ -107,7 +106,7 @@ void write_spectra( string plc, string charge, string iCen, int last_bin = -1 ){
 		
 		double value = h->GetBinContent( i );
 		double stat = h->GetBinError( i );
-		double sys = value * 0.1;
+		double sys = total_systematics( i, weights, sources, plc, charge, iCen );
 
 		fout << std::setprecision( 10 ) << std::left << std::setw(20) << pT << std::left << std::setw(20) << value << std::left << std::setw(20) << stat << std::left << std::setw(20) << sys << endl; 
 
@@ -122,10 +121,25 @@ void write_spectra( string plc, string charge, string iCen, int last_bin = -1 ){
 void export_spectra(  ){
 	Logger::setGlobalLogLevel( Logger::llAll );
 	
+	// first calculate the cov matrix for our cut variables
+	vector<string> sources = { "yLocal_left", "zLocal_right", "dca_low", "nHitsFit_low", "nHitsDedx_low", "nHitsRatio_low" };
+	vector<string> source_vars = { "yLocal", "zLocal", "dca", "nHitsFit", "nHitsDedx", "nHitsPossible" };
+
+	TMatrixD cut_cov = cov_matrix( source_vars, "matchFlag>=1" );
+	vector<double> weights;
+	for ( int i = 0; i < source_vars.size(); i++ ){
+		weights.push_back( error_weight( cut_cov, i ) );
+		INFO( "w[" << source_vars[ i ] << "] = " << weights[ i ] );
+	}	
+
+	cout << "total_sys = " << total_systematics( 12, weights, sources );
+
+	return;
+
 	for ( string plc : plcs ){
 		for ( string charge : charges  ){
 			for ( string iCen : centralities ){
-				write_spectra( plc, charge, iCen );			
+				write_spectra( plc, charge, iCen, sources, weights );			
 			}
 		}
 	}
