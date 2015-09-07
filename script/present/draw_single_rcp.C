@@ -1,9 +1,11 @@
 #include "draw_single_spectra.C"
+#include "RooPlotLib.h"
 
-
-void draw_single_rcp(string energy, string plc, string charge, string iCen, string iPer,
+TH1* draw_single_rcp(string energy, string plc, string charge, string iCen = "0", string iPer = "6",
 							double cen_nColl = 800.0, double per_nColl = 20.0, 
 							int color = kRed, string draw_opt = ""){
+
+	RooPlotLib rpl;
 
 	gStyle->SetOptStat( 0 );
 
@@ -21,6 +23,8 @@ void draw_single_rcp(string energy, string plc, string charge, string iCen, stri
 
 	TH1* cen_stat_rcp = (TH1*)cen_stat->Clone( (cen_fn + "_cen_stat_rcp").c_str() );
 	TH1* cen_sys_rcp = (TH1*)cen_sys->Clone( (cen_fn + "_cen_sys_rcp").c_str() );
+
+	rpl.style( cen_sys_rcp ).set( "title", " ;pT [GeV/c]" );
 
 	cen_stat_rcp->Divide( per_stat );
 	cen_stat_rcp->Scale( per_nColl / cen_nColl );
@@ -42,5 +46,8 @@ void draw_single_rcp(string energy, string plc, string charge, string iCen, stri
 	cen_sys_rcp->GetYaxis()->SetRangeUser( 0.15, 5 );
 	gPad->SetLogy(1);
 	gPad->SetGrid( 1, 1 );
+
+
+	return cen_sys_rcp;
 
 }

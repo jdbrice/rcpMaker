@@ -122,18 +122,31 @@ void export_spectra(  ){
 	Logger::setGlobalLogLevel( Logger::llAll );
 	
 	// first calculate the cov matrix for our cut variables
-	vector<string> sources = { "yLocal_left", "zLocal_right", "dca_low", "nHitsFit_low", "nHitsDedx_low", "nHitsRatio_low", "tpcEff_low" };
-	vector<string> source_vars = { "yLocal", "zLocal", "dca", "nHitsFit", "nHitsDedx", "nHitsPossible" };
+	vector<string> sources = { "zLocal_right", "dca_low", "nHitsFit_low", "nHitsDedx_low", "nHitsRatio_low", "tpcEff_low" };
+	vector<string> source_vars = { "zLocal", "dca", "nHitsFit", "nHitsDedx", "nHitsPossible" };
 
 	TMatrixD cut_cov = cov_matrix( source_vars, "matchFlag>=1" );
 	vector<double> weights;
 	for ( int i = 0; i < source_vars.size(); i++ ){
 		weights.push_back( error_weight( cut_cov, i ) );
+		// weights.push_back( 1.0 );
 		INFO( "w[" << source_vars[ i ] << "] = " << weights[ i ] );
 	}	
 
 	weights.push_back( 1.0 );
 
+	// cout << "11 = " << total_systematics( 11, weights, sources, "Pi", "p", "0" ) << endl;
+	// cout << "12 = " << total_systematics( 12, weights, sources, "Pi", "p", "0" ) << endl;
+	// total_systematics( 32, weights, sources, "Pi", "p", "0" );
+	// cout << "14 = " << total_systematics( 14, weights, sources, "Pi", "p", "0" ) << endl;
+	// cout << "15 = " << total_systematics( 15, weights, sources, "Pi", "p", "0" ) << endl;
+	// cout << "16 = " << total_systematics( 16, weights, sources, "Pi", "p", "0" ) << endl;
+
+
+	// return;
+
+	Logger::setGlobalColor( true );
+	Logger::setGlobalLogLevel( Logger::llWarn );
 	for ( string plc : plcs ){
 		for ( string charge : charges  ){
 			for ( string iCen : centralities ){

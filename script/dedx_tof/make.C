@@ -58,6 +58,8 @@ void make( string charge = "p", bool lines = true, int iCen = 0, string cs = "Pi
 
 	Bichsel bgen;
 	gStyle->SetPadLeftMargin(0.16);
+	gStyle->SetPadBottomMargin(0.12);
+	gStyle->SetPadRightMargin(0.12);
 
 	set_plot_style();
 
@@ -70,7 +72,7 @@ void make( string charge = "p", bool lines = true, int iCen = 0, string cs = "Pi
 	if ( "n" == charge )
 		chargeName = "Negative Tracks : ";
 
-	Reporter rp( rpName, 800, 800 );
+	Reporter rp( rpName, 1000, 800 );
 
 	TFile * f = new TFile( hFile.c_str(), "READ" );
 
@@ -101,7 +103,7 @@ void make( string charge = "p", bool lines = true, int iCen = 0, string cs = "Pi
 		  
 
 		rpl.style( h2 ).set( "draw", "colz" ).set( "optstat", 0 ).set( "logz", 1 )
-		.set( "title", chargeName + dts(lpT) + " < pT < " + dts(hpT) ).set( "yoffset", 0.01 ).draw(); 
+		.set( "title", chargeName + dts(lpT) + " < pT < " + dts(hpT) +"; ln(dE/dx) - ln(dE/dx)_{#pi}; #beta^{-1} - #beta^{-1}_{#pi}" ).set( "yoffset", 0.01 ).draw(); 
 
 		if ( lines  ){
 			double bKaon = one_beta( mK, avgP ) - one_beta( mPi, avgP );
@@ -120,12 +122,12 @@ void make( string charge = "p", bool lines = true, int iCen = 0, string cs = "Pi
 			drawTpcLines( dProton, kBlack, y1, y2);
 		}
 
-		double dElec = bgen.meanLog( avgP, mE, -1, 1000 ) - bgen.meanLog( avgP, mPi, -1, 1000 );
-		double bElec = one_beta( mE, avgP ) - one_beta( mPi, avgP );
-		//drawTpcLines( dMerged, kBlack, y1, y2);
-		TEllipse * ell = new TEllipse( dElec,bElec, sigTpc * 3, sigTof * 3 );
-		ell->SetFillColorAlpha( kBlack, 0 );
-		ell->Draw();
+		// double dElec = bgen.meanLog( avgP, mE, -1, 1000 ) - bgen.meanLog( avgP, mPi, -1, 1000 );
+		// double bElec = one_beta( mE, avgP ) - one_beta( mPi, avgP );
+		// //drawTpcLines( dMerged, kBlack, y1, y2);
+		// TEllipse * ell = new TEllipse( dElec,bElec, sigTpc * 3, sigTof * 3 );
+		// ell->SetFillColorAlpha( kBlack, 0 );
+		// ell->Draw();
 
 		rp.savePage();
 	}

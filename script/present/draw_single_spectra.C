@@ -89,9 +89,11 @@ TH1* draw_single_spectra( 	string energy, string plc, string charge, string iCen
 
 	sys->Scale( scaler );
 	stat->Scale( scaler );
+
 	
 	sys->SetTitle( " ; pT [GeV/c]; dN^{2} / ( N_{evt} 2 #pi pT dpT dy )" );
 	sys->SetLineColor( color );
+	sys->SetMarkerStyle( 8 );
 	sys->SetMarkerColor( color );
 	sys->SetFillColorAlpha( color, 0.5 );
 
@@ -99,6 +101,8 @@ TH1* draw_single_spectra( 	string energy, string plc, string charge, string iCen
 	
 
 	stat->SetLineColor( color );
+	stat->SetMarkerStyle( 8 );
+	stat->SetMarkerColor( color );
 
 
 
