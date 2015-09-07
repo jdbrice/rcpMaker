@@ -196,8 +196,10 @@ namespace TSF{
 			if ( sigmaRanges[ "zb_" + plc ].above( avgP ) ){	
 				
 				double hm = sigmaSets[ "zb_" + plc ].mean();
+				if ( 0 >= hm  )	// for running not in order so the sigma set isn't filled
+					hm = zbSig;
 
-				schema->setInitialMuLimits( "zb_mu_"+plc, zbMu, hm, zbDeltaMu );
+				schema->setInitialMu( "zb_mu_"+plc, zbMu, hm, zbDeltaMu );
 
 				INFO( tag, "Fixing zb_sigma_" << plc << " to " << sigmaSets[ "zb_" + plc ].mean() )
 				//schema->setInitialSigma( "zb_sigma_"+plc, hm, hm, hm );
@@ -215,8 +217,10 @@ namespace TSF{
 			if ( sigmaRanges[ "zd_" + plc ].above( avgP ) ){	
 				
 				double hm = sigmaSets[ "zd_" + plc ].mean();
+				if ( 0 >= hm  )	// for running not in order so the sigma set isn't filled
+					hm = zdSig;
 				schema->setInitialSigma( "zd_sigma_"+plc, hm, hm - 0.002, hm + 0.002  );
-				schema->setInitialMuLimits( "zd_mu_"+plc, zdMu, hm, zbDeltaMu );
+				schema->setInitialMu( "zd_mu_"+plc, zdMu, hm, zbDeltaMu );
 			}
 				
 				
@@ -375,6 +379,16 @@ namespace TSF{
 
 			schema->var( "yield_" + plc )->min = 0;
 			schema->var( "yield_" + plc )->max = schema->getNormalization() * 2;
+
+			for ( string pre : { "zb_", "zd_" } ){
+				for ( string pplc : Common::species ){
+					schema->var( pre + pplc + "_yield_" + plc )->min = 0;
+					schema->var( pre + pplc + "_yield_" + plc )->max = schema->getNormalization() * 2;
+
+					if ( pplc != plc )
+						schema->var( pre + pplc + "_yield_" + plc )->val = 0;
+				}
+			}
 
 			// if ( !schema->datasetActive( "zd_" + plc ) ){
 			// 	double zdMu = zdMean( plc, avgP );

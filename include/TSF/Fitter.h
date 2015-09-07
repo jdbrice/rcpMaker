@@ -116,7 +116,7 @@ namespace TSF{
 		void fit1(  );
 		void fit2(  );
 		void fit3( );
-		void fit4( string plc );
+		void fit4( );
 		void fit5( string plc );
 		void fitErrors(  );
 		

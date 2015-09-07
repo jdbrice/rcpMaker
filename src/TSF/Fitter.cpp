@@ -341,7 +341,7 @@ namespace TSF{
 
 		schema->setMethod( "poisson" );
 
-		
+
 		minuit->mnexcm( "MINI", arglist, 1, iFlag );
 		minuit->mnexcm( "MINI", arglist, 1, iFlag );
 		minuit->mnexcm( "MINI", arglist, 1, iFlag );
@@ -353,10 +353,10 @@ namespace TSF{
 		INFO( tag, "AFTER" );
 		reportFitStatus();
 
-		//if ( 0 == iFlag )
+		if ( 0 == iFlag )
 			fitIsGood = true;
-		//else 
-		//	fitIsGood = false;
+		else 
+			fitIsGood = false;
 		
 
 		// get the final state of all variables 
@@ -364,11 +364,10 @@ namespace TSF{
 		updateParameters();
 	}
 
-	void Fitter::fit4( string plc ){
+	void Fitter::fit4( ){
 
 		double arglist[10];
-		arglist[ 0 ] = 5000;
-		arglist[ 1 ] = 1.0;
+		arglist[ 0 ] = 50000;
 		int iFlag = -1;
 		string status = "na";
 
@@ -376,22 +375,27 @@ namespace TSF{
 		reportFitStatus();
 
 		schema->setMethod( "poisson" );
-		
-		release( "eff_", false );
-			minuit->mnexcm( "MINI", arglist, 1, iFlag );
-			minuit->mnexcm( "MINI", arglist, 1, iFlag );
-			status = minuit->fCstatu;
-			INFO ( tag, "Step 1. Status " << status );
-		releaseAll(  );
+
+		minuit->mnexcm( "MINI", arglist, 1, iFlag );
+		status = minuit->fCstatu;
+		INFO ( tag, "Step 3. Status " << status );	
+
 		schema->updateRanges();
 
 		INFO( tag, "AFTER" );
 		reportFitStatus();
 
+		if ( 0 == iFlag )
+			fitIsGood = true;
+		else 
+			fitIsGood = false;
+		
+
 		// get the final state of all variables 
 		INFO( tag, "Updating parameters after Fit" );
 		updateParameters();
 	}
+
 
 	void Fitter::fit5( string plc ){
 
