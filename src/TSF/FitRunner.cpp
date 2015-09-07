@@ -682,8 +682,8 @@ namespace TSF{
 
 					reportYields();
 
-					// if ( doSystematic )
-					// 	runTofEffSystematic( iCharge, iCen, iPt );
+					if ( doSystematic )
+						runTofEffSystematic( iCharge, iCen, iPt );
 					
 						
 

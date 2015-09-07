@@ -1,0 +1,52 @@
+#########################################
+# Runs the entire PID R_CP analysis chain
+#########################################
+
+JOB EnergyLoss EnergyLoss.submit
+JOB TPC_Make TpcEff_Make.submit
+JOB TPC_Fit TpcEff_Fit.submit
+
+JOB PidData_Pi PidData_PostCorr_Pi.submit
+JOB PidData_K PidData_PostCorr_K.submit
+JOB PidData_P PidData_PostCorr_P.submit
+JOB PidData_Merge PidData_Merge.submit
+
+
+JOB TofEff_K TofEff_K.submit
+JOB TofEff_Pi TofEff_Pi.submit
+JOB TofEff_P TofEff_P.submit
+JOB TofEff_Merge TofEff_Merge.submit
+JOB TofEff_Fit TofEff_Fit.submit
+
+JOB FeedDown_Make FeedDown_Maker.submit
+JOB FeedDown_Merge FeedDown_Merge.submit
+JOB FeedDown_Fit FeedDown_Fit.submit
+
+JOB Fit_all Fit.submit
+JOB Fit_merge Fit_Merge.submit
+
+JOB PostCorr PostCorr.submit
+
+
+
+# Tof Eff
+PARENT TofEff_K TofEff_Pi TofEff_P CHILD TofEff_Merge
+PARENT TofEff_Merge CHILD TofEff_Fit
+
+# FeedDown
+PARENT FeedDown_Make CHILD FeedDown_Merge
+PARENT FeedDown_Merge CHILD FeedDown_Fit
+
+# Tpc Eff
+PARENT TPC_Make CHILD TPC_Fit
+
+# PidData
+PARENT TPC_Fit EnergyLoss CHILD PidData_Pi PidData_K PidData_P
+PARENT PidData_Pi PidData_K PidData_P CHILD PidData_Merge
+
+# Fitter
+PARENT PidData_Merge CHILD Fit_all
+PARENT Fit_all CHILD Fit_merge
+
+#PostCorr
+PARENT Fit_merge TofEff_Fit FeedDown_Fit CHILD PostCorr
