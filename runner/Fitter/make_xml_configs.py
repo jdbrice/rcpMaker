@@ -31,7 +31,7 @@ def write_conf(  output_path, config_path ="./" ) :
 
 		<!-- fit bins -->
 		<FitRange>
-			<ptBins min="10" max="100" />
+			<ptBins min="10" max="32" />
 			<centralityBins>0, 1, 2, 3, 4, 5, 6</centralityBins>
 			<charges>1, -1</charges>
 		</FitRange>

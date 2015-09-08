@@ -22,6 +22,22 @@ string file_name( string energy, string plc, string charge, string iCen ){
 
 }
 
+string plc_label( string plc, string charge ){
+	if ( "Pi" == plc && "p" == charge )
+		return "#pi^{+}";
+	if ( "Pi" == plc && "n" == charge )
+		return "#pi^{-}";
+	if ( "K" == plc && "p" == charge )
+		return "K^{+}";
+	if ( "K" == plc && "n" == charge )
+		return "K^{+}";
+	if ( "P" == plc && "p" == charge )
+		return "P";
+	if ( "P" == plc && "n" == charge )
+		return "#bar{P}";
+	return "";
+}
+
 int nPtBins = 26;
 double ptBins[] = { 
 0.0,
@@ -94,7 +110,7 @@ TH1* draw_single_spectra( 	string energy, string plc, string charge, string iCen
 
 	RooPlotLib rpl;
 	
-	rpl.style( sys ).set( "title", plc + " " + charge + " ; pT [GeV/c]; dN^{2} / ( N_{evt} 2 #pi pT dpT dy )    " )
+	rpl.style( sys ).set( "title", plc_label( plc, charge ) + " ; pT [GeV/c]; dN^{2} / ( N_{evt} 2 #pi pT dpT dy )    " )
 		.set( "color", color, 0.5 ).set( "markerstyle", 8 )
 		.set( "draw", draw_opt + " e2" ).set( "yto", 2 )
 		.draw();

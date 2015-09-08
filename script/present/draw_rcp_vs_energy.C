@@ -15,7 +15,7 @@ void draw_rcp_vs_energy( string plc, string charge, string iCen = "0", string iP
 			draw_single_rcp( en, plc, charge, iCen, iPer, cen_n_coll, per_n_coll, colors[ iColor ], "same" );
 
 
-		draw_ncoll_uncertainty( iColor, cen_n_coll, 30, per_n_coll, 7 );
+		draw_ncoll_uncertainty( iColor, cen_n_coll, 30, per_n_coll, 7, false );
 
 		iColor ++;
 	}

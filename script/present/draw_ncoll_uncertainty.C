@@ -1,14 +1,18 @@
 
 #include "draw_single_spectra.C"
 
-int n_ncoll_unc_bins = 9;
+int n_ncoll_unc_bins = 18;
 double ncoll_unc_bins[] = { 
 0.0,
 0.1,
 0.2, 
 0.3,
 0.4,
-0.5, 
+0.5,
+0.6,
+0.7,
+0.8,
+0.9, 
 5.2, 
 5.4,
 5.6,
@@ -26,8 +30,10 @@ void draw_ncoll_uncertainty( int iEn, double cen, double u_cen, double per, doub
 
 
 	int iB = n_ncoll_unc_bins - iEn;
+	
 	if ( front )
 		iB = iEn + 1;
+
 	h->SetBinContent( iB, 1.0 );
 	
 	// add the error in

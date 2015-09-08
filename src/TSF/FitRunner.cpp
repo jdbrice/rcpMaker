@@ -210,7 +210,7 @@ namespace TSF{
 				if ( 0 >= hm  )	// for running not in order so the sigma set isn't filled
 					hm = zbSig;
 
-				schema->setInitialMu( "zb_mu_"+plc, zbMu, hm, zbDeltaMu );
+				schema->setInitialMuLimits( "zb_mu_"+plc, zbMu, hm, zbDeltaMu );
 
 				INFO( tag, "Fixing zb_sigma_" << plc << " to " << sigmaSets[ "zb_" + plc ].mean() )
 				//schema->setInitialSigma( "zb_sigma_"+plc, hm, hm, hm );
@@ -231,7 +231,7 @@ namespace TSF{
 				if ( 0 >= hm  )	// for running not in order so the sigma set isn't filled
 					hm = zdSig;
 				schema->setInitialSigma( "zd_sigma_"+plc, hm, hm - 0.002, hm + 0.002  );
-				schema->setInitialMu( "zd_mu_"+plc, zdMu, hm, zbDeltaMu );
+				schema->setInitialMuLimits( "zd_mu_"+plc, zdMu, hm, zbDeltaMu );
 			}
 				
 				
