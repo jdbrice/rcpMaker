@@ -598,58 +598,6 @@ namespace TSF{
 
 	}
 
-
-	// void FitRunner::runTofEffSystematic( int iCharge, int iCen, int iPt ){
-	// 	return;
-	// 	double avgP = binAverageP( iPt );
-
-	// 	map<string, vector<double> > systematics_toffEff;
-	// 	for ( string plc : Common::species ){
-	// 		INFO( tag, "Doing TofEff Systematics for " << plc );
-
-	// 		book->cd( "tofEff_dist" );
-	// 		string d_name = Common::yieldName( plc, iCen, iCharge );
-	
-	// 		for ( int i = 0; i < 2; i ++ ) { 
-	// 			double delta = rnd->Rndm() * 0.02 + 0.99;
-
-	// 			book->fill( d_name, avgP, delta );
-	// 			shared_ptr<FitSchema> sysSchema = prepareSystematic( "eff", plc, 0 );
-	// 			map<string, double> deltas = runSystematic( sysSchema, iCharge, iCen, iPt );	
-
-	// 			systematics_toffEff[ "Pi" ].push_back( deltas[ "Pi" ] );
-	// 			systematics_toffEff[ "K" ].push_back( deltas[ "K" ] );
-	// 			systematics_toffEff[ "P" ].push_back( deltas[ "P" ] );
-
-	// 			book->fill( "sys_" + d_name, avgP, deltas[ plc ] );
-	// 		}
-	// 	}
-
-	// 	INFO( tag, "SYSTEMATIC from TofEff" );
-	// 	for ( auto k : systematics_toffEff ){
-	// 		INFO( tag, "Systematics for " << k.first );
-	// 		for ( auto v : k.second ){
-	// 			INFO( tag, "systematic = " << v );
-	// 		}
-	// 		vector<double> v = k.second;
-	// 		double sum = std::accumulate(v.begin(), v.end(), 0.0);
-	// 		double mean = sum / v.size();
-
-	// 		double max = *std::max_element( v.begin(), v.end() );
-
-	// 		double sq_sum = std::inner_product(v.begin(), v.end(), v.begin(), 0.0);
-	// 		double stdev = std::sqrt(sq_sum / v.size() - mean * mean);
-
-	// 		INFO( tag, "MAX = " << max );
-	// 		INFO( tag, "AVG = " << mean );
-	// 		INFO( tag, "STDEV = " << stdev );
-
-	// 		fillSystematicHistogram( "tofEff", k.first, iPt, iCen, iCharge, max );
-
-			
-	// 	} 
-	// } // runTofEffSystematic(...)
-
 	void FitRunner::make(){
 
 		if ( inFile == nullptr || inFile->IsOpen() == false ){
@@ -676,7 +624,7 @@ namespace TSF{
 				sigmaSets.clear();
 				for ( int iPt = firstPtBin; iPt <= lastPtBin; iPt++ ){
 
-					bool doSystematic = true; // TODO: config
+					bool doSystematic = false; // TODO: config
 
 					runNominal( iCharge, iCen, iPt );
 

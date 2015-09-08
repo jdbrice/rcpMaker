@@ -78,7 +78,7 @@ TH1* draw_single_spectra( 	string energy, string plc, string charge, string iCen
 	if ( !file_exists( fn ) )
 		return new TH1D( "err", "", nPtBins, ptBins );
 
-	INFO( "Loading " << fn )
+	INFO( "Loading " << fn );
 	SpectraLoader sl( fn );
 
 	TH1* sys = normalize_binning( sl.sysHisto( fn + "_sys" ) );
