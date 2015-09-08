@@ -489,6 +489,8 @@ namespace TSF{
 		
 		double avgP = binAverageP( iPt );
 
+		int N = cfg->getInt( nodePath + "Systematics:nSigma", 5 );
+
 		for ( string pre : { "zb", "zd" } ){
 			for ( string plc : Common::species ){
 				
@@ -501,7 +503,7 @@ namespace TSF{
 				book->cd( pre + "_sigma_dist" );
 				string d_name = Common::yieldName( plc, iCen, iCharge );
 
-				for ( int i = 0; i < 5; i++ ){
+				for ( int i = 0; i < N; i++ ){
 
 					double mean = sigmaSets[ pre+"_"+plc ].mean();
 					double stdev = sigmaSets[ pre+"_"+plc ].std();
@@ -539,13 +541,16 @@ namespace TSF{
 		double avgP = binAverageP( iPt );
 		book->cd( "tofEff_dist" );
 
+		int N = cfg->getInt( nodePath + "Systematics:nTofEff=", 5 );
+		double amt = cfg->getDouble( nodePath + "Systematics:tofEffAmount", 0.15 );
+
 		shared_ptr <FitSchema> rSchema = shared_ptr<FitSchema>( new FitSchema( *schema ) );
 
 		map<string, vector<double> > sys;
-		for ( int i = 0; i < 20; i ++ ){
+		for ( int i = 0; i < N; i ++ ){
 			for ( string plc : Common::species ){
 				string d_name = Common::yieldName( plc, iCen, iCharge );
-				double delta = rnd->Rndm() * 0.40 + 0.80;
+				double delta = rnd->Rndm() * (amt*2) + ( 1.0 - amt );
 
 				for ( string oplc : Common::species ){
 					rSchema->var( "eff_" + oplc )->val = 1.0;
