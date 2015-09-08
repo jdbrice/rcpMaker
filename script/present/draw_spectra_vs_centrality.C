@@ -6,7 +6,7 @@
 void draw_spectra_vs_centrality( string en, string plc, string charge ){
 	Logger::setGlobalLogLevel( Logger::llAll );
 
-	Reporter rp( "tmp.pdf", 900, 700 );
+	//Reporter rp( "tmp.pdf", 900, 700 );
 	RooPlotLib rpl;
 
 	TH1 * master;
@@ -22,17 +22,14 @@ void draw_spectra_vs_centrality( string en, string plc, string charge ){
 		iColor ++;
 	}
 
-	master->GetYaxis()->SetRangeUser( 10e-14, 1e2 );
+	master->GetYaxis()->SetRangeUser( 1.5e-15, 5e2 );
 	rpl.style( master ).set( "yto", 1.1 ).set( "markerstyle", 8 );
 
-	if ( "14.5" == en ){
-		rpl.style( master ).set( "xr", 0, 4.0 );
-		//if ( "P" == plc && "n" == charge )
-						
-	}
+	rpl.style( master ).set( "xr", 0, 6.0 );
+	
 
 
-	rp.saveImage( "img/spectra_" + en + "_" + plc + "_" + charge + ".pdf" );
+	//rp.saveImage( "img/spectra_" + en + "_" + plc + "_" + charge + ".pdf" );
 	
 
 }

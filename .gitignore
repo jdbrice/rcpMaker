@@ -9,6 +9,9 @@
 # image outputs
 *.eps
 *.pdf
+*.png
+*.jpg
+*.jpeg
 
 
 # build files

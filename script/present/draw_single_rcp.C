@@ -24,7 +24,7 @@ TH1* draw_single_rcp(string energy, string plc, string charge, string iCen = "0"
 	TH1* cen_stat_rcp = (TH1*)cen_stat->Clone( (cen_fn + "_cen_stat_rcp").c_str() );
 	TH1* cen_sys_rcp = (TH1*)cen_sys->Clone( (cen_fn + "_cen_sys_rcp").c_str() );
 
-	rpl.style( cen_sys_rcp ).set( "title", " ;pT [GeV/c]" );
+	rpl.style( cen_sys_rcp ).set( "title", " ;pT [GeV/c]; R_{CP} ( " + centrality_labels[ stoi( iCen ) ] + " ) / ( " + centrality_labels[ stoi( iPer ) ] + " )" );
 
 	cen_stat_rcp->Divide( per_stat );
 	cen_stat_rcp->Scale( per_nColl / cen_nColl );

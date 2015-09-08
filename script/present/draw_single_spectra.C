@@ -9,6 +9,8 @@
 
 #include <sys/stat.h>
 
+#include "RooPlotLib.h"
+
  bool file_exists (const std::string& name) {
   struct stat buffer;   
   return (stat (name.c_str(), &buffer) == 0); 
@@ -75,8 +77,11 @@ TH1* draw_single_spectra( 	string energy, string plc, string charge, string iCen
 
 
 	string fn = file_name( energy, plc, charge, iCen );
-	if ( !file_exists( fn ) )
+	if ( !file_exists( fn ) && iCen != "3"){
 		return new TH1D( "err", "", nPtBins, ptBins );
+	} else if ( !file_exists( fn ) && iCen == "3" ){
+		fn = file_name( energy, plc, charge, "3+4" );
+	}
 
 	INFO( "Loading " << fn );
 	SpectraLoader sl( fn );
@@ -84,32 +89,20 @@ TH1* draw_single_spectra( 	string energy, string plc, string charge, string iCen
 	TH1* sys = normalize_binning( sl.sysHisto( fn + "_sys" ) );
 	TH1* stat = normalize_binning( sl.statHisto( fn + "_stat" ) );
 
-	
-	DEBUG( "Got sys = " << sys );
-
 	sys->Scale( scaler );
 	stat->Scale( scaler );
 
+	RooPlotLib rpl;
 	
-	sys->SetTitle( " ; pT [GeV/c]; dN^{2} / ( N_{evt} 2 #pi pT dpT dy )" );
-	sys->SetLineColor( color );
-	sys->SetMarkerStyle( 8 );
-	sys->SetMarkerColor( color );
-	sys->SetFillColorAlpha( color, 0.5 );
+	rpl.style( sys ).set( "title", plc + " " + charge + " ; pT [GeV/c]; dN^{2} / ( N_{evt} 2 #pi pT dpT dy )    " )
+		.set( "color", color, 0.5 ).set( "markerstyle", 8 )
+		.set( "draw", draw_opt + " e2" ).set( "yto", 2 )
+		.draw();
 
-	DEBUG( "Got stat = " << stat );
+	rpl.style( stat ).set( "color", color, 0.5 ).set( "markerstyle", 8 )
+		.set( "draw", "same" )
+		.draw();
 	
-
-	stat->SetLineColor( color );
-	stat->SetMarkerStyle( 8 );
-	stat->SetMarkerColor( color );
-
-
-
-	sys->Draw( (draw_opt + " e2").c_str() );
-	stat->Draw( "same" );
-
-
 
 	gPad->SetLogy(1);
 

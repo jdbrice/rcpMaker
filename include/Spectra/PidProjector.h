@@ -121,10 +121,10 @@ public:
 		double min = data->GetMinimum( var.c_str() );
 
 		if ( "zb" == var && max > _zbCutMax )
-			max = _zbCutMax + (_zbCutMax - min) * .10;
+			max = _zbCutMax + (_zbCutMax - min) * .50;
 
 		if ( "zb" == var && min < _zbCutMin )
-			min = _zbCutMin - (max - _zbCutMin) * .10;
+			min = _zbCutMin - (max - _zbCutMin) * .50;
 		
 		double binWidth = _zbBinWidth;
 		if ( "zd" == var )
@@ -178,9 +178,9 @@ public:
 		double min = data->GetMinimum( var.c_str() );
 
 		if ( "zb" == var && max > _zbCutMax )
-			max = _zbCutMax + (_zbCutMax - min) * .10;
+			max = _zbCutMax + (_zbCutMax - min) * .50;
 		if ( "zb" == var && min < _zbCutMin )
-			min = _zbCutMin - (max - _zbCutMin) * .10;
+			min = _zbCutMin - (max - _zbCutMin) * .50;
 		
 		double binWidth = _zbBinWidth;
 		if ( "zd" == var )

@@ -79,7 +79,7 @@ namespace TSF{
 		void runNominal( int iCharge, int iCen, int iPt, shared_ptr<FitSchema> _schema = nullptr );
 		void runSigmaSystematic( int iCharge, int iCen, int iPt );
 		void runTofEffSystematic( int iCharge, int iCen, int iPt );
-		map<string, double> runSystematic( shared_ptr<FitSchema>, int iCharge, int iCen, int iPt );
+		void runSystematic( shared_ptr<FitSchema>, int iCharge, int iCen, int iPt );
 
 		/* Average P in a bin range assuming a flat distribution
 		 * The distribution is really an exp, but we just need to be consistent

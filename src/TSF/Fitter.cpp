@@ -341,13 +341,15 @@ namespace TSF{
 
 		schema->setMethod( "poisson" );
 
+		fix( "_yield_" );
+		fixShapes();
 
 		minuit->mnexcm( "MINI", arglist, 1, iFlag );
 		minuit->mnexcm( "MINI", arglist, 1, iFlag );
 		minuit->mnexcm( "MINI", arglist, 1, iFlag );
 		status = minuit->fCstatu;
 		INFO ( tag, "Step 3. Status " << status );	
-
+		releaseAll();
 		schema->updateRanges();
 
 		INFO( tag, "AFTER" );

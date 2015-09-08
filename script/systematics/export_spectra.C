@@ -69,8 +69,11 @@ void write_spectra( string plc, string charge, string iCen, vector<string> &sour
 	string base = "/Users/danielbrandenburg/bnl/local/data/RcpAnalysis/spectra/";
 	TH1 * h = yield_hist_for( "nominal", plc, charge, iCen );
 
-	string name = base + "spectra_" + energy + "_" + plc + "_" + charge + "_" + iCen + ".dat";
+	vector<double> sys_unc = total_systematics( weights, sources, plc, charge, iCen );
 
+
+	// open the files
+	string name = base + "spectra_" + energy + "_" + plc + "_" + charge + "_" + iCen + ".dat";
 	ofstream fout( name.c_str() );
 
 	fout << std::left << std::setw(20) << "pT" << std::setw(20) << "value" << std::setw(20) << "stat_unc" << std::setw(20) << "sys_unc" << endl;
@@ -86,7 +89,10 @@ void write_spectra( string plc, string charge, string iCen, vector<string> &sour
 		
 		double value = h->GetBinContent( i );
 		double stat = h->GetBinError( i );
-		double sys = value * 0.0001  ;//total_systematics( i, weights, sources, plc, charge, iCen );
+		double sys = sys_unc[ i - 1 ];//total_systematics( i, weights, sources, plc, charge, iCen );
+		if ( 0 >= sys )
+			sys = 1e-10;
+
 
 		fout << std::setprecision( 10 ) << std::left << std::setw(20) << pT << std::left << std::setw(20) << value << std::left << std::setw(20) << stat << std::left << std::setw(20) << sys << endl; 
 
@@ -102,17 +108,19 @@ void export_spectra(  ){
 	Logger::setGlobalLogLevel( Logger::llAll );
 	
 	// first calculate the cov matrix for our cut variables
-	vector<string> sources = { "zLocal_right", "dca_low", "nHitsFit_low", "nHitsDedx_low", "nHitsRatio_low", "tpcEff_low" };
+	// vector<string> sources = { "zLocal_right", "dca_low", "nHitsFit_low", "nHitsDedx_low", "nHitsRatio_low", "tpcEff_low" };
+	vector<string> sources = { "tpcEff_low", "dca_low" };
 	vector<string> source_vars = { "zLocal", "dca", "nHitsFit", "nHitsDedx", "nHitsPossible" };
-
-	TMatrixD cut_cov = cov_matrix( source_vars, "matchFlag>=1" );
 	vector<double> weights;
-	for ( int i = 0; i < source_vars.size(); i++ ){
-		weights.push_back( error_weight( cut_cov, i ) );
-		// weights.push_back( 1.0 );
-		INFO( "w[" << source_vars[ i ] << "] = " << weights[ i ] );
-	}	
+	
+	// calculate the cov_matrix
+	// TMatrixD cut_cov = cov_matrix( source_vars, "matchFlag>=1" );
+	// for ( int i = 0; i < source_vars.size(); i++ ){
+	// 	weights.push_back( error_weight( cut_cov, i ) );
+	// 	INFO( "w[" << source_vars[ i ] << "] = " << weights[ i ] );
+	// }	
 
+	weights.push_back( 1.0 );
 	weights.push_back( 1.0 );
 
 	// cout << "11 = " << total_systematics( 11, weights, sources, "Pi", "p", "0" ) << endl;

@@ -4,7 +4,7 @@
 vector<string> centralities = { "0", "1", "2", "3", "4", "5", "6" };
 vector<string> centrality_labels = { "0-5%", "5-10%", "10-20%", "20-30%", "30-40%", "40-60%", "60-80%" };
 
-vector<string> energies = { /*"39.0", "27.0",*/ "19.6", "14.5", "11.5"/*, "7.7"*/ }; //{ "7.7", 		"11.5", 	"14.5", 	"19.6"};//, 		"27.0", 		"39.0" };
+vector<string> energies =  { "7.7", 		"11.5", 	"14.5", 	"19.6", 		"27.0", 		"39.0" };
 vector<int> colors 		= { kRed - 3, 	kBlue - 3, 	kRed + 3,	kGreen + 3, 	kMagenta + 3, 	kOrange + 3, kBlue	};
 
 map<string, vector<double> > n_coll = 

@@ -6,8 +6,6 @@
 #include "TBox.h"
 
 
-
-
 namespace TSF{
 	FitRunner::FitRunner( XmlConfig * _cfg, string _np, int iCharge, int iCen) 
 	: HistoAnalyzer( _cfg, _np, false ){
@@ -149,6 +147,19 @@ namespace TSF{
 					for ( string plc2 : Common::species ){
 						book->clone( "/", "sys_dist", "tofEff_dist", "sys_" + Common::yieldName( plc, iCen, iCharge, plc2 ) );
 					}
+
+					book->cd( "zd_sigma_dist" );
+					book->clone( "/", "sigma_dist", "zd_sigma_dist", Common::yieldName( plc, iCen, iCharge ) );
+					for ( string plc2 : Common::species ){
+						book->clone( "/", "sys_dist", "zd_sigma_dist", "sys_" + Common::yieldName( plc, iCen, iCharge, plc2 ) );
+					}
+
+					book->cd( "zb_sigma_dist" );
+					book->clone( "/", "sigma_dist", "zb_sigma_dist", Common::yieldName( plc, iCen, iCharge ) );
+					for ( string plc2 : Common::species ){
+						book->clone( "/", "sys_dist", "zb_sigma_dist", "sys_" + Common::yieldName( plc, iCen, iCharge, plc2 ) );
+					}
+
 
 
 				} // loop plc
@@ -475,66 +486,52 @@ namespace TSF{
 
 	void FitRunner::runSigmaSystematic( int iCharge, int iCen, int iPt ){
 		// Run systematics on sigma
-		map<string, vector<double> > systematics_sigma;
+		
 		double avgP = binAverageP( iPt );
 
 		for ( string pre : { "zb", "zd" } ){
 			for ( string plc : Common::species ){
-				INFO( tag, "Do Systematics for " << pre << "_" << plc );
+				
 				ConfigRange &range = sigmaRanges[ pre + "_" + plc ];
-
 				if ( !range.above( avgP ) )
 					continue;
 
-				book->cd( "sys_dist" );
-				book->make1D( pre + "_" + plc, "", 1000, -1, 1 );
+				INFO( tag, "Do Systematics for " << pre << "_" << plc );
+				
+				book->cd( pre + "_sigma_dist" );
+				string d_name = Common::yieldName( plc, iCen, iCharge );
 
-				map<string, vector<double> > tmp_sigma;
 				for ( int i = 0; i < 5; i++ ){
-					double delta = rnd->Gaus( sigmaSets[ pre+"_"+plc ].mean(), sigmaSets[ pre+"_"+plc ].std() );
+
+					double mean = sigmaSets[ pre+"_"+plc ].mean();
+					double stdev = sigmaSets[ pre+"_"+plc ].std();
+
+					// for testing only
+					if ( 0 == mean && "zd" == pre )
+						mean = 0.07;
+					else if ( 0 == mean && "zb" == pre )
+						mean = 0.012;
+					if ( 0 == stdev && "zd" == pre )
+						stdev = 0.007;
+					else if ( 0 == stdev && "zb" == pre )
+						stdev = 0.0012; 
+
+					double delta = rnd->Gaus( mean, stdev ) - mean;
+					INFO( tag, "Gaus( " << mean <<", " << stdev << " ) = " << delta );
+					book->fill( d_name, avgP, delta );
+
 					shared_ptr<FitSchema> sysSchema = prepareSystematic( pre + "_sigma", plc, delta );
+					runSystematic( sysSchema, iCharge, iCen, iPt );		
 
-					map<string, double> deltas = runSystematic( sysSchema, iCharge, iCen, iPt );	
-
-					book->fill( pre + "_" + plc, deltas[ plc ] );
-
-					tmp_sigma[ "Pi" ].push_back( deltas[ "Pi" ] );
-					tmp_sigma[ "K" ].push_back( deltas[ "K" ] );
-					tmp_sigma[ "P" ].push_back( deltas[ "P" ] );	
+					for (string pplc : Common::species ){
+						double y_delta = sysSchema->var( "yield_" + pplc )->val - schema->var( "yield_" + pplc )->val;
+						y_delta = y_delta /  schema->var( "yield_" + pplc )->val;
+						string sd_name = "sys_" + Common::yieldName( plc, iCen, iCharge, pplc );
+						book->fill( sd_name, avgP, y_delta );
+					}
 				}
-
-				for ( auto k : tmp_sigma ){
-					vector<double> v = k.second;
-					double sum = std::accumulate(v.begin(), v.end(), 0.0);
-					double mean = sum / v.size();
-					systematics_sigma[ k.first ].push_back( mean );
-				} // loop tmp_sigma
-			}
-		}
-
-		INFO( tag, "SYSTEMATIC from sigma" );
-		for ( auto k : systematics_sigma ){
-			INFO( tag, "Systematics for " << k.first );
-			for ( auto v : k.second ){
-				INFO( tag, "systematic = " << v );
-			}
-			vector<double> v = k.second;
-			double sum = std::accumulate(v.begin(), v.end(), 0.0);
-			double mean = sum / v.size();
-
-			double max = *std::max_element( v.begin(), v.end() );
-
-			double sq_sum = std::inner_product(v.begin(), v.end(), v.begin(), 0.0);
-			double stdev = std::sqrt(sq_sum / v.size() - mean * mean);
-
-			INFO( tag, "MAX = " << max );
-
-			fillSystematicHistogram( "sigma", k.first, iPt, iCen, iCharge, max );
-
-			INFO( tag, "AVG = " << mean );
-			INFO( tag, "STDEV = " << stdev );
-
-		} 
+			} // plc
+		} // { zb, zd }
 	} // runSigmaSystematic(...)
 
 
@@ -624,32 +621,23 @@ namespace TSF{
 				sigmaSets.clear();
 				for ( int iPt = firstPtBin; iPt <= lastPtBin; iPt++ ){
 
-					bool doSystematic = false; // TODO: config
-
 					runNominal( iCharge, iCen, iPt );
 
 					reportYields();
 
-					if ( doSystematic )
+					if ( cfg->getBool( nodePath + "Systematics:tofEff" ) ){
 						runTofEffSystematic( iCharge, iCen, iPt );
-					
-						
+					}
+					else {
+						INFO( tag, "Skipping runTofEffSystematic" );
+					}
 
-					
-					// if ( doSystematic )
-					// 	runSigmaSystematic( iCharge, iCen, iPt );
-
-					
-						
-
-					
-					
-
-					
-
-					// do something with them now
-					
-
+										
+					if ( cfg->getBool( nodePath + "Systematics:sigma" ) ){
+						runSigmaSystematic( iCharge, iCen, iPt );
+					} else{
+						INFO( tag, "Skipping runSigmaSystematic" );
+					}
 
 				}// loop iPt
 			} // loop iCharge
@@ -697,18 +685,17 @@ namespace TSF{
 
 		int binmax = h->GetMaximumBin();
 		double max = h->GetBinContent( binmax ) * 5;
-		h->GetYaxis()->SetRangeUser( schema->getNormalization() * scaler, max );
+		h->GetYaxis()->SetRangeUser( 0.1 / fitter->getNorm(), max );
 
 		double xMin = 0, xMax = 0;
-		float nSigPad = 10;
 		if ( v.substr(0, 2) == "zb" ){
 			INFO( tag, "Using zb range ( " << zbMin << " -> " << zbMax << " )" );
-			xMin = zbMin - 0.05;
-			xMax = zbMax + 0.05;
+			xMin = zbMin - 0.2;
+			xMax = zbMax + 0.2;
 		} else {
 			INFO( tag, "Using zd range( " << zdMin << " -> " << zdMax << " )" );
-			xMin = zdMin - 0.4;
-			xMax = zdMax + 0.4;
+			xMin = zdMin - 0.8;
+			xMax = zdMax + 0.8;
 		}
 
 		h->GetXaxis()->SetRangeUser( xMin, xMax );
@@ -719,7 +706,7 @@ namespace TSF{
 		for ( FitRange range : fitter->getSchema()->getRanges() ){
 			if ( range.dataset != v )
 				continue;
-			TBox * b1 = new TBox( range.min, schema->getNormalization() * scaler, range.max, max  );
+			TBox * b1 = new TBox( range.min, 0.1 / fitter->getNorm(), range.max, max  );
 			b1->SetFillColorAlpha( kBlack, 0.25 );
 			b1->SetFillStyle( 1001 );
 			b1->Draw(  );
@@ -1077,7 +1064,7 @@ namespace TSF{
 		return rSchema;
 	} // prepareSystematic(...)
 
-	map<string, double> FitRunner::runSystematic( shared_ptr<FitSchema> tmpSchema, int iCharge, int iCen, int iPt ){
+	void FitRunner::runSystematic( shared_ptr<FitSchema> tmpSchema, int iCharge, int iCen, int iPt ){
 		WARN( tag, "(schema=" << tmpSchema << "iCharge=" << iCharge << ", iCen=" << iCen << ", iPt=" << iPt << ")" );
 
 	
@@ -1112,14 +1099,6 @@ namespace TSF{
 			tries ++;
 		}
 
-		// now we should compare our schema to the nominal result
-		map<string, double> deltas;
-		for ( string plc : Common::species ){
-			deltas[ plc ] = tmpSchema->var( "yield_" + plc )->val - schema->var( "yield_" + plc )->val;
-			INFO( tag, "Systematic yield_" << plc << " = " << deltas[ plc ] << " ==> " << (deltas[plc] / schema->var( "yield_" + plc )->val) << "% " );
-		}
-
-		return deltas;
 	} // runSystematic(...)
 }
 
