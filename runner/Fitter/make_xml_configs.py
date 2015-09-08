@@ -26,6 +26,8 @@ def write_conf(  output_path, config_path ="./" ) :
 		<input> <data url="{data_file}"/> </input>
 		<output path="{output_path}"> <data>{product_file}</data> </output>
 	
+		<!-- Systematic Uncertainties -->
+		<Systematics sigma="false" tofEff="false" tofEffAmount="0.15" />
 
 		<!-- fit bins -->
 		<FitRange>
