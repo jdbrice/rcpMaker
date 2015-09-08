@@ -342,7 +342,7 @@ namespace TSF{
 		schema->setMethod( "poisson" );
 
 		fix( "_yield_" );
-		fix( "sigma" );
+		fixShapes();
 
 		minuit->mnexcm( "MINI", arglist, 1, iFlag );
 		minuit->mnexcm( "MINI", arglist, 1, iFlag );
