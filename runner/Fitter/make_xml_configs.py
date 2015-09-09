@@ -79,6 +79,7 @@ def write_conf(  output_path, config_path ="./" ) :
 		<histograms>
 			<Histo name="yield" title="yield" xBins="binning.pt" />
 			<Histo name="eff_dist" title="eff_dist" xBins="binning.pt" widthY=".01" minY="0.75" maxY="1.25" />
+			<Histo name="sigma_dist" title="delta sigma_dist" xBins="binning.pt" widthY=".0001" minY="-0.1" maxY="0.1" />
 			<Histo name="sys_dist" title="eff_dist" xBins="binning.pt" widthY=".005" minY="-1.0" maxY="1.0" />
 		</histograms>
 

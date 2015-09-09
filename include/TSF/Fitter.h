@@ -110,7 +110,7 @@ namespace TSF{
 		}
 
 		void registerDefaults( XmlConfig * cfg, string nodePath );
-		void loadDatasets( string cs, int charge, int cenBin, int ptBin, bool enhanced, map<string, double> zbMu, map<string, double> zdMu );
+		void loadDatasets( string cs, int charge, int cenBin, int ptBin, bool enhanced, map<string, double> zbMu, map<string, double> zdMu);
 		
 		void nop(  );
 		void fit1(  );
@@ -119,6 +119,8 @@ namespace TSF{
 		void fit4( );
 		void fit5( string plc );
 		void fitErrors(  );
+
+		void overrideStatistics( bool v ) { sufficienctStatistics = v; }
 		
 
 		TGraph * plotResult( string dataset );

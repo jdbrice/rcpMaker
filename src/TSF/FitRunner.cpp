@@ -495,8 +495,8 @@ namespace TSF{
 			for ( string plc : Common::species ){
 				
 				ConfigRange &range = sigmaRanges[ pre + "_" + plc ];
-				if ( !range.above( avgP ) )
-					continue;
+				// if ( !range.above( avgP ) )
+				// 	continue;
 
 				INFO( tag, "Do Systematics for " << pre << "_" << plc );
 				
@@ -551,7 +551,7 @@ namespace TSF{
 			for ( string plc : Common::species ){
 				string d_name = Common::yieldName( plc, iCen, iCharge );
 				double delta = rnd->Rndm() * (amt*2) + ( 1.0 - amt );
-
+				INFO( tag, "TOF EFF AMOUNT " << (amt * 2) << " + " << 1.0 - amt );
 				for ( string oplc : Common::species ){
 					rSchema->var( "eff_" + oplc )->val = 1.0;
 				}
