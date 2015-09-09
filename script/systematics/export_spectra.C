@@ -17,7 +17,7 @@ map< string, double> max_yield = {
 	{ "Pi_n_3", 3.5 },
 	{ "Pi_n_4", 2.9 },
 	{ "Pi_n_5", 2.8 },
-	{ "Pi_n_6", 3.0 },
+	{ "Pi_n_6", 2.8 },
 
 	/* P Plus */
 	{ "P_p_0", 3.5 },
@@ -26,7 +26,7 @@ map< string, double> max_yield = {
 	{ "P_p_3", 3.5 },
 	{ "P_p_4", 3.5 },
 	{ "P_p_5", 3.5 },
-	{ "P_p_6", 3.0 },
+	{ "P_p_6", 3.5 },
 	/* P Minus */
 	{ "P_n_0", 3.0 },
 	{ "P_n_1", 3.0 },
@@ -67,7 +67,7 @@ void write_spectra( string plc, string charge, string iCen, vector<string> &sour
 	INFO( tag, "(plc=" << plc << ", charge=" << charge << ", iCen=" << iCen <<" )" );
 
 	string base = "/Users/danielbrandenburg/bnl/local/data/RcpAnalysis/spectra/";
-	TH1 * h = yield_hist_for( "nominal", plc, charge, iCen );
+	TH1 * h = yield_hist_for( "nominal_01", plc, charge, iCen );
 
 	vector<double> sys_unc = total_systematics( weights, sources, plc, charge, iCen );
 

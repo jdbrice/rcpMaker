@@ -1,3 +1,7 @@
+#ifndef DRAW_SINGLE_RCP
+#define DRAW_SINGLE_RCP
+
+
 #include "draw_single_spectra.C"
 #include "RooPlotLib.h"
 
@@ -35,6 +39,7 @@ TH1* draw_single_rcp(string energy, string plc, string charge, string iCen = "0"
 	cen_sys_rcp->SetLineColor( color );
 	cen_sys_rcp->SetMarkerColor( color );
 	cen_sys_rcp->SetFillColorAlpha( color, 0.5 );
+	cen_sys_rcp->SetMarkerStyle( 8 );
 
 	cen_stat_rcp->SetMarkerStyle( 8 );
 	cen_stat_rcp->SetLineColor( color );
@@ -43,7 +48,7 @@ TH1* draw_single_rcp(string energy, string plc, string charge, string iCen = "0"
 	cen_sys_rcp->Draw( ( draw_opt + " e2").c_str() );
 	cen_stat_rcp->Draw( "same e1" );
 
-	cen_sys_rcp->GetYaxis()->SetRangeUser( 0.15, 5 );
+	cen_sys_rcp->GetYaxis()->SetRangeUser( 0.15, 6 );
 	gPad->SetLogy(1);
 	gPad->SetGrid( 1, 1 );
 
@@ -51,3 +56,5 @@ TH1* draw_single_rcp(string energy, string plc, string charge, string iCen = "0"
 	return cen_sys_rcp;
 
 }
+
+#endif

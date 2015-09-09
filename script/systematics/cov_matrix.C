@@ -59,7 +59,7 @@ TMatrixD cov_matrix( vector<string> sources, string cut ="", bool corr = false )
 	RooPlotLib rpl;
 
 	TChain * c = new TChain( "rcpPicoDst" );
-	c->Add( "/Users/danielbrandenburg/bnl/local/data/RcpAnalysis/data/RcpPicoDst/tuple_93477DF676758D2254762F71F52E3D44_1*.root" );
+	c->Add( "/Users/danielbrandenburg/bnl/local/data/RcpAnalysis/data/RcpPicoDst/tuple_93477DF676758D2254762F71F52E3D44_1448.root" );
 
 	// first make histograms of each source
 	map< string, TH1* > hSource;

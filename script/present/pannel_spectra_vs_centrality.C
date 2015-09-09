@@ -1,8 +1,10 @@
 #include "draw_spectra_vs_centrality.C"
 
 void pannel_spectra_vs_centrality( string energy ){
+	gStyle->SetTitleSize( 0.25, "t" );
+	gStyle->SetTitleX( 0.82 );
 
-	Reporter rp( "_tmp.pdf", 1200, 800 );
+	Reporter rp( "_tmp.pdf", 1200, 700 );
 	rp.newPage( 3, 2, 0, 0 );
 	rp.cd( 1, 1 );
 
@@ -17,7 +19,5 @@ void pannel_spectra_vs_centrality( string energy ){
 			rp.next();
 		}
 	}
-
-	
 
 }

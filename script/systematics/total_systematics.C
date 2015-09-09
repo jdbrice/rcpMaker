@@ -1,6 +1,7 @@
 #include "single_compare.C"
 #include "cov_matrix.C"
 #include "tof_eff_systematic.C"
+#include "fit_sigma_systematic.C"
 
 double total_systematics( int iPt, vector<double> &weights, vector<string> &sources, string plc ="Pi", string charge="p", string iCen="0" ){
 
@@ -90,6 +91,7 @@ vector<double> total_systematics( vector<double> &weights, vector<string> &sourc
 	
 	// these are relative so multiply by the nominal yield
 	vector<double> tof_eff_unc = tof_eff_systematic( plc, charge, iCen );
+	vector<double> fit_sig_unc = fit_sigma_systematic( plc, charge, iCen );
 
 	for ( int iPt = 1; iPt <= nominal->GetNbinsX(); iPt++ ){
 
@@ -99,7 +101,8 @@ vector<double> total_systematics( vector<double> &weights, vector<string> &sourc
 		double yNominal = nominal->GetBinContent( iPt );
 		// cout << "Relative TofEff Unc " << tof_eff_unc[ iPt - 1 ] << endl;
 		tof_eff_unc[ iPt - 1 ] = tof_eff_unc[ iPt - 1 ] * yNominal;
-
+		if ( iPt -1 < fit_sig_unc.size() )
+			fit_sig_unc[ iPt - 1 ] = fit_sig_unc[ iPt - 1 ] * yNominal;
 		// cout << "Nominal Yield = " << yNominal << endl;
 
 
@@ -161,7 +164,7 @@ vector<double> total_systematics( vector<double> &weights, vector<string> &sourc
 	// work in the tof_eff ones
 	for ( int i = 0; i < totals.size(); i++ ){
 
-		totals[ i ] = sqrt(  tof_eff_unc[i]*tof_eff_unc[i]  );
+		totals[ i ] = sqrt(  totals[i]*totals[i] + tof_eff_unc[i]*tof_eff_unc[i] + fit_sig_unc[i]*fit_sig_unc[i]   );
 
 	}
 

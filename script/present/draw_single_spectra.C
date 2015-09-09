@@ -32,7 +32,7 @@ string plc_label( string plc, string charge ){
 	if ( "K" == plc && "p" == charge )
 		return "K^{+}";
 	if ( "K" == plc && "n" == charge )
-		return "K^{+}";
+		return "K^{-}";
 	if ( "P" == plc && "p" == charge )
 		return "P";
 	if ( "P" == plc && "n" == charge )
@@ -40,9 +40,10 @@ string plc_label( string plc, string charge ){
 	return "";
 }
 
-int nPtBins = 26;
+int nPtBins = 28;
 double ptBins[] = { 
 0.0,
+0.1,
 0.5,
 0.6, 
 0.7, 
@@ -66,7 +67,8 @@ double ptBins[] = {
 3.0 , 
 3.5, 
 4.5, 
-5.0, 
+5.0,
+5.7, 
 6.0, 
 6.8 };
 
@@ -79,8 +81,8 @@ TH1 * normalize_binning( TH1 * in ){
 
 	DEBUG( "Input has " << in->GetNbinsX() << " bins" );
 	for ( int i = 1; i <= in->GetNbinsX(); i++ ){
-		out->SetBinContent( i + 1, in->GetBinContent( i ) );
-		out->SetBinError( i + 1, in->GetBinError( i ) );
+		out->SetBinContent( i + 2, in->GetBinContent( i ) );
+		out->SetBinError( i + 2, in->GetBinError( i ) );
 	}
 
 	DEBUG( "returing normalized hitograms " << name  );

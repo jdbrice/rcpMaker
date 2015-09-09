@@ -12,7 +12,7 @@ void draw_double_ratio_vs_energy( 	string charge = "p",
 
 	Reporter rp( "img/rp_double_ratio.pdf", 400, 600 );
 
-
+	gPad->SetTopMargin( 0.01);
 	TLegend * leg = new TLegend( 0.6, 0.1, 0.9, 0.5 );
 	leg-> SetNColumns(1);
 	leg->SetTextFont( 52 );

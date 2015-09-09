@@ -1,3 +1,5 @@
+#ifndef TOF_EFF_SYSTEMATIC
+#define TOF_EFF_SYSTEMATIC
 
 #include "Logger.h"
 
@@ -51,3 +53,4 @@ vector<double> tof_eff_systematic( string plc, string charge, string iCen ){
 	return unc;
 
 }
+#endif
