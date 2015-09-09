@@ -14,7 +14,7 @@ void set_plot_style()
     gStyle->SetNumberContours(NCont);
 }
 
-void make_dedx_only(){
+void make_beta_only(){
 	TFile * f = new TFile( "histograms.root", "READ" );
 
 	RooPlotLib rpl;
@@ -24,13 +24,14 @@ void make_dedx_only(){
 	gStyle->SetOptStat( 0 );
 
 
-	TH2 * h = (TH2*)f->Get( "dedxRaw" );
+	TH2 * h = (TH2*)f->Get( "betaRaw" );
 
 	h->RebinX( 2 );
 	h->RebinY( 2 );
 
-	rpl.style( h ).set( "title", " ; pT * charge; ln(dE/dx)" )
-		.set( "yto", 0.9 ).set( "yr", 0.56, 2.5 ).set( "draw", "colz" ).draw();
+	rpl.style( h ).set( "title", " ; pT * charge; 1 / #beta" )
+		.set( "yr", 0.6, 2.4 )
+		.set( "yto", 0.9 ).set( "draw", "colz" ).draw();
 
 	// h->SetTitle( " ; pT * charge; ln(dE/dx)" );
 	// h->GetYaxis()->SetRangeUser( 0.66, 3.0 );
@@ -41,6 +42,6 @@ void make_dedx_only(){
 	gPad->SetLogz(1);
 	gPad->SetLeftMargin( 0.10 );
 
-	rp.saveImage( "dedxRaw.pdf" );
-	rp.saveImage( "dedx_raw.png" );
+	rp.saveImage( "one_beta_raw.pdf" );
+	rp.saveImage( "one_beta_raw.png" );
 }
