@@ -1,11 +1,13 @@
+
+#include "common.C"
+
 #ifndef DRAW_SINGLE_SPECTRA_C
 #define DRAW_SINGLE_SPECTRA_C
-
 
 #include "SpectraLoader.h"
 #include "Utils.h"
 #include "Logger.h"
-#include "common.C"
+
 
 #include <sys/stat.h>
 
@@ -86,11 +88,18 @@ TH1 * normalize_binning( TH1 * in ){
 }
 
 
-TH1* draw_single_spectra( 	string energy, string plc, string charge, string iCen,
-							int color = kRed, string draw_opt = "", double scaler = 1.0 ){
+TH1* draw_single_spectra( 	string energy = "14.5", 
+							string plc="Pi", string charge="p", 
+							string iCen="0",
+							int color = kRed, 
+							string draw_opt = "", 
+							double scaler = 1.0 ){
+
+
 	Logger::setGlobalLogLevel( Logger::llAll );
 	gStyle->SetOptStat( 0 );
 
+	INFO( "Got COLOR " << color );
 
 	string fn = file_name( energy, plc, charge, iCen );
 	if ( !file_exists( fn ) && iCen != "3"){
@@ -109,8 +118,10 @@ TH1* draw_single_spectra( 	string energy, string plc, string charge, string iCen
 	stat->Scale( scaler );
 
 	RooPlotLib rpl;
-	
-	rpl.style( sys ).set( "title", plc_label( plc, charge ) + " ; pT [GeV/c]; dN^{2} / ( N_{evt} 2 #pi pT dpT dy )    " )
+
+
+	rpl.style( sys )
+		.set( "title", plc_label( plc, charge ) + " ; pT [GeV/c]; dN^{2} / ( N_{evt} 2 #pi pT dpT dy )    " )
 		.set( "color", color, 0.5 ).set( "markerstyle", 8 )
 		.set( "draw", draw_opt + " e2" ).set( "yto", 2 )
 		.draw();

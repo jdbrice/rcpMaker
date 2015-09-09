@@ -50,19 +50,4 @@ void draw_ratio( 	string energy,
 		.set( "title", " ; pT [GeV/c]; " + plc1 + " / " + plc2 )
 		.set( "markerstyle", 8 ).set( "draw", "same" ).draw();
 
-	// sys->SetTitle(  );
-	// sys->SetLineColor( color );
-	// sys->SetMarkerStyle( 8 );
-	// sys->SetMarkerColor( color );
-	// sys->SetFillColorAlpha( color, 0.5 );
-
-	// stat->SetLineColor( color );
-	// stat->SetMarkerStyle( 8 );
-	// stat->SetMarkerColor( color );
-
-
-
-	// sys->Draw( (draw_opt + " e2").c_str() );
-	// stat->Draw( "same" );
-
 }

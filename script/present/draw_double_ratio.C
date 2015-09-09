@@ -91,7 +91,9 @@ TH1 *draw_double_ratio( 	string energy,
 
 		gPad->SetLogy(1);
 
-	TLine * lUnity = new TLine( 0, scaler, 6.8, scaler );
+	TLine * lUnity = new TLine( 0, scaler, 5.0, scaler );
+
+	rpl.style( lUnity ).set( "color", color ).set( "lw", 2 );
 	lUnity->SetLineColor( color );
 	lUnity->Draw();
 	lUnity->SetLineStyle( kDashed );

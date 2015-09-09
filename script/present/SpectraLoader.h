@@ -33,7 +33,7 @@ public:
 			stat.push_back( c );
 			sys.push_back( d );
 
-			INFO( tag,  "[" << a << "] = " << b << " +/- " << c << " +/- " << d );
+			// INFO( tag,  "[" << a << "] = " << b << " +/- " << c << " +/- " << d );
 
 		}	
 
@@ -52,7 +52,7 @@ public:
 			else
 				width.push_back( (pT[ i ] - pT[ i - 1 ]) / 2.0 );
 
-			INFO( tag, "width[" << i << "] = " << width[ i ] );
+			// INFO( tag, "width[" << i << "] = " << width[ i ] );
 		}
 
 
@@ -97,7 +97,7 @@ public:
 		}
 
 		for ( int i = 0; i < bins.size(); i++ ){
-			INFO( tag, "bin edge [" << i << "] = " << bins[ i ] );
+			//INFO( tag, "bin edge [" << i << "] = " << bins[ i ] );
 		}
 		return bins;
 	}

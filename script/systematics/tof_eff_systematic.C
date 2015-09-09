@@ -3,7 +3,7 @@
 
 string fit_file_name( string plc ){
 	string base = "/Users/danielbrandenburg/bnl/local/data/RcpAnalysis/products/";
-	string source = "fitTofEff";
+	string source = "fitTofSchema";
 	return base + source + "/Fit_PostCorr_" + plc +".root";
 }
 

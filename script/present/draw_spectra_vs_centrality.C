@@ -3,7 +3,7 @@
 #include "Reporter.h"
 
 
-void draw_spectra_vs_centrality( string en, string plc, string charge ){
+void draw_spectra_vs_centrality( string en="14.5", string plc="Pi", string charge="p" ){
 	Logger::setGlobalLogLevel( Logger::llAll );
 
 	//Reporter rp( "tmp.pdf", 900, 700 );
@@ -25,7 +25,7 @@ void draw_spectra_vs_centrality( string en, string plc, string charge ){
 	master->GetYaxis()->SetRangeUser( 1.5e-15, 5e2 );
 	rpl.style( master ).set( "yto", 1.1 ).set( "markerstyle", 8 );
 
-	rpl.style( master ).set( "xr", 0, 6.0 );
+	rpl.style( master ).set( "xr", 0, 4.5 );
 	
 
 

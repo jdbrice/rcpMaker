@@ -97,9 +97,11 @@ vector<double> total_systematics( vector<double> &weights, vector<string> &sourc
 		vector<double> sigmaNW;
 
 		double yNominal = nominal->GetBinContent( iPt );
+		// cout << "Relative TofEff Unc " << tof_eff_unc[ iPt - 1 ] << endl;
 		tof_eff_unc[ iPt - 1 ] = tof_eff_unc[ iPt - 1 ] * yNominal;
 
-		TRACE( "Nominal Yield = " << yNominal );
+		// cout << "Nominal Yield = " << yNominal << endl;
+
 
 		int i = 0;
 		for ( string source : sources ){
@@ -142,10 +144,8 @@ vector<double> total_systematics( vector<double> &weights, vector<string> &sourc
 			i++;
 		}
 
-		// avg feedDown from other part
-		// sigma.push_back( yNominal * 0.015 );
 		// avg sigma from other part
-		// sigma.push_back( yNominal * 0.012 );
+		sigma.push_back( yNominal * 0.0 );
 
 		
 		double total_sqr = 0;
@@ -159,11 +159,11 @@ vector<double> total_systematics( vector<double> &weights, vector<string> &sourc
 	}
 
 	// work in the tof_eff ones
-	// for ( int i = 0; i < totals.size(); i++ ){
+	for ( int i = 0; i < totals.size(); i++ ){
 
-	// 	totals[ i ] = sqrt( totals[ i ]*totals[ i ] + tof_eff_unc[i]*tof_eff_unc[i]  );
+		totals[ i ] = sqrt(  tof_eff_unc[i]*tof_eff_unc[i]  );
 
-	// }
+	}
 
 	cout << " Totals for " << plc << "_" << charge << "_" << iCen << endl;
 	for ( double v : totals ){

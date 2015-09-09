@@ -26,7 +26,7 @@ map< string, double> max_yield = {
 	{ "P_p_3", 3.5 },
 	{ "P_p_4", 3.5 },
 	{ "P_p_5", 3.5 },
-	{ "P_p_6", 3.5 },
+	{ "P_p_6", 3.0 },
 	/* P Minus */
 	{ "P_n_0", 3.0 },
 	{ "P_n_1", 3.0 },
@@ -67,9 +67,9 @@ void write_spectra( string plc, string charge, string iCen, vector<string> &sour
 	INFO( tag, "(plc=" << plc << ", charge=" << charge << ", iCen=" << iCen <<" )" );
 
 	string base = "/Users/danielbrandenburg/bnl/local/data/RcpAnalysis/spectra/";
-	TH1 * h = yield_hist_for( "nominal_01", plc, charge, iCen );
+	TH1 * h = yield_hist_for( "nominal", plc, charge, iCen );
 
-	//vector<double> sys_unc = total_systematics( weights, sources, plc, charge, iCen );
+	vector<double> sys_unc = total_systematics( weights, sources, plc, charge, iCen );
 
 
 	// open the files
@@ -89,7 +89,7 @@ void write_spectra( string plc, string charge, string iCen, vector<string> &sour
 		
 		double value = h->GetBinContent( i );
 		double stat = h->GetBinError( i );
-		double sys = value * 0.01; //sys_unc[ i - 1 ];//total_systematics( i, weights, sources, plc, charge, iCen );
+		double sys =  sys_unc[ i - 1 ];//total_systematics( i, weights, sources, plc, charge, iCen );
 		if ( 0 >= sys )
 			sys = 1e-10;
 
@@ -108,28 +108,19 @@ void export_spectra(  ){
 	Logger::setGlobalLogLevel( Logger::llAll );
 	
 	// first calculate the cov matrix for our cut variables
-	// vector<string> sources = { "zLocal_right", "dca_low", "nHitsFit_low", "nHitsDedx_low", "nHitsRatio_low", "tpcEff_low" };
-	vector<string> sources = { "tpcEff_low", "dca_low" };
+	vector<string> sources = { "zLocal_right", "dca_low", "nHitsFit_low", "nHitsDedx_low", "nHitsRatio_low", "tpcEff_low", "feedDown_low" };
 	vector<string> source_vars = { "zLocal", "dca", "nHitsFit", "nHitsDedx", "nHitsPossible" };
 	vector<double> weights;
 	
 	// calculate the cov_matrix
-	// TMatrixD cut_cov = cov_matrix( source_vars, "matchFlag>=1" );
-	// for ( int i = 0; i < source_vars.size(); i++ ){
-	// 	weights.push_back( error_weight( cut_cov, i ) );
-	// 	INFO( "w[" << source_vars[ i ] << "] = " << weights[ i ] );
-	// }	
+	TMatrixD cut_cov = cov_matrix( source_vars, "matchFlag>=1" );
+	for ( int i = 0; i < source_vars.size(); i++ ){
+		weights.push_back( error_weight( cut_cov, i ) );
+		INFO( "w[" << source_vars[ i ] << "] = " << weights[ i ] );
+	}	
 
 	weights.push_back( 1.0 );
 	weights.push_back( 1.0 );
-
-	// cout << "11 = " << total_systematics( 11, weights, sources, "Pi", "p", "0" ) << endl;
-	// cout << "12 = " << total_systematics( 12, weights, sources, "Pi", "p", "0" ) << endl;
-	// total_systematics( 32, weights, sources, "Pi", "p", "0" );
-	// cout << "14 = " << total_systematics( 14, weights, sources, "Pi", "p", "0" ) << endl;
-	// cout << "15 = " << total_systematics( 15, weights, sources, "Pi", "p", "0" ) << endl;
-	// cout << "16 = " << total_systematics( 16, weights, sources, "Pi", "p", "0" ) << endl;
-
 
 	// return;
 

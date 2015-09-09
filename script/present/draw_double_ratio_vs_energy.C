@@ -2,9 +2,9 @@
 #include "draw_single_spectra.C"
 #include "common.C"
 
-void draw_double_ratio_vs_energy( 	string plc1, string plc2, 
-									string charge, 
-									string iCen1, string iCen2 ){
+void draw_double_ratio_vs_energy( 	string charge = "p",
+									string plc1 = "P", string plc2 = "Pi",  
+									string iCen1 = "0", string iCen2 = "6" ){
 
 	gStyle->SetOptStat( 0 );
 	RooPlotLib rpl;
