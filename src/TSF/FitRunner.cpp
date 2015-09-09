@@ -495,8 +495,8 @@ namespace TSF{
 			for ( string plc : Common::species ){
 				
 				ConfigRange &range = sigmaRanges[ pre + "_" + plc ];
-				// if ( !range.above( avgP ) )
-				// 	continue;
+				if ( !range.above( avgP ) )
+					continue;
 
 				INFO( tag, "Do Systematics for " << pre << "_" << plc );
 				
