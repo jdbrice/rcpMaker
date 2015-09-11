@@ -458,6 +458,8 @@ namespace TSF{
 			fitter.fit3( );
 			tries ++;
 		}
+
+		fitter.fitErrors();
 		
 
 		if ( nullptr == _schema ){

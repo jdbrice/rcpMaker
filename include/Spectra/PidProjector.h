@@ -63,8 +63,10 @@ public:
 		string cutstr = "zb - " + dts(zb_Pi) + " >= " + dts( - zb_Pi_sigma * nSigma );
 
 		_electronCut = TCut( cutstr.c_str() );
+		INFO( tag, "Electron Cut : \"" << _electronCut << " \" "  );
 
 		_zbCutMin = zb_Pi - zb_Pi_sigma * nSigma;
+		INFO( tag, "zb cut min = " << _zbCutMin );
 
 	}
 
@@ -121,10 +123,10 @@ public:
 		double min = data->GetMinimum( var.c_str() );
 
 		if ( "zb" == var && max > _zbCutMax )
-			max = _zbCutMax + (_zbCutMax - min) * .50;
+			max = _zbCutMax + (_zbCutMax - min) * .10;
 
 		if ( "zb" == var && min < _zbCutMin )
-			min = _zbCutMin - (max - _zbCutMin) * .50;
+			min = _zbCutMin - (max - _zbCutMin) * .10;
 		
 		double binWidth = _zbBinWidth;
 		if ( "zd" == var )
