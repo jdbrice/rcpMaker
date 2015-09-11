@@ -1,0 +1,485 @@
+
+##################################################
+# Create Condor Submit files for PID Rcp Analysis
+##################################################
+Getenv = True
+Executable    = /home/jdb12/work/rcpMaker/bin/rcp
+initialdir 		= /home/jdb12/work/rcpMaker/bin/
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_aaa PostCorr_K_aaa_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_aab PostCorr_K_aab_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_aac PostCorr_K_aac_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_aad PostCorr_K_aad_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_aae PostCorr_K_aae_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_aaf PostCorr_K_aaf_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_aag PostCorr_K_aag_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_aah PostCorr_K_aah_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_aai PostCorr_K_aai_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_aaj PostCorr_K_aaj_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_aak PostCorr_K_aak_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_aal PostCorr_K_aal_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_aam PostCorr_K_aam_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_aan PostCorr_K_aan_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_aao PostCorr_K_aao_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_aap PostCorr_K_aap_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_aaq PostCorr_K_aaq_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_aar PostCorr_K_aar_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_aas PostCorr_K_aas_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_aat PostCorr_K_aat_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_aau PostCorr_K_aau_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_aav PostCorr_K_aav_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_aaw PostCorr_K_aaw_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_aax PostCorr_K_aax_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_aay PostCorr_K_aay_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_aaz PostCorr_K_aaz_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_aba PostCorr_K_aba_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_abb PostCorr_K_abb_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_abc PostCorr_K_abc_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_abd PostCorr_K_abd_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_abe PostCorr_K_abe_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_abf PostCorr_K_abf_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_abg PostCorr_K_abg_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_abh PostCorr_K_abh_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_abi PostCorr_K_abi_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_abj PostCorr_K_abj_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_abk PostCorr_K_abk_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_abl PostCorr_K_abl_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_abm PostCorr_K_abm_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_abn PostCorr_K_abn_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_abo PostCorr_K_abo_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_abp PostCorr_K_abp_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_abq PostCorr_K_abq_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_abr PostCorr_K_abr_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_abs PostCorr_K_abs_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_abt PostCorr_K_abt_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_abu PostCorr_K_abu_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_abv PostCorr_K_abv_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_abw PostCorr_K_abw_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_abx PostCorr_K_abx_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_aby PostCorr_K_aby_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_abz PostCorr_K_abz_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_aca PostCorr_K_aca_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_acb PostCorr_K_acb_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_acc PostCorr_K_acc_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_acd PostCorr_K_acd_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_ace PostCorr_K_ace_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_acf PostCorr_K_acf_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_acg PostCorr_K_acg_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_ach PostCorr_K_ach_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_aci PostCorr_K_aci_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_acj PostCorr_K_acj_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_ack PostCorr_K_ack_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_acl PostCorr_K_acl_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_acm PostCorr_K_acm_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_acn PostCorr_K_acn_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_aco PostCorr_K_aco_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_acp PostCorr_K_acp_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_acq PostCorr_K_acq_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_acr PostCorr_K_acr_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_acs PostCorr_K_acs_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_act PostCorr_K_act_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_acu PostCorr_K_acu_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_acv PostCorr_K_acv_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_acw PostCorr_K_acw_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_acx PostCorr_K_acx_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_acy PostCorr_K_acy_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_acz PostCorr_K_acz_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_ada PostCorr_K_ada_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_adb PostCorr_K_adb_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_adc PostCorr_K_adc_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_add PostCorr_K_add_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_ade PostCorr_K_ade_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_adf PostCorr_K_adf_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_adg PostCorr_K_adg_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_adh PostCorr_K_adh_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_adi PostCorr_K_adi_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_adj PostCorr_K_adj_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_adk PostCorr_K_adk_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_adl PostCorr_K_adl_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_adm PostCorr_K_adm_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_adn PostCorr_K_adn_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_ado PostCorr_K_ado_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_adp PostCorr_K_adp_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_adq PostCorr_K_adq_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_adr PostCorr_K_adr_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_ads PostCorr_K_ads_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_adt PostCorr_K_adt_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_adu PostCorr_K_adu_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_adv PostCorr_K_adv_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_adw PostCorr_K_adw_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_adx PostCorr_K_adx_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_ady PostCorr_K_ady_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_adz PostCorr_K_adz_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_aea PostCorr_K_aea_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_aeb PostCorr_K_aeb_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_aec PostCorr_K_aec_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_aed PostCorr_K_aed_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_aee PostCorr_K_aee_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_aef PostCorr_K_aef_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_aeg PostCorr_K_aeg_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_aeh PostCorr_K_aeh_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_aei PostCorr_K_aei_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_aej PostCorr_K_aej_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_aek PostCorr_K_aek_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_ael PostCorr_K_ael_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_aem PostCorr_K_aem_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_aen PostCorr_K_aen_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_aeo PostCorr_K_aeo_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_aep PostCorr_K_aep_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_aeq PostCorr_K_aeq_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_aer PostCorr_K_aer_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_aes PostCorr_K_aes_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_aet PostCorr_K_aet_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_aeu PostCorr_K_aeu_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_aev PostCorr_K_aev_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_aew PostCorr_K_aew_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_aex PostCorr_K_aex_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_aey PostCorr_K_aey_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_aez PostCorr_K_aez_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_afa PostCorr_K_afa_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_afb PostCorr_K_afb_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_afc PostCorr_K_afc_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_afd PostCorr_K_afd_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_afe PostCorr_K_afe_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_aff PostCorr_K_aff_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_afg PostCorr_K_afg_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_afh PostCorr_K_afh_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_afi PostCorr_K_afi_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_afj PostCorr_K_afj_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_afk PostCorr_K_afk_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_afl PostCorr_K_afl_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_afm PostCorr_K_afm_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_afn PostCorr_K_afn_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_afo PostCorr_K_afo_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_afp PostCorr_K_afp_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_afq PostCorr_K_afq_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_afr PostCorr_K_afr_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_afs PostCorr_K_afs_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_aft PostCorr_K_aft_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_afu PostCorr_K_afu_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_afv PostCorr_K_afv_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_afw PostCorr_K_afw_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_afx PostCorr_K_afx_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_afy PostCorr_K_afy_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_afz PostCorr_K_afz_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_aga PostCorr_K_aga_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_agb PostCorr_K_agb_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_agc PostCorr_K_agc_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_agd PostCorr_K_agd_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_age PostCorr_K_age_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_agf PostCorr_K_agf_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_agg PostCorr_K_agg_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_agh PostCorr_K_agh_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_agi PostCorr_K_agi_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_agj PostCorr_K_agj_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_agk PostCorr_K_agk_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_agl PostCorr_K_agl_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_agm PostCorr_K_agm_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_agn PostCorr_K_agn_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_ago PostCorr_K_ago_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_agp PostCorr_K_agp_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_agq PostCorr_K_agq_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_agr PostCorr_K_agr_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_ags PostCorr_K_ags_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_agt PostCorr_K_agt_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_agu PostCorr_K_agu_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_agv PostCorr_K_agv_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_agw PostCorr_K_agw_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_agx PostCorr_K_agx_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_agy PostCorr_K_agy_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_agz PostCorr_K_agz_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_aha PostCorr_K_aha_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_ahb PostCorr_K_ahb_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_ahc PostCorr_K_ahc_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_ahd PostCorr_K_ahd_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_ahe PostCorr_K_ahe_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_ahf PostCorr_K_ahf_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_ahg PostCorr_K_ahg_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_ahh PostCorr_K_ahh_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_ahi PostCorr_K_ahi_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_ahj PostCorr_K_ahj_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_ahk PostCorr_K_ahk_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_ahl PostCorr_K_ahl_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_ahm PostCorr_K_ahm_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_ahn PostCorr_K_ahn_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_aho PostCorr_K_aho_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_ahp PostCorr_K_ahp_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_ahq PostCorr_K_ahq_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_ahr PostCorr_K_ahr_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_ahs PostCorr_K_ahs_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_aht PostCorr_K_aht_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_ahu PostCorr_K_ahu_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_ahv PostCorr_K_ahv_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_ahw PostCorr_K_ahw_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_ahx PostCorr_K_ahx_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_ahy PostCorr_K_ahy_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_ahz PostCorr_K_ahz_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_aia PostCorr_K_aia_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_aib PostCorr_K_aib_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_aic PostCorr_K_aic_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_aid PostCorr_K_aid_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_aie PostCorr_K_aie_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_aif PostCorr_K_aif_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_aig PostCorr_K_aig_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_aih PostCorr_K_aih_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_aii PostCorr_K_aii_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_aij PostCorr_K_aij_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_aik PostCorr_K_aik_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_ail PostCorr_K_ail_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_aim PostCorr_K_aim_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_ain PostCorr_K_ain_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_aio PostCorr_K_aio_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_aip PostCorr_K_aip_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_aiq PostCorr_K_aiq_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_air PostCorr_K_air_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_ais PostCorr_K_ais_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_ait PostCorr_K_ait_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_aiu PostCorr_K_aiu_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_aiv PostCorr_K_aiv_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_aiw PostCorr_K_aiw_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_aix PostCorr_K_aix_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_aiy PostCorr_K_aiy_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_aiz PostCorr_K_aiz_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_aja PostCorr_K_aja_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_ajb PostCorr_K_ajb_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_ajc PostCorr_K_ajc_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_ajd PostCorr_K_ajd_
+Queue
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal_minos/PidData/PostCorr_K.xml /data/star/jdb12/RcpAnalysis/data/list/list_aje PostCorr_K_aje_
+Queue
