@@ -440,13 +440,13 @@ namespace TSF{
 
 		schema->setMethod( "chi2" );
 
-		minuit->mnexcm( "MINOS", arglist, 1, iFlag );
+		minuit->mnexcm( "HESSE", arglist, 1, iFlag );
 		status = minuit->fCstatu;
 		INFO ( tag, "Errors Status " << status );
 	
 		// get the final state of all variables 
 		INFO( tag, "Updating parameters after Fit" );
-		updateParameters();
+		// updateParameters();
 	}
 
 	void Fitter::setValue( string var, double val ){
