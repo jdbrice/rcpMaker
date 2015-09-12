@@ -19,7 +19,7 @@ void make_beta_only(){
 
 	RooPlotLib rpl;
 
-	Reporter rp( "tmp.pdf", 600, 300 );
+	Reporter rp( "tmp.pdf", 600, 400 );
 	set_plot_style();
 	gStyle->SetOptStat( 0 );
 
@@ -30,18 +30,20 @@ void make_beta_only(){
 	h->RebinY( 2 );
 
 	rpl.style( h ).set( "title", " ; pT * charge; 1 / #beta" )
-		.set( "yr", 0.6, 2.4 )
-		.set( "yto", 0.9 ).set( "draw", "colz" ).draw();
+		.set( "yr", 0.6, 1.8 )
+		.set( "xr", -3, 3 )
+		.set( "yts", 0.08 )
+		.set( "yto", 0.6 )
+		.set( "xts", 0.08 )
+		.set( "xto", 0.6 )
+		.set( "draw", "col" ).draw();
 
-	// h->SetTitle( " ; pT * charge; ln(dE/dx)" );
-	// h->GetYaxis()->SetRangeUser( 0.66, 3.0 );
-	// h->Draw( "colz" );
-	// gPad->SetLeftMargin( 0.16 );
 	gPad->SetBottomMargin( 0.13 );
 
 	gPad->SetLogz(1);
-	gPad->SetLeftMargin( 0.10 );
+	gPad->SetLeftMargin( 0.13 );
+	gPad->SetRightMargin( 0.05 );
 
-	rp.saveImage( "one_beta_raw.pdf" );
-	rp.saveImage( "one_beta_raw.png" );
+	rp.saveImage( "img/one_beta_raw.pdf" );
+	rp.saveImage( "img/one_beta_raw.png" );
 }

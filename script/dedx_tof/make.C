@@ -54,7 +54,7 @@ void drawTpcLines( double center, int c, double y1, double y2 ){
 	l2->Draw("same");
 }
 
-void make( string charge = "p", bool lines = true, int iCen = 0, string cs = "Pi", string hFile = "histograms.root" ){
+void make( string charge = "p", bool lines = false, int iCen = 0, string cs = "Pi", string hFile = "histograms.root" ){
 
 	Bichsel bgen;
 	gStyle->SetPadLeftMargin(0.16);
@@ -102,8 +102,10 @@ void make( string charge = "p", bool lines = true, int iCen = 0, string cs = "Pi
 
 		  
 
-		rpl.style( h2 ).set( "draw", "colz" ).set( "optstat", 0 ).set( "logz", 1 )
-		.set( "title", chargeName + dts(lpT) + " < pT < " + dts(hpT) +"; ln(dE/dx) - ln(dE/dx)_{#pi}; #beta^{-1} - #beta^{-1}_{#pi}" ).set( "yoffset", 0.01 ).draw(); 
+		rpl.style( h2 ).set( "draw", "col" )
+			.set( "optstat", 0 ).set( "logz", 1 )
+			.set( "title", chargeName + dts(lpT) + " < p_{T} [GeV/c] < " + dts(hpT) +"; ln(dE/dx) - ln(dE/dx)_{#pi}; #beta^{-1} - #beta^{-1}_{#pi}" )
+			.set( "yoffset", 0.01 ).draw(); 
 
 		if ( lines  ){
 			double bKaon = one_beta( mK, avgP ) - one_beta( mPi, avgP );
@@ -130,6 +132,7 @@ void make( string charge = "p", bool lines = true, int iCen = 0, string cs = "Pi
 		// ell->Draw();
 
 		rp.savePage();
+		rp.saveImage( ("img/dedx_tof_" + ts(iPt) + ".pdf").c_str() );
 	}
 
 }

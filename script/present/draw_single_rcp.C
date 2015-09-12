@@ -28,25 +28,32 @@ TH1* draw_single_rcp(string energy, string plc, string charge, string iCen = "0"
 	TH1* cen_stat_rcp = (TH1*)cen_stat->Clone( (cen_fn + "_cen_stat_rcp").c_str() );
 	TH1* cen_sys_rcp = (TH1*)cen_sys->Clone( (cen_fn + "_cen_sys_rcp").c_str() );
 
-	rpl.style( cen_sys_rcp ).set( "title", " ;pT [GeV/c]; R_{CP} ( " + centrality_labels[ stoi( iCen ) ] + " ) / ( " + centrality_labels[ stoi( iPer ) ] + " )" );
-
+	// do the division
 	cen_stat_rcp->Divide( per_stat );
 	cen_stat_rcp->Scale( per_nColl / cen_nColl );
 
 	cen_sys_rcp->Divide( per_sys );
 	cen_sys_rcp->Scale( per_nColl / cen_nColl );
 
-	cen_sys_rcp->SetLineColor( color );
-	cen_sys_rcp->SetMarkerColor( color );
-	cen_sys_rcp->SetFillColorAlpha( color, 0.5 );
-	cen_sys_rcp->SetMarkerStyle( 8 );
 
-	cen_stat_rcp->SetMarkerStyle( 8 );
-	cen_stat_rcp->SetLineColor( color );
-	cen_stat_rcp->SetMarkerColor( color );
+
+	rpl.style( cen_sys_rcp )
+		.set( "title", " ;p_{T} [GeV/c]; R_{CP} ( " + centrality_labels[ stoi( iCen ) ] + " ) / ( " + centrality_labels[ stoi( iPer ) ] + " )    " )
+		.set( "yts", 0.05 )
+		.set( "yls", 0.06 )
+		.set( "xts", 0.05 )
+		.set( "xls", 0.05 )
+		.set( "mst", 8 )
+		.set( "color", color, 0.33 );
+
+	rpl.style( cen_stat_rcp )
+		.set( "yts", 0.05 )
+		.set( "yls", 0.06 )
+		.set( "mst", 8 )
+		.set( "color", color );
 
 	cen_sys_rcp->Draw( ( draw_opt + " e2").c_str() );
-	cen_stat_rcp->Draw( "same e1" );
+	cen_stat_rcp->Draw( "same e1x0" );
 
 	cen_sys_rcp->GetYaxis()->SetRangeUser( 0.15, 6 );
 	gPad->SetLogy(1);

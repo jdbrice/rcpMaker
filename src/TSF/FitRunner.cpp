@@ -699,15 +699,20 @@ namespace TSF{
 			INFO( tag, "Using zb range ( " << zbMin << " -> " << zbMax << " )" );
 			xMin = zbMin - 0.2;
 			xMax = zbMax + 0.2;
+
+			// TODO : fix hard code center species
+			h->SetTitle( " ; #beta^{-1} - #beta^{-1}_{#pi} ; counts" );
 		} else {
 			INFO( tag, "Using zd range( " << zdMin << " -> " << zdMax << " )" );
 			xMin = zdMin - 0.8;
 			xMax = zdMax + 0.8;
+
+			h->SetTitle( " ; ln(dE/dx) - ln(dE/dx)_{#pi}; counts" );
 		}
 
 		h->GetXaxis()->SetRangeUser( xMin, xMax );
 
-		h->SetTitle( ( dts((*binsPt)[ iPt ]) + " < pT < " + dts( (*binsPt)[ iPt + 1 ] ) ).c_str() );
+		h->SetTitle( ( dts((*binsPt)[ iPt ]) + " < p_{T} [GeV/c] < " + dts( (*binsPt)[ iPt + 1 ] ) ).c_str() );
 
 		// draw boxes to show the fit ranges
 		for ( FitRange range : fitter->getSchema()->getRanges() ){
@@ -722,19 +727,19 @@ namespace TSF{
 		h->Draw("pe same");
 
 		TGraph * sum = fitter->plotResult( v );
-		sum->SetLineColor( kBlue );
-		sum->SetLineWidth( 1 );
+		sum->SetLineColor( kBlack );
+		sum->SetLineWidth( 2 );
 		sum->Draw( "same" );
 		
 		vector<TGraph*> comps;
-		vector<double> colors = { kOrange, kRed - 3, kGreen - 3, kBlue - 3 };
+		vector<double> colors = { kRed + 1, 	kAzure - 3, 	kGreen + 1, kBlue - 3 };
 		int i = 0;
 		
 		for ( string plc : Common::species ){
 			TGraph * g = fitter->plotResult( v+"_g"+plc );
 			comps.push_back( g );
 			g->SetLineColor( colors[ i ] );
-			g->SetLineWidth( 1 );
+			g->SetLineWidth( 2 );
 			g->Draw( "same" );
 
 			i++;
@@ -745,6 +750,8 @@ namespace TSF{
 	} // drawSet(...)
 
 	void FitRunner::reportFit( Fitter * fitter, int iPt ){
+
+		bool export_images = true;
 
 		gStyle->SetOptStat(0);
 		bool drawBig = false;
@@ -787,6 +794,10 @@ namespace TSF{
 		{
 			zdReporter->cd( 1, 1 );
 			drawSet( "zd_All", fitter, iPt );
+			if ( export_images ){
+				gPad->Print( (cfg->getString( nodePath + "output:path" ) + "img/zd_All_" + ts(iPt) + ".pdf").c_str() );
+				gPad->Print( (cfg->getString( nodePath + "output:path" ) + "img/zd_All_" + ts(iPt) + ".png").c_str() );
+			}
 			zdReporter->cd( 2, 1 );
 			drawSet( "zd_Pi", fitter, iPt );
 			zdReporter->cd( 1, 2 );
@@ -819,6 +830,10 @@ namespace TSF{
 		{
 			zbReporter->cd( 1, 1 );
 			drawSet( "zb_All", fitter, iPt );
+			if ( export_images ){
+				gPad->Print( (cfg->getString( nodePath + "output:path" ) + "img/zb_All_" + ts(iPt) + ".pdf").c_str() );
+				gPad->Print( (cfg->getString( nodePath + "output:path" ) + "img/zb_All_" + ts(iPt) + ".png").c_str() );
+			}
 			zbReporter->cd( 2, 1 );
 			drawSet( "zb_Pi", fitter, iPt );
 			zbReporter->cd( 1, 2 );
