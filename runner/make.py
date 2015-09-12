@@ -28,6 +28,9 @@ args = parser.parse_args()
 if not os.path.exists(args.config_base_path):
     os.makedirs(args.config_base_path)
 
+if not os.path.exists(args.output_path):
+    os.makedirs(args.output_path)
+
 """Correction Makers"""
 #	Tpc Efficiency
 effc.write( os.path.join( args.data_path, "embedding" ) , args.output_path, args.output_config_path, os.path.join( args.config_base_path, "TpcEff/") )
