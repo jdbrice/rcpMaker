@@ -1,7 +1,7 @@
 #include "draw_ratio_vs_centrality.C"
 
 
-void pannel_ratio_vs_centrality( string charge ){
+void pannel_ratio_vs_centrality( string charge ="p" ){
 
 	gStyle->SetOptStat(0);
 
@@ -14,11 +14,19 @@ void pannel_ratio_vs_centrality( string charge ){
 
 
 	
-	for ( string energy : energies ){
+	for ( string energy : renergies ){
 	
-		draw_ratio_vs_centrality( energy, "P", "Pi", charge );
+		if ( "39.0" == energy || "14.5" == energy ){
+			gPad->SetLeftMargin(0.15);
+		}
+		if ( "11.5" == energy || "14.5" == energy || "7.7" == energy ){
+			gPad->SetBottomMargin(0.15);
+		}
+
+		draw_ratio_vs_centrality( energy, "P", "Pi", charge, &rp );
 		
-		if ( "39.0" == energy )
+	
+		if ( "7.7" == energy )
 			rp.saveImage( "img/pannel_ratio_" + charge + ".pdf" );
 
 		rp.next();

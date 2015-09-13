@@ -95,6 +95,7 @@ TH1 *draw_double_ratio( 	string energy,
 
 	rpl.style( lUnity ).set( "color", color ).set( "lw", 2 );
 	lUnity->SetLineColor( color );
+	lUnity->SetLineWidth( 2 );
 	lUnity->Draw();
 	lUnity->SetLineStyle( kDashed );
 

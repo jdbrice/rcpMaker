@@ -34,8 +34,8 @@ void make_dedx_only(){
 		.set( "xr", -3, 3 )
 		.set( "yts", 0.08 )
 		.set( "xts", 0.08 )
-		.set( "yto", 0.6 )
 		.set( "xto", 0.6 )
+		.set( "yto", 0.6 )
 		.set( "draw", "col" ).draw();
 
 	gPad->SetBottomMargin( 0.13 );

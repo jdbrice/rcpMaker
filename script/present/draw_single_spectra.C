@@ -34,9 +34,9 @@ string plc_label( string plc, string charge ){
 	if ( "K" == plc && "n" == charge )
 		return "K^{-}";
 	if ( "P" == plc && "p" == charge )
-		return "P";
+		return "p";
 	if ( "P" == plc && "n" == charge )
-		return "#bar{P}";
+		return "#bar{p}";
 	return "";
 }
 

@@ -3,11 +3,11 @@
 #include "RooPlotLib.h"
 
 
-TH1* draw_ratio( 	string energy ="14.5", 
-					string plc1="P", string charge1="p", 
-					string plc2="Pi", string charge2="p", 
-					string iCen1 = "0", string iCen2 ="0",
-					int color = kRed, string draw_opt = "", double lb = 4.5 ){
+TH1* draw_single_ratio( 	string energy ="14.5", 
+							string plc1="P", string charge1="p", 
+							string plc2="Pi", string charge2="p", 
+							string iCen1 = "0", string iCen2 ="0",
+							int color = kRed, string draw_opt = "" ){
 	
 
 	RooPlotLib rpl;

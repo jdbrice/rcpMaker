@@ -10,7 +10,7 @@ void draw_double_ratio_vs_energy( 	string charge = "p",
 	RooPlotLib rpl;
 	TH1 * master;
 
-	Reporter rp( "img/rp_double_ratio.pdf", 400, 600 );
+	Reporter rp( "img/rp_double_ratio.pdf", 500, 700 );
 
 	gPad->SetTopMargin( 0.01);
 	TLegend * leg = new TLegend( 0.6, 0.1, 0.9, 0.5 );
@@ -42,9 +42,13 @@ void draw_double_ratio_vs_energy( 	string charge = "p",
 	string yt = centrality_labels[ stoi( iCen1 ) ] + " central / " + centrality_labels[ stoi( iCen2 ) ] + " central " + plc_label( plc1, charge ) + "/" + plc_label( plc2, charge ) + " Ratio";
 
 	rpl.style( master ).set( "yr", 0.3, 140 )
-	.set( "xr", 0, 5 )
-	.set( "title", " ; pT [GeV/c]; " + yt )
-	.set( "yto", 1.5 );
+		.set( "yts", 0.06 )
+		.set( "yls", 0.05 )
+		.set( "yto", 1.2 )
+		.set( "xr", 0, 5 )
+		.set( "title", " ; p_{T} [GeV/c]; " + yt )
+		.set( "xts", 0.06 )
+		.set( "xto", 0.7 );
 
 	leg->Draw();
 	gPad->SetGrid(1, 0);
