@@ -29,13 +29,13 @@ void make_beta_only(){
 	h->RebinX( 2 );
 	h->RebinY( 2 );
 
-	rpl.style( h ).set( "title", " ; pT * charge; 1 / #beta" )
+	rpl.style( h ).set( "title", " ; p_{T} * charge; 1 / #beta" )
 		.set( "yr", 0.6, 1.8 )
 		.set( "xr", -3, 3 )
 		.set( "yts", 0.08 )
 		.set( "yto", 0.6 )
 		.set( "xts", 0.08 )
-		.set( "xto", 0.6 )
+		.set( "xto", 0.7 )
 		.set( "draw", "col" ).draw();
 
 	gPad->SetBottomMargin( 0.13 );

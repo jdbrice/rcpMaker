@@ -29,12 +29,12 @@ void make_dedx_only(){
 	h->RebinX( 2 );
 	h->RebinY( 2 );
 
-	rpl.style( h ).set( "title", " ; pT * charge; ln(dE/dx)" )
+	rpl.style( h ).set( "title", " ; p_{T} * charge; ln(dE/dx)" )
 		.set( "yr", 0.6, 2.2 )
 		.set( "xr", -3, 3 )
 		.set( "yts", 0.08 )
 		.set( "xts", 0.08 )
-		.set( "xto", 0.6 )
+		.set( "xto", 0.7 )
 		.set( "yto", 0.6 )
 		.set( "draw", "col" ).draw();
 

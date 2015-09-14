@@ -16,7 +16,8 @@ void draw_ratio_vs_centrality( string en="14.5", string plc1="P", string plc2="P
 	master->Draw();
 	int iColor = 0;
 
-	TLegend * leg = new TLegend( 0.3, gPad->GetBottomMargin(), 0.95, 0.6 );
+	TLegend * leg = new TLegend( 0.35, gPad->GetBottomMargin(), 0.95, 0.65, "Centrality:" );
+	
 	leg->SetTextFont( 52 );
 	leg->SetTextSize( 0.07 );
 	leg-> SetNColumns(2);
@@ -39,7 +40,9 @@ void draw_ratio_vs_centrality( string en="14.5", string plc1="P", string plc2="P
 
 	}
 
-	if ( "7.7" == en ){
+	if ( "7.7" == en && "p" == charge){
+		leg->Draw();
+	} else if ( "14.5" == en && "n" == charge ){
 		leg->Draw();
 	}
 
@@ -52,7 +55,7 @@ void draw_ratio_vs_centrality( string en="14.5", string plc1="P", string plc2="P
 
 	rpl.style( master )
 		.set( "logy", 1 )
-		.set( "title", en + "; p_{T} [GeV/c]   ; " + plc_label( plc1, charge ) + " / " + plc_label( plc2, charge ) + "       " )
+		.set( "title", en + "; p_{T} [GeV/c]   ; " + plc_label( plc1, charge ) + " / " + plc_label( plc2, charge ) + "" )
 		.set( "xr", 0.1, 4.8 )
 		.set( "yr", 0.08, 6 )
 		.set( "xts", 0.10 )
@@ -66,6 +69,14 @@ void draw_ratio_vs_centrality( string en="14.5", string plc1="P", string plc2="P
 	if ( stof( en ) < 15 ){
 		rpl.style( master )
 			.set( "yr", 0.15, 20 );
+	}
+
+	if ( "n" == charge ){
+		if( stof( en ) < 15 ){
+			rpl.set( "yr", 0.002, 0.55 );
+		} else {
+			rpl.set( "yr", 0.02, 0.9 );
+		}
 	}
 
 	rp->saveImage( "img/ratio_" + en + "_" + plc1 + "_over_" + plc2 + "_" + charge + ".pdf" );
