@@ -16,13 +16,13 @@ void draw_ratio_vs_centrality( string en="14.5", string plc1="P", string plc2="P
 	master->Draw();
 	int iColor = 0;
 
-	TLegend * leg = new TLegend( 0.3, 0.15, 0.95, 0.6 );
+	TLegend * leg = new TLegend( 0.3, gPad->GetBottomMargin(), 0.95, 0.6 );
 	leg->SetTextFont( 52 );
 	leg->SetTextSize( 0.07 );
 	leg-> SetNColumns(2);
 
 	gStyle->SetTitleSize( 0.15, "t" );
-	gStyle->SetTitleX( 0.3 );
+	gStyle->SetTitleX( 0.22 );
 	gStyle->SetTitleAlign( 23 );
 
 	int iiCen = 0;
@@ -45,22 +45,27 @@ void draw_ratio_vs_centrality( string en="14.5", string plc1="P", string plc2="P
 
 	if ( "7.7" == en )
 		en = "7.7   ";
+	if ( "14.5" == en )
+		en = "         14.5";
+	if ( "39.0" == en )
+		en = "        39.0";
 
 	rpl.style( master )
 		.set( "logy", 1 )
-		.set( "title", en + "; p_{T} [GeV/c]   ; " + plc_label( plc1, charge ) + " / " + plc_label( plc2, charge ) + "   " )
+		.set( "title", en + "; p_{T} [GeV/c]   ; " + plc_label( plc1, charge ) + " / " + plc_label( plc2, charge ) + "       " )
 		.set( "xr", 0.1, 4.8 )
 		.set( "yr", 0.08, 6 )
 		.set( "xts", 0.10 )
-		.set( "xto", 0.6 )
+		.set( "xto", 0.8 )
 		.set( "xls", 0.06 )
 		.set( "yts", 0.10 )
-		.set( "yto", 0.5 );
+		.set( "yto", 0.7 )
+		.set( "yls", 0.06 );
 	
 
 	if ( stof( en ) < 15 ){
 		rpl.style( master )
-			.set( "yr", 0.08, 20 );
+			.set( "yr", 0.15, 20 );
 	}
 
 	rp->saveImage( "img/ratio_" + en + "_" + plc1 + "_over_" + plc2 + "_" + charge + ".pdf" );

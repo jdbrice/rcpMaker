@@ -17,10 +17,10 @@ void pannel_ratio_vs_centrality( string charge ="p" ){
 	for ( string energy : renergies ){
 	
 		if ( "39.0" == energy || "14.5" == energy ){
-			gPad->SetLeftMargin(0.15);
+			gPad->SetLeftMargin(0.18);
 		}
 		if ( "11.5" == energy || "14.5" == energy || "7.7" == energy ){
-			gPad->SetBottomMargin(0.15);
+			gPad->SetBottomMargin(0.2);
 		}
 
 		draw_ratio_vs_centrality( energy, "P", "Pi", charge, &rp );
