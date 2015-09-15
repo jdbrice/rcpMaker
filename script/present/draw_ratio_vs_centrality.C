@@ -65,7 +65,7 @@ void draw_ratio_vs_centrality( string en="14.5", string plc1="P", string plc2="P
 		.set( "yto", 0.7 )
 		.set( "yls", 0.06 );
 	
-
+ 
 	if ( stof( en ) < 15 ){
 		rpl.style( master )
 			.set( "yr", 0.15, 20 );
