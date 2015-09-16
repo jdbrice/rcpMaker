@@ -197,12 +197,12 @@ namespace TSF{
 			
 
 			// default low pt settings
-			schema->setInitialSigma( "zb_sigma_"+plc, zbSig, zbSig * 0.5, zbSig * 6 );
+			schema->setInitialSigma( "zb_sigma_"+plc, zbSig, zbSig * 0.5, zbSig * 12 );
 
 			if ( 0 >= zbDeltaMu ) // only used for testing
 				schema->fixParameter( "zb_mu_"+plc, zbMu );
 			else if ( !sigmaRanges[ "zb_" + plc ].above( avgP ) )	// actual default for running
-				schema->setInitialMu( "zb_mu_"+plc, zbMu, zbSig, 5.0 );
+				schema->setInitialMu( "zb_mu_"+plc, zbMu, zbSig, 10.0 );
 
 			if ( sigmaRanges[ "zb_" + plc ].above( avgP ) ){	
 				
@@ -221,7 +221,7 @@ namespace TSF{
 			if ( 0 >= zdDeltaMu ) // for testing
 				schema->fixParameter( "zd_mu_"+plc, zdMu );
 			else if ( !sigmaRanges[ "zd_" + plc ].above( avgP ) )
-				schema->setInitialMu( "zd_mu_"+plc, zdMu, zdSig, 5.0 );
+				schema->setInitialMu( "zd_mu_"+plc, zdMu, zdSig, 10.0 );
 
 			schema->setInitialSigma( "zd_sigma_"+plc, zdSig, 0.04, 0.24);
 

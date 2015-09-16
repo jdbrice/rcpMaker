@@ -31,7 +31,7 @@ TH1 * yield_hist_for( string source, string plc, string charge, string iCen, str
 }
 
 
-void single_compare( string source2, string source1 = "nominal", string plc = "Pi", string charge ="p", string iCen = "0" ){
+void single_compare( string source2, string source1 = "nominal", string plc = "P", string charge ="p", string iCen = "0" ){
 
 	Logger::setGlobalLogLevel( Logger::llAll );
 
