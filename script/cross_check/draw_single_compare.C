@@ -54,6 +54,25 @@ double ptBins[] = {
 6.0, 
 6.8 };
 
+
+vector<string> cenLabels = { "0-5%", "5-10%", "10-20%", "20-30%", "30-40%", "40-60%", "60-80%" };
+string plc_label( string plc, string charge ){
+	if ( "Pi" == plc && "p" == charge )
+		return "#pi^{+}";
+	if ( "Pi" == plc && "n" == charge )
+		return "#pi^{-}";
+	if ( "K" == plc && "p" == charge )
+		return "K^{+}";
+	if ( "K" == plc && "n" == charge )
+		return "K^{-}";
+	if ( "P" == plc && "p" == charge )
+		return "p";
+	if ( "P" == plc && "n" == charge )
+		return "#bar{p}";
+	return "";
+}
+
+
 TH1 * normalize_binning( TH1 * in, int push = 2 ){
 	INFO( "Normalizing the bins for " << in->GetName() );
 	string name = in->GetName();
@@ -77,7 +96,10 @@ TH1 * normalize_binning( TH1 * in, int push = 2 ){
 
 void draw_single_compare( string plc="K", string charge="p", string iCen="0" ){
 
-	TCanvas *c = new TCanvas( "c", "c", 800, 800 );
+	string tag="cross_check";
+	Logger::setGlobalLogLevel(Logger::llAll);
+
+	//TCanvas *c = new TCanvas( "c", "c", 800, 800 );
 
 	// Upper pad for the data points +  the fit
 	TPad * p1 = new TPad( "spectra", "spectra", 0.001, 0.3, 0.99, 0.99 );
@@ -95,23 +117,42 @@ void draw_single_compare( string plc="K", string charge="p", string iCen="0" ){
 	RooPlotLib rpl;
 
 	string energy = "14.5";
-	SpectraLoader da( file_name( energy, plc, charge, iCen ) );
-	SpectraLoader de( deepti_file_name( energy, plc, charge, iCen ) );
+	INFO( tag, "Loading Daniel's Spectra" );
+	string dafn = file_name( energy, plc, charge, iCen );
+	if ( !file_exists( dafn ) ){
+		ERROR( tag, dafn + " DNE" );
+		return;
+	}
+	SpectraLoader da( dafn );
 
+	INFO( tag, "Loading Deb's Spectra" );
+	string defn = deepti_file_name( energy, plc, charge, iCen );
+	if ( !file_exists( defn ) ){
+		ERROR( tag, defn + " DNE" );
+		return;
+	}
+	SpectraLoader de( defn );
 
-	TH1 * hda = normalize_binning( da.statHisto("da") );
-	TH1 * hde = normalize_binning( de.statHisto("de"), 1 );
+	int push = 1;
+	if ( plc == "P" )
+		push = 2;
 
-	//hde->Scale( 0.2 );
-	//hda->Scale( 0.5 );
+	TH1 * hda = normalize_binning( da.combinedErrorHisto("da") );
+	TH1 * hde = normalize_binning( de.combinedErrorHisto("de"), push );
+
+	TLegend * leg = new TLegend( 0.2, 0.1, 0.3, 0.3 );
+	leg->AddEntry( hda, "Daniel" );
+	leg->AddEntry( hde, "Deepti" );
 
 	rpl.style(hda)
 		.set( "mst", kCircle )
 		.set( "color", kRed )
+		.set( "fillstyle", 1001 )
 		.set( "logy", 1 )
 		.set( "xr", 0.5, 2 )
 		.set( "yr", 1e-5, 1e3 )
 		.set( "optstat", 0 )
+		.set( "title", plc_label( plc, charge ) + " : " + cenLabels[ stoi( iCen ) ] )
 		.draw();
 
 	rpl.style(hde)
@@ -119,6 +160,8 @@ void draw_single_compare( string plc="K", string charge="p", string iCen="0" ){
 		.set( "color", kBlue )
 		.set( "draw", "same" )
 		.draw();
+
+	leg->Draw();
 
 	p2->cd();
 

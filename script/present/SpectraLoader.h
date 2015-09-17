@@ -112,6 +112,16 @@ public:
 		return h;
 	}
 
+	TH1D * combinedErrorHisto( string name ){
+		vector<double> bins = getBins();
+		TH1D * h = new TH1D( name.c_str(), "", bins.size() - 1, bins.data() );
+		for ( int i = 0; i < bins.size() + 1; i++ ){
+			h->SetBinContent( i + 1, value[ i ] );
+			h->SetBinError( i + 1, sqrt( stat[ i ]*stat[ i ] + sys[i]*sys[i] ) );
+		}
+		return h;
+	}
+
 	
 
 	TH1D * sysHisto( string name ){
