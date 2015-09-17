@@ -27,6 +27,9 @@ protected:
 
 	string plc = "UNK";
 
+	bool apply_feeddown;
+	bool apply_tofEff;
+
 public:
 	ApplyPostCorr( XmlConfig * _cfg, string _nodePath );
 	~ApplyPostCorr() {}

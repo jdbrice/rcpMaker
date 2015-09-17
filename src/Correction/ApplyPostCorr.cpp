@@ -13,8 +13,8 @@ ApplyPostCorr::ApplyPostCorr( XmlConfig * _cfg, string _nodePath ) : HistoAnalyz
 	}
 
 
-
-
+	apply_feeddown = cfg->getBool( nodePath + "FeedDown:apply", true );
+	apply_tofEff = cfg->getBool( nodePath + "TofEff:apply", true );
 }
 
 void ApplyPostCorr::setupCorrections(){
@@ -127,7 +127,7 @@ void ApplyPostCorr::make(){
 				// }
 
 				// apply Tof Eff
-				if ( tofEff.count( param ) >= 1 ){
+				if ( tofEff.count( param ) >= 1 && apply_tofEff ){
 					
 					double weight = 1.0 / tofEff[ param ]->eval( bCen, "closest" );
 					fc = fc * ( weight );
@@ -143,7 +143,7 @@ void ApplyPostCorr::make(){
 
 
 				// Feed down
-				if ( "K" != plc ) {
+				if ( "K" != plc && apply_feeddown ) {
 							
 					double weight = sc->feedDownWeight( plc, bCen, cb, cg, feedDownSysNSigma );
 					fc = fc * ( weight );

@@ -447,11 +447,18 @@ namespace TSF{
 			// gets close on shapes with fixed yields
 			fitter.fit2(  );
 		}
+		fitter.loadDatasets(centerSpecies, iCharge, iCen, iPt, true, zbMu, zdMu );
 
-		// reload the datasets from the file
-		// now that we have better idea of mu, sigma ( for enhancement cuts )
-		if ( avgP < 1.0 )
+		for ( int i = 0; i < 3; i ++){
+			// gets close on yield with fixed shapes
+			fitter.fit1(  );
+			// gets close on shapes with fixed yields
+			fitter.fit2(  );
 			fitter.loadDatasets(centerSpecies, iCharge, iCen, iPt, true, zbMu, zdMu );
+		}
+		
+
+	
 
 		int tries = 0;
 		while( fitter.isFitGood() == false && tries < 3 ){
