@@ -31,6 +31,7 @@ protected:
 	bool apply_tofEff;
 
 public:
+	static constexpr auto tag = "ApplyPostCorr";
 	ApplyPostCorr( XmlConfig * _cfg, string _nodePath );
 	~ApplyPostCorr() {}
 
