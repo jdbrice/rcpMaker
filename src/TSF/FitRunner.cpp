@@ -448,18 +448,16 @@ namespace TSF{
 			fitter.fit2(  );
 		}
 		
-		int tries = 0;
-		while( fitter.isFitGood() == false && tries < 3 ){
+		
+		for ( int i = 0; i < 3; i ++){
 			fitter.loadDatasets(centerSpecies, iCharge, iCen, iPt, true, zbMu, zdMu );
-
 			// gets close on yield with fixed shapes
 			fitter.fit1(  );
-			
 			// gets close on shapes with fixed yields
 			fitter.fit2(  );
 		}
 		
-		tries = 0;
+		int tries = 0;
 		while( fitter.isFitGood() == false && tries < 3 ){
 			fitter.fit3( );
 			tries ++;
