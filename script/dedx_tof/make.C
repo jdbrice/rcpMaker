@@ -72,7 +72,7 @@ void make( string charge = "p", bool lines = false, int iCen = 0, string cs = "P
 	if ( "n" == charge )
 		chargeName = "Negative Tracks : ";
 
-	Reporter rp( rpName, 1000, 800 );
+	Reporter rp( rpName, 600, 800 );
 
 	TFile * f = new TFile( hFile.c_str(), "READ" );
 
@@ -80,6 +80,8 @@ void make( string charge = "p", bool lines = false, int iCen = 0, string cs = "P
 
 
 	for ( int iPt = 0; iPt < 100; iPt ++ ){
+		if ( iPt != 16 ) continue;
+
 
 		TAxis * x = nlBeta->GetXaxis();
 		double lpT = x->GetBinLowEdge( iPt + 1 );
@@ -104,8 +106,26 @@ void make( string charge = "p", bool lines = false, int iCen = 0, string cs = "P
 
 		rpl.style( h2 ).set( "draw", "col" )
 			.set( "optstat", 0 ).set( "logz", 1 )
-			.set( "title", chargeName + dts(lpT) + " < p_{T} [GeV/c] < " + dts(hpT) +"; ln(dE/dx) - ln(dE/dx)_{#pi}; #beta^{-1} - #beta^{-1}_{#pi}" )
+			.set( "title", " ; ln(dE/dx) - ln(dE/dx)_{#pi}  ; #beta^{-1} - #beta^{-1}_{#pi} " )
+			.set( "ts", 0.16 )
+			.set( "xts", 0.06 )
+			.set( "xto", 0.75 )
+			.set( "yts", 0.07 )
+			.set( "yto", 0.85 )
 			.set( "yoffset", 0.01 ).draw(); 
+
+
+
+		if ( 16 == iPt ){
+			gStyle->SetTitleFontSize( 0.45 );
+			rpl.style(h2)
+				.set( "xr", -0.3, 0.95 )
+				.set( "yr", -0.15, 0.6 ).draw();
+		}
+		TLatex *text = new TLatex( -0.5, 0.64, (chargeName + dts(lpT) + " < p_{T} [GeV/c] < " + dts(hpT)).c_str() );
+		text->SetTextSize(0.055);
+		text->Draw("");
+
 
 		if ( lines  ){
 			double bKaon = one_beta( mK, avgP ) - one_beta( mPi, avgP );
@@ -130,9 +150,15 @@ void make( string charge = "p", bool lines = false, int iCen = 0, string cs = "P
 		// TEllipse * ell = new TEllipse( dElec,bElec, sigTpc * 3, sigTof * 3 );
 		// ell->SetFillColorAlpha( kBlack, 0 );
 		// ell->Draw();
+		// 
+		
+		gPad->SetRightMargin( 0.01 );
+		gPad->SetBottomMargin( 0.10 );
+		gPad->SetLeftMargin( 0.14 );
 
 		rp.savePage();
 		rp.saveImage( ("img/dedx_tof_" + ts(iPt) + ".pdf").c_str() );
+		rp.saveImage( ("img/dedx_tof_" + ts(iPt) + ".png").c_str() );
 	}
 
 }

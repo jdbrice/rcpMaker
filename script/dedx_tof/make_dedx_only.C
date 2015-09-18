@@ -29,13 +29,15 @@ void make_dedx_only(){
 	h->RebinX( 2 );
 	h->RebinY( 2 );
 
-	rpl.style( h ).set( "title", " ; p_{T} * charge; ln(dE/dx)" )
-		.set( "yr", 0.6, 2.2 )
+	rpl.style( h ).set( "title", " ; p_{T} [GeV/c] * charge; ln(dE/dx)   " )
+		.set( "yr", 0.5, 1.85 )
 		.set( "xr", -3, 3 )
 		.set( "yts", 0.08 )
+		.set( "yto", 0.8 )
 		.set( "xts", 0.08 )
-		.set( "xto", 0.7 )
-		.set( "yto", 0.6 )
+		.set( "xto", 0.9 )
+		.set( "xls", 0.08 )
+		.set( "yls", 0.08 )
 		.set( "draw", "col" ).draw();
 
 	gPad->SetBottomMargin( 0.13 );
@@ -43,6 +45,8 @@ void make_dedx_only(){
 	gPad->SetLogz(1);
 	gPad->SetLeftMargin( 0.13 );
 	gPad->SetRightMargin( 0.05 );
+	gPad->SetTopMargin( 0.01 );
+	gPad->SetBottomMargin( 0.18 );
 
 	rp.saveImage( "img/dedx_raw.pdf" );
 	rp.saveImage( "img/dedx_raw.png" );
