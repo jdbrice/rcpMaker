@@ -326,6 +326,11 @@ namespace TSF{
 		
 		schema->updateRanges();
 
+		if ( 0 == iFlag )
+			fitIsGood = true;
+		else 
+			fitIsGood = false;
+
 		updateParameters();
 	}
 
