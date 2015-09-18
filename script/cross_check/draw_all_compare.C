@@ -3,7 +3,7 @@
 
 vector<string> plcs = { "Pi", "K", "P" };
 vector<string> charges = { "p", "n" };
-vector<string> centralities = { "0", "1", "2", "3", "4" };
+vector<string> centralities = { "0", "1", "2", "3", "4", "5", "6" };
 
 void draw_all_compare(){
 	
