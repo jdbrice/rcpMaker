@@ -449,13 +449,13 @@ namespace TSF{
 		}
 		fitter.loadDatasets(centerSpecies, iCharge, iCen, iPt, true, zbMu, zdMu );
 
-		for ( int i = 0; i < 3; i ++){
-			// gets close on yield with fixed shapes
-			fitter.fit1(  );
-			// gets close on shapes with fixed yields
-			fitter.fit2(  );
-			fitter.loadDatasets(centerSpecies, iCharge, iCen, iPt, true, zbMu, zdMu );
-		}
+		// for ( int i = 0; i < 3; i ++){
+		// 	// gets close on yield with fixed shapes
+		// 	fitter.fit1(  );
+		// 	// gets close on shapes with fixed yields
+		// 	fitter.fit2(  );
+		// 	fitter.loadDatasets(centerSpecies, iCharge, iCen, iPt, true, zbMu, zdMu );
+		// }
 		
 
 	
