@@ -87,7 +87,7 @@ TH1 * normalize_binning( TH1 * in, int push = 2 ){
 		double y = in->GetBinContent( i );
 		double ey = in->GetBinError( i );
 		out->SetBinContent( i + push, y );
-		out->SetBinError( i + push, sqrt( ey*ey + .1 * .1 * y * y ) );
+		out->SetBinError( i + push, sqrt( ey*ey ) );
 	}
 
 	DEBUG( "returing normalized hitograms " << name  );

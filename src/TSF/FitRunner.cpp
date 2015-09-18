@@ -198,6 +198,11 @@ namespace TSF{
 
 			// default low pt settings
 			schema->setInitialSigma( "zb_sigma_"+plc, zbSig, zbSig * 0.5, zbSig * 12 );
+			
+			// start the proton out with a bigger sigma to help with the enhancement cuts
+			// this is just the initial value
+			if ( "P" == plc && avgP < 0.75 )
+				schema->setInitialSigma( "zb_sigma_"+plc, zbSig * 3, zbSig * 0.5, zbSig * 12 );
 
 			if ( 0 >= zbDeltaMu ) // only used for testing
 				schema->fixParameter( "zb_mu_"+plc, zbMu );
@@ -705,13 +710,13 @@ namespace TSF{
 			xMax = zbMax + 0.2;
 
 			// TODO : fix hard code center species
-			h->SetTitle( " ; #beta^{-1} - #beta^{-1}_{#pi} ; counts" );
+			h->SetTitle( (" ; #beta^{-1} - #beta^{-1}_{" + Common::plc_label( centerSpecies ) + "} ; counts").c_str() );
 		} else {
 			INFO( tag, "Using zd range( " << zdMin << " -> " << zdMax << " )" );
 			xMin = zdMin - 0.8;
 			xMax = zdMax + 0.8;
 
-			h->SetTitle( " ; ln(dE/dx) - ln(dE/dx)_{#pi}; counts" );
+			h->SetTitle( (" ; ln(dE/dx) - ln(dE/dx)_{  " + Common::plc_label( centerSpecies ) + " }; counts").c_str() );
 		}
 
 		h->GetXaxis()->SetRangeUser( xMin, xMax );

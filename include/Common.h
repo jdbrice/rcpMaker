@@ -251,6 +251,31 @@ public:
 	static TGraphErrors *choleskyBands( TFitResultPtr fitResult, TF1 * f, int nSamples = 50, int nPoints = 100, Reporter * rp = nullptr, double x1 = -1.0, double x2 = -1.0 );
 
 
+	static string plc_label( string plc, string charge = "na" ){
+		if ( "Pi" == plc && "p" == charge )
+			return "#pi^{+}";
+		if ( "Pi" == plc && "n" == charge )
+			return "#pi^{-}";
+		if ( "K" == plc && "p" == charge )
+			return "K^{+}";
+		if ( "K" == plc && "n" == charge )
+			return "K^{-}";
+		if ( "P" == plc && "p" == charge )
+			return "p";
+		if ( "P" == plc && "n" == charge )
+			return "#bar{p}";
+
+		if ( "Pi" == plc )
+			return "#pi";
+		if ( "K" == plc )
+			return "K";
+		if ( "P" == plc )
+			return "p";
+
+		return "";
+	}
+
+
 
 };
 
