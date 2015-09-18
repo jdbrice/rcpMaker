@@ -130,7 +130,6 @@ void ApplyPostCorr::make(){
 				if ( tofEff.count( param ) >= 1 && apply_tofEff ){
 					
 					double weight = 1.0 / tofEff[ param ]->eval( bCen, "closest" );
-					weight = 1.0 / 0.6;
 					fc = fc * ( weight );
 
 					book->setBin( "effTof_" + cyn, iB, tofEff[ param ]->eval( bCen, "closest" ), 0 );
