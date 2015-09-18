@@ -435,8 +435,12 @@ namespace TSF{
 		// prepare initial values, ranges, etc. for fit
 		prepare( avgP, iCen );
 
+		double nSigmaAbovePOverride = 50;
+		if ( avgP > 1.4 )
+			nSigmaAbovePOverride = -1;
+
 		// load the datasets from the file
-		fitter.loadDatasets(centerSpecies, iCharge, iCen, iPt, true, zbMu, zdMu );
+		fitter.loadDatasets(centerSpecies, iCharge, iCen, iPt, true, zbMu, zdMu, nSigmaAbovePOverride );
 
 		respondToStats( avgP ); 
 
@@ -455,7 +459,7 @@ namespace TSF{
 		
 		
 		for ( int i = 0; i < 3; i ++){
-			fitter.loadDatasets(centerSpecies, iCharge, iCen, iPt, true, zbMu, zdMu );
+			fitter.loadDatasets(centerSpecies, iCharge, iCen, iPt, true, zbMu, zdMu, nSigmaAbovePOverride );
 			// gets close on yield with fixed shapes
 			fitter.fit1(  );
 			// gets close on shapes with fixed yields
@@ -716,7 +720,7 @@ namespace TSF{
 			xMin = zdMin - 0.8;
 			xMax = zdMax + 0.8;
 
-			h->SetTitle( (" ; ln(dE/dx) - ln(dE/dx)_{  " + Common::plc_label( centerSpecies ) + " }; counts").c_str() );
+			h->SetTitle( (" ; ln(dE/dx) - ln(dE/dx)_{" + Common::plc_label( centerSpecies ) + "}; counts").c_str() );
 		}
 
 		h->GetXaxis()->SetRangeUser( xMin, xMax );

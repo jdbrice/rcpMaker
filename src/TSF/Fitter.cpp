@@ -183,7 +183,7 @@ namespace TSF{
 		INFO( tag, "cut_nSigma_E = " << cut_nSigma_E );
 	}
 
-	void Fitter::loadDatasets( string cs, int charge, int cenBin, int ptBin, bool enhanced, map<string, double> zbMu, map<string, double> zdMu ){
+	void Fitter::loadDatasets( string cs, int charge, int cenBin, int ptBin, bool enhanced, map<string, double> zbMu, map<string, double> zdMu, double nSigAbovePOverride ){
 		INFO( tag, "( cs=" << cs << ", charge=" << charge << ", iCen=" <<cenBin << ", ptBin=" << ptBin << ")" )
 
 		dataFile->cd();
@@ -201,7 +201,11 @@ namespace TSF{
 			sigmaP = zbSigmaIdeal;
 
 		// sets the deuteron rejection cut for all zd related projections (including 2D )
-		proj.cutDeuterons( schema->var( "zb_mu_P" )->val, sigmaP, nSigAboveP );
+		if ( nSigAbovePOverride > 0 )
+			proj.cutDeuterons( schema->var( "zb_mu_P" )->val, sigmaP, nSigAbovePOverride );
+		else
+			proj.cutDeuterons( schema->var( "zb_mu_P" )->val, sigmaP, nSigAboveP );
+		
 		
 		// sets the electron rejection for this pt bin
 		// very verbose
