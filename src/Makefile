@@ -23,6 +23,7 @@ sources = 	Engine.cpp 							\
 			Params/EnergyLossParams.cpp			\
 			Spectra/PidHistoMaker.cpp			\
 			Spectra/PidDataMaker.cpp			\
+			Spectra/TofEffSpectra.cpp			\
 			Present/PidYieldPresenter.cpp 		\
 			Correction/ApplyPostCorr.cpp		\
 			Correction/SpectraCorrecter.cpp

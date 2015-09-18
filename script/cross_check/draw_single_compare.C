@@ -101,15 +101,17 @@ void draw_single_compare( string plc="K", string charge="p", string iCen="0" ){
 	string tag="cross_check";
 	Logger::setGlobalLogLevel(Logger::llAll);
 
+	gStyle->SetTitleSize( 0.1, "" );
+
 	//TCanvas *c = new TCanvas( "c", "c", 800, 800 );
 
 	// Upper pad for the data points +  the fit
-	TPad * p1 = new TPad( "spectra", "spectra", 0.001, 0.3, 0.99, 0.99 );
+	TPad * p1 = new TPad( "spectra", "spectra", 0.001, 0.5, 0.99, 0.99 );
 	p1->SetBottomMargin( 0.0 );
 	p1->SetLeftMargin( 0.1 );
 
 	// Lower pad with the data / fit ratio
-	TPad * p2 = new TPad( "ratio", "ratio", 0.001, 0.01, 0.99, 0.3 );
+	TPad * p2 = new TPad( "ratio", "ratio", 0.001, 0.01, 0.99, 0.5 );
 	p2->SetTopMargin( 0.0 );
 	p2->SetLeftMargin( 0.1 );
 	p1->Draw();
@@ -146,15 +148,20 @@ void draw_single_compare( string plc="K", string charge="p", string iCen="0" ){
 	leg->AddEntry( hda, "Daniel" );
 	leg->AddEntry( hde, "Deepti" );
 
+	double max = hda->GetMaximum();
+	if ( max <= 0  )
+		max = 100;
+
 	rpl.style(hda)
 		.set( "mst", kCircle )
 		.set( "color", kRed )
 		.set( "fillstyle", 1001 )
 		.set( "logy", 1 )
 		.set( "xr", 0.5, 2 )
-		.set( "yr", 1e-5, 1e3 )
+		.set( "yr", max * 1e-4, max * 10  )
 		.set( "optstat", 0 )
-		.set( "title", plc_label( plc, charge ) + " : " + cenLabels[ stoi( iCen ) ] )
+		.set( "yls", 0.06 )
+		.set( "title", plc_label( plc, charge ) + " : " + cenLabels[ stoi( iCen ) ] + "; ; yield" )
 		.draw();
 
 	rpl.style(hde)
@@ -174,10 +181,17 @@ void draw_single_compare( string plc="K", string charge="p", string iCen="0" ){
 		.set( "logy", 0 )
 		.set( "optstat", 0 )
 		.set( "xr", 0.5, 2 )
-		.set( "yr", 0.5, 1.5 )
+		.set( "yr", 0.55, 1.45 )
 		.set( "yls", 0.09 )
+		.set( "xls", 0.09 )
+		.set( "x", "p_{T} [GeV/c]   " )
+		.set( "xts", 0.08 )
+		.set( "y", "Dan / Deepti       " )
+		.set( "yts", 0.08 )
+		.set( "yto", 0.5 )
 		.draw();
 
+	gPad->SetBottomMargin( 0.2 );
 	gPad->SetGrid(0, 1);
 
 }

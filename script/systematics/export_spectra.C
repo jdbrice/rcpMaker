@@ -69,7 +69,7 @@ void write_spectra( string plc, string charge, string iCen, vector<string> &sour
 	string base = "/Users/danielbrandenburg/bnl/local/data/RcpAnalysis/spectra/";
 	TH1 * h = yield_hist_for( "debadeepti", plc, charge, iCen );
 
-	//vector<double> sys_unc = total_systematics( weights, sources, plc, charge, iCen );
+	vector<double> sys_unc = total_systematics( weights, sources, plc, charge, iCen );
 
 
 	// open the files
@@ -89,7 +89,7 @@ void write_spectra( string plc, string charge, string iCen, vector<string> &sour
 		
 		double value = h->GetBinContent( i );
 		double stat = h->GetBinError( i );
-		double sys =  0;//sys_unc[ i - 1 ];//total_systematics( i, weights, sources, plc, charge, iCen );
+		double sys =  sys_unc[ i - 1 ];//total_systematics( i, weights, sources, plc, charge, iCen );
 		if ( 0 >= sys )
 			sys = 1e-10;
 

@@ -16,7 +16,7 @@ using namespace jdb;
 	#include "Spectra/InclusiveSpectra.h"
 	#include "Spectra/PidHistoMaker.h"
 	#include "Spectra/PidDataMaker.h"
-	// #include "Spectra/PidPoint.h"
+	#include "Spectra/TofEffSpectra.h"
 
 
 // McMaker
@@ -69,6 +69,9 @@ int main( int argc, char* argv[] ) {
 			if ( "InclusiveSpectra" == job ){
 				InclusiveSpectra is( &config, "InclusiveSpectra.", fileList, jobPrefix );
 				is.make();
+			} if ( "TofEffSpectra" == job ){
+				TofEffSpectra tes( &config, "TofEffSpectra.", fileList, jobPrefix );
+				tes.make();
 			} if ( "EnergyLoss" == job ){
 				EnergyLoss el( &config, "EnergyLoss.", fileList, jobPrefix );
 				el.make();

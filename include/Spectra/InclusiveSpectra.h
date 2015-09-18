@@ -3,7 +3,10 @@
 
 // JDB 
 #include "TreeAnalyzer.h"
- using namespace jdb;
+#include "XmlConfig.h"
+#include "Utils.h"
+#include "Logger.h"
+using namespace jdb;
 
 // ROOT
 #include "TChain.h"
