@@ -435,12 +435,12 @@ namespace TSF{
 		// prepare initial values, ranges, etc. for fit
 		prepare( avgP, iCen );
 
-		double nSigmaAbovePOverride = 50;
-		if ( avgP > 1.4 )
-			nSigmaAbovePOverride = -1;
+		// double nSigmaAbovePOverride = 50;
+		// if ( avgP > 1.4 )
+		// 	nSigmaAbovePOverride = -1;
 
 		// load the datasets from the file
-		fitter.loadDatasets(centerSpecies, iCharge, iCen, iPt, true, zbMu, zdMu, nSigmaAbovePOverride );
+		fitter.loadDatasets(centerSpecies, iCharge, iCen, iPt, true, zbMu, zdMu );
 
 		respondToStats( avgP ); 
 
@@ -459,7 +459,7 @@ namespace TSF{
 		
 		
 		for ( int i = 0; i < 3; i ++){
-			fitter.loadDatasets(centerSpecies, iCharge, iCen, iPt, true, zbMu, zdMu, nSigmaAbovePOverride );
+			fitter.loadDatasets(centerSpecies, iCharge, iCen, iPt, true, zbMu, zdMu );
 			// gets close on yield with fixed shapes
 			fitter.fit1(  );
 			// gets close on shapes with fixed yields

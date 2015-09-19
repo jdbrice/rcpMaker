@@ -174,7 +174,7 @@ void PidDataMaker::analyzeTofTrack( int iTrack ){
 	trackWeight = trackWeight * ( 1.0 / ( cut_rapidity->max - cut_rapidity->min ) ); 	// 1.0 / dy
 
 	// correct for TPC matching efficiency
-	trackWeight = trackWeight * sc->tpcEffWeight( centerSpecies, trackPt, cBin, charge, tpcSysNSigma );
+	trackWeight = trackWeight * sc->tpcEffWeight( centerSpecies, corrTrackPt, cBin, charge, tpcSysNSigma );
 	
 	// fill the tree
 	string name = Common::speciesName( centerSpecies, charge, cBin, ptBin );

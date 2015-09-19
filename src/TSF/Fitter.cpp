@@ -201,10 +201,7 @@ namespace TSF{
 			sigmaP = zbSigmaIdeal;
 
 		// sets the deuteron rejection cut for all zd related projections (including 2D )
-		if ( nSigAbovePOverride > 0 )
-			proj.cutDeuterons( schema->var( "zb_mu_P" )->val, sigmaP, nSigAbovePOverride );
-		else
-			proj.cutDeuterons( schema->var( "zb_mu_P" )->val, sigmaP, nSigAboveP );
+		proj.cutDeuterons( schema->var( "zb_mu_P" )->val, sigmaP, nSigAboveP );
 		
 		
 		// sets the electron rejection for this pt bin

@@ -24,6 +24,7 @@ using namespace jdb;
 	#include "McMaker/EnergyLoss.h"
 	#include "McMaker/TofEffFitter.h"
 	#include "McMaker/TpcEffFitter.h"
+	#include "McMaker/TpcEffMaker.h"
 
 // Presentation
 	#include "Present/PidYieldPresenter.h"
@@ -78,6 +79,9 @@ int main( int argc, char* argv[] ) {
 			} if ( "TpcEffFitter" == job ){
 				TpcEffFitter tef( &config, "TpcEffFitter." );
 				tef.make();
+			} if ( "TpcEffMaker" == job ){
+				TpcEffMaker tem( &config, "TpcEffMaker." );
+				tem.make();
 			} else if ( "PidHistoMaker" == job ){
 				PidHistoMaker pps( &config, "PidHistoMaker.", fileList, jobPrefix  );
 				pps.make();
