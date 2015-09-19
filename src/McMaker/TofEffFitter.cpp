@@ -38,6 +38,7 @@ void TofEffFitter::make(){
 
 
 
+	vector<string> labels = cfg->getStringVector( nodePath + "CentralityLabels" );
 	vector< int> cbins = cfg->getIntVector( nodePath + "CentralityBins" );
 	Reporter rp( cfg, nodePath + "Reporter." );
 
@@ -90,8 +91,10 @@ void TofEffFitter::make(){
 
 				RooPlotLib rpl;
 				rp.newPage();
-				rpl.style( &g ).set( "title", plc + "_" + cs + " : centrality bin = " + ts( b ) ).set( "yr", 0.4, 0.85 ).set( "optfit", 111 )
-					.set("y", "Efficiency").set( "x", "p_{T} [GeV/c]" ).draw();
+				rpl.style( &g ).set( "title", Common::plc_label( plc, cs ) + " : " + labels[ b ] ).set( "yr", 0.4, 0.85 ).set( "optfit", 111 )
+					.set("y", "Efficiency").set( "x", "p_{T} [GeV/c]" )
+					.set( cfg, nodePath + "Style.TofEff" )
+					.draw();
 					gStyle->SetStatY( 0.9 );
 					gStyle->SetStatX( 0.65 );
 					

@@ -7,98 +7,145 @@ Executable    = /home/jdb12/work/rcpMaker/bin/rcp
 initialdir 		= /home/jdb12/work/rcpMaker/bin/
 
 Arguments = /data/star/jdb12/RcpAnalysis/config/debadeepti/TofEff/Pi.xml /data/star/jdb12/RcpAnalysis/data/list/debadeepti/list_aaa TofEff_Pi_aaa_
+Output 		= /data/star/jdb12/RcpAnalysis/data/list/debadeepti/TofEff_aaa.log
 Queue
 Arguments = /data/star/jdb12/RcpAnalysis/config/debadeepti/TofEff/Pi.xml /data/star/jdb12/RcpAnalysis/data/list/debadeepti/list_aab TofEff_Pi_aab_
+Output 		= /data/star/jdb12/RcpAnalysis/data/list/debadeepti/TofEff_aab.log
 Queue
 Arguments = /data/star/jdb12/RcpAnalysis/config/debadeepti/TofEff/Pi.xml /data/star/jdb12/RcpAnalysis/data/list/debadeepti/list_aac TofEff_Pi_aac_
+Output 		= /data/star/jdb12/RcpAnalysis/data/list/debadeepti/TofEff_aac.log
 Queue
 Arguments = /data/star/jdb12/RcpAnalysis/config/debadeepti/TofEff/Pi.xml /data/star/jdb12/RcpAnalysis/data/list/debadeepti/list_aad TofEff_Pi_aad_
+Output 		= /data/star/jdb12/RcpAnalysis/data/list/debadeepti/TofEff_aad.log
 Queue
 Arguments = /data/star/jdb12/RcpAnalysis/config/debadeepti/TofEff/Pi.xml /data/star/jdb12/RcpAnalysis/data/list/debadeepti/list_aae TofEff_Pi_aae_
+Output 		= /data/star/jdb12/RcpAnalysis/data/list/debadeepti/TofEff_aae.log
 Queue
 Arguments = /data/star/jdb12/RcpAnalysis/config/debadeepti/TofEff/Pi.xml /data/star/jdb12/RcpAnalysis/data/list/debadeepti/list_aaf TofEff_Pi_aaf_
+Output 		= /data/star/jdb12/RcpAnalysis/data/list/debadeepti/TofEff_aaf.log
 Queue
 Arguments = /data/star/jdb12/RcpAnalysis/config/debadeepti/TofEff/Pi.xml /data/star/jdb12/RcpAnalysis/data/list/debadeepti/list_aag TofEff_Pi_aag_
+Output 		= /data/star/jdb12/RcpAnalysis/data/list/debadeepti/TofEff_aag.log
 Queue
 Arguments = /data/star/jdb12/RcpAnalysis/config/debadeepti/TofEff/Pi.xml /data/star/jdb12/RcpAnalysis/data/list/debadeepti/list_aah TofEff_Pi_aah_
+Output 		= /data/star/jdb12/RcpAnalysis/data/list/debadeepti/TofEff_aah.log
 Queue
 Arguments = /data/star/jdb12/RcpAnalysis/config/debadeepti/TofEff/Pi.xml /data/star/jdb12/RcpAnalysis/data/list/debadeepti/list_aai TofEff_Pi_aai_
+Output 		= /data/star/jdb12/RcpAnalysis/data/list/debadeepti/TofEff_aai.log
 Queue
 Arguments = /data/star/jdb12/RcpAnalysis/config/debadeepti/TofEff/Pi.xml /data/star/jdb12/RcpAnalysis/data/list/debadeepti/list_aaj TofEff_Pi_aaj_
+Output 		= /data/star/jdb12/RcpAnalysis/data/list/debadeepti/TofEff_aaj.log
 Queue
 Arguments = /data/star/jdb12/RcpAnalysis/config/debadeepti/TofEff/Pi.xml /data/star/jdb12/RcpAnalysis/data/list/debadeepti/list_aak TofEff_Pi_aak_
+Output 		= /data/star/jdb12/RcpAnalysis/data/list/debadeepti/TofEff_aak.log
 Queue
 Arguments = /data/star/jdb12/RcpAnalysis/config/debadeepti/TofEff/Pi.xml /data/star/jdb12/RcpAnalysis/data/list/debadeepti/list_aal TofEff_Pi_aal_
+Output 		= /data/star/jdb12/RcpAnalysis/data/list/debadeepti/TofEff_aal.log
 Queue
 Arguments = /data/star/jdb12/RcpAnalysis/config/debadeepti/TofEff/Pi.xml /data/star/jdb12/RcpAnalysis/data/list/debadeepti/list_aam TofEff_Pi_aam_
+Output 		= /data/star/jdb12/RcpAnalysis/data/list/debadeepti/TofEff_aam.log
 Queue
 Arguments = /data/star/jdb12/RcpAnalysis/config/debadeepti/TofEff/Pi.xml /data/star/jdb12/RcpAnalysis/data/list/debadeepti/list_aan TofEff_Pi_aan_
+Output 		= /data/star/jdb12/RcpAnalysis/data/list/debadeepti/TofEff_aan.log
 Queue
 Arguments = /data/star/jdb12/RcpAnalysis/config/debadeepti/TofEff/Pi.xml /data/star/jdb12/RcpAnalysis/data/list/debadeepti/list_aao TofEff_Pi_aao_
+Output 		= /data/star/jdb12/RcpAnalysis/data/list/debadeepti/TofEff_aao.log
 Queue
 Arguments = /data/star/jdb12/RcpAnalysis/config/debadeepti/TofEff/Pi.xml /data/star/jdb12/RcpAnalysis/data/list/debadeepti/list_aap TofEff_Pi_aap_
+Output 		= /data/star/jdb12/RcpAnalysis/data/list/debadeepti/TofEff_aap.log
 Queue
 Arguments = /data/star/jdb12/RcpAnalysis/config/debadeepti/TofEff/Pi.xml /data/star/jdb12/RcpAnalysis/data/list/debadeepti/list_aaq TofEff_Pi_aaq_
+Output 		= /data/star/jdb12/RcpAnalysis/data/list/debadeepti/TofEff_aaq.log
 Queue
 Arguments = /data/star/jdb12/RcpAnalysis/config/debadeepti/TofEff/Pi.xml /data/star/jdb12/RcpAnalysis/data/list/debadeepti/list_aar TofEff_Pi_aar_
+Output 		= /data/star/jdb12/RcpAnalysis/data/list/debadeepti/TofEff_aar.log
 Queue
 Arguments = /data/star/jdb12/RcpAnalysis/config/debadeepti/TofEff/Pi.xml /data/star/jdb12/RcpAnalysis/data/list/debadeepti/list_aas TofEff_Pi_aas_
+Output 		= /data/star/jdb12/RcpAnalysis/data/list/debadeepti/TofEff_aas.log
 Queue
 Arguments = /data/star/jdb12/RcpAnalysis/config/debadeepti/TofEff/Pi.xml /data/star/jdb12/RcpAnalysis/data/list/debadeepti/list_aat TofEff_Pi_aat_
+Output 		= /data/star/jdb12/RcpAnalysis/data/list/debadeepti/TofEff_aat.log
 Queue
 Arguments = /data/star/jdb12/RcpAnalysis/config/debadeepti/TofEff/Pi.xml /data/star/jdb12/RcpAnalysis/data/list/debadeepti/list_aau TofEff_Pi_aau_
+Output 		= /data/star/jdb12/RcpAnalysis/data/list/debadeepti/TofEff_aau.log
 Queue
 Arguments = /data/star/jdb12/RcpAnalysis/config/debadeepti/TofEff/Pi.xml /data/star/jdb12/RcpAnalysis/data/list/debadeepti/list_aav TofEff_Pi_aav_
+Output 		= /data/star/jdb12/RcpAnalysis/data/list/debadeepti/TofEff_aav.log
 Queue
 Arguments = /data/star/jdb12/RcpAnalysis/config/debadeepti/TofEff/Pi.xml /data/star/jdb12/RcpAnalysis/data/list/debadeepti/list_aaw TofEff_Pi_aaw_
+Output 		= /data/star/jdb12/RcpAnalysis/data/list/debadeepti/TofEff_aaw.log
 Queue
 Arguments = /data/star/jdb12/RcpAnalysis/config/debadeepti/TofEff/Pi.xml /data/star/jdb12/RcpAnalysis/data/list/debadeepti/list_aax TofEff_Pi_aax_
+Output 		= /data/star/jdb12/RcpAnalysis/data/list/debadeepti/TofEff_aax.log
 Queue
 Arguments = /data/star/jdb12/RcpAnalysis/config/debadeepti/TofEff/Pi.xml /data/star/jdb12/RcpAnalysis/data/list/debadeepti/list_aay TofEff_Pi_aay_
+Output 		= /data/star/jdb12/RcpAnalysis/data/list/debadeepti/TofEff_aay.log
 Queue
 Arguments = /data/star/jdb12/RcpAnalysis/config/debadeepti/TofEff/Pi.xml /data/star/jdb12/RcpAnalysis/data/list/debadeepti/list_aaz TofEff_Pi_aaz_
+Output 		= /data/star/jdb12/RcpAnalysis/data/list/debadeepti/TofEff_aaz.log
 Queue
 Arguments = /data/star/jdb12/RcpAnalysis/config/debadeepti/TofEff/Pi.xml /data/star/jdb12/RcpAnalysis/data/list/debadeepti/list_aba TofEff_Pi_aba_
+Output 		= /data/star/jdb12/RcpAnalysis/data/list/debadeepti/TofEff_aba.log
 Queue
 Arguments = /data/star/jdb12/RcpAnalysis/config/debadeepti/TofEff/Pi.xml /data/star/jdb12/RcpAnalysis/data/list/debadeepti/list_abb TofEff_Pi_abb_
+Output 		= /data/star/jdb12/RcpAnalysis/data/list/debadeepti/TofEff_abb.log
 Queue
 Arguments = /data/star/jdb12/RcpAnalysis/config/debadeepti/TofEff/Pi.xml /data/star/jdb12/RcpAnalysis/data/list/debadeepti/list_abc TofEff_Pi_abc_
+Output 		= /data/star/jdb12/RcpAnalysis/data/list/debadeepti/TofEff_abc.log
 Queue
 Arguments = /data/star/jdb12/RcpAnalysis/config/debadeepti/TofEff/Pi.xml /data/star/jdb12/RcpAnalysis/data/list/debadeepti/list_abd TofEff_Pi_abd_
+Output 		= /data/star/jdb12/RcpAnalysis/data/list/debadeepti/TofEff_abd.log
 Queue
 Arguments = /data/star/jdb12/RcpAnalysis/config/debadeepti/TofEff/Pi.xml /data/star/jdb12/RcpAnalysis/data/list/debadeepti/list_abe TofEff_Pi_abe_
+Output 		= /data/star/jdb12/RcpAnalysis/data/list/debadeepti/TofEff_abe.log
 Queue
 Arguments = /data/star/jdb12/RcpAnalysis/config/debadeepti/TofEff/Pi.xml /data/star/jdb12/RcpAnalysis/data/list/debadeepti/list_abf TofEff_Pi_abf_
+Output 		= /data/star/jdb12/RcpAnalysis/data/list/debadeepti/TofEff_abf.log
 Queue
 Arguments = /data/star/jdb12/RcpAnalysis/config/debadeepti/TofEff/Pi.xml /data/star/jdb12/RcpAnalysis/data/list/debadeepti/list_abg TofEff_Pi_abg_
+Output 		= /data/star/jdb12/RcpAnalysis/data/list/debadeepti/TofEff_abg.log
 Queue
 Arguments = /data/star/jdb12/RcpAnalysis/config/debadeepti/TofEff/Pi.xml /data/star/jdb12/RcpAnalysis/data/list/debadeepti/list_abh TofEff_Pi_abh_
+Output 		= /data/star/jdb12/RcpAnalysis/data/list/debadeepti/TofEff_abh.log
 Queue
 Arguments = /data/star/jdb12/RcpAnalysis/config/debadeepti/TofEff/Pi.xml /data/star/jdb12/RcpAnalysis/data/list/debadeepti/list_abi TofEff_Pi_abi_
+Output 		= /data/star/jdb12/RcpAnalysis/data/list/debadeepti/TofEff_abi.log
 Queue
 Arguments = /data/star/jdb12/RcpAnalysis/config/debadeepti/TofEff/Pi.xml /data/star/jdb12/RcpAnalysis/data/list/debadeepti/list_abj TofEff_Pi_abj_
+Output 		= /data/star/jdb12/RcpAnalysis/data/list/debadeepti/TofEff_abj.log
 Queue
 Arguments = /data/star/jdb12/RcpAnalysis/config/debadeepti/TofEff/Pi.xml /data/star/jdb12/RcpAnalysis/data/list/debadeepti/list_abk TofEff_Pi_abk_
+Output 		= /data/star/jdb12/RcpAnalysis/data/list/debadeepti/TofEff_abk.log
 Queue
 Arguments = /data/star/jdb12/RcpAnalysis/config/debadeepti/TofEff/Pi.xml /data/star/jdb12/RcpAnalysis/data/list/debadeepti/list_abl TofEff_Pi_abl_
+Output 		= /data/star/jdb12/RcpAnalysis/data/list/debadeepti/TofEff_abl.log
 Queue
 Arguments = /data/star/jdb12/RcpAnalysis/config/debadeepti/TofEff/Pi.xml /data/star/jdb12/RcpAnalysis/data/list/debadeepti/list_abm TofEff_Pi_abm_
+Output 		= /data/star/jdb12/RcpAnalysis/data/list/debadeepti/TofEff_abm.log
 Queue
 Arguments = /data/star/jdb12/RcpAnalysis/config/debadeepti/TofEff/Pi.xml /data/star/jdb12/RcpAnalysis/data/list/debadeepti/list_abn TofEff_Pi_abn_
+Output 		= /data/star/jdb12/RcpAnalysis/data/list/debadeepti/TofEff_abn.log
 Queue
 Arguments = /data/star/jdb12/RcpAnalysis/config/debadeepti/TofEff/Pi.xml /data/star/jdb12/RcpAnalysis/data/list/debadeepti/list_abo TofEff_Pi_abo_
+Output 		= /data/star/jdb12/RcpAnalysis/data/list/debadeepti/TofEff_abo.log
 Queue
 Arguments = /data/star/jdb12/RcpAnalysis/config/debadeepti/TofEff/Pi.xml /data/star/jdb12/RcpAnalysis/data/list/debadeepti/list_abp TofEff_Pi_abp_
+Output 		= /data/star/jdb12/RcpAnalysis/data/list/debadeepti/TofEff_abp.log
 Queue
 Arguments = /data/star/jdb12/RcpAnalysis/config/debadeepti/TofEff/Pi.xml /data/star/jdb12/RcpAnalysis/data/list/debadeepti/list_abq TofEff_Pi_abq_
+Output 		= /data/star/jdb12/RcpAnalysis/data/list/debadeepti/TofEff_abq.log
 Queue
 Arguments = /data/star/jdb12/RcpAnalysis/config/debadeepti/TofEff/Pi.xml /data/star/jdb12/RcpAnalysis/data/list/debadeepti/list_abr TofEff_Pi_abr_
+Output 		= /data/star/jdb12/RcpAnalysis/data/list/debadeepti/TofEff_abr.log
 Queue
 Arguments = /data/star/jdb12/RcpAnalysis/config/debadeepti/TofEff/Pi.xml /data/star/jdb12/RcpAnalysis/data/list/debadeepti/list_abs TofEff_Pi_abs_
+Output 		= /data/star/jdb12/RcpAnalysis/data/list/debadeepti/TofEff_abs.log
 Queue
 Arguments = /data/star/jdb12/RcpAnalysis/config/debadeepti/TofEff/Pi.xml /data/star/jdb12/RcpAnalysis/data/list/debadeepti/list_abt TofEff_Pi_abt_
+Output 		= /data/star/jdb12/RcpAnalysis/data/list/debadeepti/TofEff_abt.log
 Queue
 Arguments = /data/star/jdb12/RcpAnalysis/config/debadeepti/TofEff/Pi.xml /data/star/jdb12/RcpAnalysis/data/list/debadeepti/list_abu TofEff_Pi_abu_
+Output 		= /data/star/jdb12/RcpAnalysis/data/list/debadeepti/TofEff_abu.log
 Queue
 Arguments = /data/star/jdb12/RcpAnalysis/config/debadeepti/TofEff/Pi.xml /data/star/jdb12/RcpAnalysis/data/list/debadeepti/list_abv TofEff_Pi_abv_
 Queue
