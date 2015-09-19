@@ -121,13 +121,15 @@ void TpcEffFitter::make(){
 					.set( "xr", 0, 4.5 )
 					.set("y", "Efficiency x Acceptance").set( "x", "p_{T}^{MC} [GeV/c]" ).draw();
 
-					gStyle->SetStatY( 0.5 );
-					gStyle->SetStatX( 0.85 );
-					
-					fitFunc->SetLineColor( kRed );
-					fitFunc->Draw("same");	
 
+				INFO( tag, "Stat Box" );
+				gStyle->SetStatY( 0.5 );
+				gStyle->SetStatX( 0.85 );
 				
+				fitFunc->SetLineColor( kRed );
+				fitFunc->Draw("same");	
+
+				INFO( tag, "Drawing CL band" );
 				// TH1 * band2 = Common::fitCL( fitFunc, "bands", 0.95 );
 				// band2->SetFillColorAlpha( kBlue, 0.5 );
 				band->SetFillColorAlpha( kRed, 0.5 );
@@ -137,6 +139,7 @@ void TpcEffFitter::make(){
 
 				rp.savePage();
 
+				INFO( tag, "Exporting Params" );
 				exportParams( b, fitFunc, fitPointer, out );
 
 			} // loop centrality bins
