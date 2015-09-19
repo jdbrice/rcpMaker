@@ -100,14 +100,14 @@ void TpcEffFitter::make(){
 				fitFunc->SetParLimits( 1, 0.0, 0.5 );
 				fitFunc->SetParLimits( 2, 0.0, 10 );
 
-				TFitResultPtr fitPointer = g.Fit( fitFunc, "BNRSWW" );
+				TFitResultPtr fitPointer = g.Fit( fitFunc, "BRSWW" );
 				INFO( tag, "FitPointer = " << fitPointer );
 				TGraphErrors * band = Common::choleskyBands( fitPointer, fitFunc, 5000, 200, &rp );
 
 				RooPlotLib rpl;
 				rp.newPage();
 				rpl.style( &g ).set( "title", plc + "_" + c + " : centrality bin = " + ts( b ) ).set( "yr", 0, 1.1 ).set( "optfit", 111 )
-					.set( "xr", 0, 5 )
+					.set( "xr", 0, 2 )
 					.set("y", "Efficiency").set( "x", "p_{T} [GeV/c]" ).draw();
 
 					gStyle->SetStatY( 0.5 );

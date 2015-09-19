@@ -6,6 +6,8 @@ Getenv = True
 Executable    = /home/jdb12/work/rcpMaker/bin/rcp
 initialdir 		= /home/jdb12/work/rcpMaker/bin/
 
+Requirements = Machine == "macfrank.rice.edu"
+
 Arguments = /data/star/jdb12/RcpAnalysis/config/debadeepti/TofEff/K.xml /data/star/jdb12/RcpAnalysis/data/list/debadeepti/list_aaa TofEff_K_aaa_
 Queue
 Arguments = /data/star/jdb12/RcpAnalysis/config/debadeepti/TofEff/K.xml /data/star/jdb12/RcpAnalysis/data/list/debadeepti/list_aab TofEff_K_aab_
