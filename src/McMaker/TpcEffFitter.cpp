@@ -38,7 +38,7 @@ void TpcEffFitter::make(){
 	out << "<config>" << endl;
 
 
-
+	vector<string> labels = cfg->getStringVector( nodePath + "CentralityLabels" );
 	vector< int> cbins = cfg->getIntVector( nodePath + "CentralityBins" );
 	Reporter rp( cfg, nodePath + "Reporter." );
 
@@ -98,17 +98,18 @@ void TpcEffFitter::make(){
 				fitFunc->SetParameters( .85, 0.05, 5.0, -0.05 );
 				fitFunc->SetParLimits( 0, 0.5, 1.0 );
 				fitFunc->SetParLimits( 1, 0.0, 0.5 );
-				fitFunc->SetParLimits( 2, 0.0, 10 );
+				fitFunc->SetParLimits( 2, 0.0, 20 );
 
 				TFitResultPtr fitPointer = g.Fit( fitFunc, "BRSWW" );
+				fitPointer = g.Fit( fitFunc, "BRS" );
 				INFO( tag, "FitPointer = " << fitPointer );
 				TGraphErrors * band = Common::choleskyBands( fitPointer, fitFunc, 5000, 200, &rp );
 
 				RooPlotLib rpl;
 				rp.newPage();
-				rpl.style( &g ).set( "title", plc + "_" + c + " : centrality bin = " + ts( b ) ).set( "yr", 0, 1.1 ).set( "optfit", 111 )
+				rpl.style( &g ).set( "title", Common::plc_label( plc, c ) + " : " + labels[ b ] ).set( "yr", 0, 1.1 ).set( "optfit", 111 )
 					.set( "xr", 0, 2 )
-					.set("y", "Efficiency").set( "x", "p_{T} [GeV/c]" ).draw();
+					.set("y", "Efficiency x Acceptance").set( "x", "p_{T}^{MC} [GeV/c]" ).draw();
 
 					gStyle->SetStatY( 0.5 );
 					gStyle->SetStatX( 0.85 );

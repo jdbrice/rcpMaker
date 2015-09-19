@@ -19,8 +19,6 @@ void TpcEffMaker::analyzeTrack( Int_t iTrack ){
 	int charge = pico->trackCharge( iTrack );
 	 
 	book->cd( "inclusive" );
-	//book->fill( "pt", pt, eventWeight );
-	//book->fill( "pt_" + Common::chargeString( charge ) , pt, eventWeight );
 	
 	if ( cBin >= 0 ){
 		string cName = "pt_" + ts( cBin ) + "_" + Common::chargeString( charge );
@@ -39,8 +37,6 @@ void TpcEffMaker::analyzeTofTrack( Int_t iTrack ){
 	int charge = pico->trackCharge( iTrack );
 	 
 	book->cd( "inclusiveTof" );
-	// book->fill( "pt", pt, eventWeight );
-	// book->fill( "pt_" + Common::chargeString( charge ), pt, eventWeight );
 	
 	if ( cBin >= 0 ){
 		string cName = "pt_" + ts( cBin ) + "_" + Common::chargeString( charge );
