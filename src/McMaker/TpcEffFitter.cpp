@@ -98,17 +98,27 @@ void TpcEffFitter::make(){
 				fitFunc->SetParameters( .85, 0.05, 5.0, -0.05 );
 				fitFunc->SetParLimits( 0, 0.5, 1.0 );
 				fitFunc->SetParLimits( 1, 0.0, 0.5 );
-				fitFunc->SetParLimits( 2, 0.0, 20 );
+				fitFunc->SetParLimits( 2, 0.0, 100000 );
 
-				TFitResultPtr fitPointer = g.Fit( fitFunc, "BRSWW" );
-				fitPointer = g.Fit( fitFunc, "BRS" );
+				// fist fit shape
+				TFitResultPtr fitPointer = g.Fit( fitFunc, "RSWW" );
+
+				// fitFunc->FixParameter( 1, fitFunc->GetParameter( 1 ) );
+				// fitFunc->FixParameter( 2, fitFunc->GetParameter( 2 ) );
+				fitPointer = g.Fit( fitFunc, "RS" );
+
+				// fitFunc->ReleaseParameter( 1 );
+				// fitFunc->ReleaseParameter( 2 );
+
 				INFO( tag, "FitPointer = " << fitPointer );
 				TGraphErrors * band = Common::choleskyBands( fitPointer, fitFunc, 5000, 200, &rp );
 
+
+
 				RooPlotLib rpl;
 				rp.newPage();
-				rpl.style( &g ).set( "title", Common::plc_label( plc, c ) + " : " + labels[ b ] ).set( "yr", 0, 1.1 ).set( "optfit", 111 )
-					.set( "xr", 0, 2 )
+				rpl.style( &g ).set( "title", Common::plc_label( plc, c ) + " : " + labels[ b ] + ", 68%CL (Red)" ).set( "yr", 0, 1.1 ).set( "optfit", 111 )
+					.set( "xr", 0, 4.5 )
 					.set("y", "Efficiency x Acceptance").set( "x", "p_{T}^{MC} [GeV/c]" ).draw();
 
 					gStyle->SetStatY( 0.5 );
@@ -118,8 +128,10 @@ void TpcEffFitter::make(){
 					fitFunc->Draw("same");	
 
 				
-				// TH1 * band = Common::fitCL( fitFunc, "bands", 0.99 );
+				// TH1 * band2 = Common::fitCL( fitFunc, "bands", 0.95 );
+				// band2->SetFillColorAlpha( kBlue, 0.5 );
 				band->SetFillColorAlpha( kRed, 0.5 );
+				// band2->Draw( "same e3" );
 				band->Draw( "same e3" );
 
 
