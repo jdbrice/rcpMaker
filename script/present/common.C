@@ -12,6 +12,10 @@ vector<string> rcentrality_labels = { "0-5%", "5-10%", "10-20%", "20-40%", "40-6
 vector<string> energies =  { "7.7", 		"11.5", 	"14.5", 	"19.6", 		"27.0", 		"39.0" };
 vector<string> renergies =  { "39.0",         "27.0",     "19.6",    "14.5",         "11.5",         "7.7" };
 
+vector<int> rcpcolors      = { kAzure - 3,     kGreen + 1,      kMagenta + 3,      kOrange - 3,    kYellow + 1, kRed + 1  };
+vector<string> rcpenergies =  { "39.0",         "27.0",     "19.6",         "11.5",         "7.7",  "14.5" };
+vector<string> nullenergies =  { "",            "",         "",             "",             "",     "14.5" };
+
 
 map<string, vector<double> > n_coll = 
 {

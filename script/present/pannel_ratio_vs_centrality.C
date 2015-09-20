@@ -14,6 +14,8 @@ void pannel_ratio_vs_centrality( string charge ="p" ){
 
 
 	
+	int index = 0;
+
 	for ( string energy : renergies ){
 	
 		if ( "39.0" == energy || "14.5" == energy ){

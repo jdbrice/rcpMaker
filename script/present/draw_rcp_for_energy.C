@@ -6,7 +6,7 @@
 
 void draw_rcp_for_energy( string en, string chargeIn ="p+n", string iCen = "0", string iPer = "6" ){
 
-	Reporter rp( "tmp.pdf", 300, 450 );
+	Reporter rp( "tmp.pdf", 400, 700 );
 	gPad->SetTopMargin( 0.01 );
 	gPad->SetLeftMargin( 0.15 );
 	gPad->SetBottomMargin( 0.15 );

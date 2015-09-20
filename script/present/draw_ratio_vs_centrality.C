@@ -26,12 +26,14 @@ void draw_ratio_vs_centrality( string en="14.5", string plc1="P", string plc2="P
 	gStyle->SetTitleX( 0.22 );
 	gStyle->SetTitleAlign( 23 );
 
+	vector<int> markers = { 20, 21, 34, 22, 33, 29, 8 };
+
 	int iiCen = 0;
 	for ( string iCen : rcentralities ){
 		
 		TH1 * h = draw_single_ratio( en, 
 			plc1, charge, plc2, charge,
-			iCen, iCen, colors[ iColor ], "same" );
+			iCen, iCen, colors[ iColor ], "same", markers[ iColor ] );
 
 		iColor ++;
 

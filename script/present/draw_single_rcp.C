@@ -7,7 +7,7 @@
 
 TH1* draw_single_rcp(string energy, string plc, string charge, string iCen = "0", string iPer = "6",
 							double cen_nColl = 800.0, double per_nColl = 20.0, 
-							int color = kRed, string draw_opt = ""){
+							int color = kRed, string draw_opt = "", int marker = 8){
 
 	RooPlotLib rpl;
 
@@ -43,13 +43,16 @@ TH1* draw_single_rcp(string energy, string plc, string charge, string iCen = "0"
 		.set( "yls", 0.06 )
 		.set( "xts", 0.05 )
 		.set( "xls", 0.05 )
-		.set( "mst", 8 )
-		.set( "color", color, 0.33 );
+		.set( "mst", marker )
+		.set( "color", color, 0.13 );
+
+	if ( "14.5" == energy )
+		rpl.set( "ms", 2 );
 
 	rpl.style( cen_stat_rcp )
 		.set( "yts", 0.05 )
 		.set( "yls", 0.06 )
-		.set( "mst", 8 )
+		.set( "mst", marker )
 		.set( "color", color );
 
 	cen_sys_rcp->Draw( ( draw_opt + " e2").c_str() );
@@ -60,7 +63,7 @@ TH1* draw_single_rcp(string energy, string plc, string charge, string iCen = "0"
 	gPad->SetGrid( 1, 1 );
 
 
-	return cen_sys_rcp;
+	return cen_stat_rcp;
 
 }
 

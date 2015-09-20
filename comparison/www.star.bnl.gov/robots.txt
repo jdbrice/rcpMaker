@@ -1,0 +1,7 @@
+User-agent: *
+Crawl-delay: 10
+Disallow: /cgi-bin/
+Disallow: /HyperNews/
+Disallow: /dbAdmin/
+Disallow: /protected/
+Disallow: /HyperNews-star/
