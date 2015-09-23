@@ -8,8 +8,8 @@ void pannel_ratio_vs_centrality( string charge ="p" ){
 	gStyle->SetTitleSize( 0.25, "t" );
 	gStyle->SetTitleX( 0.82 );
 
-	Reporter rp( "_tmp.pdf", 900, 700 );
-	rp.newPage( 3, 2, 0, 0 );
+	Reporter rp( "_tmp.pdf", 1150, 900 );
+	rp.newPage( 3, 2, 0.0, 0.005 );
 	rp.cd( 1, 1 );
 
 
@@ -23,6 +23,9 @@ void pannel_ratio_vs_centrality( string charge ="p" ){
 		}
 		if ( "11.5" == energy || "14.5" == energy || "7.7" == energy ){
 			gPad->SetBottomMargin(0.2);
+		}
+		if ( "19.6"==energy || "7.7" == energy ){
+			gPad->SetRightMargin( 0.01 );
 		}
 
 		draw_ratio_vs_centrality( energy, "P", "Pi", charge, &rp );

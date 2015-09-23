@@ -86,12 +86,14 @@ void TpcEffFitter::make(){
 				hMc->Sumw2();
 				hRc->Sumw2();
 
-				TGraphAsymmErrors g;
+				// TGraphAsymmErrors g;
 
-				g.SetName( (plc + "_" + c + "_" + ts(b)).c_str() );
-				g.BayesDivide( hRc, hMc );
+				// g.SetName( (plc + "_" + c + "_" + ts(b)).c_str() );
+				// g.BayesDivide( hRc, hMc );
+				TH1 * g = (TH1D*) hRc->Clone( (plc + "_" + c + "_" + ts(b)).c_str() );
+				g->Divide( hMc );
 
-				book->add( plc + "_" + c + "_" + ts(b),  &g );
+				book->add( plc + "_" + c + "_" + ts(b),  g );
 
 				// do the fit
 				TF1 * fitFunc = new TF1( "effFitFunc", "[0] * exp( - pow( [1] / x, [2] ) )", 0.0, 5.0 );
@@ -101,11 +103,11 @@ void TpcEffFitter::make(){
 				fitFunc->SetParLimits( 2, 0.0, 100000 );
 
 				// fist fit shape
-				TFitResultPtr fitPointer = g.Fit( fitFunc, "RSWW" );
+				TFitResultPtr fitPointer = g->Fit( fitFunc, "RSWW" );
 
 				// fitFunc->FixParameter( 1, fitFunc->GetParameter( 1 ) );
 				// fitFunc->FixParameter( 2, fitFunc->GetParameter( 2 ) );
-				fitPointer = g.Fit( fitFunc, "RS" );
+				//fitPointer = g.Fit( fitFunc, "RS" );
 
 				// fitFunc->ReleaseParameter( 1 );
 				// fitFunc->ReleaseParameter( 2 );
@@ -117,7 +119,7 @@ void TpcEffFitter::make(){
 
 				RooPlotLib rpl;
 				rp.newPage();
-				rpl.style( &g ).set( "title", Common::plc_label( plc, c ) + " : " + labels[ b ] + ", 68%CL (Red)" ).set( "yr", 0, 1.1 ).set( "optfit", 111 )
+				rpl.style( g ).set( "title", Common::plc_label( plc, c ) + " : " + labels[ b ] + ", 68%CL (Red)" ).set( "yr", 0, 1.1 ).set( "optfit", 111 )
 					.set( "xr", 0, 4.5 )
 					.set("y", "Efficiency x Acceptance").set( "x", "p_{T}^{MC} [GeV/c]" ).draw();
 

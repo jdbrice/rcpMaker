@@ -10,7 +10,7 @@ void draw_double_ratio_vs_energy( 	string charge = "p",
 	RooPlotLib rpl;
 	TH1 * master;
 
-	Reporter rp( "img/rp_double_ratio.pdf", 500, 700 );
+	Reporter rp( "img/rp_double_ratio.pdf", 500, 750 );
 
 	gPad->SetTopMargin( 0.01);
 	TLegend * leg = new TLegend( 0.6, 0.1, 0.9, 0.5 );
@@ -21,8 +21,9 @@ void draw_double_ratio_vs_energy( 	string charge = "p",
 	gPad->SetLeftMargin( 0.15 );
 
 	int iColor = 0;
-	float scaler = 1.0;
-	for ( string en : energies ){
+	float scaler = 32.0;
+	vector<int> markers = { 20, 21, 34, 22, 33, 29 };
+	for ( string en : renergies ){
 
 		TH1 * h;
 		if ( 0 == iColor ){
@@ -30,12 +31,12 @@ void draw_double_ratio_vs_energy( 	string charge = "p",
 			h = master;
 		}
 		else
-			h = draw_double_ratio( en, plc1, plc2, charge, iCen1, iCen2, colors[ iColor ], "same", scaler, &rp );
+			h = draw_double_ratio( en, plc1, plc2, charge, iCen1, iCen2, colors[ iColor ], "same", scaler, &rp, markers[ iColor ] );
 
 		leg->AddEntry( h, (en + " x " + ts( (int)scaler )).c_str() );
 
 
-		scaler *= 2;
+		scaler /= 2;
 		iColor++;
 	}
 

@@ -10,7 +10,8 @@ TH1 *draw_double_ratio( 	string energy,
 							int color, 
 							string draw_opt,
 							double scaler,
-							Reporter *rp = nullptr ){
+							Reporter *rp = nullptr,
+							int marker = 8 ){
 
 	RooPlotLib rpl;
 
@@ -83,11 +84,14 @@ TH1 *draw_double_ratio( 	string energy,
 	rpl.style( sys ).set( "color", color, 0.33 )
 		.set( "title", " ; pT [GeV/c]; " + plc1 + " / " + plc2 )
 		.set( "markerstyle", 8 ).set( "draw", draw_opt + " e2" )
+		.set( "markerstyle", marker )
 		.draw();
 
 	rpl.style( stat ).set( "color", color )
 		.set( "title", " ; pT [GeV/c]; " + plc1 + " / " + plc2 )
-		.set( "markerstyle", 8 ).set( "draw", "same" ).draw();
+		.set( "markerstyle", marker )
+		.set( "markersize", 2 )
+		.set( "draw", "same" ).draw();
 
 		gPad->SetLogy(1);
 
@@ -95,7 +99,7 @@ TH1 *draw_double_ratio( 	string energy,
 
 	rpl.style( lUnity ).set( "color", color ).set( "lw", 2 );
 	lUnity->SetLineColor( color );
-	lUnity->SetLineWidth( 4 );
+	lUnity->SetLineWidth( 6 );
 	lUnity->Draw();
 	lUnity->SetLineStyle( kDashed );
 

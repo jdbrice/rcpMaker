@@ -44,12 +44,28 @@ TH1* draw_single_ratio( 	string energy ="14.5",
 
 	rpl.style( sys ).set( "color", color, 0.5 ).set( "fca", color, 0.15 )
 		.set( "title", " ; pT [GeV/c]; " + plc1 + " / " + plc2 )
-		.set( "markerstyle", ms ).set( "draw", draw_opt + " e2" )
-		.set( "xr", 0.1, 5.0 ).draw();
+		.set( "markerstyle", ms )
+		.set( "markersize", 2 )
+		.set( "optstat", 0 )
+		.set( "draw", draw_opt + " e2" )
+		.set( "xts", 0.10 )
+		.set( "xto", 0.8 )
+		.set( "xls", 0.06 )
+		.set( "yts", 0.10 )
+		.set( "yto", 0.7 )
+		.set( "yls", 0.06 )
+		.set( "xr", 0.1, 10.0 ).draw();
 
 	rpl.style( stat ).set( "color", color, 0.15 )
 		.set( "title", " ; pT [GeV/c]; " + plc1 + " / " + plc2 )
-		.set( "markerstyle", ms ).set( "draw", "same" ).draw();
+		.set( "markerstyle", ms ).set( "draw", "same" )
+		.set( "xts", 0.10 )
+		.set( "xto", 0.8 )
+		.set( "xls", 0.06 )
+		.set( "yts", 0.10 )
+		.set( "yto", 0.7 )
+		.set( "yls", 0.06 )
+		.draw();
 
 	return sys;
 
