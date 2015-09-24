@@ -255,6 +255,7 @@ namespace TSF{
 			schema->var( "eff_" + plc )->fixed = false;
 			if ( tofPidEffRanges[ plc ].above( avgP ) ){
 				schema->var( "eff_" + plc )->val = tofPidEffSets[ plc ].mean();
+				schema->var( "eff_" + plc )->error = tofPidEffSets[ plc ].std() * 2;
 				schema->var( "eff_" + plc )->fixed = true;
 			}
 
