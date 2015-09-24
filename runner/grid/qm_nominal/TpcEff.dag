@@ -2,6 +2,8 @@
 # TPC Efficiency
 ###########################
 
+Requirements = Machine == "macfrank.rice.edu"
+
 JOB A TpcEff_Make.submit
 JOB B TpcEff_Fit.submit
 PARENT A CHILD B

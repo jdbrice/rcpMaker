@@ -6,6 +6,7 @@ Getenv = True
 Executable    = /home/jdb12/work/rcpMaker/bin/rcp
 initialdir 		= /home/jdb12/work/rcpMaker/bin/
 
+
 Arguments = /data/star/jdb12/RcpAnalysis/config/qm_nominal/TofEff/Pi.xml /data/star/jdb12/RcpAnalysis/data/list/list_aaa TofEff_Pi_aaa_
 Queue
 Arguments = /data/star/jdb12/RcpAnalysis/config/qm_nominal/TofEff/Pi.xml /data/star/jdb12/RcpAnalysis/data/list/list_aab TofEff_Pi_aab_
