@@ -4,6 +4,8 @@ TH1 * events;
 
 void normalize( TH1 * h, int iCen ){
 
+	h->Sumw2();
+
 	//debadeepti's rapidity cut
 	double dy = ( 0.1 -  -0.1 );
 
@@ -18,8 +20,11 @@ void normalize( TH1 * h, int iCen ){
 		double val 		= h->GetBinContent( i );
 		double error 	= h->GetBinError( i );
 
-		h->SetBinContent( i, val / pT  );
-		h->SetBinError( i, error / pT );
+		// divide out the bin width
+		double bw 		= h->GetBinWidth( i );
+
+		h->SetBinContent( i, val / (pT * bw ) );
+		h->SetBinError( i, error / (pT ) );
 	}	
 }
 
@@ -48,14 +53,25 @@ void export_raw_spectra( string plc ="Pi", string charge="p" ){
 
 	for ( int iCen = 0; iCen < 7; iCen++ ){
 
+		TCanvas * c = new TCanvas( ("c"+ts(iCen)).c_str(), ("c"+ts(iCen)).c_str(), 400, 800 );
+		c->Divide( 1, 2 );
+
 		TH1 * hTpc = (TH1D*)f->Get( ("inclusive/pt_" + ts(iCen) + "_" + charge ).c_str() );
 
+		c->cd(1);
 		normalize( hTpc, iCen );
-		write( hTpc, "tpc_inclusive_raw_" + plc + "_" + charge + ".dat" );
+		hTpc->Draw();
+		write( hTpc, "tpc_inclusive_raw_" + plc + "_" + charge + "_" + ts(iCen) + ".dat" );
 
 		TH1 * hTof = (TH1D*)f->Get( ("inclusiveTof/pt_" + ts(iCen) + "_" + charge ).c_str() );
 		normalize( hTof, iCen );
-		write( hTof, "tof_inclusive_raw_" + plc + "_" + charge + ".dat" );
+		hTof->Draw("same");
+		write( hTof, "tof_inclusive_raw_" + plc + "_" + charge + "_" + ts(iCen) + ".dat" );
+
+		c->cd(2);
+		TH1 * hEff = (TH1D*)hTof->Clone( ("eff_" + ts(iCen)).c_str() );
+		hEff->Divide( hTpc );
+		hEff->Draw();
 
 	}
 

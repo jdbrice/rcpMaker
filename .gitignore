@@ -2,6 +2,7 @@
 *.root
 *.log
 *.zip
+*.dat
 *.DataSource*
 /products
 /config
