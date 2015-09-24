@@ -5,6 +5,8 @@
 Executable = /home/jdb12/work/rcpMaker/runner/rcp
 Initialdir = /home/jdb12/work/rcpMaker/runner/
 
+Requirements = Machine == "macfrank.rice.edu"
+
 Arguments 	= /data/star/jdb12/RcpAnalysis/config/qm_nominal/EnergyLoss/K_n.xml
 Output 		= /data/star/jdb12/RcpAnalysis/config/qm_nominal/EnergyLoss/K_n.xml.log
 Log 		= /data/star/jdb12/RcpAnalysis/config/qm_nominal/EnergyLoss/K_n.xml.condor.log

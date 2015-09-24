@@ -5,6 +5,8 @@
 Executable = /home/jdb12/work/rcpMaker/runner/rcp
 Initialdir = /home/jdb12/work/rcpMaker/runner/
 
+Requirements = Machine == "macfrank.rice.edu"
+
 Arguments = /data/star/jdb12/RcpAnalysis/config/qm_nominal/FeedDown/make.xml /data/star/jdb12/RcpAnalysis/urqmd/list/urqmd_aaaa FeedDown_urqmd_aaaa_
 Queue
 Arguments = /data/star/jdb12/RcpAnalysis/config/qm_nominal/FeedDown/make.xml /data/star/jdb12/RcpAnalysis/urqmd/list/urqmd_aaab FeedDown_urqmd_aaab_

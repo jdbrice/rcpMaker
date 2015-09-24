@@ -5,6 +5,9 @@
 Getenv = True
 Executable    = /home/jdb12/work/rcpMaker/bin/rcp
 initialdir 		= /home/jdb12/work/rcpMaker/bin/
+
+Requirements = Machine == "macfrank.rice.edu"
+
 Arguments = /data/star/jdb12/RcpAnalysis/config/qm_nominal/PidData/PostCorr_Pi.xml /data/star/jdb12/RcpAnalysis/data/list/list_aaa PostCorr_Pi_aaa_
 Queue
 Arguments = /data/star/jdb12/RcpAnalysis/config/qm_nominal/PidData/PostCorr_Pi.xml /data/star/jdb12/RcpAnalysis/data/list/list_aab PostCorr_Pi_aab_
