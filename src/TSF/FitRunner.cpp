@@ -45,8 +45,14 @@ namespace TSF{
 
 		Logger::setGlobalLogLevel( Logger::logLevelFromString( cfg->getString( nodePath + "Logger:globalLogLevel" ) ) );
 
-		for ( string pre : { "zb", "zd" } ){
-			for ( string plc : Common::species ){
+		for ( string plc : Common::species ){
+
+
+			for ( string pre : { "zb", "zd" } ){
+			
+				ConfigRange tpecr( cfg, nodePath + "ParameterFixing.tofPidEff." + plc );
+				tofPidEffRanges[ plc ] = tpecr;
+
 				if ( cfg->exists( nodePath + "ParameterFixing." + pre + "." + plc ) ){
 					INFO( tag, "Creating Sigma Fixing range for " << pre << "_" << plc );
 					ConfigRange cr( cfg, nodePath + "ParameterFixing." + pre + "." + plc );
@@ -246,8 +252,13 @@ namespace TSF{
 			// double eff_fudge = 0.01;
 			// leave it as whatever it is in config
 			// schema->var( "eff_" + plc )->val = 1.0 ;//+ ( rnd->Rndm() * (2 * eff_fudge) - eff_fudge );
-			schema->var( "eff_" + plc )->fixed = true;
-			
+			schema->var( "eff_" + plc )->fixed = false;
+			if ( tofPidEffRanges[ plc ].above( avgP ) ){
+				schema->var( "eff_" + plc )->val = tofPidEffSets[ plc ].mean();
+				schema->var( "eff_" + plc )->fixed = true;
+			}
+
+
 			
 		} // loop on plc to set initial vals
 	} // perpare(...)
@@ -439,8 +450,10 @@ namespace TSF{
 		// if ( avgP > 1.4 )
 		// 	nSigmaAbovePOverride = -1;
 
+		bool enhanced = cfg->getBool( nodePath + "FitSchema:enhanced", true );
+
 		// load the datasets from the file
-		fitter.loadDatasets(centerSpecies, iCharge, iCen, iPt, true, zbMu, zdMu );
+		fitter.loadDatasets(centerSpecies, iCharge, iCen, iPt, enhanced, zbMu, zdMu );
 
 		respondToStats( avgP ); 
 
@@ -457,13 +470,14 @@ namespace TSF{
 			fitter.fit2(  );
 		}
 		
-		
-		for ( int i = 0; i < 3; i ++){
-			fitter.loadDatasets(centerSpecies, iCharge, iCen, iPt, true, zbMu, zdMu );
-			// gets close on yield with fixed shapes
-			fitter.fit1(  );
-			// gets close on shapes with fixed yields
-			fitter.fit2(  );
+		if ( enhanced ){
+			for ( int i = 0; i < 3; i ++){
+				fitter.loadDatasets(centerSpecies, iCharge, iCen, iPt, enhanced, zbMu, zdMu );
+				// gets close on yield with fixed shapes
+				fitter.fit1(  );
+				// gets close on shapes with fixed yields
+				fitter.fit2(  );
+			}
 		}
 		
 		int tries = 0;
@@ -484,15 +498,22 @@ namespace TSF{
 			if ( fitter.isFitGood())
 				fillFitHistograms(iPt, iCen, iCharge, fitter );
 
-			
-			// Keep track of the sigma for each species for fixing at high pt
-			for ( string pre : {"zb", "zd"} ){
-				for ( string plc : Common::species ){
 
+
+			for ( string plc : Common::species ){
+
+				// tof pid efficiency
+				if ( tofPidEffRanges[ plc ].inInclusiveRange( avgP ) ){
+					tofPidEffSets[ plc ].add( schema->var( "eff_" + plc )->val );
+				}
+
+
+				// Keep track of the sigma for each species for fixing at high pt
+				for ( string pre : {"zb", "zd"} ){
 					ConfigRange &range = sigmaRanges[ pre + "_" + plc ];
 					// if we are in the good p range then add this value to the set
 					if ( range.inInclusiveRange( avgP ) )
-						sigmaSets[ pre+"_"+plc ].add( avgP, schema->var( pre + "_sigma_" + plc )->val ); 	
+						sigmaSets[ pre+"_"+plc ].add( schema->var( pre + "_sigma_" + plc )->val ); 	
 				} // plc
 			} // pre
 		}

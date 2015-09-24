@@ -16,7 +16,7 @@ using namespace jdb;
 #include "TSF/FitSchema.h"
 #include "TSF/Fitter.h"
 #include "Spectra/ZRecentering.h"
-#include "TSF/SigmaHistory.h"
+#include "TSF/HistorySet.h"
 
 // ROOT
 #include "TRandom3.h"
@@ -41,8 +41,10 @@ namespace TSF{
 
 		vector<string> activePlayers;
 
-		map< string, SigmaHistory > sigmaSets;
+		map< string, HistorySet > tofPidEffSets;
+		map< string, ConfigRange > tofPidEffRanges;
 
+		map< string, HistorySet > sigmaSets;
 		map< string, ConfigRange > sigmaRanges;
 
 		unique_ptr<TRandom3> rnd;

@@ -9,29 +9,29 @@ using namespace jdb;
 
 namespace TSF{
 
-	class SigmaHistory
+	class HistorySet
 	{
 	protected:
 		double _mean = 0, _std = 0;
 		vector<double> vals;
 	public:
-		static constexpr auto tag = "SigmaHistory";
-		SigmaHistory(){
+		static constexpr auto tag = "HistorySet";
+		HistorySet(){
 			DEBUG( tag, "()" )
 		}
-		SigmaHistory( const SigmaHistory &other ){
+		HistorySet( const HistorySet &other ){
 			this->_mean = other._mean;
 			this->_std = other._std;
 			this->vals = other.vals;
 		}
-		~SigmaHistory(){
+		~HistorySet(){
 			DEBUG( tag, "()" )
 		}
 
-		void add( double pt, double sigma ){
-			INFO( tag, "( pt=" << pt << ", sigma=" << sigma << " )" )
+		void add( double value ){
+			INFO( tag, "( value=" << value << " )" )
 			
-			vals.push_back( sigma );
+			vals.push_back( value );
 			
 			// update these values
 			calcMean();

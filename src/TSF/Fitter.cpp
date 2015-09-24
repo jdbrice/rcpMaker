@@ -201,12 +201,16 @@ namespace TSF{
 			sigmaP = zbSigmaIdeal;
 
 		// sets the deuteron rejection cut for all zd related projections (including 2D )
-		proj.cutDeuterons( schema->var( "zb_mu_P" )->val, sigmaP, nSigAboveP );
-		
+		if ( enhanced )
+			proj.cutDeuterons( schema->var( "zb_mu_P" )->val, sigmaP, nSigAboveP );
+		else 
+			proj.cutDeuterons( zbMu[ "P" ], sigmaP, 9 );
 		
 		// sets the electron rejection for this pt bin
-		// very verbose
-		proj.cutElectrons( 	schema->var( "zb_mu_Pi" )->val, schema->var( "zb_sigma_Pi" )->val, 3 );
+		if ( enhanced )
+			proj.cutElectrons( 	schema->var( "zb_mu_Pi" )->val, schema->var( "zb_sigma_Pi" )->val, 3 );
+		else 
+			proj.cutElectrons( 	zbMu[ "Pi" ], zbSigmaIdeal, 3 );
 
 
 		string name = Common::speciesName( cs, charge, cenBin, ptBin );
@@ -227,7 +231,15 @@ namespace TSF{
 						continue;
 
 					double center = schema->var( other + "_mu_" + plc )->val;
+					if ( !enhanced && "zb" == var)
+						center = zbMu[ plc ];
+					if ( !enhanced && "zd" == var)
+						center = zdMu[ plc ];
+
+
 					double sigma = schema->var( other + "_sigma_" + plc )->val;      
+					if ( !enhanced )
+						sigma = zbSigmaIdeal;
 					INFO( tag, "center = " << center << ", sigma=" << sigma );
 
 					dataHists[ var + "_" + plc ] = proj.projectEnhanced( name, var, plc, center - sigma, center + sigma ); 
