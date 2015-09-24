@@ -18,9 +18,9 @@ def write_conf( data_path, output_path, config_path ="./" ) :
 <config>
 
 	<!-- Job to run -->
-	<jobType>InclusiveSpectra</jobType>
+	<jobType>TofEffSpectra</jobType>
 
-	<InclusiveSpectra>
+	<TofEffSpectra>
 		<Logger color="true" globalLogLevel="warning" logLevel="warning" />
 		
 		<input plc="{plc}" >
@@ -38,9 +38,18 @@ def write_conf( data_path, output_path, config_path ="./" ) :
 		<!-- histograms to auto-make -->
 		<histograms>
 			<pt type="1D" title="p_{{T}} [GeV]; p_{{T}} [GeV]; #Events"  xBins="binning.pt"/>
+			<pt_vs_dedx title="p_{{T}} [GeV] vs dE/dx; p_{{T}} [GeV]; #Events"  xBins="binning.pt" yBins="binning.dedxEff" />
 		</histograms>
 
-	</InclusiveSpectra>
+		<nSigmaDedx cut="2" />
+
+		<ZRecentering>
+			<centerSpecies>{plc}</centerSpecies>
+			<sigma tof="0.012" dedx="0.07"/>
+			<method>nonlinear</method>
+		</ZRecentering>
+
+	</TofEffSpectra>
 
 	<!-- Include common resources -->
 	<Include url="../common/cuts.xml" />

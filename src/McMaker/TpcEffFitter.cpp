@@ -86,14 +86,12 @@ void TpcEffFitter::make(){
 				hMc->Sumw2();
 				hRc->Sumw2();
 
-				// TGraphAsymmErrors g;
+				TGraphAsymmErrors g;
 
-				// g.SetName( (plc + "_" + c + "_" + ts(b)).c_str() );
-				// g.BayesDivide( hRc, hMc );
-				TH1 * g = (TH1D*) hRc->Clone( (plc + "_" + c + "_" + ts(b)).c_str() );
-				g->Divide( hMc );
+				g.SetName( (plc + "_" + c + "_" + ts(b)).c_str() );
+				g.BayesDivide( hRc, hMc );
 
-				book->add( plc + "_" + c + "_" + ts(b),  g );
+				book->add( plc + "_" + c + "_" + ts(b),  &g );
 
 				// do the fit
 				TF1 * fitFunc = new TF1( "effFitFunc", "[0] * exp( - pow( [1] / x, [2] ) )", 0.0, 5.0 );
@@ -103,23 +101,16 @@ void TpcEffFitter::make(){
 				fitFunc->SetParLimits( 2, 0.0, 100000 );
 
 				// fist fit shape
-				TFitResultPtr fitPointer = g->Fit( fitFunc, "RSWW" );
-
-				// fitFunc->FixParameter( 1, fitFunc->GetParameter( 1 ) );
-				// fitFunc->FixParameter( 2, fitFunc->GetParameter( 2 ) );
-				//fitPointer = g.Fit( fitFunc, "RS" );
-
-				// fitFunc->ReleaseParameter( 1 );
-				// fitFunc->ReleaseParameter( 2 );
+				TFitResultPtr fitPointer = g.Fit( fitFunc, "RSWW" );
+				fitPointer = g.Fit( fitFunc, "RS" );
 
 				INFO( tag, "FitPointer = " << fitPointer );
 				TGraphErrors * band = Common::choleskyBands( fitPointer, fitFunc, 5000, 200, &rp );
 
 
-
 				RooPlotLib rpl;
 				rp.newPage();
-				rpl.style( g ).set( "title", Common::plc_label( plc, c ) + " : " + labels[ b ] + ", 68%CL (Red)" ).set( "yr", 0, 1.1 ).set( "optfit", 111 )
+				rpl.style( &g ).set( "title", Common::plc_label( plc, c ) + " : " + labels[ b ] + ", 68%CL (Red)" ).set( "yr", 0, 1.1 ).set( "optfit", 111 )
 					.set( "xr", 0, 4.5 )
 					.set("y", "Efficiency x Acceptance").set( "x", "p_{T}^{MC} [GeV/c]" ).draw();
 
@@ -132,10 +123,8 @@ void TpcEffFitter::make(){
 				fitFunc->Draw("same");	
 
 				INFO( tag, "Drawing CL band" );
-				// TH1 * band2 = Common::fitCL( fitFunc, "bands", 0.95 );
-				// band2->SetFillColorAlpha( kBlue, 0.5 );
+				
 				band->SetFillColorAlpha( kRed, 0.5 );
-				// band2->Draw( "same e3" );
 				band->Draw( "same e3" );
 
 
