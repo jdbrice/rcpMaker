@@ -58,6 +58,12 @@ def write_conf(  output_path, config_path ="./" ) :
 				<P min="0.6" max="1.0" />
 			</zd>
 
+			<tofPidEff>
+				<Pi min="0.34" max="0.5" />
+				<K min="0.34" max="0.5" />
+				<P min="0.36" max="0.8" />
+			</tofPidEff>
+
 		</ParameterFixing>
 		
 

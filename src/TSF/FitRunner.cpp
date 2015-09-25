@@ -661,6 +661,7 @@ namespace TSF{
 				schema = shared_ptr<FitSchema>(new FitSchema( cfg, nodePath + "FitSchema" ));
 
 				sigmaSets.clear();
+				tofPidEffSets.clear();
 				for ( int iPt = firstPtBin; iPt <= lastPtBin; iPt++ ){
 
 					runNominal( iCharge, iCen, iPt );

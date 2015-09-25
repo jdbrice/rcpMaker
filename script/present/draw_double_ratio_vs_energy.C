@@ -36,8 +36,7 @@ void draw_double_ratio_vs_energy( 	string charge = "p",
 		leg->AddEntry( h, (en + " x " + ts( (int)scaler )).c_str() );
 
 
-		scaler /= 2;
-		iColor++;
+		0
 	}
 
 	string yt = centrality_labels[ stoi( iCen1 ) ] + " central / " + centrality_labels[ stoi( iCen2 ) ] + " central " + plc_label( plc1, charge ) + "/" + plc_label( plc2, charge ) + " Ratio";

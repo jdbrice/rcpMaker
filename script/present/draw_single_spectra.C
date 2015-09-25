@@ -20,6 +20,12 @@
 
 string file_name( string energy, string plc, string charge, string iCen ){
 	string base = "/Users/danielbrandenburg/bnl/local/data/RcpAnalysis/spectra/";
+
+	// for easy comparison
+	// if ( "14.5" == energy )
+	// 	base = "/Users/danielbrandenburg/bnl/local/data/RcpAnalysis/spectra/deepti/compare/";
+		// base ="/Users/danielbrandenburg/bnl/local/data/RcpAnalysis/spectra/deepti_wo_fdc/";
+
 	return base + "spectra_" + energy + "_" + plc + "_" + charge + "_" + iCen + ".dat";
 
 }

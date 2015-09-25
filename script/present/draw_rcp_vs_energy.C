@@ -7,10 +7,10 @@ void draw_rcp_vs_energy( string plc, string charge, string iCen = "0", string iP
 
 	RooPlotLib rpl;
 	gStyle->SetTitleSize( 0.25, "t" );
-	gStyle->SetTitleX( 0.96 );
+	gStyle->SetTitleX( 0.99 );
 
 	if ( nullptr == rp )
-		rp = new Reporter( "img/single_rcp.pdf", 350, 300 );
+		rp = new Reporter( "img/single_rcp.pdf", 450, 300 );
 
 
 	vector<int> markers = { 20, 21, 34, 22, 33, 29 };

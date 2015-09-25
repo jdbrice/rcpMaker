@@ -30,7 +30,7 @@ void make_dedx_only(){
 	h->RebinY( 2 );
 
 	rpl.style( h ).set( "title", " ; p_{T} [GeV/c] * charge; ln(dE/dx)   " )
-		.set( "yr", 0.5, 1.85 )
+		.set( "yr", 0.4, 1.85 )
 		.set( "xr", -3, 3 )
 		.set( "yts", 0.08 )
 		.set( "yto", 0.8 )

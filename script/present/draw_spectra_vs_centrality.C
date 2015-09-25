@@ -40,6 +40,8 @@ void draw_spectra_vs_centrality( string en="14.5", string plc="Pi", string charg
 		.set( "title", plc_label( plc, charge ) + " ; p_{T} [GeV/c]   ; dN^{2} / ( N_{evt} 2 #pi pT dpT dy )    " )
 		.set( "xr", 0.2, 3.8 )
 		.set( "yto", 1.35 )
+		.set( "yls", 0.07 )
+		.set( "yticks", 7, 10, 0, 0 )
 		.set( "yts", 0.065 )
 		.set( "xto", 0.9 )
 		.set( "xts", 0.08 )

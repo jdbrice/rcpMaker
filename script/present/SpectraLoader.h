@@ -122,9 +122,22 @@ public:
 		return h;
 	}
 
+	void check_sys(){
+
+		for ( int i = 0; i < sys.size(); i++ ){
+			// cout << "CHECKING = " << sys[i] << endl;
+			if ( 1e-8 >= sys[i] ){
+				sys[i] = 1e-8;
+				// cout << "CHECKING NOW = " << sys[i] << endl;
+			}
+		}
+	}
 	
 
 	TH1D * sysHisto( string name ){
+
+		check_sys();
+
 		vector<double> bins = getBins();
 		TH1D * h = new TH1D( name.c_str(), "", bins.size() - 1, bins.data() );
 		for ( int i = 0; i < bins.size() + 1; i++ ){
@@ -153,5 +166,6 @@ public:
 		}
 		return h;
 	}
+
 
 };
