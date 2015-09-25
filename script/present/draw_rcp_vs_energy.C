@@ -16,10 +16,10 @@ void draw_rcp_vs_energy( string plc, string charge, string iCen = "0", string iP
 	vector<int> markers = { 20, 21, 34, 22, 33, 29 };
 	int iColor = 0;
 	
-	TLegend * leg = new TLegend( 0.35, 0.15, 0.75, 0.5 );
+	TLegend * leg = new TLegend( 0.01, 0.01, 0.99, 0.99, "Au+Au #sqrt{s_{NN}}" );
 	leg-> SetNColumns(2);
 	leg->SetTextFont( 52 );
-	leg->SetTextSize( 0.07 );
+	leg->SetTextSize( 0.2 );
 
 	TH1 * master = new TH1D( "frame", "frame", 100, 0, 6 );
 	master->Draw();
@@ -52,6 +52,9 @@ void draw_rcp_vs_energy( string plc, string charge, string iCen = "0", string iP
 
 
 		draw_ncoll_uncertainty( iColor, cen_n_coll, cen_n_coll_unc, per_n_coll, per_n_coll_unc, false, rcpcolors[ iColor ] );
+
+		// for making legend
+		h->SetMarkerSize( 3 );
 
 		leg->AddEntry( h, en.c_str() );
 
@@ -101,8 +104,11 @@ void draw_rcp_vs_energy( string plc, string charge, string iCen = "0", string iP
 	lUnity->Draw( "same" );
 	
 
-	if ( "P" == plc &&  "n" == charge && !alone )
-		leg->Draw("same");
+	if ( "P" == plc &&  "n" == charge && !alone ){
+		TCanvas * cleg = new TCanvas( "cleg", "cleg", 400, 200 );
+		leg->Draw();
+		cleg->Print( "img/legend_rcp.pdf" );
+	}
 	// TPaveText *pt = (TPaveText*)(gPad->GetPrimitive("title")); 
 	// pt->SetTextSize(0.1); 
 	// gPad->Modified();
