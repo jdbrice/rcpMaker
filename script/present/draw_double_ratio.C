@@ -4,12 +4,12 @@
 #include "RooPlotLib.h"
 
 TH1 *draw_double_ratio( 	string energy, 
-							string plc1, string plc2, 
-							string charge, 
-							string iCen1, string iCen2,
-							int color, 
-							string draw_opt,
-							double scaler,
+							string plc1="P", string plc2="Pi", 
+							string charge = "p", 
+							string iCen1="0", string iCen2="6",
+							int color = kRed, 
+							string draw_opt = "",
+							double scaler = 1.0,
 							Reporter *rp = nullptr,
 							int marker = 8 ){
 
