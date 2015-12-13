@@ -3,7 +3,7 @@
 #include "draw_single_spectra.C"
 #include "RooPlotLib.h"
 
-TH1 *draw_double_ratio( 	string energy, 
+TH1 *draw_double_ratio( 	string energy = "14.5", 
 							string plc1="P", string plc2="Pi", 
 							string charge = "p", 
 							string iCen1="0", string iCen2="6",

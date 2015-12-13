@@ -8,7 +8,7 @@ void draw_ratio_vs_centrality( string en="14.5", string plc1="P", string plc2="P
 	Logger::setGlobalLogLevel( Logger::llAll );
 
 	if ( nullptr == rp  ){
-		 rp = new Reporter( "tmp.pdf", 900, 700 );
+		 rp = new Reporter( "tmp.pdf", 500, 750 );
 	}
 	RooPlotLib rpl;
 
@@ -24,7 +24,14 @@ void draw_ratio_vs_centrality( string en="14.5", string plc1="P", string plc2="P
 		gPad->SetLeftMargin(0.1);
 	int iColor = 0;
 
-	TLegend * leg = new TLegend( 0.66, gPad->GetBottomMargin(), 0.99, 0.99, "Centrality:" );
+	if ( "n" == charge && !( "39.0" == en || "14.5" == en ))
+			gPad->SetLeftMargin(0.13);
+
+	TLegend * leg;
+	if ( "p" == charge ) 
+		leg = new TLegend( 0.66, gPad->GetBottomMargin(), 0.99, 0.99, "Centrality:" );
+	else 
+		leg = new TLegend( gPad->GetLeftMargin(), gPad->GetBottomMargin(), 0.99, 0.99, "Centrality:" );
 	
 	leg->SetTextFont( 52 );
 	leg->SetTextSize( 0.07 );
@@ -40,9 +47,10 @@ void draw_ratio_vs_centrality( string en="14.5", string plc1="P", string plc2="P
 	int iiCen = 0;
 	for ( string iCen : rcentralities ){
 		
+
 		TH1 * h = draw_single_ratio( en, 
 			plc1, charge, plc2, charge,
-			iCen, iCen, colors[ iColor ], "same", markers[ iColor ] );
+			iCen, iCen, colors[ iColor ], "same pe ", markers[ iColor ] );
 
 		iColor ++;
 
@@ -54,7 +62,9 @@ void draw_ratio_vs_centrality( string en="14.5", string plc1="P", string plc2="P
 	if ( "7.7" == en && "p" == charge){
 		leg->Draw();
 	} else if ( "14.5" == en && "n" == charge ){
+		//TCanvas * cleg = new TCanvas( "cc", "cc", 200, 200 );
 		leg->Draw();
+		//cleg->Print( "legend_ratio_negative.pdf" ) ;
 	}
 
 	rpl.style( master )
@@ -93,14 +103,16 @@ void draw_ratio_vs_centrality( string en="14.5", string plc1="P", string plc2="P
 		rpl.set( "yr", 0.08, 2.7 );
 	
 
-	// if ( "n" == charge ){
-	// 	if( stof( en ) < 15 ){
-	// 		rpl.set( "yr", 0.002, 0.55 );
-	// 	} else {
-	// 		rpl.set( "yr", 0.02, 0.9 );
-	// 	}
-	// }
+	if ( "n" == charge ){
 
+		if( stof( en ) < 15 ){
+			rpl.set( "yr", 0.002, 0.95 );
+		} else {
+			rpl.set( "yr", 0.02, 2 );
+		}
+	}
+
+	gPad->SetLogy(1);
 
 
 

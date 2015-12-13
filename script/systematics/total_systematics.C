@@ -56,7 +56,15 @@ double total_systematics( int iPt, vector<double> &weights, vector<string> &sour
 	}
 
 	// avg feedDown from other part
-	sigma.push_back( yNominal * 0.015 );
+	if ( "P" == plc ){
+		if ( iPt <= 13 )
+			sigma.push_back( yNominal * 0.185 ); // large uncertainty on first bin due to feed-down
+		else 
+			sigma.push_back( yNominal * 0.04 );
+	}
+	else 
+		sigma.push_back( yNominal * 0.02 );
+
 	// avg sigma from other part
 	sigma.push_back( yNominal * 0.012 );
 
@@ -147,8 +155,18 @@ vector<double> total_systematics( vector<double> &weights, vector<string> &sourc
 			i++;
 		}
 
+		// avg feedDown from other part
+		if ( "P" == plc ){
+			if ( iPt <= 13 )
+				sigma.push_back( yNominal * 0.185 ); // large uncertainty on first bin due to feed-down
+			else 
+				sigma.push_back( yNominal * 0.04 );
+		}
+		else 
+			sigma.push_back( yNominal * 0.02 );
+
 		// avg sigma from other part
-		sigma.push_back( yNominal * 0.0 );
+		sigma.push_back( yNominal * 0.012 );
 
 		
 		double total_sqr = 0;

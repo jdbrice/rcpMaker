@@ -25,6 +25,9 @@ void draw_double_ratio_vs_energy( 	string charge = "p",
 	vector<int> markers = { 20, 21, 34, 22, 33, 29 };
 	for ( string en : renergies ){
 
+		if ( "14.5" == en && "n" == charge )
+			continue;
+
 		TH1 * h;
 		if ( 0 == iColor ){
 			master = draw_double_ratio( en, plc1, plc2, charge, iCen1, iCen2, colors[ iColor ], "", scaler, &rp );
@@ -35,8 +38,9 @@ void draw_double_ratio_vs_energy( 	string charge = "p",
 
 		leg->AddEntry( h, (en + " x " + ts( (int)scaler )).c_str() );
 
-
-		0
+		scaler /= 2;
+		iColor++;
+		
 	}
 
 	string yt = centrality_labels[ stoi( iCen1 ) ] + " central / " + centrality_labels[ stoi( iCen2 ) ] + " central " + plc_label( plc1, charge ) + "/" + plc_label( plc2, charge ) + " Ratio";

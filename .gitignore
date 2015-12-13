@@ -6,6 +6,8 @@
 *.DataSource*
 /products
 /config
+*.tar
+*.tar.gz
 
 # image outputs
 *.eps

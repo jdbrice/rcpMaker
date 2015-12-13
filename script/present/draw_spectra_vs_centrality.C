@@ -37,7 +37,7 @@ void draw_spectra_vs_centrality( string en="14.5", string plc="Pi", string charg
 	gPad->SetLogy( 1 );
 	master->GetYaxis()->SetRangeUser( 1.5e-13, 5e2 );
 	rpl.style( master )
-		.set( "title", plc_label( plc, charge ) + " ; p_{T} [GeV/c]   ; dN^{2} / ( N_{evt} 2 #pi pT dpT dy )    " )
+		.set( "title", plc_label( plc, charge ) + " ; p_{T} [GeV/c]   ;     " ) //dN^{2} / ( N_{evt} 2 #pi pT dpT dy )
 		.set( "xr", 0.2, 3.8 )
 		.set( "yto", 1.35 )
 		.set( "yls", 0.07 )

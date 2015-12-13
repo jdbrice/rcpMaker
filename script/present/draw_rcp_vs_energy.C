@@ -30,7 +30,7 @@ void draw_rcp_vs_energy( string plc, string charge, string iCen = "0", string iP
 	gPad->SetRightMargin( 0.01 );
 
 
-	bool alone = false;
+	bool alone = true;
 
 	vector<string> energySet = nullenergies;
 	if ( !alone )energySet = rcpenergies;
@@ -54,7 +54,7 @@ void draw_rcp_vs_energy( string plc, string charge, string iCen = "0", string iP
 		draw_ncoll_uncertainty( iColor, cen_n_coll, cen_n_coll_unc, per_n_coll, per_n_coll_unc, false, rcpcolors[ iColor ] );
 
 		// for making legend
-		h->SetMarkerSize( 3 );
+		// h->SetMarkerSize( 3 );
 
 		leg->AddEntry( h, en.c_str() );
 
