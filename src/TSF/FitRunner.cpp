@@ -7,55 +7,55 @@
 
 
 namespace TSF{
-	FitRunner::FitRunner( XmlConfig * _cfg, string _np, int iCharge, int iCen) 
-	: HistoAnalyzer( _cfg, _np, false ){
+	FitRunner::FitRunner( XmlConfig _config, string _np, int iCharge, int iCen) 
+	: HistoAnalyzer( _config, _np, false ){
 		
 		// Initialize the Phase Space Recentering Object
-		tofSigmaIdeal = cfg->getDouble( nodePath+"ZRecentering.sigma:tof", 0.0012);
-		dedxSigmaIdeal = cfg->getDouble( nodePath+"ZRecentering.sigma:dedx", 0.06);
+		tofSigmaIdeal = config.getDouble( nodePath+".ZRecentering.sigma:tof", 0.0012);
+		dedxSigmaIdeal = config.getDouble( nodePath+".ZRecentering.sigma:dedx", 0.06);
 		psr = new ZRecentering( dedxSigmaIdeal,
 										 tofSigmaIdeal,
-										 cfg->getString( nodePath+"Bichsel.table", "dedxBichsel.root"),
-										 cfg->getInt( nodePath+"Bichsel.method", 0) );
-		psrMethod = cfg->getString( nodePath+"ZRecentering.method", "traditional" );
+										 config.getString( nodePath+".Bichsel.table", "dedxBichsel.root"),
+										 config.getInt( nodePath+".Bichsel.method", 0) );
+		psrMethod = config.getString( nodePath+".ZRecentering.method", "traditional" );
 		// alias the centered species for ease of use
-		centerSpecies = cfg->getString( nodePath+"ZRecentering.centerSpecies", "K" );
+		centerSpecies = config.getString( nodePath+".ZRecentering.centerSpecies", "K" );
 
 		
 		//Make the momentum transverse, eta, charge binning 
-		binsPt = new HistoBins( cfg, "binning.pt" );
+		binsPt = new HistoBins( config, "binning.pt" );
 
 		// setup reporters for the zb and zd fit projections
-		string rpre = cfg->getString( nodePath + "output:prefix", "" );
+		string rpre = config.getString( nodePath + ".output:prefix", "" );
 
 		if ( iCen >= 0 && iCen <= 6 && (iCharge == -1 || iCharge == 1) ){
 			rpre = Common::chargeString( iCharge ) + "_iCen_" + ts(iCen); 
 
 			map<string, string> overrides;
-			overrides[ nodePath + "output.data" ] = "Fit_" + cfg->getString( nodePath + "ZRecentering.centerSpecies" ) + "_" + rpre + ".root";
-			cfg->applyOverrides( overrides );
+			overrides[ nodePath + ".output.data" ] = "Fit_" + config.getString( nodePath + ".ZRecentering.centerSpecies" ) + "_" + rpre + ".root";
+			config.applyOverrides( overrides );
 		}
 
 
 
-		zbReporter = unique_ptr<Reporter>(new Reporter( cfg->getString( nodePath + "output:path" ) + "rp_" + centerSpecies + "_" + rpre + "_TSF_zb.pdf",
-			cfg->getInt( nodePath + "Reporter.output:width", 400 ), cfg->getInt( nodePath + "Reporter.output:height", 400 ) ) );
-		zdReporter = unique_ptr<Reporter>(new Reporter( cfg->getString( nodePath + "output:path" ) + "rp_" + centerSpecies + "_" + rpre + "_TSF_zd.pdf",
-			cfg->getInt( nodePath + "Reporter.output:width", 400 ), cfg->getInt( nodePath + "Reporter.output:height", 400 ) ) );
+		zbReporter = unique_ptr<Reporter>(new Reporter( config.getString( nodePath + ".output:path" ) + "rp_" + centerSpecies + "_" + rpre + "_TSF_zb.pdf",
+			config.getInt( nodePath + ".Reporter.output:width", 400 ), config.getInt( nodePath + ".Reporter.output:height", 400 ) ) );
+		zdReporter = unique_ptr<Reporter>(new Reporter( config.getString( nodePath + ".output:path" ) + "rp_" + centerSpecies + "_" + rpre + "_TSF_zd.pdf",
+			config.getInt( nodePath + ".Reporter.output:width", 400 ), config.getInt( nodePath + ".Reporter.output:height", 400 ) ) );
 
-		Logger::setGlobalLogLevel( Logger::logLevelFromString( cfg->getString( nodePath + "Logger:globalLogLevel" ) ) );
+		Logger::setGlobalLogLevel( Logger::logLevelFromString( config.getString( nodePath + ".Logger:globalLogLevel" ) ) );
 
 		for ( string plc : Common::species ){
 
 
 			for ( string pre : { "zb", "zd" } ){
 			
-				ConfigRange tpecr( cfg, nodePath + "ParameterFixing.tofPidEff." + plc );
+				ConfigRange tpecr( &config, nodePath + ".ParameterFixing.tofPidEff." + plc );
 				tofPidEffRanges[ plc ] = tpecr;
 
-				if ( cfg->exists( nodePath + "ParameterFixing." + pre + "." + plc ) ){
+				if ( config.exists( nodePath + ".ParameterFixing." + pre + "." + plc ) ){
 					INFO( tag, "Creating Sigma Fixing range for " << pre << "_" << plc );
-					ConfigRange cr( cfg, nodePath + "ParameterFixing." + pre + "." + plc );
+					ConfigRange cr( &config, nodePath + ".ParameterFixing." + pre + "." + plc );
 					sigmaRanges[ pre + "_" + plc ] = cr;
 					INFO(tag, cr.toString() )
 				}
@@ -67,8 +67,8 @@ namespace TSF{
 		rnd->SetSeed( 0 );
 
 		//The bins to fit over
-		centralityFitBins = cfg->getIntVector( nodePath + "FitRange.centralityBins" );
-		chargeFit = cfg->getIntVector( nodePath + "FitRange.charges" );
+		centralityFitBins = config.getIntVector( nodePath + ".FitRange.centralityBins" );
+		chargeFit = config.getIntVector( nodePath + ".FitRange.charges" );
 
 		// override if we are running parallel jobs
 		if ( iCen >= 0 && iCen <= 6){
@@ -90,7 +90,7 @@ namespace TSF{
 	void FitRunner::makeHistograms(){
 
 		book->cd();
-		book->makeAll( nodePath + "histograms" );
+		book->makeAll( nodePath + ".histograms" );
 		for ( int iCen : centralityFitBins ){
 			for ( int iCharge : chargeFit ){
 				for ( string plc : Common::species ){
@@ -177,8 +177,8 @@ namespace TSF{
 		TRACE( tag, "( avgP=" << avgP << ", iCen=" << iCen << ")" )
 
 		//Constraints on the mu 	 
-		double zbDeltaMu = cfg->getDouble( nodePath + "ParameterFixing.deltaMu:zb", 1.5 );
-		double zdDeltaMu = cfg->getDouble( nodePath + "ParameterFixing.deltaMu:zd", 1.5 );
+		double zbDeltaMu = config.getDouble( nodePath + ".ParameterFixing.deltaMu:zb", 1.5 );
+		double zdDeltaMu = config.getDouble( nodePath + ".ParameterFixing.deltaMu:zd", 1.5 );
 
 		// fit roi
 		
@@ -266,12 +266,12 @@ namespace TSF{
 
 	void FitRunner::choosePlayers( double avgP, string plc ){
 
-		double zdOnly = cfg->getDouble( nodePath + "Timing:zdOnly" , 0.5 );
-		double useZdEnhanced = cfg->getDouble( nodePath + "Timing:useZdEnhanced" , 0.6 );
-		double useZbEnhanced = cfg->getDouble( nodePath + "Timing:useZbEnhanced" , 0.6 );
-		double nSigZbEnhanced = cfg->getDouble( nodePath + "Timing:nSigZbEnhanced" , 3.0 );
-		double nSigZdEnhanced = cfg->getDouble( nodePath + "Timing:nSigZdEnhanced" , 3.0 );
-		double roi = cfg->getDouble( nodePath + "FitSchema:roi", -1 );
+		double zdOnly = config.getDouble( nodePath + ".Timing:zdOnly" , 0.5 );
+		double useZdEnhanced = config.getDouble( nodePath + ".Timing:useZdEnhanced" , 0.6 );
+		double useZbEnhanced = config.getDouble( nodePath + ".Timing:useZbEnhanced" , 0.6 );
+		double nSigZbEnhanced = config.getDouble( nodePath + ".Timing:nSigZbEnhanced" , 3.0 );
+		double nSigZdEnhanced = config.getDouble( nodePath + ".Timing:nSigZdEnhanced" , 3.0 );
+		double roi = config.getDouble( nodePath + ".FitSchema:roi", -1 );
 
 		if ( roi > 0 ){
 			double zbSig = zbSigma( );
@@ -442,7 +442,7 @@ namespace TSF{
 		
 
 		// loads the default values used for data projection
-		fitter.registerDefaults( cfg, nodePath );
+		fitter.registerDefaults( &config, nodePath );
 		
 		// prepare initial values, ranges, etc. for fit
 		prepare( avgP, iCen );
@@ -451,7 +451,7 @@ namespace TSF{
 		// if ( avgP > 1.4 )
 		// 	nSigmaAbovePOverride = -1;
 
-		bool enhanced = cfg->getBool( nodePath + "FitSchema:enhanced", true );
+		bool enhanced = config.getBool( nodePath + ".FitSchema:enhanced", true );
 
 		// load the datasets from the file
 		fitter.loadDatasets(centerSpecies, iCharge, iCen, iPt, enhanced, zbMu, zdMu );
@@ -526,7 +526,7 @@ namespace TSF{
 		
 		double avgP = binAverageP( iPt );
 
-		int N = cfg->getInt( nodePath + "Systematics:nSigma", 5 );
+		int N = config.getInt( nodePath + ".Systematics:nSigma", 5 );
 
 		for ( string pre : { "zb", "zd" } ){
 			for ( string plc : Common::species ){
@@ -578,8 +578,8 @@ namespace TSF{
 		double avgP = binAverageP( iPt );
 		book->cd( "tofEff_dist" );
 
-		int N = cfg->getInt( nodePath + "Systematics:nTofEff=", 5 );
-		double amt = cfg->getDouble( nodePath + "Systematics:tofEffAmount", 0.15 );
+		int N = config.getInt( nodePath + ".Systematics:nTofEff=", 5 );
+		double amt = config.getDouble( nodePath + ".Systematics:tofEffAmount", 0.15 );
 
 		shared_ptr <FitSchema> rSchema = shared_ptr<FitSchema>( new FitSchema( *schema ) );
 
@@ -648,8 +648,8 @@ namespace TSF{
 		// Make the histograms for storing the results
 		makeHistograms();
 
-		int firstPtBin = cfg->getInt( nodePath + "FitRange.ptBins:min", 0 );
-		int lastPtBin = cfg->getInt( nodePath + "FitRange.ptBins:max", 1 );
+		int firstPtBin = config.getInt( nodePath + ".FitRange.ptBins:min", 0 );
+		int lastPtBin = config.getInt( nodePath + ".FitRange.ptBins:max", 1 );
 
 		if ( lastPtBin >= binsPt->nBins() )
 			lastPtBin = binsPt->nBins() - 1;
@@ -658,7 +658,7 @@ namespace TSF{
 			for ( int iCharge : chargeFit ){
 							
 				//Create the schema and fitter 
-				schema = shared_ptr<FitSchema>(new FitSchema( cfg, nodePath + "FitSchema" ));
+				schema = shared_ptr<FitSchema>(new FitSchema( &config, nodePath + ".FitSchema" ));
 
 				sigmaSets.clear();
 				tofPidEffSets.clear();
@@ -668,7 +668,7 @@ namespace TSF{
 
 					reportYields();
 
-					if ( cfg->getBool( nodePath + "Systematics:tofEff" ) ){
+					if ( config.getBool( nodePath + ".Systematics:tofEff" ) ){
 						runTofEffSystematic( iCharge, iCen, iPt );
 					}
 					else {
@@ -676,7 +676,7 @@ namespace TSF{
 					}
 
 										
-					if ( cfg->getBool( nodePath + "Systematics:sigma" ) ){
+					if ( config.getBool( nodePath + ".Systematics:sigma" ) ){
 						runSigmaSystematic( iCharge, iCen, iPt );
 					} else{
 						INFO( tag, "Skipping runSigmaSystematic" );
@@ -831,8 +831,8 @@ namespace TSF{
 			zdReporter->cd( 1, 1 );
 			drawSet( "zd_All", fitter, iPt );
 			if ( export_images ){
-				gPad->Print( (cfg->getString( nodePath + "output:path" ) + "img/zd_All_" + ts(iPt) + ".pdf").c_str() );
-				gPad->Print( (cfg->getString( nodePath + "output:path" ) + "img/zd_All_" + ts(iPt) + ".png").c_str() );
+				gPad->Print( (config.getString( nodePath + ".output:path" ) + "img/zd_All_" + ts(iPt) + ".pdf").c_str() );
+				gPad->Print( (config.getString( nodePath + ".output:path" ) + "img/zd_All_" + ts(iPt) + ".png").c_str() );
 			}
 			zdReporter->cd( 2, 1 );
 			drawSet( "zd_Pi", fitter, iPt );
@@ -867,8 +867,8 @@ namespace TSF{
 			zbReporter->cd( 1, 1 );
 			drawSet( "zb_All", fitter, iPt );
 			if ( export_images ){
-				gPad->Print( (cfg->getString( nodePath + "output:path" ) + "img/zb_All_" + ts(iPt) + ".pdf").c_str() );
-				gPad->Print( (cfg->getString( nodePath + "output:path" ) + "img/zb_All_" + ts(iPt) + ".png").c_str() );
+				gPad->Print( (config.getString( nodePath + ".output:path" ) + "img/zb_All_" + ts(iPt) + ".pdf").c_str() );
+				gPad->Print( (config.getString( nodePath + ".output:path" ) + "img/zb_All_" + ts(iPt) + ".png").c_str() );
 			}
 			zbReporter->cd( 2, 1 );
 			drawSet( "zb_Pi", fitter, iPt );
@@ -1136,7 +1136,7 @@ namespace TSF{
 		Fitter fitter( tmpSchema, inFile );
 
 		// loads the default values used for data projection
-		fitter.registerDefaults( cfg, nodePath );
+		fitter.registerDefaults( &config, nodePath );
 		
 		// load the datasets from the file
 		fitter.loadDatasets(centerSpecies, iCharge, iCen, iPt, true, zbMu, zdMu );

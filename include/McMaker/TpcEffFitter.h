@@ -5,6 +5,9 @@
 // ROOBARB
 #include "XmlConfig.h"
 #include "HistoBook.h"
+// Interface
+	#include "IObject.h"
+	#include "IConfig.h"
 using namespace jdb;
 
 // STL
@@ -16,11 +19,10 @@ using namespace jdb;
 #include "TF1.h"
 #include "TFitResultPtr.h"
 
-class TpcEffFitter
+class TpcEffFitter : public IConfig, public IObject
 {
 protected:
 
-	XmlConfig* cfg;
 	string nodePath;
 	string outputPath;
 
@@ -28,7 +30,7 @@ protected:
 
 public:
 	static constexpr auto tag = "TpcEffFitter";
-	TpcEffFitter( XmlConfig * _cfg, string nodePath );
+	TpcEffFitter( XmlConfig _cfg, string nodePath );
 	~TpcEffFitter() {};
 
 

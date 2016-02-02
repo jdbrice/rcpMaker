@@ -1,94 +1,96 @@
  // RcpMaker
 #include "Spectra/PidHistoMaker.h"
 #include "Correction/SpectraCorrecter.h"
+#include "RooPlotLib.h"
 
 // ROOT
 #include "TLine.h"
 
 
-PidHistoMaker::PidHistoMaker( XmlConfig* config, string np, string fl, string jp ) : InclusiveSpectra( config, np, fl, jp ) {
+PidHistoMaker::PidHistoMaker( XmlConfig config, string np, string fl, string jp ) : InclusiveSpectra( config, np, fl, jp ) {
 
 	/**
 	 * Phase space padding options
 	 */
- 	tofPadding 			= cfg->getDouble( "binning.padding:tof", .2 );
-	dedxPadding 		= cfg->getDouble( "binning.padding:dedx", .25 );
-	tofScalePadding 	= cfg->getDouble( "binning.padding.tofScale", .05 );
-	dedxScalePadding 	= cfg->getDouble( "binning.padding.dedxScale", .05 );
+ 	tofPadding 			= config.getDouble( "binning.padding:tof", .2 );
+	dedxPadding 		= config.getDouble( "binning.padding:dedx", .25 );
+	tofScalePadding 	= config.getDouble( "binning.padding.tofScale", .05 );
+	dedxScalePadding 	= config.getDouble( "binning.padding.dedxScale", .05 );
 
-	logger->info(__FUNCTION__) << "Tof Padding ( " << tofPadding << ", " << tofScalePadding << " ) " << endl;
+	INFO( classname(), "Tof Padding ( " << tofPadding << ", " << tofScalePadding << " ) " );
 	/**
 	 * Initialize the Phase Space Recentering Object
 	 */
-	tofSigmaIdeal 	= cfg->getDouble( np+"ZRecentering.sigma:tof", 0.011);
-	dedxSigmaIdeal 	= cfg->getDouble( np+"ZRecentering.sigma:dedx", 0.033);
+	tofSigmaIdeal 	= config.getDouble( nodePath+".ZRecentering.sigma:tof", 0.011);
+	dedxSigmaIdeal 	= config.getDouble( nodePath+".ZRecentering.sigma:dedx", 0.033);
 	zr 				= new ZRecentering( dedxSigmaIdeal,
 									 	tofSigmaIdeal,
-									 	cfg->getString( np+"Bichsel.table", "dedxBichsel.root"),
-									 	cfg->getInt( np+"Bichsel.method", 0) );
+									 	config.getString( nodePath+".Bichsel.table", "dedxBichsel.root"),
+									 	config.getInt( nodePath+".Bichsel.method", 0) );
 
 		// method for phase space recentering
-	zrMethod 		= config->getString( np + "ZRecentering.method", "traditional" );
+	zrMethod 		= config.getString( nodePath + ".ZRecentering.method", "traditional" );
 		// alias the centered species for ease of use
-	centerSpecies 	= cfg->getString( np + "ZRecentering.centerSpecies", "K" );
+	centerSpecies 	= config.getString( nodePath + ".ZRecentering.centerSpecies", "K" );
 		// enhanced distro options
-	tofCut 			= cfg->getDouble( np+"Distributions:tof", 1.0 );
-	dedxCut 		= cfg->getDouble( np+"Distributions:dedx", 1.0 );
+	tofCut 			= config.getDouble( nodePath+".Distributions:tof", 1.0 );
+	dedxCut 		= config.getDouble( nodePath+".Distributions:dedx", 1.0 );
 
 	// Flags to turn on and off certain histos
-	make1D 			= cfg->getBool( np + "Distributions:1D", false );
-	make2D 			= cfg->getBool( np + "Distributions:2D", false );
-	makeEnhanced 	= cfg->getBool( np + "Distributions:enhanced", false );
+	make1D 			= config.getBool( nodePath + ".Distributions:1D", false );
+	make2D 			= config.getBool( nodePath + ".Distributions:2D", false );
+	makeEnhanced 	= config.getBool( nodePath + ".Distributions:enhanced", false );
 
 	if ( makeEnhanced && !make1D )
 		make1D = true;
 
 	// n sigmas for electron rejection
-	nSigE 			= cfg->getDouble( np+"Electrons:nSigE", 3.0 );
-	nSigPi 			= cfg->getDouble( np+"Electrons:nSigPi", 3.0 );
-	nSigK 			= cfg->getDouble( np+"Electrons:nSigK", 3.0 );
-	nSigP 			= cfg->getDouble( np+"Electrons:nSigP", 3.0 );
+	nSigE 			= config.getDouble( nodePath+".Electrons:nSigE", 3.0 );
+	nSigPi 			= config.getDouble( nodePath+".Electrons:nSigPi", 3.0 );
+	nSigK 			= config.getDouble( nodePath+".Electrons:nSigK", 3.0 );
+	nSigP 			= config.getDouble( nodePath+".Electrons:nSigP", 3.0 );
 
 	// Make the dedx + tof binning 
 	// Only the bin width is used for dynamic bins
-	dedxBinWidth 	= cfg->getDouble( "binning.dedx:width", 0.015 );
-	tofBinWidth 	= cfg->getDouble( "binning.tof:width", 0.006 );
+	dedxBinWidth 	= config.getDouble( "binning.dedx:width", 0.015 );
+	tofBinWidth 	= config.getDouble( "binning.tof:width", 0.006 );
 
 	//Make the momentum transverse binning
-	binsPt 	= unique_ptr<HistoBins>(new HistoBins( cfg, "binning.pt" ));
+	binsPt 	= unique_ptr<HistoBins>(new HistoBins( config, "binning.pt" ));
 
 	// Get the list of charges we are looking at
-	charges = cfg->getIntVector( "binning.charges" );
+	charges = config.getIntVector( "binning.charges" );
 
 
 	// Cuts below Pion to remove electrons
 	// And above P to remove deuterons
-	nSigBelow = cfg->getDouble( nodePath + "Distributions:nSigBelow", 3.0 );
-	nSigAbove = cfg->getDouble( nodePath + "Distributions:nSigAbove", 3.0 );
-	logger->info(__FUNCTION__) << "nSig cuts for e : Pi - " << nSigBelow << " sigma" << endl;
-	logger->info(__FUNCTION__) << "nSig cuts for d : P + " << nSigAbove << " sigma" << endl;
+	nSigBelow = config.getDouble( nodePath + ".Distributions:nSigBelow", 3.0 );
+	nSigAbove = config.getDouble( nodePath + ".Distributions:nSigAbove", 3.0 );
+	
+	INFO( classname(), "nSig cuts for e : Pi - " << nSigBelow << " sigma" );
+	INFO( classname(), "nSig cuts for d : P + " << nSigAbove << " sigma" );
 
 	// TODO: use charges vector to decide if we want to combine charges
 	makeCombinedCharge = false;
 
 	// Efficiency corrector
-	sc = unique_ptr<SpectraCorrecter>( new SpectraCorrecter( cfg, nodePath ) ); 
+	sc = unique_ptr<SpectraCorrecter>( new SpectraCorrecter( &config, nodePath ) ); 
 	// Read in the options for corrections
-	correctTpcEff = cfg->getBool( nodePath + "Corrections:tpc", false );
-	correctTofEff = cfg->getBool( nodePath + "Corrections:tof", false );
-	correctFeedDown = cfg->getBool( nodePath + "Corrections:fd", false );
+	correctTpcEff = config.getBool( nodePath + ".Corrections:tpc", false );
+	correctTofEff = config.getBool( nodePath + ".Corrections:tof", false );
+	correctFeedDown = config.getBool( nodePath + ".Corrections:fd", false );
 
 	// make the energy loss params
 	vector<int> charges = { -1, 1 };
-	if ( cfg->exists( np + "EnergyLossParams:path" ) ){
-		string path = cfg->getString( np + "EnergyLossParams:path" );
+	if ( config.exists( nodePath + ".EnergyLossParams:path" ) ){
+		string path = config.getString( nodePath + ".EnergyLossParams:path" );
 
 		for ( int c : charges ){
 
 			string cfgName = path + centerSpecies + "_" + Common::chargeString( c ) + ".xml";
 			XmlConfig cfgEL( cfgName );
 
-			for ( int cb : cfg->getIntVector( nodePath + "CentralityBins" ) ){
+			for ( int cb : config.getIntVector( nodePath + ".CentralityBins" ) ){
 				
 				// Name like 'Pi_p_0' ... 'Pi_n_6' to be used for quick lookup
 				string name = centerSpecies + "_" + Common::chargeString( c ) +"_" + ts( cb );
@@ -104,7 +106,7 @@ PidHistoMaker::~PidHistoMaker(){
 }
 
 void PidHistoMaker::preEventLoop() {
-	logger->info(__FUNCTION__) << endl;
+	INFO( classname(), "" );
 	
 	InclusiveSpectra::preEventLoop();
 
@@ -121,11 +123,11 @@ void PidHistoMaker::preEventLoop() {
 }
 
 void PidHistoMaker::postEventLoop() {
-	logger->info(__FUNCTION__) << endl;
+	INFO( classname(), "" );
 
-	if ( cfg->getBool( nodePath+"MakeQA:tof", false ) )
+	if ( config.getBool( nodePath+".MakeQA:tof", false ) )
 		reportAll( "" );
-	if ( cfg->getBool( nodePath+"MakeQA:dedx", false ) )
+	if ( config.getBool( nodePath+".MakeQA:dedx", false ) )
 		reportAll( "dedx" );
 
 	book->cd();
@@ -159,7 +161,7 @@ void PidHistoMaker::analyzeTofTrack( int iTrack ){
 		p = Common::p( corrPt, eta );
 		pt = corrPt;
 	} else {
-		ERROR( "No Energy Loss Params Given - These must be applied here" )
+		ERROR( classname(), "No Energy Loss Params Given - These must be applied here" )
 	} 
 	/************ Corrections **********/
 
@@ -339,7 +341,7 @@ bool PidHistoMaker::enhanceDistributions( double avgP, int ptBin, int charge, do
 
 void PidHistoMaker::prepareHistograms( string plc ){
 
-	logger->info(__FUNCTION__) << "Making Histograms with centering species: " << plc << endl;
+	INFO( classname(), "Making Histograms with centering species: " << plc );
 
 	book->cd();
 
@@ -368,36 +370,41 @@ void PidHistoMaker::prepareHistograms( string plc ){
 				// 2D for NMF 
 				if ( make2D ){
 					book->cd( "dedx_tof" );
-					book->make2D( hName, title, dedxBins.size()-1, dedxBins.data(), tofBins.size()-1, tofBins.data() );
+					book->add( hName, 
+						new TH2D( hName.c_str(), title.c_str(), dedxBins.size()-1, dedxBins.data(), tofBins.size()-1, tofBins.data() ) );
 				}
 
 
 				// tof projections
 				book->cd( "tof" );
 				if ( make1D ){
-					book->make1D( Common::zbName( plc, charge, iCen, ptBin ), 
-						"#beta^{-1}", tofBins.size()-1, tofBins.data() );
+					string h1Name = Common::zbName( plc, charge, iCen, ptBin );
+					book->add( h1Name, 
+						new TH1D( h1Name.c_str(), "#beta^{-1}", tofBins.size()-1, tofBins.data() ) );
 				}
 				
 				if ( makeEnhanced ){ 
 					for ( string eplc : Common::species ){
-						book->make1D( Common::zbName( plc, charge, iCen, ptBin, eplc ), 
-							"#beta^{-1}", tofBins.size()-1, tofBins.data() );
+						string h1Name = Common::zbName( plc, charge, iCen, ptBin, eplc );
+						book->add( h1Name, 
+							 new TH1D( h1Name.c_str(), "#beta^{-1}", tofBins.size()-1, tofBins.data() ) );
 					} 
 				}
 
 				// dedx projections
 				book->cd( "dedx" );		
 				if ( make1D ){
-					book->make1D( Common::zdName( plc, charge, iCen, ptBin ), 
-								"dEdx", dedxBins.size()-1, dedxBins.data() );
+					string h1Name = Common::zdName( plc, charge, iCen, ptBin );
+					book->add( h1Name, 
+								new TH1D( h1Name.c_str(), "dEdx", dedxBins.size()-1, dedxBins.data() ) );
 				}
 				
 				// Enhanced
 				if ( makeEnhanced ){ 
 					for ( string eplc : Common::species ){
-						book->make1D( Common::zdName( plc, charge, iCen, ptBin, eplc ), 
-							"dEdx", dedxBins.size()-1, dedxBins.data() );
+						string h1Name = Common::zdName( plc, charge, iCen, ptBin, eplc );
+						book->add( h1Name, 
+							new TH1D( h1Name.c_str(), "dEdx", dedxBins.size()-1, dedxBins.data() ) );
 					}
 				}
 
@@ -463,9 +470,9 @@ void PidHistoMaker::autoViewport( 	string pType, double p, ZRecentering * lpsr, 
 
 void PidHistoMaker::reportAll( string type ){
 
+	RooPlotLib rpl;
 
-
-	logger->info( __FUNCTION__ ) << endl;
+	INFO( classname(), "" );
 	
 	double sigma = tofSigmaIdeal;
 	if ( "dedx" == type )
@@ -476,8 +483,8 @@ void PidHistoMaker::reportAll( string type ){
 	book->cd();
 	int nCenBins = nCentralityBins();
 	map<string,  unique_ptr<Reporter> > rps;
-	string baseURL = cfg->getString(  nodePath + "output:path", "./" );
-	string baseName= cfg->getString(  nodePath + "output.Reports", "" );
+	string baseURL = config.getString(  nodePath + ".output:path", "./" );
+	string baseName= config.getString(  nodePath + ".output.Reports", "" );
 
 
 	book->cd( "tof" );
@@ -496,7 +503,7 @@ void PidHistoMaker::reportAll( string type ){
 			
 			if ( !book->exists( sn ) ) continue;
 
-			rps[ sn ] = unique_ptr<Reporter>(new Reporter( baseURL + jobPrefix + baseName + sn + ".pdf", 1000, 500 )) ;
+			rps[ sn ] = unique_ptr<Reporter>(new Reporter( baseURL + jobPostfix + baseName + sn + ".pdf", 1000, 500 )) ;
 
 
 		} // loop centralities
@@ -534,15 +541,15 @@ void PidHistoMaker::reportAll( string type ){
 				//string range = dts(binsPt->getBins()[ pBin ]) + " < Pt < " + dts(binsPt->getBins()[ pBin ]) + " : #eta = " << dts(binsEta->getBins()[ etaBin ])
 
 				if ( !rps[sn] ){
-					logger->error(__FUNCTION__) << "NO reporter for : " << sn << endl;
+					INFO( classname(), "NO reporter for : " << sn );
 					continue;
 				}
 				rps[ sn ]->newPage();
-				book->style( n )->set( "logY", 1 )->
-				set( "title", pLowEdge + " < P < " + pHiEdge )->
-				set( "x", "z_{1/#beta}" )->
-				set( "y", "events / " + dts( tofBinWidth ) )->
-				set( "draw", "pe" )->
+				rpl.style( book->get( n ) ).set( "logY", 1 ).
+				set( "title", pLowEdge + " < P < " + pHiEdge ).
+				set( "x", "z_{1/#beta}" ).
+				set( "y", "events / " + dts( tofBinWidth ) ).
+				set( "draw", "pe" ).
 				draw();
 
 				map<string, int> colors;
@@ -564,8 +571,8 @@ void PidHistoMaker::reportAll( string type ){
 				}
 				if ( "dedx" != type  ){
 					double ttMean = tMeans[ 0 ];
-					logger->info(__FUNCTION__) << "PiMu = " << ttMean << ", sigma = " << sigma << ", nSigma = " << nSigBelow << endl; 
-					logger->info(__FUNCTION__) << "pBin = " << pBin << " electron cut : " << ttMean - sigma * nSigBelow <<  endl;
+					INFO( classname(), "PiMu = " << ttMean << ", sigma = " << sigma << ", nSigma = " << nSigBelow ); 
+					INFO( classname(), "pBin = " << pBin << " electron cut : " << ttMean - sigma * nSigBelow );
 					TLine * l1 = new TLine( ttMean - sigma * nSigBelow, 0, ttMean - sigma * nSigBelow, 100 );
 					l1->SetLineStyle( 2 );
 					l1->SetLineColor( kRed );

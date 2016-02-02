@@ -1,11 +1,14 @@
 #ifndef INCLUSIVE_SPECTRA_H
 #define INCLUSIVE_SPECTRA_H 
 
+
+
 // JDB 
 #include "TreeAnalyzer.h"
 #include "XmlConfig.h"
 #include "Utils.h"
 #include "Logger.h"
+#include "ConfigRange.h"
 using namespace jdb;
 
 // ROOT
@@ -92,11 +95,19 @@ protected:
 
 
 public:
-	InclusiveSpectra( XmlConfig * config, string nodePath, string fileList ="", string jobPrefix ="" );
+	virtual const char* classname() const { return "InclusiveSpectra"; }
+	InclusiveSpectra( XmlConfig config, string nodePath, string fileList ="", string jobPostfix ="" );
+	InclusiveSpectra( XmlConfig _config, string _nodePath="", int _jobIndex = -1 );
 	~InclusiveSpectra();
+
+	// virtual void init( XmlConfig _config, string _nodePath="", int _jobIndex = -1 );
+	// virtual void init( XmlConfig _config, string _nodePath="", string _fileList ="", string _jobPostfix ="" );
+
 
 	//virtual void make()
 protected:
+	void commonInit();
+
 	/**
 	 * Makes pt histograms for each centrality
 	 */

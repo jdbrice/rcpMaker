@@ -13,7 +13,7 @@ using namespace std;
 class EnergyLoss : public InclusiveSpectra
 {
 public:
-	EnergyLoss( XmlConfig * config, string nodePath, string fileList ="", string jobPrefix ="" );
+	EnergyLoss( XmlConfig config, string nodePath, string fileList ="", string jobPrefix ="" );
 	~EnergyLoss() {}
 
 	virtual void preEventLoop();

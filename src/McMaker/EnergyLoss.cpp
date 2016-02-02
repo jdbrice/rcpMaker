@@ -3,7 +3,7 @@
 #include "TProfile.h"
 
 
-EnergyLoss::EnergyLoss( XmlConfig * _config, string _nodePath, string _fileList, string _jobPrefix )
+EnergyLoss::EnergyLoss( XmlConfig _config, string _nodePath, string _fileList, string _jobPrefix )
 	: InclusiveSpectra( _config, _nodePath, _fileList, _jobPrefix ){
 
 }
@@ -26,7 +26,7 @@ void EnergyLoss::preEventLoop() {
 void EnergyLoss::postEventLoop(){
 
 
-	string params_file = cfg->getString( nodePath + "output.params" );
+	string params_file = config.getString( nodePath + "output.params" );
 	if ( "" == params_file ){
 		ERROR( "Specifiy an output params file for the parameters" )
 		return;
@@ -39,7 +39,7 @@ void EnergyLoss::postEventLoop(){
 	
 
 	book->cd();
-	vector<int> cBins = cfg->getIntVector( nodePath + "CentralityBins" );
+	vector<int> cBins = config.getIntVector( nodePath + "CentralityBins" );
 
 	for ( int bin : cBins ){
 
@@ -83,7 +83,7 @@ void EnergyLoss::analyzeTrack( int iTrack ){
 
 void EnergyLoss::exportParams( int bin, TF1 * f, ofstream &out ){
 	
-	out << "\t<EnergyLossParams plc=\"" << cfg->getString( nodePath + "input:plc" ) << "\" bin=\"" << bin << "\" "; 
+	out << "\t<EnergyLossParams plc=\"" << config.getString( nodePath + "input:plc" ) << "\" bin=\"" << bin << "\" "; 
 	out << Common::toXml( f ) ;
 	out << " />" << endl;
 }

@@ -1,4 +1,3 @@
-
 #include "Spectra/InclusiveSpectra.h"
 #include "ChainLoader.h"
 #include "Adapter/ProdPicoDst.h"
@@ -7,76 +6,84 @@
 #include <limits.h>
 #include "Spectra/PidHistoMaker.h"
 
-InclusiveSpectra::InclusiveSpectra( XmlConfig * config, string np, string fileList, string prefix ) : TreeAnalyzer( config, np, fileList, prefix  ){
+InclusiveSpectra::InclusiveSpectra( XmlConfig config, string np, string fileList, string prefix ) : TreeAnalyzer( config, np, fileList, prefix  ){
+	DEBUG( classname(), "( config, nodePath=" << np << ", filelist=" << fileList << ", prefix=" << prefix )
 
-	logger->setClassSpace( "InclusiveSpectra" );
-	logger->info(__FUNCTION__) << endl;
+	commonInit();
+}
+
+InclusiveSpectra::InclusiveSpectra( XmlConfig config, string np, int jobIndex ) : TreeAnalyzer( config, np, jobIndex  ){
+	DEBUG( classname(), "(config, nodePath=" << np << ", jobIndex=" << jobIndex );
+
+	commonInit();
+}
+
+void InclusiveSpectra::commonInit(  ){
+	DEBUG( classname(), "" )
+
 	/**
 	 * Make the desired PicoDataStore Interface
 	 */
-	logger->debug(__FUNCTION__) << ds << endl;
 	if ( ds && ds->getTreeName() == "PicoDst" ){
-		logger->info(__FUNCTION__) << "DataDtore" << endl;
+		INFO( "Using Prod PicoDst from DataStore" );
 		pico = unique_ptr<PicoDataStore>( new ProdPicoDst( ds->getChain() ) );
-	} else if ( chain && "PicoDst" == cfg->getString( np + "input.dst:treeName" ) ){
-		logger->info(__FUNCTION__) << "ProdPico" << endl;
+	} else if ( chain && "PicoDst" == config.getString( nodePath + ".input.dst:treeName" ) ){
+		INFO( "Using ProdPico" );
 		pico = unique_ptr<PicoDataStore>( new ProdPicoDst( chain ) );
-	} else if ( chain && "rcpPicoDst" == cfg->getString( np + "input.dst:treeName" ) ){
-		logger->info(__FUNCTION__) << "Rcp Pico" << endl;
+	} else if ( chain && "rcpPicoDst" == config.getString( nodePath + ".input.dst:treeName" ) ){
+		INFO( "Using Rcp Pico" );
 		pico = unique_ptr<PicoDataStore>( new RcpPicoDst( chain ) );
 	}
 
-	logger->info(__FUNCTION__) << "Got a valid Data Adapter" << endl;
+	INFO( "Got a valid Data Adapter" );
 
 
     // Tracks cuts
-    cut_nHitsFit				= unique_ptr<ConfigRange>(new ConfigRange( cfg, "TrackCuts.nHitsFit", 				0, 		INT_MAX ) );
-    cut_dca 					= unique_ptr<ConfigRange>(new ConfigRange( cfg, "TrackCuts.dca", 					0, 		INT_MAX ) );
-	cut_nHitsFitOverPossible 	= unique_ptr<ConfigRange>(new ConfigRange( cfg, "TrackCuts.nHitsFitOverPossible", 	0, 		INT_MAX ) );
-    cut_nHitsDedx 				= unique_ptr<ConfigRange>(new ConfigRange( cfg, "TrackCuts.nHitsDedx", 				0, 		INT_MAX ) );
-    cut_pt 						= unique_ptr<ConfigRange>(new ConfigRange( cfg, "TrackCuts.pt", 					0, 		INT_MAX ) );
-    cut_ptGlobalOverPrimary 	= unique_ptr<ConfigRange>(new ConfigRange( cfg, "TrackCuts.ptGlobalOverPrimary", 	0.7, 	1.42 ) );
-    cut_yLocal 					= unique_ptr<ConfigRange>(new ConfigRange( cfg, "TrackCuts.yLocal", 				-1.6, 	1.6 ) );
-    cut_zLocal 					= unique_ptr<ConfigRange>(new ConfigRange( cfg, "TrackCuts.zLocal", 				-2.8, 	2.8 ) );
-    cut_matchFlag				= unique_ptr<ConfigRange>(new ConfigRange( cfg, "TrackCuts.matchFlag", 				1, 		3 ) );
-    cut_rapidity				= unique_ptr<ConfigRange>(new ConfigRange( cfg, "TrackCuts.rapidity", 				-0.25, 	0.25 ) );
-
-
+    cut_nHitsFit				= unique_ptr<ConfigRange>(new ConfigRange( &config, "TrackCuts.nHitsFit", 				0, 		INT_MAX ) );
+    cut_dca 					= unique_ptr<ConfigRange>(new ConfigRange( &config, "TrackCuts.dca", 					0, 		INT_MAX ) );
+	cut_nHitsFitOverPossible 	= unique_ptr<ConfigRange>(new ConfigRange( &config, "TrackCuts.nHitsFitOverPossible", 	0, 		INT_MAX ) );
+    cut_nHitsDedx 				= unique_ptr<ConfigRange>(new ConfigRange( &config, "TrackCuts.nHitsDedx", 				0, 		INT_MAX ) );
+    cut_pt 						= unique_ptr<ConfigRange>(new ConfigRange( &config, "TrackCuts.pt", 					0, 		INT_MAX ) );
+    cut_ptGlobalOverPrimary 	= unique_ptr<ConfigRange>(new ConfigRange( &config, "TrackCuts.ptGlobalOverPrimary", 	0.7, 	1.42 ) );
+    cut_yLocal 					= unique_ptr<ConfigRange>(new ConfigRange( &config, "TrackCuts.yLocal", 				-1.6, 	1.6 ) );
+    cut_zLocal 					= unique_ptr<ConfigRange>(new ConfigRange( &config, "TrackCuts.zLocal", 				-2.8, 	2.8 ) );
+    cut_matchFlag				= unique_ptr<ConfigRange>(new ConfigRange( &config, "TrackCuts.matchFlag", 				1, 		3 ) );
+    cut_rapidity				= unique_ptr<ConfigRange>(new ConfigRange( &config, "TrackCuts.rapidity", 				-0.25, 	0.25 ) );
 
 
    	// Setup the centrality bins
-   	logger->info( __FUNCTION__ ) << "Loading Centrality Map" << endl; 
-    centralityBinMap = cfg->getIntMap( np + "CentralityMap" );
-    centralityBins = cfg->getIntVector( np + "CentralityBins" );
-    logger->info( __FUNCTION__ ) << "c[ 0 ] = " << centralityBinMap[ 0 ] << endl;
+   	INFO( classname(), "Loading Centrality Map" );
+    centralityBinMap = config.getIntMap( nodePath + ".CentralityMap" );
+    centralityBins = config.getIntVector( nodePath + ".CentralityBins" );
+    INFO( classname(), "c[ 0 ] = " << centralityBinMap[ 0 ] );
     
     // make the inclusive spectra
-    makeSpectra 	= cfg->getBool( np + "Spectra:all", true );
-    logger->info( __FUNCTION__ ) << "Make Inclusive Spectra : " << makeSpectra << endl;
+    makeSpectra 	= config.getBool( nodePath + ".Spectra:all", true );
+    INFO( classname(), "Make Inclusive Spectra : " << makeSpectra );
+    
     // make the inclusive tof spectra
-    makeTofSpectra 	= cfg->getBool( np + "Spectra:tof", true );
-    logger->info( __FUNCTION__ ) << "Make Inclusive Tof Spectra : " << makeTofSpectra << endl;
+    makeTofSpectra 	= config.getBool( nodePath + ".Spectra:tof", true );
+    INFO( classname(), "Make Inclusive Tof Spectra : " << makeTofSpectra );
     
 
-
     // Setup the options
-	makeTrackQA = cfg->getBool( np + "MakeQA:track", false );
+	makeTrackQA = config.getBool( nodePath + ".MakeQA:track", false );
 	if( makeTrackQA )
-	    logger->info( __FUNCTION__ ) << "Making Track QA" << endl;
+	    INFO( classname(), "Making Track QA" );
 
-	makeEventQA = cfg->getBool( np + "MakeQA:event", false );
+	makeEventQA = config.getBool( nodePath + ".MakeQA:event", false );
 	if( makeEventQA )
-	    logger->info( __FUNCTION__ ) << "Making Event QA" << endl;
+	    INFO( classname(), "Making Event QA" );
 
 
 
-	plc = cfg->getString( nodePath + "input:plc", "" );
+	plc = config.getString( nodePath + ".input:plc", "" );
 	mass = Common::mass( plc );
-	if ( mass < 0 )
-		ERROR( "Invalid Particle Species " << plc )
+	if ( mass < 0 ){
+		ERROR( classname(), "Invalid Particle Species " << plc );
+	}
 
-
-	cfg->report();
+	book->cd();
 
 }
 
@@ -97,31 +104,32 @@ void InclusiveSpectra::makeCentralityHistos() {
 	
 
 
-	logger->info( __FUNCTION__ ) << "Make Inclusive Spectra : " << makeSpectra << endl;
-	logger->info( __FUNCTION__ ) << "Make Inclusive Spectra : " << makeTofSpectra << endl;
+	INFO( classname(), "Make Inclusive Spectra : " << makeSpectra );
+	INFO( classname(), "Make Inclusive Tof Spectra : " << makeTofSpectra );
 
 	for ( int iC : centralityBins ){
 		
 		if ( makeSpectra ){
 			string hName = "pt_" + ts(iC);
-			logger->info( __FUNCTION__ ) << hName << endl;
+			INFO ( classname(), hName );
 			book->cd( "inclusive" );
-			book->clone( "/", "pt", "inclusive", hName + "_p" );
-			book->clone( "/", "pt", "inclusive", hName + "_n" );	
+			book->clone( "", "pt", "inclusive", hName + "_p" );
+			book->clone( "", "pt", "inclusive", hName + "_n" );	
 		}
 		
 		if ( makeTofSpectra ){
 			string hName = "pt_" + ts(iC);
-			logger->info( __FUNCTION__ ) << hName << endl;
+			INFO ( classname(), hName );
 			book->cd( "inclusiveTof" );
-			book->clone( "/", "pt", "inclusiveTof", hName + "_p" );
-			book->clone( "/", "pt", "inclusiveTof", hName + "_n" );
+			book->clone( "", "pt", "inclusiveTof", hName + "_p" );
+			book->clone( "", "pt", "inclusiveTof", hName + "_n" );
 		}
 		
 	}
 	for ( int iB = 0; iB < 11; iB++ ){
-		if( centralityBinMap.find( iB ) != centralityBinMap.end() )
-			logger->info( __FUNCTION__ ) << "[" << iB << "] = " << centralityBinMap[ iB ] << endl;
+		if( centralityBinMap.find( iB ) != centralityBinMap.end() ){
+			INFO( classname(), "[" << iB << "] = " << centralityBinMap[ iB ] );
+		}
 	}
 }
 
@@ -135,14 +143,14 @@ void InclusiveSpectra::preEventLoop(){
 
 	if ( makeEventQA ){
 		book->cd( "EventQA" );
-		logger->info(__FUNCTION__) << "Making Event QA histograms " << endl;
-		book->makeAll( cfg, "QAHistograms.Event" );
+		INFO( classname(), "Making Event QA histograms " );
+		book->makeAll( config, "QAHistograms.Event" );
 		book->setBin( "mass", 1, mass, 0 );
 	}
 	if ( makeTrackQA ){
 		book->cd( "TrackQA" );
-		logger->info(__FUNCTION__) << "Making track QA histograms " << endl;
-		book->makeAll( cfg, "QAHistograms.Track" );
+		INFO( classname(), "Making track QA histograms " );
+		book->makeAll( config, "QAHistograms.Track" );
 	}
 
 
@@ -218,7 +226,7 @@ void InclusiveSpectra::analyzeTofTrack( Int_t iTrack ){
 
 bool InclusiveSpectra::keepEvent(){
 
-	if ( "rcpPicoDst" == cfg->getString( nodePath + "input.dst:treeName" ) ){
+	if ( "rcpPicoDst" == config.getString( nodePath + ".input.dst:treeName" ) ){
 
 		if ( isRunBad( pico->runId() ) ){
 			WARN( "Run " << pico->runId() << " Rejected as bad" )

@@ -53,8 +53,8 @@ protected:
 
 
 public:
-	static constexpr auto tag = "PidDataMaker";
-	PidDataMaker( XmlConfig* config, string np, string fl ="", string jp ="" );
+	virtual const char* classname() const { return "PidDataMaker"; }
+	PidDataMaker( XmlConfig config, string np, string fl ="", string jp ="" );
 	~PidDataMaker();
 
 	/**

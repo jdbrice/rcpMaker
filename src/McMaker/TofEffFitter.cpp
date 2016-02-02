@@ -10,13 +10,13 @@
 using namespace jdb;
 
 
-TofEffFitter::TofEffFitter( XmlConfig * _cfg, string _nodePath ){
+TofEffFitter::TofEffFitter( XmlConfig _cfg, string _nodePath ){
 
-	cfg = _cfg;
-	nodePath = _nodePath;
-	outputPath = cfg->getString( nodePath + "output:path" );
+	this->config = _cfg;
+	this->nodePath = _nodePath;
+	outputPath = config.getString( nodePath + "output:path" );
 
-	book = unique_ptr<HistoBook>( new HistoBook( outputPath + cfg->getString( nodePath +  "output.data", "TofEff.root" ), cfg, "", "" ) );	
+	book = unique_ptr<HistoBook>( new HistoBook( outputPath + config.getString( nodePath +  "output.data", "TofEff.root" ), config, "", "" ) );	
 
 }
 
@@ -25,7 +25,7 @@ TofEffFitter::TofEffFitter( XmlConfig * _cfg, string _nodePath ){
 void TofEffFitter::make(){
 
 
-	string params_file =  cfg->getString( nodePath + "output.params" );
+	string params_file =  config.getString( nodePath + "output.params" );
 	if ( "" == params_file ){
 		ERROR( "Specifiy an output params file for the parameters" )
 		return;
@@ -38,15 +38,15 @@ void TofEffFitter::make(){
 
 
 
-	vector<string> labels = cfg->getStringVector( nodePath + "CentralityLabels" );
-	vector< int> cbins = cfg->getIntVector( nodePath + "CentralityBins" );
-	Reporter rp( cfg, nodePath + "Reporter." );
+	vector<string> labels = config.getStringVector( nodePath + "CentralityLabels" );
+	vector< int> cbins = config.getIntVector( nodePath + "CentralityBins" );
+	Reporter rp( config, nodePath + "Reporter." );
 
 	for ( string plc : Common::species ){
 		
 		
 
-		string fn = cfg->getString( nodePath + "input:url" ) + "TofEff_" + plc + ".root";
+		string fn = config.getString( nodePath + "input:url" ) + "TofEff_" + plc + ".root";
 		TFile * f = new TFile( fn.c_str(), "READ" );
 		
 
@@ -93,7 +93,7 @@ void TofEffFitter::make(){
 				rp.newPage();
 				rpl.style( &g ).set( "title", Common::plc_label( plc, cs ) + " : " + labels[ b ] ).set( "yr", 0.4, 0.85 ).set( "optfit", 111 )
 					.set("y", "Efficiency").set( "x", "p_{T} [GeV/c]" )
-					.set( cfg, nodePath + "Style.TofEff" )
+					.set( &config, nodePath + "Style.TofEff" )
 					.draw();
 					gStyle->SetStatY( 0.9 );
 					gStyle->SetStatX( 0.65 );

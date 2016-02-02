@@ -14,16 +14,17 @@ using namespace std;
 #include "HistoBins.h"
 #include "XmlConfig.h"
 #include "Reporter.h"
+// Interface
+	#include "IObject.h"
+	#include "IConfig.h"
 using namespace jdb;
 
 #include "TFitResultPtr.h"
 #include "TF1.h"
 
-class FeedDownFitter
+class FeedDownFitter : public IConfig, public IObject
 {
 protected:
-	XmlConfig * cfg;
-	string nodePath;
 	string outputPath;
 
 	unique_ptr<HistoBook> book;
@@ -45,8 +46,8 @@ protected:
 
 public:
 
-	static constexpr auto tag = "FeedDownFitter";
-	FeedDownFitter( XmlConfig * cfg, string nodePath );
+	virtual const char* classname() const { return "FeedDownFitter";}
+	FeedDownFitter( XmlConfig cfg, string nodePath );
 	~FeedDownFitter();
 	
 

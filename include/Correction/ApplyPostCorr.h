@@ -32,7 +32,7 @@ protected:
 
 public:
 	static constexpr auto tag = "ApplyPostCorr";
-	ApplyPostCorr( XmlConfig * _cfg, string _nodePath );
+	ApplyPostCorr( XmlConfig _cfg, string _nodePath );
 	~ApplyPostCorr() {}
 
 	void setupCorrections();

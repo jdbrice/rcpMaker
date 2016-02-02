@@ -1,24 +1,24 @@
 #include "Spectra/TofEffSpectra.h"
 
 
-TofEffSpectra::TofEffSpectra( XmlConfig * config, string nodePath, string fileList, string jobPrefix ) 
+TofEffSpectra::TofEffSpectra( XmlConfig config, string nodePath, string fileList, string jobPrefix ) 
 	: InclusiveSpectra( config, nodePath, fileList, jobPrefix ){
 
 
-	tofSigmaIdeal 	= cfg->getDouble( nodePath+"ZRecentering.sigma:tof", 0.012 );
-	dedxSigmaIdeal 	= cfg->getDouble( nodePath+"ZRecentering.sigma:dedx", 0.07 );
+	tofSigmaIdeal 	= config.getDouble( nodePath+".ZRecentering.sigma:tof", 0.012 );
+	dedxSigmaIdeal 	= config.getDouble( nodePath+".ZRecentering.sigma:dedx", 0.07 );
 	zr 				= new ZRecentering( dedxSigmaIdeal,
 									 	tofSigmaIdeal,
-									 	cfg->getString( nodePath+"Bichsel.table", "dedxBichsel.root"),
-									 	cfg->getInt( nodePath+"Bichsel.method", 0) );
+									 	config.getString( nodePath+".Bichsel.table", "dedxBichsel.root"),
+									 	config.getInt( nodePath+".Bichsel.method", 0) );
 
 		// method for phase space recentering
-	zrMethod 		= config->getString( nodePath + "ZRecentering.method", "traditional" );
+	zrMethod 		= config.getString( nodePath + ".ZRecentering.method", "traditional" );
 		// alias the centered species for ease of use
-	centerSpecies 	= cfg->getString( nodePath + "ZRecentering.centerSpecies", "K" );
+	centerSpecies 	= config.getString( nodePath + ".ZRecentering.centerSpecies", "K" );
 
 
-	nSigmaDedxCut = cfg->getDouble( nodePath + "nSigmaDedx:cut", -1 );
+	nSigmaDedxCut = config.getDouble( nodePath + ".nSigmaDedx:cut", -1 );
 
 }
 
@@ -38,15 +38,15 @@ void TofEffSpectra::makeCentralityHistos(){
 	
 	for ( int iC : centralityBins ){
 		string hName = "pt_" + ts(iC);
-		logger->info( __FUNCTION__ ) << hName << endl;
+		INFO( classname(), hName );
 		book->cd( "inclusive_vs_dedx" );
-		book->clone( "/", "pt_vs_dedx", "inclusive_vs_dedx", hName + "_p" );
-		book->clone( "/", "pt_vs_dedx", "inclusive_vs_dedx", hName + "_n" );	
+		book->clone( "", "pt_vs_dedx", "inclusive_vs_dedx", hName + "_p" );
+		book->clone( "", "pt_vs_dedx", "inclusive_vs_dedx", hName + "_n" );	
 		
-		logger->info( __FUNCTION__ ) << hName << endl;
+		INFO( classname(), hName );
 		book->cd( "inclusiveTof_vs_dedx" );
-		book->clone( "/", "pt_vs_dedx", "inclusiveTof_vs_dedx", hName + "_p" );
-		book->clone( "/", "pt_vs_dedx", "inclusiveTof_vs_dedx", hName + "_n" );
+		book->clone( "", "pt_vs_dedx", "inclusiveTof_vs_dedx", hName + "_p" );
+		book->clone( "", "pt_vs_dedx", "inclusiveTof_vs_dedx", hName + "_n" );
 		
 	}
 }

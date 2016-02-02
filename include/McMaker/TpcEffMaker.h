@@ -7,7 +7,7 @@
 class TpcEffMaker : public InclusiveSpectra {
 
 public:
-	TpcEffMaker( XmlConfig * config, string nodePath, string fileList ="", string jobPrefix ="" );
+	TpcEffMaker( XmlConfig config, string nodePath, string fileList ="", string jobPrefix ="" );
 	~TpcEffMaker();
 
 protected:

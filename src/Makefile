@@ -7,27 +7,29 @@ source = .cpp
 # Source files to make
 sources = 	Engine.cpp 							\
 			Common.cpp 							\
-			Spectra/InclusiveSpectra.cpp 		\
-			Spectra/ZRecentering.cpp 			\
 			Adapter/ProdPicoDst.cpp 			\
 			Adapter/RcpPicoDst.cpp 				\
+			Spectra/InclusiveSpectra.cpp 		\
+			Spectra/ZRecentering.cpp 			\
+			Spectra/TofEffSpectra.cpp			\
+			Spectra/PidHistoMaker.cpp			\
+			Params/FeedDownParams.cpp 			\
+			Params/EnergyLossParams.cpp			\
 			TSF/FitSchema.cpp 					\
 			TSF/Fitter.cpp 						\
 			TSF/FitRunner.cpp 					\
+			Correction/SpectraCorrecter.cpp		\
+			Spectra/PidDataMaker.cpp			\
 			McMaker/EnergyLoss.cpp 				\
 			McMaker/TpcEffFitter.cpp 			\
 			McMaker/TofEffFitter.cpp 			\
 			McMaker/FeedDownMaker.cpp			\
 			McMaker/FeedDownFitter.cpp			\
 			McMaker/TpcEffMaker.cpp				\
-			Params/FeedDownParams.cpp 			\
-			Params/EnergyLossParams.cpp			\
-			Spectra/PidHistoMaker.cpp			\
-			Spectra/PidDataMaker.cpp			\
-			Spectra/TofEffSpectra.cpp			\
-			Present/PidYieldPresenter.cpp 		\
-			Correction/ApplyPostCorr.cpp		\
-			Correction/SpectraCorrecter.cpp
+			Correction/ApplyPostCorr.cpp		
+			# Present/PidYieldPresenter.cpp 		\
+			
+			
 
 
 objects = $(patsubst %.cpp,%.o, $(sources))

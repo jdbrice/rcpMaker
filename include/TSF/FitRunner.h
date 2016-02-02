@@ -54,7 +54,7 @@ namespace TSF{
 
 
 	public:
-		FitRunner( XmlConfig * _cfg, string _np, int iCharge = -10, int iCen = -1  );
+		FitRunner( XmlConfig _config, string _np, int iCharge = -10, int iCen = -1  );
 
 		~FitRunner();
 

@@ -13,10 +13,10 @@
 vector<int> FeedDownFitter::plcID = { 8, 9, 11, 12, 14, 15 };
 vector<float> FeedDownFitter::plcMass = { 0.1396, 0.1396, 0.4937, 0.4937, 0.9383, 0.9383 };
 
-FeedDownFitter::FeedDownFitter( XmlConfig * cfg, string nodePath ){
+FeedDownFitter::FeedDownFitter( XmlConfig cfg, string nodePath ){
 
 
-	this->cfg = cfg;
+	this->config = cfg;
 	this->nodePath = nodePath;
 
 	// map of GEANT PID -> histogram name
@@ -34,21 +34,21 @@ FeedDownFitter::FeedDownFitter( XmlConfig * cfg, string nodePath ){
 				"[0]*exp( -[1] * x ) + [2] * exp( -[3] * x * x )",
 				"pow( [0] + [1] * pow( x, [2] ), -1 )" };
 
-	rmb = unique_ptr<HistoBins>( new HistoBins( cfg, nodePath + "RefMultBins" ) );
+	rmb = unique_ptr<HistoBins>( new HistoBins( config, nodePath + ".RefMultBins" ) );
 
-	book = unique_ptr<HistoBook>( new HistoBook( cfg->getString( nodePath + "output:path" ) + cfg->getString( nodePath + "output.data" ),
-													cfg, cfg->getString( nodePath + "input:url" ) ) );
+	book = unique_ptr<HistoBook>( new HistoBook( config.getString( nodePath + ".output:path" ) + config.getString( nodePath + "output.data" ),
+													config, config.getString( nodePath + ".input:url" ) ) );
 
 
 
 	// Setup the centrality bins
-   	INFO( tag,  "Loading Centrality Map" );
-    centralityBinMap = cfg->getIntMap( nodePath + "CentralityMap" );
-    centralityBins = cfg->getIntVector( nodePath + "CentralityBins" );
-    INFO( tag, "c[ 0 ] = " << centralityBinMap[ 0 ] );
+   	INFO( classname(),  "Loading Centrality Map" );
+    centralityBinMap = config.getIntMap( nodePath + ".CentralityMap" );
+    centralityBins = config.getIntVector( nodePath + ".CentralityBins" );
+    INFO( classname(), "c[ 0 ] = " << centralityBinMap[ 0 ] );
 
 
-    reporter = unique_ptr<Reporter>( new Reporter( cfg, nodePath + "Reporter." ) );
+    reporter = unique_ptr<Reporter>( new Reporter( cfg, nodePath + ".Reporter." ) );
 
 }
 
@@ -64,7 +64,7 @@ void FeedDownFitter::make(){
 
 	vector<string> hNames = { "#pi^{+}", "#pi^{-}", "K^{+}", "K^{-}", "Proton", "#bar{P}" };
 
-	string path = cfg->getString( nodePath + "output.param" );
+	string path = config.getString( nodePath + ".output.param" );
 	ofstream out( path.c_str(), ios::out );
 
 	out << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" << endl;
@@ -76,8 +76,8 @@ void FeedDownFitter::make(){
 	for ( auto k : plcName ){
 		
 
-		if ( cfg->getBool( nodePath + "Pages:parents", false ) ){
-			INFO( tag, "parents" );
+		if ( config.getBool( nodePath + ".Pages:parents", false ) ){
+			INFO( classname(), "parents" );
 			TH2 * h2d = book->get2D( "parents_" + k.second );
 			for ( int i = 1; i < h2d->GetNbinsY(); i++ ){
 				
@@ -90,12 +90,12 @@ void FeedDownFitter::make(){
 				
 				addGEANTLabels( projX );
 				projX->GetXaxis()->LabelsOption( " " );
-				rpl.style( projX ).set( cfg, "Style.logy1D" ).set( "title", hNames[ plcIndex ] + " : " + dts( ptl ) + " < pT < " + dts( pth ) ).draw();
+				rpl.style( projX ).set( &config, "Style.logy1D" ).set( "title", hNames[ plcIndex ] + " : " + dts( ptl ) + " < pT < " + dts( pth ) ).draw();
 
 				reporter->savePage();
 
-				if ( cfg->getBool( nodePath + "Pages:export", false ) )
-					reporter->saveImage( cfg->getString( nodePath + "output:path" ) + "image/" + k.second + "_" + dts( ptl ) + "_pT_" + dts( pth ) + ".eps"  );
+				if ( config.getBool( nodePath + ".Pages:export", false ) )
+					reporter->saveImage( config.getString( nodePath + ".output:path" ) + "image/" + k.second + "_" + dts( ptl ) + "_pT_" + dts( pth ) + ".eps"  );
 			}
 		}
 
@@ -106,7 +106,7 @@ void FeedDownFitter::make(){
 		
 
 		out << "\t<" << k.second << ">" << endl;
-		for ( int b : cfg->getIntVector( nodePath + "CentralityBins" ) ) {
+		for ( int b : config.getIntVector( nodePath + ".CentralityBins" ) ) {
 			background( k.second, plcIndex, b, out );	
 		}
 		out << "\t</" << k.second << ">" << endl;
@@ -126,7 +126,7 @@ void FeedDownFitter::exportParams( int bin, TF1 * fn, TFitResultPtr result,  ofs
 }
 
 void FeedDownFitter::background( string name, int plcIndex, int bin, ofstream &out ){
-	INFO( tag, "(name=" << name << ", plcIndex=" << plcIndex << ", bin=" << bin << ")" );
+	INFO( classname(), "(name=" << name << ", plcIndex=" << plcIndex << ", bin=" << bin << ")" );
 
 	RooPlotLib rpl; 
 
@@ -160,7 +160,7 @@ void FeedDownFitter::background( string name, int plcIndex, int bin, ofstream &o
 
 	g->BayesDivide( back, total );
 
-	rpl.style( g ).set( cfg, "Style.frac_" + name ).set( cfg, "Style.frac" ).set( "title", hNames[ plcIndex ] + " : bin " + ts(bin) ).draw();
+	rpl.style( g ).set( &config, "Style.frac_" + name ).set( &config, "Style.frac" ).set( "title", hNames[ plcIndex ] + " : bin " + ts(bin) ).draw();
 
 	INFO( "Fitting to : " << formulas[ plcIndex ]  )
 	TF1 * fracFun = new TF1( "fn", formulas[ plcIndex ].c_str() , 0.01, 4.5 );
@@ -246,7 +246,7 @@ void FeedDownFitter::background( string name, int plcIndex, int bin, ofstream &o
 	ratio->GetYaxis()->SetNdivisions( 5, 2, 0, true );
 	ratio->GetYaxis()->SetTickLength( 0.01 );
 
-	rpl.style( ratio ).set( cfg, "Style.ratio" ).draw();
+	rpl.style( ratio ).set( &config, "Style.ratio" ).draw();
 	
 
 	TLine * l = new TLine( 0.0, 1, 3, 1  );
@@ -254,7 +254,7 @@ void FeedDownFitter::background( string name, int plcIndex, int bin, ofstream &o
 	l->Draw("same");
 	
 
-	if ( cfg->getBool( nodePath + "Pages:export", true ) )
-		reporter->saveImage( cfg->getString( nodePath + "output:path" ) + "image/" + name + "_back_" + ts(bin) + ".eps" );
+	if ( config.getBool( nodePath + "Pages:export", true ) )
+		reporter->saveImage( config.getString( nodePath + "output:path" ) + "image/" + name + "_back_" + ts(bin) + ".eps" );
 	reporter->savePage();
 }

@@ -1,4 +1,5 @@
 
+
 // STL
 #include <iostream>
 #include <exception>
@@ -19,31 +20,29 @@ using namespace jdb;
 	#include "Spectra/TofEffSpectra.h"
 
 
-// McMaker
-//	#include "McMaker/TofEffMaker.h"
-	#include "McMaker/EnergyLoss.h"
-	#include "McMaker/TofEffFitter.h"
-	#include "McMaker/TpcEffFitter.h"
-	#include "McMaker/TpcEffMaker.h"
+// // McMaker
+// //	#include "McMaker/TofEffMaker.h"
+// 	#include "McMaker/EnergyLoss.h"
+// 	#include "McMaker/TofEffFitter.h"
+// 	#include "McMaker/TpcEffFitter.h"
+// 	#include "McMaker/TpcEffMaker.h"
 
-// Presentation
-	#include "Present/PidYieldPresenter.h"
+// // Presentation
+// 	#include "Present/PidYieldPresenter.h"
 
-// Feed down
-	#include "McMaker/FeedDownMaker.h"
-	#include "McMaker/FeedDownFitter.h"
-
-
-// PID Fitting
-	#include "TSF/FitRunner.h"
-
-// Corrections
-	#include "Correction/ApplyPostCorr.h"
+// // Feed down
+// 	#include "McMaker/FeedDownMaker.h"
+// 	#include "McMaker/FeedDownFitter.h"
 
 
+// // PID Fitting
+// 	#include "TSF/FitRunner.h"
+
+// // Corrections
+// 	#include "Correction/ApplyPostCorr.h"
+// using namespace TSF;
 
 
-using namespace TSF;
 
 int main( int argc, char* argv[] ) {
 
@@ -68,56 +67,61 @@ int main( int argc, char* argv[] ) {
 			string job = config.getString( "jobType" );
 
 			if ( "InclusiveSpectra" == job ){
-				InclusiveSpectra is( &config, "InclusiveSpectra.", fileList, jobPrefix );
-				is.make();
-			} if ( "TofEffSpectra" == job ){
-				TofEffSpectra tes( &config, "TofEffSpectra.", fileList, jobPrefix );
-				tes.make();
-			} if ( "EnergyLoss" == job ){
-				EnergyLoss el( &config, "EnergyLoss.", fileList, jobPrefix );
-				el.make();
-			} if ( "TpcEffFitter" == job ){
-				TpcEffFitter tef( &config, "TpcEffFitter." );
-				tef.make();
-			} if ( "TpcEffMaker" == job ){
-				TpcEffMaker tem( &config, "TpcEffMaker." );
-				tem.make();
-			} else if ( "PidHistoMaker" == job ){
-				PidHistoMaker pps( &config, "PidHistoMaker.", fileList, jobPrefix  );
-				pps.make();
-			} else if ( "PidDataMaker" == job ){
-				PidDataMaker pdm( &config, "PidDataMaker.", fileList, jobPrefix  );
-				pdm.make();
-			} else if ( "TofEffFitter" == job ){
-				TofEffFitter tef( &config, "TofEffFitter." );
-				tef.make();     
-			} else if ( "SimultaneousTPid" == job ){
-				int iCharge = atoi( fileList.c_str() );
-				if ( "" == fileList )
-					iCharge = -2;
-				int iCen = atoi( jobPrefix.c_str() );
-				if ( "" == jobPrefix )
-					iCen = -1;
+				InclusiveSpectra is( config, "InclusiveSpectra.", fileList, jobPrefix );
+				is.run();
+			} 
+			// else if ( "TofEffSpectra" == job ){
+			// 	TofEffSpectra tes( config, "TofEffSpectra.", fileList, jobPrefix );
+			// 	tes.run();
+			// } 
+			// if ( "EnergyLoss" == job ){
+			// 	EnergyLoss el( &config, "EnergyLoss.", fileList, jobPrefix );
+			// 	el.run();
+			// } if ( "TpcEffFitter" == job ){
+			// 	TpcEffFitter tef( &config, "TpcEffFitter." );
+			// 	tef.make();
+			// } if ( "TpcEffMaker" == job ){
+			// 	TpcEffMaker tem( &config, "TpcEffMaker." );
+			// 	tem.run();
+			// } 
+			else if ( "PidHistoMaker" == job ){
+				PidHistoMaker pps( config, "PidHistoMaker.", fileList, jobPrefix  );
+				pps.run();
+			} 
+			else if ( "PidDataMaker" == job ){
+				PidDataMaker pdm( config, "PidDataMaker.", fileList, jobPrefix  );
+				pdm.run();
+			} 
+			// else if ( "TofEffFitter" == job ){
+			// 	TofEffFitter tef( &config, "TofEffFitter." );
+			// 	tef.make();     
+			// } else if ( "SimultaneousTPid" == job ){
+			// 	int iCharge = atoi( fileList.c_str() );
+			// 	if ( "" == fileList )
+			// 		iCharge = -2;
+			// 	int iCen = atoi( jobPrefix.c_str() );
+			// 	if ( "" == jobPrefix )
+			// 		iCen = -1;
 
-				FitRunner fr( &config, "SimultaneousPid.", iCharge, iCen );
-				fr.make();
+			// 	FitRunner fr( &config, "SimultaneousPid.", iCharge, iCen );
+			// 	fr.make();
 
-			}  else if ( "FeedDownMaker" == job ){
-				FeedDownMaker fdm( &config, "FeedDownMaker.", fileList, jobPrefix );
-				fdm.make();
-			} else if ( "FeedDownFitter" == job ){
-				FeedDownFitter fdf( &config, "FeedDownFitter." );
-				fdf.make();
-			} else if ( "ApplyPostCorr" == job ){
-				ApplyPostCorr apc( &config, "ApplyPostCorr." );
-				apc.make();
-			} else if ( "PresentPidYield" == job ){
-				//cout << "making presenter" << endl;
+			// }  else if ( "FeedDownMaker" == job ){
+			// 	FeedDownMaker fdm( &config, "FeedDownMaker.", fileList, jobPrefix );
+			// 	fdm.run();
+			// } else if ( "FeedDownFitter" == job ){
+			// 	FeedDownFitter fdf( &config, "FeedDownFitter." );
+			// 	fdf.make();
+			// } else if ( "ApplyPostCorr" == job ){
+			// 	ApplyPostCorr apc( &config, "ApplyPostCorr." );
+			// 	apc.make();
+			// } else if ( "PresentPidYield" == job ){
+			// 	//cout << "making presenter" << endl;
  
-				PidYieldPresenter pyp( &config, "PidYieldPresenter." );
-				pyp.make();
+			// 	PidYieldPresenter pyp( &config, "PidYieldPresenter." );
+			// 	pyp.make();
 
-			}
+			// }
 
 		} catch ( exception &e ){
 			cout << e.what() << endl;

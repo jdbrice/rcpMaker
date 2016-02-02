@@ -16,18 +16,16 @@ using namespace jdb;
 #include "TF1.h"
 #include "TGraphAsymmErrors.h"
 
-class TofEffFitter
+class TofEffFitter : public IConfig, public IObject
 {
 protected:
 
-	XmlConfig* cfg;
-	string nodePath;
 	string outputPath;
 
 	unique_ptr<HistoBook> book;
 
 public:
-	TofEffFitter( XmlConfig * _cfg, string nodePath );
+	TofEffFitter( XmlConfig _cfg, string nodePath );
 	~TofEffFitter() {};
 
 

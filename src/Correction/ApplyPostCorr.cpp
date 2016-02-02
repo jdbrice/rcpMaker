@@ -3,45 +3,43 @@
 
 #include <algorithm>
 
-ApplyPostCorr::ApplyPostCorr( XmlConfig * _cfg, string _nodePath ) : HistoAnalyzer( _cfg, _nodePath ){
+ApplyPostCorr::ApplyPostCorr( XmlConfig _cfg, string _nodePath ) : HistoAnalyzer( _cfg, _nodePath ){
 	INFO( "ApplyPostCorr" )
-	if ( cfg == nullptr )
-		ERROR( "Invalid config" )
-	else {
-		setupCorrections();
-		plc = cfg->getString( nodePath + "input:plc", "UNKNOWN" );
-	}
+	
+	setupCorrections();
+	plc = config.getString( nodePath + ".input:plc", "UNKNOWN" );
+	
 
 
-	apply_feeddown = cfg->getBool( nodePath + "FeedDown:apply", true );
-	apply_tofEff = cfg->getBool( nodePath + "TofEff:apply", true );
+	apply_feeddown = config.getBool( nodePath + ".FeedDown:apply", true );
+	apply_tofEff = config.getBool( nodePath + ".TofEff:apply", true );
 }
 
 void ApplyPostCorr::setupCorrections(){
 	INFO("")
 	// Efficiency corrector
-	sc = unique_ptr<SpectraCorrecter>( new SpectraCorrecter( cfg, nodePath ) ); 
+	sc = unique_ptr<SpectraCorrecter>( new SpectraCorrecter( &config, nodePath ) ); 
 
 
-	vector<string> cfgPaths = { "TofEff" };
+	vector<string> cfgPaths = { ".TofEff" };
 
 	for ( string cPath : cfgPaths ){
 		for ( string plc : Common::species ){
 			for ( string c : Common::sCharges ){
 
-				if ( cfg->exists( nodePath + cPath + "." + plc + "_" + c ) ){
-					for ( int cb : cfg->getIntVector( nodePath + "CentralityBins" ) ){
-						string path = nodePath + cPath + "." + plc + "_" + c + "." + cPath + "Params[" + ts(cb) + "]";
+				if ( config.exists( nodePath + cPath + "." + plc + "_" + c ) ){
+					for ( int cb : config.getIntVector( nodePath + ".CentralityBins" ) ){
+						string path = nodePath + cPath + "." + plc + "_" + c + cPath + "Params[" + ts(cb) + "]";
 						
-						if ( cb != cfg->getInt( path + ":bin" ) )
+						if ( cb != config.getInt( path + ":bin" ) )
 							ERROR( "Centrality Bin Mismatch" )
 
 						// if ( "FeedDown" == cPath )
 						// 	feedDown[ plc + "_" + c + "_" + ts(cb) ] = unique_ptr<ConfigFunction>( new ConfigFunction( cfg, path ) );
 						// if ( "TpcEff" == cPath )
 						// 	tpcEff[ plc + "_" + c + "_" + ts(cb) ] = unique_ptr<ConfigFunction>( new ConfigFunction( cfg, path ) );
-						if ( "TofEff" == cPath )
-							tofEff[ plc + "_" + c + "_" + ts(cb) ] = unique_ptr<ConfigGraph>( new ConfigGraph( cfg, path ) );
+						if ( ".TofEff" == cPath )
+							tofEff[ plc + "_" + c + "_" + ts(cb) ] = unique_ptr<ConfigGraph>( new ConfigGraph( &config, path ) );
 					}
 				} else {
 					WARN( "Cannot find " + cPath + " params for " << plc + "_" + c )
@@ -63,11 +61,11 @@ void ApplyPostCorr::make(){
 		return;
 	}
 
-	double feedDownSysNSigma = cfg->getDouble( nodePath + "FeedDown:systematic", 0 );
+	double feedDownSysNSigma = config.getDouble( nodePath + "FeedDown:systematic", 0 );
 	INFO( "ApplyPostCorr", "FeedDown Systematic " << feedDownSysNSigma << " sigma" );
 
 	for ( int cg : Common::charges ){
-		for ( int cb : cfg->getIntVector( nodePath + "CentralityBins" ) ){
+		for ( int cb : config.getIntVector( nodePath + "CentralityBins" ) ){
 
 			TRACE( "Working on charge=" << cg << ", cen=" << cb )
 

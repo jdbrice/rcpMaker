@@ -11,13 +11,15 @@
 using namespace jdb;
 
 
-TpcEffFitter::TpcEffFitter( XmlConfig * _cfg, string _nodePath ){
-	DEBUG( "( " << _cfg << ", " << _nodePath << " )" )
-	cfg = _cfg;
-	nodePath = _nodePath;
-	outputPath = cfg->getString( nodePath + "output:path", "" );
+TpcEffFitter::TpcEffFitter( XmlConfig _cfg, string _nodePath ){
 
-	book = unique_ptr<HistoBook>( new HistoBook( outputPath + cfg->getString( nodePath +  "output.data", "TpcEff.root" ), cfg, "", "" ) );	
+	this->config = _cfg;
+	DEBUG( "( " << config.getFilename() << ", " << _nodePath << " )" )
+	
+	nodePath = _nodePath;
+	outputPath = config.getString( nodePath + "output:path", "" );
+
+	book = unique_ptr<HistoBook>( new HistoBook( outputPath + config.getString( nodePath +  "output.data", "TpcEff.root" ), config, "", "" ) );	
 }
 
 
@@ -26,7 +28,7 @@ void TpcEffFitter::make(){
 	DEBUG("")
 
 	gStyle->SetOptFit( 111 );
-	string params_file =  cfg->getString( nodePath + "output.params" );
+	string params_file =  config.getString( nodePath + "output.params" );
 	if ( "" == params_file ){
 		ERROR( "Specifiy an output params file for the parameters" )
 		return;
@@ -38,9 +40,9 @@ void TpcEffFitter::make(){
 	out << "<config>" << endl;
 
 
-	vector<string> labels = cfg->getStringVector( nodePath + "CentralityLabels" );
-	vector< int> cbins = cfg->getIntVector( nodePath + "CentralityBins" );
-	Reporter rp( cfg, nodePath + "Reporter." );
+	vector<string> labels = config.getStringVector( nodePath + "CentralityLabels" );
+	vector< int> cbins = config.getIntVector( nodePath + "CentralityBins" );
+	Reporter rp( config, nodePath + "Reporter." );
 
 	DEBUG( "Starting plc loop" )
 	for ( string plc : Common::species ){
@@ -50,9 +52,9 @@ void TpcEffFitter::make(){
 
 			out << "\t<" << plc << "_" << c << ">" << endl;
 
-			string fnMc = cfg->getString( nodePath + "input:url" ) + "TpcEff_" + plc + "_" + c + "_mc" + ".root";
+			string fnMc = config.getString( nodePath + "input:url" ) + "TpcEff_" + plc + "_" + c + "_mc" + ".root";
 			TFile * fmc = new TFile( fnMc.c_str(), "READ" );
-			string fnRc = cfg->getString( nodePath + "input:url" ) + "TpcEff_" + plc + "_" + c + "_rc" + ".root";
+			string fnRc = config.getString( nodePath + "input:url" ) + "TpcEff_" + plc + "_" + c + "_rc" + ".root";
 			TFile * frc = new TFile( fnRc.c_str(), "READ" );
 
 			DEBUG( "Mc File = " << fmc )

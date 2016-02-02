@@ -30,8 +30,8 @@ public:
 
    // Declaration of leaf types
    Int_t           rrunId;
-   UShort_t        bin16;
-   UShort_t        bin9;
+   UShort_t         bin16;
+   UShort_t         bin9;
    Float_t         weight;
    Float_t         corrRefMult;
    Int_t           nTracks;

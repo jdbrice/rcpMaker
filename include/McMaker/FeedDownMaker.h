@@ -9,6 +9,7 @@ using namespace std;
 // Roobarb
 #include "TreeAnalyzer.h"
 #include "HistoBins.h"
+#include "ConfigRange.h"
 using namespace jdb;
 
 
@@ -49,7 +50,8 @@ protected:
 	int cBin;
 
 public:
-	FeedDownMaker( XmlConfig * config, string nodePath, string fileList ="", string jobPrefix ="" );
+	virtual const char* classname() const { return "FeedDownMaker"; }
+	FeedDownMaker( XmlConfig config, string nodePath, string fileList ="", string jobPrefix ="" );
 	~FeedDownMaker();
 	
 

@@ -15,16 +15,13 @@
 vector<int> FeedDownMaker::plcID = { 8, 9, 11, 12, 14, 15 };
 vector<float> FeedDownMaker::plcMass = { 0.1396, 0.1396, 0.4937, 0.4937, 0.9383, 0.9383 };
 
-FeedDownMaker::FeedDownMaker( XmlConfig * config, string np, string fileList, string prefix ) : TreeAnalyzer( config, np, fileList, prefix  ){
-
-	logger->setClassSpace( "FeedDownMaker" );
-	logger->info(__FUNCTION__) << endl;
-	 
-	logger->debug(__FUNCTION__) << ds << endl;
+FeedDownMaker::FeedDownMaker( XmlConfig config, string np, string fileList, string prefix ) : TreeAnalyzer( config, np, fileList, prefix  ){
+ 
+	DEBUG( classname(), ds );
 	if ( ds && ds->getTreeName() == "StMiniMcTree" ){
-		INFO( "Using DataStore" )
+		INFO( classname(), "Using DataStore" )
 	} else {
-		ERROR( "No Data Source. Specify one at <DataSourcce ... > </DataSource>" )
+		ERROR( classname(), "No Data Source. Specify one at <DataSourcce ... > </DataSource>" )
 	}
 
 	// map of GEANT PID -> histogram name
@@ -37,13 +34,13 @@ FeedDownMaker::FeedDownMaker( XmlConfig * config, string np, string fileList, st
 
 
 	// Tracks cuts
-    cut_nHitsFit				= unique_ptr<ConfigRange>(new ConfigRange( cfg, "TrackCuts.nHitsFit", 				0, 		INT_MAX ) );
-    cut_dca 					= unique_ptr<ConfigRange>(new ConfigRange( cfg, "TrackCuts.dca", 					0, 		INT_MAX ) );
-	cut_nHitsFitOverPossible 	= unique_ptr<ConfigRange>(new ConfigRange( cfg, "TrackCuts.nHitsFitOverPossible", 	0, 		INT_MAX ) );
-    cut_nHitsDedx 				= unique_ptr<ConfigRange>(new ConfigRange( cfg, "TrackCuts.nHitsDedx", 				0, 		INT_MAX ) );
-    cut_pt 						= unique_ptr<ConfigRange>(new ConfigRange( cfg, "TrackCuts.pt", 					0, 		INT_MAX ) );
-    cut_ptGlobalOverPrimary 	= unique_ptr<ConfigRange>(new ConfigRange( cfg, "TrackCuts.ptGlobalOverPrimary", 	0.7, 	1.42 ) );
-    cut_rapidity				= unique_ptr<ConfigRange>(new ConfigRange( cfg, "TrackCuts.rapidity", 				-0.25, 	0.25 ) );
+    cut_nHitsFit				= unique_ptr<ConfigRange>(new ConfigRange( &config, "TrackCuts.nHitsFit", 				0, 		INT_MAX ) );
+    cut_dca 					= unique_ptr<ConfigRange>(new ConfigRange( &config, "TrackCuts.dca", 					0, 		INT_MAX ) );
+	cut_nHitsFitOverPossible 	= unique_ptr<ConfigRange>(new ConfigRange( &config, "TrackCuts.nHitsFitOverPossible", 	0, 		INT_MAX ) );
+    cut_nHitsDedx 				= unique_ptr<ConfigRange>(new ConfigRange( &config, "TrackCuts.nHitsDedx", 				0, 		INT_MAX ) );
+    cut_pt 						= unique_ptr<ConfigRange>(new ConfigRange( &config, "TrackCuts.pt", 					0, 		INT_MAX ) );
+    cut_ptGlobalOverPrimary 	= unique_ptr<ConfigRange>(new ConfigRange( &config, "TrackCuts.ptGlobalOverPrimary", 	0.7, 	1.42 ) );
+    cut_rapidity				= unique_ptr<ConfigRange>(new ConfigRange( &config, "TrackCuts.rapidity", 				-0.25, 	0.25 ) );
 
     formulas =	{ "[0]*exp( -[1] * x ) + [2] * exp( -[3] * x )",
 				"[0]*exp( -[1] * x ) + [2] * exp( -[3] * x )",
@@ -52,13 +49,13 @@ FeedDownMaker::FeedDownMaker( XmlConfig * config, string np, string fileList, st
 				"[0]*exp( -[1] * x ) + [2] * exp( -[3] * x * x )",
 				"(1-[0]*exp( -[1] * x ) ) * [2] * exp( -[3] * x )" };
 
-	rmb = unique_ptr<HistoBins>( new HistoBins( cfg, nodePath + "RefMultBins" ) );
+	rmb = unique_ptr<HistoBins>( new HistoBins( config, nodePath + ".RefMultBins" ) );
 
 	// Setup the centrality bins
-   	logger->info( __FUNCTION__ ) << "Loading Centrality Map" << endl; 
-    centralityBinMap = cfg->getIntMap( np + "CentralityMap" );
-    centralityBins = cfg->getIntVector( np + "CentralityBins" );
-    logger->info( __FUNCTION__ ) << "c[ 0 ] = " << centralityBinMap[ 0 ] << endl;
+   	INFO( classname(), "Loading Centrality Map" ); 
+    centralityBinMap = config.getIntMap( nodePath + ".CentralityMap" );
+    centralityBins = config.getIntVector( nodePath + ".CentralityBins" );
+    INFO( classname(), "c[ 0 ] = " << centralityBinMap[ 0 ] );
 }
 
 FeedDownMaker::~FeedDownMaker(){
@@ -71,7 +68,7 @@ void FeedDownMaker::preEventLoop(){
 	TreeAnalyzer::preEventLoop();
 
 	for ( auto k : plcID ){
-		for ( int cb : cfg->getIntVector( nodePath + "CentralityBins" ) ){
+		for ( int cb : config.getIntVector( nodePath + ".CentralityBins" ) ){
 			string name = plcName[ k ] + "_" + ts(cb);
 			book->clone( "spectra", "sig_" + name );
 			book->clone( "spectra", "back_" + name );

@@ -77,7 +77,10 @@ protected:
 	bool correctTofEff = false;
 
 public:
-	PidHistoMaker( XmlConfig* config, string np, string fl ="", string jp ="" );
+
+	virtual const char* classname() const { return "PidHistoMaker"; }
+
+	PidHistoMaker( XmlConfig config, string np, string fl ="", string jp ="" );
 	~PidHistoMaker();
 
 	/**

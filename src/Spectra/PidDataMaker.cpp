@@ -10,43 +10,43 @@
 #include <cmath> // for M_1_PI etc.
 
 
-PidDataMaker::PidDataMaker( XmlConfig* config, string np, string fl, string jp ) : InclusiveSpectra( config, np, fl, jp ) {
+PidDataMaker::PidDataMaker( XmlConfig config, string nodePath, string fl, string jp ) : InclusiveSpectra( config, nodePath, fl, jp ) {
 
 	/**
 	 * Initialize the Phase Space Recentering Object
 	 */
-	tofSigmaIdeal 	= cfg->getDouble( np+"ZRecentering.sigma:tof", 0.011);
-	dedxSigmaIdeal 	= cfg->getDouble( np+"ZRecentering.sigma:dedx", 0.033);
+	tofSigmaIdeal 	= config.getDouble( nodePath+".ZRecentering.sigma:tof", 0.011);
+	dedxSigmaIdeal 	= config.getDouble( nodePath+".ZRecentering.sigma:dedx", 0.033);
 	zr 				= new ZRecentering( dedxSigmaIdeal,
 									 	tofSigmaIdeal,
-									 	cfg->getString( np+"Bichsel.table", "dedxBichsel.root"),
-									 	cfg->getInt( np+"Bichsel.method", 0) );
+									 	config.getString( nodePath+".Bichsel.table", "dedxBichsel.root"),
+									 	config.getInt( nodePath+".Bichsel.method", 0) );
 
 		// method for phase space recentering
-	zrMethod 		= config->getString( np + "ZRecentering.method", "traditional" );
+	zrMethod 		= config.getString( nodePath + ".ZRecentering.method", "traditional" );
 		// alias the centered species for ease of use
-	centerSpecies 	= cfg->getString( np + "ZRecentering.centerSpecies", "K" );
+	centerSpecies 	= config.getString( nodePath + ".ZRecentering.centerSpecies", "K" );
 
 	//Make the momentum transverse binning
-	binsPt 	= unique_ptr<HistoBins>(new HistoBins( cfg, "binning.pt" ));
+	binsPt 	= unique_ptr<HistoBins>(new HistoBins( config, "binning.pt" ));
 
 	// Get the list of charges we are looking at
-	charges = cfg->getIntVector( "binning.charges" );
+	charges = config.getIntVector( "binning.charges" );
 
 	// Efficiency corrector
-	sc = unique_ptr<SpectraCorrecter>( new SpectraCorrecter( cfg, nodePath ) ); 
+	sc = unique_ptr<SpectraCorrecter>( new SpectraCorrecter( &config, nodePath ) ); 
 
 	// make the energy loss params
 	vector<int> charges = { -1, 1 };
-	if ( cfg->exists( np + "EnergyLossParams:path" ) ){
-		string path = cfg->getString( np + "EnergyLossParams:path" );
+	if ( config.exists( nodePath + ".EnergyLossParams:path" ) ){
+		string path = config.getString( nodePath + ".EnergyLossParams:path" );
 
 		for ( int c : charges ){
 
 			string cfgName = path + centerSpecies + "_" + Common::chargeString( c ) + ".xml";
 			XmlConfig cfgEL( cfgName );
 
-			for ( int cb : cfg->getIntVector( nodePath + "CentralityBins" ) ){
+			for ( int cb : config.getIntVector( nodePath + ".CentralityBins" ) ){
 				
 				// Name like 'Pi_p_0' ... 'Pi_n_6' to be used for quick lookup
 				string name = centerSpecies + "_" + Common::chargeString( c ) +"_" + ts( cb );
@@ -56,8 +56,8 @@ PidDataMaker::PidDataMaker( XmlConfig* config, string np, string fl, string jp )
 		}	
 	}
 
-	tpcSysNSigma = cfg->getDouble( nodePath + "TpcEff:systematics", 0 );
-	INFO( tag, "Systematic uncertainty on TpcEff = " << tpcSysNSigma << " sigma" );
+	tpcSysNSigma = config.getDouble( nodePath + ".TpcEff:systematics", 0 );
+	INFO( classname(), "Systematic uncertainty on TpcEff = " << tpcSysNSigma << " sigma" );
 
 }
 
@@ -66,7 +66,7 @@ PidDataMaker::~PidDataMaker(){
 }
 
 void PidDataMaker::preEventLoop() {
-	logger->info(__FUNCTION__) << endl;
+	INFO( classname(), "");
 	
 	InclusiveSpectra::preEventLoop();
 
@@ -96,7 +96,7 @@ void PidDataMaker::preEventLoop() {
 }
 
 void PidDataMaker::postEventLoop() {
-	logger->info(__FUNCTION__) << endl;
+	INFO( classname(), "");
 	book->cd();
 
 	// write the PidData trees to the file
@@ -134,7 +134,7 @@ void PidDataMaker::analyzeTofTrack( int iTrack ){
 		p = Common::p( corrPt, eta );
 		pt = corrPt;
 	} else {
-		ERROR( "No Energy Loss Params Given - These must be applied here" )
+		ERROR( classname(), "No Energy Loss Params Given - These must be applied here" )
 	} 
 	/************ Corrections **********/
 
