@@ -8,4 +8,4 @@ initialdir 		= /home/jdb12/work/rcpMaker/bin/
 
 
 Arguments = /data/star/jdb12/RcpAnalysis/config/nominal/PidData/PostCorr_Pi.xml $(Process)
-Queue N_DATA
+Queue 96
