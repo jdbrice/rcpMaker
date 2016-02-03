@@ -5,50 +5,50 @@
 Executable = /home/jdb12/work/rcpMaker/runner/rcp
 Initialdir = /home/jdb12/work/rcpMaker/runner/
 
-Arguments 	= /data/star/jdb12/RcpAnalysis/config/template/TpcEff/K_n_mc.xml
-Output 		= /data/star/jdb12/RcpAnalysis/config/template/TpcEff/K_n_mc.xml.log
+Arguments 	= /data/star/jdb12/RcpAnalysis/config/nominal/TpcEff/K_n_mc.xml
+Output 		= /data/star/jdb12/RcpAnalysis/config/nominal/TpcEff/K_n_mc.xml.log
 Queue
 
-Arguments 	= /data/star/jdb12/RcpAnalysis/config/template/TpcEff/K_p_mc.xml
-Output 		= /data/star/jdb12/RcpAnalysis/config/template/TpcEff/K_p_mc.xml.log
+Arguments 	= /data/star/jdb12/RcpAnalysis/config/nominal/TpcEff/K_p_mc.xml
+Output 		= /data/star/jdb12/RcpAnalysis/config/nominal/TpcEff/K_p_mc.xml.log
 Queue
 
-Arguments 	= /data/star/jdb12/RcpAnalysis/config/template/TpcEff/K_n_rc.xml
-Output 		= /data/star/jdb12/RcpAnalysis/config/template/TpcEff/K_n_rc.xml.log
+Arguments 	= /data/star/jdb12/RcpAnalysis/config/nominal/TpcEff/K_n_rc.xml
+Output 		= /data/star/jdb12/RcpAnalysis/config/nominal/TpcEff/K_n_rc.xml.log
 Queue
 
-Arguments 	= /data/star/jdb12/RcpAnalysis/config/template/TpcEff/K_p_rc.xml
-Output 		= /data/star/jdb12/RcpAnalysis/config/template/TpcEff/K_p_rc.xml.log
+Arguments 	= /data/star/jdb12/RcpAnalysis/config/nominal/TpcEff/K_p_rc.xml
+Output 		= /data/star/jdb12/RcpAnalysis/config/nominal/TpcEff/K_p_rc.xml.log
 Queue
 
-Arguments 	= /data/star/jdb12/RcpAnalysis/config/template/TpcEff/Pi_n_mc.xml
-Output 		= /data/star/jdb12/RcpAnalysis/config/template/TpcEff/Pi_n_mc.xml.log
+Arguments 	= /data/star/jdb12/RcpAnalysis/config/nominal/TpcEff/Pi_n_mc.xml
+Output 		= /data/star/jdb12/RcpAnalysis/config/nominal/TpcEff/Pi_n_mc.xml.log
 Queue
 
-Arguments 	= /data/star/jdb12/RcpAnalysis/config/template/TpcEff/Pi_p_mc.xml
-Output 		= /data/star/jdb12/RcpAnalysis/config/template/TpcEff/Pi_p_mc.xml.log
+Arguments 	= /data/star/jdb12/RcpAnalysis/config/nominal/TpcEff/Pi_p_mc.xml
+Output 		= /data/star/jdb12/RcpAnalysis/config/nominal/TpcEff/Pi_p_mc.xml.log
 Queue
 
-Arguments 	= /data/star/jdb12/RcpAnalysis/config/template/TpcEff/Pi_n_rc.xml
-Output 		= /data/star/jdb12/RcpAnalysis/config/template/TpcEff/Pi_n_rc.xml.log
+Arguments 	= /data/star/jdb12/RcpAnalysis/config/nominal/TpcEff/Pi_n_rc.xml
+Output 		= /data/star/jdb12/RcpAnalysis/config/nominal/TpcEff/Pi_n_rc.xml.log
 Queue
 
-Arguments 	= /data/star/jdb12/RcpAnalysis/config/template/TpcEff/Pi_p_rc.xml
-Output 		= /data/star/jdb12/RcpAnalysis/config/template/TpcEff/Pi_p_rc.xml.log
+Arguments 	= /data/star/jdb12/RcpAnalysis/config/nominal/TpcEff/Pi_p_rc.xml
+Output 		= /data/star/jdb12/RcpAnalysis/config/nominal/TpcEff/Pi_p_rc.xml.log
 Queue
 
-Arguments 	= /data/star/jdb12/RcpAnalysis/config/template/TpcEff/P_n_mc.xml
-Output 		= /data/star/jdb12/RcpAnalysis/config/template/TpcEff/P_n_mc.xml.log
+Arguments 	= /data/star/jdb12/RcpAnalysis/config/nominal/TpcEff/P_n_mc.xml
+Output 		= /data/star/jdb12/RcpAnalysis/config/nominal/TpcEff/P_n_mc.xml.log
 Queue
 
-Arguments 	= /data/star/jdb12/RcpAnalysis/config/template/TpcEff/P_p_mc.xml
-Output 		= /data/star/jdb12/RcpAnalysis/config/template/TpcEff/P_p_mc.xml.log
+Arguments 	= /data/star/jdb12/RcpAnalysis/config/nominal/TpcEff/P_p_mc.xml
+Output 		= /data/star/jdb12/RcpAnalysis/config/nominal/TpcEff/P_p_mc.xml.log
 Queue
 
-Arguments 	= /data/star/jdb12/RcpAnalysis/config/template/TpcEff/P_n_rc.xml
-Output 		= /data/star/jdb12/RcpAnalysis/config/template/TpcEff/P_n_rc.xml.log
+Arguments 	= /data/star/jdb12/RcpAnalysis/config/nominal/TpcEff/P_n_rc.xml
+Output 		= /data/star/jdb12/RcpAnalysis/config/nominal/TpcEff/P_n_rc.xml.log
 Queue
 
-Arguments 	= /data/star/jdb12/RcpAnalysis/config/template/TpcEff/P_p_rc.xml
-Output 		= /data/star/jdb12/RcpAnalysis/config/template/TpcEff/P_p_rc.xml.log
+Arguments 	= /data/star/jdb12/RcpAnalysis/config/nominal/TpcEff/P_p_rc.xml
+Output 		= /data/star/jdb12/RcpAnalysis/config/nominal/TpcEff/P_p_rc.xml.log
 Queue

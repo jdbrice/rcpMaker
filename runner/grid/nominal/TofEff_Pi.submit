@@ -6,5 +6,5 @@ Getenv = True
 Executable    = /home/jdb12/work/rcpMaker/bin/rcp
 initialdir 		= /home/jdb12/work/rcpMaker/bin/
 
-Arguments = /data/star/jdb12/RcpAnalysis/config/template/TofEff/Pi.xml $(Process)
+Arguments = /data/star/jdb12/RcpAnalysis/config/nominal/TofEff/Pi.xml $(Process)
 Queue N_DATA
