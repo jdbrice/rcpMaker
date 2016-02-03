@@ -7,5 +7,5 @@ Executable    = /home/jdb12/work/rcpMaker/bin/rcp
 initialdir 		= /home/jdb12/work/rcpMaker/bin/
 
 
-Arguments = /data/star/jdb12/RcpAnalysis/config/nominal/PidData/PostCorr_P.xml $(Process)
+Arguments = /data/star1/jdb12/RcpAnalysis/config/nominal/PidData/PostCorr_P.xml $(Process)
 Queue 96

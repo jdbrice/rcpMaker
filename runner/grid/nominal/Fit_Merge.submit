@@ -4,7 +4,7 @@
 
 Getenv = True
 Executable = /home/jdb12/work/rcpMaker/runner/hadder.py
-Initialdir = /data/star/jdb12/RcpAnalysis/products/nominal/
+Initialdir = /data/star1/jdb12/RcpAnalysis/products/nominal/
 
 Arguments = Fit_Pi_*.root 50 Fit_PostCorr_Pi.root
 output = Fit_PostCorr_Pi.merge.log
