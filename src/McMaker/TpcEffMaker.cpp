@@ -1,8 +1,7 @@
 #include "McMaker/TpcEffMaker.h"
 
-TpcEffMaker::TpcEffMaker( XmlConfig config, string nodePath, string fileList, string jobPrefix ) 
-	: InclusiveSpectra( config, nodePath, fileList, jobPrefix ){
-
+void TpcEffMaker::initialize(){
+	InclusiveSpectra::initialize();
 }
 
 TpcEffMaker::~TpcEffMaker(){

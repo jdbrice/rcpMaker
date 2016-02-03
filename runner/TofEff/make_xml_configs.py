@@ -37,8 +37,8 @@ def write_conf( data_path, output_path, config_path ="./" ) :
 
 		<!-- histograms to auto-make -->
 		<histograms>
-			<pt type="1D" title="p_{{T}} [GeV]; p_{{T}} [GeV]; #Events"  xBins="binning.pt"/>
-			<pt_vs_dedx title="p_{{T}} [GeV] vs dE/dx; p_{{T}} [GeV]; #Events"  xBins="binning.pt" yBins="binning.dedxEff" />
+			<Histo name="pt" title="p_{{T}} [GeV]; p_{{T}} [GeV]; #Events"  bins_x="binning.pt"/>
+			<Histo name="pt_vs_dedx" title="p_{{T}} [GeV] vs dE/dx; p_{{T}} [GeV]; #Events"  bins_x="binning.pt" yBins="binning.dedxEff" />
 		</histograms>
 
 		<nSigmaDedx cut="2" />

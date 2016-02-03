@@ -1,8 +1,0 @@
-########################
-# Fit DAG
-########################
-
-JOB Fit_all Fit.submit
-JOB Fit_merge Fit_Merge.submit
-
-PARENT Fit_all CHILD Fit_merge

@@ -69,8 +69,8 @@ void TpcEffFitter::make(){
 				TH1 * hMc = (TH1*)fmc->Get( ("inclusive/pt_" + ts( b ) + "_" + c ).c_str() );
 				TH1 * hRc = (TH1*)frc->Get( ("inclusive/pt_" + ts( b ) + "_" + c ).c_str() );
 
-				INFO( tag, "N bins MC = " << hMc->GetNbinsX() );
-				INFO( tag, "N bins RC = " << hRc->GetNbinsX() );
+				INFO( classname(), "N bins MC = " << hMc->GetNbinsX() );
+				INFO( classname(), "N bins RC = " << hRc->GetNbinsX() );
 
 				for ( int i = 0; i <= hMc->GetNbinsX() + 1; i++ ){
 					if ( hMc->GetBinContent( i ) < hRc->GetBinContent( i ) ){
@@ -106,7 +106,7 @@ void TpcEffFitter::make(){
 				TFitResultPtr fitPointer = g.Fit( fitFunc, "RSWW" );
 				fitPointer = g.Fit( fitFunc, "RS" );
 
-				INFO( tag, "FitPointer = " << fitPointer );
+				INFO( classname(), "FitPointer = " << fitPointer );
 				TGraphErrors * band = Common::choleskyBands( fitPointer, fitFunc, 5000, 200, &rp );
 
 
@@ -117,14 +117,14 @@ void TpcEffFitter::make(){
 					.set("y", "Efficiency x Acceptance").set( "x", "p_{T}^{MC} [GeV/c]" ).draw();
 
 
-				INFO( tag, "Stat Box" );
+				INFO( classname(), "Stat Box" );
 				gStyle->SetStatY( 0.5 );
 				gStyle->SetStatX( 0.85 );
 				
 				fitFunc->SetLineColor( kRed );
 				fitFunc->Draw("same");	
 
-				INFO( tag, "Drawing CL band" );
+				INFO( classname(), "Drawing CL band" );
 				
 				band->SetFillColorAlpha( kRed, 0.5 );
 				band->Draw( "same e3" );
@@ -132,7 +132,7 @@ void TpcEffFitter::make(){
 
 				rp.savePage();
 
-				INFO( tag, "Exporting Params" );
+				INFO( classname(), "Exporting Params" );
 				exportParams( b, fitFunc, fitPointer, out );
 
 			} // loop centrality bins
@@ -149,7 +149,7 @@ void TpcEffFitter::make(){
 }
 
 void TpcEffFitter::exportParams( int bin, TF1 * f, TFitResultPtr result, ofstream &out ){
-	INFO( tag, "(bin=" << bin << ", f=" << f << ", fPtr=" << result << " )" )
+	INFO( classname(), "(bin=" << bin << ", f=" << f << ", fPtr=" << result << " )" )
 	out << "\t\t<TpcEffParams bin=\"" << bin << "\" ";
 	out << Common::toXml( f, result );
 	out << "/>" << endl;

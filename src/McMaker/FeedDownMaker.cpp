@@ -15,14 +15,15 @@
 vector<int> FeedDownMaker::plcID = { 8, 9, 11, 12, 14, 15 };
 vector<float> FeedDownMaker::plcMass = { 0.1396, 0.1396, 0.4937, 0.4937, 0.9383, 0.9383 };
 
-FeedDownMaker::FeedDownMaker( XmlConfig config, string np, string fileList, string prefix ) : TreeAnalyzer( config, np, fileList, prefix  ){
- 
-	DEBUG( classname(), ds );
+void FeedDownMaker::initialize(){
+	DEBUG( classname(), "" );
 	if ( ds && ds->getTreeName() == "StMiniMcTree" ){
 		INFO( classname(), "Using DataStore" )
 	} else {
 		ERROR( classname(), "No Data Source. Specify one at <DataSourcce ... > </DataSource>" )
 	}
+
+	
 
 	// map of GEANT PID -> histogram name
 	plcName[ 8 ] = "Pi_p";
@@ -58,13 +59,14 @@ FeedDownMaker::FeedDownMaker( XmlConfig config, string np, string fileList, stri
     INFO( classname(), "c[ 0 ] = " << centralityBinMap[ 0 ] );
 }
 
+
 FeedDownMaker::~FeedDownMaker(){
 }
 
 
 
 void FeedDownMaker::preEventLoop(){
-
+	DEBUG( classname(), "" );
 	TreeAnalyzer::preEventLoop();
 
 	for ( auto k : plcID ){

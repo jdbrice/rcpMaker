@@ -7,7 +7,7 @@
 #include "Adapter/PicoDataStore.h"
 #include "Params/EnergyLossParams.h"
 #include "Params/FeedDownParams.h"
-class SpectraCorrecter;
+#include "Correction/SpectraCorrecter.h"
 
 // STL
 #include <algorithm> 
@@ -80,8 +80,10 @@ public:
 
 	virtual const char* classname() const { return "PidHistoMaker"; }
 
-	PidHistoMaker( XmlConfig config, string np, string fl ="", string jp ="" );
+	PidHistoMaker( ) {};
 	~PidHistoMaker();
+
+	virtual void initialize();
 
 	/**
 	 * Analyze a track in the current Event

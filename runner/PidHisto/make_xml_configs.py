@@ -48,22 +48,22 @@ def write_conf( data_path, output_path, input_config_path, config_path ="./" ) :
 		<MakeQA event="true" track="false" tof="false" dedx="false"/>
 
 		<histograms>
-			<Histo name="betaRaw" title="#beta^{{-1}}" xBins="binning.rid" yBins="binning.tofRaw" />
-			<Histo name="dedxRaw" title="dEdx" xBins="binning.rid" yBins="binning.dedxRaw" />
+			<Histo name="betaRaw" title="#beta^{{-1}}" bins_x="binning.rid" bins_y="binning.tofRaw" />
+			<Histo name="dedxRaw" title="dEdx" bins_x="binning.rid" bins_y="binning.dedxRaw" />
 
-			<Histo name="cutBeta" title="#beta^{{-1}}" xBins="binning.rid" yBins="binning.tofRaw" />
-			<Histo name="cutDedx" title="dE/dx" xBins="binning.rid" yBins="binning.dedxRaw" />
+			<Histo name="cutBeta" title="#beta^{{-1}}" bins_x="binning.rid" bins_y="binning.tofRaw" />
+			<Histo name="cutDedx" title="dE/dx" bins_x="binning.rid" bins_y="binning.dedxRaw" />
 
 			<Histo name="eta" type="1D" title="eta" nBinsX="200" minX="-2" maxX="2" />
-			<Histo name="pt" title="p_{{T}} [GeV]; p_{{T}} [GeV]; #Events"  xBins="binning.pt"/>
+			<Histo name="pt" title="p_{{T}} [GeV]; p_{{T}} [GeV]; #Events"  bins_x="binning.pt"/>
 
-			<Histo name="corrPt" title="p_{{T}} [GeV]; p_{{T}} [GeV]; #Events"  xBins="binning.pt" yBins="binning.eloss"/>
+			<Histo name="corrPt" title="p_{{T}} [GeV]; p_{{T}} [GeV]; #Events"  bins_x="binning.pt" bins_y="binning.eloss"/>
 			
 
-			<Histo name="trBeta" title="" xBins="binning.pt" yBins="binning.tof" />
-			<Histo name="trDedx" title="" xBins="binning.pt" yBins="binning.dedx" />
-			<Histo name="nlBeta" title="" xBins="binning.pt" yBins="binning.tof"/>
-			<Histo name="nlDedx" title="" xBins="binning.pt" yBins="binning.dedx"/>
+			<Histo name="trBeta" title="" bins_x="binning.pt" bins_y="binning.tof" />
+			<Histo name="trDedx" title="" bins_x="binning.pt" bins_y="binning.dedx" />
+			<Histo name="nlBeta" title="" bins_x="binning.pt" bins_y="binning.tof"/>
+			<Histo name="nlDedx" title="" bins_x="binning.pt" bins_y="binning.dedx"/>
 		</histograms>
 
 		<style hide="true">

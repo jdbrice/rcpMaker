@@ -152,7 +152,7 @@ void ApplyPostCorr::make(){
 					book->setBinContent( "fd_" + cyn, iB, bCon * ( weight ) );
 					
 				} else if ( !apply_feeddown ){
-					INFO( tag, "Skipping Feed Down Corrections" );
+					INFO( classname(), "Skipping Feed Down Corrections" );
 				}
 
 

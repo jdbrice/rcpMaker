@@ -6,19 +6,7 @@
 #include <limits.h>
 #include "Spectra/PidHistoMaker.h"
 
-InclusiveSpectra::InclusiveSpectra( XmlConfig config, string np, string fileList, string prefix ) : TreeAnalyzer( config, np, fileList, prefix  ){
-	DEBUG( classname(), "( config, nodePath=" << np << ", filelist=" << fileList << ", prefix=" << prefix )
-
-	commonInit();
-}
-
-InclusiveSpectra::InclusiveSpectra( XmlConfig config, string np, int jobIndex ) : TreeAnalyzer( config, np, jobIndex  ){
-	DEBUG( classname(), "(config, nodePath=" << np << ", jobIndex=" << jobIndex );
-
-	commonInit();
-}
-
-void InclusiveSpectra::commonInit(  ){
+void InclusiveSpectra::initialize(  ){
 	DEBUG( classname(), "" )
 
 	/**

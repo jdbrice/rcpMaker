@@ -34,7 +34,7 @@ def write_histo_conf( data_path, output_path, config_path ="./" ) :
 
 			<!-- histograms to auto-make -->
 			<histograms>
-				<pt type="1D" title="p_{{T}} [GeV]; p_{{T}} [GeV]; #Events"  xBins="binning.ptEff"/>
+				<Histo name="pt" title="p_{{T}} [GeV]; p_{{T}} [GeV]; #Events"  bins_x="binning.ptEff"/>
 			</histograms>
 
 		</InclusiveSpectra>
@@ -71,7 +71,7 @@ def write_histo_conf( data_path, output_path, config_path ="./" ) :
 
 			<!-- histograms to auto-make -->
 			<histograms>
-				<pt type="1D" title="p_{{T}} [GeV]; p_{{T}} [GeV]; #Events"  xBins="binning.ptEff"/>
+				<Histo name="pt" title="p_{{T}} [GeV]; p_{{T}} [GeV]; #Events"  bins_x="binning.ptEff"/>
 			</histograms>
 
 		</TpcEffMaker>

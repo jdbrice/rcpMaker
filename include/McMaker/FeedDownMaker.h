@@ -51,9 +51,10 @@ protected:
 
 public:
 	virtual const char* classname() const { return "FeedDownMaker"; }
-	FeedDownMaker( XmlConfig config, string nodePath, string fileList ="", string jobPrefix ="" );
 	~FeedDownMaker();
 	
+	virtual void initialize(  );
+
 
 protected:
 

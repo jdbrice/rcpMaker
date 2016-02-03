@@ -11,21 +11,21 @@ sources = 	Engine.cpp 							\
 			Adapter/RcpPicoDst.cpp 				\
 			Spectra/InclusiveSpectra.cpp 		\
 			Spectra/ZRecentering.cpp 			\
+			Spectra/PidDataMaker.cpp			\
 			Spectra/TofEffSpectra.cpp			\
 			Spectra/PidHistoMaker.cpp			\
+			McMaker/FeedDownMaker.cpp			\
+			McMaker/EnergyLoss.cpp 				\
+			McMaker/TpcEffFitter.cpp 			\
+			McMaker/TofEffFitter.cpp 			\
+			McMaker/FeedDownFitter.cpp			\
+			McMaker/TpcEffMaker.cpp				\
 			Params/FeedDownParams.cpp 			\
 			Params/EnergyLossParams.cpp			\
 			TSF/FitSchema.cpp 					\
 			TSF/Fitter.cpp 						\
 			TSF/FitRunner.cpp 					\
 			Correction/SpectraCorrecter.cpp		\
-			Spectra/PidDataMaker.cpp			\
-			McMaker/EnergyLoss.cpp 				\
-			McMaker/TpcEffFitter.cpp 			\
-			McMaker/TofEffFitter.cpp 			\
-			McMaker/FeedDownMaker.cpp			\
-			McMaker/FeedDownFitter.cpp			\
-			McMaker/TpcEffMaker.cpp				\
 			Correction/ApplyPostCorr.cpp		
 			# Present/PidYieldPresenter.cpp 		\
 			
@@ -47,7 +47,7 @@ includes		= -I../include -I. -I$(ROOTSYS)/include -I$(JDB_LIB)/include/jdb -I$(J
 libraries 		= $(ROOTLIBS) -lRooFitCore -lRooFit -lMinuit $(CERNLIBS) $(SYSLIBS) 
 staticLibs 		= $(JDB_LIB)/lib/libJDB.a
 
-cxx 		= g++ -std=c++11
+cxx 		= g++ -std=c++11 -DJDB_LOG_LEVEL=60
 flags 		= -Wall -O3 $(ROOTCFLAGS) $(includes)
 compile 	= $(cxx) $(flags) -c 
 ldFlags  	= $(ROOTLDFLAGS) 

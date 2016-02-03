@@ -7,9 +7,10 @@
 class TofEffSpectra : public InclusiveSpectra {
 
 public:
-	TofEffSpectra( XmlConfig config, string nodePath, string fileList ="", string jobPrefix ="" );
+	TofEffSpectra() {}
 	~TofEffSpectra();
 
+	virtual void initialize();
 
 	// Z Recentering 
 	// Which cpecies are we centering around

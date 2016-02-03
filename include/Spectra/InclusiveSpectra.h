@@ -96,17 +96,14 @@ protected:
 
 public:
 	virtual const char* classname() const { return "InclusiveSpectra"; }
-	InclusiveSpectra( XmlConfig config, string nodePath, string fileList ="", string jobPostfix ="" );
-	InclusiveSpectra( XmlConfig _config, string _nodePath="", int _jobIndex = -1 );
+	InclusiveSpectra() { DEBUG(classname(), "" ); }
 	~InclusiveSpectra();
 
-	// virtual void init( XmlConfig _config, string _nodePath="", int _jobIndex = -1 );
-	// virtual void init( XmlConfig _config, string _nodePath="", string _fileList ="", string _jobPostfix ="" );
+	virtual void initialize();
 
 
 	//virtual void make()
 protected:
-	void commonInit();
 
 	/**
 	 * Makes pt histograms for each centrality

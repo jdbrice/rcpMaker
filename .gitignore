@@ -23,6 +23,7 @@
 /src/rcp
 /bin/rcp
 
+/runner/_grid
 
 # sublime
 *.sublime-workspace

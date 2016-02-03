@@ -54,8 +54,10 @@ protected:
 
 public:
 	virtual const char* classname() const { return "PidDataMaker"; }
-	PidDataMaker( XmlConfig config, string np, string fl ="", string jp ="" );
+	PidDataMaker( ) {}
 	~PidDataMaker();
+
+	virtual void initialize();
 
 	/**
 	 * Analyze a track in the current Event

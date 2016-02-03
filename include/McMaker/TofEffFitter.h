@@ -25,6 +25,7 @@ protected:
 	unique_ptr<HistoBook> book;
 
 public:
+	virtual const char* classname() const { return "TofEffFitter"; }
 	TofEffFitter( XmlConfig _cfg, string nodePath );
 	~TofEffFitter() {};
 

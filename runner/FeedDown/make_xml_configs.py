@@ -22,7 +22,7 @@ def write_conf( data_path, output_path, output_config_path, config_path ="./" ) 
 		<Pages parents="true" fraction="true" export="false"/>
 
 		<!-- Use a datasource to setup an automap to the tree structure -->
-		<DataSource treeName="StMiniMcTree" url="{data_path}">
+		<DataSource treeName="StMiniMcTree" filelist="{data_path}">
 			
 			<!-- Set all branches off -->
 			<BranchStatus status="0">*</BranchStatus>
@@ -46,29 +46,29 @@ def write_conf( data_path, output_path, output_config_path, config_path ="./" ) 
 		</output>
 
 		<histograms>
-			<Histo name="vR" title="vR [cm]" xBins="bins.vR" />
-			<Histo name="vX" title="vX [cm]" xBins="bins.vX" />
-			<Histo name="vY" title="vY [cm]" xBins="bins.vX" />
-			<Histo name="vZ" title="vZ [cm]" xBins="bins.vZ" />
-			<Histo name="refMult" title="rm" xBins="bins.rm" />
-			<Histo name="refMultBins" title="rm" xBins="bins.rm" yBins="bins.rmb" />
-			<Histo name="refMultMappedBins" title="rm" xBins="bins.rm" yBins="bins.rmb" />
+			<Histo name="vR" title="vR [cm]" bins_x="bins.vR" />
+			<Histo name="vX" title="vX [cm]" bins_x="bins.vX" />
+			<Histo name="vY" title="vY [cm]" bins_x="bins.vX" />
+			<Histo name="vZ" title="vZ [cm]" bins_x="bins.vZ" />
+			<Histo name="refMult" title="rm" bins_x="bins.rm" />
+			<Histo name="refMultBins" title="rm" bins_x="bins.rm" bins_y="bins.rmb" />
+			<Histo name="refMultMappedBins" title="rm" bins_x="bins.rm" bins_y="bins.rmb" />
 
-			<Histo name="pre_rapidity" title="rapidity" widthX=".01" minX="-2.0" maxX="2.0" />
+			<Histo name="pre_rapidity" title="rapidity" width_x=".01" min_x="-2.0" max_x="2.0" />
 
-			<Histo name="dca" title="DcaGl [cm]" widthX="0.02" minX="0.0" maxX="3.0" />
-			<Histo name="fitPts" title="fitPts" widthX="1" minX="0.0" maxX="50.0" />
-			<Histo name="dedxPts" title="dedxPts" widthX="1" minX="0.0" maxX="50.0" />
-			<Histo name="possiblePts" title="possiblePts" widthX="1" minX="0.0" maxX="50.0" />
-			<Histo name="fitr" title="fitPts / possiblePts" widthX=".02" minX="0.0" maxX="1.0" />
-			<Histo name="ptr" title="ptgl / ptpr" widthX=".01" minX="0.0" maxX="2.0" />
-			<Histo name="eta" title="eta" widthX=".02" minX="-2.0" maxX="2.0" />
-			<Histo name="rapidity" title="rapidity" widthX=".01" minX="-0.3" maxX="0.3" />
+			<Histo name="dca" title="DcaGl [cm]" width_x="0.02" min_x="0.0" max_x="3.0" />
+			<Histo name="fitPts" title="fitPts" width_x="1" min_x="0.0" max_x="50.0" />
+			<Histo name="dedxPts" title="dedxPts" width_x="1" min_x="0.0" max_x="50.0" />
+			<Histo name="possiblePts" title="possiblePts" width_x="1" min_x="0.0" max_x="50.0" />
+			<Histo name="fitr" title="fitPts / possiblePts" width_x=".02" min_x="0.0" max_x="1.0" />
+			<Histo name="ptr" title="ptgl / ptpr" width_x=".01" min_x="0.0" max_x="2.0" />
+			<Histo name="eta" title="eta" width_x=".02" min_x="-2.0" max_x="2.0" />
+			<Histo name="rapidity" title="rapidity" width_x=".01" min_x="-0.3" max_x="0.3" />
 
-			<Histo name="parents" widthX="1" minX="-0.5" maxX="51.5" yBins="binning.ptEff" />
-			<Histo name="spectra" xBins="binning.ptEff" />
+			<Histo name="parents" width_x="1" min_x="-0.5" max_x="51.5" bins_y="binning.ptEff" />
+			<Histo name="spectra" bins_x="binning.ptEff" />
 
-			<Histo name="refMultVz" xBins="bins.vZ" yBins="bins.rm" />
+			<Histo name="refMultVz" bins_x="bins.vZ" bins_y="bins.rm" />
 
 		</histograms>
 

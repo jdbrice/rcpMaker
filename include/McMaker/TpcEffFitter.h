@@ -29,7 +29,7 @@ protected:
 	unique_ptr<HistoBook> book;
 
 public:
-	static constexpr auto tag = "TpcEffFitter";
+	virtual const char* classname() const { return "TpcEffFitter"; }
 	TpcEffFitter( XmlConfig _cfg, string nodePath );
 	~TpcEffFitter() {};
 

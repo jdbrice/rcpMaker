@@ -36,8 +36,8 @@ def write_conf( data_path, output_path, output_config_path, config_path ="./" ) 
 
 			<!-- histograms to auto-make -->
 			<histograms>
-				<Histo name="pt" title="p_{{T}} [GeV]; p_{{T}} [GeV]; #Events"  xBins="binning.pt"/>
-				<Histo name="energyLoss" title="Energy Loss; RC p_{{T}} [GeV]; p_{{T}}^{{RC}} - p_{{T}}^{{MC}}"  xBins="binning.pt" yBins="binning.eloss"/>
+				<Histo name="pt" title="p_{{T}} [GeV]; p_{{T}} [GeV]; #Events"  bins_x="binning.pt"/>
+				<Histo name="energyLoss" title="Energy Loss; RC p_{{T}} [GeV]; p_{{T}}^{{RC}} - p_{{T}}^{{MC}}"  bins_x="binning.pt" yBins="binning.eloss"/>
 			</histograms>
 
 			<!-- InclusiveSpectra can skip making the combined spectra -->

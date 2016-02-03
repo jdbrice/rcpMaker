@@ -45,8 +45,8 @@ def write_conf( data_path, output_path, input_config_path, config_path ="./" ) :
 		<MakeQA event="true" track="false" tof="false" dedx="false"/>
 
 		<histograms>
-			<Histo name="pt" title="p_{{T}} [GeV]; p_{{T}} [GeV]; #Events"  xBins="binning.pt"/>
-			<Histo name="corrPt" title="p_{{T}} [GeV]; p_{{T}} [GeV]; #Events"  xBins="binning.pt" yBins="binning.eloss"/>
+			<Histo name="pt" title="p_{{T}} [GeV]; p_{{T}} [GeV]; #Events"  bins_x="binning.pt"/>
+			<Histo name="corrPt" title="p_{{T}} [GeV]; p_{{T}} [GeV]; #Events"  bins_x="binning.pt" yBins="binning.eloss"/>
 		</histograms>
 
 		<!-- Energy Loss params are loaded from their own Configs -->

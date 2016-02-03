@@ -3,9 +3,8 @@
 #include "TProfile.h"
 
 
-EnergyLoss::EnergyLoss( XmlConfig _config, string _nodePath, string _fileList, string _jobPrefix )
-	: InclusiveSpectra( _config, _nodePath, _fileList, _jobPrefix ){
-
+void EnergyLoss::initialize(){
+	InclusiveSpectra::initialize();
 }
 
 

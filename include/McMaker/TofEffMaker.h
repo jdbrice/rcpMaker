@@ -35,8 +35,10 @@ protected:
 
 
 public:
-	TofEffMaker( XmlConfig* config, string np, string fl ="", string jp ="" );
+	TofEffMaker( ) {}
 	~TofEffMaker();
+
+	virtual void initialize();
 
 	/**
 	 * Analyze a track in the current Event

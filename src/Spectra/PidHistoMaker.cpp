@@ -7,8 +7,10 @@
 #include "TLine.h"
 
 
-PidHistoMaker::PidHistoMaker( XmlConfig config, string np, string fl, string jp ) : InclusiveSpectra( config, np, fl, jp ) {
+void PidHistoMaker::initialize() {
 
+	InclusiveSpectra::initialize();
+	
 	/**
 	 * Phase space padding options
 	 */

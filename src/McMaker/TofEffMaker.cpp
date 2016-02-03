@@ -3,7 +3,9 @@
 
 #include "Spectra/PidHistoMaker.h"
 
-TofEffMaker::TofEffMaker( XmlConfig* config, string np, string fl, string jp ) : InclusiveSpectra( config, np, fl, jp ) {
+void TofEffMaker::Initialize() {
+
+	InclusiveSpectra::Initialize();
 
 	DEBUG("")
 	/**

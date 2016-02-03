@@ -1,9 +1,8 @@
 #include "Spectra/TofEffSpectra.h"
 
+void TofEffSpectra::initialize(  ){
 
-TofEffSpectra::TofEffSpectra( XmlConfig config, string nodePath, string fileList, string jobPrefix ) 
-	: InclusiveSpectra( config, nodePath, fileList, jobPrefix ){
-
+	InclusiveSpectra::initialize();
 
 	tofSigmaIdeal 	= config.getDouble( nodePath+".ZRecentering.sigma:tof", 0.012 );
 	dedxSigmaIdeal 	= config.getDouble( nodePath+".ZRecentering.sigma:dedx", 0.07 );

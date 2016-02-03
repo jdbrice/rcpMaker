@@ -31,7 +31,7 @@ protected:
 	bool apply_tofEff;
 
 public:
-	static constexpr auto tag = "ApplyPostCorr";
+	virtual const char* classname() const {return "ApplyPostCorr"; }
 	ApplyPostCorr( XmlConfig _cfg, string _nodePath );
 	~ApplyPostCorr() {}
 

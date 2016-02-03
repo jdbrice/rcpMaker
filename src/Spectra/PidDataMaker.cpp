@@ -10,7 +10,9 @@
 #include <cmath> // for M_1_PI etc.
 
 
-PidDataMaker::PidDataMaker( XmlConfig config, string nodePath, string fl, string jp ) : InclusiveSpectra( config, nodePath, fl, jp ) {
+void PidDataMaker::initialize() {
+
+	InclusiveSpectra::initialize();
 
 	/**
 	 * Initialize the Phase Space Recentering Object
