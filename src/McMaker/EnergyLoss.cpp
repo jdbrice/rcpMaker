@@ -58,7 +58,7 @@ void EnergyLoss::postEventLoop(){
 		
 		exportParams( bin, f, out );
 
-		// delete f; 
+		delete f; 
 
 	}
 
