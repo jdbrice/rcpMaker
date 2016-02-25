@@ -42,8 +42,8 @@
 			<Histo name="vY" title="vY [cm]" xBins="bins.vX" />
 			<Histo name="vZ" title="vZ [cm]" xBins="bins.vZ" />
 			<Histo name="refMult" title="rm" xBins="bins.rm" />
-			<Histo name="refMultBins" title="rm" xBins="bins.rm" yBins="bins.rmb" />
-			<Histo name="refMultMappedBins" title="rm" xBins="bins.rm" yBins="bins.rmb" />
+			<Histo name="refMultBins" title="rm" xBins="bins.rm" bins_y="bins.rmb" />
+			<Histo name="refMultMappedBins" title="rm" xBins="bins.rm" bins_y="bins.rmb" />
 
 <!-- 
 			<Histo name="pre_dca" title="DcaGl [cm]" widthX="0.02" minX="0.0" maxX="3.0" />
@@ -64,10 +64,10 @@
 			<Histo name="eta" title="eta" widthX=".02" minX="-2.0" maxX="2.0" />
 			<Histo name="rapidity" title="rapidity" widthX=".01" minX="-0.3" maxX="0.3" />
 
-			<Histo name="parents" widthX="1" minX="-0.5" maxX="51.5" yBins="bins.pt" />
+			<Histo name="parents" widthX="1" minX="-0.5" maxX="51.5" bins_y="bins.pt" />
 			<Histo name="spectra" xBins="bins.pt" />
 
-			<Histo name="refMultVz" xBins="bins.vZ" yBins="bins.rm" />
+			<Histo name="refMultVz" xBins="bins.vZ" bins_y="bins.rm" />
 
 		</histograms>
 

@@ -26,9 +26,9 @@ void SpectraCorrecter::setupCorrections(){
 	for ( string cPath : cfgPaths ){
 		for ( string plc : Common::species ){
 			for ( string c : Common::sCharges ){
-				if ( cfg->exists( nodePath + cPath + "." + plc + "_" + c ) ){
-					for ( int cb : cfg->getIntVector( nodePath + "CentralityBins" ) ){
-						string path = nodePath + cPath + "." + plc + "_" + c + "." + cPath + "Params[" + ts(cb) + "]";
+				if ( cfg->exists( nodePath + "." + cPath + "." + plc + "_" + c ) ){
+					for ( int cb : cfg->getIntVector( nodePath + ".CentralityBins" ) ){
+						string path = nodePath + "." + cPath + "." + plc + "_" + c + "." + cPath + "Params[" + ts(cb) + "]";
 						DEBUG( "Loading " << path )
 						if ( cb != cfg->getInt( path + ":bin" ) )
 							ERROR( "Centrality Bin Mismatch" )
