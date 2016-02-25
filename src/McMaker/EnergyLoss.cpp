@@ -25,7 +25,7 @@ void EnergyLoss::preEventLoop() {
 void EnergyLoss::postEventLoop(){
 
 
-	string params_file = config.getString( nodePath + "output.params" );
+	string params_file = config.getString( nodePath + ".output.params" );
 	if ( "" == params_file ){
 		ERROR( "Specifiy an output params file for the parameters" )
 		return;
@@ -38,7 +38,7 @@ void EnergyLoss::postEventLoop(){
 	
 
 	book->cd();
-	vector<int> cBins = config.getIntVector( nodePath + "CentralityBins" );
+	vector<int> cBins = config.getIntVector( nodePath + ".CentralityBins" );
 
 	for ( int bin : cBins ){
 
