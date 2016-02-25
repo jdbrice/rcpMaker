@@ -53,13 +53,12 @@ void EnergyLoss::postEventLoop(){
 		TProfile * h1 = h2->ProfileX( ("eloss_" + ts(bin)).c_str() );
 
 		TF1 * f = new TF1( "ff", "[0] + [1] * pow( x, -[2] )" );
-
 		
 		h1->Fit( f );
 		
 		exportParams( bin, f, out );
 
-		delete f; 
+		// delete f; 
 
 	}
 
