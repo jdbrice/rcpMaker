@@ -505,7 +505,7 @@ void PidHistoMaker::reportAll( string type ){
 			
 			if ( !book->exists( sn ) ) continue;
 
-			rps[ sn ] = unique_ptr<Reporter>(new Reporter( baseURL + jobPostfix + baseName + sn + ".pdf", 1000, 500 )) ;
+			rps[ sn ] = unique_ptr<Reporter>(new Reporter( baseURL + jobModifier + baseName + sn + ".pdf", 1000, 500 )) ;
 
 
 		} // loop centralities

@@ -23,7 +23,7 @@ void EnergyLoss::preEventLoop() {
 
 
 void EnergyLoss::postEventLoop(){
-
+	DEBUG( classname(), "" )
 
 	string params_file = config.getString( nodePath + ".output.params" );
 	if ( "" == params_file ){
@@ -31,6 +31,8 @@ void EnergyLoss::postEventLoop(){
 		return;
 	}
 
+
+	DEBUG( classname(), "Opening : " << params_file );
 	ofstream out( params_file.c_str() );
 
 	out << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" << endl;
