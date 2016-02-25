@@ -112,7 +112,7 @@ void draw_ratio_vs_centrality( string en="14.5", string plc1="P", string plc2="P
 		}
 	}
 
-	gPad->SetLogy(1);
+	gPad->SetLogy(0);
 
 
 

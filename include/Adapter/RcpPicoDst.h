@@ -17,7 +17,7 @@
 // Header file for the classes stored in the TTree if any.
 
 // Fixed size dimensions of array or collections stored in the TTree if any.
-const int kMaxRcpTracks = 5000;
+const int kMaxRcpTracks = 800;
 
 class RcpPicoDst : public PicoDataStore{
 public:
@@ -30,10 +30,10 @@ public:
 
    // Declaration of leaf types
    Int_t           rrunId;
-   UShort_t         bin16;
-   UShort_t         bin9;
    Float_t         weight;
    Float_t         corrRefMult;
+   UShort_t         bin16;
+   UShort_t         bin9;
    Int_t           nTracks;
    Float_t         ppT[ kMaxRcpTracks ];   //[nTracks]
    Float_t         gpT[ kMaxRcpTracks ];   //[nTracks]
