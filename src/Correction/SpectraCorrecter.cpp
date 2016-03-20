@@ -34,11 +34,11 @@ void SpectraCorrecter::setupCorrections(){
 							ERROR( "Centrality Bin Mismatch" )
 
 						if ( "FeedDown" == cPath )
-							feedDown[ plc + "_" + c + "_" + ts(cb) ] = unique_ptr<ConfigFunction>( new ConfigFunction( cfg, path ) );
+							feedDown[ plc + "_" + c + "_" + ts(cb) ] = unique_ptr<XmlFunction>( new XmlFunction( cfg, path ) );
 						if ( "TpcEff" == cPath )
-							tpcEff[ plc + "_" + c + "_" + ts(cb) ] = unique_ptr<ConfigFunction>( new ConfigFunction( cfg, path ) );
+							tpcEff[ plc + "_" + c + "_" + ts(cb) ] = unique_ptr<XmlFunction>( new XmlFunction( cfg, path ) );
 						if ( "TofEff" == cPath )
-							tofEff[ plc + "_" + c + "_" + ts(cb) ] = unique_ptr<ConfigGraph>( new ConfigGraph( cfg, path ) );
+							tofEff[ plc + "_" + c + "_" + ts(cb) ] = unique_ptr<XmlGraph>( new XmlGraph( cfg, path ) );
 					}
 				} else {
 					WARN( "Cannot find " + cPath + " params for " << plc + "_" + c )

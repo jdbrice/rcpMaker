@@ -27,16 +27,16 @@ void InclusiveSpectra::initialize(  ){
 
 
     // Tracks cuts
-    cut_nHitsFit				= unique_ptr<ConfigRange>(new ConfigRange( &config, "TrackCuts.nHitsFit", 				0, 		INT_MAX ) );
-    cut_dca 					= unique_ptr<ConfigRange>(new ConfigRange( &config, "TrackCuts.dca", 					0, 		INT_MAX ) );
-	cut_nHitsFitOverPossible 	= unique_ptr<ConfigRange>(new ConfigRange( &config, "TrackCuts.nHitsFitOverPossible", 	0, 		INT_MAX ) );
-    cut_nHitsDedx 				= unique_ptr<ConfigRange>(new ConfigRange( &config, "TrackCuts.nHitsDedx", 				0, 		INT_MAX ) );
-    cut_pt 						= unique_ptr<ConfigRange>(new ConfigRange( &config, "TrackCuts.pt", 					0, 		INT_MAX ) );
-    cut_ptGlobalOverPrimary 	= unique_ptr<ConfigRange>(new ConfigRange( &config, "TrackCuts.ptGlobalOverPrimary", 	0.7, 	1.42 ) );
-    cut_yLocal 					= unique_ptr<ConfigRange>(new ConfigRange( &config, "TrackCuts.yLocal", 				-1.6, 	1.6 ) );
-    cut_zLocal 					= unique_ptr<ConfigRange>(new ConfigRange( &config, "TrackCuts.zLocal", 				-2.8, 	2.8 ) );
-    cut_matchFlag				= unique_ptr<ConfigRange>(new ConfigRange( &config, "TrackCuts.matchFlag", 				1, 		3 ) );
-    cut_rapidity				= unique_ptr<ConfigRange>(new ConfigRange( &config, "TrackCuts.rapidity", 				-0.25, 	0.25 ) );
+    cut_nHitsFit				= unique_ptr<XmlRange>(new XmlRange( &config, "TrackCuts.nHitsFit", 				0, 		INT_MAX ) );
+    cut_dca 					= unique_ptr<XmlRange>(new XmlRange( &config, "TrackCuts.dca", 					0, 		INT_MAX ) );
+	cut_nHitsFitOverPossible 	= unique_ptr<XmlRange>(new XmlRange( &config, "TrackCuts.nHitsFitOverPossible", 	0, 		INT_MAX ) );
+    cut_nHitsDedx 				= unique_ptr<XmlRange>(new XmlRange( &config, "TrackCuts.nHitsDedx", 				0, 		INT_MAX ) );
+    cut_pt 						= unique_ptr<XmlRange>(new XmlRange( &config, "TrackCuts.pt", 					0, 		INT_MAX ) );
+    cut_ptGlobalOverPrimary 	= unique_ptr<XmlRange>(new XmlRange( &config, "TrackCuts.ptGlobalOverPrimary", 	0.7, 	1.42 ) );
+    cut_yLocal 					= unique_ptr<XmlRange>(new XmlRange( &config, "TrackCuts.yLocal", 				-1.6, 	1.6 ) );
+    cut_zLocal 					= unique_ptr<XmlRange>(new XmlRange( &config, "TrackCuts.zLocal", 				-2.8, 	2.8 ) );
+    cut_matchFlag				= unique_ptr<XmlRange>(new XmlRange( &config, "TrackCuts.matchFlag", 				1, 		3 ) );
+    cut_rapidity				= unique_ptr<XmlRange>(new XmlRange( &config, "TrackCuts.rapidity", 				-0.25, 	0.25 ) );
 
 
    	// Setup the centrality bins

@@ -8,7 +8,7 @@
 #include "XmlConfig.h"
 #include "Utils.h"
 #include "Logger.h"
-#include "ConfigRange.h"
+#include "XmlRange.h"
 using namespace jdb;
 
 // ROOT
@@ -39,29 +39,29 @@ protected:
 	// Track cuts loaded from config
 	
 	// nHitsFit
-	unique_ptr<ConfigRange> cut_nHitsFit;
+	unique_ptr<XmlRange> cut_nHitsFit;
 	// Distance to closest approach [cm]
-	unique_ptr<ConfigRange> cut_dca;
+	unique_ptr<XmlRange> cut_dca;
 	// nHitsFit / nHitsPossible
-	unique_ptr<ConfigRange> cut_nHitsFitOverPossible;
+	unique_ptr<XmlRange> cut_nHitsFitOverPossible;
 	// nHitDedx
-	unique_ptr<ConfigRange> cut_nHitsDedx;
+	unique_ptr<XmlRange> cut_nHitsDedx;
 	// Minimum pT [GeV/c]
-	unique_ptr<ConfigRange> cut_pt;
+	unique_ptr<XmlRange> cut_pt;
 	// ptGlobal / ptPrimary
-	unique_ptr<ConfigRange> cut_ptGlobalOverPrimary;
+	unique_ptr<XmlRange> cut_ptGlobalOverPrimary;
 	// Rapidity based on mass assumption
-	unique_ptr<ConfigRange> cut_rapidity;
+	unique_ptr<XmlRange> cut_rapidity;
 
 
 	// Tof Track Cuts
 
 	// Tof Match Flag 0 - no match, 1 - match to 1 tray, 2 or more - multi-match
-	unique_ptr<ConfigRange> cut_matchFlag;
+	unique_ptr<XmlRange> cut_matchFlag;
 	// yLocal [cm]
-	unique_ptr<ConfigRange> cut_yLocal;
+	unique_ptr<XmlRange> cut_yLocal;
 	// zLocal [cm]
-	unique_ptr<ConfigRange> cut_zLocal;
+	unique_ptr<XmlRange> cut_zLocal;
 
 	
 

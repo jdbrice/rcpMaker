@@ -12,8 +12,8 @@ using namespace std;
 #include "Common.h"
 
 // Roobarb
-#include "ConfigFunction.h"
-#include "ConfigGraph.h"
+#include "XmlFunction.h"
+#include "XmlGraph.h"
 #include "XmlConfig.h"
 using namespace jdb;
 
@@ -27,9 +27,9 @@ protected:
 
 	string plc;
 
-	map<string, unique_ptr<ConfigFunction> > tpcEff;
-	map<string, unique_ptr<ConfigGraph> > tofEff;
-	map<string, unique_ptr<ConfigFunction> > feedDown;
+	map<string, unique_ptr<XmlFunction> > tpcEff;
+	map<string, unique_ptr<XmlGraph> > tofEff;
+	map<string, unique_ptr<XmlFunction> > feedDown;
 
 public:
 	static constexpr auto tag = "SpectraCorrecter";

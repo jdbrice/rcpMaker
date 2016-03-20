@@ -9,7 +9,7 @@ using namespace std;
 // Roobarb
 #include "TreeAnalyzer.h"
 #include "HistoBins.h"
-#include "ConfigRange.h"
+#include "XmlRange.h"
 using namespace jdb;
 
 
@@ -23,19 +23,19 @@ protected:
 	// Track cuts loaded from config
 	
 	// nHitsFit
-	unique_ptr<ConfigRange> cut_nHitsFit;
+	unique_ptr<XmlRange> cut_nHitsFit;
 	// Distance to closest approach [cm]
-	unique_ptr<ConfigRange> cut_dca;
+	unique_ptr<XmlRange> cut_dca;
 	// nHitsFit / nHitsPossible
-	unique_ptr<ConfigRange> cut_nHitsFitOverPossible;
+	unique_ptr<XmlRange> cut_nHitsFitOverPossible;
 	// nHitDedx
-	unique_ptr<ConfigRange> cut_nHitsDedx;
+	unique_ptr<XmlRange> cut_nHitsDedx;
 	// Minimum pT [GeV/c]
-	unique_ptr<ConfigRange> cut_pt;
+	unique_ptr<XmlRange> cut_pt;
 	// ptGlobal / ptPrimary
-	unique_ptr<ConfigRange> cut_ptGlobalOverPrimary;
+	unique_ptr<XmlRange> cut_ptGlobalOverPrimary;
 	// Rapidity based on mass assumption
-	unique_ptr<ConfigRange> cut_rapidity;
+	unique_ptr<XmlRange> cut_rapidity;
 
 	vector<string> formulas;
 	unique_ptr<HistoBins> rmb;

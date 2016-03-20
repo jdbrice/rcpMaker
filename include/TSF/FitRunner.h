@@ -42,10 +42,10 @@ namespace TSF{
 		vector<string> activePlayers;
 
 		map< string, HistorySet > tofPidEffSets;
-		map< string, ConfigRange > tofPidEffRanges;
+		map< string, XmlRange > tofPidEffRanges;
 
 		map< string, HistorySet > sigmaSets;
-		map< string, ConfigRange > sigmaRanges;
+		map< string, XmlRange > sigmaRanges;
 
 		unique_ptr<TRandom3> rnd;
 

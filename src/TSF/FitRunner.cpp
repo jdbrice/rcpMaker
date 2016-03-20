@@ -50,12 +50,12 @@ namespace TSF{
 
 			for ( string pre : { "zb", "zd" } ){
 			
-				ConfigRange tpecr( &config, nodePath + ".ParameterFixing.tofPidEff." + plc );
+				XmlRange tpecr( &config, nodePath + ".ParameterFixing.tofPidEff." + plc );
 				tofPidEffRanges[ plc ] = tpecr;
 
 				if ( config.exists( nodePath + ".ParameterFixing." + pre + "." + plc ) ){
 					INFO( tag, "Creating Sigma Fixing range for " << pre << "_" << plc );
-					ConfigRange cr( &config, nodePath + ".ParameterFixing." + pre + "." + plc );
+					XmlRange cr( &config, nodePath + ".ParameterFixing." + pre + "." + plc );
 					sigmaRanges[ pre + "_" + plc ] = cr;
 					INFO(tag, cr.toString() )
 				}
@@ -511,7 +511,7 @@ namespace TSF{
 
 				// Keep track of the sigma for each species for fixing at high pt
 				for ( string pre : {"zb", "zd"} ){
-					ConfigRange &range = sigmaRanges[ pre + "_" + plc ];
+					XmlRange &range = sigmaRanges[ pre + "_" + plc ];
 					// if we are in the good p range then add this value to the set
 					if ( range.inInclusiveRange( avgP ) )
 						sigmaSets[ pre+"_"+plc ].add( schema->var( pre + "_sigma_" + plc )->val ); 	
@@ -531,7 +531,7 @@ namespace TSF{
 		for ( string pre : { "zb", "zd" } ){
 			for ( string plc : Common::species ){
 				
-				ConfigRange &range = sigmaRanges[ pre + "_" + plc ];
+				XmlRange &range = sigmaRanges[ pre + "_" + plc ];
 				if ( !range.above( avgP ) )
 					continue;
 
