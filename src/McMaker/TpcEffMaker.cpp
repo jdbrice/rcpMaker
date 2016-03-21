@@ -6,6 +6,8 @@ void TpcEffMaker::initialize(){
 	string trackType = config.getString( nodePath + ".input:type" );
 	if ( "mc" == trackType ){
 		cut_nHitsDedx->min = 0;
+		cut_nHitsFit->min = 0;
+		cut_nHitsFitOverPossible->min = 0;
 	}
 }
 
