@@ -139,6 +139,7 @@ void conGo( XmlConfig &config, int jobIndex ){
 		pdm.run();
 	} 
 	else if ( "SimultaneousTPid" == job ){
+		cout << "WOW:" << endl;
 		// int iCharge = atoi( fileList.c_str() );
 		// if ( "" == fileList )
 		// 	iCharge = -2;
@@ -146,7 +147,7 @@ void conGo( XmlConfig &config, int jobIndex ){
 		// if ( "" == jobPrefix )
 		// 	iCen = -1;
 
-		// FitRunner fr( &config, "SimultaneousPid.", iCharge, iCen );
+		// FitRunner fr( config, "SimultaneousPid.", iCharge, iCen );
 		// fr.make();
 
 	}  
