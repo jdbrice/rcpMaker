@@ -5,6 +5,8 @@
 Executable = /home/jdb12/work/rcpMaker/runner/rcp
 Initialdir = /home/jdb12/work/rcpMaker/runner/
 
+Requirements = Machine == "macfrank.rice.edu"
+
 Arguments 	= /data/star1/jdb12/RcpAnalysis/config/deepti/TpcEff/K_n_mc.xml
 Output 		= /data/star1/jdb12/RcpAnalysis/config/deepti/TpcEff/K_n_mc.xml.log
 Queue
