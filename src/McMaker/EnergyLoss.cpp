@@ -83,7 +83,7 @@ void EnergyLoss::analyzeTrack( int iTrack ){
 
 void EnergyLoss::exportParams( int bin, TF1 * f, ofstream &out ){
 	
-	out << "\t<EnergyLossParams plc=\"" << config.getString( nodePath + "input:plc" ) << "\" bin=\"" << bin << "\" "; 
+	out << "\t<EnergyLossParams plc=\"" << config.getString( nodePath + ".input:plc" ) << "\" bin=\"" << bin << "\" "; 
 	out << Common::toXml( f ) ;
 	out << " />" << endl;
 }
