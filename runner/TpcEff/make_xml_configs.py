@@ -85,6 +85,45 @@ def write_histo_conf( data_path, output_path, config_path ="./" ) :
 	"""
 
 
+
+	template_mc_rc = """
+	<?xml version="1.0" encoding="UTF-8"?>
+	<config>
+
+		<!-- Job to run -->
+		<jobType>TpcEffMaker</jobType>
+
+		<TpcEffMaker>
+			<Logger color="true" globalLogLevel="info" logLevel="all" />
+			
+			<input plc="{0}" type="{3}">
+				<dst treeName="rcpPicoDst" url="{1}"/>
+			</input>
+			<output>
+				<data>{2}</data>
+			</output>
+
+			<!-- the bins into which the 9 centrality bins are mapped. -->
+			<Include url="../common/centralityMap.xml" />
+
+			<MakeQA event="true" track="true" />
+
+			<!-- histograms to auto-make -->
+			<histograms>
+				<Histo name="pt" title="p_{{T}} [GeV]; p_{{T}} [GeV]; #Events"  bins_x="binning.ptEff"/>
+			</histograms>
+
+		</TpcEffMaker>
+
+		<!-- Include common resources -->
+		<Include url="../common/cuts.xml" />
+		<Include url="../common/binning.xml" />
+		<Include url="../common/qaHistograms.xml" />
+
+	</config>
+	"""
+
+
 	plcs 		= ( "Pi", "K", "P" )
 	charge 		= ( "p", "n" )
 	track_types = ( "mc", "rc" )
@@ -103,10 +142,11 @@ def write_histo_conf( data_path, output_path, config_path ="./" ) :
 				prod_file = pjoin( output_path, t_product_histo_file.format( plc=plc, c=c, tt=tt, ext="root" ) )
 
 				with open( pjoin( config_path, t_config_file.format( plc=plc, c=c, tt=tt, ext="xml" ) ), 'w' ) as f :
-					if ( "mc" == tt ) :
-						f.write( template_mc.format( plc, data_file, prod_file ) )
-					elif ( "rc" == tt ) :
-						f.write( template_rc.format( plc, data_file, prod_file ) )
+					f.write( template_mc_rc.format( plc, data_file, prod_file, tt )
+					# if ( "mc" == tt ) :
+					# 	f.write( template_mc.format( plc, data_file, prod_file ) )
+					# elif ( "rc" == tt ) :
+					# 	f.write( template_rc.format( plc, data_file, prod_file ) )
 
 
 
