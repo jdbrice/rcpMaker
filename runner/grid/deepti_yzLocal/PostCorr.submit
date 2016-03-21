@@ -1,0 +1,20 @@
+########################
+# PostCorr
+########################
+
+Executable = /home/jdb12/work/rcpMaker/runner/rcp
+Initialdir = /home/jdb12/work/rcpMaker/runner/
+
+Arguments = /data/star1/jdb12/RcpAnalysis/config/deepti_yzLocal/PostCorr/Pi.xml
+Output = /data/star1/jdb12/RcpAnalysis/config/deepti_yzLocal/PostCorr/Pi.xml.log
+Queue
+
+
+Arguments = /data/star1/jdb12/RcpAnalysis/config/deepti_yzLocal/PostCorr/K.xml
+Output = /data/star1/jdb12/RcpAnalysis/config/deepti_yzLocal/PostCorr/K.xml.log
+Queue
+
+
+Arguments = /data/star1/jdb12/RcpAnalysis/config/deepti_yzLocal/PostCorr/P.xml
+Output = /data/star1/jdb12/RcpAnalysis/config/deepti_yzLocal/PostCorr/P.xml.log
+Queue
