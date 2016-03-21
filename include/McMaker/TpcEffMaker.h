@@ -14,6 +14,7 @@ public:
 
 protected:
 
+	string trackType;
 	virtual void analyzeTrack( Int_t iTrack );
 	
 	virtual void analyzeTofTrack( Int_t iTrack );

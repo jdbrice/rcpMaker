@@ -3,7 +3,7 @@
 void TpcEffMaker::initialize(){
 	InclusiveSpectra::initialize();
 
-	string trackType = config.getString( nodePath + ".input:type" );
+	trackType = config.getString( nodePath + ".input:type" );
 	if ( "mc" == trackType ){
 		cut_nHitsDedx->min = 0;
 		cut_nHitsFit->min = 0;
@@ -22,6 +22,9 @@ void TpcEffMaker::analyzeTrack( Int_t iTrack ){
 
 	// use the ptMc instead of primary pT
 	double pt = pico->mcPt( iTrack );
+	if ( "mc" == trackType ){
+		pt = pico->trackPt( iTrack );
+	}
 	int charge = pico->trackCharge( iTrack );
 	 
 	book->cd( "inclusive" );
@@ -40,6 +43,9 @@ void TpcEffMaker::analyzeTofTrack( Int_t iTrack ){
 		return;
 
 	double pt = pico->mcPt( iTrack );
+	if ( "mc" == trackType ){
+		pt = pico->trackPt( iTrack );
+	}
 	int charge = pico->trackCharge( iTrack );
 	 
 	book->cd( "inclusiveTof" );
