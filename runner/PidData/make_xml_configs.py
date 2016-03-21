@@ -46,7 +46,7 @@ def write_conf( data_path, output_path, input_config_path, config_path ="./" ) :
 
 		<histograms>
 			<Histo name="pt" title="p_{{T}} [GeV]; p_{{T}} [GeV]; #Events"  bins_x="binning.pt"/>
-			<Histo name="corrPt" title="p_{{T}} [GeV]; p_{{T}} [GeV]; #Events"  bins_x="binning.pt" yBins="binning.eloss"/>
+			<Histo name="corrPt" title="p_{{T}} [GeV]; p_{{T}} [GeV]; #Events"  bins_x="binning.pt" bins_y="binning.eloss"/>
 		</histograms>
 
 		<!-- Energy Loss params are loaded from their own Configs -->
