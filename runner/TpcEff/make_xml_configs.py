@@ -142,7 +142,7 @@ def write_histo_conf( data_path, output_path, config_path ="./" ) :
 				prod_file = pjoin( output_path, t_product_histo_file.format( plc=plc, c=c, tt=tt, ext="root" ) )
 
 				with open( pjoin( config_path, t_config_file.format( plc=plc, c=c, tt=tt, ext="xml" ) ), 'w' ) as f :
-					f.write( template_mc_rc.format( plc, data_file, prod_file, tt )
+					f.write( template_mc_rc.format( plc, data_file, prod_file, tt ) )
 
 
 
