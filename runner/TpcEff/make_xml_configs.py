@@ -143,10 +143,6 @@ def write_histo_conf( data_path, output_path, config_path ="./" ) :
 
 				with open( pjoin( config_path, t_config_file.format( plc=plc, c=c, tt=tt, ext="xml" ) ), 'w' ) as f :
 					f.write( template_mc_rc.format( plc, data_file, prod_file, tt )
-					# if ( "mc" == tt ) :
-					# 	f.write( template_mc.format( plc, data_file, prod_file ) )
-					# elif ( "rc" == tt ) :
-					# 	f.write( template_rc.format( plc, data_file, prod_file ) )
 
 
 
