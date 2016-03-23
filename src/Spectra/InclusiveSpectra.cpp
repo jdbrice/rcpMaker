@@ -9,6 +9,11 @@
 void InclusiveSpectra::initialize(  ){
 	DEBUG( classname(), "" )
 
+	if ( !chain ){
+		ERROR( classname(), "FATAL : Invalid Chain" );
+		return;
+	}
+
 	/**
 	 * Make the desired PicoDataStore Interface
 	 */
