@@ -15,10 +15,10 @@ void InclusiveSpectra::initialize(  ){
 	if ( ds && ds->getTreeName() == "PicoDst" ){
 		INFO( "Using Prod PicoDst from DataStore" );
 		pico = unique_ptr<PicoDataStore>( new ProdPicoDst( ds->getChain() ) );
-	} else if ( chain && "PicoDst" == config.getString( nodePath + ".input.dst:treeName" ) ){
+	} else if ( chain && "PicoDst" == treeName ){
 		INFO( "Using ProdPico" );
 		pico = unique_ptr<PicoDataStore>( new ProdPicoDst( chain ) );
-	} else if ( chain && "rcpPicoDst" == config.getString( nodePath + ".input.dst:treeName" ) ){
+	} else if ( chain && "rcpPicoDst" == treeName || "SpectraPicoDst" == treeName ){
 		INFO( "Using Rcp Pico" );
 		pico = unique_ptr<PicoDataStore>( new RcpPicoDst( chain ) );
 	}
@@ -214,7 +214,7 @@ void InclusiveSpectra::analyzeTofTrack( Int_t iTrack ){
 
 bool InclusiveSpectra::keepEvent(){
 
-	if ( "rcpPicoDst" == config.getString( nodePath + ".input.dst:treeName" ) ){
+	if ( "rcpPicoDst" == treeName || "SpectraPicoDst" == treeName ){
 
 		if ( isRunBad( pico->runId() ) ){
 			WARN( "Run " << pico->runId() << " Rejected as bad" )
