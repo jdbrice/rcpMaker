@@ -6,14 +6,14 @@ Getenv = True
 Executable = /home/jdb12/work/rcpMaker/runner/hadder.py
 Initialdir = /data/star1/jdb12/RcpAnalysis/products/deepti_bbc_setA/
 
-Arguments = PostCorr_K_a*.root 50 PidData_PostCorr_K.root
+Arguments = PostCorr_K_*.root 50 PidData_PostCorr_K.root
 output = PidData_PostCorr_K_merge.log
 Queue
 
-Arguments = PostCorr_Pi_a*.root 50 PidData_PostCorr_Pi.root
+Arguments = PostCorr_Pi_*.root 50 PidData_PostCorr_Pi.root
 output = PidData_PostCorr_Pi_merge.log
 Queue
 
-Arguments = PostCorr_P_a*.root 50 PidData_PostCorr_P.root
+Arguments = PostCorr_P_*.root 50 PidData_PostCorr_P.root
 output = PidData_PostCorr_P_merge.log
 Queue
