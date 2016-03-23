@@ -9,7 +9,7 @@
 void InclusiveSpectra::initialize(  ){
 	DEBUG( classname(), "" )
 
-	if ( !chain ){
+	if ( !chain || chain->GetNtrees() <= 0 ){
 		ERROR( classname(), "FATAL : Invalid Chain" );
 		return;
 	}
