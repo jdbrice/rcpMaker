@@ -18,7 +18,7 @@ void InclusiveSpectra::initialize(  ){
 	} else if ( chain && "PicoDst" == treeName ){
 		INFO( "Using ProdPico" );
 		pico = unique_ptr<PicoDataStore>( new ProdPicoDst( chain ) );
-	} else if ( chain && "rcpPicoDst" == treeName || "SpectraPicoDst" == treeName ){
+	} else if ( chain && ("rcpPicoDst" == treeName || "SpectraPicoDst" == treeName) ){
 		INFO( "Using Rcp Pico" );
 		pico = unique_ptr<PicoDataStore>( new RcpPicoDst( chain ) );
 	}
