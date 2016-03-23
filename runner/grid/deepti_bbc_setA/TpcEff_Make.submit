@@ -1,0 +1,56 @@
+##############################
+# TPC Histogram Makers
+##############################
+
+Executable = /home/jdb12/work/rcpMaker/runner/rcp
+Initialdir = /home/jdb12/work/rcpMaker/runner/
+
+Requirements = Machine == "macfrank.rice.edu"
+
+Arguments 	= /data/star1/jdb12/RcpAnalysis/config/deepti_bbc_setA/TpcEff/K_n_mc.xml
+Output 		= /data/star1/jdb12/RcpAnalysis/config/deepti_bbc_setA/TpcEff/K_n_mc.xml.log
+Queue
+
+Arguments 	= /data/star1/jdb12/RcpAnalysis/config/deepti_bbc_setA/TpcEff/K_p_mc.xml
+Output 		= /data/star1/jdb12/RcpAnalysis/config/deepti_bbc_setA/TpcEff/K_p_mc.xml.log
+Queue
+
+Arguments 	= /data/star1/jdb12/RcpAnalysis/config/deepti_bbc_setA/TpcEff/K_n_rc.xml
+Output 		= /data/star1/jdb12/RcpAnalysis/config/deepti_bbc_setA/TpcEff/K_n_rc.xml.log
+Queue
+
+Arguments 	= /data/star1/jdb12/RcpAnalysis/config/deepti_bbc_setA/TpcEff/K_p_rc.xml
+Output 		= /data/star1/jdb12/RcpAnalysis/config/deepti_bbc_setA/TpcEff/K_p_rc.xml.log
+Queue
+
+Arguments 	= /data/star1/jdb12/RcpAnalysis/config/deepti_bbc_setA/TpcEff/Pi_n_mc.xml
+Output 		= /data/star1/jdb12/RcpAnalysis/config/deepti_bbc_setA/TpcEff/Pi_n_mc.xml.log
+Queue
+
+Arguments 	= /data/star1/jdb12/RcpAnalysis/config/deepti_bbc_setA/TpcEff/Pi_p_mc.xml
+Output 		= /data/star1/jdb12/RcpAnalysis/config/deepti_bbc_setA/TpcEff/Pi_p_mc.xml.log
+Queue
+
+Arguments 	= /data/star1/jdb12/RcpAnalysis/config/deepti_bbc_setA/TpcEff/Pi_n_rc.xml
+Output 		= /data/star1/jdb12/RcpAnalysis/config/deepti_bbc_setA/TpcEff/Pi_n_rc.xml.log
+Queue
+
+Arguments 	= /data/star1/jdb12/RcpAnalysis/config/deepti_bbc_setA/TpcEff/Pi_p_rc.xml
+Output 		= /data/star1/jdb12/RcpAnalysis/config/deepti_bbc_setA/TpcEff/Pi_p_rc.xml.log
+Queue
+
+Arguments 	= /data/star1/jdb12/RcpAnalysis/config/deepti_bbc_setA/TpcEff/P_n_mc.xml
+Output 		= /data/star1/jdb12/RcpAnalysis/config/deepti_bbc_setA/TpcEff/P_n_mc.xml.log
+Queue
+
+Arguments 	= /data/star1/jdb12/RcpAnalysis/config/deepti_bbc_setA/TpcEff/P_p_mc.xml
+Output 		= /data/star1/jdb12/RcpAnalysis/config/deepti_bbc_setA/TpcEff/P_p_mc.xml.log
+Queue
+
+Arguments 	= /data/star1/jdb12/RcpAnalysis/config/deepti_bbc_setA/TpcEff/P_n_rc.xml
+Output 		= /data/star1/jdb12/RcpAnalysis/config/deepti_bbc_setA/TpcEff/P_n_rc.xml.log
+Queue
+
+Arguments 	= /data/star1/jdb12/RcpAnalysis/config/deepti_bbc_setA/TpcEff/P_p_rc.xml
+Output 		= /data/star1/jdb12/RcpAnalysis/config/deepti_bbc_setA/TpcEff/P_p_rc.xml.log
+Queue
