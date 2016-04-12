@@ -21,7 +21,7 @@ def write_conf( data_path, output_path, input_config_path, config_path ="./" ) :
 		<Logger color="true" logLevel="all" globalLogLevel="info" />
 		
 		<input plc="{plc}">
-			<dst treeName="rcpPicoDst" url="{data_path}"/>
+			<dst treeName="SpectraPicoDst" url="{data_path}"/>
 		</input>
 
 		<output path="{product_path}">

@@ -37,7 +37,7 @@ effc.write( os.path.join( args.data_path, "embedding" ) , args.output_path, args
 #	Energy Loss
 elossc.write( os.path.join( args.data_path, "embedding" ), args.output_path, args.output_config_path, os.path.join( args.config_base_path, "EnergyLoss/") )
 #	Tof Efficiency
-tofc.write( os.path.join( args.data_path, "data", "RcpPicoDst.lis" ), args.output_path, args.output_config_path, os.path.join( args.config_base_path, "TofEff/") )
+tofc.write( os.path.join( args.data_path, "data", "SpectraPicoDst.lis" ), args.output_path, args.output_config_path, os.path.join( args.config_base_path, "TofEff/") )
 #	FeedDown Maker
 fdc.write( os.path.join( args.data_path, "urqmd", "urqmd.lis" ), args.output_path, args.output_config_path, os.path.join( args.config_base_path, "FeedDown/") )
 
@@ -47,7 +47,7 @@ fdc.write( os.path.join( args.data_path, "urqmd", "urqmd.lis" ), args.output_pat
 #PidHisto
 #pidhc.write( os.path.join( args.data_path, "data", "RcpPicoDst" ), args.output_path, args.output_config_path, os.path.join( args.config_base_path, "PidHisto/") )
 #PidTree
-pidtc.write( os.path.join( args.data_path, "data", "RcpPicoDst.lis" ), args.output_path, args.output_config_path, os.path.join( args.config_base_path, "PidData/") )
+pidtc.write( os.path.join( args.data_path, "data", "SpectraPicoDst.lis" ), args.output_path, args.output_config_path, os.path.join( args.config_base_path, "PidData/") )
 # Pif Fitter
 fitc.write( args.output_path, os.path.join( args.config_base_path, "Fitter/") )
 
