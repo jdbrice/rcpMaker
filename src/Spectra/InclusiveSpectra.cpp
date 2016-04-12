@@ -284,7 +284,7 @@ bool InclusiveSpectra::keepTrack( Int_t iTrack ){
 		book->fill( "pre_nHitsPossible", 		nHitsPossible );
 		book->fill( "pre_nHitsFitOverPossible", fitRatio );
 		book->fill( "pre_nHitsFitVsPossible", 	nHitsPossible, nHitsFit );
-		book->fill( "pre_ptPrimary", 			ptPrimary );
+		book->fill( "pre_ptPrimary", 			ptPrimary * pico->trackCharge( iTrack ) );
 		book->fill( "pre_ptGlobal", 			ptGlobal );
 		book->fill( "pre_ptGlobalOverPrimary", 	ptGlobal / ptPrimary );
 		book->fill( "pre_ptGlobalVsPrimary", 	ptPrimary, ptGlobal );
@@ -342,7 +342,7 @@ bool InclusiveSpectra::keepTrack( Int_t iTrack ){
 		book->fill( "nHitsPossible", 		nHitsPossible );
 		book->fill( "nHitsFitOverPossible", fitRatio );
 		book->fill( "nHitsFitVsPossible", 	nHitsPossible, nHitsFit );
-		book->fill( "ptPrimary", 			ptPrimary );
+		book->fill( "ptPrimary", 			ptPrimary * pico->trackCharge( iTrack ) );
 		book->fill( "ptGlobal", 			ptGlobal );
 		book->fill( "ptGlobalOverPrimary", 	ptGlobal / ptPrimary );
 		book->fill( "ptGlobalVsPrimary", 	ptPrimary, ptGlobal );

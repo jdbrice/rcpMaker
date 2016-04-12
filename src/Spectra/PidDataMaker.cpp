@@ -30,7 +30,7 @@ void PidDataMaker::initialize() {
 	centerSpecies 	= config.getString( nodePath + ".ZRecentering.centerSpecies", "K" );
 
 	//Make the momentum transverse binning
-	binsPt 	= unique_ptr<HistoBins>(new HistoBins( config, "binning.pt" ));
+	binsPt = unique_ptr<HistoBins>(new HistoBins( config, "binning.pt" ));
 
 	// Get the list of charges we are looking at
 	charges = config.getIntVector( "binning.charges" );
@@ -121,7 +121,7 @@ void PidDataMaker::analyzeTofTrack( int iTrack ){
 	double eta 		= pico->trackEta( iTrack );
 	trackPt 		= pt; // saved for whole track calculations
 
-	/************ Corrections **********/
+	/************ Energy Loss Corrections **********/
 	// Apply Energy Loss Corrections if given
 	string elName = centerSpecies + "_" + Common::chargeString( charge ) +"_" + ts( cBin );
 	if ( elParams.count( elName ) ){
@@ -138,7 +138,7 @@ void PidDataMaker::analyzeTofTrack( int iTrack ){
 	} else {
 		ERROR( classname(), "No Energy Loss Params Given - These must be applied here" )
 	} 
-	/************ Corrections **********/
+	/************ Energy Loss Corrections **********/
 
 	// Must be done after corrections
 	int ptBin 	= binsPt->findBin( pt );
@@ -146,8 +146,10 @@ void PidDataMaker::analyzeTofTrack( int iTrack ){
 	double avgP = binAverageP( ptBin );
 
 	// Require valid p bin
-	if ( ptBin < 0 )
+	if ( ptBin < 0 ){	// only caused by pT outside of range we are interested in
+		DEBUG( classname(), "invalid ptBin = " << ptBin << " pT = " << pt << ", track pT = " << trackPt );
 		return;
+	}
 
 	double ptBinWidth = binsPt->binWidth( ptBin );
 
@@ -156,6 +158,7 @@ void PidDataMaker::analyzeTofTrack( int iTrack ){
 	// Traditionally Recentered values
 	double tof 		= zr->rTof(centerSpecies, pico->trackBeta(iTrack), p );
 	double dedx 	= zr->rDedx(centerSpecies, pico->trackDedx(iTrack), p );
+	
 	// Non-Linearly Recentered values
 	double tofNL 	= zr->nlTof(centerSpecies, pico->trackBeta(iTrack), p, avgP );
 	double dedxNL 	= zr->nlDedx(centerSpecies, pico->trackDedx(iTrack), p, avgP );
@@ -168,12 +171,13 @@ void PidDataMaker::analyzeTofTrack( int iTrack ){
 
 	// event weight from RefMult correction
 	double trackWeight = eventWeight;
-	
+
 	// standard dN/dpT normalization
 	trackWeight = trackWeight * M_1_PI * 0.5; 			// 1.0 / ( 2 pi )
 	trackWeight = trackWeight * ( 1.0 / corrTrackPt ); 	// 1.0 / pT
 	trackWeight = trackWeight * ( 1.0 / ptBinWidth ); 	// 1.0 / ( bin width )
 	trackWeight = trackWeight * ( 1.0 / ( cut_rapidity->max - cut_rapidity->min ) ); 	// 1.0 / dy
+
 
 	// correct for TPC matching efficiency
 	trackWeight = trackWeight * sc->tpcEffWeight( centerSpecies, corrTrackPt, cBin, charge, tpcSysNSigma );
