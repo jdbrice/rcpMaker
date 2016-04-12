@@ -5,129 +5,129 @@
 Executable = /home/jdb12/work/rcpMaker/runner/rcp
 Initialdir = /home/jdb12/work/rcpMaker/runner/
 
-Arguments = /data/star/jdb12/RcpAnalysis/config/template/Fitter/PostCorr_K.xml -1 0
+Arguments = /data/star1/jdb12/RcpAnalysis/config/template/Fitter/PostCorr_K.xml -1 0
 Queue
 
-Arguments = /data/star/jdb12/RcpAnalysis/config/template/Fitter/PostCorr_K.xml -1 1
+Arguments = /data/star1/jdb12/RcpAnalysis/config/template/Fitter/PostCorr_K.xml -1 1
 Queue
 
-Arguments = /data/star/jdb12/RcpAnalysis/config/template/Fitter/PostCorr_K.xml -1 2
+Arguments = /data/star1/jdb12/RcpAnalysis/config/template/Fitter/PostCorr_K.xml -1 2
 Queue
 
-Arguments = /data/star/jdb12/RcpAnalysis/config/template/Fitter/PostCorr_K.xml -1 3
+Arguments = /data/star1/jdb12/RcpAnalysis/config/template/Fitter/PostCorr_K.xml -1 3
 Queue
 
-Arguments = /data/star/jdb12/RcpAnalysis/config/template/Fitter/PostCorr_K.xml -1 4
+Arguments = /data/star1/jdb12/RcpAnalysis/config/template/Fitter/PostCorr_K.xml -1 4
 Queue
 
-Arguments = /data/star/jdb12/RcpAnalysis/config/template/Fitter/PostCorr_K.xml -1 5
+Arguments = /data/star1/jdb12/RcpAnalysis/config/template/Fitter/PostCorr_K.xml -1 5
 Queue
 
-Arguments = /data/star/jdb12/RcpAnalysis/config/template/Fitter/PostCorr_K.xml -1 6
+Arguments = /data/star1/jdb12/RcpAnalysis/config/template/Fitter/PostCorr_K.xml -1 6
 Queue
 
-Arguments = /data/star/jdb12/RcpAnalysis/config/template/Fitter/PostCorr_K.xml 1 0
+Arguments = /data/star1/jdb12/RcpAnalysis/config/template/Fitter/PostCorr_K.xml 1 0
 Queue
 
-Arguments = /data/star/jdb12/RcpAnalysis/config/template/Fitter/PostCorr_K.xml 1 1
+Arguments = /data/star1/jdb12/RcpAnalysis/config/template/Fitter/PostCorr_K.xml 1 1
 Queue
 
-Arguments = /data/star/jdb12/RcpAnalysis/config/template/Fitter/PostCorr_K.xml 1 2
+Arguments = /data/star1/jdb12/RcpAnalysis/config/template/Fitter/PostCorr_K.xml 1 2
 Queue
 
-Arguments = /data/star/jdb12/RcpAnalysis/config/template/Fitter/PostCorr_K.xml 1 3
+Arguments = /data/star1/jdb12/RcpAnalysis/config/template/Fitter/PostCorr_K.xml 1 3
 Queue
 
-Arguments = /data/star/jdb12/RcpAnalysis/config/template/Fitter/PostCorr_K.xml 1 4
+Arguments = /data/star1/jdb12/RcpAnalysis/config/template/Fitter/PostCorr_K.xml 1 4
 Queue
 
-Arguments = /data/star/jdb12/RcpAnalysis/config/template/Fitter/PostCorr_K.xml 1 5
+Arguments = /data/star1/jdb12/RcpAnalysis/config/template/Fitter/PostCorr_K.xml 1 5
 Queue
 
-Arguments = /data/star/jdb12/RcpAnalysis/config/template/Fitter/PostCorr_K.xml 1 6
+Arguments = /data/star1/jdb12/RcpAnalysis/config/template/Fitter/PostCorr_K.xml 1 6
 Queue
 
-Arguments = /data/star/jdb12/RcpAnalysis/config/template/Fitter/PostCorr_Pi.xml -1 0
+Arguments = /data/star1/jdb12/RcpAnalysis/config/template/Fitter/PostCorr_Pi.xml -1 0
 Queue
 
-Arguments = /data/star/jdb12/RcpAnalysis/config/template/Fitter/PostCorr_Pi.xml -1 1
+Arguments = /data/star1/jdb12/RcpAnalysis/config/template/Fitter/PostCorr_Pi.xml -1 1
 Queue
 
-Arguments = /data/star/jdb12/RcpAnalysis/config/template/Fitter/PostCorr_Pi.xml -1 2
+Arguments = /data/star1/jdb12/RcpAnalysis/config/template/Fitter/PostCorr_Pi.xml -1 2
 Queue
 
-Arguments = /data/star/jdb12/RcpAnalysis/config/template/Fitter/PostCorr_Pi.xml -1 3
+Arguments = /data/star1/jdb12/RcpAnalysis/config/template/Fitter/PostCorr_Pi.xml -1 3
 Queue
 
-Arguments = /data/star/jdb12/RcpAnalysis/config/template/Fitter/PostCorr_Pi.xml -1 4
+Arguments = /data/star1/jdb12/RcpAnalysis/config/template/Fitter/PostCorr_Pi.xml -1 4
 Queue
 
-Arguments = /data/star/jdb12/RcpAnalysis/config/template/Fitter/PostCorr_Pi.xml -1 5
+Arguments = /data/star1/jdb12/RcpAnalysis/config/template/Fitter/PostCorr_Pi.xml -1 5
 Queue
 
-Arguments = /data/star/jdb12/RcpAnalysis/config/template/Fitter/PostCorr_Pi.xml -1 6
+Arguments = /data/star1/jdb12/RcpAnalysis/config/template/Fitter/PostCorr_Pi.xml -1 6
 Queue
 
-Arguments = /data/star/jdb12/RcpAnalysis/config/template/Fitter/PostCorr_Pi.xml 1 0
+Arguments = /data/star1/jdb12/RcpAnalysis/config/template/Fitter/PostCorr_Pi.xml 1 0
 Queue
 
-Arguments = /data/star/jdb12/RcpAnalysis/config/template/Fitter/PostCorr_Pi.xml 1 1
+Arguments = /data/star1/jdb12/RcpAnalysis/config/template/Fitter/PostCorr_Pi.xml 1 1
 Queue
 
-Arguments = /data/star/jdb12/RcpAnalysis/config/template/Fitter/PostCorr_Pi.xml 1 2
+Arguments = /data/star1/jdb12/RcpAnalysis/config/template/Fitter/PostCorr_Pi.xml 1 2
 Queue
 
-Arguments = /data/star/jdb12/RcpAnalysis/config/template/Fitter/PostCorr_Pi.xml 1 3
+Arguments = /data/star1/jdb12/RcpAnalysis/config/template/Fitter/PostCorr_Pi.xml 1 3
 Queue
 
-Arguments = /data/star/jdb12/RcpAnalysis/config/template/Fitter/PostCorr_Pi.xml 1 4
+Arguments = /data/star1/jdb12/RcpAnalysis/config/template/Fitter/PostCorr_Pi.xml 1 4
 Queue
 
-Arguments = /data/star/jdb12/RcpAnalysis/config/template/Fitter/PostCorr_Pi.xml 1 5
+Arguments = /data/star1/jdb12/RcpAnalysis/config/template/Fitter/PostCorr_Pi.xml 1 5
 Queue
 
-Arguments = /data/star/jdb12/RcpAnalysis/config/template/Fitter/PostCorr_Pi.xml 1 6
+Arguments = /data/star1/jdb12/RcpAnalysis/config/template/Fitter/PostCorr_Pi.xml 1 6
 Queue
 
 
-Arguments = /data/star/jdb12/RcpAnalysis/config/template/Fitter/PostCorr_P.xml -1 0
+Arguments = /data/star1/jdb12/RcpAnalysis/config/template/Fitter/PostCorr_P.xml -1 0
 Queue
 
-Arguments = /data/star/jdb12/RcpAnalysis/config/template/Fitter/PostCorr_P.xml -1 1
+Arguments = /data/star1/jdb12/RcpAnalysis/config/template/Fitter/PostCorr_P.xml -1 1
 Queue
 
-Arguments = /data/star/jdb12/RcpAnalysis/config/template/Fitter/PostCorr_P.xml -1 2
+Arguments = /data/star1/jdb12/RcpAnalysis/config/template/Fitter/PostCorr_P.xml -1 2
 Queue
 
-Arguments = /data/star/jdb12/RcpAnalysis/config/template/Fitter/PostCorr_P.xml -1 3
+Arguments = /data/star1/jdb12/RcpAnalysis/config/template/Fitter/PostCorr_P.xml -1 3
 Queue
 
-Arguments = /data/star/jdb12/RcpAnalysis/config/template/Fitter/PostCorr_P.xml -1 4
+Arguments = /data/star1/jdb12/RcpAnalysis/config/template/Fitter/PostCorr_P.xml -1 4
 Queue
 
-Arguments = /data/star/jdb12/RcpAnalysis/config/template/Fitter/PostCorr_P.xml -1 5
+Arguments = /data/star1/jdb12/RcpAnalysis/config/template/Fitter/PostCorr_P.xml -1 5
 Queue
 
-Arguments = /data/star/jdb12/RcpAnalysis/config/template/Fitter/PostCorr_P.xml -1 6
+Arguments = /data/star1/jdb12/RcpAnalysis/config/template/Fitter/PostCorr_P.xml -1 6
 Queue
 
-Arguments = /data/star/jdb12/RcpAnalysis/config/template/Fitter/PostCorr_P.xml 1 0
+Arguments = /data/star1/jdb12/RcpAnalysis/config/template/Fitter/PostCorr_P.xml 1 0
 Queue
 
-Arguments = /data/star/jdb12/RcpAnalysis/config/template/Fitter/PostCorr_P.xml 1 1
+Arguments = /data/star1/jdb12/RcpAnalysis/config/template/Fitter/PostCorr_P.xml 1 1
 Queue
 
-Arguments = /data/star/jdb12/RcpAnalysis/config/template/Fitter/PostCorr_P.xml 1 2
+Arguments = /data/star1/jdb12/RcpAnalysis/config/template/Fitter/PostCorr_P.xml 1 2
 Queue
 
-Arguments = /data/star/jdb12/RcpAnalysis/config/template/Fitter/PostCorr_P.xml 1 3
+Arguments = /data/star1/jdb12/RcpAnalysis/config/template/Fitter/PostCorr_P.xml 1 3
 Queue
 
-Arguments = /data/star/jdb12/RcpAnalysis/config/template/Fitter/PostCorr_P.xml 1 4
+Arguments = /data/star1/jdb12/RcpAnalysis/config/template/Fitter/PostCorr_P.xml 1 4
 Queue
 
-Arguments = /data/star/jdb12/RcpAnalysis/config/template/Fitter/PostCorr_P.xml 1 5
+Arguments = /data/star1/jdb12/RcpAnalysis/config/template/Fitter/PostCorr_P.xml 1 5
 Queue
 
-Arguments = /data/star/jdb12/RcpAnalysis/config/template/Fitter/PostCorr_P.xml 1 6
+Arguments = /data/star1/jdb12/RcpAnalysis/config/template/Fitter/PostCorr_P.xml 1 6
 Queue

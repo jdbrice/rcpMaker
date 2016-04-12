@@ -6,6 +6,6 @@ Getenv = True
 Executable = /home/jdb12/work/rcpMaker/runner/hadder.py
 Initialdir = /data/star1/jdb12/RcpAnalysis/products/nominal/
 
-Arguments = FeedDown_urqmd_*.root 50 FeedDown.root
+Arguments = FeedDown_urqmd_a*.root 50 FeedDown.root
 output = FeedDown_urqmd.merge
 Queue

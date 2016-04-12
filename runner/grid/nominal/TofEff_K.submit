@@ -7,4 +7,4 @@ Executable    = /home/jdb12/work/rcpMaker/bin/rcp
 initialdir 		= /home/jdb12/work/rcpMaker/bin/
 
 Arguments = /data/star1/jdb12/RcpAnalysis/config/nominal/TofEff/K.xml $(Process)
-Queue 96
+Queue 100
