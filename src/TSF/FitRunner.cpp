@@ -841,6 +841,7 @@ namespace TSF{
 			drawSet( "zd_Pi", fitter, iPt );
 			if ( export_images ){
 				string imgName = imgPartA + "zd_Pi" + imgPartB;
+				zdReporter->cd( 0 );
 				gPad->Print( imgName.c_str() );
 			}
 			zdReporter->cd( 1, 2 );
