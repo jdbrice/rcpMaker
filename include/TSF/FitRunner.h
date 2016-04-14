@@ -52,6 +52,8 @@ namespace TSF{
 		vector<int> centralityFitBins;
 		vector<int> chargeFit;
 
+		string imgNameMod;
+
 
 	public:
 		FitRunner( XmlConfig _config, string _np, int iCharge = -10, int iCen = -1  );

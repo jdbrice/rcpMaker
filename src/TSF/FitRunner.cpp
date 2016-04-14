@@ -30,6 +30,7 @@ namespace TSF{
 
 		if ( iCen >= 0 && iCen <= 6 && (iCharge == -1 || iCharge == 1) ){
 			rpre = Common::chargeString( iCharge ) + "_iCen_" + ts(iCen); 
+			imgNameMod = "rp_" + centerSpecies + "_" + Common::chargeString( iCharge ) + "_iCen_" + ts(iCen);
 
 			map<string, string> overrides;
 			overrides[ nodePath + ".output.data" ] = "Fit_" + config.getString( nodePath + ".ZRecentering.centerSpecies" ) + "_" + rpre + ".root";
@@ -831,8 +832,8 @@ namespace TSF{
 			zdReporter->cd( 1, 1 );
 			drawSet( "zd_All", fitter, iPt );
 			if ( export_images ){
-				gPad->Print( (config.getString( nodePath + ".output:path" ) + "img/zd_All_" + ts(iPt) + ".pdf").c_str() );
-				gPad->Print( (config.getString( nodePath + ".output:path" ) + "img/zd_All_" + ts(iPt) + ".png").c_str() );
+				gPad->Print( (config.getString( nodePath + ".output:path" ) + "img/" + imgNameMod + "zd_All_" + ts(iPt) + ".pdf").c_str() );
+				gPad->Print( (config.getString( nodePath + ".output:path" ) + "img/" + imgNameMod + "zd_All_" + ts(iPt) + ".png").c_str() );
 			}
 			zdReporter->cd( 2, 1 );
 			drawSet( "zd_Pi", fitter, iPt );
