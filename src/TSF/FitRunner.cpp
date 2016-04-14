@@ -826,7 +826,7 @@ namespace TSF{
 		}
 
 		string imgPartA = config.getString( nodePath + ".output:path" ) + "img/" + imgNameMod + "_";
-		string imgPartB =  "_" + ts(iPt) + ".png";
+		string imgPartB =  "_" + ts(iPt) + ".pdf";
 		// plot the dedx then tof
 		INFO( tag, "Reporting zd" );
 		zdReporter->newPage( 2, 2 );
@@ -841,7 +841,6 @@ namespace TSF{
 			drawSet( "zd_Pi", fitter, iPt );
 			if ( export_images ){
 				string imgName = imgPartA + "zd_Pi" + imgPartB;
-				zdReporter->cd( 0 );
 				gPad->Print( imgName.c_str() );
 			}
 			zdReporter->cd( 1, 2 );
