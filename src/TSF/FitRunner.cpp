@@ -828,39 +828,54 @@ namespace TSF{
 		}
 
 		string imgPartA = config.getString( nodePath + ".output:path" ) + "img/" + imgNameMod + "_";
-		string imgPartB =  "_" + ts(iPt) + ".jpg";
+		string imgPartB =  "_" + ts(iPt) + ".png";
 		// plot the dedx then tof
 		INFO( tag, "Reporting zd" );
 		zdReporter->newPage( 2, 2 );
 		{
-			zdReporter->cd( 1, 1 );
-			drawSet( "zd_All", fitter, iPt );
-			if ( export_images ){
-				imgCanvas->cd();
-				drawSet( "zd_All", fitter, iPt );
-				string imgName = imgPartA + "zd_All" + imgPartB;
-				gPad->Print( imgName.c_str() );
+
+			int pageXY = 1;
+			for ( string set : { "zd_All", "zd_Pi", "zd_K", "zd_P" } ){
+					
+				if ( export_images ){
+					imgCanvas->cd();
+					drawSet( set, fitter, iPt );
+					string imgName = imgPartA + set + imgPartB;
+					gPad->Print( imgName.c_str() );
+				} 
+				zbReporter->cd( pageXY );
+				drawSet( set, fitter, iPt );
+				
+				pageXY++;
 			}
-			zdReporter->cd( 2, 1 );
-			drawSet( "zd_Pi", fitter, iPt );
-			if ( export_images ){
-				imgCanvas->cd();
-				drawSet( "zd_All", fitter, iPt );
-				string imgName = imgPartA + "zd_Pi" + imgPartB;
-				gPad->Print( imgName.c_str() );
-			}
-			zdReporter->cd( 1, 2 );
-			drawSet( "zd_K", fitter, iPt );
-			if ( export_images ){
-				string imgName = imgPartA + "zd_K" + imgPartB;
-				gPad->Print( imgName.c_str() );
-			}
-			zdReporter->cd( 2, 2 );
-			drawSet( "zd_P", fitter, iPt );
-			if ( export_images ){
-				string imgName = imgPartA + "zd_P" + imgPartB;
-				gPad->Print( imgName.c_str() );
-			}
+			// zdReporter->cd( 1, 1 );
+			// drawSet( "zd_All", fitter, iPt );
+			// if ( export_images ){
+			// 	imgCanvas->cd();
+			// 	drawSet( "zd_All", fitter, iPt );
+			// 	string imgName = imgPartA + "zd_All" + imgPartB;
+			// 	gPad->Print( imgName.c_str() );
+			// }
+			// zdReporter->cd( 2, 1 );
+			// drawSet( "zd_Pi", fitter, iPt );
+			// if ( export_images ){
+			// 	imgCanvas->cd();
+			// 	drawSet( "zd_All", fitter, iPt );
+			// 	string imgName = imgPartA + "zd_Pi" + imgPartB;
+			// 	gPad->Print( imgName.c_str() );
+			// }
+			// zdReporter->cd( 1, 2 );
+			// drawSet( "zd_K", fitter, iPt );
+			// if ( export_images ){
+			// 	string imgName = imgPartA + "zd_K" + imgPartB;
+			// 	gPad->Print( imgName.c_str() );
+			// }
+			// zdReporter->cd( 2, 2 );
+			// drawSet( "zd_P", fitter, iPt );
+			// if ( export_images ){
+			// 	string imgName = imgPartA + "zd_P" + imgPartB;
+			// 	gPad->Print( imgName.c_str() );
+			// }
 		}
 		zdReporter->savePage();
 
@@ -887,12 +902,16 @@ namespace TSF{
 		{
 			int pageXY = 1;
 			for ( string set : { "zb_All", "zb_Pi", "zb_K", "zb_P" } ){
-				zbReporter->cd( pageXY );
-				drawSet( set, fitter, iPt );	
+					
 				if ( export_images ){
+					imgCanvas->cd();
+					drawSet( set, fitter, iPt );
 					string imgName = imgPartA + set + imgPartB;
 					gPad->Print( imgName.c_str() );
-				}
+				} 
+				zbReporter->cd( pageXY );
+				drawSet( set, fitter, iPt );
+				
 				pageXY++;
 			}
 			// zbReporter->cd( 1, 1 );
