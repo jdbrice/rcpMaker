@@ -790,6 +790,8 @@ namespace TSF{
 
 		bool export_images = true;
 
+		TCanvas* imgCanvas = new TCanvas( "imgCanvas", "imgCanvas", 400, 400 );
+
 		gStyle->SetOptStat(0);
 		bool drawBig = false;
 		bool drawFitRatios=false;
@@ -834,12 +836,16 @@ namespace TSF{
 			zdReporter->cd( 1, 1 );
 			drawSet( "zd_All", fitter, iPt );
 			if ( export_images ){
+				imgCanvas->cd();
+				drawSet( "zd_All", fitter, iPt );
 				string imgName = imgPartA + "zd_All" + imgPartB;
 				gPad->Print( imgName.c_str() );
 			}
 			zdReporter->cd( 2, 1 );
 			drawSet( "zd_Pi", fitter, iPt );
 			if ( export_images ){
+				imgCanvas->cd();
+				drawSet( "zd_All", fitter, iPt );
 				string imgName = imgPartA + "zd_Pi" + imgPartB;
 				gPad->Print( imgName.c_str() );
 			}
@@ -919,6 +925,9 @@ namespace TSF{
 			}
 			zbReporter->savePage();
 		}
+
+
+		delete imgCanvas;
 	} // reportFit(...)
 
 	void FitRunner::reportYields(){
