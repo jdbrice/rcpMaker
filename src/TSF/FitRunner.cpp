@@ -826,7 +826,7 @@ namespace TSF{
 		}
 
 		string imgPartA = config.getString( nodePath + ".output:path" ) + "img/" + imgNameMod + "_";
-		string imgPartB =  "_" + ts(iPt) + ".pdf";
+		string imgPartB =  "_" + ts(iPt) + ".jpg";
 		// plot the dedx then tof
 		INFO( tag, "Reporting zd" );
 		zdReporter->newPage( 2, 2 );
