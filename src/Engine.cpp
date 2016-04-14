@@ -162,13 +162,14 @@ void ssGo( XmlConfig &config, string fileList, string jobPrefix ){
 	cout << "ssGo" << endl;
 	string job = config.getString( "jobType" );
 	if ( "SimultaneousTPid" == job ){
-		cout << "WOW:" << endl;
+		
 		int iCharge = atoi( fileList.c_str() );
 		if ( "" == fileList )
 			iCharge = -2;
 		int iCen = atoi( jobPrefix.c_str() );
 		if ( "" == jobPrefix )
 			iCen = -1;
+		INFO( "Engine", "iCharge = " << iCharge << ", iCen = " << iCen );
 
 		FitRunner fr( config, "SimultaneousPid.", iCharge, iCen );
 		fr.make();
