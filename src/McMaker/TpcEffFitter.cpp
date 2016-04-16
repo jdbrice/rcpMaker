@@ -43,8 +43,6 @@ void TpcEffFitter::make(){
 	vector< int> cbins = config.getIntVector( nodePath + ".CentralityBins" );
 	Reporter rp( config, nodePath + ".Reporter." );
 
-	double minP0Error = config.getDouble( nodePath + ".Systematics:minP0Error" );
-
 	DEBUG( "Starting plc loop" )
 	for ( string plc : Common::species ){
 		if ( "E" == plc || "D" == plc )	// skip Electrons and Deuterons if I've got those in the list
@@ -112,11 +110,12 @@ void TpcEffFitter::make(){
 				fitPointer = g.Fit( fitFunc, "RS" );
 
 				// ensure that uncertainty on efficiency is at least X%
-				if ( fitFunc->GetParError( 0 ) < minP0Error ) {
-					INFO( classname(), "P0 uncertainty below threshold (" << (minP0Error * 100) << "%" );
-					INFO( classname(), "Setting P0 error to " << (minP0Error * 100) << "%" );
-					fitFunc->SetParError( 0, minP0Error );
-				}
+				// MOVED TO Application
+				// if ( fitFunc->GetParError( 0 ) < minP0Error ) {
+				// 	INFO( classname(), "P0 uncertainty below threshold (" << (minP0Error * 100) << "%" );
+				// 	INFO( classname(), "Setting P0 error to " << (minP0Error * 100) << "%" );
+				// 	fitFunc->SetParError( 0, minP0Error );
+				// }
 
 				INFO( classname(), "FitPointer = " << fitPointer );
 				TGraphErrors * band = Common::choleskyBands( fitPointer, fitFunc, 5000, 200, &rp );
