@@ -41,7 +41,7 @@ void TpcEffFitter::make(){
 
 	vector<string> labels = config.getStringVector( nodePath + ".CentralityLabels" );
 	vector< int> cbins = config.getIntVector( nodePath + ".CentralityBins" );
-	Reporter rp( config, nodePath + "Reporter." );
+	Reporter rp( config, nodePath + ".Reporter." );
 
 	double minP0Error = config.getDouble( nodePath + ".Systematics:minP0Error" );
 
