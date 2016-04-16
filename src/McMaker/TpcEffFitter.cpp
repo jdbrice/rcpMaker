@@ -97,6 +97,7 @@ void TpcEffFitter::make(){
 				g.SetName( (plc + "_" + c + "_" + ts(b)).c_str() );
 				g.BayesDivide( hRc, hMc );
 
+				INFO( classname(), "Adding TGraphAsymmErrors to book" );
 				book->add( plc + "_" + c + "_" + ts(b),  &g );
 
 				// do the fit
