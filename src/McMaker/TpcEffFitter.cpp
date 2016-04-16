@@ -143,7 +143,9 @@ void TpcEffFitter::make(){
 
 
 				rp.savePage();
-				rp.saveImage( outputPath + "/img/TpcEff_" + plc + "_" + c + "_" +  + ".png" );
+				string imgName = outputPath + "/img/TpcEff_" + plc + "_" + c + "_" +  + ".png";
+				INFO( classname(), "Exporting image to : " << imgName );
+				rp.saveImage( imgName );
 
 				INFO( classname(), "Exporting Params" );
 				exportParams( b, fitFunc, fitPointer, out );
