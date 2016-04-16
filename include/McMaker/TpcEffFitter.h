@@ -5,9 +5,8 @@
 // ROOBARB
 #include "XmlConfig.h"
 #include "HistoBook.h"
-// Interface
-	#include "IObject.h"
-	#include "IConfig.h"
+#include "TaskRunner.h"
+	
 using namespace jdb;
 
 // STL
@@ -19,22 +18,22 @@ using namespace jdb;
 #include "TF1.h"
 #include "TFitResultPtr.h"
 
-class TpcEffFitter : public IConfig, public IObject
+class TpcEffFitter : public TaskRunner
 {
 protected:
 
-	string nodePath;
 	string outputPath;
 
 	unique_ptr<HistoBook> book;
 
 public:
 	virtual const char* classname() const { return "TpcEffFitter"; }
-	TpcEffFitter( XmlConfig _cfg, string nodePath );
+
+	TpcEffFitter( ){};
 	~TpcEffFitter() {};
 
-
-	void make();
+	virtual void initialize();
+	virtual void make();
 
 	void exportParams( int cbin, TF1 * f, TFitResultPtr result, ofstream &out );
 	

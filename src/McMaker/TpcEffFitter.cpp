@@ -11,15 +11,12 @@
 using namespace jdb;
 
 
-TpcEffFitter::TpcEffFitter( XmlConfig _cfg, string _nodePath ){
+void TpcEffFitter::initialize(  ){
 
-	this->config = _cfg;
-	DEBUG( "( " << config.getFilename() << ", " << _nodePath << " )" )
+	DEBUG( "( " << config.getFilename() << ", " << nodePath << " )" )
+	outputPath = config.getString( nodePath + ".output:path", "" );
 	
-	nodePath = _nodePath;
-	outputPath = config.getString( nodePath + "output:path", "" );
-
-	book = unique_ptr<HistoBook>( new HistoBook( outputPath + config.getString( nodePath +  "output.data", "TpcEff.root" ), config, "", "" ) );	
+	book = unique_ptr<HistoBook>( new HistoBook( outputPath + config.getString( nodePath +  ".output.data", "TpcEff.root" ), config, "", "" ) );	
 }
 
 
@@ -30,7 +27,7 @@ void TpcEffFitter::make(){
 	RooPlotLib rpl;
 
 	gStyle->SetOptFit( 111 );
-	string params_file =  config.getString( nodePath + "output.params" );
+	string params_file =  config.getString( nodePath + ".output.params" );
 	if ( "" == params_file ){
 		ERROR( "Specifiy an output params file for the parameters" )
 		return;
@@ -42,9 +39,11 @@ void TpcEffFitter::make(){
 	out << "<config>" << endl;
 
 
-	vector<string> labels = config.getStringVector( nodePath + "CentralityLabels" );
-	vector< int> cbins = config.getIntVector( nodePath + "CentralityBins" );
+	vector<string> labels = config.getStringVector( nodePath + ".CentralityLabels" );
+	vector< int> cbins = config.getIntVector( nodePath + ".CentralityBins" );
 	Reporter rp( config, nodePath + "Reporter." );
+
+	double minP0Error = config.getDouble( nodePath + ".Systematics:minP0Error" );
 
 	DEBUG( "Starting plc loop" )
 	for ( string plc : Common::species ){
@@ -55,9 +54,9 @@ void TpcEffFitter::make(){
 
 			out << "\t<" << plc << "_" << c << ">" << endl;
 
-			string fnMc = config.getString( nodePath + "input:url" ) + "TpcEff_" + plc + "_" + c + "_mc" + ".root";
+			string fnMc = config.getString( nodePath + ".input:url" ) + "TpcEff_" + plc + "_" + c + "_mc" + ".root";
 			TFile * fmc = new TFile( fnMc.c_str(), "READ" );
-			string fnRc = config.getString( nodePath + "input:url" ) + "TpcEff_" + plc + "_" + c + "_rc" + ".root";
+			string fnRc = config.getString( nodePath + ".input:url" ) + "TpcEff_" + plc + "_" + c + "_rc" + ".root";
 			TFile * frc = new TFile( fnRc.c_str(), "READ" );
 
 			DEBUG( "Mc File = " << fmc );
@@ -111,6 +110,13 @@ void TpcEffFitter::make(){
 				TFitResultPtr fitPointer = g.Fit( fitFunc, "RSWW" );
 				fitPointer = g.Fit( fitFunc, "RS" );
 
+				// ensure that uncertainty on efficiency is at least 2%
+				if ( fitFunc->GetParError( 0 ) < minP0Error ) {
+					INFO( classname(), "P0 uncertainty below threshold (" << (minP0Error * 100) << "%" );
+					INFO( classname(), "Setting P0 error to " << (minP0Error * 100) << "%" );
+					fitFunc->SetParError( 0, minP0Error );
+				}
+
 				INFO( classname(), "FitPointer = " << fitPointer );
 				TGraphErrors * band = Common::choleskyBands( fitPointer, fitFunc, 5000, 200, &rp );
 
@@ -136,7 +142,7 @@ void TpcEffFitter::make(){
 
 
 				rp.savePage();
-				rp.saveImage( outputPath + "/img/TpcEff_" + Common::plc_label( plc, c ) + " : " + labels[ b ] + ".png" );
+				rp.saveImage( outputPath + "/img/TpcEff_" + plc + "_" + c + "_" +  + ".png" );
 
 				INFO( classname(), "Exporting Params" );
 				exportParams( b, fitFunc, fitPointer, out );

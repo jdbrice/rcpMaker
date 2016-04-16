@@ -116,8 +116,9 @@ void conGo( XmlConfig &config, int jobIndex ){
 		tem.run();
 	} 
 	else if ( "TpcEffFitter" == job ){
-		TpcEffFitter tef( config, "TpcEffFitter." );
-		tef.make();
+		TpcEffFitter tef;
+		tef.init( config, "TpcEffFitter.", jobIndex );
+		tef.run();
 	} 
 	else if ( "FeedDownMaker" == job ){
 		FeedDownMaker fdm;
