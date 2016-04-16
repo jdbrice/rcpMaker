@@ -27,6 +27,8 @@ TpcEffFitter::TpcEffFitter( XmlConfig _cfg, string _nodePath ){
 void TpcEffFitter::make(){
 	DEBUG("")
 
+	RooPlotLib rpl;
+	
 	gStyle->SetOptFit( 111 );
 	string params_file =  config.getString( nodePath + "output.params" );
 	if ( "" == params_file ){
@@ -46,8 +48,9 @@ void TpcEffFitter::make(){
 
 	DEBUG( "Starting plc loop" )
 	for ( string plc : Common::species ){
-		if ( "E" == plc || "D" == plc )
+		if ( "E" == plc || "D" == plc )	// skip Electrons and Deuterons if I've got those in the list
 			continue;
+
 		for ( string c : Common::sCharges ){
 
 			out << "\t<" << plc << "_" << c << ">" << endl;
@@ -57,8 +60,10 @@ void TpcEffFitter::make(){
 			string fnRc = config.getString( nodePath + "input:url" ) + "TpcEff_" + plc + "_" + c + "_rc" + ".root";
 			TFile * frc = new TFile( fnRc.c_str(), "READ" );
 
-			DEBUG( "Mc File = " << fmc )
-			DEBUG( "Rc File = " << frc )
+			DEBUG( "Mc File = " << fmc );
+			DEBUG( "Rc File = " << frc );
+
+
 			if ( !fmc->IsOpen() || !frc->IsOpen() )
 				continue;
 			
@@ -110,7 +115,7 @@ void TpcEffFitter::make(){
 				TGraphErrors * band = Common::choleskyBands( fitPointer, fitFunc, 5000, 200, &rp );
 
 
-				RooPlotLib rpl;
+				
 				rp.newPage();
 				rpl.style( &g ).set( "title", Common::plc_label( plc, c ) + " : " + labels[ b ] + ", 68%CL (Red)" ).set( "yr", 0, 1.1 ).set( "optfit", 111 )
 					.set( "xr", 0, 4.5 )
@@ -139,8 +144,8 @@ void TpcEffFitter::make(){
 
 			out << "\t</" << plc << "_" << c << ">" << endl;
 
-		}
-	}
+		} // loop on charge
+	} // loop on plc
 
 	out << "</config>" << endl;
 	out.close();
