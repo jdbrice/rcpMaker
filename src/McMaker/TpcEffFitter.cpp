@@ -4,7 +4,6 @@
 // ROOT
 #include "TGraphAsymmErrors.h"
 #include "TFile.h"
-#include "TLatex.h"
 
 #include "Logger.h"
 #include "Reporter.h"
@@ -45,8 +44,6 @@ void TpcEffFitter::make(){
 	Reporter rp( config, nodePath + ".Reporter." );
 
 	double minP0Error = config.getDouble( nodePath + ".Systematics:minP0Error" );
-	TLatex Tl;  
-	Tl.SetTextSize(40);
 
 	DEBUG( "Starting plc loop" )
 	for ( string plc : Common::species ){
@@ -145,8 +142,6 @@ void TpcEffFitter::make(){
 				
 				band->SetFillColorAlpha( kRed, 0.7 );
 				band->Draw( "same e3" );
-
-				Tl.DrawLatex( 2, 0.6, "f(pT) = [p0]e^{ (#frac{-[p1]}{pT})^{[p2]} }" );
 
 
 				rp.savePage();
