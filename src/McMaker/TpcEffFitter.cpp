@@ -119,10 +119,9 @@ void TpcEffFitter::make(){
 				}
 
 				INFO( classname(), "FitPointer = " << fitPointer );
-				// TGraphErrors * band = Common::choleskyBands( fitPointer, fitFunc, 5000, 200, &rp );
-				TH1 * band = Common::fitCL( fitFunc, "tmp", 5000, 200 );
-
+				TGraphErrors * band = Common::choleskyBands( fitPointer, fitFunc, 5000, 200, &rp );
 				
+
 				rp.newPage();
 				rpl.style( &g ).set( "title", Common::plc_label( plc, c ) + " : " + labels[ b ] + ", 68%CL (Red)" ).set( "yr", 0, 1.1 ).set( "optfit", 111 )
 					.set( "xr", 0, 4.5 )
@@ -138,8 +137,8 @@ void TpcEffFitter::make(){
 
 				INFO( classname(), "Drawing CL band" );
 				
-				band->SetFillColorAlpha( kRed, 0.5 );
-				band->Draw( "same e" );
+				band->SetFillColorAlpha( kRed, 0.7 );
+				band->Draw( "same e3" );
 
 
 				rp.savePage();
