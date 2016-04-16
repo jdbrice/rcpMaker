@@ -120,7 +120,7 @@ void TpcEffFitter::make(){
 
 				INFO( classname(), "FitPointer = " << fitPointer );
 				TGraphErrors * band = Common::choleskyBands( fitPointer, fitFunc, 5000, 200, &rp );
-
+				TH1 * band = Common::fitCL( fitFunc, "tmp", 5000, 200 );
 
 				
 				rp.newPage();
