@@ -13,7 +13,7 @@ using namespace jdb;
 
 void TpcEffFitter::initialize(  ){
 
-	DEBUG( "( " << config.getFilename() << ", " << nodePath << " )" )
+	DEBUG( classname(), "( " << config.getFilename() << ", " << nodePath << " )" )
 	outputPath = config.getString( nodePath + ".output:path", "" );
 	
 	book = unique_ptr<HistoBook>( new HistoBook( outputPath + config.getString( nodePath +  ".output.data", "TpcEff.root" ), config, "", "" ) );	
@@ -22,14 +22,14 @@ void TpcEffFitter::initialize(  ){
 
 
 void TpcEffFitter::make(){
-	DEBUG("")
+	DEBUG(classname(), "")
 
 	RooPlotLib rpl;
 
 	gStyle->SetOptFit( 111 );
 	string params_file =  config.getString( nodePath + ".output.params" );
 	if ( "" == params_file ){
-		ERROR( "Specifiy an output params file for the parameters" )
+		ERROR( classname(), "Specifiy an output params file for the parameters" )
 		return;
 	}
 
@@ -59,8 +59,8 @@ void TpcEffFitter::make(){
 			string fnRc = config.getString( nodePath + ".input:url" ) + "TpcEff_" + plc + "_" + c + "_rc" + ".root";
 			TFile * frc = new TFile( fnRc.c_str(), "READ" );
 
-			DEBUG( "Mc File = " << fmc );
-			DEBUG( "Rc File = " << frc );
+			DEBUG( classname(), "Mc File = " << fmc );
+			DEBUG( classname(), "Rc File = " << frc );
 
 
 			if ( !fmc->IsOpen() || !frc->IsOpen() )
@@ -111,11 +111,11 @@ void TpcEffFitter::make(){
 				fitPointer = g.Fit( fitFunc, "RS" );
 
 				// ensure that uncertainty on efficiency is at least 2%
-				if ( fitFunc->GetParError( 0 ) < minP0Error ) {
-					INFO( classname(), "P0 uncertainty below threshold (" << (minP0Error * 100) << "%" );
-					INFO( classname(), "Setting P0 error to " << (minP0Error * 100) << "%" );
-					fitFunc->SetParError( 0, minP0Error );
-				}
+				// if ( fitFunc->GetParError( 0 ) < minP0Error ) {
+				// 	INFO( classname(), "P0 uncertainty below threshold (" << (minP0Error * 100) << "%" );
+				// 	INFO( classname(), "Setting P0 error to " << (minP0Error * 100) << "%" );
+				// 	fitFunc->SetParError( 0, minP0Error );
+				// }
 
 				INFO( classname(), "FitPointer = " << fitPointer );
 				TGraphErrors * band = Common::choleskyBands( fitPointer, fitFunc, 5000, 200, &rp );
