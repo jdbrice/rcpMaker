@@ -44,6 +44,7 @@ void TpcEffFitter::make(){
 	Reporter rp( config, nodePath + ".Reporter." );
 
 	double minP0Error = config.getDouble( nodePath + ".Systematics:minP0Error" );
+	TLatex Tl; Tl.SetTextFont(43); Tl.SetTextSize(20);
 
 	DEBUG( "Starting plc loop" )
 	for ( string plc : Common::species ){
@@ -123,9 +124,12 @@ void TpcEffFitter::make(){
 				
 
 				rp.newPage();
-				rpl.style( &g ).set( "title", Common::plc_label( plc, c ) + " : " + labels[ b ] + ", 68%CL (Red)" ).set( "yr", 0, 1.1 ).set( "optfit", 111 )
+				rpl.style( &g ).set( "title", Common::plc_label( plc, c ) + " : " + labels[ b ] + ", Fit 68%CL(Red Band)" )
+					.set( "yr", 0, 1.1 ).set( "optfit", 111 )
 					.set( "xr", 0, 4.5 )
-					.set("y", "Efficiency x Acceptance").set( "x", "p_{T}^{MC} [GeV/c]" ).draw();
+					.set("y", "Efficiency x Acceptance")
+					.set( "x", "p_{T}^{MC} [GeV/c]" )
+					.draw();
 
 
 				INFO( classname(), "Stat Box" );
@@ -139,6 +143,8 @@ void TpcEffFitter::make(){
 				
 				band->SetFillColorAlpha( kRed, 0.7 );
 				band->Draw( "same e3" );
+
+				Tl.DrawLatex( 0.5, 0.5, ( "[0] * #exp( - pow( [1] / x, [2] ) )" ).c_str(); )
 
 
 				rp.savePage();
