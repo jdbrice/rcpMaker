@@ -139,7 +139,7 @@ void TpcEffFitter::make(){
 				INFO( classname(), "Drawing CL band" );
 				
 				band->SetFillColorAlpha( kRed, 0.5 );
-				band->Draw( "same e3" );
+				band->Draw( "same e" );
 
 
 				rp.savePage();
