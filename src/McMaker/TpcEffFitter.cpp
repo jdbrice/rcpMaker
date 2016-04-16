@@ -4,6 +4,7 @@
 // ROOT
 #include "TGraphAsymmErrors.h"
 #include "TFile.h"
+#include "TLatex.h"
 
 #include "Logger.h"
 #include "Reporter.h"
