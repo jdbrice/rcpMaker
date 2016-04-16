@@ -145,7 +145,7 @@ void TpcEffFitter::make(){
 				band->SetFillColorAlpha( kRed, 0.7 );
 				band->Draw( "same e3" );
 
-				Tl.DrawLatex( 0.5, 0.5, ( "[0] * #exp( - pow( [1] / x, [2] ) )" ).c_str(); )
+				Tl.DrawLatex( 0.5, 0.5, "[0] * #exp( - pow( [1] / x, [2] ) )" )
 
 
 				rp.savePage();
