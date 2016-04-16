@@ -28,7 +28,7 @@ void TpcEffFitter::make(){
 	DEBUG("")
 
 	RooPlotLib rpl;
-	
+
 	gStyle->SetOptFit( 111 );
 	string params_file =  config.getString( nodePath + "output.params" );
 	if ( "" == params_file ){
@@ -136,6 +136,7 @@ void TpcEffFitter::make(){
 
 
 				rp.savePage();
+				rp.saveImage( outputPath + "/img/TpcEff_" + Common::plc_label( plc, c ) + " : " + labels[ b ] + ".png" );
 
 				INFO( classname(), "Exporting Params" );
 				exportParams( b, fitFunc, fitPointer, out );

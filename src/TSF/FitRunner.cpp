@@ -829,7 +829,8 @@ namespace TSF{
 
 		string imgPartA = config.getString( nodePath + ".output:path" ) + "img/" + imgNameMod + "_";
 		string imgPartB =  "_" + ts(iPt) + ".png";
-		// plot the dedx then tof
+		
+
 		INFO( tag, "Reporting zd" );
 		zdReporter->newPage( 2, 2 );
 		{
@@ -848,35 +849,7 @@ namespace TSF{
 				
 				pageXY++;
 			}
-			// zdReporter->cd( 1, 1 );
-			// drawSet( "zd_All", fitter, iPt );
-			// if ( export_images ){
-			// 	imgCanvas->cd();
-			// 	drawSet( "zd_All", fitter, iPt );
-			// 	string imgName = imgPartA + "zd_All" + imgPartB;
-			// 	gPad->Print( imgName.c_str() );
-			// }
-			// zdReporter->cd( 2, 1 );
-			// drawSet( "zd_Pi", fitter, iPt );
-			// if ( export_images ){
-			// 	imgCanvas->cd();
-			// 	drawSet( "zd_All", fitter, iPt );
-			// 	string imgName = imgPartA + "zd_Pi" + imgPartB;
-			// 	gPad->Print( imgName.c_str() );
-			// }
-			// zdReporter->cd( 1, 2 );
-			// drawSet( "zd_K", fitter, iPt );
-			// if ( export_images ){
-			// 	string imgName = imgPartA + "zd_K" + imgPartB;
-			// 	gPad->Print( imgName.c_str() );
-			// }
-			// zdReporter->cd( 2, 2 );
-			// drawSet( "zd_P", fitter, iPt );
-			// if ( export_images ){
-			// 	string imgName = imgPartA + "zd_P" + imgPartB;
-			// 	gPad->Print( imgName.c_str() );
-			// }
-		}
+		} // reporting zd
 		zdReporter->savePage();
 
 		if ( drawFitRatios ){
@@ -914,19 +887,8 @@ namespace TSF{
 				
 				pageXY++;
 			}
-			// zbReporter->cd( 1, 1 );
-			// drawSet( "zb_All", fitter, iPt );
-			// if ( export_images ){
-			// 	string imgName = imgPartA + "zb_All" + imgPartB;
-			// 	gPad->Print( imgName.c_str() );
-			// }
-			// zbReporter->cd( 2, 1 );
-			// drawSet( "zb_Pi", fitter, iPt );
-			// zbReporter->cd( 1, 2 );
-			// drawSet( "zb_K", fitter, iPt );
-			// zbReporter->cd( 2, 2 );
-			// drawSet( "zb_P", fitter, iPt );
-		}
+		}// reporting zb
+
 		zbReporter->savePage();
 
 		if ( drawFitRatios ){
