@@ -111,12 +111,12 @@ void TpcEffFitter::make(){
 				TFitResultPtr fitPointer = g.Fit( fitFunc, "RSWW" );
 				fitPointer = g.Fit( fitFunc, "RS" );
 
-				// ensure that uncertainty on efficiency is at least 2%
-				// if ( fitFunc->GetParError( 0 ) < minP0Error ) {
-				// 	INFO( classname(), "P0 uncertainty below threshold (" << (minP0Error * 100) << "%" );
-				// 	INFO( classname(), "Setting P0 error to " << (minP0Error * 100) << "%" );
-				// 	fitFunc->SetParError( 0, minP0Error );
-				// }
+				// ensure that uncertainty on efficiency is at least X%
+				if ( fitFunc->GetParError( 0 ) < minP0Error ) {
+					INFO( classname(), "P0 uncertainty below threshold (" << (minP0Error * 100) << "%" );
+					INFO( classname(), "Setting P0 error to " << (minP0Error * 100) << "%" );
+					fitFunc->SetParError( 0, minP0Error );
+				}
 
 				INFO( classname(), "FitPointer = " << fitPointer );
 				TGraphErrors * band = Common::choleskyBands( fitPointer, fitFunc, 5000, 200, &rp );
