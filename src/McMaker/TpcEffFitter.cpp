@@ -143,7 +143,7 @@ void TpcEffFitter::make(){
 
 
 				rp.savePage();
-				string imgName = outputPath + "img/TpcEff_" + plc + "_" + c + "_" + ts(b) + ".png";
+				string imgName = outputPath + "/img/TpcEff_" + plc + "_" + c + "_" + ts(b) + ".png";
 				INFO( classname(), "Exporting image to : " << imgName );
 				rp.saveImage( imgName );
 
