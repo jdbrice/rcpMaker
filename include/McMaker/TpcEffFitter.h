@@ -32,6 +32,10 @@ public:
 	TpcEffFitter( ){};
 	~TpcEffFitter() {};
 
+	// TODO: inheritance should make this unneeded
+	virtual void init( XmlConfig _config, string _nodePath, int _jobIndex ){
+		initialize();
+	}
 	virtual void initialize();
 	virtual void make();
 
