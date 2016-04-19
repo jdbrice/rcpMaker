@@ -114,7 +114,7 @@ namespace TSF{
 
 		string setTitle( string setName ){
 			if ( "zb_All" == setName )
-				return "zb All";
+				return "All";
 			if ( "zb_Pi" == setName )
 				return "Pi Enhanced";
 			if ( "zb_K" == setName )
