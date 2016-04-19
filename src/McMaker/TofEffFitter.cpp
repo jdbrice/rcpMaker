@@ -77,11 +77,13 @@ void TofEffFitter::make(){
 				book->add( plc + "_" + cs + "_" + ts(b),  &g );
 
 				rp.newPage();
-				rpl.style( &g ).set( "title", Common::plc_label( plc, cs ) + " : " + labels[ b ] ).set( "yr", 0.4, 0.85 ).set( "optfit", 111 )
-					.set("y", "Efficiency").set( "x", "p_{T} [GeV/c]" )
-					.set( &config, nodePath + "Style.TofEff" )
-					.set( "lw", 3 )
-					.set( "ms", 3 )
+				rpl.style( &g )
+					.set( "title", Common::plc_label( plc, cs ) + " : " + labels[ b ] )
+					.set( "yr", 0.0, 0.85 )
+					.set( "optfit", 111 )
+					.set("y", "TOF Matching Efficiency")
+					.set( "x", "p_{T} [GeV/c]" )
+					.set( &config, nodePath + ".Style.TofEff" )
 					.draw();
 				
 				gStyle->SetStatY( 0.9 );
