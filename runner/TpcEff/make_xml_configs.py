@@ -163,7 +163,7 @@ def write_fit_config( input_path, output_path, output_config_path,config_path ="
 
 		<TpcEffFitter>
 			<Logger color="true" globalLogLevel="info" logLevel="all" />
-			<Reporter> <output url="{report_file}" width="1200" height="800" /> </Reporter>
+			<Reporter> <output url="{report_file}" width="700" height="500" /> </Reporter>
 
 			<input url="{input_path}"/> 
 
