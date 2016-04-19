@@ -21,7 +21,6 @@ using namespace jdb;
 
 
 // // McMaker
-	#include "McMaker/TofEffMaker.h"
 	#include "McMaker/EnergyLoss.h"
 	#include "McMaker/TofEffFitter.h"
 	#include "McMaker/TpcEffFitter.h"
@@ -102,7 +101,8 @@ void conGo( XmlConfig &config, int jobIndex ){
 		tes.run();
 	} 
 	else if ( "TofEffFitter" == job ){
-		TofEffFitter tef( config, "TofEffFitter." );
+		TofEffFitter tef;
+		tef.init( config, "TofEffFitter.", jobIndex );
 		tef.make();     
 	} 
 	else if ( "EnergyLoss" == job ){

@@ -10,13 +10,17 @@
 using namespace jdb;
 
 
-TofEffFitter::TofEffFitter( XmlConfig _cfg, string _nodePath ){
+void TofEffFitter::initialize( ){
 
-	this->config = _cfg;
-	this->nodePath = _nodePath;
-	outputPath = config.getString( nodePath + "output:path" );
-
-	book = unique_ptr<HistoBook>( new HistoBook( outputPath + config.getString( nodePath +  "output.data", "TofEff.root" ), config, "", "" ) );	
+	outputPath = config.getString( nodePath + ".output:path" );
+	book = unique_ptr<HistoBook>( 
+				new HistoBook( 
+					outputPath + config.getString( nodePath +  ".output.data", "TofEff.root" ), 
+					config, 
+					"", 
+					"" 
+				) 
+			);	
 
 }
 
@@ -25,7 +29,9 @@ TofEffFitter::TofEffFitter( XmlConfig _cfg, string _nodePath ){
 void TofEffFitter::make(){
 
 
-	string params_file =  config.getString( nodePath + "output.params" );
+	RooPlotLib rpl;
+
+	string params_file =  config.getString( nodePath + ".output.params" );
 	if ( "" == params_file ){
 		ERROR( "Specifiy an output params file for the parameters" )
 		return;
@@ -38,15 +44,12 @@ void TofEffFitter::make(){
 
 
 
-	vector<string> labels = config.getStringVector( nodePath + "CentralityLabels" );
-	vector< int> cbins = config.getIntVector( nodePath + "CentralityBins" );
-	Reporter rp( config, nodePath + "Reporter." );
+	vector<string> labels = config.getStringVector( nodePath + ".CentralityLabels" );
+	vector< int> cbins = config.getIntVector( nodePath + ".CentralityBins" );
+	Reporter rp( config, nodePath + ".Reporter." );
 
 	for ( string plc : Common::species ){
-		
-		
-
-		string fn = config.getString( nodePath + "input:url" ) + "TofEff_" + plc + ".root";
+		string fn = config.getString( nodePath + ".input:url" ) + "TofEff_" + plc + ".root";
 		TFile * f = new TFile( fn.c_str(), "READ" );
 		
 
@@ -73,38 +76,20 @@ void TofEffFitter::make(){
 
 				book->add( plc + "_" + cs + "_" + ts(b),  &g );
 
-				// do the fit
-				// TF1 * fitFunc = new TF1( "effFitFunc", "[0] * exp( -pow( [1] / (x), [2] ) )", 0.2, 0.6 );
-				// fitFunc->SetParameters( .6, 0.1, 4.0, 0.6);
-				// fitFunc->SetParLimits( 0, 0.2, 0.99 );
-				// fitFunc->SetParLimits( 1, 0.0, 0.15 );
-				// fitFunc->SetParLimits( 2, 0.0, 30.0 ); 
-				
-				// g.Fit( fitFunc, "R" );
-
-				// cout << Common::toXml( &g ) << endl;
-				//g.Fit( fitFunc, "R" );
-				// fitFunc->SetRange( 0, 5 );
-
-				// string fitName = "pt_" + ts( b ) + "_" + cs + "_CL";
-				// TH1F * hCL = (TH1F*)Common::fitCL( fitFunc, fitName, 100, 0.2, 5 );
-
-				RooPlotLib rpl;
 				rp.newPage();
 				rpl.style( &g ).set( "title", Common::plc_label( plc, cs ) + " : " + labels[ b ] ).set( "yr", 0.4, 0.85 ).set( "optfit", 111 )
 					.set("y", "Efficiency").set( "x", "p_{T} [GeV/c]" )
 					.set( &config, nodePath + "Style.TofEff" )
 					.draw();
-					gStyle->SetStatY( 0.9 );
-					gStyle->SetStatX( 0.65 );
+				
+				gStyle->SetStatY( 0.9 );
+				gStyle->SetStatX( 0.65 );
 					
-					// hCL->SetFillColorAlpha( kRed, 0.66 );
-					// hCL->Draw( "same e3" );
-
-					// fitFunc->SetLineColor( kRed );
-					// fitFunc->Draw("same");
-
 				rp.savePage();
+
+				string imgName = outputPath + "/img/TofEff_" + plc + "_" + cs + "_" + ts(b) + ".png";
+				INFO( classname(), "Exporting image to : " << imgName );
+				rp.saveImage( imgName );
 
 				exportParams( b, &g, out );
 

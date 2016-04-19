@@ -167,7 +167,7 @@ def write_fit_config( input_path, output_path, output_config_path,config_path ="
 
 			<input url="{input_path}"/> 
 
-			<output>
+			<output path="{output_path}">
 				<data>{product_file}</data>
 				<params>{params_file}</params>
 			</output>
@@ -181,11 +181,11 @@ def write_fit_config( input_path, output_path, output_config_path,config_path ="
 
 
 	report = pjoin( output_path, "rp_" + t_product_file.format( ext="pdf" ) )
-	product = pjoin( output_path, t_product_file.format( ext="root" ) )
+	product = t_product_file.format( ext="root" )
 	params = pjoin( output_config_path, t_product_file.format( ext="xml" ) )
 
 	with open( pjoin( config_path, 'fit.xml' ), 'w' ) as f :
-		f.write( fit_template.format( input_path = output_path, params_file = params, product_file=product, report_file=report ) )
+		f.write( fit_template.format( input_path = output_path, output_path = output_path, params_file = params, product_file=product, report_file=report ) )
 
 def write( data_path, output_path, output_config_path,config_path ="./" ) :
 

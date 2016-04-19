@@ -5,6 +5,8 @@
 // ROOBARB
 #include "XmlConfig.h"
 #include "HistoBook.h"
+#include "TaskRunner.h"
+
 using namespace jdb;
 
 // STL
@@ -16,21 +18,23 @@ using namespace jdb;
 #include "TF1.h"
 #include "TGraphAsymmErrors.h"
 
-class TofEffFitter : public IConfig, public IObject
+class TofEffFitter : public TaskRunner
 {
 protected:
 
 	string outputPath;
-
 	unique_ptr<HistoBook> book;
 
 public:
 	virtual const char* classname() const { return "TofEffFitter"; }
-	TofEffFitter( XmlConfig _cfg, string nodePath );
-	~TofEffFitter() {};
-
-
-	void make();
+	
+	// TODO: inheritance should make this unneeded
+	virtual void init( XmlConfig _config, string _nodePath, int _jobIndex ){
+		TaskRunner::init( _config, _nodePath, _jobIndex );
+		initialize();
+	}
+	virtual void initialize();
+	virtual void make();
 
 	void exportParams( int cbin, TGraphAsymmErrors * g, ofstream &out );
 	
