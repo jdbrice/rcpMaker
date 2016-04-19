@@ -112,6 +112,26 @@ namespace TSF{
 			return dedxSigmaIdeal;
 		}
 
+		string setTitle( string setName ){
+			if ( "zb_All" == setName )
+				return "zb All";
+			if ( "zb_Pi" == setName )
+				return "Pi Enhanced";
+			if ( "zb_K" == setName )
+				return "K Enhanced";
+			if ( "zb_P" == setName )
+				return "P Enhanced";
+
+			if ( "zd_All" == setName )
+				return "All";
+			if ( "zd_Pi" == setName )
+				return "Pi Enhanced";
+			if ( "zd_K" == setName )
+				return "K Enhanced";
+			if ( "zd_P" == setName )
+				return "P Enhanced";
+		}
+
 	};
 
 }
