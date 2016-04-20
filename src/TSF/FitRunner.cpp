@@ -738,13 +738,13 @@ namespace TSF{
 			xMax = zbMax + 0.2;
 
 			// TODO : fix hard code center species
-			h->SetTitle( (" ; #beta^{-1} - #beta^{-1}_{" + Common::plc_label( centerSpecies ) + "} ; counts").c_str() );
+			h->SetTitle( (" ; z_{b}^{" + Common::plc_label( centerSpecies ) + "} ; dN/dz_{b}").c_str() );
 		} else {
 			INFO( tag, "Using zd range( " << zdMin << " -> " << zdMax << " )" );
 			xMin = zdMin - 0.8;
 			xMax = zdMax + 0.8;
 
-			h->SetTitle( (" ; ln(dE/dx) - ln(dE/dx)_{" + Common::plc_label( centerSpecies ) + "}; counts").c_str() );
+			h->SetTitle( (" ; z_{d}^{" + Common::plc_label( centerSpecies ) + "}; dN/dz_{d}").c_str() );
 		}
 
 		h->GetXaxis()->SetRangeUser( xMin, xMax );
