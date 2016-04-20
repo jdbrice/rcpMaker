@@ -832,7 +832,7 @@ namespace TSF{
 		}
 
 		string imgPartA = config.getString( nodePath + ".output:path" ) + "img/" + imgNameMod + "_";
-		string imgPartB =  "_" + ts(iPt) + ".pdf";
+		string imgPartB =  "_" + ts(iPt) + ".png";
 		
 
 		INFO( tag, "Reporting zd" );
