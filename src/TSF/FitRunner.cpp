@@ -748,7 +748,7 @@ namespace TSF{
 		}
 
 		h->GetXaxis()->SetRangeUser( xMin, xMax );
-		h->GetYAxis()->SetTitleOffset( 1.4 );
+		h->GetYaxis()->SetTitleOffset( 1.4 );
 
 		h->SetTitle( ( setTitle( v ) + " : " +  dts((*binsPt)[ iPt ]) + " < p_{T} [GeV/c] < " + dts( (*binsPt)[ iPt + 1 ] ) ).c_str() );
 
