@@ -30,7 +30,7 @@ void ApplyPostCorr::setupCorrections(){
 				if ( config.exists( nodePath + cPath + "." + plc + "_" + c ) ){
 					for ( int cb : config.getIntVector( nodePath + ".CentralityBins" ) ){
 						string path = nodePath + cPath + "." + plc + "_" + c + cPath + "Params[" + ts(cb) + "]";
-						
+						INFO( classname(), "Looking at path: " << path );
 						if ( cb != config.getInt( path + ":bin" ) )
 							ERROR( "Centrality Bin Mismatch" )
 
@@ -61,11 +61,11 @@ void ApplyPostCorr::make(){
 		return;
 	}
 
-	double feedDownSysNSigma = config.getDouble( nodePath + "FeedDown:systematic", 0 );
+	double feedDownSysNSigma = config.getDouble( nodePath + ".FeedDown:systematic", 0 );
 	INFO( "ApplyPostCorr", "FeedDown Systematic " << feedDownSysNSigma << " sigma" );
 
 	for ( int cg : Common::charges ){
-		for ( int cb : config.getIntVector( nodePath + "CentralityBins" ) ){
+		for ( int cb : config.getIntVector( nodePath + ".CentralityBins" ) ){
 
 			INFO( "Working on charge=" << cg << ", cen=" << cb )
 
