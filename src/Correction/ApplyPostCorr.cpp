@@ -67,7 +67,7 @@ void ApplyPostCorr::make(){
 	for ( int cg : Common::charges ){
 		for ( int cb : config.getIntVector( nodePath + "CentralityBins" ) ){
 
-			TRACE( "Working on charge=" << cg << ", cen=" << cb )
+			INFO( "Working on charge=" << cg << ", cen=" << cb )
 
 			string scg = Common::chargeString( cg );
 			string scb = ts( cb );
