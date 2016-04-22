@@ -56,9 +56,12 @@ namespace TSF{
 
 
 	public:
-		FitRunner( XmlConfig _config, string _np, int iCharge = -10, int iCen = -1  );
-
+		virtual const char * classname() const { return "FitRunner"; }
+		FitRunner( );//XmlConfig _config, string _np, int iCharge = -10, int iCen = -1  );
 		~FitRunner();
+
+		void setup( XmlConfig &_config, string _nodePath, int iCharge = -10, int iCen = -1 );
+		virtual void initialize(  );
 
 		virtual void make();
 

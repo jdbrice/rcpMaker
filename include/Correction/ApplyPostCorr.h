@@ -32,12 +32,14 @@ protected:
 
 public:
 	virtual const char* classname() const {return "ApplyPostCorr"; }
-	ApplyPostCorr( XmlConfig _cfg, string _nodePath );
+	ApplyPostCorr( );
 	~ApplyPostCorr() {}
+
+	virtual void initialize();
 
 	void setupCorrections();
 
-	void make();
+	virtual void make();
 	
 };
 

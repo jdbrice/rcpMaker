@@ -29,7 +29,7 @@ public:
 	virtual const char* classname() const { return "TofEffFitter"; }
 	
 	// TODO: inheritance should make this unneeded
-	virtual void init( XmlConfig _config, string _nodePath, int _jobIndex ){
+	virtual void init( XmlConfig &_config, string _nodePath, int _jobIndex ){
 		TaskRunner::init( _config, _nodePath, _jobIndex );
 		initialize();
 	}

@@ -3,9 +3,9 @@
 
 #include <algorithm>
 
-ApplyPostCorr::ApplyPostCorr( XmlConfig _cfg, string _nodePath ) : HistoAnalyzer( _cfg, _nodePath ){
-	INFO( "ApplyPostCorr" )
-	
+ApplyPostCorr::ApplyPostCorr(){
+}
+void ApplyPostCorr::initialize(){
 	setupCorrections();
 	plc = config.getString( nodePath + ".input:plc", "UNKNOWN" );
 	

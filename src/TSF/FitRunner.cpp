@@ -7,9 +7,40 @@
 
 
 namespace TSF{
-	FitRunner::FitRunner( XmlConfig _config, string _np, int iCharge, int iCen) 
-	: HistoAnalyzer( _config, _np, false ){
+	FitRunner::FitRunner( ){
+	}
+
+
+	void FitRunner::setup(XmlConfig &_config, string _nodePath="", int iCharge, int iCen) {
+
+		// this sets the config etc.
+		TaskRunner::init( _config, _nodePath, "", "" );
+
+
+		// apply config overrides
+		map<string, string> opts;
+		if ( abs(iCharge) == 1  ){
+			opts[ nodePath + ".FitRange.charges" ] = ts(iCharge);
+		}
+
+		if ( iCen >= 0 && iCen <= 6 ){
+			opts[ nodePath + ".FitRange.centralityBins" ] = ts(iCen);
+		}
+
+		centerSpecies = config.getString( nodePath+".ZRecentering.centerSpecies", "K" );
+		imgNameMod = "rp_" + centerSpecies + "_" + Common::chargeString( iCharge ) + "_iCen_" + ts(iCen);
+
+		_config.applyOverrides( opts );
+
+
+		HistoAnalyzer::init( _config, _nodePath, "", "" );
+
+	}
+
+	void FitRunner::initialize(  ) {
 		
+
+
 		// Initialize the Phase Space Recentering Object
 		tofSigmaIdeal = config.getDouble( nodePath+".ZRecentering.sigma:tof", 0.0012);
 		dedxSigmaIdeal = config.getDouble( nodePath+".ZRecentering.sigma:dedx", 0.06);
@@ -26,29 +57,27 @@ namespace TSF{
 		binsPt = new HistoBins( config, "binning.pt" );
 
 		// setup reporters for the zb and zd fit projections
-		string rpre = config.getString( nodePath + ".output:prefix", "" );
+		//string rpre = config.getString( nodePath + ".output:prefix", "" );
 
-		if ( iCen >= 0 && iCen <= 6 && (iCharge == -1 || iCharge == 1) ){
-			rpre = Common::chargeString( iCharge ) + "_iCen_" + ts(iCen); 
-			imgNameMod = "rp_" + centerSpecies + "_" + Common::chargeString( iCharge ) + "_iCen_" + ts(iCen);
+		// if ( iCen >= 0 && iCen <= 6 && (iCharge == -1 || iCharge == 1) ){
+		// 	rpre = Common::chargeString( iCharge ) + "_iCen_" + ts(iCen); 
+		// 	imgNameMod = "rp_" + centerSpecies + "_" + Common::chargeString( iCharge ) + "_iCen_" + ts(iCen);
 
-			map<string, string> overrides;
-			overrides[ nodePath + ".output.data" ] = "Fit_" + config.getString( nodePath + ".ZRecentering.centerSpecies" ) + "_" + rpre + ".root";
-			config.applyOverrides( overrides );
-		}
+		// 	map<string, string> overrides;
+		// 	overrides[ nodePath + ".output.data" ] = "Fit_" + config.getString( nodePath + ".ZRecentering.centerSpecies" ) + "_" + rpre + ".root";
+		// 	config.applyOverrides( overrides );
+		// }
 
 
-
-		zbReporter = unique_ptr<Reporter>(new Reporter( config.getString( nodePath + ".output:path" ) + "rp_" + centerSpecies + "_" + rpre + "_TSF_zb.pdf",
+		INFO( classname(), "Image Name Modifier: " << imgNameMod );
+		zbReporter = unique_ptr<Reporter>(new Reporter( config.getString( nodePath + ".output:path" ) + imgNameMod + "_TSF_zb.pdf",
 			config.getInt( nodePath + ".Reporter.output:width", 400 ), config.getInt( nodePath + ".Reporter.output:height", 400 ) ) );
-		zdReporter = unique_ptr<Reporter>(new Reporter( config.getString( nodePath + ".output:path" ) + "rp_" + centerSpecies + "_" + rpre + "_TSF_zd.pdf",
+		zdReporter = unique_ptr<Reporter>(new Reporter( config.getString( nodePath + ".output:path" ) + imgNameMod + "_TSF_zd.pdf",
 			config.getInt( nodePath + ".Reporter.output:width", 400 ), config.getInt( nodePath + ".Reporter.output:height", 400 ) ) );
 
-		Logger::setGlobalLogLevel( Logger::logLevelFromString( config.getString( nodePath + ".Logger:globalLogLevel" ) ) );
+		// Logger::setGlobalLogLevel( Logger::logLevelFromString( config.getString( nodePath + ".Logger:globalLogLevel" ) ) );
 
 		for ( string plc : Common::species ){
-
-
 			for ( string pre : { "zb", "zd" } ){
 			
 				XmlRange tpecr( &config, nodePath + ".ParameterFixing.tofPidEff." + plc );
@@ -71,17 +100,23 @@ namespace TSF{
 		centralityFitBins = config.getIntVector( nodePath + ".FitRange.centralityBins" );
 		chargeFit = config.getIntVector( nodePath + ".FitRange.charges" );
 
-		// override if we are running parallel jobs
-		if ( iCen >= 0 && iCen <= 6){
-			centralityFitBins.clear();
-			centralityFitBins.push_back( iCen );
-		}
-		if ( -1 == iCharge || 1 == iCharge){
-			chargeFit.clear();
-			chargeFit.push_back( iCharge );
-		}
 
-		HistoAnalyzer::setup();
+		
+		INFO( classname(), "Fitting Charges[ " << vts( chargeFit ) << " ]" );
+		INFO( classname(), "Fitting centralityBins[ " << vts( centralityFitBins ) << " ]" );
+		
+
+		// override if we are running parallel jobs
+		// if ( iCen >= 0 && iCen <= 6){
+		// 	centralityFitBins.clear();
+		// 	centralityFitBins.push_back( iCen );
+		// }
+		// if ( -1 == iCharge || 1 == iCharge){
+		// 	chargeFit.clear();
+		// 	chargeFit.push_back( iCharge );
+		// }
+
+		// HistoAnalyzer::setup();
 	}
 
 	FitRunner::~FitRunner(){

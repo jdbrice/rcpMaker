@@ -140,21 +140,17 @@ void conGo( XmlConfig &config, int jobIndex ){
 		pdm.run();
 	} 
 	else if ( "SimultaneousTPid" == job ){
-		cout << "WOW:" << endl;
-		// int iCharge = atoi( fileList.c_str() );
-		// if ( "" == fileList )
-		// 	iCharge = -2;
-		// int iCen = atoi( jobPrefix.c_str() );
-		// if ( "" == jobPrefix )
-		// 	iCen = -1;
-
-		// FitRunner fr( config, "SimultaneousPid.", iCharge, iCen );
-		// fr.make();
+		cout << "TSF Straight Config Run:" << endl;
+	
+		// FitRunner fr;
+		// fr.init( config, "SimultaneousPid.", jobIndex );
+		// fr.run();
 
 	}  
 	else if ( "ApplyPostCorr" == job ){
-		ApplyPostCorr apc( config, "ApplyPostCorr." );
-		apc.make();
+		ApplyPostCorr apc;
+		apc.init( config, "ApplyPostCorr.", -1 );
+		apc.run();
 	} 
 	
 }
@@ -172,78 +168,13 @@ void ssGo( XmlConfig &config, string fileList, string jobPrefix ){
 			iCen = -1;
 		INFO( "Engine", "iCharge = " << iCharge << ", iCen = " << iCen );
 
-		FitRunner fr( config, "SimultaneousPid.", iCharge, iCen );
-		fr.make();
+		FitRunner fr;
+		fr.setup( config, "SimultaneousPid.", iCharge, iCen );
+		// fr.run();
 
 	}
 	
-	// if ( "InclusiveSpectra" == job ){
-	// 	InclusiveSpectra is( config, "InclusiveSpectra.", fileList, jobPrefix );
-	// 	is.run();
-	// }
-	// else if ( "TofEffSpectra" == job ){
-	// 	TofEffSpectra tes( config, "TofEffSpectra.", fileList, jobPrefix );
-	// 	tes.run();
-	// } 
+	
 	
 }
 
-
-/*
-if ( "InclusiveSpectra" == job ){
-				InclusiveSpectra is( config, "InclusiveSpectra.", fileList, jobPrefix );
-				is.run();
-			} 
-			// else if ( "TofEffSpectra" == job ){
-			// 	TofEffSpectra tes( config, "TofEffSpectra.", fileList, jobPrefix );
-			// 	tes.run();
-			// } 
-			// if ( "EnergyLoss" == job ){
-			// 	EnergyLoss el( &config, "EnergyLoss.", fileList, jobPrefix );
-			// 	el.run();
-			// } if ( "TpcEffFitter" == job ){
-			// 	TpcEffFitter tef( &config, "TpcEffFitter." );
-			// 	tef.make();
-			// } if ( "TpcEffMaker" == job ){
-			// 	TpcEffMaker tem( &config, "TpcEffMaker." );
-			// 	tem.run();
-			// } 
-			else if ( "PidHistoMaker" == job ){
-				PidHistoMaker pps( config, "PidHistoMaker.", fileList, jobPrefix  );
-				pps.run();
-			} 
-			else if ( "PidDataMaker" == job ){
-				PidDataMaker pdm( config, "PidDataMaker.", fileList, jobPrefix  );
-				pdm.run();
-			} 
-			// else if ( "TofEffFitter" == job ){
-			// 	TofEffFitter tef( &config, "TofEffFitter." );
-			// 	tef.make();     
-			// } else if ( "SimultaneousTPid" == job ){
-			// 	int iCharge = atoi( fileList.c_str() );
-			// 	if ( "" == fileList )
-			// 		iCharge = -2;
-			// 	int iCen = atoi( jobPrefix.c_str() );
-			// 	if ( "" == jobPrefix )
-			// 		iCen = -1;
-
-			// 	FitRunner fr( &config, "SimultaneousPid.", iCharge, iCen );
-			// 	fr.make();
-
-			// }  else if ( "FeedDownMaker" == job ){
-			// 	FeedDownMaker fdm( &config, "FeedDownMaker.", fileList, jobPrefix );
-			// 	fdm.run();
-			// } else if ( "FeedDownFitter" == job ){
-			// 	FeedDownFitter fdf( &config, "FeedDownFitter." );
-			// 	fdf.make();
-			// } else if ( "ApplyPostCorr" == job ){
-			// 	ApplyPostCorr apc( &config, "ApplyPostCorr." );
-			// 	apc.make();
-			// } else if ( "PresentPidYield" == job ){
-			// 	//cout << "making presenter" << endl;
- 
-			// 	PidYieldPresenter pyp( &config, "PidYieldPresenter." );
-			// 	pyp.make();
-
-			// }
-*/
