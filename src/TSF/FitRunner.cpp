@@ -30,6 +30,12 @@ namespace TSF{
 		centerSpecies = config.getString( nodePath+".ZRecentering.centerSpecies", "K" );
 		imgNameMod = "rp_" + centerSpecies + "_" + Common::chargeString( iCharge ) + "_iCen_" + ts(iCen);
 
+
+		// modify the output name if we are running parallel
+		if ( iCen >= 0 && iCen <= 6 && ( abs(iCharge) == 1 ) ){
+			opts[ nodePath + ".output.data" ] = "Fit_" + centerSpecies + "_" + Common::chargeString( iCharge ) + "_iCen_" + ts(iCen) + ".root";
+		}
+
 		_config.applyOverrides( opts );
 
 
