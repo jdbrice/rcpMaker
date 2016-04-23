@@ -170,7 +170,7 @@ void ssGo( XmlConfig &config, string fileList, string jobPrefix ){
 
 		FitRunner fr;
 		fr.setup( config, "SimultaneousPid.", iCharge, iCen );
-		// fr.run();
+		fr.run();
 
 	}
 	
