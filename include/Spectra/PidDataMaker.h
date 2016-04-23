@@ -51,6 +51,8 @@ protected:
 
 	map<string, unique_ptr<TNtuple>> pidPoints;
 
+	bool trackBytrackCorrs = true;
+
 
 public:
 	virtual const char* classname() const { return "PidDataMaker"; }

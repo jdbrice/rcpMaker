@@ -61,6 +61,10 @@ void PidDataMaker::initialize() {
 	tpcSysNSigma = config.getDouble( nodePath + ".TpcEff:systematics", 0 );
 	INFO( classname(), "Systematic uncertainty on TpcEff = " << tpcSysNSigma << " sigma" );
 
+	// apply corrections now at a tack-by-track level?
+	trackBytrackCorrs = config.getBool( nodePath + ":trackBytrackCorrs", true );
+	INFO( classname(), "Applying Track by Track params : " << bts( trackBytrackCorrs ));
+
 }
 
 PidDataMaker::~PidDataMaker(){
@@ -172,16 +176,17 @@ void PidDataMaker::analyzeTofTrack( int iTrack ){
 	// event weight from RefMult correction
 	double trackWeight = eventWeight;
 
-	// standard dN/dpT normalization
-	trackWeight = trackWeight * M_1_PI * 0.5; 			// 1.0 / ( 2 pi )
-	trackWeight = trackWeight * ( 1.0 / corrTrackPt ); 	// 1.0 / pT
-	trackWeight = trackWeight * ( 1.0 / ptBinWidth ); 	// 1.0 / ( bin width )
-	trackWeight = trackWeight * ( 1.0 / ( cut_rapidity->max - cut_rapidity->min ) ); 	// 1.0 / dy
-
-
-	// correct for TPC matching efficiency
-	trackWeight = trackWeight * sc->tpcEffWeight( centerSpecies, corrTrackPt, cBin, charge, tpcSysNSigma );
 	
+	if ( trackBytrackCorrs ){
+		trackWeight = trackWeight * M_1_PI * 0.5; 			// 1.0 / ( 2 pi )
+		trackWeight = trackWeight * ( 1.0 / corrTrackPt ); 	// 1.0 / pT
+		trackWeight = trackWeight * ( 1.0 / ptBinWidth ); 	// 1.0 / ( bin width )
+		trackWeight = trackWeight * ( 1.0 / ( cut_rapidity->max - cut_rapidity->min ) ); 	// 1.0 / dy
+
+		// correct for TPC matching efficiency
+		trackWeight = trackWeight * sc->tpcEffWeight( centerSpecies, corrTrackPt, cBin, charge, tpcSysNSigma );
+	}
+
 	// fill the tree
 	string name = Common::speciesName( centerSpecies, charge, cBin, ptBin );
 	pidPoints[ name ]->Fill( tof, dedx, trackWeight );
