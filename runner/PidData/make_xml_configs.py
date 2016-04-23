@@ -17,7 +17,7 @@ def write_conf( data_path, output_path, input_config_path, config_path ="./" ) :
 
 	<jobType>PidDataMaker</jobType>
 
-	<PidDataMaker>
+	<PidDataMaker trackBytrackCorrs="{tbtCorrs}">
 		<Logger color="true" logLevel="all" globalLogLevel="info" />
 		
 		<input plc="{plc}">
@@ -84,7 +84,7 @@ def write_conf( data_path, output_path, input_config_path, config_path ="./" ) :
 		param_file= pjoin( input_config_path, "EnergyLoss_" )
 
 		with open( pjoin( config_path, t_config_file.format( state=state, plc=plc, ext="xml" ) ), 'w' ) as f :
-			f.write( template.format( plc=plc, data_path=data_path, params_path=param_file, product_path=output_path, product_file=product_file ) )
+			f.write( template.format( plc=plc, data_path=data_path, params_path=param_file, product_path=output_path, product_file=product_file, tbtCorrs="false" ) )
 
 
 def write( data_path, output_path, input_config_path, config_path ="./" ) :
