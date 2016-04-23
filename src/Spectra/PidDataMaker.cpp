@@ -35,8 +35,19 @@ void PidDataMaker::initialize() {
 	// Get the list of charges we are looking at
 	charges = config.getIntVector( "binning.charges" );
 
-	// Efficiency corrector
-	sc = unique_ptr<SpectraCorrecter>( new SpectraCorrecter( &config, nodePath ) ); 
+
+	// apply corrections now at a tack-by-track level?
+	trackBytrackCorrs = config.getBool( nodePath + ":trackBytrackCorrs", true );
+	INFO( classname(), "Applying Track by Track params : " << bts( trackBytrackCorrs ));
+
+	if ( trackBytrackCorrs ){
+		// Efficiency corrector
+		sc = unique_ptr<SpectraCorrecter>( new SpectraCorrecter( &config, nodePath ) ); 	
+
+		tpcSysNSigma = config.getDouble( nodePath + ".TpcEff:systematics", 0 );
+		INFO( classname(), "Systematic uncertainty on TpcEff = " << tpcSysNSigma << " sigma" );
+	}
+	
 
 	// make the energy loss params
 	vector<int> charges = { -1, 1 };
@@ -58,12 +69,9 @@ void PidDataMaker::initialize() {
 		}	
 	}
 
-	tpcSysNSigma = config.getDouble( nodePath + ".TpcEff:systematics", 0 );
-	INFO( classname(), "Systematic uncertainty on TpcEff = " << tpcSysNSigma << " sigma" );
+	
 
-	// apply corrections now at a tack-by-track level?
-	trackBytrackCorrs = config.getBool( nodePath + ":trackBytrackCorrs", true );
-	INFO( classname(), "Applying Track by Track params : " << bts( trackBytrackCorrs ));
+	
 
 }
 
