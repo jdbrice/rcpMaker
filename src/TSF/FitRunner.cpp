@@ -889,7 +889,7 @@ namespace TSF{
 					string imgName = imgPartA + set + imgPartB;
 					gPad->Print( imgName.c_str() );
 				} 
-				zbReporter->cd( pageXY );
+				zdReporter->cd( pageXY );
 				drawSet( set, fitter, iPt );
 				
 				pageXY++;
