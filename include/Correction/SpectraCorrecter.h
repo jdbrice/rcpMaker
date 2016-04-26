@@ -8,38 +8,38 @@ using namespace std;
 
 // LOCAL
 #include "Params/EffParams.h"
-// #include "Spectra/PidHistoMaker.h"
 #include "Common.h"
 
 // Roobarb
 #include "XmlFunction.h"
-#include "XmlGraph.h"
+#include "XmlBinnedData.h"
 #include "XmlConfig.h"
+#include "IConfig.h"
+#include "IObject.h"
 using namespace jdb;
 
 
-class SpectraCorrecter
+class SpectraCorrecter : public IConfig, public IObject
 {
 protected:
-	
-	XmlConfig * cfg;
-	string nodePath;
 
 	string plc;
 
-	map<string, unique_ptr<XmlFunction> > tpcEff;
-	map<string, unique_ptr<XmlGraph> > tofEff;
-	map<string, unique_ptr<XmlFunction> > feedDown;
+	map<string, unique_ptr<XmlFunction> > 	tpcEff;
+	map<string, unique_ptr<XmlBinnedData> > tofEff;
+	map<string, unique_ptr<XmlFunction> > 	feedDown;
 
 public:
-	static constexpr auto tag = "SpectraCorrecter";
+	virtual const char* classname() const { return "SpectraCorrecter"; }
 
-	SpectraCorrecter( XmlConfig * cfg, string _nodePath );
+	SpectraCorrecter( XmlConfig _config, string _nodePath );
 	~SpectraCorrecter();
 
 	void setupCorrections();
 
+	double tpcEffCorr( string plc, double pt, int iCen, int charge );
 	double tpcEffWeight( string plc, double pt, int iCen, int charge, double sysNSigma = 0 );
+	double tofEffCorr( string plc, double pt, int iCen, int charge );
 	double tofEffWeight( string plc, double pt, int iCen, int charge, double sysNSigma = 0 );
 	double feedDownWeight( string plc, double pt, int iCen, int charge, double sysNSigma = 0 );
 	

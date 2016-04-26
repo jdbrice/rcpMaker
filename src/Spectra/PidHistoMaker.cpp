@@ -76,7 +76,7 @@ void PidHistoMaker::initialize() {
 	makeCombinedCharge = false;
 
 	// Efficiency corrector
-	sc = unique_ptr<SpectraCorrecter>( new SpectraCorrecter( &config, nodePath ) ); 
+	sc = unique_ptr<SpectraCorrecter>( new SpectraCorrecter( config, nodePath ) ); 
 	// Read in the options for corrections
 	correctTpcEff = config.getBool( nodePath + ".Corrections:tpc", false );
 	correctTofEff = config.getBool( nodePath + ".Corrections:tof", false );

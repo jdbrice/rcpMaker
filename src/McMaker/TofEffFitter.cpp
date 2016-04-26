@@ -1,5 +1,6 @@
 #include "McMaker/TofEffFitter.h"
 #include "Common.h"
+#include "XmlBinnedData.h"
 
 // ROOT
 #include "TGraphAsymmErrors.h"
@@ -95,7 +96,7 @@ void TofEffFitter::make(){
 				INFO( classname(), "Exporting image to : " << imgName );
 				rp.saveImage( imgName );
 
-				exportParams( b, &g, out );
+				exportParams( b, hAll, &g, out );
 
 			} // loop centrality bins
 			out << "\t</" << plc << "_" << cs << ">" << endl;
@@ -109,8 +110,10 @@ void TofEffFitter::make(){
 }
 
 
-void TofEffFitter::exportParams( int bin, TGraphAsymmErrors * g, ofstream &out ){
+void TofEffFitter::exportParams( int bin, TH1 * h, TGraphAsymmErrors * g, ofstream &out ){
 	out << "\t\t<TofEffParams bin=\"" << bin << "\" >\n";
-	out << Common::toXml( g, "\t\t\t" );
+	XmlBinnedData xbd( h, g );
+	//out << Common::toXml( g, "\t\t\t" );
+	out << xbd.toXml( "\t\t\t" );
 	out << "\n\t\t</TofEffParams>" << endl;
 }

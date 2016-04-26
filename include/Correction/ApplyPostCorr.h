@@ -20,8 +20,8 @@ class ApplyPostCorr : public HistoAnalyzer
 protected:
 
 	// map<string, unique_ptr<XmlFunction> > tpcEff;
-	map<string, unique_ptr<XmlGraph> > tofEff;
-	map<string, unique_ptr<XmlFunction> > feedDown;
+	// map<string, unique_ptr<XmlGraph> > tofEff;
+	// map<string, unique_ptr<XmlFunction> > feedDown;
 
 	unique_ptr<SpectraCorrecter> sc;
 
@@ -29,6 +29,11 @@ protected:
 
 	bool apply_feeddown;
 	bool apply_tofEff;
+	bool apply_tpcEff;
+	bool apply_pTFactor;
+	bool apply_dy;
+	bool apply_binWidth;
+	bool apply_twopi;
 
 public:
 	virtual const char* classname() const {return "ApplyPostCorr"; }
@@ -38,6 +43,7 @@ public:
 	virtual void initialize();
 
 	void setupCorrections();
+	void setupCloneArmy( TH1* h_origin, string cyn, string plc );
 
 	virtual void make();
 	

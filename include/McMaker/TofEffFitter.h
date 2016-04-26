@@ -36,7 +36,7 @@ public:
 	virtual void initialize();
 	virtual void make();
 
-	void exportParams( int cbin, TGraphAsymmErrors * g, ofstream &out );
+	void exportParams( int cbin, TH1 * h, TGraphAsymmErrors * g, ofstream &out );
 	
 };
 

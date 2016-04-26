@@ -42,7 +42,7 @@ void PidDataMaker::initialize() {
 
 	if ( trackBytrackCorrs ){
 		// Efficiency corrector
-		sc = unique_ptr<SpectraCorrecter>( new SpectraCorrecter( &config, nodePath ) ); 	
+		sc = unique_ptr<SpectraCorrecter>( new SpectraCorrecter( config, nodePath ) ); 	
 
 		tpcSysNSigma = config.getDouble( nodePath + ".TpcEff:systematics", 0 );
 		INFO( classname(), "Systematic uncertainty on TpcEff = " << tpcSysNSigma << " sigma" );

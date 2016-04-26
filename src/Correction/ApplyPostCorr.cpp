@@ -11,156 +11,181 @@ void ApplyPostCorr::initialize(){
 	
 
 
+	apply_pTFactor = config.getBool( nodePath + ".Factors:pTFactor", false );
+	apply_binWidth = config.getBool( nodePath + ".Factors:binWidth", false );
+	apply_dy = config.getBool( nodePath + ".Factors:dy", false );
+	apply_twopi = config.getBool( nodePath + ".Factors:twopi", false );
+
+	apply_tpcEff = config.getBool( nodePath + ".TpcEff:apply", false );
 	apply_feeddown = config.getBool( nodePath + ".FeedDown:apply", true );
 	apply_tofEff = config.getBool( nodePath + ".TofEff:apply", true );
+
+	INFO( classname(), "Apply TofEff : " << bts( apply_tofEff ) );
+	INFO( classname(), "Apply Feed-down : " << bts( apply_feeddown ) );
 }
 
 void ApplyPostCorr::setupCorrections(){
-	INFO("")
-	// Efficiency corrector
-	sc = unique_ptr<SpectraCorrecter>( new SpectraCorrecter( &config, nodePath ) ); 
-
-
-	vector<string> cfgPaths = { ".TofEff" };
-
-	for ( string cPath : cfgPaths ){
-		for ( string plc : Common::species ){
-			for ( string c : Common::sCharges ){
-
-				if ( config.exists( nodePath + cPath + "." + plc + "_" + c ) ){
-					for ( int cb : config.getIntVector( nodePath + ".CentralityBins" ) ){
-						string path = nodePath + cPath + "." + plc + "_" + c + cPath + "Params[" + ts(cb) + "]";
-						INFO( classname(), "Looking at path: " << path );
-						if ( cb != config.getInt( path + ":bin" ) )
-							ERROR( "Centrality Bin Mismatch" )
-
-						// if ( "FeedDown" == cPath )
-						// 	feedDown[ plc + "_" + c + "_" + ts(cb) ] = unique_ptr<XmlFunction>( new XmlFunction( cfg, path ) );
-						// if ( "TpcEff" == cPath )
-						// 	tpcEff[ plc + "_" + c + "_" + ts(cb) ] = unique_ptr<XmlFunction>( new XmlFunction( cfg, path ) );
-						if ( ".TofEff" == cPath )
-							tofEff[ plc + "_" + c + "_" + ts(cb) ] = unique_ptr<XmlGraph>( new XmlGraph( &config, path ) );
-					}
-				} else {
-					WARN( "Cannot find " + cPath + " params for " << plc + "_" + c )
-				}
-
-			} // c
-		} // plc
-	} // cPath
+	DEBUG( classname(), "");
+	// Load corrections
+	sc = unique_ptr<SpectraCorrecter>( new SpectraCorrecter( config, nodePath ) ); 
 }
 
 
+void ApplyPostCorr::setupCloneArmy( TH1 * h_origin, string cyn, string plc ){
+	TRACE( classname(), "Clones for " << cyn << ", h=" << h_origin );
+	
+	book->cd( plc + "_yield" );
+	// the yield after each correction is applied
+	book->addClone( "original_" + cyn, h_origin );
+	// book->addClone( "post_tofEff_" + cyn, h_origin );
+	// book->addClone( "post_tpcEff_" + cyn, h_origin );
+	// book->addClone( "post_pTFactor_" + cyn, h_origin );
+	// book->addClone( "post_dy_" + cyn, h_origin );
+	// book->addClone( "post_pTBin_" + cyn, h_origin );
+	book->addClone( cyn, h_origin );
+
+
+
+	// plot the "raw" correction applied to each bin
+	book->cd( plc + "_yield/corr_fd" );
+		book->addClone( "corr_fd_" + cyn, h_origin );
+	book->cd( plc + "_yield/corr_tof" );
+		book->addClone( "corr_tofEff_" + cyn, h_origin );
+	book->cd( plc + "_yield/corr_tpc" );
+		book->addClone( "corr_tpcEff_" + cyn, h_origin );
+	book->cd( plc + "_yield/corr_pTFactor" );
+		book->addClone( "corr_pTFactor_" + cyn, h_origin );
+	book->cd( plc + "_yield/corr_dy" );
+		book->addClone( "corr_dy_" + cyn, h_origin );
+	book->cd( plc + "_yield/corr_pTBinWidth" );
+		book->addClone( "corr_pTBinWidth_" + cyn, h_origin );
+
+	book->cd( plc + "_yield/corr_full" );
+		book->addClone( "corr_full_" + cyn, h_origin );
+
+
+}
+
 
 void ApplyPostCorr::make(){
-	INFO("")
+	DEBUG( classname(), "");
 
 
 	if ( !inFile || !inFile->IsOpen() ){
-		ERROR( "InFile is invalid" )
+		ERROR( classname(), "InFile is invalid" );
 		return;
 	}
 
+
 	double feedDownSysNSigma = config.getDouble( nodePath + ".FeedDown:systematic", 0 );
-	INFO( "ApplyPostCorr", "FeedDown Systematic " << feedDownSysNSigma << " sigma" );
+	INFO( classname(), "FeedDown Systematic " << feedDownSysNSigma << " sigma" );
+
+
+	double dy = ( config.getDouble( "TrackCuts.rapidity:max" ) - config.getDouble( "TrackCuts.rapidity:min" ) );
+	INFO( classname(), "dy = " << dy );
+
 
 	for ( int cg : Common::charges ){
 		for ( int cb : config.getIntVector( nodePath + ".CentralityBins" ) ){
-
-			INFO( "Working on charge=" << cg << ", cen=" << cb )
+			INFO( classname(), "Working on charge=" << cg << ", cen=" << cb );
 
 			string scg = Common::chargeString( cg );
 			string scb = ts( cb );
-
 			string cyn = Common::yieldName( plc, cb, cg );
 
 			TH1 * h = (TH1*)inFile->Get( (plc + "_yield/" + cyn ).c_str() );
 
 			if ( !h ){
-				ERROR( "Histogram is invalid" )
+				ERROR( classname(), "Histogram is invalid" );
 				continue;
 			}
+			h->SetDirectory(0);
 
 			book->cd( plc + "_yield" );
 
-			TH1 * full = (TH1*)h->Clone( cyn.c_str() );
-			TH1 * orig = (TH1*)h->Clone( ( "orig_" + cyn ).c_str() );
-			// TH1 * tpc = (TH1*)h->Clone( ( "tpc_" + cyn).c_str() );
-			TH1 * tof = (TH1*)h->Clone( ( "tof_" + cyn).c_str() );
-			TH1 * fd = (TH1*)h->Clone( ( "fd_" + cyn).c_str() );
-
-			// TH1 * effTpc = (TH1*)h->Clone( ( "effTpc_" + cyn ).c_str() );
-			TH1 * effTof = (TH1*)h->Clone( ( "effTof_" + cyn ).c_str() );
-			TH1 * fdCorr = (TH1*)h->Clone( ( "fdCorr_" + cyn ).c_str() );
-
-			book->cd( plc + "_yield" );
-			book->add( cyn, 			full );
-			book->add( "orig_" + cyn, 	orig );
-			// book->add( "tpc_" + cyn, 	tpc );
-			book->add( "tof_" + cyn, 	tof );
-			book->add( "fd_" + cyn, 	fd );
-
-			// book->add( "effTpc_" + cyn, 	effTpc );
-			book->add( "fdCorr_" + cyn, 	fdCorr );
-
-			//book->get( "tpc_" + cyn );
+			setupCloneArmy( h, cyn, plc );
+			
 
 			string param = plc + "_" + scg + "_" + scb;
 			for ( int iB = 1; iB <= h->GetNbinsX(); iB++ ){
+				
 				double bCon = h->GetBinContent( iB );
-				double bCen = h->GetBinLowEdge( iB );
+				double bLEdge = h->GetBinLowEdge( iB );
+				double bWidth = h->GetBinWidth( iB );
+				double bCen = bLEdge + bWidth / 2.0;
 				double fc = bCon;
 
-				// apply TPC eff
-				// if ( tpcEff.count( param ) >= 1 ){
-					
-				// 	double weight = 1.0 / tpcEff[ param ]->eval( bCen );
-				// 	fc = fc * ( weight );
 
-				// 	book->setBin( "effTpc_" + cyn, iB, tpcEff[ param ]->eval( bCen ), 0 );
-				// 	INFO( "TpcEff weight = " << weight )
-				// 	book->setBinContent( "tpc_" + cyn, iB, bCon * ( weight ) );
-				// } else {
-				// 	ERROR( "Cannot find tpcEff[ " << param << " ] "  )
-				// }
+				/***********************************************************/
+				// Plot raw corrections
+				book->cd( plc + "_yield/corr_tof" );
+				book->setBin( 	"corr_tofEff_" + cyn,
+								iB,
+								sc->tofEffCorr( plc, bCen, cb, cg ),
+								0.0 );
 
-				// apply Tof Eff
-				if ( tofEff.count( param ) >= 1 && apply_tofEff ){
-					
-					double weight = 1.0 / tofEff[ param ]->eval( bCen, "closest" );
-					fc = fc * ( weight );
+				book->cd( plc + "_yield/corr_tpc" );
+				book->setBin( 	"corr_tpcEff_" + cyn,
+								iB,
+								sc->tpcEffCorr( plc, bCen, cb, cg ),
+								0.0 );
 
-					book->setBin( "effTof_" + cyn, iB, tofEff[ param ]->eval( bCen, "closest" ), 0 );
-					INFO( "tofEff weight = " << weight )
-					book->setBinContent( "tof_" + cyn, iB, bCon * ( weight ) );
-				} else {
-					ERROR( "Cannot find tofEff[ " << param << " ] "  )
+				book->cd( plc + "_yield/corr_pTFactor" );
+				book->setBin( 	"corr_pTFactor_" + cyn,
+								iB,
+								1.0 / bCen,
+								0.0 );
+
+				book->cd( plc + "_yield/corr_pTBinWidth" );
+				book->setBin( 	"corr_pTBinWidth_" + cyn,
+								iB,
+								1.0 / bWidth,
+								0.0 );
+
+				book->cd( plc + "_yield/corr_dy" );
+				book->setBin( 	"corr_dy_" + cyn,
+								iB,
+								1.0 / dy,
+								0.0 );
+
+				book->cd( plc + "_yield/corr_full" );
+				book->setBin( 	"corr_full_" + cyn,
+								iB,
+								(1.0 / dy) * ( 1.0 / bCen) * ( 1.0 / bWidth ) * ( 1.0 / (2 * 3.1415926) ) * sc->tpcEffWeight( plc, bCen, cb, cg, 0 ),
+								0.0 );
+				/***********************************************************/
+
+
+				/***********************************************************/
+				// Correct spectra and plot
+				if ( apply_dy ){
+					fc = fc * (1.0 / dy);
 				}
+				if ( apply_pTFactor ){
+					fc = fc * ( 1.0 / bCen );
+				}
+				if ( apply_binWidth ){
+					fc = fc * ( 1.0 / bWidth );
+				} 
+				if ( apply_tofEff ){
+					fc = fc * sc->tofEffWeight( plc, bCen, cb, cg, 0 );
+				}
+				if ( apply_feeddown ){
+					fc = fc * sc->feedDownWeight( plc, bCen, cb, cg, feedDownSysNSigma );
+				}
+				if ( apply_tpcEff ){
+					fc = fc * sc->tpcEffWeight( plc, bCen, cb, cg, 0 );
+				}
+				if ( apply_twopi ){
+					fc = fc * (1.0 / (2 * 3.1415926));
+				}
+
+				/***********************************************************/
 				
-
-
-
-				// Feed down
-				if ( "K" != plc && apply_feeddown ) {
-							
-					double weight = sc->feedDownWeight( plc, bCen, cb, cg, feedDownSysNSigma );
-					fc = fc * ( weight );
-
-					book->setBin( "fdCorr_" + cyn, iB, weight, 0 );
-					INFO( "feedDown weight = " << weight )
-					
-					book->setBinContent( "fd_" + cyn, iB, bCon * ( weight ) );
-					
-				} else if ( !apply_feeddown ){
-					INFO( classname(), "Skipping Feed Down Corrections" );
-				}
-
-
+				book->cd( plc + "_yield" );
 				book->setBinContent( cyn, iB, fc );
-				book->get( cyn )->Sumw2();
-			}
-
-
+			
+			} // iBin
 		} // cb
 	} // cs
 

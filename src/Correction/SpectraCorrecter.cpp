@@ -1,18 +1,14 @@
 #include "Correction/SpectraCorrecter.h"
 
 
-SpectraCorrecter::SpectraCorrecter( XmlConfig * _cfg, string _nodePath ){
+SpectraCorrecter::SpectraCorrecter( XmlConfig _config, string _nodePath ){
 
-	cfg = _cfg;
-	nodePath = _nodePath;
+	config = _config;
+	nodePath = config.basePath( _nodePath );
 
-	INFO( "" )
-	if ( cfg == nullptr )
-		ERROR( "Invalid config" )
-	else {
-		setupCorrections();
-		plc = cfg->getString( nodePath + "input:plc", "UNKNOWN" );
-	}
+	DEBUG( classname(), "config=<" << config.getFilename() << ">, nodepath=<" << nodePath << ">" );
+	
+	setupCorrections();
 }
 
 SpectraCorrecter::~SpectraCorrecter(){
@@ -20,28 +16,43 @@ SpectraCorrecter::~SpectraCorrecter(){
 }
 
 void SpectraCorrecter::setupCorrections(){
-	INFO("")
+	DEBUG(classname(), "")
 	vector<string> cfgPaths = { "FeedDown", "TpcEff", "TofEff" };
 	
 	for ( string cPath : cfgPaths ){
 		for ( string plc : Common::species ){
 			for ( string c : Common::sCharges ){
-				if ( cfg->exists( nodePath + "." + cPath + "." + plc + "_" + c ) ){
-					for ( int cb : cfg->getIntVector( nodePath + ".CentralityBins" ) ){
+
+				string basepath = nodePath + "." + cPath + "." + plc + "_" + c;
+
+				if ( config.exists( basepath ) ){
+					
+					for ( int cb : config.getIntVector( nodePath + ".CentralityBins" ) ){
+
 						string path = nodePath + "." + cPath + "." + plc + "_" + c + "." + cPath + "Params[" + ts(cb) + "]";
-						DEBUG( "Loading " << path )
-						if ( cb != cfg->getInt( path + ":bin" ) )
-							ERROR( "Centrality Bin Mismatch" )
+						DEBUG( classname(), "Loading " << path );
+						DEBUG( classname(), "for CenBin : " << config.getInt( path + ":bin" ) << " expect : " << cb );
+
+						// check that node[0] contains centrality bin0! as it should
+						if ( cb != config.getInt( path + ":bin" ) ){
+							ERROR( classname(), "Centrality Bin Mismatch" );
+						}
+
+						string key = plc + "_" + c + "_" + ts(cb);
 
 						if ( "FeedDown" == cPath )
-							feedDown[ plc + "_" + c + "_" + ts(cb) ] = unique_ptr<XmlFunction>( new XmlFunction( cfg, path ) );
+							feedDown[ key ] = unique_ptr<XmlFunction>( new XmlFunction( &config, path ) );
 						if ( "TpcEff" == cPath )
-							tpcEff[ plc + "_" + c + "_" + ts(cb) ] = unique_ptr<XmlFunction>( new XmlFunction( cfg, path ) );
+							tpcEff[ key ] = unique_ptr<XmlFunction>( new XmlFunction( &config, path ) );
 						if ( "TofEff" == cPath )
-							tofEff[ plc + "_" + c + "_" + ts(cb) ] = unique_ptr<XmlGraph>( new XmlGraph( cfg, path ) );
-					}
+							tofEff[ key ] = unique_ptr<XmlBinnedData>( new XmlBinnedData( config, path ) );
+
+						TRACE( classname(), cPath << " Params for " << key);
+
+					} // for cb
+
 				} else {
-					WARN( "Cannot find " + cPath + " params for " << plc + "_" + c )
+					WARN( classname(), "Cannot find " + cPath + " params for " << plc + "_" + c );
 				}
 
 			} // c
@@ -49,6 +60,14 @@ void SpectraCorrecter::setupCorrections(){
 	} // cPath
 }
 
+
+double SpectraCorrecter::tpcEffCorr( string plc, double pt, int iCen, int charge ){
+	string name = plc + "_" + Common::chargeString( charge ) + "_" + ts(iCen);
+	if ( tpcEff.count( name ) ){
+		return tpcEff[ name ]->eval( pt );
+	}
+	return 1.0;
+}
 
 double SpectraCorrecter::tpcEffWeight( string plc, double pt, int iCen, int charge, double sysNSigma ){
 	string name = plc + "_" + Common::chargeString( charge ) + "_" + ts(iCen);
@@ -64,30 +83,42 @@ double SpectraCorrecter::tpcEffWeight( string plc, double pt, int iCen, int char
 		return 1.0 / tpcEff[ name ]->eval( pt );
 	}
 	else
-		ERROR( "Cannot find tpcEff correction for " << name )
+		ERROR( classname(), "Cannot find tpcEff correction for " << name );
 	return 1.0;
 }
+
+double SpectraCorrecter::tofEffCorr( string plc, double pt, int iCen, int charge ){
+	string name = plc + "_" + Common::chargeString( charge ) + "_" + ts(iCen);
+	if ( tofEff.count( name ) ){
+		return tofEff[ name ]->eval( pt );
+	}
+	return 1.0;
+}
+
 double SpectraCorrecter::tofEffWeight( string plc, double pt, int iCen, int charge, double sysNSigma ){
 	string name = plc + "_" + Common::chargeString( charge ) + "_" + ts(iCen);
 	if ( tofEff.count( name ) )
 		return 1.0 / tofEff[ name ]->eval( pt );
 	else
-		ERROR( "Cannot find tofEff correction for " << name )
+		ERROR( classname(), "Cannot find tofEff correction for " << name );
 	return 1.0;
 }
 double SpectraCorrecter::feedDownWeight( string plc, double pt, int iCen, int charge, double sysNSigma ){
+	
 	if ( "K" == plc ) // no feed down correction for K
 		return 1.0;
+
+
 	string name = plc + "_" + Common::chargeString( charge ) + "_" + ts(iCen);
 	if ( feedDown.count( name ) ){
 		if ( sysNSigma != 0 ){
 			double sys = Common::choleskyUncertainty( pt, feedDown[ name ]->getCov().data(), feedDown[ name ]->getTF1().get(), 500 );
 			double val = feedDown[ name ]->eval( pt ) + sys * sysNSigma;
-			DEBUG( tag, "systematics on feedDown fd = " << val );
+			DEBUG( classname(), "systematics on feedDown fd = " << val );
 			return 1.0 - val;
 		}
 		return 1.0 - feedDown[ name ]->eval( pt );
 	} else
-		ERROR( "Cannot find feedDown correction for " << name )
+		ERROR( classname(), "Cannot find feedDown correction for " << name );
 	return 1.0;
 }
