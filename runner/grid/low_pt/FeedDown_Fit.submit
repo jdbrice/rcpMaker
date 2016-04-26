@@ -1,0 +1,10 @@
+#####################
+# FeedDown Fit
+#####################
+
+Executable = /home/jdb12/work/rcpMaker/runner/rcp
+Initialdir = /home/jdb12/work/rcpMaker/runner/
+
+Arguments 	= /data/star1/jdb12/RcpAnalysis/config/low_pt/FeedDown/fit.xml
+Output 	 	= /data/star1/jdb12/RcpAnalysis/config/low_pt/FeedDown/fit.xml.log
+Queue
