@@ -193,6 +193,16 @@ void PidDataMaker::analyzeTofTrack( int iTrack ){
 
 		// correct for TPC matching efficiency
 		trackWeight = trackWeight * sc->tpcEffWeight( centerSpecies, corrTrackPt, cBin, charge, tpcSysNSigma );
+
+		if ( ptBin == 12 ){
+			INFO( classname(), "pT = " << corrTrackPt );
+			INFO( classname(), "pTBinWidth = " << ptBinWidth );
+			INFO( classname(), "dy = " << ( cut_rapidity->max - cut_rapidity->min ) );
+			INFO( classname(), "tpcEff = " << (1.0 / sc->tpcEffWeight( centerSpecies, corrTrackPt, cBin, charge, tpcSysNSigma )) );
+
+			INFO( classname(), "w = " << trackWeight );
+
+		}
 	}
 
 	// fill the tree
