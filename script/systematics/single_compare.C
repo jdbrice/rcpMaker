@@ -3,8 +3,9 @@
 
 
 string file_name( string source, string plc ){
-	string base = "/Users/danielbrandenburg/bnl/local/data/RcpAnalysis/products/";
-	return base + source + "/PostCorr_" + plc +".root";
+	// string base = "/Users/danielbrandenburg/bnl/local/data/RcpAnalysis/products/";
+	string base = "/Users/danielbrandenburg/bnl/mdf/jdb12/RcpAnalysis/products/";
+	return base + source + "/Fit_PostCorr_" + plc +".root";
 }
 
 
@@ -56,28 +57,33 @@ void single_compare( string source2, string source1 = "nominal", string plc = "P
 	h2->SetLineColor( kRed );
 
 
+	TLegend * leg = new TLegend( 0.6, 0.7, 0.9, 0.9 );
+	leg->AddEntry( h1, source1.c_str() );
+	leg->AddEntry( h2, source2.c_str() );
 	TCanvas * c1 = new TCanvas( "c1", "c1" );
 	h1->Draw();
 	h2->Draw("same");
+	leg->Draw("same");
 
 	TCanvas * c2 = new TCanvas( "c2", "Difference" );
 	TH1D * dif = (TH1D*) h1->Clone( "dif" );
 
 	dif->Add( h2, -1 );
-
+	dif->SetTitle( (source1 + " - " + source2).c_str() );
 	dif->Draw();
 
 	TCanvas * c3 = new TCanvas( "c3", "Ratio" );
 	TH1D * ratio = (TH1D*) h1->Clone( "ratio" );
 
 	ratio->Divide( h2 );
-
+	ratio->SetTitle( (source1 + " / " + source2).c_str() );
 	ratio->Draw();
 
 	TCanvas * c4 = new TCanvas( "c4", "Rel" );
 	TH1D * rel = (TH1D*) dif->Clone( "rel" );
 
 	rel->Divide( h1 );
+	rel->SetTitle( ("(" + source1 + " - " + source2 + ") / " + source1).c_str() );
 
 	rel->Draw();
 

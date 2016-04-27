@@ -11,7 +11,7 @@ TCanvas *  newCan( string title,int nW = 1, int nH = 1 ){
 	return new TCanvas( title.c_str(), title.c_str(), cW * nW, cH * nH );
 }
 
-void high_pt( int iPt = 33, string df = "/Users/danielbrandenburg/bnl/local/data/RcpAnalysis/products/nominal/PidData_PostCorr_Pi.root", string plc = "Pi", string charge = "p", string iCen = "0" ){
+void high_pt( int iPt = 12, string df = "/Users/danielbrandenburg/bnl/local/data/RcpAnalysis/products/nominal/PidData_PostCorr_Pi.root", string plc = "Pi", string charge = "p", string iCen = "0" ){
 
 	string name = plc + "_" + charge + "_" + iCen + "_" + ts(iPt);
 	RooPlotLib rpl;

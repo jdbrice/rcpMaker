@@ -66,8 +66,8 @@ string tag = "export_spectra";
 void write_spectra( string plc, string charge, string iCen, vector<string> &sources, vector<double> &weights ){
 	INFO( tag, "(plc=" << plc << ", charge=" << charge << ", iCen=" << iCen <<" )" );
 
-	string base = "/Users/danielbrandenburg/bnl/local/data/RcpAnalysis/spectra/";
-	TH1 * h = yield_hist_for( "qm_nominal", plc, charge, iCen );
+	string base = "/Users/danielbrandenburg/bnl/local/data/RcpAnalysis/spectraNew/";
+	TH1 * h = yield_hist_for( "nominal", plc, charge, iCen );
 
 	vector<double> sys_unc = total_systematics( weights, sources, plc, charge, iCen );
 

@@ -171,7 +171,7 @@ void ApplyPostCorr::make(){
 					fc = fc * sc->tofEffWeight( plc, bCen, cb, cg, 0 );
 				}
 				if ( apply_feeddown ){
-					fc = fc * sc->feedDownWeight( plc, bCen, cb, cg, feedDownSysNSigma );
+					fc = fc * sc->feedDownWeight( plc, bLEdge, cb, cg, feedDownSysNSigma );
 				}
 				if ( apply_tpcEff ){
 					fc = fc * sc->tpcEffWeight( plc, bCen, cb, cg, 0 );
