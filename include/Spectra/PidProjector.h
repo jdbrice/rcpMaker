@@ -48,12 +48,7 @@ public:
 	}
 
 	void cutDeuterons( double protonCenter, double protonSigma, float nSigma = 3 ){
-		
-		// hack for fitting zd only
-		if ( nSigma < 0 ){
-			_deuteronCut = "";
-			return;
-		}
+	
 
 		// less than because we want to keep what isn't deuterons
 		string cutstr = "zb - " + dts(protonCenter) + " <= " + dts( protonSigma * nSigma );
@@ -65,12 +60,6 @@ public:
 	}
 
 	void cutElectrons( 	double zb_Pi, double zb_Pi_sigma, double nSigma = 3 ){
-
-		// hack for fitting zd only
-		if ( nSigma < 0 ){
-			_electronCut = "";
-			return;
-		}
 
 		string cutstr = "zb - " + dts(zb_Pi) + " >= " + dts( - zb_Pi_sigma * nSigma );
 

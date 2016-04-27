@@ -204,13 +204,13 @@ namespace TSF{
 		if ( enhanced )
 			proj.cutDeuterons( schema->var( "zb_mu_P" )->val, sigmaP, nSigAboveP );
 		else 
-			proj.cutDeuterons( zbMu[ "P" ], sigmaP, -9 ); // hack for zd fit only
+			proj.cutDeuterons( zbMu[ "P" ], sigmaP, 9 );
 		
 		// sets the electron rejection for this pt bin
 		if ( enhanced )
 			proj.cutElectrons( 	schema->var( "zb_mu_Pi" )->val, schema->var( "zb_sigma_Pi" )->val, 3 );
 		else 
-			proj.cutElectrons( 	zbMu[ "Pi" ], zbSigmaIdeal, -3 ); // hack for zd fit only
+			proj.cutElectrons( 	zbMu[ "Pi" ], zbSigmaIdeal, 3 ); 
 
 
 		string name = Common::speciesName( cs, charge, cenBin, ptBin );
