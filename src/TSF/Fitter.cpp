@@ -183,7 +183,7 @@ namespace TSF{
 		INFO( tag, "cut_nSigma_E = " << cut_nSigma_E );
 	}
 
-	void Fitter::loadDatasets( string cs, int charge, int cenBin, int ptBin, bool enhanced, map<string, double> zbMu, map<string, double> zdMu, double nSigAbovePOverride ){
+	void Fitter::loadDatasets( string cs, int charge, int cenBin, int ptBin, bool enhanced, map<string, double> zbMu, map<string, double> zdMu, bool use_zb ){
 		INFO( tag, "( cs=" << cs << ", charge=" << charge << ", iCen=" <<cenBin << ", ptBin=" << ptBin << ")" )
 
 		dataFile->cd();
@@ -215,7 +215,7 @@ namespace TSF{
 
 		string name = Common::speciesName( cs, charge, cenBin, ptBin );
 		dataHists[ "zb_All" ] = proj.project1D( name, "zb" );
-		dataHists[ "zd_All" ] = proj.project1D( name, "zd" );
+		dataHists[ "zd_All" ] = proj.project1D( name, "zd", "", use_zb );
 		
 		if ( enhanced ){
 			// load the enhanced distributions

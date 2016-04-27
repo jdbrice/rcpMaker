@@ -113,7 +113,7 @@ public:
 		return h;
 	}
 
-	TH1D * project1D( string name, string var, string cut = "" ){
+	TH1D * project1D( string name, string var, string cut = "", bool cut_zb = true ){
 		TNtuple * data = (TNtuple*)_f->Get( path(name).c_str() );
 		if ( !data ){
 			ERROR( tag, "ubable to open " << name );
@@ -143,8 +143,8 @@ public:
 		INFO( tag, "Projecting " << name << " in 1D on " << var << " from ( " << min <<", " << max << " ) / " << binWidth << ", = " << nBins << " bins" << ")" )
 
 		TCut allCuts = cut.c_str();
-		if ( "zd" == var )
-			allCuts = allCuts ;//&& _deuteronCut && _electronCut;
+		if ( "zd" == var && cut_zb)
+			allCuts = allCuts && _deuteronCut && _electronCut;
 
 		TCut wCut = "w";
 		allCuts = allCuts * wCut;

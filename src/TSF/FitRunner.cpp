@@ -494,6 +494,7 @@ namespace TSF{
 		// 	nSigmaAbovePOverride = -1;
 
 		bool enhanced = config.getBool( nodePath + ".FitSchema:enhanced", true );
+		bool use_zb = config.getBool( nodePath + ".FitSchema:use_zb", true );
 
 		// load the datasets from the file
 		fitter.loadDatasets(centerSpecies, iCharge, iCen, iPt, enhanced, zbMu, zdMu );
