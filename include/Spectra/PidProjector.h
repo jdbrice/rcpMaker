@@ -155,7 +155,7 @@ public:
 
 		TCut allCuts = cut.c_str();
 		if ( "zd" == var )
-			allCuts = allCuts && _deuteronCut && _electronCut;
+			allCuts = allCuts ;//&& _deuteronCut && _electronCut;
 
 		TCut wCut = "w";
 		allCuts = allCuts * wCut;
