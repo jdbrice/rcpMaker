@@ -181,6 +181,11 @@ void PidDataMaker::analyzeTofTrack( int iTrack ){
 		dedx = dedxNL;
 	} 
 
+	if ( pico->trackBeta(iTrack) == 0){
+		WARN( classname()," beta==0, tof=" << tof );
+		tof = -50;
+	}
+
 	// event weight from RefMult correction
 	double trackWeight = eventWeight;
 
