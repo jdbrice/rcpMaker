@@ -27,7 +27,7 @@ using namespace jdb;
 	#include "McMaker/TpcEffMaker.h"
 
 // // Presentation
-// 	#include "Present/PidYieldPresenter.h"
+	#include "Present/YieldExporter.h"
 
 // // Feed down
 	#include "McMaker/FeedDownMaker.h"
@@ -151,7 +151,11 @@ void conGo( XmlConfig &config, int jobIndex ){
 		ApplyPostCorr apc;
 		apc.init( config, "ApplyPostCorr.", -1 );
 		apc.run();
-	} 
+	} else if ( "YieldExporter" == job ){
+		YieldExporter yxp;
+		yxp.init( config, "YieldExporter", -1 );
+		yxp.run();
+	}
 	
 }
 

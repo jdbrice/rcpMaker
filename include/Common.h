@@ -182,6 +182,12 @@ public:
 
 		return "yield_" + plc + "_" + ts(iCen) + "_" + Common::chargeString( charge ) + plc2;
 	}
+	static string yieldName( string plc, string iCen, string charge, string plc2 = "" ){
+		if ( "" != plc2 )
+			plc2 = "_" + plc2;
+
+		return "yield_" + plc + "_" + iCen + "_" + charge + plc2;
+	}
 	static string sigmaName( string plc, int iCen, int charge ){
 		return "sigma_" + plc + "_" + ts(iCen) + "_" + Common::chargeString( charge );
 	}
