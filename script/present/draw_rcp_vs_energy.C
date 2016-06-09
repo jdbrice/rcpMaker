@@ -30,7 +30,7 @@ void draw_rcp_vs_energy( string plc, string charge, string iCen = "0", string iP
 	gPad->SetRightMargin( 0.01 );
 
 
-	bool alone = true;
+	bool alone = false;
 
 	vector<string> energySet = nullenergies;
 	if ( !alone )energySet = rcpenergies;
@@ -51,7 +51,14 @@ void draw_rcp_vs_energy( string plc, string charge, string iCen = "0", string iP
 		TH1 * h = draw_single_rcp( en, plc, charge, iCen, iPer, cen_n_coll, per_n_coll, rcpcolors[ iColor ], "same", markers[ iColor ] );
 
 
-		draw_ncoll_uncertainty( iColor, cen_n_coll, cen_n_coll_unc, per_n_coll, per_n_coll_unc, false, rcpcolors[ iColor ] );
+		if ( "27.0" == en ){
+			// draw_ncoll_uncertainty( 0, cen_n_coll, cen_n_coll_unc, per_n_coll, per_n_coll_unc, false, kGray+3 );
+			draw_ncoll_uncertainty( 1, cen_n_coll, cen_n_coll_unc, per_n_coll, per_n_coll_unc, false, kGray+3 );
+			// draw_ncoll_uncertainty( 2, cen_n_coll, cen_n_coll_unc, per_n_coll, per_n_coll_unc, false, kGray+3 );
+		}
+
+		// fo drawing the rainbow
+		//draw_ncoll_uncertainty( iColor, cen_n_coll, cen_n_coll_unc, per_n_coll, per_n_coll_unc, false, rcpcolors[ iColor ] );
 
 		// for making legend
 		// h->SetMarkerSize( 3 );
@@ -84,7 +91,7 @@ void draw_rcp_vs_energy( string plc, string charge, string iCen = "0", string iP
 	if ( "Pi" == plc && "p" == charge )
 		rpl.set( "yr", 0.29, 3.5 );
 	if ( "Pi" == plc && "n" == charge )
-		rpl.set( "yr", 0.36, 2.4 );
+		rpl.set( "yr", 0.23, 2.4 );
 
 	if ( "K" == plc && "p" == charge )
 		rpl.set( "yr", 0.45, 4.5 );

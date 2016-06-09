@@ -17,7 +17,7 @@ FeedDownFitter::FeedDownFitter( XmlConfig cfg, string nodePath ){
 
 
 	this->config = cfg;
-	this->nodePath = nodePath;
+	this->nodePath = cfg.basePath( nodePath );
 
 	// map of GEANT PID -> histogram name
 	plcName[ 8 ] = "Pi_p";
@@ -36,7 +36,7 @@ FeedDownFitter::FeedDownFitter( XmlConfig cfg, string nodePath ){
 
 	rmb = unique_ptr<HistoBins>( new HistoBins( config, nodePath + ".RefMultBins" ) );
 
-	book = unique_ptr<HistoBook>( new HistoBook( config.getString( nodePath + ".output:path" ) + config.getString( nodePath + "output.data" ),
+	book = unique_ptr<HistoBook>( new HistoBook( config.getString( nodePath + ".output:path" ) + config.getString( nodePath + ".output.data" ),
 													config, config.getString( nodePath + ".input:url" ) ) );
 
 
@@ -90,7 +90,7 @@ void FeedDownFitter::make(){
 				
 				addGEANTLabels( projX );
 				projX->GetXaxis()->LabelsOption( " " );
-				rpl.style( projX ).set( &config, "Style.logy1D" ).set( "title", hNames[ plcIndex ] + " : " + dts( ptl ) + " < pT < " + dts( pth ) ).draw();
+				rpl.style( projX ).set( &config, ".Style.logy1D" ).set( "title", hNames[ plcIndex ] + " : " + dts( ptl ) + " < pT < " + dts( pth ) ).draw();
 
 				reporter->savePage();
 
@@ -160,7 +160,7 @@ void FeedDownFitter::background( string name, int plcIndex, int bin, ofstream &o
 
 	g->BayesDivide( back, total );
 
-	rpl.style( g ).set( &config, "Style.frac_" + name ).set( &config, "Style.frac" ).set( "title", hNames[ plcIndex ] + " : bin " + ts(bin) ).draw();
+	rpl.style( g ).set( &config, ".Style.frac_" + name ).set( &config, ".Style.frac" ).set( "title", hNames[ plcIndex ] + " : bin " + ts(bin) ).draw();
 
 	INFO( "Fitting to : " << formulas[ plcIndex ]  )
 	TF1 * fracFun = new TF1( "fn", formulas[ plcIndex ].c_str() , 0.01, 4.5 );
@@ -246,7 +246,7 @@ void FeedDownFitter::background( string name, int plcIndex, int bin, ofstream &o
 	ratio->GetYaxis()->SetNdivisions( 5, 2, 0, true );
 	ratio->GetYaxis()->SetTickLength( 0.01 );
 
-	rpl.style( ratio ).set( &config, "Style.ratio" ).draw();
+	rpl.style( ratio ).set( &config, ".Style.ratio" ).draw();
 	
 
 	TLine * l = new TLine( 0.0, 1, 3, 1  );
@@ -254,7 +254,8 @@ void FeedDownFitter::background( string name, int plcIndex, int bin, ofstream &o
 	l->Draw("same");
 	
 
-	if ( config.getBool( nodePath + "Pages:export", true ) )
-		reporter->saveImage( config.getString( nodePath + "output:path" ) + "image/" + name + "_back_" + ts(bin) + ".eps" );
+	INFO( classname(), config.getString( nodePath + ".output:path" ) + "img/" + name + "_back_" + ts(bin) + ".eps" );
+	if ( config.getBool( nodePath + ".Pages:export", true ) )
+		reporter->saveImage( config.getString( nodePath + ".output:path" ) + "img/" + name + "_back_" + ts(bin) + ".eps" );
 	reporter->savePage();
 }

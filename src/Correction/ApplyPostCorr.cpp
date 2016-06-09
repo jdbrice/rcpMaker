@@ -11,12 +11,15 @@ void ApplyPostCorr::initialize(){
 	
 
 
+	/*************************** Only if we are NOT applying trac-by-track ****************************/
 	apply_pTFactor = config.getBool( nodePath + ".Factors:pTFactor", false );
 	apply_binWidth = config.getBool( nodePath + ".Factors:binWidth", false );
 	apply_dy = config.getBool( nodePath + ".Factors:dy", false );
 	apply_twopi = config.getBool( nodePath + ".Factors:twopi", false );
-
 	apply_tpcEff = config.getBool( nodePath + ".TpcEff:apply", false );
+	/*************************** Only if we are NOT applying trac-by-track ****************************/
+		
+
 	apply_feeddown = config.getBool( nodePath + ".FeedDown:apply", true );
 	apply_tofEff = config.getBool( nodePath + ".TofEff:apply", true );
 
@@ -168,7 +171,7 @@ void ApplyPostCorr::make(){
 					fc = fc * ( 1.0 / bWidth );
 				} 
 				if ( apply_tofEff ){
-					fc = fc * sc->tofEffWeight( plc, bCen, cb, cg, 0 );
+					fc = fc * sc->tofEffWeight( plc, bLEdge, cb, cg, 0 );
 				}
 				if ( apply_feeddown ){
 					fc = fc * sc->feedDownWeight( plc, bLEdge, cb, cg, feedDownSysNSigma );

@@ -10,7 +10,7 @@ void pannel_rcp_vs_energy( ){
 	for ( string charge : { "p", "n" } ){
 		for ( string plc : { "Pi", "K", "P" } ){
 		
-			draw_rcp_vs_energy( plc, charge );
+			draw_rcp_vs_energy( plc, charge, "0", "6", &rp );
 			
 			if ( plc == "P" && charge == "n" ){
 
