@@ -1,5 +1,6 @@
 #include <fstream>
 
+using namespace jdb;
 #include "Logger.h"
 
 #include "TGraphErrors.h"
@@ -17,33 +18,50 @@ public:
 	// computed
 	vector<double> width;
 
-	SpectraLoader( string fname ){
+	SpectraLoader( string fname, bool lokesh=false ){
 
 		ifstream inf( fname.c_str() );
 
 		string tmp;
 		double a, b, c, d;
 
-		getline( inf, tmp );
+		if ( false == lokesh ){
+			getline( inf, tmp );
 
-		while( inf >> a >> b >> c >> d ){
+			while( inf >> a >> b >> c >> d ){
 
-			pT.push_back( a );
-			value.push_back( b );
-			stat.push_back( c );
-			sys.push_back( d );
+				pT.push_back( a );
+				value.push_back( b );
+				stat.push_back( c );
+				sys.push_back( d );
 
-			// INFO( tag,  "[" << a << "] = " << b << " +/- " << c << " +/- " << d );
+				// INFO( tag,  "[" << a << "] = " << b << " +/- " << c << " +/- " << d );
 
-		}	
+			}	
 
-		if ( pT[ 0 ] > pT[ pT.size() - 1 ] ){
-			reverse( pT.begin(), pT.end() );
-			reverse( value.begin(), value.end() );
-			reverse( stat.begin(), stat.end() );
-			reverse( sys.begin(), sys.end() );
+			if ( pT[ 0 ] > pT[ pT.size() - 1 ] ){
+				reverse( pT.begin(), pT.end() );
+				reverse( value.begin(), value.end() );
+				reverse( stat.begin(), stat.end() );
+				reverse( sys.begin(), sys.end() );
+			}
+
+			
+		} else {
+			INFO( "SpectraLoader", "here" );
+			// getline( inf, tmp );
+			d = 0;
+
+			while( inf >> a >> b >> c ){
+
+				pT.push_back( a );
+				value.push_back( b );
+				stat.push_back( c );
+
+				INFO( "SpectraLoader",  "[" << a << "] = " << b << " +/- " << c << " +/- " << d );
+
+			}	
 		}
-
 
 		for ( int i = 0; i < pT.size(); i++ ){
 
@@ -54,10 +72,13 @@ public:
 
 			// INFO( tag, "width[" << i << "] = " << width[ i ] );
 		}
+		
 
 
 		inf.close();
 	}
+
+
 
 	void trim( int N = 1 ){
 
