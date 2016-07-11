@@ -45,7 +45,7 @@ ROOTGLIBS     	= $(shell root-config --glibs)
 # Custom Project includes and libs
 includes		= -I../include -I. -I$(ROOTSYS)/include -I$(JDB_LIB)/include/jdb -I$(JDB_LIB)/include 
 libraries 		= $(ROOTLIBS) -lMinuit $(CERNLIBS) $(SYSLIBS) 
-staticLibs 		= $(JDB_LIB)/lib/libJDB.a
+staticLibs 		= $(JDB_LIB)/lib/libRooBarb.a
 
 cxx 		= g++ -std=c++11 -DJDB_LOG_LEVEL=60
 flags 		= -Wall -O3 $(ROOTCFLAGS) $(includes)
