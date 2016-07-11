@@ -23,7 +23,7 @@ namespace TSF{
 			opts[ nodePath + ".FitRange.charges" ] = ts(iCharge);
 		}
 
-		if ( iCen >= 0 && iCen <= 6 ){
+		if ( iCen >= 0 ){
 			opts[ nodePath + ".FitRange.centralityBins" ] = ts(iCen);
 		}
 
@@ -32,7 +32,7 @@ namespace TSF{
 
 
 		// modify the output name if we are running parallel
-		if ( iCen >= 0 && iCen <= 6 && ( abs(iCharge) == 1 ) ){
+		if ( iCen >= 0 && ( abs(iCharge) == 1 ) ){
 			opts[ nodePath + ".output.data" ] = "Fit_" + centerSpecies + "_" + Common::chargeString( iCharge ) + "_iCen_" + ts(iCen) + ".root";
 		}
 
