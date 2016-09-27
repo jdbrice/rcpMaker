@@ -3,7 +3,7 @@
 
 
 // Roobarb
-#include <jdb/RooPlotLib.h>
+#include "RooPlotLib.h"
 
 // ROOT
 #include "TGraphAsymmErrors.h"

@@ -1,7 +1,7 @@
 #include "McMaker/FeedDownFitter.h"
 
 // Roobarb
-#include <jdb/RooPlotLib.h>
+#include <RooPlotLib.h>
 
 // ROOT
 #include "TGraphAsymmErrors.h"
@@ -13,11 +13,8 @@
 vector<int> FeedDownFitter::plcID = { 8, 9, 11, 12, 14, 15 };
 vector<float> FeedDownFitter::plcMass = { 0.1396, 0.1396, 0.4937, 0.4937, 0.9383, 0.9383 };
 
-FeedDownFitter::FeedDownFitter( XmlConfig cfg, string nodePath ){
-
-
-	this->config = cfg;
-	this->nodePath = nodePath;
+void FeedDownFitter::init( XmlConfig &_config, string _nodePath ){
+	TaskRunner::init( _config, _nodePath );
 
 	// map of GEANT PID -> histogram name
 	plcName[ 8 ] = "Pi_p";
@@ -36,7 +33,7 @@ FeedDownFitter::FeedDownFitter( XmlConfig cfg, string nodePath ){
 
 	rmb = unique_ptr<HistoBins>( new HistoBins( config, nodePath + ".RefMultBins" ) );
 
-	book = unique_ptr<HistoBook>( new HistoBook( config.getString( nodePath + ".output:path" ) + config.getString( nodePath + "output.data" ),
+	book = unique_ptr<HistoBook>( new HistoBook( config.getString( nodePath + ".output:path" ) + config.getString( nodePath + ".output.data" ),
 													config, config.getString( nodePath + ".input:url" ) ) );
 
 
@@ -48,12 +45,7 @@ FeedDownFitter::FeedDownFitter( XmlConfig cfg, string nodePath ){
     INFO( classname(), "c[ 0 ] = " << centralityBinMap[ 0 ] );
 
 
-    reporter = unique_ptr<Reporter>( new Reporter( cfg, nodePath + ".Reporter." ) );
-
-}
-
-
-FeedDownFitter::~FeedDownFitter(){
+    reporter = unique_ptr<Reporter>( new Reporter( config, nodePath + ".Reporter." ) );
 
 }
 

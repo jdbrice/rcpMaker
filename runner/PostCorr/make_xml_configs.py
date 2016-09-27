@@ -17,6 +17,7 @@ def write_conf(  output_path, config_path ="./" ) :
 <config>
 
 	<jobType>ApplyPostCorr</jobType>
+	<Task name="ApplyPostCorr" type="ApplyPostCorr" config="" nodePath="ApplyPostCorr" />
 
 	<ApplyPostCorr>
 		<Logger color="true" logLevel="info" globalLogLevel="trace"/>

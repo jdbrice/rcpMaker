@@ -14,6 +14,8 @@ def write_conf(  output_path, config_path ="./" ) :
 <config>
 
 	<jobType>YieldExporter</jobType>
+	<Task name="YieldExporter" type="YieldExporter" config="" nodePath="YieldExporter" />
+
 	<Logger color="true" globalLogLevel="info" />
 
 	<YieldExporter>

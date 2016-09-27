@@ -17,6 +17,7 @@ using namespace jdb;
 #include "TSF/Fitter.h"
 #include "Spectra/ZRecentering.h"
 #include "TSF/HistorySet.h"
+#include "Common.h"
 
 // ROOT
 #include "TRandom3.h"
@@ -60,7 +61,38 @@ namespace TSF{
 		FitRunner( );//XmlConfig _config, string _np, int iCharge = -10, int iCen = -1  );
 		~FitRunner();
 
-		void setup( XmlConfig &_config, string _nodePath, int iCharge = -10, int iCen = -1 );
+		/* Applies overrides based on config values
+		 *
+		 */
+		virtual void overrideConfig(){
+
+			// these are really just for convenience in the case of passing single values
+			map< string, string > opts; 
+			int iCharge = 0;
+			int iCen = -1;
+			if ( config.exists( "iCharge" ) ){
+				opts[ nodePath + ".FitRange.charges" ] = config[ "iCharge" ];
+				iCharge = config.getInt( "iCharge" );
+			}
+			if ( config.exists( "iCen" ) ){
+				opts[ nodePath + ".FitRange.centralityBins" ] = config[ "iCen" ];
+				iCen = config.getInt( "iCen" );
+			}
+
+			if ( iCen >= 0 && abs(iCharge) > 0 ){
+				centerSpecies = config.getString( nodePath+".ZRecentering.centerSpecies", "K" );
+				imgNameMod = "rp_" + centerSpecies + "_" + Common::chargeString( iCharge ) + "_iCen_" + ts(iCen);	
+			}
+			
+			for ( auto kv : opts ){
+				INFO( classname(), kv.first << " : " << kv.second );
+			}
+
+			config.applyOverrides( opts );
+
+		}
+
+		// void setup( XmlConfig &_config, string _nodePath, int iCharge = -10, int iCen = -1 );
 		virtual void initialize(  );
 
 		virtual void make();

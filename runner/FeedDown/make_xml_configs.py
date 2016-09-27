@@ -15,13 +15,18 @@ def write_conf( data_path, output_path, output_config_path, config_path ="./" ) 
 <config>
 	
 	<jobType>FeedDownMaker</jobType>
+	<Task name="FeedDownMaker" type="FeedDownMaker" config="" nodePath="FeedDownMaker" />
 
 	<FeedDownMaker>
-		
+		<EventLoop progress="true" />
+
 		<SkipMake>false</SkipMake>
 		<Pages parents="true" fraction="true" export="false"/>
 
 		<!-- Use a datasource to setup an automap to the tree structure -->
+		<input>
+			<dst treeName="StMiniMcTree" url="{data_path}" /> 
+		</input>
 		<DataSource treeName="StMiniMcTree" filelist="{data_path}">
 			
 			<!-- Set all branches off -->
@@ -129,6 +134,7 @@ def write_fit_conf( data_path, output_path, output_config_path, config_path ="./
 <config>
 	
 	<jobType>FeedDownFitter</jobType>
+	<Task name="FeedDownFitter" type="FeedDownFitter" config="" nodePath="FeedDownFitter" />
 
 	<FeedDownFitter>
 		<Pages parents="true" fraction="true" export="false"/>

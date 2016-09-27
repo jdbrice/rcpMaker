@@ -17,6 +17,7 @@ def write_conf(  output_path, config_path ="./" ) :
 <config>
 
 	<jobType>SimultaneousTPid</jobType>
+	<Task name="SimultaneousTPid" type="SimultaneousTPid" config="" nodePath="SimultaneousTPid" />
 
 	<SimultaneousPid>
 		<Logger color="true" logLevel="info" globalLogLevel="info"/>

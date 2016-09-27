@@ -16,9 +16,11 @@ def write_histo_conf( data_path, output_path, config_path ="./" ) :
 
 		<!-- Job to run -->
 		<jobType>InclusiveSpectra</jobType>
+		<Task name="InclusiveSpectra" type="InclusiveSpectra" config="" nodePath="InclusiveSpectra" />
 
 		<InclusiveSpectra>
 			<Logger color="true" globalLogLevel="info" logLevel="all" />
+			<EventLoop progress="true" />
 			
 			<input plc="{0}">
 				<dst treeName="rcpPicoDst" url="{1}"/>
@@ -53,6 +55,7 @@ def write_histo_conf( data_path, output_path, config_path ="./" ) :
 
 		<!-- Job to run -->
 		<jobType>TpcEffMaker</jobType>
+		<Task name="TpcEffMaker" type="TpcEffMaker" config="" nodePath="TpcEffMaker" />
 
 		<TpcEffMaker>
 			<Logger color="true" globalLogLevel="info" logLevel="all" />
@@ -92,6 +95,7 @@ def write_histo_conf( data_path, output_path, config_path ="./" ) :
 
 		<!-- Job to run -->
 		<jobType>TpcEffMaker</jobType>
+		<Task name="TpcEffMaker" type="TpcEffMaker" config="" nodePath="TpcEffMaker" />
 
 		<TpcEffMaker>
 			<Logger color="true" globalLogLevel="info" logLevel="all" />
@@ -160,6 +164,7 @@ def write_fit_config( input_path, output_path, output_config_path,config_path ="
 
 		<!-- Job to run -->
 		<jobType>TpcEffFitter</jobType>
+		<Task name="TpcEffFitter" type="TpcEffFitter" config="" nodePath="TpcEffFitter" />
 
 		<TpcEffFitter>
 			<Logger color="true" globalLogLevel="info" logLevel="all" />
