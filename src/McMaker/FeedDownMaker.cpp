@@ -38,11 +38,11 @@ void FeedDownMaker::initialize(){
 
 
 	// Tracks cuts
-	cut_nHitsFit             = unique_ptr<XmlRange>(new XmlRange( &config , "TrackCuts.nHitsFit"             , 0     , INT_MAX ) );
-	cut_dca                  = unique_ptr<XmlRange>(new XmlRange( &config , "TrackCuts.dca"                  , 0     , INT_MAX ) );
-	cut_nHitsFitOverPossible = unique_ptr<XmlRange>(new XmlRange( &config , "TrackCuts.nHitsFitOverPossible" , 0     , INT_MAX ) );
-	cut_nHitsDedx            = unique_ptr<XmlRange>(new XmlRange( &config , "TrackCuts.nHitsDedx"            , 0     , INT_MAX ) );
-	cut_pt                   = unique_ptr<XmlRange>(new XmlRange( &config , "TrackCuts.pt"                   , 0     , INT_MAX ) );
+	cut_nHitsFit             = unique_ptr<XmlRange>(new XmlRange( &config , "TrackCuts.nHitsFit"             , 0     , std::numeric_limits<int>::max() ) );
+	cut_dca                  = unique_ptr<XmlRange>(new XmlRange( &config , "TrackCuts.dca"                  , 0     , std::numeric_limits<int>::max() ) );
+	cut_nHitsFitOverPossible = unique_ptr<XmlRange>(new XmlRange( &config , "TrackCuts.nHitsFitOverPossible" , 0     , std::numeric_limits<int>::max() ) );
+	cut_nHitsDedx            = unique_ptr<XmlRange>(new XmlRange( &config , "TrackCuts.nHitsDedx"            , 0     , std::numeric_limits<int>::max() ) );
+	cut_pt                   = unique_ptr<XmlRange>(new XmlRange( &config , "TrackCuts.pt"                   , 0     , std::numeric_limits<int>::max() ) );
 	cut_ptGlobalOverPrimary  = unique_ptr<XmlRange>(new XmlRange( &config , "TrackCuts.ptGlobalOverPrimary"  , 0.7   , 1.42 ) );
 	cut_rapidity             = unique_ptr<XmlRange>(new XmlRange( &config , "TrackCuts.rapidity"             , -0.25 , 	0.25 ) );
 
