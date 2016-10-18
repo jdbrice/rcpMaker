@@ -11,6 +11,8 @@
 
 // STL
 #include <math.h>
+#include <limits>
+#include <cstdint>
 
 vector<int> FeedDownMaker::plcID = { 8, 9, 11, 12, 14, 15 };
 vector<float> FeedDownMaker::plcMass = { 0.1396, 0.1396, 0.4937, 0.4937, 0.9383, 0.9383 };
