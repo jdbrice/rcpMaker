@@ -1,0 +1,92 @@
+##############
+# Fit
+##############
+
+Executable = /home/jdb12/work/rcpMaker/runner/rcp
+Initialdir = /home/jdb12/work/rcpMaker/runner/
+
+
+Arguments = /data/star1/jdb12/RcpAnalysis/config/tbtCorrsOff/Fitter/PostCorr_Pi.xml --iCharge=-1 --iCen=0
+# Output = /data/star1/jdb12/RcpAnalysis/config/tbtCorrsOff/Fitter/PostCorr_Pi.xml_-1_0.log
+# Error = /data/star1/jdb12/RcpAnalysis/config/tbtCorrsOff/Fitter/PostCorr_Pi.xml_-1_0.error
+# Log = /data/star1/jdb12/RcpAnalysis/config/tbtCorrsOff/Fitter/PostCorr_Pi.xml_-1_0.condor.log
+Queue
+
+Arguments = /data/star1/jdb12/RcpAnalysis/config/tbtCorrsOff/Fitter/PostCorr_Pi.xml --iCharge=-1 --iCen=1
+# Output = /data/star1/jdb12/RcpAnalysis/config/tbtCorrsOff/Fitter/PostCorr_Pi.xml_-1_1.log
+# Error = /data/star1/jdb12/RcpAnalysis/config/tbtCorrsOff/Fitter/PostCorr_Pi.xml_-1_1.error
+# Log = /data/star1/jdb12/RcpAnalysis/config/tbtCorrsOff/Fitter/PostCorr_Pi.xml_-1_1.condor.log
+Queue
+
+Arguments = /data/star1/jdb12/RcpAnalysis/config/tbtCorrsOff/Fitter/PostCorr_Pi.xml --iCharge=-1 --iCen=2
+# Output = /data/star1/jdb12/RcpAnalysis/config/tbtCorrsOff/Fitter/PostCorr_Pi.xml_-1_2.log
+# Error = /data/star1/jdb12/RcpAnalysis/config/tbtCorrsOff/Fitter/PostCorr_Pi.xml_-1_2.error
+# Log = /data/star1/jdb12/RcpAnalysis/config/tbtCorrsOff/Fitter/PostCorr_Pi.xml_-1_2.condor.log
+Queue
+
+Arguments = /data/star1/jdb12/RcpAnalysis/config/tbtCorrsOff/Fitter/PostCorr_Pi.xml --iCharge=-1 --iCen=3
+# Output = /data/star1/jdb12/RcpAnalysis/config/tbtCorrsOff/Fitter/PostCorr_Pi.xml_-1_3.log
+# Error = /data/star1/jdb12/RcpAnalysis/config/tbtCorrsOff/Fitter/PostCorr_Pi.xml_-1_3.error
+# Log = /data/star1/jdb12/RcpAnalysis/config/tbtCorrsOff/Fitter/PostCorr_Pi.xml_-1_3.condor.log
+Queue
+
+Arguments = /data/star1/jdb12/RcpAnalysis/config/tbtCorrsOff/Fitter/PostCorr_Pi.xml --iCharge=-1 --iCen=4
+# Output = /data/star1/jdb12/RcpAnalysis/config/tbtCorrsOff/Fitter/PostCorr_Pi.xml_-1_4.log
+# Error = /data/star1/jdb12/RcpAnalysis/config/tbtCorrsOff/Fitter/PostCorr_Pi.xml_-1_4.error
+# Log = /data/star1/jdb12/RcpAnalysis/config/tbtCorrsOff/Fitter/PostCorr_Pi.xml_-1_4.condor.log
+Queue
+
+Arguments = /data/star1/jdb12/RcpAnalysis/config/tbtCorrsOff/Fitter/PostCorr_Pi.xml --iCharge=-1 --iCen=5
+# Output = /data/star1/jdb12/RcpAnalysis/config/tbtCorrsOff/Fitter/PostCorr_Pi.xml_-1_5.log
+# Error = /data/star1/jdb12/RcpAnalysis/config/tbtCorrsOff/Fitter/PostCorr_Pi.xml_-1_5.error
+# Log = /data/star1/jdb12/RcpAnalysis/config/tbtCorrsOff/Fitter/PostCorr_Pi.xml_-1_5.condor.log
+Queue
+
+Arguments = /data/star1/jdb12/RcpAnalysis/config/tbtCorrsOff/Fitter/PostCorr_Pi.xml --iCharge=-1 --iCen=6
+# Output = /data/star1/jdb12/RcpAnalysis/config/tbtCorrsOff/Fitter/PostCorr_Pi.xml_-1_6.log
+# Error = /data/star1/jdb12/RcpAnalysis/config/tbtCorrsOff/Fitter/PostCorr_Pi.xml_-1_6.error
+# Log = /data/star1/jdb12/RcpAnalysis/config/tbtCorrsOff/Fitter/PostCorr_Pi.xml_-1_6.condor.log
+Queue
+
+Arguments = /data/star1/jdb12/RcpAnalysis/config/tbtCorrsOff/Fitter/PostCorr_Pi.xml --iCharge=1 --iCen=0
+# Output = /data/star1/jdb12/RcpAnalysis/config/tbtCorrsOff/Fitter/PostCorr_Pi.xml_1_0.log
+# Error = /data/star1/jdb12/RcpAnalysis/config/tbtCorrsOff/Fitter/PostCorr_Pi.xml_1_0.error
+# Log = /data/star1/jdb12/RcpAnalysis/config/tbtCorrsOff/Fitter/PostCorr_Pi.xml_1_0.condor.log
+Queue
+
+Arguments = /data/star1/jdb12/RcpAnalysis/config/tbtCorrsOff/Fitter/PostCorr_Pi.xml --iCharge=1 --iCen=1
+# Output = /data/star1/jdb12/RcpAnalysis/config/tbtCorrsOff/Fitter/PostCorr_Pi.xml_1_1.log
+# Error = /data/star1/jdb12/RcpAnalysis/config/tbtCorrsOff/Fitter/PostCorr_Pi.xml_1_1.error
+# Log = /data/star1/jdb12/RcpAnalysis/config/tbtCorrsOff/Fitter/PostCorr_Pi.xml_1_1.condor.log
+Queue
+
+Arguments = /data/star1/jdb12/RcpAnalysis/config/tbtCorrsOff/Fitter/PostCorr_Pi.xml --iCharge=1 --iCen=2
+# Output = /data/star1/jdb12/RcpAnalysis/config/tbtCorrsOff/Fitter/PostCorr_Pi.xml_1_2.log
+# Error = /data/star1/jdb12/RcpAnalysis/config/tbtCorrsOff/Fitter/PostCorr_Pi.xml_1_2.error
+# Log = /data/star1/jdb12/RcpAnalysis/config/tbtCorrsOff/Fitter/PostCorr_Pi.xml_1_2.condor.log
+Queue
+
+Arguments = /data/star1/jdb12/RcpAnalysis/config/tbtCorrsOff/Fitter/PostCorr_Pi.xml --iCharge=1 --iCen=3
+# Output = /data/star1/jdb12/RcpAnalysis/config/tbtCorrsOff/Fitter/PostCorr_Pi.xml_1_3.log
+# Error = /data/star1/jdb12/RcpAnalysis/config/tbtCorrsOff/Fitter/PostCorr_Pi.xml_1_3.error
+# Log = /data/star1/jdb12/RcpAnalysis/config/tbtCorrsOff/Fitter/PostCorr_Pi.xml_1_3.condor.log
+Queue
+
+Arguments = /data/star1/jdb12/RcpAnalysis/config/tbtCorrsOff/Fitter/PostCorr_Pi.xml --iCharge=1 --iCen=4
+# Output = /data/star1/jdb12/RcpAnalysis/config/tbtCorrsOff/Fitter/PostCorr_Pi.xml_1_4.log
+# Error = /data/star1/jdb12/RcpAnalysis/config/tbtCorrsOff/Fitter/PostCorr_Pi.xml_1_4.error
+# Log = /data/star1/jdb12/RcpAnalysis/config/tbtCorrsOff/Fitter/PostCorr_Pi.xml_1_4.condor.log
+Queue
+
+Arguments = /data/star1/jdb12/RcpAnalysis/config/tbtCorrsOff/Fitter/PostCorr_Pi.xml --iCharge=1 --iCen=5
+# Output = /data/star1/jdb12/RcpAnalysis/config/tbtCorrsOff/Fitter/PostCorr_Pi.xml_1_5.log
+# Error = /data/star1/jdb12/RcpAnalysis/config/tbtCorrsOff/Fitter/PostCorr_Pi.xml_1_5.error
+# Log = /data/star1/jdb12/RcpAnalysis/config/tbtCorrsOff/Fitter/PostCorr_Pi.xml_1_5.condor.log
+Queue
+
+Arguments = /data/star1/jdb12/RcpAnalysis/config/tbtCorrsOff/Fitter/PostCorr_Pi.xml --iCharge=1 --iCen=6
+# Output = /data/star1/jdb12/RcpAnalysis/config/tbtCorrsOff/Fitter/PostCorr_Pi.xml_1_6.log
+# Error = /data/star1/jdb12/RcpAnalysis/config/tbtCorrsOff/Fitter/PostCorr_Pi.xml_1_6.error
+# Log = /data/star1/jdb12/RcpAnalysis/config/tbtCorrsOff/Fitter/PostCorr_Pi.xml_1_6.condor.log
+Queue
+

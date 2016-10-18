@@ -5,5 +5,5 @@
 Executable = /home/jdb12/work/rcpMaker/runner/rcp
 Initialdir = /home/jdb12/work/rcpMaker/runner/
 
-Arguments = /data/star1/jdb12/RcpAnalysis/config/nominal/FeedDown/make.xml --jobIndex=$(Process)
+Arguments = /data/star1/jdb12/RcpAnalysis/config/tbtCorrsOff/FeedDown/make.xml --jobIndex=$(Process)
 Queue 100

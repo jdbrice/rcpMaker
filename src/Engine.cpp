@@ -29,6 +29,7 @@ using namespace jdb;
 
 // // Presentation
 	#include "Present/YieldExporter.h"
+	#include "Spectra/SpectraExporter.h"
 
 // // Feed down
 	#include "McMaker/FeedDownMaker.h"
@@ -63,6 +64,7 @@ int main( int argc, char* argv[] ) {
 	
 	TaskFactory::registerTaskRunner<ApplyPostCorr>( "ApplyPostCorr" );
 	TaskFactory::registerTaskRunner<YieldExporter>( "YieldExporter" );
+	TaskFactory::registerTaskRunner<SpectraExporter>( "SpectraExporter" );
 
 	TaskEngine engine( argc, argv );
 

@@ -7,7 +7,7 @@ pjoin = os.path.join
 t_config_file = "{plc}.{ext}"
 t_data_file = "{plc}.{ext}"
 # all of them should define this
-t_product_file = "PostCorr_{plc}.{ext}"
+t_product_file = "PostCorr_{plc}.root"
 
 
 
@@ -23,10 +23,10 @@ def write_conf(  output_path, config_path ="./" ) :
 		<Logger color="true" logLevel="info" globalLogLevel="trace"/>
 
 		<input plc="{plc}">
-			<data url="{data_file}" />
+			<TFile url="{data_file}.root" as="data" />
 		</input>
 		<output>
-			<data>{product_file}</data>
+			<TFile url="{product_file}" />
 		</output>
 
 
@@ -46,13 +46,15 @@ def write_conf(  output_path, config_path ="./" ) :
 
 	</ApplyPostCorr>
 
+	<Include url="../common/cuts.xml" />
+
 </config>
 	"""
 
 
 	plcs 		= ( "Pi", "K", "P" )
 	for plc in plcs :
-		data_file = pjoin( output_path, fitc.t_product_file.format( state="PostCorr", plc=plc, ext="root" ) )
+		data_file = pjoin( output_path, fitc.t_product_file.format( state="PostCorr", plc=plc ) )
 		product_file = pjoin( output_path, t_product_file.format( plc=plc, ext="root" ) )
 
 		with open( pjoin( config_path, t_config_file.format( plc=plc, ext="xml" ) ), 'w' ) as f :

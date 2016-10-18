@@ -7,7 +7,7 @@ pjoin = os.path.join
 t_config_file = "{state}_{plc}.{ext}"
 t_data_file = "{plc}.{ext}"
 # all of them should define this
-t_product_file = "Fit_{state}_{plc}.{ext}"
+t_product_file = "Fit_{state}_{plc}"
 
 
 
@@ -16,16 +16,18 @@ def write_conf(  output_path, config_path ="./" ) :
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
 
-	<jobType>SimultaneousTPid</jobType>
-	<Task name="SimultaneousTPid" type="SimultaneousTPid" config="" nodePath="SimultaneousTPid" />
+	<jobType>FitRunner</jobType>
+	<Task name="FitRunner" type="FitRunner" config="" nodePath="FitRunner" />
 
-	<SimultaneousPid>
+	<FitRunner>
 		<Logger color="true" logLevel="info" globalLogLevel="info"/>
 		<Reporter> <output width="1600" height="1200" /> </Reporter>	
 
 		<!-- Path the PidHisto file -->
 		<input> <data url="{data_file}"/> </input>
-		<output path="{output_path}"> <data>{product_file}</data> </output>
+		<output path="{output_path}"> 
+			<TFile url="{output_path}/{product_file}_iCharge{{iCharge}}_iCen{{iCen}}.root"/>
+		</output>
 	
 		<!-- Systematic Uncertainties -->
 		<Systematics sigma="false" tofEff="false" tofEffAmount="0.15" nTofEff="10" nSigma="5" />
@@ -90,7 +92,7 @@ def write_conf(  output_path, config_path ="./" ) :
 			<Histo name="sys_dist" title="eff_dist" bins_x="binning.pt" width_y=".005" min_y="-1.0" max_y="1.0" />
 		</histograms>
 
-	</SimultaneousPid>
+	</FitRunner>
 
 
 	<Include url="../common/binning.xml" />

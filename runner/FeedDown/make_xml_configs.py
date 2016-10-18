@@ -25,12 +25,10 @@ def write_conf( data_path, output_path, output_config_path, config_path ="./" ) 
 
 		<!-- Use a datasource to setup an automap to the tree structure -->
 		<input>
-			<dst treeName="StMiniMcTree" url="{data_path}" /> 
+			<dst treeName="StMiniMcTree" url="{data_path}" splitBy="50"/> 
 		</input>
 		<DataSource treeName="StMiniMcTree" filelist="{data_path}">
 			
-			<!-- Set all branches off -->
-			<BranchStatus status="0">*</BranchStatus>
 			<!-- Turn on only the ones you need -->
 			<BranchStatus status="1">
 				mMatchedPair*,
@@ -46,7 +44,7 @@ def write_conf( data_path, output_path, output_config_path, config_path ="./" ) 
 		</Reporter>
 		<Logger logLevel="info" globalLogLevel="warning" />
 		<output path="{output_path}">
-			<data>{product_file}</data>
+			<TFile url="{{FeedDownMaker.output:path}}FeedDown_{{jobIndex}}.root"/>
 			<param>{params_file}</param>
 		</output>
 
@@ -137,7 +135,7 @@ def write_fit_conf( data_path, output_path, output_config_path, config_path ="./
 	<Task name="FeedDownFitter" type="FeedDownFitter" config="" nodePath="FeedDownFitter" />
 
 	<FeedDownFitter>
-		<Pages parents="true" fraction="true" export="false"/>
+		<Pages parents="true" fraction="true" export="true"/>
 
 		
 
@@ -149,6 +147,7 @@ def write_fit_conf( data_path, output_path, output_config_path, config_path ="./
 		<output>
 			<data>{product_file}</data>
 			<param>{params_file}</param>
+			<export>{export_path}</export>
 		</output>
 
 		<!-- the bins into which the 9 centrality bins are mapped. -->
@@ -185,7 +184,7 @@ def write_fit_conf( data_path, output_path, output_config_path, config_path ="./
 	params_file= pjoin( output_config_path, t_product_file.format( ext="xml" ) )
 
 	with open( pjoin( config_path, t_fit_config_file.format( ext="xml" ) ), 'w' ) as f :
-		f.write( template.format( data_path=data_path, params_file=params_file, input_file=input_file, product_file=product_file, report_file=report_file ) )
+		f.write( template.format( data_path=data_path, params_file=params_file, input_file=input_file, product_file=product_file, report_file=report_file, export_path=output_path ) )
 
 def write( data_path, output_path, output_config_path, config_path ="./" ) :
 

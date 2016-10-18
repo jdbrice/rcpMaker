@@ -87,7 +87,7 @@ void FeedDownFitter::make(){
 				reporter->savePage();
 
 				if ( config.getBool( nodePath + ".Pages:export", false ) )
-					reporter->saveImage( config.getString( nodePath + ".output:path" ) + "image/" + k.second + "_" + dts( ptl ) + "_pT_" + dts( pth ) + ".eps"  );
+					reporter->saveImage( config.getString( nodePath + ".output.export" ) + "/img/feeddown_" + k.second + "_" + dts( ptl ) + "_pT_" + dts( pth ) + ".pdf"  );
 			}
 		}
 
@@ -247,6 +247,6 @@ void FeedDownFitter::background( string name, int plcIndex, int bin, ofstream &o
 	
 
 	if ( config.getBool( nodePath + "Pages:export", true ) )
-		reporter->saveImage( config.getString( nodePath + "output:path" ) + "image/" + name + "_back_" + ts(bin) + ".eps" );
+		reporter->saveImage( config.getString( nodePath + ".output.export" ) + "/img/feeddown_fit_" + name + "_back_" + ts(bin) + ".pdf" );
 	reporter->savePage();
 }
