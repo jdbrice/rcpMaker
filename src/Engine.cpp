@@ -29,7 +29,6 @@ using namespace jdb;
 
 // // Presentation
 	#include "Present/YieldExporter.h"
-	#include "Spectra/SpectraExporter.h"
 
 // // Feed down
 	#include "McMaker/FeedDownMaker.h"
