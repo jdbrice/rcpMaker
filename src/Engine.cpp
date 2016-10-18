@@ -63,7 +63,6 @@ int main( int argc, char* argv[] ) {
 	
 	TaskFactory::registerTaskRunner<ApplyPostCorr>( "ApplyPostCorr" );
 	TaskFactory::registerTaskRunner<YieldExporter>( "YieldExporter" );
-	TaskFactory::registerTaskRunner<SpectraExporter>( "SpectraExporter" );
 
 	TaskEngine engine( argc, argv );
 
