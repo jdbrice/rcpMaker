@@ -14,15 +14,15 @@ using namespace std;
 #include "HistoBins.h"
 #include "XmlConfig.h"
 #include "Reporter.h"
-// Interface
-	#include "IObject.h"
-	#include "IConfig.h"
+
+#include "TaskRunner.h"
+
 using namespace jdb;
 
 #include "TFitResultPtr.h"
 #include "TF1.h"
 
-class FeedDownFitter : public IConfig, public IObject
+class FeedDownFitter : public TaskRunner
 {
 protected:
 	string outputPath;
@@ -47,9 +47,10 @@ protected:
 public:
 
 	virtual const char* classname() const { return "FeedDownFitter";}
-	FeedDownFitter( XmlConfig cfg, string nodePath );
-	~FeedDownFitter();
+	FeedDownFitter() { }
+	~FeedDownFitter() {}
 	
+	virtual void init( XmlConfig &_config, string _nodePath );
 
 
 	void make();

@@ -5,72 +5,72 @@
 Executable = /home/jdb12/work/rcpMaker/runner/rcp
 Initialdir = /home/jdb12/work/rcpMaker/runner/
 
-Arguments = /data/star1/jdb12/RcpAnalysis/config/nominal/Fitter/PostCorr_K.xml -1 0
-Output = /data/star1/jdb12/RcpAnalysis/config/nominal/Fitter/PostCorr_K.xml_-1_0.log
-Error = /data/star1/jdb12/RcpAnalysis/config/nominal/Fitter/PostCorr_K.xml_-1_0.error
+Arguments = /data/star1/jdb12/RcpAnalysis/config/nominal/Fitter/PostCorr_K.xml --iCharge=-1 --iCen=0
+# Output = /data/star1/jdb12/RcpAnalysis/config/nominal/Fitter/PostCorr_K.xml_-1_0.log
+# Error = /data/star1/jdb12/RcpAnalysis/config/nominal/Fitter/PostCorr_K.xml_-1_0.error
 Queue
 
-Arguments = /data/star1/jdb12/RcpAnalysis/config/nominal/Fitter/PostCorr_K.xml -1 1
-Output = /data/star1/jdb12/RcpAnalysis/config/nominal/Fitter/PostCorr_K.xml_-1_1.log
-Error = /data/star1/jdb12/RcpAnalysis/config/nominal/Fitter/PostCorr_K.xml_-1_1.error
+Arguments = /data/star1/jdb12/RcpAnalysis/config/nominal/Fitter/PostCorr_K.xml --iCharge=-1 --iCen=1
+# Output = /data/star1/jdb12/RcpAnalysis/config/nominal/Fitter/PostCorr_K.xml_-1_1.log
+# Error = /data/star1/jdb12/RcpAnalysis/config/nominal/Fitter/PostCorr_K.xml_-1_1.error
 Queue
 
-Arguments = /data/star1/jdb12/RcpAnalysis/config/nominal/Fitter/PostCorr_K.xml -1 2
-Output = /data/star1/jdb12/RcpAnalysis/config/nominal/Fitter/PostCorr_K.xml_-1_2.log
-Error = /data/star1/jdb12/RcpAnalysis/config/nominal/Fitter/PostCorr_K.xml_-1_2.error
+Arguments = /data/star1/jdb12/RcpAnalysis/config/nominal/Fitter/PostCorr_K.xml --iCharge=-1 --iCen=2
+# Output = /data/star1/jdb12/RcpAnalysis/config/nominal/Fitter/PostCorr_K.xml_-1_2.log
+# Error = /data/star1/jdb12/RcpAnalysis/config/nominal/Fitter/PostCorr_K.xml_-1_2.error
 Queue
 
-Arguments = /data/star1/jdb12/RcpAnalysis/config/nominal/Fitter/PostCorr_K.xml -1 3
-Output = /data/star1/jdb12/RcpAnalysis/config/nominal/Fitter/PostCorr_K.xml_-1_3.log
-Error = /data/star1/jdb12/RcpAnalysis/config/nominal/Fitter/PostCorr_K.xml_-1_3.error
+Arguments = /data/star1/jdb12/RcpAnalysis/config/nominal/Fitter/PostCorr_K.xml --iCharge=-1 --iCen=3
+# Output = /data/star1/jdb12/RcpAnalysis/config/nominal/Fitter/PostCorr_K.xml_-1_3.log
+# Error = /data/star1/jdb12/RcpAnalysis/config/nominal/Fitter/PostCorr_K.xml_-1_3.error
 Queue
 
-Arguments = /data/star1/jdb12/RcpAnalysis/config/nominal/Fitter/PostCorr_K.xml -1 4
-Output = /data/star1/jdb12/RcpAnalysis/config/nominal/Fitter/PostCorr_K.xml_-1_4.log
-Error = /data/star1/jdb12/RcpAnalysis/config/nominal/Fitter/PostCorr_K.xml_-1_4.error
+Arguments = /data/star1/jdb12/RcpAnalysis/config/nominal/Fitter/PostCorr_K.xml --iCharge=-1 --iCen=4
+# Output = /data/star1/jdb12/RcpAnalysis/config/nominal/Fitter/PostCorr_K.xml_-1_4.log
+# Error = /data/star1/jdb12/RcpAnalysis/config/nominal/Fitter/PostCorr_K.xml_-1_4.error
 Queue
 
-Arguments = /data/star1/jdb12/RcpAnalysis/config/nominal/Fitter/PostCorr_K.xml -1 5
-Output = /data/star1/jdb12/RcpAnalysis/config/nominal/Fitter/PostCorr_K.xml_-1_5.log
-Error = /data/star1/jdb12/RcpAnalysis/config/nominal/Fitter/PostCorr_K.xml_-1_5.error
+Arguments = /data/star1/jdb12/RcpAnalysis/config/nominal/Fitter/PostCorr_K.xml --iCharge=-1 --iCen=5
+# Output = /data/star1/jdb12/RcpAnalysis/config/nominal/Fitter/PostCorr_K.xml_-1_5.log
+# Error = /data/star1/jdb12/RcpAnalysis/config/nominal/Fitter/PostCorr_K.xml_-1_5.error
 Queue
 
-Arguments = /data/star1/jdb12/RcpAnalysis/config/nominal/Fitter/PostCorr_K.xml -1 6
-Output = /data/star1/jdb12/RcpAnalysis/config/nominal/Fitter/PostCorr_K.xml_-1_6.log
-Error = /data/star1/jdb12/RcpAnalysis/config/nominal/Fitter/PostCorr_K.xml_-1_6.error
+Arguments = /data/star1/jdb12/RcpAnalysis/config/nominal/Fitter/PostCorr_K.xml --iCharge=-1 --iCen=6
+# Output = /data/star1/jdb12/RcpAnalysis/config/nominal/Fitter/PostCorr_K.xml_-1_6.log
+# Error = /data/star1/jdb12/RcpAnalysis/config/nominal/Fitter/PostCorr_K.xml_-1_6.error
 Queue
 
-Arguments = /data/star1/jdb12/RcpAnalysis/config/nominal/Fitter/PostCorr_K.xml 1 0
-Output = /data/star1/jdb12/RcpAnalysis/config/nominal/Fitter/PostCorr_K.xml_1_0.log
-Error = /data/star1/jdb12/RcpAnalysis/config/nominal/Fitter/PostCorr_K.xml_1_0.error
+Arguments = /data/star1/jdb12/RcpAnalysis/config/nominal/Fitter/PostCorr_K.xml --iCharge=1 --iCen=0
+# Output = /data/star1/jdb12/RcpAnalysis/config/nominal/Fitter/PostCorr_K.xml_1_0.log
+# Error = /data/star1/jdb12/RcpAnalysis/config/nominal/Fitter/PostCorr_K.xml_1_0.error
 Queue
 
-Arguments = /data/star1/jdb12/RcpAnalysis/config/nominal/Fitter/PostCorr_K.xml 1 1
-Output = /data/star1/jdb12/RcpAnalysis/config/nominal/Fitter/PostCorr_K.xml_1_1.log
-Error = /data/star1/jdb12/RcpAnalysis/config/nominal/Fitter/PostCorr_K.xml_1_1.error
+Arguments = /data/star1/jdb12/RcpAnalysis/config/nominal/Fitter/PostCorr_K.xml --iCharge=1 --iCen=1
+# Output = /data/star1/jdb12/RcpAnalysis/config/nominal/Fitter/PostCorr_K.xml_1_1.log
+# Error = /data/star1/jdb12/RcpAnalysis/config/nominal/Fitter/PostCorr_K.xml_1_1.error
 Queue
 
-Arguments = /data/star1/jdb12/RcpAnalysis/config/nominal/Fitter/PostCorr_K.xml 1 2
-Output = /data/star1/jdb12/RcpAnalysis/config/nominal/Fitter/PostCorr_K.xml_1_2.log
-Error = /data/star1/jdb12/RcpAnalysis/config/nominal/Fitter/PostCorr_K.xml_1_2.error
+Arguments = /data/star1/jdb12/RcpAnalysis/config/nominal/Fitter/PostCorr_K.xml --iCharge=1 --iCen=2
+# Output = /data/star1/jdb12/RcpAnalysis/config/nominal/Fitter/PostCorr_K.xml_1_2.log
+# Error = /data/star1/jdb12/RcpAnalysis/config/nominal/Fitter/PostCorr_K.xml_1_2.error
 Queue
 
-Arguments = /data/star1/jdb12/RcpAnalysis/config/nominal/Fitter/PostCorr_K.xml 1 3
-Output = /data/star1/jdb12/RcpAnalysis/config/nominal/Fitter/PostCorr_K.xml_1_3.log
-Error = /data/star1/jdb12/RcpAnalysis/config/nominal/Fitter/PostCorr_K.xml_1_3.error
+Arguments = /data/star1/jdb12/RcpAnalysis/config/nominal/Fitter/PostCorr_K.xml --iCharge=1 --iCen=3
+# Output = /data/star1/jdb12/RcpAnalysis/config/nominal/Fitter/PostCorr_K.xml_1_3.log
+# Error = /data/star1/jdb12/RcpAnalysis/config/nominal/Fitter/PostCorr_K.xml_1_3.error
 Queue
 
-Arguments = /data/star1/jdb12/RcpAnalysis/config/nominal/Fitter/PostCorr_K.xml 1 4
-Output = /data/star1/jdb12/RcpAnalysis/config/nominal/Fitter/PostCorr_K.xml_1_4.log
-Error = /data/star1/jdb12/RcpAnalysis/config/nominal/Fitter/PostCorr_K.xml_1_4.error
+Arguments = /data/star1/jdb12/RcpAnalysis/config/nominal/Fitter/PostCorr_K.xml --iCharge=1 --iCen=4
+# Output = /data/star1/jdb12/RcpAnalysis/config/nominal/Fitter/PostCorr_K.xml_1_4.log
+# Error = /data/star1/jdb12/RcpAnalysis/config/nominal/Fitter/PostCorr_K.xml_1_4.error
 Queue
 
-Arguments = /data/star1/jdb12/RcpAnalysis/config/nominal/Fitter/PostCorr_K.xml 1 5
-Output = /data/star1/jdb12/RcpAnalysis/config/nominal/Fitter/PostCorr_K.xml_1_5.log
-Error = /data/star1/jdb12/RcpAnalysis/config/nominal/Fitter/PostCorr_K.xml_1_5.error
+Arguments = /data/star1/jdb12/RcpAnalysis/config/nominal/Fitter/PostCorr_K.xml --iCharge=1 --iCen=5
+# Output = /data/star1/jdb12/RcpAnalysis/config/nominal/Fitter/PostCorr_K.xml_1_5.log
+# Error = /data/star1/jdb12/RcpAnalysis/config/nominal/Fitter/PostCorr_K.xml_1_5.error
 Queue
 
-Arguments = /data/star1/jdb12/RcpAnalysis/config/nominal/Fitter/PostCorr_K.xml 1 6
-Output = /data/star1/jdb12/RcpAnalysis/config/nominal/Fitter/PostCorr_K.xml_1_6.log
-Error = /data/star1/jdb12/RcpAnalysis/config/nominal/Fitter/PostCorr_K.xml_1_6.error
+Arguments = /data/star1/jdb12/RcpAnalysis/config/nominal/Fitter/PostCorr_K.xml --iCharge=1 --iCen=6
+# Output = /data/star1/jdb12/RcpAnalysis/config/nominal/Fitter/PostCorr_K.xml_1_6.log
+# Error = /data/star1/jdb12/RcpAnalysis/config/nominal/Fitter/PostCorr_K.xml_1_6.error
 Queue

@@ -17,6 +17,7 @@ def write_conf( data_path, output_path, output_config_path, config_path ="./" ) 
 
 		<!-- Job to run -->
 		<jobType>EnergyLoss</jobType>
+		<Task name="EnergyLoss" type="EnergyLoss" config="" nodePath="EnergyLoss" />
 
 		<EnergyLoss>
 			<Logger color="false" globalLogLevel="info" logLevel="all" />

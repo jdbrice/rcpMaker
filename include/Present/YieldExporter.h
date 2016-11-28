@@ -4,6 +4,8 @@
 #include "HistoAnalyzer.h"
 #include "Common.h"
 
+#include "ANSIColors.h"
+
 class YieldExporter : public HistoAnalyzer
 {
 
@@ -24,6 +26,8 @@ public:
 		INFO( classname(), "" );
 		plc = config.getString( nodePath + ".input:plc" );
 		energy = config.getString( nodePath + ".input:energy", "14.5" );
+
+		loadSystematics( nodePath + ".systematics" );
 	}
 
 
@@ -39,7 +43,7 @@ public:
 				string hName = plc + "_yield/" + Common::yieldName( plc, cen, charge );
 				TH1D* hSpectra =  (TH1D*)inFile->Get( hName.c_str() );
 				string name = base + "spectra_" + energy + "_" + plc + "_" + charge + "_" + cen + ".dat";
-
+				string sysName = plc + "_" + charge + "_" + cen;
 				INFO( classname(), "Exporting " << hName << " --> " << name );
 
 				if ( nullptr == hSpectra ){
@@ -48,7 +52,7 @@ public:
 				}
 
 				ofstream fout( name.c_str() );
-					exportSpectraHist( hSpectra, fout );
+					exportSpectraHist( hSpectra, fout, sysName );
 				fout.close();
 
 
@@ -56,7 +60,29 @@ public:
 		}
 	}// make
 
-	void exportSpectraHist( TH1D * hSpectra, ofstream &fout ){
+
+	void loadSystematics( string _path ){
+
+		vector<string> centralityBins = config.getStringVector( nodePath + ".CentralityBins" );
+
+		for ( string plc : Common::species ){
+			for ( string chg : Common::sCharges ){
+				for ( string cen : centralityBins ){
+					string name = plc + "_" + chg + "_" + cen;
+					if ( config.exists( _path + "." + name ) ){
+						INFO( classname(), ANSIColors::color("Systematics uncertainties : ", "green" ) << name );
+						sysMap[ name ] = config.getFloatMap( _path + "." + name );
+						INFO( classname(), "[0.55] = +/-" << sysMap[name][0.55] );
+					} else {
+						ERROR( classname(), "Cannot find Systematic Uncertainties for " << name );
+					}
+
+				}
+			}
+		}
+	}
+
+	void exportSpectraHist( TH1D * hSpectra, ofstream &fout, string sysName ){
 		DEBUG( classname(), "( h=" << hSpectra->GetName() << ", file=" << ")" );
 
 		// file header
@@ -71,10 +97,20 @@ public:
 			double stat_unc = hSpectra->GetBinError( i );
 			double sys_unc = 0.0;
 
+			if ( sysMap.count( sysName ) > 0 && sysMap[ sysName ].count( pT ) > 0 ){
+				sys_unc = sysMap[ sysName ][ pT ];
+			}
+			
+			if ( value < 10e-20 || pT < 0.54 || sys_unc == 0) continue;
+
 			fout << std::setprecision( 10 ) << std::left << std::setw(20) << pT << std::left << std::setw(20) << value << std::left << std::setw(20) << stat_unc << std::left << std::setw(20) << sys_unc << endl; 
 		}
 
 	} // exportSpectraHist
+
+
+protected:
+	map<string, map<float, float> > sysMap;
 
 };
 

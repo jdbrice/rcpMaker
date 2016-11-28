@@ -1,7 +1,7 @@
 #include "McMaker/FeedDownFitter.h"
 
 // Roobarb
-#include <jdb/RooPlotLib.h>
+#include <RooPlotLib.h>
 
 // ROOT
 #include "TGraphAsymmErrors.h"
@@ -13,11 +13,8 @@
 vector<int> FeedDownFitter::plcID = { 8, 9, 11, 12, 14, 15 };
 vector<float> FeedDownFitter::plcMass = { 0.1396, 0.1396, 0.4937, 0.4937, 0.9383, 0.9383 };
 
-FeedDownFitter::FeedDownFitter( XmlConfig cfg, string nodePath ){
-
-
-	this->config = cfg;
-	this->nodePath = cfg.basePath( nodePath );
+void FeedDownFitter::init( XmlConfig &_config, string _nodePath ){
+	TaskRunner::init( _config, _nodePath );
 
 	// map of GEANT PID -> histogram name
 	plcName[ 8 ] = "Pi_p";
@@ -48,12 +45,7 @@ FeedDownFitter::FeedDownFitter( XmlConfig cfg, string nodePath ){
     INFO( classname(), "c[ 0 ] = " << centralityBinMap[ 0 ] );
 
 
-    reporter = unique_ptr<Reporter>( new Reporter( cfg, nodePath + ".Reporter." ) );
-
-}
-
-
-FeedDownFitter::~FeedDownFitter(){
+    reporter = unique_ptr<Reporter>( new Reporter( config, nodePath + ".Reporter." ) );
 
 }
 
@@ -95,7 +87,7 @@ void FeedDownFitter::make(){
 				reporter->savePage();
 
 				if ( config.getBool( nodePath + ".Pages:export", false ) )
-					reporter->saveImage( config.getString( nodePath + ".output:path" ) + "image/" + k.second + "_" + dts( ptl ) + "_pT_" + dts( pth ) + ".eps"  );
+					reporter->saveImage( config.getString( nodePath + ".output.export" ) + "/img/feeddown_" + k.second + "_" + dts( ptl ) + "_pT_" + dts( pth ) + ".pdf"  );
 			}
 		}
 
@@ -254,8 +246,7 @@ void FeedDownFitter::background( string name, int plcIndex, int bin, ofstream &o
 	l->Draw("same");
 	
 
-	INFO( classname(), config.getString( nodePath + ".output:path" ) + "img/" + name + "_back_" + ts(bin) + ".eps" );
-	if ( config.getBool( nodePath + ".Pages:export", true ) )
-		reporter->saveImage( config.getString( nodePath + ".output:path" ) + "img/" + name + "_back_" + ts(bin) + ".eps" );
+	if ( config.getBool( nodePath + "Pages:export", true ) )
+		reporter->saveImage( config.getString( nodePath + ".output.export" ) + "/img/feeddown_fit_" + name + "_back_" + ts(bin) + ".pdf" );
 	reporter->savePage();
 }

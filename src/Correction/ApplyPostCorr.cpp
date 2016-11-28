@@ -23,6 +23,13 @@ void ApplyPostCorr::initialize(){
 	apply_feeddown = config.getBool( nodePath + ".FeedDown:apply", true );
 	apply_tofEff = config.getBool( nodePath + ".TofEff:apply", true );
 
+	INFO( classname(), "Apply TpcEff (Nominal is FALSE) : " << bts( apply_tpcEff ) );
+	INFO( classname(), "Apply pT Factor : " << bts( apply_pTFactor ) );
+	INFO( classname(), "Apply bin Width : " << bts( apply_binWidth ) );
+	INFO( classname(), "Apply dy : " << bts( apply_dy ) );
+	INFO( classname(), "Apply two pi : " << bts( apply_twopi ) );
+
+
 	INFO( classname(), "Apply TofEff : " << bts( apply_tofEff ) );
 	INFO( classname(), "Apply Feed-down : " << bts( apply_feeddown ) );
 }
@@ -72,7 +79,7 @@ void ApplyPostCorr::setupCloneArmy( TH1 * h_origin, string cyn, string plc ){
 
 void ApplyPostCorr::make(){
 	DEBUG( classname(), "");
-
+	setCurrentFile( "data" );
 
 	if ( !inFile || !inFile->IsOpen() ){
 		ERROR( classname(), "InFile is invalid" );
@@ -83,7 +90,9 @@ void ApplyPostCorr::make(){
 	double feedDownSysNSigma = config.getDouble( nodePath + ".FeedDown:systematic", 0 );
 	INFO( classname(), "FeedDown Systematic " << feedDownSysNSigma << " sigma" );
 
-
+	if ( !config.exists( "TrackCuts" ) ){
+		ERROR( "TrackCuts not provided" );
+	}
 	double dy = ( config.getDouble( "TrackCuts.rapidity:max" ) - config.getDouble( "TrackCuts.rapidity:min" ) );
 	INFO( classname(), "dy = " << dy );
 
@@ -92,11 +101,12 @@ void ApplyPostCorr::make(){
 		for ( int cb : config.getIntVector( nodePath + ".CentralityBins" ) ){
 			INFO( classname(), "Working on charge=" << cg << ", cen=" << cb );
 
-			string scg = Common::chargeString( cg );
-			string scb = ts( cb );
-			string cyn = Common::yieldName( plc, cb, cg );
-
-			TH1 * h = (TH1*)inFile->Get( (plc + "_yield/" + cyn ).c_str() );
+			string scg   = Common::chargeString( cg );
+			string scb   = ts( cb );
+			string cyn   = Common::yieldName( plc, cb, cg );
+			string hname = plc + "_yield/" + cyn;
+			INFO( classname(), "Getting : " << hname );
+			TH1 * h = get1D( hname );
 
 			if ( !h ){
 				ERROR( classname(), "Histogram is invalid" );

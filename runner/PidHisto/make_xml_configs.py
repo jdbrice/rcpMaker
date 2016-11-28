@@ -16,6 +16,7 @@ def write_conf( data_path, output_path, input_config_path, config_path ="./" ) :
 <config>
 
 	<jobType>PidHistoMaker</jobType>
+	<Task name="PidHistoMaker" type="PidHistoMaker" config="" nodePath="PidHistoMaker" />
 
 	<PidHistoMaker>
 		<Logger color="true" logLevel="all" globalLogLevel="info" />

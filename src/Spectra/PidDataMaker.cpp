@@ -159,7 +159,9 @@ void PidDataMaker::analyzeTofTrack( int iTrack ){
 
 	// Require valid p bin
 	if ( ptBin < 0 ){	// only caused by pT outside of range we are interested in
-		DEBUG( classname(), "invalid ptBin = " << ptBin << " pT = " << pt << ", track pT = " << trackPt );
+		if ( pt > binsPt->getBins()[0] ){
+			WARN( classname(), "invalid ptBin = " << ptBin << " pT = " << pt << ", track pT = " << trackPt );
+		}
 		return;
 	}
 
@@ -205,6 +207,7 @@ void PidDataMaker::analyzeTofTrack( int iTrack ){
 			INFO( classname(), "dy = " << ( cut_rapidity->max - cut_rapidity->min ) );
 			INFO( classname(), "tpcEff = " << (1.0 / sc->tpcEffWeight( centerSpecies, corrTrackPt, cBin, charge, tpcSysNSigma )) );
 
+			INFO( classname(), "ew = " << eventWeight );
 			INFO( classname(), "w = " << trackWeight );
 
 		}

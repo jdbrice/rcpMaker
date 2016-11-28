@@ -96,6 +96,10 @@ void TofEffFitter::make(){
 				INFO( classname(), "Exporting image to : " << imgName );
 				rp.saveImage( imgName );
 
+				imgName = outputPath + "/img/TofEff_" + plc + "_" + cs + "_" + ts(b) + ".pdf";
+				INFO( classname(), "Exporting image to : " << imgName );
+				rp.saveImage( imgName );
+
 				exportParams( b, hAll, &g, out );
 
 			} // loop centrality bins

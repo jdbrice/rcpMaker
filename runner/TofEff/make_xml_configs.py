@@ -19,6 +19,7 @@ def write_conf( data_path, output_path, config_path ="./" ) :
 
 	<!-- Job to run -->
 	<jobType>TofEffSpectra</jobType>
+	<Task name="TofEffSpectra" type="TofEffSpectra" config="" nodePath="TofEffSpectra" />
 
 	<TofEffSpectra>
 		<Logger color="true" globalLogLevel="warning" logLevel="warning" />
@@ -81,6 +82,7 @@ def write_fit_config( input_path, output_path, output_config_path, config_path =
 
 	<!-- Job to run -->
 	<jobType>TofEffFitter</jobType>
+	<Task name="TofEffFitter" type="TofEffFitter" config="" nodePath="TofEffFitter" />
 
 	<TofEffFitter>
 		<Logger color="true" globalLogLevel="info" logLevel="all" />

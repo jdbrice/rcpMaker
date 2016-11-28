@@ -3,7 +3,7 @@
 
 
 // Roobarb
-#include <jdb/RooPlotLib.h>
+#include "RooPlotLib.h"
 
 // ROOT
 #include "TGraphAsymmErrors.h"
@@ -11,11 +11,14 @@
 
 // STL
 #include <math.h>
+#include <limits>
+#include <cstdint>
 
 vector<int> FeedDownMaker::plcID = { 8, 9, 11, 12, 14, 15 };
 vector<float> FeedDownMaker::plcMass = { 0.1396, 0.1396, 0.4937, 0.4937, 0.9383, 0.9383 };
 
 void FeedDownMaker::initialize(){
+		TreeAnalyzer::initialize();
 	DEBUG( classname(), "" );
 	if ( ds && ds->getTreeName() == "StMiniMcTree" ){
 		INFO( classname(), "Using DataStore" )
@@ -35,15 +38,15 @@ void FeedDownMaker::initialize(){
 
 
 	// Tracks cuts
-    cut_nHitsFit				= unique_ptr<XmlRange>(new XmlRange( &config, "TrackCuts.nHitsFit", 				0, 		INT_MAX ) );
-    cut_dca 					= unique_ptr<XmlRange>(new XmlRange( &config, "TrackCuts.dca", 					0, 		INT_MAX ) );
-	cut_nHitsFitOverPossible 	= unique_ptr<XmlRange>(new XmlRange( &config, "TrackCuts.nHitsFitOverPossible", 	0, 		INT_MAX ) );
-    cut_nHitsDedx 				= unique_ptr<XmlRange>(new XmlRange( &config, "TrackCuts.nHitsDedx", 				0, 		INT_MAX ) );
-    cut_pt 						= unique_ptr<XmlRange>(new XmlRange( &config, "TrackCuts.pt", 					0, 		INT_MAX ) );
-    cut_ptGlobalOverPrimary 	= unique_ptr<XmlRange>(new XmlRange( &config, "TrackCuts.ptGlobalOverPrimary", 	0.7, 	1.42 ) );
-    cut_rapidity				= unique_ptr<XmlRange>(new XmlRange( &config, "TrackCuts.rapidity", 				-0.25, 	0.25 ) );
+	cut_nHitsFit             = unique_ptr<XmlRange>(new XmlRange( &config , "TrackCuts.nHitsFit"             , 0     , std::numeric_limits<int>::max() ) );
+	cut_dca                  = unique_ptr<XmlRange>(new XmlRange( &config , "TrackCuts.dca"                  , 0     , std::numeric_limits<int>::max() ) );
+	cut_nHitsFitOverPossible = unique_ptr<XmlRange>(new XmlRange( &config , "TrackCuts.nHitsFitOverPossible" , 0     , std::numeric_limits<int>::max() ) );
+	cut_nHitsDedx            = unique_ptr<XmlRange>(new XmlRange( &config , "TrackCuts.nHitsDedx"            , 0     , std::numeric_limits<int>::max() ) );
+	cut_pt                   = unique_ptr<XmlRange>(new XmlRange( &config , "TrackCuts.pt"                   , 0     , std::numeric_limits<int>::max() ) );
+	cut_ptGlobalOverPrimary  = unique_ptr<XmlRange>(new XmlRange( &config , "TrackCuts.ptGlobalOverPrimary"  , 0.7   , 1.42 ) );
+	cut_rapidity             = unique_ptr<XmlRange>(new XmlRange( &config , "TrackCuts.rapidity"             , -0.25 , 	0.25 ) );
 
-    formulas =	{ "[0]*exp( -[1] * x ) + [2] * exp( -[3] * x )",
+	formulas =	{ "[0]*exp( -[1] * x ) + [2] * exp( -[3] * x )",
 				"[0]*exp( -[1] * x ) + [2] * exp( -[3] * x )",
 				"[0]*exp( -[1] * x ) + [2] * exp( -[3] * x )",
 				"[0]*exp( -[1] * x ) + [2] * exp( -[3] * x )",
@@ -103,13 +106,13 @@ bool FeedDownMaker::keepTrack( Int_t iTrack ){
 
 
 
-	float pt 	= ds->get<float>( "mMatchedPairs.mPtPr", iTrack );
-	float dca 	= ds->get<float>( "mMatchedPairs.mDcaGl", iTrack );
-	float ptg 	= ds->get<float>( "mMatchedPairs.mPtGl", iTrack );
-	float eta 	= ds->get<float>( "mMatchedPairs.mEtaPr", iTrack );
+	float pt          = ds->get<float>( "mMatchedPairs.mPtPr", iTrack );
+	float dca         = ds->get<float>( "mMatchedPairs.mDcaGl", iTrack );
+	float ptg         = ds->get<float>( "mMatchedPairs.mPtGl", iTrack );
+	float eta         = ds->get<float>( "mMatchedPairs.mEtaPr", iTrack );
 
-	short fitPts = ds->get<short>( "mMatchedPairs.mFitPts", iTrack );
-	short dedxPts = ds->get<short>( "mMatchedPairs.mDedxPts", iTrack );
+	short fitPts      = ds->get<short>( "mMatchedPairs.mFitPts", iTrack );
+	short dedxPts     = ds->get<short>( "mMatchedPairs.mDedxPts", iTrack );
 	short possiblePts = ds->get<short>( "mMatchedPairs.mNPossible", iTrack );
 
 	float ptr = ptg / pt;

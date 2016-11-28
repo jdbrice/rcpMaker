@@ -33,8 +33,8 @@ public:
 	~TpcEffFitter() {};
 
 	// TODO: inheritance should make this unneeded
-	virtual void init( XmlConfig &_config, string _nodePath, int _jobIndex ){
-		TaskRunner::init( _config, _nodePath, _jobIndex );
+	virtual void init( XmlConfig &_config, string _nodePath ){
+		TaskRunner::init( _config, _nodePath );
 		initialize();
 	}
 	virtual void initialize();

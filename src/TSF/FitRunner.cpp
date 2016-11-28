@@ -11,37 +11,37 @@ namespace TSF{
 	}
 
 
-	void FitRunner::setup(XmlConfig &_config, string _nodePath="", int iCharge, int iCen) {
+	// void FitRunner::setup(XmlConfig &_config, string _nodePath="", int iCharge, int iCen) {
 
-		// this sets the config etc.
-		TaskRunner::init( _config, _nodePath, "", "" );
-
-
-		// apply config overrides
-		map<string, string> opts;
-		if ( abs(iCharge) == 1  ){
-			opts[ nodePath + ".FitRange.charges" ] = ts(iCharge);
-		}
-
-		if ( iCen >= 0 && iCen <= 6 ){
-			opts[ nodePath + ".FitRange.centralityBins" ] = ts(iCen);
-		}
-
-		centerSpecies = config.getString( nodePath+".ZRecentering.centerSpecies", "K" );
-		imgNameMod = "rp_" + centerSpecies + "_" + Common::chargeString( iCharge ) + "_iCen_" + ts(iCen);
+	// 	// this sets the config etc.
+	// 	TaskRunner::init( _config, _nodePath );
 
 
-		// modify the output name if we are running parallel
-		if ( iCen >= 0 && iCen <= 6 && ( abs(iCharge) == 1 ) ){
-			opts[ nodePath + ".output.data" ] = "Fit_" + centerSpecies + "_" + Common::chargeString( iCharge ) + "_iCen_" + ts(iCen) + ".root";
-		}
+	// 	// apply config overrides
+	// 	map<string, string> opts;
+	// 	if ( abs(iCharge) == 1  ){
+	// 		opts[ nodePath + ".FitRange.charges" ] = ts(iCharge);
+	// 	}
 
-		_config.applyOverrides( opts );
+	// 	if ( iCen >= 0 ){
+	// 		opts[ nodePath + ".FitRange.centralityBins" ] = ts(iCen);
+	// 	}
+
+	// 	centerSpecies = config.getString( nodePath+".ZRecentering.centerSpecies", "K" );
+		
 
 
-		HistoAnalyzer::init( _config, _nodePath, "", "" );
+	// 	// modify the output name if we are running parallel
+	// 	if ( iCen >= 0 && ( abs(iCharge) == 1 ) ){
+	// 		opts[ nodePath + ".output.data" ] = "Fit_" + centerSpecies + "_" + Common::chargeString( iCharge ) + "_iCen_" + ts(iCen) + ".root";
+	// 	}
 
-	}
+	// 	_config.applyOverrides( opts );
+
+
+	// 	HistoAnalyzer::init( _config, _nodePath );
+
+	// }
 
 	void FitRunner::initialize(  ) {
 		
@@ -57,7 +57,7 @@ namespace TSF{
 		psrMethod = config.getString( nodePath+".ZRecentering.method", "traditional" );
 		// alias the centered species for ease of use
 		centerSpecies = config.getString( nodePath+".ZRecentering.centerSpecies", "K" );
-
+		
 		
 		//Make the momentum transverse, eta, charge binning 
 		binsPt = new HistoBins( config, "binning.pt" );
