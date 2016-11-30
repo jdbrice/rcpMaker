@@ -19,6 +19,7 @@ using namespace jdb;
 	#include "Spectra/PidHistoMaker.h"
 	#include "Spectra/PidDataMaker.h"
 	#include "Spectra/TofEffSpectra.h"
+	#include "Spectra/ZdDataMaker.h"
 
 
 // // McMaker
@@ -29,6 +30,8 @@ using namespace jdb;
 
 // // Presentation
 	#include "Present/YieldExporter.h"
+	#include "Present/ZdSpectraHistoFileMaker.h"
+
 
 // // Feed down
 	#include "McMaker/FeedDownMaker.h"
@@ -58,11 +61,13 @@ int main( int argc, char* argv[] ) {
 
 	TaskFactory::registerTaskRunner<PidHistoMaker>( "PidHistoMaker" );
 	TaskFactory::registerTaskRunner<PidDataMaker>( "PidDataMaker" );
+	TaskFactory::registerTaskRunner<ZdDataMaker>( "ZdDataMaker" );
 
 	TaskFactory::registerTaskRunner<FitRunner>( "FitRunner" );
 	
 	TaskFactory::registerTaskRunner<ApplyPostCorr>( "ApplyPostCorr" );
 	TaskFactory::registerTaskRunner<YieldExporter>( "YieldExporter" );
+	TaskFactory::registerTaskRunner<ZdSpectraHistoFileMaker>( "ZdSpectraHistoFileMaker" );  
 
 	TaskEngine engine( argc, argv );
 

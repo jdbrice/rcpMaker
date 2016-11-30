@@ -55,10 +55,42 @@ public:
 					exportSpectraHist( hSpectra, fout, sysName );
 				fout.close();
 
+				book->cd();
+				// now export to ROOT file
+				string hSpectraName = "spectra_" + energy + "_" + plc + "_" + charge + "_" + cen + "_stat";
+				book->add( hSpectraName, makeSpectraHistogram( hSpectraName, hSpectra, "" ) );
+
+				hSpectraName = "spectra_" + energy + "_" + plc + "_" + charge + "_" + cen + "_sys";
+				book->add( hSpectraName, makeSpectraHistogram( hSpectraName, hSpectra, sysName ) );
+
 
 			}
 		}
 	}// make
+
+	TH1* makeSpectraHistogram( string _name, TH1* _h, string _error="stat" ){
+		INFO( classname(), "Cloning " << _h->GetName() << " as " << _name << " with " << _error << " uncertainties" );
+		if ( "" == _error ){
+			TH1 * hstat = (TH1*)_h->Clone( _name.c_str() );
+			hstat->SetDirectory( gDirectory );
+			return hstat;
+		} 
+		TH1 * hsys = (TH1*)_h->Clone( _name.c_str() );
+		hsys->SetDirectory( gDirectory );
+
+		for ( int i = 1; i <= hsys->GetNbinsX(); i++ ){
+			double pT = hsys->GetBinCenter( i );
+			double sys_unc = 0.0;
+
+			if ( sysMap.count( _error ) > 0 && sysMap[ _error ].count( pT ) > 0 ){
+				hsys->SetBinError( i, sysMap[ _error ][ pT ] );
+			}
+		}
+
+
+		// TODO: set the errors to systematics 
+		return  hsys;
+	}
 
 
 	void loadSystematics( string _path ){

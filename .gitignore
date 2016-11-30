@@ -29,5 +29,6 @@
 # sublime
 *.sublime-workspace
 
+*.sconsign.dblite
 
 website/

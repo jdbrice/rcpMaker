@@ -26,7 +26,8 @@ sources = 	Engine.cpp 							\
 			TSF/Fitter.cpp 						\
 			TSF/FitRunner.cpp 					\
 			Correction/SpectraCorrecter.cpp		\
-			Correction/ApplyPostCorr.cpp		
+			Correction/ApplyPostCorr.cpp		\
+			Spectra/ZdDataMaker.cpp
 			# Present/PidYieldPresenter.cpp 		\
 			
 			
