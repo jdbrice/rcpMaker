@@ -10,39 +10,6 @@ namespace TSF{
 	FitRunner::FitRunner( ){
 	}
 
-
-	// void FitRunner::setup(XmlConfig &_config, string _nodePath="", int iCharge, int iCen) {
-
-	// 	// this sets the config etc.
-	// 	TaskRunner::init( _config, _nodePath );
-
-
-	// 	// apply config overrides
-	// 	map<string, string> opts;
-	// 	if ( abs(iCharge) == 1  ){
-	// 		opts[ nodePath + ".FitRange.charges" ] = ts(iCharge);
-	// 	}
-
-	// 	if ( iCen >= 0 ){
-	// 		opts[ nodePath + ".FitRange.centralityBins" ] = ts(iCen);
-	// 	}
-
-	// 	centerSpecies = config.getString( nodePath+".ZRecentering.centerSpecies", "K" );
-		
-
-
-	// 	// modify the output name if we are running parallel
-	// 	if ( iCen >= 0 && ( abs(iCharge) == 1 ) ){
-	// 		opts[ nodePath + ".output.data" ] = "Fit_" + centerSpecies + "_" + Common::chargeString( iCharge ) + "_iCen_" + ts(iCen) + ".root";
-	// 	}
-
-	// 	_config.applyOverrides( opts );
-
-
-	// 	HistoAnalyzer::init( _config, _nodePath );
-
-	// }
-
 	void FitRunner::initialize(  ) {
 		
 
@@ -56,29 +23,17 @@ namespace TSF{
 										 config.getInt( nodePath+".Bichsel.method", 0) );
 		psrMethod = config.getString( nodePath+".ZRecentering.method", "traditional" );
 		// alias the centered species for ease of use
-		centerSpecies = config.getString( nodePath+".ZRecentering.centerSpecies", "K" );
+		centerSpecies = config.getXString( nodePath+".ZRecentering.centerSpecies", "K" );
 		
 		
 		//Make the momentum transverse, eta, charge binning 
 		binsPt = new HistoBins( config, "binning.pt" );
 
-		// setup reporters for the zb and zd fit projections
-		//string rpre = config.getString( nodePath + ".output:prefix", "" );
-
-		// if ( iCen >= 0 && iCen <= 6 && (iCharge == -1 || iCharge == 1) ){
-		// 	rpre = Common::chargeString( iCharge ) + "_iCen_" + ts(iCen); 
-		// 	imgNameMod = "rp_" + centerSpecies + "_" + Common::chargeString( iCharge ) + "_iCen_" + ts(iCen);
-
-		// 	map<string, string> overrides;
-		// 	overrides[ nodePath + ".output.data" ] = "Fit_" + config.getString( nodePath + ".ZRecentering.centerSpecies" ) + "_" + rpre + ".root";
-		// 	config.applyOverrides( overrides );
-		// }
-
 
 		INFO( classname(), "Image Name Modifier: " << imgNameMod );
-		zbReporter = unique_ptr<Reporter>(new Reporter( config.getString( nodePath + ".output:path" ) + imgNameMod + "_TSF_zb.pdf",
+		zbReporter = unique_ptr<Reporter>(new Reporter( config.getXString( nodePath + ".output:path" ) + imgNameMod + "_TSF_zb.pdf",
 			config.getInt( nodePath + ".Reporter.output:width", 400 ), config.getInt( nodePath + ".Reporter.output:height", 400 ) ) );
-		zdReporter = unique_ptr<Reporter>(new Reporter( config.getString( nodePath + ".output:path" ) + imgNameMod + "_TSF_zd.pdf",
+		zdReporter = unique_ptr<Reporter>(new Reporter( config.getXString( nodePath + ".output:path" ) + imgNameMod + "_TSF_zd.pdf",
 			config.getInt( nodePath + ".Reporter.output:width", 400 ), config.getInt( nodePath + ".Reporter.output:height", 400 ) ) );
 
 		// Logger::setGlobalLogLevel( Logger::logLevelFromString( config.getString( nodePath + ".Logger:globalLogLevel" ) ) );
@@ -873,7 +828,7 @@ namespace TSF{
 			zbReporter->savePage();
 		}
 
-		string imgPartA = config.getString( nodePath + ".output:path" ) + "img/" + imgNameMod + "_";
+		string imgPartA = config.getXString( nodePath + ".output:path" ) + "img/" + imgNameMod + "_";
 		string imgPartB =  "_" + ts(iPt) + ".png";
 		
 

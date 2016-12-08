@@ -104,6 +104,9 @@ public:
 
 		INFO( tag, "Cut string : " << allCuts );
 
+		TH1 * hExisting = (TH1*)gDirectory->Get( (name + "_2D").c_str() );
+		if ( nullptr != hExisting ) delete hExisting;
+
 		TH2D * h = new TH2D( (name + "_2D").c_str(), (name + "_2D").c_str(), zdNBins, zdMin, zdMax, zbNBins, zbMin, zbMax );
 		h->GetDirectory()->cd();
 		string hist = name + "_2D";
@@ -137,6 +140,10 @@ public:
 		
 
 		string hist = name + "_" + var + "_1D";
+		
+		TH1 * hExisting = (TH1*)gDirectory->Get( hist.c_str() );
+		if ( nullptr != hExisting ) delete hExisting;
+
 		TH1D * h = new TH1D( hist.c_str(), hist.c_str(), nBins, min, max );
 		h->GetDirectory()->cd();
 
@@ -191,6 +198,10 @@ public:
 		int nBins = (int) ((max - min) / binWidth + 0.5 );
 	
 		string hist = name + "_" + var + "_1D_" + plc;
+
+		TH1 * hExisting = (TH1*)gDirectory->Get( hist.c_str() );
+		if ( nullptr != hExisting ) delete hExisting;
+
 		TH1D * h = new TH1D( hist.c_str(), hist.c_str(), nBins, min, max );	
 		h->Sumw2();	
 

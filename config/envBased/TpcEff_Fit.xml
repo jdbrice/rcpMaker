@@ -1,0 +1,25 @@
+
+	<?xml version="1.0" encoding="UTF-8"?>
+	<config>
+
+		<!-- Job to run -->
+		<jobType>TpcEffFitter</jobType>
+		<Task name="TpcEffFitter" type="TpcEffFitter" config="" nodePath="TpcEffFitter" />
+
+		<TpcEffFitter>
+			<Logger color="true" globalLogLevel="info" logLevel="all" />
+			<Reporter> <output url="/data/star1/jdb12/RcpAnalysis/products/nominal/rp_TpcEff.pdf" width="700" height="500" /> </Reporter>
+
+			<input url="/data/star1/jdb12/RcpAnalysis/products/nominal/"/> 
+
+			<output path="/data/star1/jdb12/RcpAnalysis/products/nominal/">
+				<data>TpcEff.root</data>
+				<params>/data/star1/jdb12/RcpAnalysis/config/nominal/Params/TpcEff.xml</params>
+			</output>
+
+			<!-- the bins into which the 9 centrality bins are mapped. -->
+			<Include url="../common/centralityMap.xml" />
+
+		</TpcEffFitter>
+
+	</config>

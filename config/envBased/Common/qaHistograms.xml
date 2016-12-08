@@ -1,0 +1,72 @@
+
+<?xml version="1.0" encoding="UTF-8"?>
+
+<config>
+	<QAHistograms>
+		<Event>
+
+			<!-- RefMult Inspection -->
+			<Histo name="corrRefMult" title="Corrected RefMult" bins_x="binning.corrRefMult" />
+			<Histo name="refMultBin9" title="Corrected refMult in Bin9" bins_x="binning.rm9" />
+			<Histo name="refMultBin16" title="Corrected refMult in Bin16" bins_x="binning.rm16" />
+			<Histo name="mappedRefMultBins" title="Mapped RefMult Bins; refMult Bin; #"   bins_x="binning.rm9" />
+
+
+			<!-- Event Cuts -->
+			<Histo name="cuts" title="Event Cuts" nBins_x="2" min_x="0" max_x="2" />
+			<Histo name="mass" title="Mass Assumption for Rapidity" nBins_x="2" min_x="0" max_x="2" />
+		</Event>
+
+
+		<Track>
+			<Histo name="cuts" title="Track Cuts" nBins_x="15" min_x="0" max_x="15" />
+
+			<Histo name="dca" title="DCA" width_x=".1" min_x="0" max_x="3" />
+			<Histo name="pre_dca" title="DCA" width_x=".1" min_x="0" max_x="3" />
+
+			<Histo name="nHitsFit" title="# Hits Fit / Possible" nBins_x="50" min_x="-0.5" max_x="49.5" />
+			<Histo name="pre_nHitsFit" title="# Hits Fit / Possible" nBins_x="50" min_x="-0.5" max_x="49.5" />
+
+			<Histo name="nHitsFitOverPossible" title="# Hits Fit / Possible" width_x="0.01" min_x="0" max_x="1" />
+			<Histo name="pre_nHitsFitOverPossible" title="# Hits Fit / Possible" width_x="0.01" min_x="0" max_x="1" />	
+
+			<Histo name="nHitsPossible" title="# Hits Fit / Possible" nBins_x="50" min_x="-0.5" max_x="49.5" />
+			<Histo name="pre_nHitsPossible" title="# Hits Fit / Possible" nBins_x="50" min_x="-0.5" max_x="49.5" />
+			
+			<Histo name="nHitsFitVsPossible" title="# Hits Fit vs. # Hits Possible" nBins_x="50" min_x="-0.5" max_x="49.5" nBins_y="50" min_y="-0.5" max_y="49.5" />
+			<Histo name="pre_nHitsFitVsPossible" title="# Hits Fit vs. # Hits Possible; # HitsFit; # HitsPossilbe" nBins_x="50" min_x="-0.5" max_x="49.5" nBins_y="50" min_y="-0.5" max_y="49.5" />
+
+			<Histo name="nHitsDedx" title="# Hits dEdx" nBins_x="50" min_x="-0.5" max_x="49.5" />
+			<Histo name="pre_nHitsDedx" title="# Hits dEdx" nBins_x="50" min_x="-0.5" max_x="49.5" />
+			
+			<Histo name="ptPrimary" title="ptPrimary" width_x=".1" min_x="0.0" max_x="5.0" />
+			<Histo name="pre_ptPrimary" title="ptPrimary" width_x=".1" min_x="0.0" max_x="5.0" />
+
+			<Histo name="ptGlobal" title="ptGlobal" width_x=".1" min_x="0.0" max_x="5.0" />
+			<Histo name="pre_ptGlobal" title="ptGlobal" width_x=".1" min_x="0.0" max_x="5.0" />
+
+			<Histo name="ptGlobalVsPrimary" title="ptGlobal / ptPrimary; ptPrimary; ptGlobal" width_x=".1" min_x="0.0" max_x="5.0" width_y=".1" min_y="0.0" max_y="5.0"/>
+			<Histo name="pre_ptGlobalVsPrimary" title="ptGlobal / ptPrimary; ptPrimary; ptGlobal" width_x=".1" min_x="0.0" max_x="5.0" width_y=".1" min_y="0.0" max_y="5.0"/>
+
+			<Histo name="ptGlobalOverPrimary" title="ptGlobal / ptPrimary" width_x="0.01" min_x="0" max_x="2" />
+			<Histo name="pre_ptGlobalOverPrimary" title="ptGlobal / ptPrimary" width_x="0.01" min_x="0" max_x="2" />
+
+			<Histo name="yLocal" title="yLocal" width_x=".1" min_x="-2.5" max_x="2.5" />
+			<Histo name="pre_yLocal" title="yLocal" width_x=".1" min_x="-2.5" max_x="2.5" />
+
+			<Histo name="zLocal" title="zLocal" width_x=".1" min_x="-3.5" max_x="3.5" />
+			<Histo name="pre_zLocal" title="zLocal" width_x=".1" min_x="-3.5" max_x="3.5" />		
+
+			<Histo name="matchFlag" title="matchFlag" width_x="1" min_x="0" max_x="3" />
+			<Histo name="pre_matchFlag" title="matchFlag" width_x="1" min_x="0" max_x="3" />		
+
+			<Histo name="eta" title="eta" width_x=".1" min_x="-1.2" max_x="1.2" />
+			<Histo name="pre_eta" title="eta" width_x="0.1" min_x="-1.2" max_x="1.2" />		
+
+			<Histo name="rapidity" title="rapidity" width_x="0.05" min_x="-0.3" max_x="0.3" />
+			<Histo name="pre_rapidity" title="rapidity" width_x="0.05" min_x="-1.2" max_x="1.3" />		
+			
+		</Track>
+
+	</QAHistograms>
+</config>

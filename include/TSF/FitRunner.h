@@ -80,7 +80,7 @@ namespace TSF{
 			}
 
 			if ( iCen >= 0 && abs(iCharge) > 0 ){
-				centerSpecies = config.getString( nodePath+".ZRecentering.centerSpecies", "K" );
+				centerSpecies = config.getXString( nodePath+".ZRecentering.centerSpecies", "K" );
 				imgNameMod = "rp_" + centerSpecies + "_" + Common::chargeString( iCharge ) + "_iCen_" + ts(iCen);	
 			}
 			
@@ -99,6 +99,10 @@ namespace TSF{
 
 
 	protected:
+
+		virtual void postMake(){
+			config.toXmlFile( config.getString("env:cwd") + "FitRunnerConfig.xml" );
+		}
 
 		void makeHistograms();
 		void fillFitHistograms(int iPt, int iCen, int iCharge, Fitter &fitter );
