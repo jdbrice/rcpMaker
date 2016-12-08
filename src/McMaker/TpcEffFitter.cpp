@@ -14,9 +14,10 @@ using namespace jdb;
 void TpcEffFitter::initialize(  ){
 
 	DEBUG( classname(), "( " << config.getFilename() << ", " << nodePath << " )" )
-	outputPath = config.getString( nodePath + ".output:path", "" );
+	outputPath = config.getXString( nodePath + ".output:path", "" );
 	
-	book = unique_ptr<HistoBook>( new HistoBook( outputPath + config.getString( nodePath +  ".output.data", "TpcEff.root" ), config, "", "" ) );	
+	INFO( classname(), "Opening HistoBook @ " << config.getXString( nodePath +  ".output.TFile:url", "TpcEff.root" ) );
+	book = unique_ptr<HistoBook>( new HistoBook( config.getXString( nodePath +  ".output.TFile:url", "TpcEff.root" ), config, "", "" ) );
 }
 
 
@@ -27,7 +28,7 @@ void TpcEffFitter::make(){
 	RooPlotLib rpl;
 
 	gStyle->SetOptFit( 111 );
-	string params_file =  config.getString( nodePath + ".output.params" );
+	string params_file =  config.getXString( nodePath + ".output.params" );
 	if ( "" == params_file ){
 		ERROR( classname(), "Specifiy an output params file for the parameters" )
 		return;
@@ -52,9 +53,9 @@ void TpcEffFitter::make(){
 
 			out << "\t<" << plc << "_" << c << ">" << endl;
 
-			string fnMc = config.getString( nodePath + ".input:url" ) + "TpcEff_" + plc + "_" + c + "_mc" + ".root";
+			string fnMc = config.getXString( nodePath + ".input:url" ) + "TpcEff_" + plc + "_" + c + "_mc" + ".root";
 			TFile * fmc = new TFile( fnMc.c_str(), "READ" );
-			string fnRc = config.getString( nodePath + ".input:url" ) + "TpcEff_" + plc + "_" + c + "_rc" + ".root";
+			string fnRc = config.getXString( nodePath + ".input:url" ) + "TpcEff_" + plc + "_" + c + "_rc" + ".root";
 			TFile * frc = new TFile( fnRc.c_str(), "READ" );
 
 			DEBUG( classname(), "Mc File = " << fmc );

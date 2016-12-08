@@ -70,7 +70,7 @@ void InclusiveSpectra::initialize(  ){
 
 
 
-	plc = config.getString( nodePath + ".input:plc", "" );
+	plc = config.getXString( nodePath + ".input:plc", "" );
 	mass = Common::mass( plc );
 	if ( mass < 0 ){
 		ERROR( classname(), "Invalid Particle Species " << plc );

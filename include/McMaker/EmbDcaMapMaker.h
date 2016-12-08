@@ -18,8 +18,8 @@ public:
 	void makeCentralityHistos(){
 		InclusiveSpectra::makeCentralityHistos();
 
-		string sCharge = config.getString( nodePath + ".input:charge" );
-		string plc     = config.getString( nodePath + ".input:plc" );
+		string sCharge = config.getXString( nodePath + ".input:charge" );
+		string plc     = config.getXString( nodePath + ".input:plc" );
 		book->cd();
 		for ( int iC : centralityBins ){
 			INFO( classname(), "dca_vs_pt_" + plc + "_" + ts( iC ) + "_" + sCharge );
@@ -40,7 +40,7 @@ public:
 		double pt = pico->mcPt( iTrack );
 		double dca = pico->trackDca( iTrack );
 		int charge = pico->trackCharge( iTrack );
-		string plc     = config.getString( nodePath + ".input:plc" );
+		string plc     = config.getXString( nodePath + ".input:plc" );
 
 		if ( cBin >= 0 ){
 			string cName = "emb_dca_vs_pt_" + plc + "_" + ts( cBin ) + "_" + Common::chargeString( charge );

@@ -7,7 +7,7 @@ ApplyPostCorr::ApplyPostCorr(){
 }
 void ApplyPostCorr::initialize(){
 	setupCorrections();
-	plc = config.getString( nodePath + ".input:plc", "UNKNOWN" );
+	plc = config.getXString( nodePath + ".input:plc", "UNKNOWN" );
 	
 
 
@@ -201,6 +201,9 @@ void ApplyPostCorr::make(){
 			} // iBin
 		} // cb
 	} // cs
+
+
+	config.toXmlFile( config.getXString( "env:cwd" ) + "ApplyCorrections.xml" );
 
 
 }

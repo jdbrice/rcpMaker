@@ -1,0 +1,46 @@
+
+	<?xml version="1.0" encoding="UTF-8"?>
+	<config>
+
+		<!-- USER INPUTS -->
+		<!-- Pi, K, P -->
+		<plc>Pi</plc>
+		<!-- p, n -->
+		<charge>p</charge> 
+		<!-- USER INOUTS -->
+
+		<!-- Job to run -->
+		<Task name="EmbDcaMapMaker" type="EmbDcaMapMaker" config="" nodePath="EmbDcaMapMaker" />
+
+		<Include url="./Common/env.xml" />
+
+		<EmbDcaMapMaker>
+			<Logger color="true" globalLogLevel="info" logLevel="all" />
+			
+			<input plc="{plc}" type="rc" charge="{charge}">
+				<dst treeName="SpectraPicoDst" url="{env:emb}{plc}_{charge}_rc.root"/>
+			</input>
+			<output>
+				<TFile url="{env:cwd}EmbDcaMap_{plc}_{charge}_rc.root" />
+			</output>
+
+			<!-- the bins into which the 9 centrality bins are mapped. -->
+			<Include url="./Common/centralityMap.xml" />
+
+			<MakeQA event="false" track="false" />
+
+
+			<!-- histograms to auto-make -->
+			<histograms>
+				<Histo name="dca_vs_pt" title="p_{T} [GeV]; p_{T} [GeV]; #Events"  bins_x="binning.pt" bins_y="binning.dca"/>
+			</histograms>
+
+		</EmbDcaMapMaker>
+
+		<!-- Include common resources -->
+		<Include url="./Common/cuts.xml" />
+		<Include url="./Common/binning.xml" />
+		<Include url="./Common/qaHistograms.xml" />
+
+	</config>
+	

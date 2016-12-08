@@ -27,7 +27,7 @@ void DcaMapMaker::initialize() {
 		// method for phase space recentering
 	zrMethod 		= config.getString( nodePath + ".ZRecentering.method", "traditional" );
 		// alias the centered species for ease of use
-	centerSpecies 	= config.getString( nodePath + ".ZRecentering.centerSpecies", "K" );
+	centerSpecies 	= config.getXString( nodePath + ".ZRecentering.centerSpecies", "K" );
 
 	//Make the momentum transverse binning
 	binsPt = unique_ptr<HistoBins>(new HistoBins( config, "binning.pt" ));
@@ -39,7 +39,7 @@ void DcaMapMaker::initialize() {
 	// make the energy loss params
 	vector<int> charges = { -1, 1 };
 	if ( config.exists( nodePath + ".EnergyLossParams:path" ) ){
-		string path = config.getString( nodePath + ".EnergyLossParams:path" );
+		string path = config.getXString( nodePath + ".EnergyLossParams:path" );
 
 		for ( int c : charges ){
 
@@ -102,7 +102,7 @@ void DcaMapMaker::postEventLoop() {
 
 }
 
-void DcaMapMaker::analyzeTrack( int iTrack ){
+void DcaMapMaker::analyzeTofTrack( int iTrack ){
 	InclusiveSpectra::analyzeTrack( iTrack );
 	
 	book->cd();

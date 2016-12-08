@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
 
-	<Include url="qaHistograms.xml" />
-
 	<!-- Cuts applied to Events -->
 	<EventCuts>
 		<triggerMask> 36 </triggerMask> <!-- BBC_MB -->

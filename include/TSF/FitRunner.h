@@ -101,7 +101,8 @@ namespace TSF{
 	protected:
 
 		virtual void postMake(){
-			config.toXmlFile( config.getString("env:cwd") + "FitRunnerConfig.xml" );
+			// For debugging config issues
+			// config.toXmlFile( config.getString("env:cwd") + "FitRunnerConfig.xml" );
 		}
 
 		void makeHistograms();

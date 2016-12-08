@@ -57,10 +57,14 @@ public:
 
 	void makeMapFor(string plc, string sc ){
 
-		
+		string nDcaPass = "dcaEff_Pass_" + plc + "_" + sc;
+		string nDcaTotal = "dcaEff_Total_" + plc + "_" + sc;
+
 		string nDcaEff = "dcaEff_" + plc + "_" + sc;
 		string nEmbDcaEff = "embdcaEff_" + plc + "_" + sc;
 		book->clone( "dcaEff", nDcaEff );
+		book->clone( "dcaEff", nDcaPass );
+		book->clone( "dcaEff", nDcaTotal );
 		book->clone( "dcaEff", nEmbDcaEff );
 		RooPlotLib rpl;
 		rpl.link( book );
@@ -136,15 +140,19 @@ public:
 
 
 			int dcaCutBin = data1->FindBin( 1.0 );
-			double pass = data1->Integral( 1, dcaCutBin );
-			double total = data1->Integral();
+			double passError = 0;
+			double pass = data1->IntegralAndError( 1, dcaCutBin, passError );
+			double totalError = 0;
+			double total = data1->IntegralAndError(1, -1, totalError);
 
 			book->setBin( nDcaEff, i, pass / total, 0.01 );
-			
+			book->setBin( nDcaPass, i, pass, passError );
+			book->setBin( nDcaTotal, i, total, totalError );
 			
 
 			double passEmb = emb1->Integral( 1, dcaCutBin );
 			double totalEmb = emb1->Integral();
+
 
 			book->setBin( nEmbDcaEff, i, passEmb / totalEmb, 0.01 );
 			rpl.style( book->get( nEmbDcaEff ) ).set( "c", "red" );

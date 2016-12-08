@@ -10,6 +10,7 @@
 #include "LoggerConfig.h"
 #include "XmlConfig.h"
 #include "TaskEngine.h"
+#include "CommandRunner.h"
 using namespace jdb;
 
 // Rcp Maker
@@ -73,7 +74,9 @@ int main( int argc, char* argv[] ) {
 	
 	TaskFactory::registerTaskRunner<ApplyPostCorr>( "ApplyPostCorr" );
 	TaskFactory::registerTaskRunner<YieldExporter>( "YieldExporter" );
-	TaskFactory::registerTaskRunner<ZdSpectraHistoFileMaker>( "ZdSpectraHistoFileMaker" );  
+	TaskFactory::registerTaskRunner<ZdSpectraHistoFileMaker>( "ZdSpectraHistoFileMaker" );
+
+	TaskFactory::registerTaskRunner<CommandRunner>( "CommandRunner" );
 
 	TaskEngine engine( argc, argv );
 

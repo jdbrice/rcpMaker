@@ -1,0 +1,22 @@
+
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+
+	<!-- USER INPUTS -->
+	<plc>Pi</plc>
+	<!-- USER INPUTS -->
+
+	<!-- Job to run -->
+	<Task name="Hadd Fits" type="CommandRunner" config="" nodePath="CommandRunner" />
+
+	<Include url="./Common/env.xml" />
+
+	<CommandRunner>
+		<Logger color="true" globalLogLevel="info" logLevel="all" />
+		
+		<command> hadd -f {env:cwd}Fit_PostCorr_{plc}.root {env:cwd}Fit_PostCorr_{plc}_*.root </command>
+		
+
+	</CommandRunner>
+
+</config>
