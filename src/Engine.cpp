@@ -20,6 +20,7 @@ using namespace jdb;
 	#include "Spectra/PidDataMaker.h"
 	#include "Spectra/TofEffSpectra.h"
 	#include "Spectra/ZdDataMaker.h"
+	#include "Spectra/DcaMapMaker.h"
 
 
 // // McMaker
@@ -27,6 +28,8 @@ using namespace jdb;
 	#include "McMaker/TofEffFitter.h"
 	#include "McMaker/TpcEffFitter.h"
 	#include "McMaker/TpcEffMaker.h"
+	#include "McMaker/EmbDcaMapMaker.h"
+	#include "McMaker/DcaWeightMaker.h"
 
 // // Presentation
 	#include "Present/YieldExporter.h"
@@ -54,6 +57,9 @@ int main( int argc, char* argv[] ) {
 	TaskFactory::registerTaskRunner<EnergyLoss>( "EnergyLoss" );
 	TaskFactory::registerTaskRunner<FeedDownMaker>( "FeedDownMaker" );
 	TaskFactory::registerTaskRunner<FeedDownFitter>( "FeedDownFitter" );
+	TaskFactory::registerTaskRunner<EmbDcaMapMaker>( "EmbDcaMapMaker" );
+	TaskFactory::registerTaskRunner<DcaMapMaker>( "DcaMapMaker" );
+	TaskFactory::registerTaskRunner<DcaWeightMaker>( "DcaWeightMaker" );
 	TaskFactory::registerTaskRunner<TpcEffMaker>( "TpcEffMaker" );
 	TaskFactory::registerTaskRunner<TpcEffFitter>( "TpcEffFitter" );
 	TaskFactory::registerTaskRunner<TofEffSpectra>( "TofEffSpectra" );

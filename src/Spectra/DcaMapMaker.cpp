@@ -1,5 +1,5 @@
  // RcpMaker
-#include "Spectra/ZdDataMaker.h"
+#include "Spectra/DcaMapMaker.h"
 #include "Correction/SpectraCorrecter.h"
 
 // ROOT
@@ -10,7 +10,7 @@
 #include <cmath> // for M_1_PI etc.
 
 
-void ZdDataMaker::initialize() {
+void DcaMapMaker::initialize() {
 
 	InclusiveSpectra::initialize();
 
@@ -34,19 +34,6 @@ void ZdDataMaker::initialize() {
 
 	// Get the list of charges we are looking at
 	charges = config.getIntVector( "binning.charges" );
-
-
-	// apply corrections now at a tack-by-track level?
-	trackBytrackCorrs = config.getBool( nodePath + ":trackBytrackCorrs", true );
-	INFO( classname(), "Applying Track by Track params : " << bts( trackBytrackCorrs ));
-
-	if ( trackBytrackCorrs ){
-		// Efficiency corrector
-		sc = unique_ptr<SpectraCorrecter>( new SpectraCorrecter( config, nodePath ) ); 	
-
-		tpcSysNSigma = config.getDouble( nodePath + ".TpcEff:systematics", 0 );
-		INFO( classname(), "Systematic uncertainty on TpcEff = " << tpcSysNSigma << " sigma" );
-	}
 	
 
 	// make the energy loss params
@@ -70,20 +57,25 @@ void ZdDataMaker::initialize() {
 	}
 
 	xVar = config.getString( nodePath + ":xVar", "pT" );
+
+	nSigmaZdCut = config.getDouble( nodePath + ":nSigmaZdCut", 2.0 );
+	nSigmaZbCut = config.getDouble( nodePath + ":nSigmaZbCut", 2.0 );
+	tofMinPt    = config.getDouble( nodePath + ":tofMinPt", 1.0 );
+
+	// Disable the DCA cut!
+	cut_dca->max = 1000;
 	
 
 }
 
-ZdDataMaker::~ZdDataMaker(){
+DcaMapMaker::~DcaMapMaker(){
 
 }
 
-void ZdDataMaker::preEventLoop() {
+void DcaMapMaker::preEventLoop() {
 	INFO( classname(), "");
 	
 	InclusiveSpectra::preEventLoop();
-
-	book->cd();
 
 	// make the energy loss histograms
 	book->cd( "energyLoss" );
@@ -92,35 +84,25 @@ void ZdDataMaker::preEventLoop() {
 			book->clone( "/", "corrPt", "energyLoss", "corrPt_" + Common::chargeString(c) + "_" + ts(cb) );
 		}
 	}	
-
+	
 	book->cd();
-	for ( int c : charges ) {
-		// for ( string plc : Common::species ){
-			for ( int cb : centralityBins ) {
-				for ( int iPt = 0; iPt < binsPt->nBins(); iPt++ ){
-				
-					// create a PidPoint
-					string nname = Common::speciesName( centerSpecies, c, cb, iPt );
-					book->clone( "zd", "zd_" + nname );
-					book->clone( "zd", "zd_raw_" + nname );
-					// if ( iPt == 12 ){
-					// 	book->clone( "zd", "zd_" + nname );
-					// } 
-					
-					// pidPoints[ nname ] = unique_ptr<TNtuple>( new TNtuple( nname.c_str(), "PidData", "zb:zd:w" ) );
-				}
-			}
-		// }
+	for ( string c : { "p", "n" } ){
+		for ( int iC : centralityBins ){
+			INFO( classname(), "dca_vs_pt_" + centerSpecies + "_" + ts( iC ) + "_" + c );
+			book->clone( "dca_vs_pt", "dca_vs_pt_" + centerSpecies + "_" + ts( iC ) + "_" + c );
+		}
+
+		book->clone( "dca_vs_pt", "dca_vs_pt_" + centerSpecies + "_" + c );
 	}
 }
 
-void ZdDataMaker::postEventLoop() {
+void DcaMapMaker::postEventLoop() {
 	INFO( classname(), "");
 	book->cd();
 
 }
 
-void ZdDataMaker::analyzeTrack( int iTrack ){
+void DcaMapMaker::analyzeTrack( int iTrack ){
 	InclusiveSpectra::analyzeTrack( iTrack );
 	
 	book->cd();
@@ -132,6 +114,7 @@ void ZdDataMaker::analyzeTrack( int iTrack ){
 	double eta 		= pico->trackEta( iTrack );
 	double phi 		= pico->trackPhi( iTrack );
 	double mass 	= Common::mass( centerSpecies );
+	double dca 		= pico->trackDca( iTrack );
 	trackPt 		= pt; // saved for whole track calculations
 
 	/************ Energy Loss Corrections **********/
@@ -179,8 +162,6 @@ void ZdDataMaker::analyzeTrack( int iTrack ){
 		return;
 	}
 
-	double ptBinWidth = binsPt->binWidth( ptBin );
-
 	book->cd();
 
 	// Traditionally Recentered values
@@ -200,30 +181,22 @@ void ZdDataMaker::analyzeTrack( int iTrack ){
 	// event weight from RefMult correction
 	double trackWeight = eventWeight;
 
-	
-	if ( trackBytrackCorrs ){
-		trackWeight = trackWeight * M_1_PI * 0.5; 			// 1.0 / ( 2 pi )
-		trackWeight = trackWeight * ( 1.0 / x ); 	// 1.0 / pT
-		trackWeight = trackWeight * ( 1.0 / ptBinWidth ); 	// 1.0 / ( bin width )
-		trackWeight = trackWeight * ( 1.0 / ( cut_rapidity->max - cut_rapidity->min ) ); 	// 1.0 / dy
-
-		// correct for TPC matching efficiency
-		trackWeight = trackWeight * sc->tpcEffWeight( centerSpecies, corrTrackPt, cBin, charge, tpcSysNSigma );
-
-		DEBUG( classname(), "pT = " << pt << ", mTm0 = " << mTm0 );
-		DEBUG( classname(), "eventWeight = " << eventWeight );
-		DEBUG( classname(), "1.0 / 2*pi = " << M_1_PI * 0.5 );
-		DEBUG( classname(), "1.0 / pT = " << ( 1.0 / x ) );
-		DEBUG( classname(), "1.0 / dpT = " << ( 1.0 / ptBinWidth ) );
-		DEBUG( classname(), "1.0 / dy = " << ( 1.0 / ( cut_rapidity->max - cut_rapidity->min ) ) );
-		DEBUG( classname(), "TPC Eff = "  << 1.0 / sc->tpcEffWeight( centerSpecies, corrTrackPt, cBin, charge, tpcSysNSigma ) );
-	}
-
 	// fill the tree
-	string name = Common::speciesName( centerSpecies, charge, cBin, ptBin );
-	book->fill( "zd_" + name, dedx, trackWeight );
-	book->fill( "zd_raw_" + name, dedx );
-	// pidPoints[ name ]->Fill( tof, dedx, trackWeight );
+	if ( fabs(dedx / dedxSigmaIdeal)  < nSigmaZdCut ){
+
+		double tofFactor = 5;
+		if ( pt > tofMinPt )
+			tofFactor = 1;
+
+		if ( pt < tofMinPt || fabs(tof / tofSigmaIdeal) < nSigmaZbCut * tofFactor ){
+			if ( cBin >= 0 ){
+				string cName = "dca_vs_pt_" + centerSpecies + "_" + ts( cBin ) + "_" + Common::chargeString( charge );
+				book->fill( cName, pt, dca, eventWeight );
+			}
+
+			string cName = "dca_vs_pt_" + centerSpecies + "_" + Common::chargeString( charge );
+			book->fill( cName, pt, dca, eventWeight );
+		}
 	
-	book->cd();
+	}
 }

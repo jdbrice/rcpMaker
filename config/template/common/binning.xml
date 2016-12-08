@@ -16,6 +16,7 @@
 		<refMult width="1.0" min="0.0" max="500.0" />
 		<rm9 width="1.0" min="-0.5" max="10.5" />
 		<rm16 width="1.0" min="-0.5" max="20.5" />
+		<dca nBins="300" min="0" max="6" />
 
 		<!-- Energy Loss -->
 		<eloss width="0.0005" min="-0.11" max="0.11" />

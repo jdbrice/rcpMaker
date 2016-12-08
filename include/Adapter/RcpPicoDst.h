@@ -39,6 +39,7 @@ public:
    Float_t         gpT[ kMaxRcpTracks ];   //[nTracks]
    Float_t         pP[ kMaxRcpTracks ];   //[nTracks]
    Float_t         pEta[ kMaxRcpTracks ];   //[nTracks]
+   Float_t         pPhi[ kMaxRcpTracks ];   //[nTracks]
    Float_t         dca[ kMaxRcpTracks ];   //[nTracks]
    UChar_t         nHitsFit[ kMaxRcpTracks ];   //[nTracks]
    UChar_t         nHitsDedx[ kMaxRcpTracks ];   //[nTracks]
@@ -60,6 +61,7 @@ public:
    TBranch        *b_gpT;   //!
    TBranch        *b_pP;   //!
    TBranch        *b_pEta;   //!
+   TBranch        *b_pPhi;   //!
    TBranch        *b_dca;   //!
    TBranch        *b_nHitsFit;   //!
    TBranch        *b_nHitsDedx;   //!
@@ -88,6 +90,13 @@ public:
    inline virtual Double_t trackPt( Int_t iHit ){ 
       return TMath::Abs(ppT[iHit]); 
    }
+   inline virtual Double_t trackPx( Int_t iHit ){ 
+      return TMath::Abs(ppT[iHit]) * cos( pPhi[iHit] ); 
+   }
+   inline virtual Double_t trackPy( Int_t iHit ){ 
+      return TMath::Abs(ppT[iHit]) * cos( pPhi[iHit] ); 
+   }
+
    inline virtual Double_t trackP( Int_t iHit ){ 
       return pP[iHit]; 
    }
@@ -102,6 +111,9 @@ public:
    }
    inline virtual Double_t trackEta( Int_t iHit ){ 
       return pEta[ iHit ];
+   }
+   inline virtual Double_t trackPhi( Int_t iHit ){ 
+      return pPhi[ iHit ];
    }
 
    inline virtual Double_t trackDedx( Int_t iHit ){ return ((Float_t)dedx[ iHit ]) / 1000.0; }

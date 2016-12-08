@@ -1,5 +1,5 @@
-#ifndef ZD_DATA_MAKER_H
-#define ZD_DATA_MAKER_H
+#ifndef DCA_MAP_MAKER_H
+#define DCA_MAP_MAKER_H
 
 // Rcp Maker
 #include "Spectra/InclusiveSpectra.h"
@@ -19,7 +19,7 @@ using namespace std;
 #include "TNtuple.h"
 
 
-class ZdDataMaker : public InclusiveSpectra
+class DcaMapMaker : public InclusiveSpectra
 {
 protected:
 
@@ -42,25 +42,24 @@ protected:
 	// recentering object
 	ZRecentering * zr;
 	
-	unique_ptr<SpectraCorrecter> sc;
 	float corrTrackPt = 0;
 	float trackPt = 0;
 	map< string, unique_ptr<EnergyLossParams> > elParams;
 	
 	double tpcSysNSigma = 0;
 
-	map<string, unique_ptr<TNtuple>> pidPoints;
-
-	bool trackBytrackCorrs = true;
-
 	// choose between pT, mT, mTm0
 	string xVar;
 
+	double nSigmaZdCut;
+	double nSigmaZbCut;
+	double tofMinPt;
+
 
 public:
-	virtual const char* classname() const { return "ZdDataMaker"; }
-	ZdDataMaker( ) {}
-	~ZdDataMaker();
+	virtual const char* classname() const { return "DcaMapMaker"; }
+	DcaMapMaker( ) {}
+	~DcaMapMaker();
 
 	virtual void initialize();
 
@@ -73,13 +72,8 @@ public:
 	virtual void preEventLoop();
 	virtual void postEventLoop();
 	
-	/* Produces the 1D PID plots
-	 *
-	 * @return 		True / False : pass tof acceptance
-	 */
-	bool enhanceDistributions( double avgP, int pBin, int charge, double dedx, double tof );
+	
 
-	bool rejectElectron( double avgP, double dedx, double tof );
 
 	/* Average P in a bin range assuming a flat distribution
 	 * The distribution is really an exp, but we just need to be consistent

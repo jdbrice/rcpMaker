@@ -74,6 +74,9 @@ void TpcEffFitter::make(){
 				INFO( classname(), "N bins MC = " << hMc->GetNbinsX() );
 				INFO( classname(), "N bins RC = " << hRc->GetNbinsX() );
 
+				// hMc->RebinX( 3 );
+				// hRc->RebinX( 3 );
+
 				for ( int i = 0; i <= hMc->GetNbinsX() + 1; i++ ){
 					if ( hMc->GetBinContent( i ) < hRc->GetBinContent( i ) ){
 						// set to 100%
@@ -99,8 +102,8 @@ void TpcEffFitter::make(){
 				book->add( plc + "_" + c + "_" + ts(b),  &g );
 
 				// do the fit
-				TF1 * fitFunc = new TF1( "effFitFunc", "[0] * exp( - pow( [1] / x, [2] ) )", 0.0, 5.0 );
-				fitFunc->SetParameters( .85, 0.05, 5.0, -0.05 );
+				TF1 * fitFunc = new TF1( "effFitFunc", "[0] * exp( - pow( [1] / x, [2] ) )", 0.0, 4.5 );
+				fitFunc->SetParameters( .65, 0.05, 5.0, -0.05 );
 				fitFunc->SetParLimits( 0, 0.5, 1.0 );
 				fitFunc->SetParLimits( 1, 0.0, 0.5 );
 				fitFunc->SetParLimits( 2, 0.0, 100000 );

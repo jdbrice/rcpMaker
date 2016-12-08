@@ -282,6 +282,11 @@ public:
 	}
 
 
+	static double transverse_mass( double pX, double pY, double m ){
+		return sqrt( m*m + pX*pX + pY*pY );
+	}
+
+
 
 };
 

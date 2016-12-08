@@ -29,6 +29,7 @@ public:
 	virtual Double_t trackPy( Int_t iHit ){ return 0; }
 	virtual Double_t trackPz( Int_t iHit ){ return 0; }
 	virtual Double_t trackEta( Int_t iHit ){ return -100; }
+	virtual Double_t trackPhi( Int_t iHit ){ return -100; }
 	virtual Int_t trackCharge( Int_t iHit ){ return 0; }
 
 	virtual Double_t trackDedx( Int_t iHit ){ return 0; }

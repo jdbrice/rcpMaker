@@ -67,6 +67,7 @@ void RcpPicoDst::Init(TTree *tree)
    fChain->SetBranchAddress("gpT", gpT, &b_gpT);
    fChain->SetBranchAddress("pP", pP, &b_pP);
    fChain->SetBranchAddress("pEta", pEta, &b_pEta);
+   fChain->SetBranchAddress("pPhi", pPhi, &b_pPhi);
    fChain->SetBranchAddress("dca", dca, &b_dca);
    fChain->SetBranchAddress("nHitsFit", nHitsFit, &b_nHitsFit);
    fChain->SetBranchAddress("nHitsDedx", nHitsDedx, &b_nHitsDedx);

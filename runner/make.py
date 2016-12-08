@@ -1,8 +1,11 @@
 #!/usr/bin/env python2.7
+import EmbDcaMap.make_xml_configs as edmc
+import DcaMap.make_xml_configs as ddmc
 import TpcEff.make_xml_configs as effc
 import EnergyLoss.make_xml_configs as elossc
 import PidHisto.make_xml_configs as pidhc
 import PidData.make_xml_configs as pidtc
+import ZdData.make_xml_configs as zdc
 import TofEff.make_xml_configs as tofc
 import FeedDown.make_xml_configs as fdc
 import Fitter.make_xml_configs as fitc
@@ -32,8 +35,11 @@ if not os.path.exists(args.output_path):
     os.makedirs(args.output_path)
 
 """Correction Makers"""
+#  Emb Dca Map Maker
+edmc.write( os.path.join( args.data_path, "embedding/auau14p5" ) , args.output_path, args.output_config_path, os.path.join( args.config_base_path, "EmbDcaMap/") )
+ddmc.write( os.path.join( args.data_path, "data", "SpectraPicoDst.lis" ) , args.output_path, args.output_config_path, os.path.join( args.config_base_path, "DcaMap/") )
 #	Tpc Efficiency
-effc.write( os.path.join( args.data_path, "embedding" ) , args.output_path, args.output_config_path, os.path.join( args.config_base_path, "TpcEff/") )
+effc.write( os.path.join( args.data_path, "embedding/auau14p5" ) , args.output_path, args.output_config_path, os.path.join( args.config_base_path, "TpcEff/") )
 #	Energy Loss
 elossc.write( os.path.join( args.data_path, "embedding" ), args.output_path, args.output_config_path, os.path.join( args.config_base_path, "EnergyLoss/") )
 #	Tof Efficiency
@@ -50,6 +56,8 @@ fdc.write( os.path.join( args.data_path, "urqmd", "urqmd.lis" ), args.output_pat
 pidtc.write( os.path.join( args.data_path, "data", "SpectraPicoDst.lis" ), args.output_path, args.output_config_path, os.path.join( args.config_base_path, "PidData/") )
 # Pif Fitter
 fitc.write( args.output_path, os.path.join( args.config_base_path, "Fitter/") )
+
+zdc.write( os.path.join( args.data_path, "data", "SpectraPicoDst.lis" ), args.output_path, args.output_config_path, os.path.join( args.config_base_path, "ZdData/") )
 
 
 """Post Fit Corrections"""
