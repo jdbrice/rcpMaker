@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<job maxFilesPerProcess="1" filesPerHour="1" nProcesses="42">
+<job maxFilesPerProcess="1" filesPerHour="1000" nProcesses="42">
 	
 	<command>
-		./MakeYieldFits.py ${JOBINDEX}
+		./MakeYieldFits.py ${JOBINDEX} &gt;&amp; log_${JOBINDEX}.log
 	</command>
 
 	<stdout URL="file:/star/data03/pwg/jdb/scratch/log/$JOBID.out" />
