@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<job nProcesses="1">
+	
+	<command>
+		echo "Running TpcEff"
+		./MakeTpcEff.sh
+	</command>
+
+	<stdout URL="file:/star/data03/pwg/jdb/scratch/log/$JOBID.out" />
+	<stderr URL="file:/star/data03/pwg/jdb/scratch/log/$JOBID.err" />
+
+	<!-- <output fromScratch="*.root" toURL="file:/star/data03/pwg/jdb/scratch/"/> -->
+	<!-- <output fromScratch="*.root" toURL="file:/star/data03/pwg/jdb/scratch/"/> -->
+	<!-- <output fromScratch="*.log" toURL="file:/star/data03/pwg/jdb/scratch/"/> -->
+
+	<SandBox>
+ 		<Package>
+ 			<File>file:./config/</File>
+ 			<File>file:./rcp</File> 
+ 			<File>file:./dedxBichsel.root</File>
+ 			<File>file:./MakeTpcEff.sh</File>
+ 		</Package> 
+ 	</SandBox>
+
+	<Generator> 
+ 		<Location>/star/data03/pwg/jdb/scratch/gen</Location> 
+ 	</Generator> 
+</job>
