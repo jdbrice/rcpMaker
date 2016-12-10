@@ -10,7 +10,7 @@
 	<stderr URL="file:/star/data03/pwg/jdb/scratch/log/$JOBID.err" />
 
 	<!-- <output fromScratch="*.root" toURL="file:/star/data03/pwg/jdb/scratch/"/> -->
-	<!-- <output fromScratch="*.log" toURL="file:/star/data03/pwg/jdb/scratch/"/> -->
+	<output fromScratch="*.log" toURL="file:/star/data03/pwg/jdb/scratch/"/>
 
 	<SandBox>
  		<Package>
