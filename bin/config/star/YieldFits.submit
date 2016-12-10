@@ -3,14 +3,14 @@
 	
 	<command>
 		echo "Running Yield Fits"
-		./MakeYieldFits.py ${JOBINDEX} &gt;&amp; log_YieldFits_${JOBINDEX}.log
+		./MakeYieldFits.py ${JOBINDEX}
 	</command>
 
 	<stdout URL="file:/star/data03/pwg/jdb/scratch/log/$JOBID.out" />
 	<stderr URL="file:/star/data03/pwg/jdb/scratch/log/$JOBID.err" />
 
 	<!-- <output fromScratch="*.root" toURL="file:/star/data03/pwg/jdb/scratch/"/> -->
-	<output fromScratch="*.log" toURL="file:/star/data03/pwg/jdb/scratch/"/>
+	<!-- <output fromScratch="*.log" toURL="file:/star/data03/pwg/jdb/scratch/"/> -->
 
 	<SandBox>
  		<Package>

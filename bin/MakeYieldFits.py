@@ -29,5 +29,5 @@ print "Plc", iPlc
 print "iCharge", iCharge
 print "iCen", iCen
 
-command = "--iPlc=" + str(iPlc) + " --iCharge=" + str(iCharge) + " --iCen=" + str(iCen)
-print command
+command = "./rcp config/YieldFit.xml --iPlc=" + str(iPlc) + " --iCharge=" + str(iCharge) + " --iCen=" + str(iCen)
+os.system( command )
