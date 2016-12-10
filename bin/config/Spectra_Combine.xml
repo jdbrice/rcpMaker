@@ -1,0 +1,18 @@
+
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+
+	<!-- Job to run -->
+	<Task name="Hadd Spectra" type="CommandRunner" config="" nodePath="CommandRunner" />
+
+	<Include url="./Common/env.xml" />
+
+	<CommandRunner>
+		<Logger color="true" globalLogLevel="info" logLevel="all" />
+		
+		<command> hadd -f {env:cwd}BESCorrectedSpectra.root {env:cwd}Spectra_*.root {env:data}/EvanCorrectedSpectra.root </command>
+		
+
+	</CommandRunner>
+
+</config>

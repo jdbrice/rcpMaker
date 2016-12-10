@@ -70,7 +70,7 @@ public:
 		rpl.link( book );
 
 		TH2D *data2 = (TH2D*)get2D( "dca_vs_pt_" + plc + "_" + sc );
-		TH2D *emb2 = (TH2D*)get2D( "emb_dca_vs_pt_" + plc + "_" + sc );
+		TH2D *emb2 = (TH2D*)get2D( "urqmd_dca_vs_pt_" + plc + "_" + sc );
 
 		INFO( "got 2D data : " << data2 );
 		INFO( "got 2D emb  : " << emb2 );
@@ -88,7 +88,7 @@ public:
 		int nPtBins = data2->GetNbinsX();
 		for ( int i = 1; i <= nPtBins; i++ ){
 			string dName = "dca_" + plc + "_" + sc + "_ptBin_" + ts( i );
-			string eName = "emb_dca_" + plc + "_" + sc + "_ptBin_" + ts( i );
+			string eName = "urqmd_dca_" + plc + "_" + sc + "_ptBin_" + ts( i );
 			TH1D * data1 = data2->ProjectionY( dName.c_str(), i, i );
 			TH1D * emb1 = emb2->ProjectionY( eName.c_str(), i, i );
 

@@ -30,11 +30,13 @@ using namespace jdb;
 	#include "McMaker/TpcEffFitter.h"
 	#include "McMaker/TpcEffMaker.h"
 	#include "McMaker/EmbDcaMapMaker.h"
+	#include "McMaker/UrQMDDcaMapMaker.h"
 	#include "McMaker/DcaWeightMaker.h"
 
 // // Presentation
 	#include "Present/YieldExporter.h"
 	#include "Present/ZdSpectraHistoFileMaker.h"
+	#include "Present/RcpHistoFileMaker.h"
 
 
 // // Feed down
@@ -59,6 +61,7 @@ int main( int argc, char* argv[] ) {
 	TaskFactory::registerTaskRunner<FeedDownMaker>( "FeedDownMaker" );
 	TaskFactory::registerTaskRunner<FeedDownFitter>( "FeedDownFitter" );
 	TaskFactory::registerTaskRunner<EmbDcaMapMaker>( "EmbDcaMapMaker" );
+	TaskFactory::registerTaskRunner<UrQMDDcaMapMaker>( "UrQMDDcaMapMaker" );
 	TaskFactory::registerTaskRunner<DcaMapMaker>( "DcaMapMaker" );
 	TaskFactory::registerTaskRunner<DcaWeightMaker>( "DcaWeightMaker" );
 	TaskFactory::registerTaskRunner<TpcEffMaker>( "TpcEffMaker" );
@@ -75,6 +78,7 @@ int main( int argc, char* argv[] ) {
 	TaskFactory::registerTaskRunner<ApplyPostCorr>( "ApplyPostCorr" );
 	TaskFactory::registerTaskRunner<YieldExporter>( "YieldExporter" );
 	TaskFactory::registerTaskRunner<ZdSpectraHistoFileMaker>( "ZdSpectraHistoFileMaker" );
+	TaskFactory::registerTaskRunner<RcpHistoFileMaker>( "RcpHistoFileMaker" );
 
 	TaskFactory::registerTaskRunner<CommandRunner>( "CommandRunner" );
 

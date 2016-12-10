@@ -1,0 +1,435 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+	
+	<Task name="skimmer" type="VegaXmlPlotter" config="" nodePath="" />
+
+	<Include url="./Common/env.xml" />
+
+	<Data name="rcp" url="{env:cwd}Rcp_0_over_6.root" />
+
+	<!-- Things out here apply to all plots unless overriden -->
+	<Margins left="0.10" right="0.12" top="0.1" bottom="0.15" />
+
+	<TCanvas width="1000" height="700" />
+
+	<Plot>
+		<Histo data="rcp" name="Rcp_62p4_Pi_p_0_over_6_sys" style="styles.RCP">
+			<style title="#pi^{+}" yr="0.29, 3.5" logy="1" color="879" fca="879, 0.13" draw="e2" markerstyle="20" markersize="1.6"/>
+		</Histo>
+		<Histo data="rcp" name="Rcp_62p4_Pi_p_0_over_6_stat" style="styles.RCP">
+			<style title="#pi^{+}" yr="0.29, 3.5" logy="1" color="879" fca="879, 0.13" draw="same pE1EX0" markerstyle="20" markersize="1.6"/>
+		</Histo>
+
+		<Histo data="rcp" name="Rcp_39p0_Pi_p_0_over_6_sys" style="styles.RCP">
+			<style color="600" fca="600, 0.13" draw="E2 same" markerstyle="21" markersize="1.5"/>
+		</Histo>
+		<Histo data="rcp" name="Rcp_39p0_Pi_p_0_over_6_stat" style="styles.RCP">
+			<style color="600" fca="600, 0.13" draw="E1EX0 same" markerstyle="21" markersize="1.5"/>
+		</Histo>
+
+
+		<Histo data="rcp" name="Rcp_27p0_Pi_p_0_over_6_sys" style="styles.RCP">
+			<style color="867" fca="867, 0.13" draw="same E2" markerstyle="29" markersize="2"/>
+		</Histo>
+		<Histo data="rcp" name="Rcp_27p0_Pi_p_0_over_6_stat" style="styles.RCP">
+			<style color="867" fca="867, 0.13" draw="same E1EX0" markerstyle="29" markersize="2"/>
+		</Histo>
+
+		<Histo data="rcp" name="Rcp_19p6_Pi_p_0_over_6_sys" style="styles.RCP">
+			<style color="417" fca="417, 0.13" draw="same E2" markerstyle="23" markersize="1.9"/>
+		</Histo>
+		<Histo data="rcp" name="Rcp_19p6_Pi_p_0_over_6_stat" style="styles.RCP">
+			<style color="417" fca="417, 0.13" draw="same E1EX0" markerstyle="23" markersize="1.9"/>
+		</Histo>
+
+		<Histo data="rcp" name="Rcp_14p5_Pi_p_0_over_6_sys" style="styles.RCP">
+			<style color="797" fca="797, 0.13" draw="same E2" markerstyle="22" markersize="1.9"/>
+		</Histo>
+		<Histo data="rcp" name="Rcp_14p5_Pi_p_0_over_6_stat" style="styles.RCP">
+			<style color="797" fca="797, 0.13" draw="same E1EX0" markerstyle="22" markersize="1.9"/>
+		</Histo>
+
+		<Histo data="rcp" name="Rcp_11p5_Pi_p_0_over_6_sys" style="styles.RCP">
+			<style color="808" fca="808, 0.13" draw="same E2" markerstyle="21" markersize="1.5"/>
+		</Histo>
+		<Histo data="rcp" name="Rcp_11p5_Pi_p_0_over_6_stat" style="styles.RCP">
+			<style color="808" fca="808, 0.13" draw="same E1EX0" markerstyle="21" markersize="1.5"/>
+		</Histo>
+
+		<Histo data="rcp" name="Rcp_7p7_Pi_p_0_over_6_sys" style="styles.RCP">
+			<style color="633" fca="633, 0.13" draw=" E2 same" markerstyle="20" markersize="1.6"/>
+		</Histo>
+		<Histo data="rcp" name="Rcp_7p7_Pi_p_0_over_6_stat" style="styles.RCP">
+			<style color="633" fca="633, 0.13" draw="same E1EX0" markerstyle="20" markersize="1.6"/>
+		</Histo>
+
+		<TLine x1="0.1" x2="5.7" y1="1.0" y2="1.0" style="2" width="4" color="1"/>
+
+		<Legend title="Au+Au #sqrt{{s_{{NN}}}}" columns="2">
+			<Entry name="Rcp_62p4_Pi_p_0_over_6_sys" title="62.6" opt="lp"/>
+			<Entry name="Rcp_39p0_Pi_p_0_over_6_sys" title="39.0" opt="lp"/>
+			<Entry name="Rcp_27p0_Pi_p_0_over_6_sys" title="27.0" opt="lp"/>
+			<Entry name="Rcp_19p6_Pi_p_0_over_6_sys" title="19.6" opt="lp"/>
+			<Entry name="Rcp_14p5_Pi_p_0_over_6_sys" title="14.5" opt="lp"/>
+			<Entry name="Rcp_11p5_Pi_p_0_over_6_sys" title="11.5" opt="lp"/>
+			<Entry name="Rcp_7p7_Pi_p_0_over_6_sys" title="7.7" opt="lp"/>
+
+			<Position x1="0.7" x2="0.85" y1="0.6" y2="0.9"/>
+		</Legend>
+
+		<Export url="{env:cwd}/img/Rcp_Pi_p_0_over_6.pdf" />
+	</Plot>
+
+	<!-- Negative Pion  -->
+	<Plot>
+		<Histo data="rcp" name="Rcp_62p4_Pi_n_0_over_6_sys" style="styles.RCP">
+			<style title="#pi^{-}" yr="0.23, 2.4" logy="1" color="879" fca="879, 0.13" draw="e2" markerstyle="20" markersize="1.6"/>
+		</Histo>
+		<Histo data="rcp" name="Rcp_62p4_Pi_n_0_over_6_stat" style="styles.RCP">
+			<style  yr="0.29, 3.5" logy="1" color="879" fca="879, 0.13" draw="same pE1EX0" markerstyle="20" markersize="1.6"/>
+		</Histo>
+
+		<Histo data="rcp" name="Rcp_39p0_Pi_n_0_over_6_sys" style="styles.RCP">
+			<style color="600" fca="600, 0.13" draw="E2 same" markerstyle="21" markersize="1.5"/>
+		</Histo>
+		<Histo data="rcp" name="Rcp_39p0_Pi_n_0_over_6_stat" style="styles.RCP">
+			<style color="600" fca="600, 0.13" draw="E1EX0 same" markerstyle="21" markersize="1.5"/>
+		</Histo>
+
+
+		<Histo data="rcp" name="Rcp_27p0_Pi_n_0_over_6_sys" style="styles.RCP">
+			<style color="867" fca="867, 0.13" draw="same E2" markerstyle="29" markersize="2"/>
+		</Histo>
+		<Histo data="rcp" name="Rcp_27p0_Pi_n_0_over_6_stat" style="styles.RCP">
+			<style color="867" fca="867, 0.13" draw="same E1EX0" markerstyle="29" markersize="2"/>
+		</Histo>
+
+		<Histo data="rcp" name="Rcp_19p6_Pi_n_0_over_6_sys" style="styles.RCP">
+			<style color="417" fca="417, 0.13" draw="same E2" markerstyle="23" markersize="1.9"/>
+		</Histo>
+		<Histo data="rcp" name="Rcp_19p6_Pi_n_0_over_6_stat" style="styles.RCP">
+			<style color="417" fca="417, 0.13" draw="same E1EX0" markerstyle="23" markersize="1.9"/>
+		</Histo>
+
+		<Histo data="rcp" name="Rcp_14p5_Pi_n_0_over_6_sys" style="styles.RCP">
+			<style color="797" fca="797, 0.13" draw="same E2" markerstyle="22" markersize="1.9"/>
+		</Histo>
+		<Histo data="rcp" name="Rcp_14p5_Pi_n_0_over_6_stat" style="styles.RCP">
+			<style color="797" fca="797, 0.13" draw="same E1EX0" markerstyle="22" markersize="1.9"/>
+		</Histo>
+
+		<Histo data="rcp" name="Rcp_11p5_Pi_n_0_over_6_sys" style="styles.RCP">
+			<style color="808" fca="808, 0.13" draw="same E2" markerstyle="21" markersize="1.5"/>
+		</Histo>
+		<Histo data="rcp" name="Rcp_11p5_Pi_n_0_over_6_stat" style="styles.RCP">
+			<style color="808" fca="808, 0.13" draw="same E1EX0" markerstyle="21" markersize="1.5"/>
+		</Histo>
+
+		<Histo data="rcp" name="Rcp_7p7_Pi_n_0_over_6_sys" style="styles.RCP">
+			<style color="633" fca="633, 0.13" draw=" E2 same" markerstyle="20" markersize="1.6"/>
+		</Histo>
+		<Histo data="rcp" name="Rcp_7p7_Pi_n_0_over_6_stat" style="styles.RCP">
+			<style color="633" fca="633, 0.13" draw="same E1EX0" markerstyle="20" markersize="1.6"/>
+		</Histo>
+
+		<TLine x1="0.1" x2="5.7" y1="1.0" y2="1.0" style="2" width="4" color="1"/>
+
+		<Legend title="Au+Au #sqrt{{s_{{NN}}}}" columns="2">
+			<Entry name="Rcp_62p4_Pi_n_0_over_6_sys" title="62.6" opt="lp"/>
+			<Entry name="Rcp_39p0_Pi_n_0_over_6_sys" title="39.0" opt="lp"/>
+			<Entry name="Rcp_27p0_Pi_n_0_over_6_sys" title="27.0" opt="lp"/>
+			<Entry name="Rcp_19p6_Pi_n_0_over_6_sys" title="19.6" opt="lp"/>
+			<Entry name="Rcp_14p5_Pi_n_0_over_6_sys" title="14.5" opt="lp"/>
+			<Entry name="Rcp_11p5_Pi_n_0_over_6_sys" title="11.5" opt="lp"/>
+			<Entry name="Rcp_7p7_Pi_n_0_over_6_sys" title="7.7" opt="lp"/>
+
+			<Position x1="0.7" x2="0.85" y1="0.6" y2="0.9"/>
+		</Legend>
+
+		<Export url="{env:cwd}/img/Rcp_Pi_n_0_over_6.pdf" />
+	</Plot>
+
+
+	<!-- Positive Kaon -->
+	<Plot>
+		<Histo data="rcp" name="Rcp_62p4_K_p_0_over_6_sys" style="styles.RCP">
+			<style title="K^{+}" yr="0.45, 4.5" logy="1" color="879" fca="879, 0.13" draw="e2" markerstyle="20" markersize="1.6"/>
+		</Histo>
+		<Histo data="rcp" name="Rcp_62p4_K_p_0_over_6_stat" style="styles.RCP">
+			<style yr="0.29, 3.5" logy="1" color="879" fca="879, 0.13" draw="same pE1EX0" markerstyle="20" markersize="1.6"/>
+		</Histo>
+
+		<Histo data="rcp" name="Rcp_39p0_K_p_0_over_6_sys" style="styles.RCP">
+			<style color="600" fca="600, 0.13" draw="E2 same" markerstyle="21" markersize="1.5"/>
+		</Histo>
+		<Histo data="rcp" name="Rcp_39p0_K_p_0_over_6_stat" style="styles.RCP">
+			<style color="600" fca="600, 0.13" draw="E1EX0 same" markerstyle="21" markersize="1.5"/>
+		</Histo>
+
+
+		<Histo data="rcp" name="Rcp_27p0_K_p_0_over_6_sys" style="styles.RCP">
+			<style color="867" fca="867, 0.13" draw="same E2" markerstyle="29" markersize="2"/>
+		</Histo>
+		<Histo data="rcp" name="Rcp_27p0_K_p_0_over_6_stat" style="styles.RCP">
+			<style color="867" fca="867, 0.13" draw="same E1EX0" markerstyle="29" markersize="2"/>
+		</Histo>
+
+		<Histo data="rcp" name="Rcp_19p6_K_p_0_over_6_sys" style="styles.RCP">
+			<style color="417" fca="417, 0.13" draw="same E2" markerstyle="23" markersize="1.9"/>
+		</Histo>
+		<Histo data="rcp" name="Rcp_19p6_K_p_0_over_6_stat" style="styles.RCP">
+			<style color="417" fca="417, 0.13" draw="same E1EX0" markerstyle="23" markersize="1.9"/>
+		</Histo>
+
+		<Histo data="rcp" name="Rcp_14p5_K_p_0_over_6_sys" style="styles.RCP">
+			<style color="797" fca="797, 0.13" draw="same E2" markerstyle="22" markersize="1.9"/>
+		</Histo>
+		<Histo data="rcp" name="Rcp_14p5_K_p_0_over_6_stat" style="styles.RCP">
+			<style color="797" fca="797, 0.13" draw="same E1EX0" markerstyle="22" markersize="1.9"/>
+		</Histo>
+
+		<Histo data="rcp" name="Rcp_11p5_K_p_0_over_6_sys" style="styles.RCP">
+			<style color="808" fca="808, 0.13" draw="same E2" markerstyle="21" markersize="1.5"/>
+		</Histo>
+		<Histo data="rcp" name="Rcp_11p5_K_p_0_over_6_stat" style="styles.RCP">
+			<style color="808" fca="808, 0.13" draw="same E1EX0" markerstyle="21" markersize="1.5"/>
+		</Histo>
+
+		<Histo data="rcp" name="Rcp_7p7_K_p_0_over_6_sys" style="styles.RCP">
+			<style color="633" fca="633, 0.13" draw=" E2 same" markerstyle="20" markersize="1.6"/>
+		</Histo>
+		<Histo data="rcp" name="Rcp_7p7_K_p_0_over_6_stat" style="styles.RCP">
+			<style color="633" fca="633, 0.13" draw="same E1EX0" markerstyle="20" markersize="1.6"/>
+		</Histo>
+
+		<TLine x1="0.1" x2="5.7" y1="1.0" y2="1.0" style="2" width="4" color="1"/>
+
+		<Legend title="Au+Au #sqrt{{s_{{NN}}}}" columns="2">
+			<Entry name="Rcp_62p4_K_p_0_over_6_sys" title="62.6" opt="lp"/>
+			<Entry name="Rcp_39p0_K_p_0_over_6_sys" title="39.0" opt="lp"/>
+			<Entry name="Rcp_27p0_K_p_0_over_6_sys" title="27.0" opt="lp"/>
+			<Entry name="Rcp_19p6_K_p_0_over_6_sys" title="19.6" opt="lp"/>
+			<Entry name="Rcp_14p5_K_p_0_over_6_sys" title="14.5" opt="lp"/>
+			<Entry name="Rcp_11p5_K_p_0_over_6_sys" title="11.5" opt="lp"/>
+			<Entry name="Rcp_7p7_K_p_0_over_6_sys" title="7.7" opt="lp"/>
+
+			<Position x1="0.7" x2="0.85" y1="0.6" y2="0.9"/>
+		</Legend>
+
+		<Export url="{env:cwd}/img/Rcp_K_p_0_over_6.pdf" />
+	</Plot>
+
+	<!-- Negative Kaon -->
+	<Plot>
+		<Histo data="rcp" name="Rcp_62p4_K_n_0_over_6_sys" style="styles.RCP">
+			<style title="K^{-}" yr="0.45, 5.0" logy="1" color="879" fca="879, 0.13" draw="e2" markerstyle="20" markersize="1.6"/>
+		</Histo>
+		<Histo data="rcp" name="Rcp_62p4_K_n_0_over_6_stat" style="styles.RCP">
+			<style  yr="0.29, 3.5" logy="1" color="879" fca="879, 0.13" draw="same pE1EX0" markerstyle="20" markersize="1.6"/>
+		</Histo>
+
+		<Histo data="rcp" name="Rcp_39p0_K_n_0_over_6_sys" style="styles.RCP">
+			<style color="600" fca="600, 0.13" draw="E2 same" markerstyle="21" markersize="1.5"/>
+		</Histo>
+		<Histo data="rcp" name="Rcp_39p0_K_n_0_over_6_stat" style="styles.RCP">
+			<style color="600" fca="600, 0.13" draw="E1EX0 same" markerstyle="21" markersize="1.5"/>
+		</Histo>
+
+
+		<Histo data="rcp" name="Rcp_27p0_K_n_0_over_6_sys" style="styles.RCP">
+			<style color="867" fca="867, 0.13" draw="same E2" markerstyle="29" markersize="2"/>
+		</Histo>
+		<Histo data="rcp" name="Rcp_27p0_K_n_0_over_6_stat" style="styles.RCP">
+			<style color="867" fca="867, 0.13" draw="same E1EX0" markerstyle="29" markersize="2"/>
+		</Histo>
+
+		<Histo data="rcp" name="Rcp_19p6_K_n_0_over_6_sys" style="styles.RCP">
+			<style color="417" fca="417, 0.13" draw="same E2" markerstyle="23" markersize="1.9"/>
+		</Histo>
+		<Histo data="rcp" name="Rcp_19p6_K_n_0_over_6_stat" style="styles.RCP">
+			<style color="417" fca="417, 0.13" draw="same E1EX0" markerstyle="23" markersize="1.9"/>
+		</Histo>
+
+		<Histo data="rcp" name="Rcp_14p5_K_n_0_over_6_sys" style="styles.RCP">
+			<style color="797" fca="797, 0.13" draw="same E2" markerstyle="22" markersize="1.9"/>
+		</Histo>
+		<Histo data="rcp" name="Rcp_14p5_K_n_0_over_6_stat" style="styles.RCP">
+			<style color="797" fca="797, 0.13" draw="same E1EX0" markerstyle="22" markersize="1.9"/>
+		</Histo>
+
+		<Histo data="rcp" name="Rcp_11p5_K_n_0_over_6_sys" style="styles.RCP">
+			<style color="808" fca="808, 0.13" draw="same E2" markerstyle="21" markersize="1.5"/>
+		</Histo>
+		<Histo data="rcp" name="Rcp_11p5_K_n_0_over_6_stat" style="styles.RCP">
+			<style color="808" fca="808, 0.13" draw="same E1EX0" markerstyle="21" markersize="1.5"/>
+		</Histo>
+
+		<Histo data="rcp" name="Rcp_7p7_K_n_0_over_6_sys" style="styles.RCP">
+			<style color="633" fca="633, 0.13" draw=" E2 same" markerstyle="20" markersize="1.6"/>
+		</Histo>
+		<Histo data="rcp" name="Rcp_7p7_K_n_0_over_6_stat" style="styles.RCP">
+			<style color="633" fca="633, 0.13" draw="same E1EX0" markerstyle="20" markersize="1.6"/>
+		</Histo>
+
+		<TLine x1="0.1" x2="5.7" y1="1.0" y2="1.0" style="2" width="4" color="1"/>
+
+		<Legend title="Au+Au #sqrt{{s_{{NN}}}}" columns="2">
+			<Entry name="Rcp_62p4_K_n_0_over_6_sys" title="62.6" opt="lp"/>
+			<Entry name="Rcp_39p0_K_n_0_over_6_sys" title="39.0" opt="lp"/>
+			<Entry name="Rcp_27p0_K_n_0_over_6_sys" title="27.0" opt="lp"/>
+			<Entry name="Rcp_19p6_K_n_0_over_6_sys" title="19.6" opt="lp"/>
+			<Entry name="Rcp_14p5_K_n_0_over_6_sys" title="14.5" opt="lp"/>
+			<Entry name="Rcp_11p5_K_n_0_over_6_sys" title="11.5" opt="lp"/>
+			<Entry name="Rcp_7p7_K_n_0_over_6_sys" title="7.7" opt="lp"/>
+
+			<Position x1="0.7" x2="0.85" y1="0.6" y2="0.9"/>
+		</Legend>
+
+		<Export url="{env:cwd}/img/Rcp_K_n_0_over_6.pdf" />
+	</Plot>
+
+	<!-- Positive Proton -->
+	<Plot>
+		<Histo data="rcp" name="Rcp_62p4_P_p_0_over_6_sys" style="styles.RCP">
+			<style title="p" yr="0.39, 5.0" logy="1" color="879" fca="879, 0.13" draw="e2" markerstyle="20" markersize="1.6"/>
+		</Histo>
+		<Histo data="rcp" name="Rcp_62p4_P_p_0_over_6_stat" style="styles.RCP">
+			<style yr="0.29, 3.5" logy="1" color="879" fca="879, 0.13" draw="same pE1EX0" markerstyle="20" markersize="1.6"/>
+		</Histo>
+
+		<Histo data="rcp" name="Rcp_39p0_P_p_0_over_6_sys" style="styles.RCP">
+			<style color="600" fca="600, 0.13" draw="E2 same" markerstyle="21" markersize="1.5"/>
+		</Histo>
+		<Histo data="rcp" name="Rcp_39p0_P_p_0_over_6_stat" style="styles.RCP">
+			<style color="600" fca="600, 0.13" draw="E1EX0 same" markerstyle="21" markersize="1.5"/>
+		</Histo>
+
+
+		<Histo data="rcp" name="Rcp_27p0_P_p_0_over_6_sys" style="styles.RCP">
+			<style color="867" fca="867, 0.13" draw="same E2" markerstyle="29" markersize="2"/>
+		</Histo>
+		<Histo data="rcp" name="Rcp_27p0_P_p_0_over_6_stat" style="styles.RCP">
+			<style color="867" fca="867, 0.13" draw="same E1EX0" markerstyle="29" markersize="2"/>
+		</Histo>
+
+		<Histo data="rcp" name="Rcp_19p6_P_p_0_over_6_sys" style="styles.RCP">
+			<style color="417" fca="417, 0.13" draw="same E2" markerstyle="23" markersize="1.9"/>
+		</Histo>
+		<Histo data="rcp" name="Rcp_19p6_P_p_0_over_6_stat" style="styles.RCP">
+			<style color="417" fca="417, 0.13" draw="same E1EX0" markerstyle="23" markersize="1.9"/>
+		</Histo>
+
+		<Histo data="rcp" name="Rcp_14p5_P_p_0_over_6_sys" style="styles.RCP">
+			<style color="797" fca="797, 0.13" draw="same E2" markerstyle="22" markersize="1.9"/>
+		</Histo>
+		<Histo data="rcp" name="Rcp_14p5_P_p_0_over_6_stat" style="styles.RCP">
+			<style color="797" fca="797, 0.13" draw="same E1EX0" markerstyle="22" markersize="1.9"/>
+		</Histo>
+
+		<Histo data="rcp" name="Rcp_11p5_P_p_0_over_6_sys" style="styles.RCP">
+			<style color="808" fca="808, 0.13" draw="same E2" markerstyle="21" markersize="1.5"/>
+		</Histo>
+		<Histo data="rcp" name="Rcp_11p5_P_p_0_over_6_stat" style="styles.RCP">
+			<style color="808" fca="808, 0.13" draw="same E1EX0" markerstyle="21" markersize="1.5"/>
+		</Histo>
+
+		<Histo data="rcp" name="Rcp_7p7_P_p_0_over_6_sys" style="styles.RCP">
+			<style color="633" fca="633, 0.13" draw=" E2 same" markerstyle="20" markersize="1.6"/>
+		</Histo>
+		<Histo data="rcp" name="Rcp_7p7_P_p_0_over_6_stat" style="styles.RCP">
+			<style color="633" fca="633, 0.13" draw="same E1EX0" markerstyle="20" markersize="1.6"/>
+		</Histo>
+
+		<TLine x1="0.1" x2="5.7" y1="1.0" y2="1.0" style="2" width="4" color="1"/>
+
+		<Legend title="Au+Au #sqrt{{s_{{NN}}}}" columns="2">
+			<Entry name="Rcp_62p4_P_p_0_over_6_sys" title="62.6" opt="lp"/>
+			<Entry name="Rcp_39p0_P_p_0_over_6_sys" title="39.0" opt="lp"/>
+			<Entry name="Rcp_27p0_P_p_0_over_6_sys" title="27.0" opt="lp"/>
+			<Entry name="Rcp_19p6_P_p_0_over_6_sys" title="19.6" opt="lp"/>
+			<Entry name="Rcp_14p5_P_p_0_over_6_sys" title="14.5" opt="lp"/>
+			<Entry name="Rcp_11p5_P_p_0_over_6_sys" title="11.5" opt="lp"/>
+			<Entry name="Rcp_7p7_P_p_0_over_6_sys" title="7.7" opt="lp"/>
+
+			<Position x1="0.7" x2="0.85" y1="0.6" y2="0.9"/>
+		</Legend>
+
+		<Export url="{env:cwd}/img/Rcp_P_p_0_over_6.pdf" />
+	</Plot>
+
+	<!-- Negative Proton -->
+	<Plot>
+		<Histo data="rcp" name="Rcp_62p4_P_n_0_over_6_sys" style="styles.RCP">
+			<style title="#bar{p}" yr="0.12, 3.0" logy="1" color="879" fca="879, 0.13" draw="e2" markerstyle="20" markersize="1.6"/>
+		</Histo>
+		<Histo data="rcp" name="Rcp_62p4_P_n_0_over_6_stat" style="styles.RCP">
+			<style  yr="0.29, 3.5" logy="1" color="879" fca="879, 0.13" draw="same pE1EX0" markerstyle="20" markersize="1.6"/>
+		</Histo>
+
+		<Histo data="rcp" name="Rcp_39p0_P_n_0_over_6_sys" style="styles.RCP">
+			<style color="600" fca="600, 0.13" draw="E2 same" markerstyle="21" markersize="1.5"/>
+		</Histo>
+		<Histo data="rcp" name="Rcp_39p0_P_n_0_over_6_stat" style="styles.RCP">
+			<style color="600" fca="600, 0.13" draw="E1EX0 same" markerstyle="21" markersize="1.5"/>
+		</Histo>
+
+
+		<Histo data="rcp" name="Rcp_27p0_P_n_0_over_6_sys" style="styles.RCP">
+			<style color="867" fca="867, 0.13" draw="same E2" markerstyle="29" markersize="2"/>
+		</Histo>
+		<Histo data="rcp" name="Rcp_27p0_P_n_0_over_6_stat" style="styles.RCP">
+			<style color="867" fca="867, 0.13" draw="same E1EX0" markerstyle="29" markersize="2"/>
+		</Histo>
+
+		<Histo data="rcp" name="Rcp_19p6_P_n_0_over_6_sys" style="styles.RCP">
+			<style color="417" fca="417, 0.13" draw="same E2" markerstyle="23" markersize="1.9"/>
+		</Histo>
+		<Histo data="rcp" name="Rcp_19p6_P_n_0_over_6_stat" style="styles.RCP">
+			<style color="417" fca="417, 0.13" draw="same E1EX0" markerstyle="23" markersize="1.9"/>
+		</Histo>
+
+		<Histo data="rcp" name="Rcp_14p5_P_n_0_over_6_sys" style="styles.RCP">
+			<style color="797" fca="797, 0.13" draw="same E2" markerstyle="22" markersize="1.9"/>
+		</Histo>
+		<Histo data="rcp" name="Rcp_14p5_P_n_0_over_6_stat" style="styles.RCP">
+			<style color="797" fca="797, 0.13" draw="same E1EX0" markerstyle="22" markersize="1.9"/>
+		</Histo>
+
+		<Histo data="rcp" name="Rcp_11p5_P_n_0_over_6_sys" style="styles.RCP">
+			<style color="808" fca="808, 0.13" draw="same E2" markerstyle="21" markersize="1.5"/>
+		</Histo>
+		<Histo data="rcp" name="Rcp_11p5_P_n_0_over_6_stat" style="styles.RCP">
+			<style color="808" fca="808, 0.13" draw="same E1EX0" markerstyle="21" markersize="1.5"/>
+		</Histo>
+
+		<Histo data="rcp" name="Rcp_7p7_P_n_0_over_6_sys" style="styles.RCP">
+			<style color="633" fca="633, 0.13" draw=" E2 same" markerstyle="20" markersize="1.6"/>
+		</Histo>
+		<Histo data="rcp" name="Rcp_7p7_P_n_0_over_6_stat" style="styles.RCP">
+			<style color="633" fca="633, 0.13" draw="same E1EX0" markerstyle="20" markersize="1.6"/>
+		</Histo>
+
+		<TLine x1="0.1" x2="5.7" y1="1.0" y2="1.0" style="2" width="4" color="1"/>
+
+		<Legend title="Au+Au #sqrt{{s_{{NN}}}}" columns="2">
+			<Entry name="Rcp_62p4_P_n_0_over_6_sys" title="62.6" opt="lp"/>
+			<Entry name="Rcp_39p0_P_n_0_over_6_sys" title="39.0" opt="lp"/>
+			<Entry name="Rcp_27p0_P_n_0_over_6_sys" title="27.0" opt="lp"/>
+			<Entry name="Rcp_19p6_P_n_0_over_6_sys" title="19.6" opt="lp"/>
+			<Entry name="Rcp_14p5_P_n_0_over_6_sys" title="14.5" opt="lp"/>
+			<Entry name="Rcp_11p5_P_n_0_over_6_sys" title="11.5" opt="lp"/>
+			<Entry name="Rcp_7p7_P_n_0_over_6_sys" title="7.7" opt="lp"/>
+
+			<Position x1="0.7" x2="0.85" y1="0.6" y2="0.9"/>
+		</Legend>
+
+		<Export url="{env:cwd}/img/Rcp_P_n_0_over_6.pdf" />
+	</Plot>
+
+
+	<styles>
+		<RCP x="p_{T} [GeV/c]" y="R_{CP} (0-5%) / (60-80%)" optstat="0" xr="0, 5.7" xts="0.06" xls="0.06" yto="0.4" yts="0.08" yls="0.06"/>
+	</styles>
+
+
+</root>

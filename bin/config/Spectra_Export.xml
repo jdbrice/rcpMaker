@@ -1,0 +1,26 @@
+
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+
+	<plc>Pi</plc>
+	
+	<Task name="YieldExporter" type="YieldExporter" config="" nodePath="YieldExporter" />
+
+	<Include url="./Common/env.xml" />
+
+	<YieldExporter>
+		<input plc="{plc}" energy="14p5">
+			<TFile url="{env:cwd}/PostCorr_{plc}.root"/>
+		</input>
+
+		<output path="{env:cwd}">
+			<TFile url="{env:cwd}/Spectra_{plc}.root" />
+		</output>
+
+		<Include url="./Common/centralityMap.xml" />
+		<systematics>
+			<Include url="./Common/systematicUncertainties.xml" />
+		</systematics>
+	</YieldExporter>
+</config>
+	

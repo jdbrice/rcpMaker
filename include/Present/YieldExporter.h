@@ -24,8 +24,8 @@ public:
 
 	virtual void initialize() {
 		INFO( classname(), "" );
-		plc = config.getString( nodePath + ".input:plc" );
-		energy = config.getString( nodePath + ".input:energy", "14.5" );
+		plc = config.getXString( nodePath + ".input:plc" );
+		energy = config.getXString( nodePath + ".input:energy", "14p5" );
 
 		loadSystematics( nodePath + ".systematics" );
 	}
@@ -35,7 +35,7 @@ public:
 	virtual void make(){
 		INFO( classname(), "");
 
-		string base = config.getString( nodePath + ".output:path" );
+		string base = config.getXString( nodePath + ".output:path" );
 		vector<string> centralityBins = config.getStringVector( nodePath + ".CentralityBins" );
 		for ( string cen : centralityBins ){
 			for ( string charge : Common::sCharges ){
@@ -44,24 +44,30 @@ public:
 				TH1D* hSpectra =  (TH1D*)inFile->Get( hName.c_str() );
 				string name = base + "spectra_" + energy + "_" + plc + "_" + charge + "_" + cen + ".dat";
 				string sysName = plc + "_" + charge + "_" + cen;
-				INFO( classname(), "Exporting " << hName << " --> " << name );
+				
 
 				if ( nullptr == hSpectra ){
 					ERROR( classname(), "Histogram invalid : " << hName );
 					continue;
 				}
 
-				ofstream fout( name.c_str() );
-					exportSpectraHist( hSpectra, fout, sysName );
-				fout.close();
+				if ( config.getBool( nodePath + ".make:dat", false ) ){
+					INFO( classname(), "Exporting " << hName << " --> " << name );
+					ofstream fout( name.c_str() );
+						exportSpectraHist( hSpectra, fout, sysName );
+					fout.close();
+				}
+				
 
-				book->cd();
-				// now export to ROOT file
-				string hSpectraName = "spectra_" + energy + "_" + plc + "_" + charge + "_" + cen + "_stat";
-				book->add( hSpectraName, makeSpectraHistogram( hSpectraName, hSpectra, "" ) );
+				if ( config.getBool( nodePath + ".make:root", true ) ){
+					book->cd();
+					// now export to ROOT file
+					string hSpectraName = "Yield_" + energy + "_" + plc + "_" + charge + "_" + cen + "_stat_normed";
+					book->add( hSpectraName, makeSpectraHistogram( hSpectraName, hSpectra, "" ) );
 
-				hSpectraName = "spectra_" + energy + "_" + plc + "_" + charge + "_" + cen + "_sys";
-				book->add( hSpectraName, makeSpectraHistogram( hSpectraName, hSpectra, sysName ) );
+					hSpectraName = "Yield_" + energy + "_" + plc + "_" + charge + "_" + cen + "_sys_normed";
+					book->add( hSpectraName, makeSpectraHistogram( hSpectraName, hSpectra, sysName ) );
+				}
 
 
 			}

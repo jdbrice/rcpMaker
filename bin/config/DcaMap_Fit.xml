@@ -1,0 +1,38 @@
+
+	<?xml version="1.0" encoding="UTF-8"?>
+	<config>
+
+		<!-- Job to run -->
+		<Task name="DcaWeightMaker" type="DcaWeightMaker" config="" nodePath="DcaWeightMaker" />
+
+		<Include url="./Common/env.xml" />
+
+		<DcaWeightMaker>
+			<Logger color="true" globalLogLevel="info" logLevel="all" />
+			<Reporter> 
+				<output url="{env:cwd}rp_DcaWeightMap.pdf" width="700" height="500" /> 
+			</Reporter>
+
+			<input>
+				<TFile url="{env:cwd}DcaMap.root" />
+			</input> 
+
+			<output>
+				<TFile url="{env:cwd}/DcaWeightMap.root" />
+			</output>
+
+			<histograms>
+				<Histo name="dcaEff" title="; p_{T} [GeV]; DCA<1.0 [cm] %Eff"  bins_x="binning.pt"/>
+			</histograms>
+
+			<!-- the bins into which the 9 centrality bins are mapped. -->
+			<Include url="./Common/centralityMap.xml" />
+
+			<!-- <dcaBins> 0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.25, 1.5, 1.75, 2.0, 2.5, 3.0 </dcaBins> -->
+			<!-- <dcaBins>0.0, 1.0, 3.0 </dcaBins> -->
+
+		</DcaWeightMaker>
+
+		<Include url="./Common/binning.xml" />
+
+	</config>

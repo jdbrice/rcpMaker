@@ -1,0 +1,9 @@
+#########################
+# FeedDown Maker
+#########################
+
+Executable = /home/jdb12/work/rcpMaker/runner/rcp
+Initialdir = /home/jdb12/work/rcpMaker/runner/
+
+Arguments = /home/jdb12/work/rcpMaker/bin/config/DcaMap_MakeUrQMD.xml --jobIndex=$(Process)
+Queue 100

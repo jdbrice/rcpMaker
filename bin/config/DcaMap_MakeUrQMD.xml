@@ -1,0 +1,78 @@
+
+	<?xml version="1.0" encoding="UTF-8"?>
+	<config>
+
+		<!-- Job to run -->
+		<Task name="UrQMDDcaMapMaker" type="UrQMDDcaMapMaker" config="" nodePath="UrQMDDcaMapMaker" />
+
+		<Include url="./Common/env.xml" />
+
+		<UrQMDDcaMapMaker>
+			<Logger color="true" globalLogLevel="info" logLevel="all" />
+			<EventLoop progress="true" />
+			
+			<input plc="{plc}" type="rc" charge="{charge}">
+				<dst treeName="StMiniMcTree" url="{env:urqmd}"/>
+			</input>
+
+			<DataSource treeName="StMiniMcTree" filelist="/data/star1/jdb12/RcpAnalysis/urqmd/urqmd.lis" splitBy="50">
+				
+				<!-- Turn on only the ones you need -->
+				<BranchStatus status="1">
+					mMatchedPair*,
+					mVertex*,
+					mNMatchedPair,
+					mNUnc*
+				</BranchStatus>
+				
+			</DataSource>
+
+			<output>
+				<TFile url="{env:cwd}UrQMDDcaMap_{jobIndex}.root" />
+			</output>
+
+			<!-- the bins into which the 9 centrality bins are mapped. -->
+			<Include url="./Common/centralityMap.xml" />
+
+			<MakeQA event="false" track="false" />
+
+
+			<!-- histograms to auto-make -->
+			<histograms>
+				<Histo name="dca_vs_pt" title="p_{T} [GeV]; p_{T} [GeV]; #Events"  bins_x="binning.pt" bins_y="binning.dca"/>
+
+
+				<Histo name="vR" title="vR [cm]" bins_x="bins.vR" />
+				<Histo name="vX" title="vX [cm]" bins_x="bins.vX" />
+				<Histo name="vY" title="vY [cm]" bins_x="bins.vX" />
+				<Histo name="vZ" title="vZ [cm]" bins_x="bins.vZ" />
+				<Histo name="refMult" title="rm" bins_x="bins.rm" />
+				<Histo name="refMultBins" title="rm" bins_x="bins.rm" bins_y="bins.rmb" />
+				<Histo name="refMultMappedBins" title="rm" bins_x="bins.rm" bins_y="bins.rmb" />
+
+				<Histo name="pre_rapidity" title="rapidity" width_x=".01" min_x="-2.0" max_x="2.0" />
+
+				<Histo name="dca" title="DcaGl [cm]" width_x="0.02" min_x="0.0" max_x="3.0" />
+				<Histo name="fitPts" title="fitPts" width_x="1" min_x="0.0" max_x="50.0" />
+				<Histo name="dedxPts" title="dedxPts" width_x="1" min_x="0.0" max_x="50.0" />
+				<Histo name="possiblePts" title="possiblePts" width_x="1" min_x="0.0" max_x="50.0" />
+				<Histo name="fitr" title="fitPts / possiblePts" width_x=".02" min_x="0.0" max_x="1.0" />
+				<Histo name="ptr" title="ptgl / ptpr" width_x=".01" min_x="0.0" max_x="2.0" />
+				<Histo name="eta" title="eta" width_x=".02" min_x="-2.0" max_x="2.0" />
+				<Histo name="rapidity" title="rapidity" width_x=".01" min_x="-0.3" max_x="0.3" />
+
+				<Histo name="parents" width_x="1" min_x="-0.5" max_x="51.5" bins_y="binning.ptEff" />
+				<Histo name="spectra" bins_x="binning.ptEff" />
+
+				<Histo name="refMultVz" bins_x="bins.vZ" bins_y="bins.rm" />
+			</histograms>
+
+		</UrQMDDcaMapMaker>
+
+		<!-- Include common resources -->
+		<Include url="./Common/cuts.xml" />
+		<Include url="./Common/binning.xml" />
+		<Include url="./Common/qaHistograms.xml" />
+
+	</config>
+	

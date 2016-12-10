@@ -1,0 +1,62 @@
+
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+
+	<!-- USER INPUTS -->
+	<!-- Pi, K, P -->
+	<plc>Pi</plc>
+	<!-- USER INPUTS -->
+
+	<Task name="DcaMapMaker" type="DcaMapMaker" config="" nodePath="DcaMapMaker" />
+
+	<Include url="./Common/env.xml" />
+
+	<DcaMapMaker tofMinPt="0.1" nSigmaZdCut="2.0" nSigmaZbCut="2.0" >
+		<Logger color="true" logLevel="all" globalLogLevel="info" />
+		
+		<input plc="{plc}">
+			<dst treeName="SpectraPicoDst" url="{env:data}SpectraPicoDst.lis" splitBy="40"/>
+		</input>
+
+		<output path="{env:cwd}">
+			<TFile url="{env:cwd}DcaMap_{plc}_{jobIndex}.root" />
+			<Reports>report/</Reports>
+		</output>
+
+		<Bichsel>
+			<table>dedxBichsel.root</table>
+			<method>0</method>
+		</Bichsel>
+		
+		<ZRecentering>
+			<centerSpecies>{plc}</centerSpecies>
+			<sigma tof="0.012" dedx="0.07"/>
+			<method>linear</method>
+		</ZRecentering>
+
+		<!-- the bins into which the 9 centrality bins are mapped. -->
+		<Include url="./Common/centralityMap.xml" />
+		<MakeQA event="true" track="false" tof="false" dedx="false"/>
+
+		<histograms>
+			<Histo name="pt" title="p_{T} [GeV]; p_{T} [GeV]; #Events"  bins_x="binning.pt"/>
+			<Histo name="dca_vs_pt" title="p_{T} [GeV]; p_{T} [GeV]; #Events"  bins_x="binning.ptEff" bins_y="binning.dca"/>
+			<Histo name="corrPt" title="p_{T} [GeV]; p_{T} [GeV]; #Events"  bins_x="binning.pt" bins_y="binning.eloss"/>
+		</histograms>
+
+		<!-- Energy Loss params are loaded from their own Configs -->
+		<EnergyLossParams path="{env:cwd}Params/EnergyLoss_" />
+
+		<!-- InclusiveSpectra can skip making the combined spectra -->
+		<Spectra all="false" tof="false" />
+
+	</DcaMapMaker>
+	
+
+	<!-- Include common resources -->
+	<Include url="./Common/cuts.xml" />
+	<Include url="./Common/binning.xml" />
+	<Include url="./Common/qaHistograms.xml" />
+
+</config>
+	
