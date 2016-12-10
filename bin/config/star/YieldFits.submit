@@ -2,7 +2,7 @@
 <job nProcesses="42">
 	
 	<command>
-		./MakeYieldFits.py ${JOBINDEX} &gt;&amp; log_${JOBINDEX}.log
+		./MakeYieldFits.py ${JOBINDEX} &gt;&amp; log_YieldFits_${JOBINDEX}.log
 	</command>
 
 	<stdout URL="file:/star/data03/pwg/jdb/scratch/log/$JOBID.out" />
@@ -16,6 +16,7 @@
  			<File>file:./config/</File>
  			<File>file:./rcp</File> 
  			<File>file:./dedxBichsel.root</File>
+ 			<File>file:./MakeYieldFits.py</File>
  		</Package> 
  	</SandBox>
 
