@@ -3,6 +3,7 @@
 	<config>
 
 		<plc>Pi</plc>
+		<charge>p</charge>
 		<type>mc</type>
 
 		<Task name="TpcEffMaker" type="TpcEffMaker" config="" nodePath="TpcEffMaker" />
@@ -13,10 +14,10 @@
 			<Logger color="true" globalLogLevel="info" logLevel="all" />
 			
 			<input plc="{plc}" type="{type}">
-				<dst treeName="SpectraPicoDst" url="{env:emb}K_n_mc.root"/>
+				<dst treeName="SpectraPicoDst" url="{env:emb}{plc}_{charge}_{type}.root"/>
 			</input>
 			<output>
-				<TFile url="{env:cwd}TpcEff_K_n_mc.root" />
+				<TFile url="{env:cwd}TpcEff_{plc}_{charge}_{type}.root" />
 			</output>
 
 			<!-- the bins into which the 9 centrality bins are mapped. -->
