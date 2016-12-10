@@ -1,5 +1,8 @@
 #!/bin/bash
 
+./rcp config/YieldFit_Combine.xml --plc=Pi
+./rcp config/YieldFit_Combine.xml --plc=K
+./rcp config/YieldFit_Combine.xml --plc=P
 
 ./rcp config/ApplyCorrections.xml --plc=Pi
 ./rcp config/ApplyCorrections.xml --plc=K
