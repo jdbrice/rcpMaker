@@ -3,7 +3,7 @@
 void TpcEffMaker::initialize(){
 	InclusiveSpectra::initialize();
 
-	trackType = config.getString( nodePath + ".input:type" );
+	trackType = config.getXString( nodePath + ".input:type" );
 	if ( "mc" == trackType ){
 		cut_nHitsDedx->min = 0;
 		cut_nHitsFit->min = 0;

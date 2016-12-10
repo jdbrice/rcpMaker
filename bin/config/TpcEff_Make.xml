@@ -1,0 +1,40 @@
+
+	<?xml version="1.0" encoding="UTF-8"?>
+	<config>
+
+		<plc>Pi</plc>
+		<type>mc</type>
+
+		<Task name="TpcEffMaker" type="TpcEffMaker" config="" nodePath="TpcEffMaker" />
+
+		<Include url="./Common/env.xml" />
+
+		<TpcEffMaker>
+			<Logger color="true" globalLogLevel="info" logLevel="all" />
+			
+			<input plc="{plc}" type="{type}">
+				<dst treeName="SpectraPicoDst" url="{env:emb}K_n_mc.root"/>
+			</input>
+			<output>
+				<TFile url="{env:cwd}TpcEff_K_n_mc.root" />
+			</output>
+
+			<!-- the bins into which the 9 centrality bins are mapped. -->
+			<Include url="./Common/centralityMap.xml" />
+
+			<MakeQA event="true" track="true" />
+
+			<!-- histograms to auto-make -->
+			<histograms>
+				<Histo name="pt" title="p_{T} [GeV]; p_{T} [GeV]; #Events"  bins_x="binning.ptEff"/>
+			</histograms>
+
+		</TpcEffMaker>
+
+		<!-- Include common resources -->
+		<Include url="./Common/cuts.xml" />
+		<Include url="./Common/binning.xml" />
+		<Include url="./Common/qaHistograms.xml" />
+
+	</config>
+	
