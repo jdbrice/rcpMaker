@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+	<!-- Job to run -->
+	<Task name="Make Directory Tree" type="CommandRunner" config="" nodePath="CommandRunner" />
+
+	<Include url="./Common/env.xml" />
+
+	<CommandRunner>
+		<Logger color="true" globalLogLevel="info" logLevel="all" />
+		<command> bash {env:out}makeSet.sh {env:cwd} </command>
+	</CommandRunner>
+
+</config>

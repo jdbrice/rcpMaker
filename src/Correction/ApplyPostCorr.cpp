@@ -11,13 +11,13 @@ void ApplyPostCorr::initialize(){
 	
 
 
-	/*************************** Only if we are NOT applying trac-by-track ****************************/
+	/*************************** Only if we are NOT applying track-by-track ****************************/
 	apply_pTFactor = config.getBool( nodePath + ".Factors:pTFactor", false );
 	apply_binWidth = config.getBool( nodePath + ".Factors:binWidth", false );
-	apply_dy = config.getBool( nodePath + ".Factors:dy", false );
-	apply_twopi = config.getBool( nodePath + ".Factors:twopi", false );
-	apply_tpcEff = config.getBool( nodePath + ".TpcEff:apply", false );
-	/*************************** Only if we are NOT applying trac-by-track ****************************/
+	apply_dy       = config.getBool( nodePath + ".Factors:dy", false );
+	apply_twopi    = config.getBool( nodePath + ".Factors:twopi", false );
+	apply_tpcEff   = config.getBool( nodePath + ".TpcEff:apply", false );
+	/*************************** Only if we are NOT applying track-by-track ****************************/
 		
 
 	apply_feeddown = config.getBool( nodePath + ".FeedDown:apply", true );

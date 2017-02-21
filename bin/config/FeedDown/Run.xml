@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+
+	<Include url="../Common/env.xml" />
+
+	<!-- Job to run -->
+	<Task name="Condor Submit ZdData" type="CommandRunner" config="{env:cfg}FeedDown/Submit.xml" nodePath="CondorSubmitter" />
+	<Task name="Condor Wait for FeedDown" type="CommandRunner" config="{env:cfg}FeedDown/Wait.xml" nodePath="CondorWaiter" />
+	<Task name="Hadd FeedDown" type="CommandRunner" config="{env:cfg}/FeedDown/Hadd.xml" nodePath="CommandRunner" />
+	<Task name="FeedDownFitter" type="FeedDownFitter" config="{env:cfg}/FeedDown/Fit.xml" nodePath="FeedDownFitter" />
+
+</config>

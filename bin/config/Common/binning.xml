@@ -3,8 +3,13 @@
 
 	<binning>
 
+		<!-- pre-rebin to signal pT bins -->
+		<pT width="0.005" min="0" max="5.0" />
+
 		<!-- Use uniform binning for the embedding - since it was generated with flat pt -->
-		<ptEff width="0.05" min="0" max="4.5" />
+		<ptEff width="0.05" min="0" max="5.0" />
+		<ptFeedDown> 0.0, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55, 0.6, 0.65, 0.7, 0.75, 0.8, 0.85, 0.9, 1.0, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2.0, 2.25, 2.5, 2.75, 3.0, 3.25, 3.5, 4.0 </ptFeedDown>
+		<!-- <pt width="0.01" min="0.0" max="0.750" /> -->
 		<pt> 0.2, 0.22, 0.24, 0.26, 0.28, 0.3, 0.32, 0.34, 0.36, 0.38, 0.4, 0.45, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2.0, 2.2, 2.4, 2.6, 2.8, 3.0, 3.5, 4.5 </pt>
 		<rapidity width="0.05" min="-1" max="1" />
 		<eta width="0.05" min="-2" max="2" />
@@ -24,11 +29,11 @@
 		<!-- PidHistoMaker -->
 		<charges> -1, 1 </charges>
 		<tof width="0.006" min="-1" max="1" />
-		<dedx width="0.03" min="-0.75" max="0.75" />
+		<dedx width="0.006" min="-0.75" max="0.75" />
 		<dedxEff width="0.035" min="-12" max="12" />
 
 		<tofRaw width="0.0024" min="0.6" max="3" />
-		<dedxRaw width="0.012" min="0" max="6" />
+		<dedxRaw width="0.006" min="0" max="6" />
 
 		<padding tof=".15" dedx=".5" tofScale="0.05" dedxScale="0.05" />
 

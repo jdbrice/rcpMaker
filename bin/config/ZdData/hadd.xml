@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+
+	<!-- Job to run -->
+	<Task name="Hadd ZdData" type="CommandRunner" config="" nodePath="CommandRunner" />
+
+	<Include url="../Common/env.xml" />
+
+	<!-- User Input -->
+	<plc>Pi</plc>
+
+	<CommandRunner>
+		<Logger color="true" globalLogLevel="info" logLevel="all" />
+		<command> time hadd -f {env:cwd}ZdData_{plc}.root {env:cwd}ZdData_{plc}_*.root </command>
+	</CommandRunner>
+
+</config>

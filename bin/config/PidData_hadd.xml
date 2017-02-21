@@ -1,0 +1,18 @@
+
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+
+	<!-- Job to run -->
+	<Task name="Hadd PidData" type="CommandRunner" config="" nodePath="CommandRunner" />
+
+	<Include url="./Common/env.xml" />
+
+	<!-- User Input -->
+	<plc>Pi</plc>
+
+	<CommandRunner>
+		<Logger color="true" globalLogLevel="info" logLevel="all" />
+		<command> hadd -f {env:cwd}PidData_PostCorr_{plc}.root {env:cwd}PidData_PostCorr_{plc}_*.root </command>
+	</CommandRunner>
+
+</config>

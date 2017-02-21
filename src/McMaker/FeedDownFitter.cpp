@@ -2,13 +2,19 @@
 
 // Roobarb
 #include <RooPlotLib.h>
+#include "FitConfidence.h"
 
 // ROOT
 #include "TGraphAsymmErrors.h"
 #include "TLine.h"
+#include "TLatex.h"
+
+
+
 
 // STL
 #include <math.h>
+
 
 vector<int> FeedDownFitter::plcID = { 8, 9, 11, 12, 14, 15 };
 vector<float> FeedDownFitter::plcMass = { 0.1396, 0.1396, 0.4937, 0.4937, 0.9383, 0.9383 };
@@ -24,17 +30,24 @@ void FeedDownFitter::init( XmlConfig &_config, string _nodePath ){
 	plcName[ 14 ] = "P_p";
 	plcName[ 15 ] = "P_n";
 
-	formulas =	{ "[0]*pow( x, -abs( [1] ) ) + [2] * exp( -[3] * x )",
-				"[0]*exp( -[1] * x ) + [2] * exp( -[3] * x )",
-				"[0]*exp( -[1] * x ) + [2] * exp( -[3] * x )",
-				"[0]*exp( -[1] * x ) + [2] * exp( -[3] * x )",
-				"[0]*exp( -[1] * x ) + [2] * exp( -[3] * x * x )",
-				"pow( [0] + [1] * pow( x, [2] ), -1 )" };
+	formulas =	{ "[0] * exp( -pow([1]/x, [2]))",
+				  "[0] * exp( -pow([1]/x, [2]))",
+				  "[0] * exp( -pow([1]/x, [2]))",
+				  "[0] * exp( -pow([1]/x, [2]))",
+				  "[0] * exp( -pow([1]/x, [2]))",
+				  "[0] * exp( -pow([1]/x, [2]))" };
+
+				// formulas =	{ "[0] * pow( x, - abs([1])) + [2] * exp( -[3] * x )",
+				// "[0] * pow( x, - abs([1])) + [2] * exp( -[3] * x )",
+				// "([0]*exp( -[1] * x ) + [2] * exp( -[3] * x ))",
+				// "([0]*exp( -[1] * x ) + [2] * exp( -[3] * x ))",
+				// "([0]*exp( -[1] * x ) + [2] * exp( -[3] * x * x ))",
+				// "(pow( [0] + [1] * pow( x, [2] ), -1 ))" };
 
 	rmb = unique_ptr<HistoBins>( new HistoBins( config, nodePath + ".RefMultBins" ) );
 
-	book = unique_ptr<HistoBook>( new HistoBook( config.getString( nodePath + ".output:path" ) + config.getString( nodePath + ".output.data" ),
-													config, config.getString( nodePath + ".input:url" ) ) );
+	book = unique_ptr<HistoBook>( new HistoBook( config.getXString( nodePath + ".output:path" ) + config.getXString( nodePath + ".output.data" ),
+													config, config.getXString( nodePath + ".input:url" ) ) );
 
 
 
@@ -56,7 +69,7 @@ void FeedDownFitter::make(){
 
 	vector<string> hNames = { "#pi^{+}", "#pi^{-}", "K^{+}", "K^{-}", "Proton", "#bar{P}" };
 
-	string path = config.getString( nodePath + ".output.param" );
+	string path = config.getXString( nodePath + ".output.param" );
 	ofstream out( path.c_str(), ios::out );
 
 	out << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" << endl;
@@ -71,7 +84,7 @@ void FeedDownFitter::make(){
 		if ( config.getBool( nodePath + ".Pages:parents", false ) ){
 			INFO( classname(), "parents" );
 			TH2 * h2d = book->get2D( "parents_" + k.second );
-			for ( int i = 1; i < h2d->GetNbinsY(); i++ ){
+			for ( int i = 1; i <= h2d->GetNbinsY(); i++ ){
 				
 				TH1 * projX = book->get2D( "parents_" + k.second )->ProjectionX( "_px", i, i+1);
 				TH1 * projY = book->get2D( "parents_" + k.second )->ProjectionY( "_py");
@@ -82,12 +95,12 @@ void FeedDownFitter::make(){
 				
 				addGEANTLabels( projX );
 				projX->GetXaxis()->LabelsOption( " " );
-				rpl.style( projX ).set( &config, ".Style.logy1D" ).set( "title", hNames[ plcIndex ] + " : " + dts( ptl ) + " < pT < " + dts( pth ) ).draw();
+				rpl.style( projX ).set( config, "Style.logy1D" ).set( "title", hNames[ plcIndex ] + " : " + dts( ptl ) + " < pT < " + dts( pth ) ).draw();
 
 				reporter->savePage();
 
 				if ( config.getBool( nodePath + ".Pages:export", false ) )
-					reporter->saveImage( config.getString( nodePath + ".output.export" ) + "/img/feeddown_" + k.second + "_" + dts( ptl ) + "_pT_" + dts( pth ) + ".pdf"  );
+					reporter->saveImage( config.getXString( nodePath + ".output.export" ) + "/img/feeddown_" + k.second + "_" + dts( ptl ) + "_pT_" + dts( pth ) + ".pdf"  );
 			}
 		}
 
@@ -98,6 +111,7 @@ void FeedDownFitter::make(){
 		
 
 		out << "\t<" << k.second << ">" << endl;
+		background( k.second, plcIndex, -1, out );	
 		for ( int b : config.getIntVector( nodePath + ".CentralityBins" ) ) {
 			background( k.second, plcIndex, b, out );	
 		}
@@ -120,6 +134,9 @@ void FeedDownFitter::exportParams( int bin, TF1 * fn, TFitResultPtr result,  ofs
 void FeedDownFitter::background( string name, int plcIndex, int bin, ofstream &out ){
 	INFO( classname(), "(name=" << name << ", plcIndex=" << plcIndex << ", bin=" << bin << ")" );
 
+	gStyle->SetOptFit( 11 );
+
+
 	RooPlotLib rpl; 
 
 	vector<string> hNames = { "#pi^{+}", "#pi^{-}", "K^{+}", "K^{-}", "Proton", "#bar{P}" };
@@ -129,7 +146,7 @@ void FeedDownFitter::background( string name, int plcIndex, int bin, ofstream &o
 
 	// Upper pad for the data points +  the fit
 	TPad * p1 = new TPad( "fit", "fit", 0.001, 0.3, 0.99, 0.99 );
-	p1->SetBottomMargin( 0.0 );
+	p1->SetBottomMargin( 0.1 );
 	p1->SetLeftMargin( 0.1 );
 
 	// Lower pad with the data / fit ratio
@@ -144,63 +161,64 @@ void FeedDownFitter::background( string name, int plcIndex, int bin, ofstream &o
 	
 	TGraphAsymmErrors * g = new TGraphAsymmErrors();
 
-	TH1 * back = book->get( "back_" + name +"_" + ts(bin) );
-	TH1 * total = book->get( "spectra_" + name + "_" + ts(bin) );
 
+
+	TH1 * back = nullptr;
+	TH1 * total = nullptr;
+
+	if ( bin >= 0 ){
+		back  = book->get( "sig_" + name +"_" + ts(bin) );
+		total = book->get( "spectra_" + name + "_" + ts(bin) );
+	} else {
+		back  = book->get( "sig_" + name  );
+		total = book->get( "spectra_" + name  );
+	}
 	//back->Draw();
 	//p1->Draw();
 
-	g->BayesDivide( back, total );
+	// back->Rebin(2);
+	// total->Rebin(2);
 
-	rpl.style( g ).set( &config, ".Style.frac_" + name ).set( &config, ".Style.frac" ).set( "title", hNames[ plcIndex ] + " : bin " + ts(bin) ).draw();
+	HistoBins ptFeedDown( config, "binning.ptFeedDown" );
+	back = back->Rebin( ptFeedDown.nBins(), "", ptFeedDown.getBins().data() );
+	total = total->Rebin( ptFeedDown.nBins(), "", ptFeedDown.getBins().data() );
+
+	// back->Sumw2();
+	// total->Sumw2();
+
+	g->Divide( back, total );
+
+	rpl.style( g ).set( config, "Style.frac_" + name ).set( config, "Style.frac" ).set( "title", hNames[ plcIndex ] + " : bin " + ts(bin) ).draw();
 
 	INFO( "Fitting to : " << formulas[ plcIndex ]  )
 	TF1 * fracFun = new TF1( "fn", formulas[ plcIndex ].c_str() , 0.01, 4.5 );
 	
-	if ( "Pi_n" == name ){
-		fracFun->SetParLimits( 0, 0, 1 );
-		fracFun->SetParLimits( 1, 0, 50 );
-		fracFun->SetParLimits( 2, 0, 1 );
-		fracFun->SetParLimits( 3, 0, 50 );
+	// fracFun->SetParLimits( 0, 0, 10 );
+	fracFun->SetParameters( config.getDouble( nodePath + ".FitRange:p0", 1 ), 
+							config.getDouble( nodePath + ".FitRange:p1", 1 ), 
+							config.getDouble( nodePath + ".FitRange:p2", 1 ));
 
-		fracFun->SetParameters( .1, 0.005, .01, 0.002, 0.1, 0.002 );
-
-	} else  if ( "Pi_p" == name ){
-		INFO( name )
-		fracFun->SetParameters( 0.025, 0.75, 0.25, 4 );
-
-		fracFun->SetParLimits( 0, 0.0, 1 );
-		fracFun->SetParLimits( 1, 0, 5 );
-		fracFun->SetParLimits( 2, 0, 1 );
-		fracFun->SetParLimits( 3, 0, 50 );
-	} else if ( "P_p" == name ){
-		
-		fracFun->SetParLimits( 0, 0, 1 );
-		fracFun->SetParLimits( 1, 0, 50 );
-		fracFun->SetParLimits( 2, 0, 1 );
-		fracFun->SetParLimits( 3, 0, 50 );
-
-		fracFun->SetParameters( .1, 0.005, .01, 0.002 );
-		
-	} else if ( "P_n" == name ){
-		
-		fracFun->SetParLimits( 0, 0, 2 );
-		fracFun->SetParLimits( 1, 0, 10 );
-		fracFun->SetParLimits( 2, 0, 2 );
+	fracFun->SetParLimits( 0, 0, 1.0 );
+	fracFun->SetParLimits( 1, 0, 10 );
+	fracFun->SetParLimits( 2, 0, 1000 );
 	
-		fracFun->SetParameters( 1, 5.0, 1.1 );
-		
-	}
 
-	g->Fit( fracFun, "RNQ" );
-	g->Fit( fracFun, "RNQ" );
-	TFitResultPtr fitPointer = g->Fit( fracFun, "QRS" );
+	double fMin = config.getDouble( nodePath + ".FitRange:min", 0.0 );
+	double fMax = config.getDouble( nodePath + ".FitRange:max", 1.5 );
+	g->Fit( fracFun, "RNQ", "", fMin, fMax );
+	g->Fit( fracFun, "RNQ", "", fMin, fMax );
+	TFitResultPtr fitPointer = g->Fit( fracFun, "QRSM", "", fMin, fMax );
 
 	
-	TGraphErrors * band = Common::choleskyBands( fitPointer, fracFun, 5000, 200, reporter.get() );
+	// TGraphErrors * band = Common::choleskyBands( fitPointer, fracFun, 500, 100, reporter.get() );
+	// TH1 * band = FitConfidence::fitCL( fracFun, "uncer_band", 0.95 );
+	TGraphAsymmErrors * band = FitConfidence::fitUncertaintyBand( fracFun, 0.05, 0.05, 100 );
 
 	fracFun->SetRange( 0.0, 5 );
-	exportParams( bin, fracFun, fitPointer,  out );
+	
+	// dont export the inclusive centrality one
+	if ( bin >= 0 )
+		exportParams( bin, fracFun, fitPointer,  out );
 
 	book->cd( "results" );
 	g->SetName( ("y" + name + "_" + ts(bin) ).c_str() );
@@ -212,41 +230,45 @@ void FeedDownFitter::background( string name, int plcIndex, int bin, ofstream &o
 	band->SetFillColorAlpha( kRed, 0.5 );
 	band->Draw( "same e3" );
 
+	TLatex latex;
+	latex.SetTextSize(0.08);
+	latex.SetTextAlign(13);  //align at top
+	latex.DrawLatex(1,0.21,"f(p_{T}) = p0 e^{-(p1/p_{T})^{p2}}");
+
 
 	p2->cd();
 	back->Divide( total );
 	TH1 * ratio = (TH1*)back->Clone( "ratio" );
 
-	gStyle->SetStatY( 0.9 );
-	gStyle->SetStatX( 0.65 );
+	gStyle->SetStatY( 0.5 );
+	gStyle->SetStatH( 0.2 );
+	gStyle->SetStatX( 0.85 );
 
-	
-	for ( int i = 2; i < ratio->GetNbinsX() + 1; i++ ){
-		float bc = ratio->GetBinCenter( i );
-		float fv = fracFun->Eval( bc );
-		float bv = g->GetY()[ i - 3 ];
-		float be = g->GetErrorYlow( i - 3 ) ;
-		
-	
-		INFO( "stupid", "value = " << (bv/fv) << ", bv=" << bv << ", fv ="<< fv <<", be=" << be );
-		if ( isinf( bv ) || isinf( bv/fv ) || isinf( be ) || isinf( be/fv ) || be < 0 )
-			continue;
-		ratio->SetBinContent( i, bv / fv );
 
-		ratio->SetBinError( i, be / fv );
+	TGraphAsymmErrors *gRatio = new TGraphAsymmErrors( g->GetN() );
+	
+	float mfE = 0.05; // min enforced fit error
+	for ( int iG = 0; iG < g->GetN(); iG++ ){
+		float x = g->GetX()[iG];
+		float y = g->GetY()[iG];
+		float ym = fracFun->Eval( x ); 
+
+		gRatio->SetPoint( iG, x, y / ym );
+		gRatio->SetPointEYlow( iG, sqrt( mfE*mfE + g->GetEYhigh()[iG]*g->GetEYhigh()[iG] ) );
+		gRatio->SetPointEYhigh( iG, sqrt( mfE*mfE + g->GetEYhigh()[iG]*g->GetEYhigh()[iG] ) );
 	}
-	ratio->GetYaxis()->SetNdivisions( 5, 2, 0, true );
-	ratio->GetYaxis()->SetTickLength( 0.01 );
 
-	rpl.style( ratio ).set( &config, ".Style.ratio" ).draw();
+	rpl.style( gRatio ).set( config, "Style.ratio" ).draw();
+	gRatio->GetYaxis()->SetNdivisions( 5, 2, 0, true );
+	gRatio->GetYaxis()->SetTickLength( 0.01 );
 	
 
-	TLine * l = new TLine( 0.0, 1, 3, 1  );
+	TLine * l = new TLine( 0.0, 1, 2.0, 1  );
 	l->SetLineStyle( kDotted );
 	l->Draw("same");
 	
 
 	if ( config.getBool( nodePath + "Pages:export", true ) )
-		reporter->saveImage( config.getString( nodePath + ".output.export" ) + "/img/feeddown_fit_" + name + "_back_" + ts(bin) + ".pdf" );
+		reporter->saveImage( config.getXString( nodePath + ".output.export" ) + "/img/feeddown_fit_" + name + "_back_" + ts(bin) + ".pdf" );
 	reporter->savePage();
 }

@@ -55,6 +55,8 @@ namespace TSF{
 
 		string imgNameMod;
 
+		bool improveError = true;
+
 
 	public:
 		virtual const char * classname() const { return "FitRunner"; }

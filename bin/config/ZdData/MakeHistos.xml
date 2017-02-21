@@ -1,0 +1,67 @@
+
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+
+	<Include url="../Common/env.xml" />
+
+	<plc>K</plc>
+	<Task name="ZdDataMaker" type="ZdDataMaker" config="" nodePath="ZdDataMaker" />
+
+	<ZdDataMaker trackBytrackCorrs="true" xVar="pT">
+		<Logger color="true" logLevel="all" globalLogLevel="info" />
+		<EventLoop progress="true" />
+
+		<input plc="{plc}">
+			<dst treeName="SpectraPicoDst" url="{env:data}SpectraPicoDst.lis" splitBy="20" />
+		</input>
+
+		<output path="{env:cwd}">
+			<TFile url="{env:cwd}ZdData_{plc}_{jobIndex}.root" />
+			<Reports>report/</Reports>
+		</output>
+
+		<Bichsel>
+			<table>dedxBichsel.root</table>
+			<method>0</method>
+		</Bichsel>
+		
+		<ZRecentering>
+			<centerSpecies>{plc}</centerSpecies>
+			<sigma tof="0.012" dedx="0.07"/>
+			<method>linear</method>
+		</ZRecentering>
+
+		<!-- the bins into which the 9 centrality bins are mapped. -->
+		<Include url="../Common/centralityMap.xml" />
+		<MakeQA event="true" track="false" tof="false" dedx="false"/>
+
+		<histograms>
+			<Histo name="zd" title="zd; zd; dN/dzd"  bins_x="binning.dedx"/>
+			<Histo name="zd_vs_" title="; p_{T} (GeV/c); z_{d}"  bins_y="binning.dedx" bins_x="binning.pT"/>
+			<Histo name="zb_vs_" title="; p_{T} (GeV/c); z_{b}"  bins_y="binning.tof" bins_x="binning.pT"/>
+			<Histo name="pt" title="p_{T} [GeV]; p_{T} [GeV]; #Events"  bins_x="binning.pt"/>
+			<Histo name="corrPt" title="p_{T} [GeV]; p_{T} [GeV]; #Events"  bins_x="binning.pt" bins_y="binning.eloss"/>
+		</histograms>
+
+		<!-- Energy Loss params are loaded from their own Configs -->
+		<EnergyLossParams path="{env:cwd}Params/EnergyLoss_" />
+
+		<!-- InclusiveSpectra can skip making the combined spectra -->
+		<Spectra all="false" tof="false" />
+
+		<!-- Include the corrections files -->
+		<!-- systematics = nSigma ==> nSigma to vary for systematics : default is 0 -->
+		<TpcEff systematics="0" >
+			<Include url="{env:cwd}Params/TpcEff.xml" />
+		</TpcEff>
+
+	</ZdDataMaker>
+	
+
+	<!-- Include common resources -->
+	<Include url="../Common/sys_cuts/{mod}.xml" />
+	<Include url="../Common/binning.xml" />
+	<Include url="../Common/qaHistograms.xml" />
+
+</config>
+	

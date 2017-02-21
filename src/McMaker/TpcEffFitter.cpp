@@ -148,11 +148,11 @@ void TpcEffFitter::make(){
 
 
 				rp.savePage();
-				string imgName = outputPath + "/img/TpcEff_" + plc + "_" + c + "_" + ts(b) + ".png";
+				string imgName = config.getXString( "env:cwd") + "/img/TpcEff_" + plc + "_" + c + "_" + ts(b) + ".png";
 				INFO( classname(), "Exporting image to : " << imgName );
 				rp.saveImage( imgName );
 
-				imgName = outputPath + "/img/TpcEff_" + plc + "_" + c + "_" + ts(b) + ".pdf";
+				imgName = config.getXString( "env:cwd") + "/img/TpcEff_" + plc + "_" + c + "_" + ts(b) + ".pdf";
 				INFO( classname(), "Exporting image to : " << imgName );
 				rp.saveImage( imgName );
 

@@ -13,6 +13,8 @@
 	<ApplyPostCorr>
 		<Logger color="true" logLevel="info" globalLogLevel="trace"/>
 
+		<Factors pTFactor="true" binWidth="true" dy="true" twopi="true" />
+
 		<input plc="{plc}">
 			<TFile url="{env:cwd}Fit_PostCorr_{plc}.root" as="data" />
 		</input>
@@ -22,13 +24,13 @@
 
 
 		<!-- Include the corrections files -->
-		<FeedDown systematic="0" bin="0">
+		<FeedDown systematic="0" bin="0" apply="false">
 			<Include url="{env:cwd}Params/FeedDown.xml" />
 		</FeedDown>
-		<TpcEff>
+		<TpcEff apply="true">
 			<Include url="{env:cwd}Params/TpcEff.xml" />
 		</TpcEff>
-		<TofEff>
+		<TofEff apply="false">
 			<Include url="{env:cwd}Params/TofEff.xml" />
 		</TofEff>
 

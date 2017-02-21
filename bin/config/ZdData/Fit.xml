@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+
+	<Include url="../Common/env.xml" />
+
+	<plc>K</plc>
+
+	<Task name="ZdSpectraHistoFileMaker" type="ZdSpectraHistoFileMaker" config="" nodePath="ZDSHFM" />
+
+	<ZDSHFM>
+		<Logger color="true" globalLogLevel="info" />
+		
+		<input plc="{plc}">
+			<TFile url="{env:cwd}combined_ZdData_{ZDSHFM.input:plc}.root" name="spectra" />
+			<FitTo url="zd_mTm0_woeff_" />
+		</input>
+
+		<output>
+			<TFile url="{env:cwd}ZdYield_{ZDSHFM.input:plc}.root" />
+		</output>
+
+		<histograms>
+			<Histo name="pT" title="; m_{T} - m_{0} [GeV]; #Events"  bins_x="binning.pt"/>
+		</histograms>
+
+		<Include url="../Common/centralityMap.xml" />
+
+	</ZDSHFM>
+
+	<Include url="../Common/sys_cuts/{mod}.xml" />
+	<Include url="../Common/binning.xml" />
+
+</config>
+	

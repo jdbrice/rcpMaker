@@ -285,6 +285,9 @@ public:
 	static double transverse_mass( double pX, double pY, double m ){
 		return sqrt( m*m + pX*pX + pY*pY );
 	}
+	static double transverse_mass( double pT, double m ){
+		return sqrt( m*m + pT*pT );
+	}
 
 
 

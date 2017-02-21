@@ -31,7 +31,7 @@
 
 		<!-- fit bins -->
 		<FitRange>
-			<ptBins min="10" max="10" />
+			<ptBins min="10" max="33" />
 			<centralityBins>0, 1, 2, 3, 4, 5, 6</centralityBins>
 			<charges>1, -1</charges>
 		</FitRange>
@@ -80,7 +80,7 @@
 
 		<DataPurity nSigmaPi="3.0" nSigmaK="3.0" nSigmaE="3.0" nSigmaAboveP="3.0" />
 
-		<Include url="./Common/fitSchema_eff.xml" />
+		<Include url="./Common/fitSchema.xml" />
 
 		<histograms>
 			<Histo name="yield" title="yield" bins_x="binning.pt" />

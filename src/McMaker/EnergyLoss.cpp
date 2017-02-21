@@ -25,7 +25,7 @@ void EnergyLoss::preEventLoop() {
 void EnergyLoss::postEventLoop(){
 	DEBUG( classname(), "" )
 
-	string params_file = config.getString( nodePath + ".output.params" );
+	string params_file = config.getXString( nodePath + ".output.params" );
 	if ( "" == params_file ){
 		ERROR( "Specifiy an output params file for the parameters" )
 		return;
@@ -83,7 +83,7 @@ void EnergyLoss::analyzeTrack( int iTrack ){
 
 void EnergyLoss::exportParams( int bin, TF1 * f, ofstream &out ){
 	
-	out << "\t<EnergyLossParams plc=\"" << config.getString( nodePath + ".input:plc" ) << "\" bin=\"" << bin << "\" "; 
+	out << "\t<EnergyLossParams plc=\"" << config.getXString( nodePath + ".input:plc" ) << "\" bin=\"" << bin << "\" "; 
 	out << Common::toXml( f ) ;
 	out << " />" << endl;
 }

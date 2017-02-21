@@ -43,6 +43,17 @@ void InclusiveSpectra::initialize(  ){
     cut_matchFlag				= unique_ptr<XmlRange>(new XmlRange( &config, "TrackCuts.matchFlag", 				1, 		3 ) );
     cut_rapidity				= unique_ptr<XmlRange>(new XmlRange( &config, "TrackCuts.rapidity", 				-0.25, 	0.25 ) );
 
+	INFO( classname(), "cut_nHitsFit: "             << cut_nHitsFit->toString() );
+	INFO( classname(), "cut_dca: "                  << cut_dca->toString() );
+	INFO( classname(), "cut_nHitsFitOverPossible: " << cut_nHitsFitOverPossible->toString() );
+	INFO( classname(), "cut_nHitsDedx: "            << cut_nHitsDedx->toString() );
+	INFO( classname(), "cut_pt: "                   << cut_pt->toString() );
+	INFO( classname(), "cut_ptGlobalOverPrimary: "  << cut_ptGlobalOverPrimary->toString() );
+	INFO( classname(), "cut_yLocal: "               << cut_yLocal->toString() );
+	INFO( classname(), "cut_zLocal: "               << cut_zLocal->toString() );
+	INFO( classname(), "cut_matchFlag: "            << cut_matchFlag->toString() );
+	INFO( classname(), "cut_rapidity: "             << cut_rapidity->toString() );
+
 
    	// Setup the centrality bins
    	INFO( classname(), "Loading Centrality Map" );

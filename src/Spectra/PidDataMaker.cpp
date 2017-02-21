@@ -27,7 +27,7 @@ void PidDataMaker::initialize() {
 		// method for phase space recentering
 	zrMethod 		= config.getString( nodePath + ".ZRecentering.method", "traditional" );
 		// alias the centered species for ease of use
-	centerSpecies 	= config.getString( nodePath + ".ZRecentering.centerSpecies", "K" );
+	centerSpecies 	= config.getXString( nodePath + ".ZRecentering.centerSpecies", "K" );
 
 	//Make the momentum transverse binning
 	binsPt = unique_ptr<HistoBins>(new HistoBins( config, "binning.pt" ));
@@ -52,7 +52,7 @@ void PidDataMaker::initialize() {
 	// make the energy loss params
 	vector<int> charges = { -1, 1 };
 	if ( config.exists( nodePath + ".EnergyLossParams:path" ) ){
-		string path = config.getString( nodePath + ".EnergyLossParams:path" );
+		string path = config.getXString( nodePath + ".EnergyLossParams:path" );
 
 		for ( int c : charges ){
 
@@ -201,7 +201,7 @@ void PidDataMaker::analyzeTofTrack( int iTrack ){
 		// correct for TPC matching efficiency
 		trackWeight = trackWeight * sc->tpcEffWeight( centerSpecies, corrTrackPt, cBin, charge, tpcSysNSigma );
 
-		if ( ptBin == 12 ){
+		if ( false ){
 			INFO( classname(), "pT = " << corrTrackPt );
 			INFO( classname(), "pTBinWidth = " << ptBinWidth );
 			INFO( classname(), "dy = " << ( cut_rapidity->max - cut_rapidity->min ) );

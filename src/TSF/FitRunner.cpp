@@ -5,6 +5,7 @@
 #include "TGraph.h"
 #include "TBox.h"
 
+#include "ANSIColors.h"
 
 namespace TSF{
 	FitRunner::FitRunner( ){
@@ -66,6 +67,8 @@ namespace TSF{
 		INFO( classname(), "Fitting Charges[ " << vts( chargeFit ) << " ]" );
 		INFO( classname(), "Fitting centralityBins[ " << vts( centralityFitBins ) << " ]" );
 		
+
+		improveError = config.getBool( nodePath + ".FitSchema:improve_error", true );
 
 		// override if we are running parallel jobs
 		// if ( iCen >= 0 && iCen <= 6){
@@ -485,7 +488,8 @@ namespace TSF{
 			tries ++;
 		}
 
-		fitter.fitErrors();
+		if ( improveError )
+			fitter.fitErrors();
 		
 
 		if ( nullptr == _schema ){
@@ -661,6 +665,7 @@ namespace TSF{
 				sigmaSets.clear();
 				tofPidEffSets.clear();
 				for ( int iPt = firstPtBin; iPt <= lastPtBin; iPt++ ){
+					INFOC( "####################### pT bin = " << iPt << " / " << lastPtBin << " #########################" );
 
 					runNominal( iCharge, iCen, iPt );
 

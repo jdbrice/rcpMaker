@@ -8,6 +8,10 @@ void TpcEffMaker::initialize(){
 		cut_nHitsDedx->min = 0;
 		cut_nHitsFit->min = 0;
 		cut_nHitsFitOverPossible->min = 0;
+	} 
+
+	if ( "rc" == trackType ){
+		cut_yLocal->max = 1000;
 	}
 }
 
@@ -37,6 +41,8 @@ void TpcEffMaker::analyzeTrack( Int_t iTrack ){
 	
 }
 
+
+// NOT USED 
 void TpcEffMaker::analyzeTofTrack( Int_t iTrack ){
 
 	if ( !makeTofSpectra )

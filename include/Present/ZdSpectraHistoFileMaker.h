@@ -52,7 +52,7 @@ public:
 			return;
 		}
 
-		string histoToFit = config.getString( nodePath + ".input.FitTo:url", "zd_" );
+		string histoToFit = config.getXString( nodePath + ".input.FitTo:url", "zd_" );
 
 		vector<int> charges = config.getIntVector( "binning.charges" );
 		// centralityBinMap = config.getIntMap( nodePath + ".CentralityMap" );
@@ -66,7 +66,7 @@ public:
 
     	TF1 * gf = new TF1( "gf", "gaus" );
 
-    	string plc = config.getString( nodePath + ".input:plc" );
+    	string plc = config.getXString( nodePath + ".input:plc" );
 
     	INFO( classname(), "Starting fits" );
     	for ( int cb : centralityBins ) {
@@ -74,7 +74,7 @@ public:
     		double nE = hCen->GetBinContent( cb + 1 );
     		INFO( classname(), "nE[" << cb << "] = " << nE );
 
-			for ( int c : {1} ) {	
+			for ( int c : charges ) {	
 		
 				string pTname = "pT_" + Common::speciesName( plc, c, cb );
 				book->clone( "pT", pTname );
@@ -83,7 +83,7 @@ public:
 
 				for ( int iPt = 0; iPt < binsPt.nBins(); iPt++ ){
 					double bc = book->get( pTname )->GetBinCenter( iPt+1 );
-					if ( bc < 0.1 ) {
+					if ( bc < 0.0 ) {
 						book->setBin( pTname, iPt + 1, 0.000001, 0.00000001 );
 						continue;
 					}
@@ -121,6 +121,11 @@ public:
 
 					// mu = gf->GetParameter( 1 );
 					// sig = gf->GetParameter( 2 );
+					// mu = gf->GetParameter( 1 );
+					// sig = gf->GetParameter( 2 );
+					// if ( mu != mu ) mu = 0.0;
+					// if ( sig != sig ) sig = 0.012;
+
 					double y = gf->Integral( -1, 1 ) / bw;
 					double ye = sqrt( y );//gf->IntegralError( -1, 1, r->GetParams(), r->GetCovarianceMatrix().GetMatrixArray() ) / bw;
 					INFO( classname(), "y = " << y << ", +/- " << ye );

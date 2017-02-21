@@ -3,7 +3,6 @@
 
 	<!-- Cuts applied to Events -->
 	<EventCuts>
-		<triggerMask> 36 </triggerMask> <!-- BBC_MB -->
 		<vertexZ min="-30" max="30" />
 		<vertexR min="0.0" max="1.0" />
 		<vertexROffset x="0" y="0.89" />
@@ -26,8 +25,5 @@
 		<matchFlag min="1" max="3" />
 		<yLocal min="-1.6" max="1.6" />
 		<zLocal min="-2.8" max="2.8" />
-		
 	</TrackCuts>
-
-
 </config>

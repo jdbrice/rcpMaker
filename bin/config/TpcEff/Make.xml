@@ -8,7 +8,7 @@
 
 		<Task name="TpcEffMaker" type="TpcEffMaker" config="" nodePath="TpcEffMaker" />
 
-		<Include url="./Common/env.xml" />
+		<Include url="../Common/env.xml" />
 
 		<TpcEffMaker>
 			<Logger color="true" globalLogLevel="info" logLevel="all" />
@@ -21,7 +21,7 @@
 			</output>
 
 			<!-- the bins into which the 9 centrality bins are mapped. -->
-			<Include url="./Common/centralityMap.xml" />
+			<Include url="../Common/centralityMap.xml" />
 
 			<MakeQA event="true" track="true" />
 
@@ -33,9 +33,9 @@
 		</TpcEffMaker>
 
 		<!-- Include common resources -->
-		<Include url="./Common/cuts.xml" />
-		<Include url="./Common/binning.xml" />
-		<Include url="./Common/qaHistograms.xml" />
+		<Include url="../Common/sys_cuts/{mod}.xml" />
+		<Include url="../Common/binning.xml" />
+		<Include url="../Common/qaHistograms.xml" />
 
 	</config>
 	

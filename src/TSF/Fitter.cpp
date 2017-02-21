@@ -300,7 +300,7 @@ namespace TSF{
 	void Fitter::fit1( ){
 
 		double arglist[10];
-		arglist[ 0 ] = 50000;
+		arglist[ 0 ] = 100;
 		arglist[ 1 ] = 1.0;
 		int iFlag = -1;
 		string status = "na";
@@ -309,8 +309,8 @@ namespace TSF{
 		
 		fixShapes();
 			minuit->mnexcm( "MINI", arglist, 1, iFlag );
-			minuit->mnexcm( "MINI", arglist, 1, iFlag );
-			minuit->mnexcm( "MINI", arglist, 1, iFlag );
+			// minuit->mnexcm( "MINI", arglist, 1, iFlag );
+			// minuit->mnexcm( "MINI", arglist, 1, iFlag );
 			status = minuit->fCstatu;
 			INFO ( tag, "Step 1. Status " << status );
 		releaseAll();
@@ -321,7 +321,7 @@ namespace TSF{
 	void Fitter::fit2(  ){
 
 		double arglist[10];
-		arglist[ 0 ] = 50000;
+		arglist[ 0 ] = 100;
 		arglist[ 1 ] = 1.0;
 		int iFlag = -1;
 		string status = "na";
@@ -331,8 +331,8 @@ namespace TSF{
 		fix( "yield" );
 		release( "_yield_" );
 			minuit->mnexcm( "MINI", arglist, 1, iFlag );
-			minuit->mnexcm( "MINI", arglist, 1, iFlag );
-			minuit->mnexcm( "MINI", arglist, 1, iFlag );
+			// minuit->mnexcm( "MINI", arglist, 1, iFlag );
+			// minuit->mnexcm( "MINI", arglist, 1, iFlag );
 			status = minuit->fCstatu;
 			INFO ( tag, "Step 2. Status " << status );
 		releaseAll();
@@ -350,7 +350,8 @@ namespace TSF{
 	void Fitter::fit3( ){
 
 		double arglist[10];
-		arglist[ 0 ] = 50000;
+		arglist[ 0 ] = 500;
+		arglist[ 1 ] = 10;
 		int iFlag = -1;
 		string status = "na";
 
@@ -388,6 +389,7 @@ namespace TSF{
 
 		double arglist[10];
 		arglist[ 0 ] = 50000;
+		arglist[ 1 ] = 10;
 		int iFlag = -1;
 		string status = "na";
 
@@ -420,8 +422,8 @@ namespace TSF{
 	void Fitter::fit5( string plc ){
 
 		double arglist[10];
-		arglist[ 0 ] = 5000;
-		arglist[ 1 ] = 1.0;
+		arglist[ 0 ] = 1000;
+		arglist[ 1 ] = 10.0;
 		int iFlag = -1;
 		string status = "na";
 

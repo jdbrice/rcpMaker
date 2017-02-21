@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+
+	<!-- Job to run -->
+	<Task name="Condor Submit FeedDown" type="CommandRunner" config="" nodePath="CondorSubmitter" />
+
+	<Include url="../Common/env.xml" />
+
+	<CondorSubmitter>
+		<Logger color="true" globalLogLevel="info" logLevel="all" />
+		<command> condor_submit config/grid/FeedDown_Make.condor.submit.sh </command>
+	</CondorSubmitter>
+
+</config>
