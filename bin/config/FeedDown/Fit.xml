@@ -5,8 +5,16 @@
 	<Task name="FeedDownFitter" type="FeedDownFitter" config="" nodePath="FeedDownFitter" />
 
 	<FeedDownFitter>
+		<Logger globalLogLevel="info" />
 		<Pages parents="false" fraction="true" export="true"/>
-
+		
+		<FitTo name="back_" />
+		<Formulas>
+			<Pi_p>[0]*pow( x, -abs( [1] ) ) + [2] * exp( -[3] * x )</Pi_p>
+			<Pi_n>[0]*exp( -[1] * x ) + [2] * exp( -[3] * x )</Pi_n>
+			<P_p>[0]*exp( -[1] * x ) + [2] * exp( -[3] * x * x )</P_p>
+			<P_n>pow( [0] + [1] * pow( x, [2] ), -1 )</P_n>
+		</Formulas>
 		
 
 		<input url="{env:cwd}/FeedDown.root" />
@@ -24,7 +32,7 @@
 		<Include url="../Common/centralityMap.xml" />
 
 
-		<FitRange min="0.0" max="1.25" p0="1.0" p1="1.0" p2="1.0"/>
+		<FitRange min="0.1" max="4.5" p0="0.03" p1="0.0001" p2="0.1" p3="2.5" opts="QRS" />
 
 	</FeedDownFitter>
 
@@ -34,12 +42,12 @@
 		<energyLoss1D draw="pe same" logz="0" optstat="0" xr="0, 2.0" mst="8" mc="black" ms="1.5" lc="black" lw="3" yr="-0.1, 0.1"/>
 		<logy1D draw="h" logy="1" optstat="0" fc="red" xr="-0.5, 33.5"/>
 
-		<frac title="Signal Fraction" y="Signal / Total" logy="0" ms="2" mst="1" xr="0.0, 2.0" yto="0.5" yts="0.06" optstat="0" yr="0.0, 1.1" />
+		<frac title="Background Fraction" y="Background / Total" logy="1" ms="2" mst="1" xr="0.0, 3.0" yto="0.5" yts="0.06" optstat="0" yr="0.0, 0.3" />
 	
 		<frac_P_p  yr="2e-2, 2" />
 		<frac_P_n  yr="2e-2, 2" />
 
-		<ratio title="" y="data / fit"  yls="0.1" xls="0.1" logy="0" yr="0.8, 1.25" xr="0, 2.0" mst="8" mc="black" lc="black" yto="0.2" yts="0.15" />
+		<ratio title="" y="data / fit"  yls="0.1" xls="0.1" logy="0" yr="0.5, 1.5" xr="0, 3.0" mst="8" mc="black" lc="black" yto="0.2" yts="0.15" />
 	</Style>
 
 	<!-- Include common resources -->

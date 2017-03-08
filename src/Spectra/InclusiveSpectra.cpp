@@ -176,18 +176,18 @@ void InclusiveSpectra::analyzeEvent(){
 
 		if ( !keepTrack( iTrack ) )
 			continue;
+		bool isTofTrack = keepTofTrack( iTrack );
 		
-		analyzeTrack( iTrack );	
+		analyzeTrack( iTrack, isTofTrack );	
 
-		if ( !keepTofTrack( iTrack ) )
+		if ( !isTofTrack )
 			continue;
-		
 		analyzeTofTrack( iTrack );			
 	}
 }
 
 
-void InclusiveSpectra::analyzeTrack( Int_t iTrack ){
+void InclusiveSpectra::analyzeTrack( Int_t iTrack, bool isTofTrack ){
 
 	if ( !makeSpectra )
 		return;

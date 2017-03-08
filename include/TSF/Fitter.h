@@ -16,9 +16,10 @@ using namespace jdb;
 
 namespace TSF{
 
-	class Fitter{
+	class Fitter : public IObject{
 
-		static constexpr auto tag = "Fitter";
+
+		// static constexpr auto tag = "Fitter";
 
 		// Scaling for configurations that break some constraint
 		// for instance - enforce 1/beta mass ordering with parabolic minimum
@@ -56,7 +57,10 @@ namespace TSF{
 		// should be loaded from config but not yet
 		double zbBinWidth, zdBinWidth, nSigAboveP, zbSigmaIdeal, zdSigmaIdeal, cut_nSigma_Pi, cut_nSigma_K, cut_nSigma_E;
 
+		double zb_xMin, zb_xMax, zd_xMin, zd_xMax;
+
 	public:
+		virtual const char* classname() const { return "Fitter"; } 
 		Fitter( shared_ptr<FitSchema> _schema, TFile * dataFile );
 
 		~Fitter();
@@ -91,6 +95,7 @@ namespace TSF{
 			return 0;
 		}
 
+
 		static void updateParameters( int npar = 0, double * pars = 0);
 
 		vector<double> sumLog;
@@ -109,8 +114,17 @@ namespace TSF{
 			return sumLog[ n ];
 		}
 
+		void setZbProjectionMinMax( double min, double max ){
+			zb_xMin = min;
+			zb_xMax = max;
+		}
+		void setZdProjectionMinMax( double min, double max ){
+			zd_xMin = min;
+			zd_xMax = max;
+		}
 		void registerDefaults( XmlConfig * cfg, string nodePath );
 		void loadDatasets( string cs, int charge, int cenBin, int ptBin, bool enhanced, map<string, double> zbMu, map<string, double> zdMu, bool use_zb = true);
+		void loadDatasets( string cs, int charge, int cenBin, int ptBin );
 		
 		void nop(  );
 		void fit1(  );
@@ -123,7 +137,7 @@ namespace TSF{
 		void overrideStatistics( bool v ) { sufficienctStatistics = v; }
 		
 
-		TGraph * plotResult( string dataset );
+		TGraph * plotResult( string dataset, float xMin = -999, float xMax = -999 );
 		TH1 * getDataHist( string dataset ) { return dataHists[ dataset ]; }
 		bool isFitGood(  ) { return fitIsGood; }
 
@@ -166,7 +180,7 @@ namespace TSF{
 			int m_npari = 0, m_nparx = 0, m_istat = 0;
 
 			minuit->mnstat( m_fmin, m_fedm, m_errdef, m_npari, m_nparx, m_istat );
-			INFO( tag, "FMIN = " << m_fmin );
+			INFOC( "FMIN = " << m_fmin );
 		}
 
 

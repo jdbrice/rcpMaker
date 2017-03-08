@@ -17,6 +17,8 @@
 			<params>{env:cwd}Params/TpcEff.xml</params>
 		</output>
 
+		<Fit min="0.0" max="2.5" N="3" opt="RSWWEM" fitbox=""/>
+
 		<!-- the bins into which the 9 centrality bins are mapped. -->
 		<Include url="../Common/centralityMap.xml" />
 

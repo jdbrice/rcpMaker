@@ -17,6 +17,7 @@
 
 		<input plc="{plc}">
 			<TFile url="{env:cwd}Fit_PostCorr_{plc}.root" as="data" />
+			<TFile url="{env:cwd}TofEff.root" as="tofEff" />
 		</input>
 		<output>
 			<TFile url="{env:cwd}PostCorr_{plc}.root" />
@@ -24,15 +25,18 @@
 
 
 		<!-- Include the corrections files -->
-		<FeedDown systematic="0" bin="0" apply="false">
+		<FeedDown systematic="0" bin="0" apply="true">
 			<Include url="{env:cwd}Params/FeedDown.xml" />
 		</FeedDown>
 		<TpcEff apply="true">
 			<Include url="{env:cwd}Params/TpcEff.xml" />
 		</TpcEff>
-		<TofEff apply="false">
+		<TofEff apply="true">
 			<Include url="{env:cwd}Params/TofEff.xml" />
 		</TofEff>
+		<TofSpeciesEff apply="true">
+			<Include url="{env:cwd}Params/TofSpeciesEff.xml" />
+		</TofSpeciesEff>
 
 		<!-- Include the centrality maps -->
 		<Include url="./Common/centralityMap.xml" />

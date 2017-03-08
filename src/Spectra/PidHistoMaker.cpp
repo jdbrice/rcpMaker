@@ -273,7 +273,7 @@ bool PidHistoMaker::enhanceDistributions( double avgP, int ptBin, int charge, do
 		trackWeight = trackWeight * sc->tpcEffWeight( centerSpecies, trackPt, cBin, charge ) ;
 	}
 	if ( correctTofEff ){
-		trackWeight = trackWeight * sc->tofEffWeight( centerSpecies, trackPt, cBin, charge ) ;
+		// trackWeight = trackWeight * sc->tofEffWeight( centerSpecies, trackPt, cBin, charge ) ;
 	}
 	if ( correctFeedDown ){
 		trackWeight = trackWeight * sc->feedDownWeight( centerSpecies, trackPt, cBin, charge ) ;

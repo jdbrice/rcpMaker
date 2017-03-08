@@ -5,6 +5,7 @@
 #include "XmlConfig.h"
 #include "Logger.h"
 #include "Utils.h"
+#include "IObject.h"
 using namespace jdb;
 
 // Local
@@ -22,14 +23,14 @@ using namespace jdb;
 
 namespace TSF{
 	
-	class GaussModel
+	class GaussModel : public IObject
 	{
 	protected:
 
 		
 
 	public:
-
+		virtual const char* classname() const { return "GaussModel"; }
 		string dataset, name, yield, mu, sigma;
 		double y, m, s;
 
@@ -87,10 +88,13 @@ namespace TSF{
 
 		double eval( double x, double bw = 1.0 ){
 
+			// DEBUGC( "("<<x<<", "<< bw << ") on " << toString() );
+
 			// e is an efficiency param
 			double a = e * (y * bw) / ( s * TMath::Sqrt( 2 * TMath::Pi() ) );
 			double b = TMath::Exp(  -( x - m ) * ( x - m ) / ( 2 * s * s ) );
 
+			// DEBUGC( " = " << a*b )
 			return a * b;
 		}
 		double integral( double x1 = 0, double x2 = 0){

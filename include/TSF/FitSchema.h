@@ -93,6 +93,7 @@ namespace TSF{
 
 		void setInitialMu( string var, double _mu, double _sigma, double _dmu );
 		void setInitialMuLimits( string var, double _mu, double _sigma, double _dmu );
+		void setInitialMuLimits( string var, double _min, double _max );
 		void setInitialSigma( string var, double _sigma, double _dsig );
 		void setInitialSigma( string var, double _sigma, double _min, double _max );
 		void fixParameter( string var, double val, bool fixed = true );

@@ -56,6 +56,7 @@ namespace TSF{
 		string imgNameMod;
 
 		bool improveError = true;
+		bool tofMatched = true;
 
 
 	public:
@@ -114,6 +115,7 @@ namespace TSF{
 
 		void reportYields();
 		void reportFit( Fitter * fitter, int iPt );
+		pair<float, float> dataRange( string v, int iPt );
 		void drawSet( string v, Fitter * fitter, int iPt );
 		void drawFitRatio( string ds, Fitter * fitter, int iPt );
 

@@ -21,7 +21,7 @@ public:
 	virtual void preEventLoop();
 	virtual void postEventLoop();
 
-	void analyzeTrack( int iTrack );
+	virtual void analyzeTrack( Int_t iTrack, bool isTofTrack = false );
 
 	void exportParams( int cbin, TF1 * f, ofstream &out );
 	

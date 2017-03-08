@@ -25,6 +25,7 @@ sources = 	Engine.cpp 							\
 			TSF/FitSchema.cpp 					\
 			TSF/Fitter.cpp 						\
 			TSF/FitRunner.cpp 					\
+			TSF/TpcFitRunner.cpp 				\
 			Correction/SpectraCorrecter.cpp		\
 			Correction/ApplyPostCorr.cpp		\
 			Spectra/ZdDataMaker.cpp

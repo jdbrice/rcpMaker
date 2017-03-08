@@ -121,7 +121,7 @@ void PidDataMaker::postEventLoop() {
 
 }
 
-void PidDataMaker::analyzeTofTrack( int iTrack ){
+void PidDataMaker::analyzeTrack( int iTrack, bool isTofTrack ){
 	InclusiveSpectra::analyzeTofTrack( iTrack );
 	
 	book->cd();
@@ -183,10 +183,14 @@ void PidDataMaker::analyzeTofTrack( int iTrack ){
 		dedx = dedxNL;
 	} 
 
-	if ( pico->trackBeta(iTrack) == 0){
-		WARN( classname()," beta==0, tof=" << tof );
-		tof = -50;
+	if ( false == isTofTrack ){
+		tof = -999.0;
 	}
+
+	// if ( pico->trackBeta(iTrack) == 0){
+	// 	WARN( classname()," beta==0, tof=" << tof );
+	// 	tof = -50;
+	// }
 
 	// event weight from RefMult correction
 	double trackWeight = eventWeight;

@@ -4,9 +4,13 @@
 #include "Spectra/InclusiveSpectra.h"
 #include "Spectra/ZRecentering.h"
 
+// #define LOGURU_IMPLEMENTATION 1
+// #include "loguru.h"
+
 class TofEffSpectra : public InclusiveSpectra {
 
 public:
+	virtual const char* classname() const { return "TofEffSpectra"; }
 	TofEffSpectra() {}
 	~TofEffSpectra();
 
@@ -24,10 +28,24 @@ public:
 
 	double nSigmaDedxCut;
 
+	string toString(){
+		stringstream ss;
+
+		ss << "<" << classname() << ">";
+		ss << "\n";
+		ss << "\tcenterSpecies=" << quote( centerSpecies ) << "\n";
+		ss << "\tzrMethod=" << quote( zrMethod ) << "\n";
+		ss << "\tdedxSigmaIdeal=" << dedxSigmaIdeal << "\n";
+		ss << "\ttofSigmaIdeal=" << tofSigmaIdeal << "\n";
+		ss << "\tnSigmaDedxCut=" << nSigmaDedxCut << "\n";
+
+		return ss.str();
+	}
+
 protected:
 	virtual void makeCentralityHistos();
 
-	virtual void analyzeTrack( Int_t iTrack );
+	virtual void analyzeTrack( Int_t iTrack, bool isTofTrack );
 	
 	virtual void analyzeTofTrack( Int_t iTrack );
 

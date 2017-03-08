@@ -67,6 +67,9 @@ public:
 
 					hSpectraName = "Yield_" + energy + "_" + plc + "_" + charge + "_" + cen + "_sys_normed";
 					book->add( hSpectraName, makeSpectraHistogram( hSpectraName, hSpectra, sysName ) );
+
+					hSpectraName = "Yield_" + energy + "_" + plc + "_" + charge + "_" + cen + "_rels_normed";
+					book->add( hSpectraName, makeRelSysHistogram( hSpectraName, hSpectra, sysName ) );
 				}
 
 
@@ -77,11 +80,13 @@ public:
 	TH1* makeSpectraHistogram( string _name, TH1* _h, string _error="stat" ){
 		INFO( classname(), "Cloning " << _h->GetName() << " as " << _name << " with " << _error << " uncertainties" );
 		if ( "" == _error ){
-			TH1 * hstat = (TH1*)_h->Clone( _name.c_str() );
+			TH1 * hstat = HistoBook::cloneRange( _h, _name, config.getFloat( nodePath + ".min_pT", 0.5 ), 100 );
 			hstat->SetDirectory( gDirectory );
 			return hstat;
 		} 
-		TH1 * hsys = (TH1*)_h->Clone( _name.c_str() );
+
+		
+		TH1 * hsys = HistoBook::cloneRange( _h, _name, config.getFloat( nodePath + ".min_pT", 0.5 ), 100 );
 		hsys->SetDirectory( gDirectory );
 
 		for ( int i = 1; i <= hsys->GetNbinsX(); i++ ){
@@ -96,6 +101,27 @@ public:
 
 		// TODO: set the errors to systematics 
 		return  hsys;
+	}
+
+	TH1* makeRelSysHistogram( string _name, TH1* _h, string _error="stat" ){
+		// INFO( classname(), "Cloning " << _h->GetName() << " as " << _name << " with " << _error << " uncertainties" );
+
+		
+		TH1 * hsys = HistoBook::cloneRange( _h, _name+"_temp", config.getFloat( nodePath + ".min_pT", 0.5 ), 100 );
+		hsys->SetDirectory( gDirectory );
+
+		for ( int i = 1; i <= hsys->GetNbinsX(); i++ ){
+			double pT = hsys->GetBinCenter( i );
+			double sys_unc = 0.0;
+
+			if ( sysMap.count( _error ) > 0 && sysMap[ _error ].count( pT ) > 0 ){
+				hsys->SetBinError( i, sysMap[ _error ][ pT ] );
+			}
+		}
+
+
+		// TODO: set the errors to systematics 
+		return  HistoBook::relativeErrors( hsys, _name );
 	}
 
 
@@ -130,7 +156,7 @@ public:
 		for ( int i = 1; i <= hSpectra->GetNbinsX(); i++ ){
 
 			double pT = hSpectra->GetBinCenter( i );
-			// if ( pT < min_pT ) continue; TODO: add config range for stuff
+			if ( pT < config.getFloat( nodePath + ".min_pT", 0.5 ) ) continue; //TODO: add config range for stuff
 			double value = hSpectra->GetBinContent( i );
 			double stat_unc = hSpectra->GetBinError( i );
 			double sys_unc = 0.0;

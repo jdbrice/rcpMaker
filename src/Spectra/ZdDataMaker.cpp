@@ -101,7 +101,7 @@ void ZdDataMaker::postEventLoop() {
 
 }
 
-void ZdDataMaker::analyzeTrack( int iTrack ){
+void ZdDataMaker::analyzeTrack( int iTrack, bool isTofTrack ){
 	InclusiveSpectra::analyzeTrack( iTrack );
 	
 	book->cd();
@@ -164,6 +164,7 @@ void ZdDataMaker::analyzeTrack( int iTrack ){
 	// event weight from RefMult correction
 	double trackWeight = eventWeight;
 
+	
 	book->fill( "zd_vs_pT_"   + Common::speciesName( centerSpecies, charge, cBin ), pt, z_d, trackWeight );
 	book->fill( "zd_vs_mT_"   + Common::speciesName( centerSpecies, charge, cBin ), mT, z_d, trackWeight );
 	book->fill( "zd_vs_mTm0_" + Common::speciesName( centerSpecies, charge, cBin ), mTm0, z_d, trackWeight );

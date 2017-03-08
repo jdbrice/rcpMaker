@@ -15,7 +15,7 @@
 	<Include url="./Common/env.xml" />
 
 	<FitRunner>
-		<Logger color="true" logLevel="info" globalLogLevel="info"/>
+		<Logger color="true" logLevel="info" globalLogLevel="all"/>
 		<Reporter> <output width="1600" height="1200" /> </Reporter>	
 
 		<!-- Path the PidHisto file -->
@@ -31,7 +31,7 @@
 
 		<!-- fit bins -->
 		<FitRange>
-			<ptBins min="10" max="33" />
+			<ptBins min="5" max="33" />
 			<centralityBins>0, 1, 2, 3, 4, 5, 6</centralityBins>
 			<charges>1, -1</charges>
 		</FitRange>
@@ -77,6 +77,11 @@
 			<sigma tof="0.012" dedx="0.07"/>
 			<method>nonlinear</method>
 		</ZRecentering>
+
+		<DrawOpts>
+			<ShowFitComponents>true</ShowFitComponents>
+			<ShowFitSum>true</ShowFitSum>
+		</DrawOpts>
 
 		<DataPurity nSigmaPi="3.0" nSigmaK="3.0" nSigmaE="3.0" nSigmaAboveP="3.0" />
 

@@ -39,8 +39,8 @@ public:
 
 	double tpcEffCorr( string plc, double pt, int iCen, int charge );
 	double tpcEffWeight( string plc, double pt, int iCen, int charge, double sysNSigma = 0 );
-	double tofEffCorr( string plc, double pt, int iCen, int charge );
-	double tofEffWeight( string plc, double pt, int iCen, int charge, double sysNSigma = 0 );
+	// double tofEffCorr( string plc, double pt, int iCen, int charge );
+	// double tofEffWeight( string plc, double pt, int iCen, int charge, double sysNSigma = 0 );
 	double feedDownWeight( string plc, double pt, int iCen, int charge, double sysNSigma = 0 );
 	
 };

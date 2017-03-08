@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+
+	<Include url="../Common/env.xml" />
+	<Task name="TofEffSpectra" type="TofEffSpectra" config="" nodePath="TofEffSpectra" args=""/>
+
+	<!-- USER INPUT -->
+	<plc>Pi</plc>
+	<!-- USER INPUT -->
+
+	<TofEffSpectra>
+		<MakeQA event="false" track="false" />
+		<Logger color="true" globalLogLevel="info" timeStamp="true" timeFormat="%M:%S" format="T:LL: [C.FN] MSG"/>
+		<EventLoop progress="true" />
+
+		<input plc="{plc}" >
+			<dst treeName="SpectraPicoDst" url="{env:data}SpectraPicoDst.lis" splitBy="40" />
+		</input>
+		<output>
+			<TFile url="{env:cwd}TofEff_{plc}_{jobIndex}.root" />
+		</output>
+
+		<!-- the bins into which the 9 centrality bins are mapped. -->
+		<Include url="../Common/centralityMap.xml" />
+
+		<!-- histograms to auto-make -->
+		<histograms>
+			<Histo name="pt" title="p_{T} [GeV]; p_{T} [GeV]; #Events"  bins_x="binning.pt"/>
+			<Histo name="pt_vs_dedx" title="p_{T} [GeV] vs dE/dx; p_{T} [GeV]; #Events"  bins_x="binning.pt" bins_y="binning.dedxEff" />
+		</histograms>
+
+		<nSigmaDedx cut="2" />
+
+		<ZRecentering>
+			<centerSpecies>{plc}</centerSpecies>
+			<sigma tof="0.012" dedx="0.07"/>
+			<method>nonlinear</method>
+		</ZRecentering>
+
+	</TofEffSpectra>
+
+	<!-- Include common resources -->
+	<Include url="../Common/sys_cuts/{mod}.xml" />
+	<Include url="../Common/binning.xml" />
+	<Include url="../Common/qaHistograms.xml" />
+
+
+</config>
+	

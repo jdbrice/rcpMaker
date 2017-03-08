@@ -12,7 +12,8 @@ using namespace jdb;
 
 
 void TofEffFitter::initialize( ){
-
+	HistoAnalyzer::initialize();
+	
 	outputPath = config.getString( nodePath + ".output:path" );
 	book = unique_ptr<HistoBook>( 
 				new HistoBook( 
@@ -28,7 +29,7 @@ void TofEffFitter::initialize( ){
 
 
 void TofEffFitter::make(){
-
+	INFOC( "" );
 
 	RooPlotLib rpl;
 
@@ -38,6 +39,10 @@ void TofEffFitter::make(){
 		return;
 	}
 
+
+	book->cd();
+
+	INFOC( "Opening " << params_file );
 	ofstream out( params_file.c_str() );
 
 	out << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" << endl;
@@ -51,11 +56,14 @@ void TofEffFitter::make(){
 
 	for ( string plc : Common::species ){
 		string fn = config.getString( nodePath + ".input:url" ) + "TofEff_" + plc + ".root";
+		INFOC( "Opening " << fn );
 		TFile * f = new TFile( fn.c_str(), "READ" );
-		
+		INFOC( "Opened? " << fn );
 
-		if ( !f->IsOpen() )
+		if ( nullptr == f ||  !f->IsOpen() ){
+			ERRORC( "Cannot open " << fn );
 			continue;
+		}
 		
 		for ( string cs : Common::sCharges ) {
 
@@ -63,28 +71,37 @@ void TofEffFitter::make(){
 
 			// build an efficiency for each centrality
 			for ( int b : cbins ){
-
+				INFOC( "Working on " << plc << "_" << cs << "_" << b );
 				TH1 * hAll = (TH1*)f->Get( ("inclusive/pt_" + ts( b ) + "_" + cs).c_str() );
 				TH1 * hPass = (TH1*)f->Get( ("inclusiveTof/pt_" + ts( b ) + "_" + cs ).c_str() );	
+
+				if ( nullptr == hAll || nullptr == hPass ){
+					ERRORC( "Null Histo " );
+					continue;
+				}
 
 				hAll->Sumw2();
 				hPass->Sumw2();
 
-				TGraphAsymmErrors g;
+				book->cd();
+				TH1 * hEff = (TH1*)hPass->Clone( (plc + "_" + cs + "_" + ts(b)).c_str() );
 
-				g.SetName( (plc + "_" + cs + "_" + ts(b)).c_str() );
-				g.BayesDivide( hPass, hAll );
+				// TGraphAsymmErrors g;
 
-				book->add( plc + "_" + cs + "_" + ts(b),  &g );
+				// g.SetName( (plc + "_" + cs + "_" + ts(b)).c_str() );
+				// g.BayesDivide( hPass, hAll );
+				hEff->Divide( hAll );
+
+				book->add( plc + "_" + cs + "_" + ts(b),  hEff );
 
 				rp.newPage();
-				rpl.style( &g )
+				rpl.style( hEff )
 					.set( "title", Common::plc_label( plc, cs ) + " : " + labels[ b ] )
 					.set( "yr", 0.0, 0.85 )
 					.set( "optfit", 111 )
 					.set("y", "TOF Matching Efficiency")
 					.set( "x", "p_{T} [GeV/c]" )
-					.set( &config, nodePath + ".Style.TofEff" )
+					.set( config, nodePath + ".Style.TofEff" )
 					.draw();
 				
 				gStyle->SetStatY( 0.9 );
@@ -100,7 +117,7 @@ void TofEffFitter::make(){
 				INFO( classname(), "Exporting image to : " << imgName );
 				rp.saveImage( imgName );
 
-				exportParams( b, hAll, &g, out );
+				// exportParams( b, hAll, &g, out );
 
 			} // loop centrality bins
 			out << "\t</" << plc << "_" << cs << ">" << endl;

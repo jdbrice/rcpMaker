@@ -7,6 +7,8 @@
 namespace TSF{
 
 	void Fitter::tminuitFCN(int &npar, double *gin, double &f, double *par, int flag){
+		// cout << "." << flush;
+		// return;
 
 		double fnVal = 0.0;
 		updateParameters( npar, par );
@@ -114,7 +116,7 @@ namespace TSF{
 		schema = _schema;
 		dataFile = _dataFile;
 
-		INFO( tag, "( schema=" << _schema << ", datafile=" << _dataFile << " )" )
+		INFOC( "( schema=" << _schema << ", datafile=" << _dataFile << " )" )
 	}
 
 	void Fitter::setupFit(){
@@ -148,7 +150,7 @@ namespace TSF{
 
 		fitIsGood = false;
 
-		INFO( tag, "" )
+		INFOC( "" )
 	}
 
  
@@ -156,7 +158,7 @@ namespace TSF{
 	}
 
 	void Fitter::registerDefaults(  XmlConfig * cfg, string nodePath  ){
-		INFO( tag, "( cfg=" << cfg << ", nodePath=" << nodePath << " )" );
+		INFOC( "( cfg=" << cfg << ", nodePath=" << nodePath << " )" );
 
 		zbBinWidth 		= cfg->getDouble( "binning.tof:width", 0.006 ); 
 		zdBinWidth 		= cfg->getDouble( "binning.dedx:width", 0.035 ); 
@@ -173,18 +175,18 @@ namespace TSF{
 
 
 		// report them
-		INFO( tag, "zbBinWidth = " << zbBinWidth );
-		INFO( tag, "zdBinWidth = " << zdBinWidth );
-		INFO( tag, "zbSigmaIdeal = " << zbSigmaIdeal );
-		INFO( tag, "zdSigmaIdeal = " << zdSigmaIdeal );
-		INFO( tag, "nSigAboveP = " << nSigAboveP );
-		INFO( tag, "cut_nSigma_Pi = " << cut_nSigma_Pi );
-		INFO( tag, "cut_nSigma_K = " << cut_nSigma_K );
-		INFO( tag, "cut_nSigma_E = " << cut_nSigma_E );
+		INFOC( "zbBinWidth = " << zbBinWidth );
+		INFOC( "zdBinWidth = " << zdBinWidth );
+		INFOC( "zbSigmaIdeal = " << zbSigmaIdeal );
+		INFOC( "zdSigmaIdeal = " << zdSigmaIdeal );
+		INFOC( "nSigAboveP = " << nSigAboveP );
+		INFOC( "cut_nSigma_Pi = " << cut_nSigma_Pi );
+		INFOC( "cut_nSigma_K = " << cut_nSigma_K );
+		INFOC( "cut_nSigma_E = " << cut_nSigma_E );
 	}
 
 	void Fitter::loadDatasets( string cs, int charge, int cenBin, int ptBin, bool enhanced, map<string, double> zbMu, map<string, double> zdMu, bool use_zb ){
-		INFO( tag, "( cs=" << cs << ", charge=" << charge << ", iCen=" <<cenBin << ", ptBin=" << ptBin << ")" )
+		INFOC( "( cs=" << cs << ", charge=" << charge << ", iCen=" <<cenBin << ", ptBin=" << ptBin << ")" )
 
 		dataFile->cd();
 
@@ -214,8 +216,8 @@ namespace TSF{
 
 
 		string name = Common::speciesName( cs, charge, cenBin, ptBin );
-		dataHists[ "zb_All" ] = proj.project1D( name, "zb" );
-		dataHists[ "zd_All" ] = proj.project1D( name, "zd", "", use_zb );
+		dataHists[ "zb_All" ] = proj.project1D( name, "zb", "", false, zb_xMin, zb_xMax );
+		dataHists[ "zd_All" ] = proj.project1D( name, "zd", "", use_zb, zd_xMin, zd_xMax );
 		
 		if ( enhanced ){
 			// load the enhanced distributions
@@ -226,7 +228,7 @@ namespace TSF{
 					if ( "zb" == var )
 						other = "zd";
 
-					INFO( tag, "Attempting to load " << var + "_" + plc );
+					INFOC( "Attempting to load " << var + "_" + plc );
 					if ( schema->exists( other + "_mu_" + plc ) != true )
 						continue;
 
@@ -240,10 +242,17 @@ namespace TSF{
 					double sigma = schema->var( other + "_sigma_" + plc )->val;      
 					if ( !enhanced )
 						sigma = zbSigmaIdeal;
-					INFO( tag, "center = " << center << ", sigma=" << sigma );
+					INFOC( "center = " << center << ", sigma=" << sigma );
 
-					dataHists[ var + "_" + plc ] = proj.projectEnhanced( name, var, plc, center - sigma, center + sigma ); 
-					INFO( tag, "Got " << var + "_" + plc );
+					double xMin = zb_xMin;
+					double xMax = zb_xMax;
+					if ( "zd" == var ){
+						xMin = zd_xMin;
+						xMax = zd_xMax;
+					}
+
+					dataHists[ var + "_" + plc ] = proj.projectEnhanced( name, var, plc, center - sigma, center + sigma, xMin, xMax ); 
+					INFOC( "Got " << var + "_" + plc );
 				}
 			}
 		}
@@ -251,14 +260,14 @@ namespace TSF{
 		// get N_evnts for normalization
 		INFO( "Getting norm from : EventQA/mappedRefMultBins" );
 			norm = ((TH1D*)dataFile->Get( "EventQA/mappedRefMultBins" ))->GetBinContent( cenBin + 1 );
-		INFO( tag, "N_evts = " << norm );
+		INFOC( "N_evts = " << norm );
 
 		// Used for setting the scale when drawing
-		INFO( tag, "zd_All = " << dataHists[ "zd_All"] );
+		INFOC( "zd_All = " << dataHists[ "zd_All"] );
 		double maxYield = dataHists[ "zd_All"]->Integral();
-		INFO( tag, "Integral of zd_All (used for drawing) = " << maxYield );
+		INFOC( "Integral of zd_All (used for drawing) = " << maxYield );
 		schema->setNormalization( maxYield / norm );
-		INFO( tag, "Schema norm : " << maxYield / norm );
+		INFOC( "Schema norm : " << maxYield / norm );
 
 
 		sufficienctStatistics = true;
@@ -272,7 +281,61 @@ namespace TSF{
 			}
 
 			double nObs = k.second->GetEntries();
-			INFO( tag, "Num Entries in " << k.first << " : " << nObs );
+			INFOC( "Num Entries in " << k.first << " : " << nObs );
+
+			// normalize
+			k.second->Sumw2();
+			k.second->Scale( 1.0 / norm );
+
+			if ( nObs > 75 )
+				schema->loadDataset( k.first, k.second );
+		}
+
+	}
+
+	void Fitter::loadDatasets( string cs, int charge, int cenBin, int ptBin ){
+		INFOC( "( TPC ONLY: cs=" << cs << ", charge=" << charge << ", iCen=" <<cenBin << ", ptBin=" << ptBin << ")" )
+
+		dataFile->cd();
+
+		PidProjector proj( dataFile, zbBinWidth, zdBinWidth );
+		// non-TOF matched tracks will have zb = -999, this **includes** those tracks
+		proj.setZbCutMinMax( -1000, 1000 );
+
+		schema->clearDatasets();
+
+		DEBUGC( "Loading " << "tof/" + Common::zbName( cs, charge, cenBin, ptBin ) );
+		DEBUGC( "Loading " << "dedx/" + Common::zbName( cs, charge, cenBin, ptBin ) );
+
+		string name = Common::speciesName( cs, charge, cenBin, ptBin );
+		
+		dataHists[ "zd_All" ] = proj.project1D( name, "zd", "", false, zd_xMin, zd_xMax );
+
+		// get N_evnts for normalization
+		INFOC( "Getting norm from : EventQA/mappedRefMultBins" );
+			norm = ((TH1D*)dataFile->Get( "EventQA/mappedRefMultBins" ))->GetBinContent( cenBin + 1 );
+		INFOC( "N_evts = " << norm );
+
+		// Used for setting the scale when drawing
+		INFOC( "zd_All = " << dataHists[ "zd_All"] );
+		double maxYield = dataHists[ "zd_All"]->Integral();
+		INFOC( "Integral of zd_All (used for drawing) = " << maxYield );
+		schema->setNormalization( maxYield / norm );
+		INFOC( "Schema norm : " << maxYield / norm );
+
+
+		sufficienctStatistics = true;
+
+		// load the histograms into the schema
+		for ( auto k : dataHists ){
+
+			if ( !k.second ){
+				ERROR( "dataHist " << k.first << " : " << k.second )
+				continue;
+			}
+
+			double nObs = k.second->GetEntries();
+			INFOC( "Num Entries in " << k.first << " : " << nObs );
 
 			// normalize
 			k.second->Sumw2();
@@ -286,21 +349,21 @@ namespace TSF{
 
 	void Fitter::nop( ){
 
-		INFO( "DATASETS:" )
-		INFO( "yield_zb_All = " << schema->datasets[ "zb_All" ].yield() );
-		INFO( "yield_zd_All = " << schema->datasets[ "zd_All" ].yield() );
-		INFO( tag, "yield for zb_All inside roi = " << schema->datasets[ "zb_All" ].yield( schema->getRanges() ) );
-		INFO( tag, "yield for zd_All inside roi = " << schema->datasets[ "zd_All" ].yield( schema->getRanges() ) );
+		INFOC( "DATASETS:" )
+		INFOC( "yield_zb_All = " << schema->datasets[ "zb_All" ].yield() );
+		INFOC( "yield_zd_All = " << schema->datasets[ "zd_All" ].yield() );
+		INFOC( "yield for zb_All inside roi = " << schema->datasets[ "zb_All" ].yield( schema->getRanges() ) );
+		INFOC( "yield for zd_All inside roi = " << schema->datasets[ "zd_All" ].yield( schema->getRanges() ) );
 
 		// get the final state of all variables 
-		INFO( tag, "Updating parameters after setup" );
+		INFOC( "Updating parameters after setup" );
 		updateParameters();
 	}
 
 	void Fitter::fit1( ){
 
 		double arglist[10];
-		arglist[ 0 ] = 100;
+		arglist[ 0 ] = 2500;
 		arglist[ 1 ] = 1.0;
 		int iFlag = -1;
 		string status = "na";
@@ -309,10 +372,10 @@ namespace TSF{
 		
 		fixShapes();
 			minuit->mnexcm( "MINI", arglist, 1, iFlag );
-			// minuit->mnexcm( "MINI", arglist, 1, iFlag );
-			// minuit->mnexcm( "MINI", arglist, 1, iFlag );
+			minuit->mnexcm( "MINI", arglist, 1, iFlag );
+			minuit->mnexcm( "MINI", arglist, 1, iFlag );
 			status = minuit->fCstatu;
-			INFO ( tag, "Step 1. Status " << status );
+			INFOC( "Step 1. Status " << status );
 		releaseAll();
 
 		updateParameters();
@@ -321,7 +384,7 @@ namespace TSF{
 	void Fitter::fit2(  ){
 
 		double arglist[10];
-		arglist[ 0 ] = 100;
+		arglist[ 0 ] = 2500;
 		arglist[ 1 ] = 1.0;
 		int iFlag = -1;
 		string status = "na";
@@ -331,10 +394,10 @@ namespace TSF{
 		fix( "yield" );
 		release( "_yield_" );
 			minuit->mnexcm( "MINI", arglist, 1, iFlag );
-			// minuit->mnexcm( "MINI", arglist, 1, iFlag );
-			// minuit->mnexcm( "MINI", arglist, 1, iFlag );
+			minuit->mnexcm( "MINI", arglist, 1, iFlag );
+			minuit->mnexcm( "MINI", arglist, 1, iFlag );
 			status = minuit->fCstatu;
-			INFO ( tag, "Step 2. Status " << status );
+			INFOC( "Step 2. Status " << status );
 		releaseAll();
 		
 		schema->updateRanges();
@@ -350,12 +413,12 @@ namespace TSF{
 	void Fitter::fit3( ){
 
 		double arglist[10];
-		arglist[ 0 ] = 500;
+		arglist[ 0 ] = 2000;
 		arglist[ 1 ] = 10;
 		int iFlag = -1;
 		string status = "na";
 
-		INFO( tag, "BEFORE" );
+		INFOC( "BEFORE" );
 		reportFitStatus();
 
 		schema->setMethod( "poisson" );
@@ -367,11 +430,11 @@ namespace TSF{
 		minuit->mnexcm( "MINI", arglist, 1, iFlag );
 		minuit->mnexcm( "MINI", arglist, 1, iFlag );
 		status = minuit->fCstatu;
-		INFO ( tag, "Step 3. Status " << status );	
+		INFOC( "Step 3. Status " << status );	
 		releaseAll();
 		schema->updateRanges();
 
-		INFO( tag, "AFTER" );
+		INFOC( "AFTER" );
 		reportFitStatus();
 
 		if ( 0 == iFlag )
@@ -381,7 +444,7 @@ namespace TSF{
 		
 
 		// get the final state of all variables 
-		INFO( tag, "Updating parameters after Fit" );
+		INFOC( "Updating parameters after Fit" );
 		updateParameters();
 	}
 
@@ -393,18 +456,18 @@ namespace TSF{
 		int iFlag = -1;
 		string status = "na";
 
-		INFO( tag, "BEFORE" );
+		INFOC( "BEFORE" );
 		reportFitStatus();
 
 		schema->setMethod( "poisson" );
 
 		minuit->mnexcm( "MINI", arglist, 1, iFlag );
 		status = minuit->fCstatu;
-		INFO ( tag, "Step 3. Status " << status );	
+		INFOC( "Step 3. Status " << status );	
 
 		schema->updateRanges();
 
-		INFO( tag, "AFTER" );
+		INFOC( "AFTER" );
 		reportFitStatus();
 
 		if ( 0 == iFlag )
@@ -414,7 +477,7 @@ namespace TSF{
 		
 
 		// get the final state of all variables 
-		INFO( tag, "Updating parameters after Fit" );
+		INFOC( "Updating parameters after Fit" );
 		updateParameters();
 	}
 
@@ -440,13 +503,13 @@ namespace TSF{
 			minuit->mnexcm( "MINI", arglist, 1, iFlag );
 			minuit->mnexcm( "MINI", arglist, 1, iFlag );
 			status = minuit->fCstatu;
-			INFO ( tag, "Step 1. Status " << status );
+			INFOC( "Step 1. Status " << status );
 
 		releaseAll();
 		schema->updateRanges();
 
 		// get the final state of all variables 
-		INFO( tag, "Updating parameters after Fit" );
+		INFOC( "Updating parameters after Fit" );
 		updateParameters();
 	}
 
@@ -462,20 +525,20 @@ namespace TSF{
 
 		minuit->mnexcm( "HESSE", arglist, 1, iFlag );
 		status = minuit->fCstatu;
-		INFO ( tag, "Errors Status " << status );
+		INFOC( "Errors Status " << status );
 	
 		// get the final state of all variables 
-		INFO( tag, "Updating parameters after Fit" );
+		INFOC( "Updating parameters after Fit" );
 		// updateParameters();
 	}
 
 	void Fitter::setValue( string var, double val ){
 		int pos = find( parNames.begin(), parNames.end(), var ) - parNames.begin();
 		if ( pos >= parNames.size() ){
-			ERROR( tag, "Parameter " << var << " not found" ); 
+			ERRORC( "Parameter " << var << " not found" ); 
 		} else {
 
-			WARN( tag, "Setting value (parno=" << pos << ", value = " << val << " )"  )
+			WARNC( "Setting value (parno=" << pos << ", value = " << val << " )"  )
 			double arglist[10];
 			arglist[ 0 ] = pos + 1;
 			arglist[ 1 ] = val;
@@ -493,6 +556,8 @@ namespace TSF{
 			//cout << "name : " << k.first << endl;
 			if ( k.second->dataset == dataset && players[ k.first ] ){ // second part is looking for active
 				val += k.second->eval( x, bw );
+
+
 			} else if ( !players[ k.first ] ){
 			}
 		}
@@ -511,8 +576,8 @@ namespace TSF{
 	}
 
 
-	TGraph * Fitter::plotResult( string datasetOrModel ){
-		DEBUG( tag, "Plotting : " << datasetOrModel );
+	TGraph * Fitter::plotResult( string datasetOrModel, float xMin, float xMax ){
+		DEBUGC( "Plotting : " << datasetOrModel );
 
 		string datasetName = "";
 		string modelName = "";
@@ -534,18 +599,26 @@ namespace TSF{
 		}
 
 		if ( !found ){
-			WARN( tag, "Invalid Request : " << datasetOrModel );
+			WARNC( "Invalid Request : " << datasetOrModel );
 			return new TGraph();
 		}
 
 		if ( "" != modelName && !self->players[ modelName ] ){
-			INFO( tag, "Skipping inactive Player" );
+			INFOC( "Skipping inactive Player" );
 			return new TGraph();
 		}
 
 		pair<double, double> xBounds = schema->datasets[ datasetName ].rangeX(  );
 
-		DEBUG( tag, "Plotting from ( " << xBounds.first << ", " << xBounds.second <<" ) " );	
+		if ( xBounds.first < -5 ) xBounds.first = -5;
+		if ( xBounds.second > 5 ) xBounds.second = 5;
+
+		if ( -999 < xMin && xMin < xMax ){
+			xBounds.first = xMin;
+			xBounds.second = xMax;
+		}
+
+		DEBUGC( "Plotting from ( " << xBounds.first << ", " << xBounds.second <<" ) " );
 		double stepsize = (xBounds.second - xBounds.first) / 500.0;
 		vector<double> vx, vy;
 
@@ -569,6 +642,7 @@ namespace TSF{
 
 		}		
 
+		DEBUGC( "Graph( " << vx.size() << ", " << vy.size() << ")" );
 		TGraph * graph = new TGraph( vx.size(), vx.data(), vy.data() );
 		return graph;
 	}
@@ -639,8 +713,8 @@ namespace TSF{
 	double Fitter::currentValue( string var, int npar, double * pars ){
 		// sanity check
 		if ( npar > parNames.size() ){
-			ERROR( tag, "npar = " << npar << ", parNames.size() = " << parNames.size() )
-			ERROR( tag, "npar vs. parNames mismatch in size for " << var )
+			ERRORC( "npar = " << npar << ", parNames.size() = " << parNames.size() )
+			ERRORC( "npar vs. parNames mismatch in size for " << var )
 			return -9999.999;
 		}
 		// update the variables
@@ -651,7 +725,7 @@ namespace TSF{
 			}
 		}
 
-		ERROR( tag, var << " not found" )
+		ERRORC( var << " not found" )
 		// not found
 		return 9999.999;
 	}

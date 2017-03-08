@@ -7,13 +7,15 @@
 
 #include "ANSIColors.h"
 
+
 namespace TSF{
 	FitRunner::FitRunner( ){
 	}
 
 	void FitRunner::initialize(  ) {
 		
-
+		// loguru::add_file("FitRunner.log", loguru::Truncate, loguru::Verbosity_MAX);
+		// LOG_SCOPE_FUNCTION(INFO);
 
 		// Initialize the Phase Space Recentering Object
 		tofSigmaIdeal = config.getDouble( nodePath+".ZRecentering.sigma:tof", 0.0012);
@@ -69,6 +71,7 @@ namespace TSF{
 		
 
 		improveError = config.getBool( nodePath + ".FitSchema:improve_error", true );
+		tofMatched   = config.getBool( nodePath + ".FitSchema:tof_matched", true );
 
 		// override if we are running parallel jobs
 		// if ( iCen >= 0 && iCen <= 6){
@@ -424,6 +427,7 @@ namespace TSF{
 	} // respondToStats(...)
 
 	void FitRunner::runNominal( int iCharge, int iCen, int iPt, shared_ptr<FitSchema> _schema ) {
+		// LOG_SCOPE_FUNCTION(INFO);
 		WARN( tag, "(iCharge=" << iCharge << ", iCen=" << iCen << ", iPt=" << iPt << ")" );
 
 		double avgP = binAverageP( iPt );
@@ -454,6 +458,14 @@ namespace TSF{
 		bool enhanced = config.getBool( nodePath + ".FitSchema:enhanced", true );
 		bool use_zb = config.getBool( nodePath + ".FitSchema:use_zb", true );
 
+		// set the range for the data projections
+		pair<float, float> zd_MinMax = dataRange( "zd", iPt );
+		fitter.setZdProjectionMinMax( zd_MinMax.first, zd_MinMax.second );
+
+		pair<float, float> zb_MinMax = dataRange( "zb", iPt );
+		fitter.setZbProjectionMinMax( zb_MinMax.first, zb_MinMax.second );
+
+
 		// load the datasets from the file
 		fitter.loadDatasets(centerSpecies, iCharge, iCen, iPt, enhanced, zbMu, zdMu );
 
@@ -463,8 +475,12 @@ namespace TSF{
 		fitter.setupFit();
 		// assign active players to this fit
 		fitter.addPlayers( activePlayers );
-			
+		INFOC( "====ACTIVE PLAYERS======" );
+		INFOC( vts( activePlayers ) );
+		INFOC( "====ACTIVE PLAYERS======" );
 		
+		// fitter.nop();
+
 		for ( int i = 0; i < 3; i ++){
 			// gets close on yield with fixed shapes
 			fitter.fit1(  );
@@ -483,10 +499,16 @@ namespace TSF{
 		}
 		
 		int tries = 0;
-		while( fitter.isFitGood() == false && tries < 3 ){
+		bool goodFit = false;
+		while( goodFit == false && tries < 3 ){
 			fitter.fit3( );
 			tries ++;
+			goodFit = fitter.isFitGood();
 		}
+
+		// Final fit
+		INFOC( "**************** FINAL FIT *******************" );
+		fitter.fit3( );
 
 		if ( improveError )
 			fitter.fitErrors();
@@ -690,9 +712,8 @@ namespace TSF{
 		} // loop iCen
 	} // make()
 
-	void FitRunner::drawSet( string v, Fitter * fitter, int iPt ){
-		INFO( tag,  v << ", fitter=" << fitter << ", iPt=" << iPt );
 
+	pair<float, float> FitRunner::dataRange( string v, int iPt ){
 		double avgP = binAverageP( iPt );
 		auto zbMu = psr->centeredTofMap( centerSpecies, avgP );
 		auto zdMu = psr->centeredDedxMap( centerSpecies, avgP );
@@ -719,6 +740,22 @@ namespace TSF{
 				zdMax = k.second;
 		}
 
+		double xMin = 0, xMax = 0;
+		if ( v.substr(0, 2) == "zb" ){
+			INFO( tag, "Using zb range ( " << zbMin << " -> " << zbMax << " )" );
+			xMin = zbMin - 0.2;
+			xMax = zbMax + 0.2;
+		} else {
+			INFO( tag, "Using zd range( " << zdMin << " -> " << zdMax << " )" );
+			xMin = zdMin - 0.8;
+			xMax = zdMax + 0.8;
+		}
+
+		return make_pair( xMin, xMax );
+	}
+
+	void FitRunner::drawSet( string v, Fitter * fitter, int iPt ){
+		INFO( tag,  v << ", fitter=" << fitter << ", iPt=" << iPt );
 
 		TH1 * h = fitter->getDataHist( v );
 		if ( !h ){
@@ -730,26 +767,17 @@ namespace TSF{
 		double scaler = 1e-8;
 
 		int binmax = h->GetMaximumBin();
-		double max = h->GetBinContent( binmax ) * 5;
+		double max = h->GetBinContent( binmax ) * 1.2;
 		h->GetYaxis()->SetRangeUser( 0.1 / fitter->getNorm(), max );
 
-		double xMin = 0, xMax = 0;
-		if ( v.substr(0, 2) == "zb" ){
-			INFO( tag, "Using zb range ( " << zbMin << " -> " << zbMax << " )" );
-			xMin = zbMin - 0.2;
-			xMax = zbMax + 0.2;
 
-			// TODO : fix hard code center species
+		if ( v.substr(0, 2) == "zb" )
 			h->SetTitle( (" ; z_{b}^{" + Common::plc_label( centerSpecies ) + "} ; dN/dz_{b}").c_str() );
-		} else {
-			INFO( tag, "Using zd range( " << zdMin << " -> " << zdMax << " )" );
-			xMin = zdMin - 0.8;
-			xMax = zdMax + 0.8;
-
+		else 
 			h->SetTitle( (" ; z_{d}^{" + Common::plc_label( centerSpecies ) + "}; dN/dz_{d}").c_str() );
-		}
 
-		h->GetXaxis()->SetRangeUser( xMin, xMax );
+		pair<float, float> dRange = dataRange( v, iPt );
+		h->GetXaxis()->SetRangeUser( dRange.first, dRange.second );
 		h->GetXaxis()->SetNdivisions( 505 );
 		h->GetYaxis()->SetTitleOffset( 1.4 );
 
@@ -769,23 +797,28 @@ namespace TSF{
 
 		h->Draw("pe same");
 
-		TGraph * sum = fitter->plotResult( v );
-		sum->SetLineColor( kBlack );
-		sum->SetLineWidth( 2 );
-		sum->Draw( "same" );
-		
-		vector<TGraph*> comps;
-		vector<double> colors = { kRed + 1, 	kAzure - 3, 	kGreen + 1, kBlue - 3 };
-		int i = 0;
-		
-		for ( string plc : Common::species ){
-			TGraph * g = fitter->plotResult( v+"_g"+plc );
-			comps.push_back( g );
-			g->SetLineColor( colors[ i ] );
-			g->SetLineWidth( 2 );
-			g->Draw( "same" );
 
-			i++;
+		if ( config.getBool( nodePath + ".DrawOpts.ShowFitSum" ) ){
+			TGraph * sum = fitter->plotResult( v, dRange.first, dRange.second );
+			sum->SetLineColor( kBlack );
+			sum->SetLineWidth( 2 );
+			sum->Draw( "same" );
+		}
+		
+		if ( config.getBool( nodePath + ".DrawOpts.ShowFitComponents" ) ){
+			vector<TGraph*> comps;
+			vector<double> colors = { kRed + 1, 	kAzure - 3, 	kGreen + 1, kBlue - 3 };
+			int i = 0;
+			
+			for ( string plc : Common::species ){
+				TGraph * g = fitter->plotResult( v+"_g"+plc, dRange.first, dRange.second );
+				comps.push_back( g );
+				g->SetLineColor( colors[ i ] );
+				g->SetLineWidth( 2 );
+				g->Draw( "same" );
+
+				i++;
+			}
 		}
 
 		gPad->SetGrid( 1, 1 );

@@ -151,7 +151,11 @@ protected:
 	 * Analyze a track in the current Event
 	 * @piTrack	- Track index 
 	 */
-	virtual void analyzeTrack( Int_t iTrack );
+	virtual void analyzeTrack( Int_t iTrack, bool isTofTrack );
+	virtual void analyzeTrack( Int_t iTrack ) {
+		// just for backwards compatibility, since most of the subclasses dont need to know tof or not
+		analyzeTrack( iTrack, false);
+	}
 
 	/**
 	 * Analyze a track that passes normal and TOF cuts in the current Event

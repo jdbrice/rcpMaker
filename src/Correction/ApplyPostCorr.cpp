@@ -20,8 +20,9 @@ void ApplyPostCorr::initialize(){
 	/*************************** Only if we are NOT applying track-by-track ****************************/
 		
 
-	apply_feeddown = config.getBool( nodePath + ".FeedDown:apply", true );
-	apply_tofEff = config.getBool( nodePath + ".TofEff:apply", true );
+	apply_feeddown      = config.getBool( nodePath + ".FeedDown:apply", true );
+	apply_tofEff        = config.getBool( nodePath + ".TofEff:apply", true );
+	apply_tofSpeciesEff = config.getBool( nodePath + ".TofSpeciesEff:apply", true );
 
 	INFO( classname(), "Apply TpcEff (Nominal is FALSE) : " << bts( apply_tpcEff ) );
 	INFO( classname(), "Apply pT Factor : " << bts( apply_pTFactor ) );
@@ -31,6 +32,7 @@ void ApplyPostCorr::initialize(){
 
 
 	INFO( classname(), "Apply TofEff : " << bts( apply_tofEff ) );
+	INFO( classname(), "Apply TofSpeciesEff : " << bts( apply_tofSpeciesEff ) );
 	INFO( classname(), "Apply Feed-down : " << bts( apply_feeddown ) );
 }
 
@@ -67,8 +69,12 @@ void ApplyPostCorr::setupCloneArmy( TH1 * h_origin, string cyn, string plc ){
 		book->addClone( "corr_pTFactor_" + cyn, h_origin );
 	book->cd( plc + "_yield/corr_dy" );
 		book->addClone( "corr_dy_" + cyn, h_origin );
+	book->cd( plc + "_yield/corr_feeddown" );
+		book->addClone( "corr_feeddown_" + cyn, h_origin );
 	book->cd( plc + "_yield/corr_pTBinWidth" );
 		book->addClone( "corr_pTBinWidth_" + cyn, h_origin );
+	book->cd( plc + "_yield/corr_TofSpeciesEff" );
+		book->addClone( "corr_TofSpeciesEff_" + cyn, h_origin );
 
 	book->cd( plc + "_yield/corr_full" );
 		book->addClone( "corr_full_" + cyn, h_origin );
@@ -79,6 +85,21 @@ void ApplyPostCorr::setupCloneArmy( TH1 * h_origin, string cyn, string plc ){
 
 void ApplyPostCorr::make(){
 	DEBUG( classname(), "");
+	
+
+	if ( fileExists("tofEff") ){
+		setCurrentFile( "tofEff" );
+		// Load the TofEff
+		for ( int cg : Common::charges ){
+			for ( int cb : config.getIntVector( nodePath + ".CentralityBins" ) ){
+				string name = plc + "_" + Common::chargeString( cg ) + "_" + ts(cb);
+				tofEff[ plc + "_" + Common::chargeString( cg ) + "_" + ts(cb) ] = get1D( name );
+				INFOC( "Loaded TofEff : " << name );
+			}
+		}
+	}
+
+
 	setCurrentFile( "data" );
 
 	if ( !inFile || !inFile->IsOpen() ){
@@ -134,7 +155,13 @@ void ApplyPostCorr::make(){
 				book->cd( plc + "_yield/corr_tof" );
 				book->setBin( 	"corr_tofEff_" + cyn,
 								iB,
-								sc->tofEffCorr( plc, bCen, cb, cg ),
+								tofEffCorr( param, bCen ),
+								0.0 );
+
+				book->cd( plc + "_yield/corr_TofSpeciesEff" );
+				book->setBin( 	"corr_TofSpeciesEff_" + cyn,
+								iB,
+								tofSpeciesEff( plc, cb ),
 								0.0 );
 
 				book->cd( plc + "_yield/corr_tpc" );
@@ -160,6 +187,11 @@ void ApplyPostCorr::make(){
 								iB,
 								1.0 / dy,
 								0.0 );
+				book->cd( plc + "_yield/corr_feeddown" );
+				book->setBin( 	"corr_feeddown_" + cyn,
+								iB,
+								sc->feedDownWeight( plc, bLEdge, cb, cg, feedDownSysNSigma ),
+								0.0 );
 
 				book->cd( plc + "_yield/corr_full" );
 				book->setBin( 	"corr_full_" + cyn,
@@ -181,7 +213,10 @@ void ApplyPostCorr::make(){
 					fc = fc * ( 1.0 / bWidth );
 				} 
 				if ( apply_tofEff ){
-					fc = fc * sc->tofEffWeight( plc, bLEdge, cb, cg, 0 );
+					fc = fc * tofEffCorr( param, bCen );
+				}
+				if ( apply_tofSpeciesEff ){
+					fc = fc * (1.0/tofSpeciesEff( plc, cb ));
 				}
 				if ( apply_feeddown ){
 					fc = fc * sc->feedDownWeight( plc, bLEdge, cb, cg, feedDownSysNSigma );

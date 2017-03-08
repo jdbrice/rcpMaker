@@ -1,6 +1,11 @@
 #include "Spectra/TofEffSpectra.h"
 
+
+
 void TofEffSpectra::initialize(  ){
+	// loguru::add_file("TofEffSpectra.log", loguru::Truncate, loguru::Verbosity_MAX);
+	// loguru::g_stderr_verbosity = loguru::Verbosity_OFF;
+
 
 	InclusiveSpectra::initialize();
 
@@ -18,6 +23,10 @@ void TofEffSpectra::initialize(  ){
 
 
 	nSigmaDedxCut = config.getDouble( nodePath + ".nSigmaDedx:cut", -1 );
+
+	INFOC( this->toString() ) ;
+
+
 
 }
 
@@ -51,16 +60,17 @@ void TofEffSpectra::makeCentralityHistos(){
 }
 
 
-void TofEffSpectra::analyzeTrack( int iTrack ){
+void TofEffSpectra::analyzeTrack( int iTrack, bool isTofTrack ){
 
-	double pt = pico->trackPt( iTrack );
-	int charge = pico->trackCharge( iTrack );
+	double pt   = pico->trackPt( iTrack );
+	int charge  = pico->trackCharge( iTrack );
 	double dedx = pico->trackDedx( iTrack );
 
 	double p 		= pico->trackP( iTrack );
 	double rdedx 	= zr->rDedx(centerSpecies, pico->trackDedx(iTrack), p );
 	double nSigma 	= rdedx / dedxSigmaIdeal;
 
+	// INFOC( "zd = " << rdedx );
 
 	book->cd( "inclusive_vs_dedx" );
 

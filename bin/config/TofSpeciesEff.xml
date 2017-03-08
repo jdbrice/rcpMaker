@@ -1,0 +1,50 @@
+
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+
+	<Task name="TofSpeciesEff" type="TofSpeciesEff" config="" nodePath="TofSpeciesEff" />
+	<Include url="./Common/env.xml" />
+
+	<plc>Pi</plc>
+	
+	<XmlRange name="pT_Pi_p" min="0.4" max="0.6" />
+	<XmlRange name="pT_K_p" min="0.33" max="0.4" />
+	<XmlRange name="pT_P_p" min="0.5" max="1.9" />
+
+	<XmlRange name="pT_Pi_n" min="0.4" max="0.6" />
+	<XmlRange name="pT_K_n" min="0.0" max="1.6" />
+	<XmlRange name="pT_P_n" min="0.0" max="0.9" />
+
+	<SysUnc high="0.02" low="0.02" />
+	
+
+	<TofSpeciesEff>
+		<Logger color="true" logLevel="info" globalLogLevel="trace"/>
+
+
+		<input plc="{plc}">
+			<TFile url="{env:cwd}PostCorr_Pi.root" as="simfit_Pi" />
+			<TFile url="{env:cwd}PostCorr_K.root" as="simfit_K" />
+			<TFile url="{env:cwd}PostCorr_P.root" as="simfit_P" />
+			<TFile url="{env:cwd}TpcPostCorr_Pi.root" as="tpcfit_Pi" />
+			<TFile url="{env:cwd}TpcPostCorr_K.root" as="tpcfit_K" />
+			<TFile url="{env:cwd}TpcPostCorr_P.root" as="tpcfit_P" />
+		</input>
+
+		<output>
+			<TFile url="{env:cwd}TofSpeciesEff.root" />
+			<PDF url="{env:cwd}rp_TofSpeciesEff.pdf" w="1024" h="600"/>
+			<File url="{env:cwd}/Params/TofSpeciesEff.xml" />
+		</output>
+
+		<!-- Include the centrality maps -->
+		<Include url="./Common/centralityMap.xml" />
+
+	</TofSpeciesEff>
+
+	<style>
+		<plot title="Best Fit (Red) Assigned Unc (Blue); p_{T} (GeV/c); (Fit_{zd+zb}) / (Fit_{zd})" markersize="2.0" markerstyle="20" optstat="1000000001" optfit="10" yr="0.75, 1.05" />
+	</style>
+
+</config>
+	

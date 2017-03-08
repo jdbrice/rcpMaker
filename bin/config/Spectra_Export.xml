@@ -9,6 +9,9 @@
 	<Include url="./Common/env.xml" />
 
 	<YieldExporter>
+		<min_pT>0.5</min_pT>
+		
+
 		<input plc="{plc}" energy="14p5">
 			<TFile url="{env:cwd}/PostCorr_{plc}.root"/>
 		</input>

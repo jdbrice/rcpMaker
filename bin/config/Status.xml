@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+	
+	<Task name="Status" type="Status" config="" nodePath="Status" />
+	<Include url="./Common/env.xml" />
+
+	<Status>
+		<Logger color="true" logLevel="info" globalLogLevel="info"/>
+
+		
+
+		<input>
+			<!-- EnergyLoss -->
+			<TFile url="{env:cwd}EnergyLoss_Pi_p.root" name="EnergyLoss_Pi_p.root" />
+			<TFile url="{env:cwd}EnergyLoss_Pi_n.root" name="EnergyLoss_Pi_n.root" />
+
+			<TFile url="{env:cwd}EnergyLoss_K_p.root" name="EnergyLoss_K_p.root" />
+			<TFile url="{env:cwd}EnergyLoss_K_n.root" name="EnergyLoss_K_n.root" />
+
+			<TFile url="{env:cwd}EnergyLoss_P_p.root" name="EnergyLoss_P_p.root" />
+			<TFile url="{env:cwd}EnergyLoss_P_n.root" name="EnergyLoss_P_n.root" />
+			
+			<!-- TPC Efficiency -->
+			<TFile url="{env:cwd}TpcEff.root" name="TpcEff.root" />
+
+			<!-- TOF Efficiency -->
+			<TFile url="{env:cwd}TofEff.root" name="TofEff.root" />
+
+			<!-- FeedDown -->
+			<TFile url="{env:cwd}FeedDown_Fit.root" name="FeedDown_Fit.root" />
+
+			<!-- PidData -->
+			<TFile url="{env:cwd}PidData_PostCorr_Pi.root" name="PidData_PostCorr_Pi.root" />
+			<TFile url="{env:cwd}PidData_PostCorr_K.root" name="PidData_PostCorr_K.root" />
+			<TFile url="{env:cwd}PidData_PostCorr_P.root" name="PidData_PostCorr_P.root" />
+
+			<!-- Fit Results -->
+			<TFile url="{env:cwd}Fit_PostCorr_Pi.root" name="Fit_PostCorr_Pi"/>
+			<TFile url="{env:cwd}Fit_PostCorr_K.root" name="Fit_PostCorr_K"/>
+			<TFile url="{env:cwd}Fit_PostCorr_P.root" name="Fit_PostCorr_P"/>
+
+			<!-- Corrected Spectra -->
+			<TFile url="{env:cwd}PostCorr_Pi.root" name="PostCorr_Pi.root" />
+			<TFile url="{env:cwd}PostCorr_K.root" name="PostCorr_K.root" />
+			<TFile url="{env:cwd}PostCorr_P.root" name="PostCorr_P.root" />
+			
+		</input>
+	</Status>
+
+</config>
+	

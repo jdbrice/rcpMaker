@@ -1,0 +1,17 @@
+
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+
+	<!-- Job to run -->
+	<Task name="Hadd TofEff" type="CommandRunner" config="" nodePath="CommandRunner" />
+
+	<Include url="../Common/env.xml" />
+
+	<CommandRunner>
+		<Logger color="true" globalLogLevel="info" logLevel="all" />
+		<command> hadd -f {env:cwd}TofEff_Pi.root {env:cwd}TofEff_Pi_*.root </command>
+		<command> hadd -f {env:cwd}TofEff_K.root {env:cwd}TofEff_K_*.root </command>
+		<command> hadd -f {env:cwd}TofEff_P.root {env:cwd}TofEff_P_*.root; </command>
+	</CommandRunner>
+
+</config>

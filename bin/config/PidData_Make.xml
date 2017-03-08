@@ -9,7 +9,8 @@
 
 	<PidDataMaker trackBytrackCorrs="false">
 		<Logger color="true" logLevel="all" globalLogLevel="info" />
-		
+		<EventLoop progress="true" />
+
 		<input plc="{plc}">
 			<dst treeName="SpectraPicoDst" url="{env:data}SpectraPicoDst.lis" splitBy="40"/>
 		</input>

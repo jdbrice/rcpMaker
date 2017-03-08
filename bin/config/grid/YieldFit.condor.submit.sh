@@ -18,8 +18,6 @@ Arguments = /home/jdb12/work/rcpMaker/bin/config/YieldFit.xml --plc=Pi --iCharge
 Queue 1
 Arguments = /home/jdb12/work/rcpMaker/bin/config/YieldFit.xml --plc=Pi --iCharge=-1 --iCen=5
 Queue 1
-Arguments = /home/jdb12/work/rcpMaker/bin/config/YieldFit.xml --plc=Pi --iCharge=-1 --iCen=6
-Queue 1
 
 
 Arguments = /home/jdb12/work/rcpMaker/bin/config/YieldFit.xml --plc=Pi --iCharge=1 --iCen=0
@@ -33,8 +31,6 @@ Queue 1
 Arguments = /home/jdb12/work/rcpMaker/bin/config/YieldFit.xml --plc=Pi --iCharge=1 --iCen=4
 Queue 1
 Arguments = /home/jdb12/work/rcpMaker/bin/config/YieldFit.xml --plc=Pi --iCharge=1 --iCen=5
-Queue 1
-Arguments = /home/jdb12/work/rcpMaker/bin/config/YieldFit.xml --plc=Pi --iCharge=1 --iCen=6
 Queue 1
 
 
@@ -51,8 +47,6 @@ Arguments = /home/jdb12/work/rcpMaker/bin/config/YieldFit.xml --plc=K --iCharge=
 Queue 1
 Arguments = /home/jdb12/work/rcpMaker/bin/config/YieldFit.xml --plc=K --iCharge=-1 --iCen=5
 Queue 1
-Arguments = /home/jdb12/work/rcpMaker/bin/config/YieldFit.xml --plc=K --iCharge=-1 --iCen=6
-Queue 1
 
 
 Arguments = /home/jdb12/work/rcpMaker/bin/config/YieldFit.xml --plc=K --iCharge=1 --iCen=0
@@ -66,8 +60,6 @@ Queue 1
 Arguments = /home/jdb12/work/rcpMaker/bin/config/YieldFit.xml --plc=K --iCharge=1 --iCen=4
 Queue 1
 Arguments = /home/jdb12/work/rcpMaker/bin/config/YieldFit.xml --plc=K --iCharge=1 --iCen=5
-Queue 1
-Arguments = /home/jdb12/work/rcpMaker/bin/config/YieldFit.xml --plc=K --iCharge=1 --iCen=6
 Queue 1
 
 # P
@@ -83,8 +75,6 @@ Arguments = /home/jdb12/work/rcpMaker/bin/config/YieldFit.xml --plc=P --iCharge=
 Queue 1
 Arguments = /home/jdb12/work/rcpMaker/bin/config/YieldFit.xml --plc=P --iCharge=-1 --iCen=5
 Queue 1
-Arguments = /home/jdb12/work/rcpMaker/bin/config/YieldFit.xml --plc=P --iCharge=-1 --iCen=6
-Queue 1
 
 
 Arguments = /home/jdb12/work/rcpMaker/bin/config/YieldFit.xml --plc=P --iCharge=1 --iCen=0
@@ -98,8 +88,6 @@ Queue 1
 Arguments = /home/jdb12/work/rcpMaker/bin/config/YieldFit.xml --plc=P --iCharge=1 --iCen=4
 Queue 1
 Arguments = /home/jdb12/work/rcpMaker/bin/config/YieldFit.xml --plc=P --iCharge=1 --iCen=5
-Queue 1
-Arguments = /home/jdb12/work/rcpMaker/bin/config/YieldFit.xml --plc=P --iCharge=1 --iCen=6
 Queue 1
 
 

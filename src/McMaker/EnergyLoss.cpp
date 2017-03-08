@@ -70,7 +70,7 @@ void EnergyLoss::postEventLoop(){
 
 
 
-void EnergyLoss::analyzeTrack( int iTrack ){
+void EnergyLoss::analyzeTrack( int iTrack, bool isTofTrack ){
 
 	book->cd();
 	book->fill( "energyLoss", pico->trackPt( iTrack ), pico->trackPt( iTrack ) - pico->mcPt( iTrack ) );

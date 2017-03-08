@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+
+	<!-- Job to run -->
+	<Task name="Condor Wait for TofEff" type="CommandRunner" config="" nodePath="CondorWaiter" />
+
+	<Include url="../Common/env.xml" />
+
+	<CondorWaiter>
+		<Logger color="true" globalLogLevel="info" logLevel="all" />
+		<command> condor_wait config/grid/log_TofEff_Make.condor.submit </command>
+	</CondorWaiter>
+
+</config>

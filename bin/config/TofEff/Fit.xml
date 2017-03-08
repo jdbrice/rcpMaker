@@ -1,0 +1,29 @@
+
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+
+	<Include url="../Common/env.xml" />
+
+	<Task name="TofEffFitter" type="TofEffFitter" config="" nodePath="TofEffFitter" />
+
+	<TofEffFitter>
+		<Logger color="true" globalLogLevel="info" logLevel="all" />
+		<Reporter> <output url="{env:cwd}rp_TofEff.pdf" width="700" height="500" /> </Reporter>
+
+		<input url="{env:cwd}"/> 
+
+		<output path="{env:cwd}">
+			<TFile url="{env:cwd}TofEff.root" />
+			<params>{env:cwd}Params/TofEff.xml</params>
+		</output>
+
+		<!-- the bins into which the 9 centrality bins are mapped. -->
+		<Include url="../Common/centralityMap.xml" />
+
+		<Style>
+			<TofEff lw="3" ms="1" mst="8" xr="0, 2" optstat="0" />
+		</Style>
+
+	</TofEffFitter>
+
+</config>

@@ -5,6 +5,7 @@
 // ROOBARB
 #include "Utils.h"
 #include "Logger.h"
+#include "IObject.h"
 
 using namespace jdb;
 
@@ -14,7 +15,8 @@ using namespace jdb;
 #include "TNtuple.h"
 #include "TCut.h"
 
-class PidProjector {
+class PidProjector : public IObject {
+
 protected:
 
 	// bin width
@@ -23,14 +25,14 @@ protected:
 
 	TCut _deuteronCut;
 	TCut _electronCut;
-	double _zbCutMax = 1000;
-	double _zbCutMin = -1000;
+	double _zbCutMax = 999;
+	double _zbCutMin = -999;
 
 public:
-	static constexpr auto tag = "PidProjector";
+	virtual const char* classname() const { return "PidProjector"; }
 	
 	PidProjector( TFile * inFile, double zbBinWidth, double zdBinWidth ){
-		INFO( tag, "( file=" << inFile << ", zbBinWidth=" << zbBinWidth << ", zdBinWidth=" << zdBinWidth <<" )" );
+		INFOC( "( file=" << inFile << ", zbBinWidth=" << zbBinWidth << ", zdBinWidth=" << zdBinWidth <<" )" );
 		_f = inFile;
 		_zbBinWidth = zbBinWidth;
 		_zdBinWidth = zdBinWidth;
@@ -40,11 +42,17 @@ public:
 	}
 
 	~PidProjector(){
-		INFO( tag, "()" );
+		INFOC( "()" );
 	}
 
 	string path( string name ){
 		return "PidPoints/" + name;
+	}
+
+	void setZbCutMinMax( double min, double max ){
+		_zbCutMin = min;
+		_zbCutMax = max;
+		INFOC( "zbCut = (" << _zbCutMin << ", " << _zbCutMax << ")" );
 	}
 
 	void cutDeuterons( double protonCenter, double protonSigma, float nSigma = 3 ){
@@ -52,7 +60,7 @@ public:
 
 		// less than because we want to keep what isn't deuterons
 		string cutstr = "zb - " + dts(protonCenter) + " <= " + dts( protonSigma * nSigma );
-		INFO( tag, "Deuteron Cut : " << cutstr );
+		INFOC( "Deuteron Cut : " << cutstr );
 		TCut cut = cutstr.c_str(); 
 		_deuteronCut = cut;
 
@@ -64,10 +72,10 @@ public:
 		string cutstr = "zb - " + dts(zb_Pi) + " >= " + dts( - zb_Pi_sigma * nSigma );
 
 		_electronCut = TCut( cutstr.c_str() );
-		INFO( tag, "Electron Cut : \"" << _electronCut << " \" "  );
+		INFOC( "Electron Cut : \"" << _electronCut << " \" "  );
 
 		_zbCutMin = zb_Pi - zb_Pi_sigma * nSigma;
-		INFO( tag, "zb cut min = " << _zbCutMin );
+		INFOC( "zb cut min = " << _zbCutMin );
 
 	}
 
@@ -75,14 +83,14 @@ public:
 
 		TNtuple * data = (TNtuple*)_f->Get( path(name).c_str() );
 		if ( !data ){
-			ERROR( tag, "ubable to open " << name );
+			ERRORC( "ubable to open " << name );
 			return new TH2D( "err", "err", 1, 0, 1, 1, 0, 1 );
 		}
 
 		double zbMax = data->GetMaximum( "zb" );
 		double zdMax = data->GetMaximum( "zd" );
 
-		INFO( tag, "Max from tree zbMax = " << zbMax );
+		INFOC( "Max from tree zbMax = " << zbMax );
 		if ( zbMax > _zbCutMax )
 			zbMax = _zbCutMax;
 
@@ -95,14 +103,14 @@ public:
 		int zbNBins = (int) ((zbMax - zbMin) / _zbBinWidth + 0.5 );
 		int zdNBins = (int) ((zdMax - zdMin) / _zdBinWidth + 0.5 );
 
-		INFO( tag, "Projecting " << name << " in 2D " ) ;
-		INFO ( tag, "zb from ( " << zbMin <<", " << zbMax << " ) / " << _zbBinWidth << ", = " << zbNBins << " bins" << ")" );
-		INFO ( tag, "zd from ( " << zdMin <<", " << zdMax << " ) / " << _zdBinWidth << ", = " << zdNBins << " bins" << ")" );
+		INFOC( "Projecting " << name << " in 2D " ) ;
+		INFOC( "zb from ( " << zbMin <<", " << zbMax << " ) / " << _zbBinWidth << ", = " << zbNBins << " bins" << ")" );
+		INFOC( "zd from ( " << zdMin <<", " << zdMax << " ) / " << _zdBinWidth << ", = " << zdNBins << " bins" << ")" );
 
 		TCut allCuts = _deuteronCut && _electronCut && TCut( cut.c_str() );
 		allCuts = allCuts * TCut( "w" ); // apply the track weight
 
-		INFO( tag, "Cut string : " << allCuts );
+		INFOC( "Cut string : " << allCuts );
 
 		TH1 * hExisting = (TH1*)gDirectory->Get( (name + "_2D").c_str() );
 		if ( nullptr != hExisting ) delete hExisting;
@@ -116,15 +124,18 @@ public:
 		return h;
 	}
 
-	TH1D * project1D( string name, string var, string cut = "", bool cut_zb = true ){
+	TH1D * project1D( string name, string var, string cut = "", bool cut_zb = true, double _min = -5, double _max = -5 ){
 		TNtuple * data = (TNtuple*)_f->Get( path(name).c_str() );
 		if ( !data ){
-			ERROR( tag, "ubable to open " << name );
+			ERRORC( "unbable to open " << name );
 			return new TH1D( "err", "err", 1, 0, 1 );
 		}
 
-		double max = data->GetMaximum( var.c_str() );
-		double min = data->GetMinimum( var.c_str() );
+		double max = _max; //data->GetMaximum( var.c_str() );
+		double min = _min; //data->GetMinimum( var.c_str() );
+
+		if ( min < -5 ) min = -5;
+		if ( max > 5 ) max = 5;
 
 		if ( "zb" == var && max > _zbCutMax )
 			max = _zbCutMax + (_zbCutMax - min) * .30;
@@ -147,7 +158,7 @@ public:
 		TH1D * h = new TH1D( hist.c_str(), hist.c_str(), nBins, min, max );
 		h->GetDirectory()->cd();
 
-		INFO( tag, "Projecting " << name << " in 1D on " << var << " from ( " << min <<", " << max << " ) / " << binWidth << ", = " << nBins << " bins" << ")" )
+		INFOC( "Projecting " << name << " in 1D on " << var << " from ( " << min <<", " << max << " ) / " << binWidth << ", = " << nBins << " bins" << ")" )
 
 		TCut allCuts = cut.c_str();
 		if ( "zd" == var && cut_zb)
@@ -155,20 +166,20 @@ public:
 
 		TCut wCut = "w";
 		allCuts = allCuts * wCut;
-		INFO( tag, "Cut string : " << allCuts );
+		INFOC( "Cut string : " << allCuts );
 
 		data->Draw( ( var + " >>" + hist).c_str(),  allCuts );
 
 
-		INFO( tag, "Integral(h) = " << h->Integral() );
+		INFOC( "Integral(h) = " << h->Integral() );
 
 		return h;
 	}
 
-	TH1D * projectEnhanced( string name, string var, string plc, double cl, double cr ){
+	TH1D * projectEnhanced( string name, string var, string plc, double cl, double cr, double _min, double _max ){
 		TNtuple * data = (TNtuple*)_f->Get( path(name).c_str() );
 		if ( !data ){
-			ERROR( tag, "unable to open " << name );
+			ERRORC( "unable to open " << name );
 			return new TH1D( "err", "err", 1, 0, 1 );
 		}
 
@@ -184,8 +195,11 @@ public:
 		if ( "zd" == var )
 			allCuts = allCuts && _deuteronCut && _electronCut;
 
-		double max = data->GetMaximum( var.c_str() );
-		double min = data->GetMinimum( var.c_str() );
+		double max = _max; //data->GetMaximum( var.c_str() );
+		double min = _min; //data->GetMinimum( var.c_str() );
+
+		if ( min < -5 ) min = -5;
+		if ( max > 5 ) max = 5;
 
 		if ( "zb" == var && max > _zbCutMax )
 			max = _zbCutMax + (_zbCutMax - min) * .50;
@@ -205,8 +219,8 @@ public:
 		TH1D * h = new TH1D( hist.c_str(), hist.c_str(), nBins, min, max );	
 		h->Sumw2();	
 
-		INFO( tag, "Projecting " << name << " in 1D enhanced around " << plc << " on " << var << " from ( " << min <<", " << max << " ) / " << binWidth << ", = " << nBins << " bins" << ")" )
-		INFO( tag, "Cutting on " << cutVar << "( " << cl << ", " << cr << " )" );
+		INFOC( "Projecting " << name << " in 1D enhanced around " << plc << " on " << var << " from ( " << min <<", " << max << " ) / " << binWidth << ", = " << nBins << " bins" << ")" )
+		INFOC( "Cutting on " << cutVar << "( " << cl << ", " << cr << " )" );
 
 		data->Draw( ( var + " >>" + hist).c_str(), allCuts );
 		return h;

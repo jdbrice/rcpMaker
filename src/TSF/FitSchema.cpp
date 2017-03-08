@@ -101,12 +101,18 @@ namespace TSF{
 		datasets[ ds ].clear();
 		datasets[ ds ].setName( ds );
 
+		INFO( tag, "Loading " << h->GetNbinsX() << " nBins" );
 		for ( int i = 1; i <= h->GetNbinsX(); i++ ){
 
 			double center = h->GetBinCenter( i );
 			double content = h->GetBinContent( i );
 			double error = h->GetBinError( i );
 			double bw = h->GetBinWidth( i );
+
+			if ( center < -5 || center > 5 ){
+				// WARN( tag, "Skipping point at " << center << ", " << content );
+				continue;
+			}
 
 			FitDataPoint fdp( center, content, error, bw );
 			datasets[ ds ].push_back( fdp );
@@ -162,6 +168,18 @@ namespace TSF{
 			vars[ var ]->min = _mu - _sigma * _dmu;
 			vars[ var ]->max = _mu + _sigma * _dmu;
 		}
+
+		INFO( tag,  vars[ var ]->toString() )
+	}
+
+	void FitSchema::setInitialMuLimits( string var, double _min, double _max ){
+		if ( !exists( var ) ){
+			WARN( tag, var << " DNE" )
+			return;
+		}
+
+		vars[ var ]->min = _min;
+		vars[ var ]->max = _max;
 
 		INFO( tag,  vars[ var ]->toString() )
 	}

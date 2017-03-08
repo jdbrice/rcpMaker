@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+
+	<Include url="../Common/env.xml" />
+
+	<!-- Job to run -->
+	<Task name="Condor Submit TofEff" type="CommandRunner" config="{env:cfg}TofEff/Submit.xml" nodePath="CondorSubmitter" />
+	<Task name="Condor Wait for TofEff" type="CommandRunner" config="{env:cfg}TofEff/Wait.xml" nodePath="CondorWaiter" />
+	<Task name="Hadd TofEff" type="CommandRunner" config="{env:cfg}/TofEff/Hadd.xml" nodePath="CommandRunner" />
+	<Task name="TofEffFitter" type="TofEffFitter" config="{env:cfg}/TofEff/Fit.xml" nodePath="TofEffFitter" />
+
+</config>

@@ -11,12 +11,12 @@
 		<Logger color="true" globalLogLevel="info" />
 		
 		<input plc="{plc}">
-			<TFile url="{env:cwd}combined_ZdData_{ZDSHFM.input:plc}.root" name="spectra" />
-			<FitTo url="zd_mTm0_woeff_" />
+			<TFile url="{env:cwd}ZdData_{plc}.root" name="spectra" />
+			<FitTo url="zd_vs_pT_dedx_tof_" />
 		</input>
 
 		<output>
-			<TFile url="{env:cwd}ZdYield_{ZDSHFM.input:plc}.root" />
+			<TFile url="{env:cwd}ZdYield_{plc}.root" />
 		</output>
 
 		<histograms>

@@ -5,7 +5,7 @@
 // ROOBARB
 #include "XmlConfig.h"
 #include "HistoBook.h"
-#include "TaskRunner.h"
+#include "HistoAnalyzer.h"
 
 using namespace jdb;
 
@@ -18,7 +18,7 @@ using namespace jdb;
 #include "TF1.h"
 #include "TGraphAsymmErrors.h"
 
-class TofEffFitter : public TaskRunner
+class TofEffFitter : public HistoAnalyzer
 {
 protected:
 

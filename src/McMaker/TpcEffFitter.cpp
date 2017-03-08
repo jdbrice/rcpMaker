@@ -4,10 +4,12 @@
 // ROOT
 #include "TGraphAsymmErrors.h"
 #include "TFile.h"
+#include "TLatex.h"
 
 #include "Logger.h"
 #include "Reporter.h"
 #include "RooPlotLib.h"
+#include "FitConfidence.h"
 using namespace jdb;
 
 
@@ -107,11 +109,21 @@ void TpcEffFitter::make(){
 				fitFunc->SetParameters( .65, 0.05, 5.0, -0.05 );
 				fitFunc->SetParLimits( 0, 0.5, 1.0 );
 				fitFunc->SetParLimits( 1, 0.0, 0.5 );
-				fitFunc->SetParLimits( 2, 0.0, 100000 );
+				fitFunc->SetParLimits( 2, 0.0, 50 );
 
 				// fist fit shape
-				TFitResultPtr fitPointer = g.Fit( fitFunc, "RSWW" );
-				fitPointer = g.Fit( fitFunc, "RS" );
+				float min = config.getFloat( nodePath + ".Fit:min", 0.0 );
+				float max = config.getFloat( nodePath + ".Fit:max", 2.0 );
+				TFitResultPtr fitPointer = g.Fit( fitFunc, "RSWW", "", min, max );
+				for ( int i = 0; i < config.getInt( nodePath + ".Fit:N", 1 ); i++ ){
+					fitPointer = g.Fit( fitFunc, config.getXString( nodePath + ".Fit:opt", "RS" ).c_str(), "", min, max );
+				}
+
+				// fitFunc->FixParameter( 0, fitFunc->GetParameter( 0 ) );
+				// fitFunc->SetParError( 0, 0.05 );
+				
+				// run the fit again to calculate uncertainties
+				// fitPointer = g.Fit( fitFunc, "ERS", "", min, max );
 
 				// ensure that uncertainty on efficiency is at least X%
 				// MOVED TO Application
@@ -122,21 +134,29 @@ void TpcEffFitter::make(){
 				// }
 
 				INFO( classname(), "FitPointer = " << fitPointer );
-				TGraphErrors * band = Common::choleskyBands( fitPointer, fitFunc, 5000, 200, &rp );
+				TGraphErrors * bandSys = Common::choleskyBands( fitPointer, fitFunc, 200, 100, &rp );
+				TGraphAsymmErrors * band = FitConfidence::fitUncertaintyBand( fitFunc, 0.05, 0.05, 100 );
 				
 
 				rp.newPage();
-				rpl.style( &g ).set( "title", Common::plc_label( plc, c ) + " : " + labels[ b ] + ", Fit 68%CL(Red Band)" )
+				rpl.style( &g ).set( "title", Common::plc_label( plc, c ) + " : " + labels[ b ] + ", Fit 68%CL (Blue Band), SysUnct (Red Band)" )
 					.set( "yr", 0, 1.1 ).set( "optfit", 111 )
 					.set( "xr", 0, 4.5 )
 					.set("y", "Efficiency x Acceptance")
 					.set( "x", "p_{T}^{MC} [GeV/c]" )
 					.draw();
 
+				TLatex latex;
+				latex.SetTextSize(0.06);
+				latex.SetTextAlign(13);  //align at top
+				//[0] * exp( - pow( [1] / x, [2] ) )
+				latex.DrawLatex(2,0.19,"#varepsilon(p_{T}) = p0 e^{ -(p1/p_{T})^{p2}}");
 
 				INFO( classname(), "Stat Box" );
 				gStyle->SetStatY( 0.5 );
 				gStyle->SetStatX( 0.85 );
+
+				gStyle->SetOptFit( 11 );
 				
 				fitFunc->SetLineColor( kRed );
 				fitFunc->Draw("same");	
@@ -145,6 +165,9 @@ void TpcEffFitter::make(){
 				
 				band->SetFillColorAlpha( kRed, 0.7 );
 				band->Draw( "same e3" );
+
+				bandSys->SetFillColorAlpha( kBlue, 0.7 );
+				bandSys->Draw( "same e3" );
 
 
 				rp.savePage();

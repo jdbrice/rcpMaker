@@ -12,7 +12,7 @@
 		<EventLoop progress="true" />
 
 		<input plc="{plc}">
-			<dst treeName="SpectraPicoDst" url="{env:data}SpectraPicoDst.lis" splitBy="20" />
+			<dst treeName="SpectraPicoDst" url="{env:data}SpectraPicoDst.lis" splitBy="40" />
 		</input>
 
 		<output path="{env:cwd}">
@@ -28,12 +28,12 @@
 		<ZRecentering>
 			<centerSpecies>{plc}</centerSpecies>
 			<sigma tof="0.012" dedx="0.07"/>
-			<method>linear</method>
+			<method>nonlinear</method>
 		</ZRecentering>
 
 		<!-- the bins into which the 9 centrality bins are mapped. -->
 		<Include url="../Common/centralityMap.xml" />
-		<MakeQA event="true" track="false" tof="false" dedx="false"/>
+		<MakeQA event="true" track="true" tof="false" dedx="false"/>
 
 		<histograms>
 			<Histo name="zd" title="zd; zd; dN/dzd"  bins_x="binning.dedx"/>

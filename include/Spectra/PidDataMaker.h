@@ -66,7 +66,7 @@ public:
 	 * @iTrack 	- Track index 
 	 */
 	//virtual void analyzeTrack( Int_t iTrack );
-	virtual void analyzeTofTrack( Int_t iTrack );
+	virtual void analyzeTrack( Int_t iTrack, bool isTofTrack );
 	virtual void preEventLoop();
 	virtual void postEventLoop();
 	

@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+
+	<Task name="skimmer" type="VegaXmlPlotter" config="" nodePath="" />
+	<Logger globalLogLevel="info" color="true" />
+
+	<Include url="../Common/env.xml" />
+
+	<Data name="spectra" url="{env:cwd}BESCorrectedSpectra.root" />
+
+	<Include url="palette.xml"/>
+
+	<plc>K_n</plc>
+	<energy>14p5</energy>
+
+	<title>
+		<K_p>K^{+}; p_{T} (GeV/c); #frac{1}{N} #frac{1}{2#pi} #frac{d^{2}N}{p_{T} dp_{T} dy}</K_p>
+		<K_n>K^{-}; p_{T} (GeV/c); #frac{1}{N} #frac{1}{2#pi} #frac{d^{2}N}{p_{T} dp_{T} dy}</K_n>
+
+		<Pi_p>#pi^{+}; p_{T} (GeV/c); #frac{1}{N} #frac{1}{2#pi} #frac{d^{2}N}{p_{T} dp_{T} dy}</Pi_p>
+		<Pi_n>#pi^{-}; p_{T} (GeV/c); #frac{1}{N} #frac{1}{2#pi} #frac{d^{2}N}{p_{T} dp_{T} dy}</Pi_n>
+
+		<P_p>p; p_{T} (GeV/c); #frac{1}{N} #frac{1}{2#pi} #frac{d^{2}N}{p_{T} dp_{T} dy}</P_p>
+		<P_n>#bar{p}; p_{T} (GeV/c); #frac{1}{N} #frac{1}{2#pi} #frac{d^{2}N}{p_{T} dp_{T} dy}</P_n>
+	</title>
+
+	<yRange>
+		<K_n>1e-4, 20, 100</K_n>
+		<K_p>1e-4, 20, 100</K_p>
+
+		<Pi_n>1e-4, 200, 100</Pi_n>
+		<Pi_p>1e-4, 200, 100</Pi_p>
+
+		<P_n>0.5e-4, 200, 100</P_n>
+		<P_p>1e-4, 200, 100</P_p>
+	</yRange>
+
+	<Labels>
+		<Centrality>0-5% Au+Au</Centrality>
+		<Centrality>5-10% Au+Au</Centrality>
+		<Centrality>10-20% Au+Au</Centrality>
+		<Centrality>20-40% Au+Au</Centrality>
+		<Centrality>40-60% Au+Au</Centrality>
+		<Centrality>60-80% Au+Au</Centrality>
+
+		<Energy_7p7>Au+Au @ #sqrt{s_{NN} } = 7.7 GeV</Energy_7p7>
+		<Energy_11p5>Au+Au @ #sqrt{s_{NN} } = 11.5 GeV</Energy_11p5>
+		<Energy_14p5>Au+Au @ #sqrt{s_{NN} } = 14.5 GeV</Energy_14p5>
+		<Energy_19p6>Au+Au @ #sqrt{s_{NN} } = 19.6 GeV</Energy_19p6>
+		<Energy_27p0>Au+Au @ #sqrt{s_{NN} } = 27.0 GeV</Energy_27p0>
+		<Energy_39p0>Au+Au @ #sqrt{s_{NN} } = 39.0 GeV</Energy_39p0>
+		<Energy_62p4>Au+Au @ #sqrt{s_{NN} } = 62.4 GeV</Energy_62p4>
+		
+	</Labels>
+
+	<Plot>
+		<Axes lsx="0, 3, 100" lsy="@yRange.{plc}" title="@title.{plc}" />
+		
+
+		<!-- Systematic uncertainty -->
+		<Histo data="spectra" names="Yield_{energy}_{plc}_0_sys_normed, Yield_{energy}_{plc}_1_sys_normed, Yield_{energy}_{plc}_2_sys_normed, Yield_{energy}_{plc}_3_sys_normed, Yield_{energy}_{plc}_4_sys_normed, Yield_{energy}_{plc}_5_sys_normed" style="styles.common" >
+			<style draw="same e2" fca="@Palette.AC[{i}]" c="@Palette.C[{i}]"/>
+		</Histo>
+
+		<!-- Statistical uncertainty -->
+		<Histo data="spectra" names="Yield_{energy}_{plc}_0_stat_normed, Yield_{energy}_{plc}_1_stat_normed, Yield_{energy}_{plc}_2_stat_normed, Yield_{energy}_{plc}_3_stat_normed, Yield_{energy}_{plc}_4_stat_normed, Yield_{energy}_{plc}_5_stat_normed" style="styles.common" >
+			<style draw="same pe" c="@Palette.C[{i}]"/>
+		</Histo>
+
+		<Legend columns="1" border_size="0" title="Centrality">
+			<Position x1="0.75" x2="0.89" y1="0.5" y2="0.89" />
+			<Entry name="Yield_{energy}_{plc}_0_stat_normed" title="0-5%" opt="pe" />
+			<Entry name="Yield_{energy}_{plc}_1_stat_normed" title="5-10%" opt="pe" />
+			<Entry name="Yield_{energy}_{plc}_2_stat_normed" title="10-20%" opt="pe" />
+			<Entry name="Yield_{energy}_{plc}_3_stat_normed" title="20-40%" opt="pe" />
+			<Entry name="Yield_{energy}_{plc}_4_stat_normed" title="40-60%" opt="pe" />
+			<Entry name="Yield_{energy}_{plc}_5_stat_normed" title="60-80%" opt="pe" />
+		</Legend>
+
+		<TLatex text="@Labels.Energy_{energy}" x="0.2" y="0.85" size="0.05"/>
+		<Export url="{env:cwd}Plots/SpectraVsCentrality/spectra_vs_centrality_{energy}_{plc}.pdf" />
+	</Plot>
+
+	<styles>
+		<common draw="same pe" markerstyle="20" logy="1" optstat="0"/>
+	</styles>
+
+</root>

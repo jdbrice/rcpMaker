@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+	
+	<Task name="skimmer" type="VegaXmlPlotter" config="" nodePath="" />
+
+	<Include url="./Common/env.xml" />
+
+	<Data name="dd" treeName="SpectraPicoDst" url="{env:data}SpectraPicoDst.lis" maxFiles="-1"/>
+
+	<!-- Things out here apply to all plots unless overriden -->
+	<Margins left="0.10" right="0.05" top="0.1" bottom="0.15" />
+
+	<TCanvas width="1000" height="700" />
+
+	<Plot>
+		
+		<Histo data="dd" name="bin9" draw="bin9" bins_x="bins.bin9">
+			<style draw="h TEXT" fc="#0000aa" optstat="10" logy="1" title=";Centrality bin9; # of Events"/>
+			<OptStats x1="0.7" x2="0.95" y1="0.8" y2="0.9" />
+		</Histo>
+		<Export url="{env:cwd}img/EventQA_bin9.pdf" />
+	</Plot>
+
+
+	<styles>
+		<RCP x="p_{T} [GeV/c]" y="R_{CP} (0-5%) / (60-80%)" optstat="0" xr="0, 5.7" xts="0.06" xls="0.06" yto="0.4" yts="0.08" yls="0.06"/>
+	</styles>
+
+	<bins>
+		<bin9 width="1" min="0" max="12" />
+	</bins>
+
+
+</root>

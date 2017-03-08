@@ -11,9 +11,15 @@
 #include "XmlConfig.h"
 #include "TaskEngine.h"
 #include "CommandRunner.h"
+// #include "Extra/format.h"
 using namespace jdb;
 
 // Rcp Maker
+
+// UT
+#include "UnitTests/EvaluateConfig.h"
+#include "UnitTests/Status.h"
+
 
 // Spectra 
 	#include "Spectra/InclusiveSpectra.h"
@@ -46,16 +52,23 @@ using namespace jdb;
 
 // // PID Fitting
 	#include "TSF/FitRunner.h"
+	#include "TSF/TpcFitRunner.h"
 	using namespace TSF;
 
 // // Corrections
 	#include "Correction/ApplyPostCorr.h"
+	#include "Correction/TofSpeciesEff.h"
+
+	#define LOGURU_IMPLEMENTATION 1
+	#include "loguru.h"
 
 
 void ssGo( XmlConfig &config, string fileList, string jobPrefix );
 void conGo( XmlConfig &config, int jobIndex );
 
 int main( int argc, char* argv[] ) {
+	loguru::set_thread_name("MAIN");
+
 
 	TaskFactory::registerTaskRunner<EnergyLoss>( "EnergyLoss" );
 	TaskFactory::registerTaskRunner<FeedDownMaker>( "FeedDownMaker" );
@@ -74,6 +87,7 @@ int main( int argc, char* argv[] ) {
 	TaskFactory::registerTaskRunner<ZdDataMaker>( "ZdDataMaker" );
 
 	TaskFactory::registerTaskRunner<FitRunner>( "FitRunner" );
+	TaskFactory::registerTaskRunner<TpcFitRunner>( "TpcFitRunner" );
 	
 	TaskFactory::registerTaskRunner<ApplyPostCorr>( "ApplyPostCorr" );
 	TaskFactory::registerTaskRunner<YieldExporter>( "YieldExporter" );
@@ -81,8 +95,13 @@ int main( int argc, char* argv[] ) {
 	TaskFactory::registerTaskRunner<RcpHistoFileMaker>( "RcpHistoFileMaker" );
 
 	TaskFactory::registerTaskRunner<CommandRunner>( "CommandRunner" );
+	TaskFactory::registerTaskRunner<EvaluateConfig>( "EvaluateConfig" );
+	TaskFactory::registerTaskRunner<TofSpeciesEff>( "TofSpeciesEff" );
+
+	TaskFactory::registerTaskRunner<Status>( "Status" );
 
 	TaskEngine engine( argc, argv );
+	
 
 	// Logger::setGlobalLogLevel( "all" );
 

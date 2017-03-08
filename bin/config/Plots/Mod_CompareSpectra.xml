@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+
+	<plc>P</plc>
+	<cen>0</cen>
+	<charge>p</charge>
+
+	<fqn>{plc}_{cen}_{charge}</fqn>
+	<m1>dca_1p0</m1>
+	<m2>dca_3p0</m2>
+
+	<Task name="skimmer" type="VegaXmlPlotter" config="" nodePath="" />
+	<Logger globalLogLevel="all" color="true" />
+
+	<Include url="../Common/env.xml" />
+
+	<Data name="mod1" url="{env:out}sys/{m1}/PostCorr_{plc}.root" />
+	<Data name="mod2" url="{env:out}sys/{m2}/PostCorr_{plc}.root" />
+
+	<Include url="palette.xml"/>
+
+	<Transform>
+		<Divide save_as="ratio" nameB="mod1/{plc}_yield/yield_{fqn}" nameA="mod2/{plc}_yield/yield_{fqn}" />
+	</Transform>
+
+
+	<Plot>
+		<!-- <Axes lsx="0, 5, 100" lsy="0.001, 1e2, 100" title="@title.{plc}" /> -->
+		
+		<Histo names="mod1/{plc}_yield/yield_{fqn}, mod2/{plc}_yield/yield_{fqn}" style="styles.common" >
+			<style draw="same pe" c="@Palette.C[{i}]" clone="true"/>
+		</Histo>
+
+		
+		<Export url="{env:cwd}Plots/Sys/{fqn}/draw_{m2}_vs_{m1}.pdf" />
+	</Plot>
+
+	<Plot>
+		<Axes lsx="0, 2.5, 100" lsy="0.5, 1.2, 100" title="; p_{T} (Gev/c); {m2} / {m1}" />
+		
+		<Histo name="ratio" style="" >
+			<style draw="same pe" c="@Palette.C[{i}]" yr="0.5, 1.2"/>
+		</Histo>
+		<TLine x1="0.0" x2="2.5" y1="1.0" y2="1.0" color="#000000" />
+		
+		<Export url="{env:cwd}Plots/Sys/{fqn}/ratio_{m2}_over_{m1}.pdf" />
+	</Plot>
+
+	<styles>
+		<common draw="same pe" markerstyle="20" logy="1" optstat="0"/>
+	</styles>
+
+</root>

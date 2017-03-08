@@ -3,25 +3,24 @@
 
 	<!-- Maps Bin9 to our particular scheme -->
 	<CentralityMap>
-		0 :: 6,
-		1 :: 6,
-		2 :: 5,
-		3 :: 5,
-		4 :: 4,
+		0 :: 5,
+		1 :: 5,
+		2 :: 4,
+		3 :: 4,
+		4 :: 3,
 		5 :: 3,
 		6 :: 2,
 		7 :: 1,
 		8 :: 0
 	</CentralityMap>
 
-
 	<!-- A list of the unique bins in our scheme -->
 	<CentralityBins>
-		0, 1, 2, 3, 4, 5, 6
+		0, 1, 2, 3, 4, 5
 	</CentralityBins>
 
 	<CentralityLabels>
-		0-5%, 5-10%, 10-20%, 20-30%, 30-40%, 40-60%, 60-80%
+		0-5%, 5-10%, 10-20%, 20-40%, 40-60%, 60-80%
 	</CentralityLabels>
 
 	<RefMultBins>5,7,11,15,20,27,36,47,59,75,93,113,138,166,200,239,2000</RefMultBins>

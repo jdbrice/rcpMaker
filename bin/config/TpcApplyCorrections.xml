@@ -1,0 +1,45 @@
+
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+
+	<!-- USER INPUTS -->
+	<plc>Pi</plc>
+	<!-- USER INPUTS -->
+
+	<Task name="ApplyPostCorr" type="ApplyPostCorr" config="" nodePath="ApplyPostCorr" />
+
+	<Include url="./Common/env.xml" />
+
+	<ApplyPostCorr>
+		<Logger color="true" logLevel="info" globalLogLevel="trace"/>
+
+		<Factors pTFactor="true" binWidth="true" dy="true" twopi="true" />
+
+		<input plc="{plc}">
+			<TFile url="{env:cwd}TpcFit_PostCorr_{plc}.root" as="data" />
+		</input>
+		<output>
+			<TFile url="{env:cwd}TpcPostCorr_{plc}.root" />
+		</output>
+
+
+		<!-- Include the corrections files -->
+		<FeedDown systematic="0" bin="0" apply="true">
+			<Include url="{env:cwd}Params/FeedDown.xml" />
+		</FeedDown>
+		<TpcEff apply="true">
+			<Include url="{env:cwd}Params/TpcEff.xml" />
+		</TpcEff>
+		<TofEff apply="false">
+			<Include url="{env:cwd}Params/TofEff.xml" />
+		</TofEff>
+
+		<!-- Include the centrality maps -->
+		<Include url="./Common/centralityMap.xml" />
+
+	</ApplyPostCorr>
+
+	<Include url="./Common/cuts.xml" />
+
+</config>
+	

@@ -30,13 +30,20 @@ void FeedDownFitter::init( XmlConfig &_config, string _nodePath ){
 	plcName[ 14 ] = "P_p";
 	plcName[ 15 ] = "P_n";
 
-	formulas =	{ "[0] * exp( -pow([1]/x, [2]))",
-				  "[0] * exp( -pow([1]/x, [2]))",
-				  "[0] * exp( -pow([1]/x, [2]))",
-				  "[0] * exp( -pow([1]/x, [2]))",
-				  "[0] * exp( -pow([1]/x, [2]))",
-				  "[0] * exp( -pow([1]/x, [2]))" };
+	// formulas =	{ "[0] * exp( -pow([1]/x, [2]))",
+	// 			  "[0] * exp( -pow([1]/x, [2]))",
+	// 			  "[0] * exp( -pow([1]/x, [2]))",
+	// 			  "[0] * exp( -pow([1]/x, [2]))",
+	// 			  "[0] * exp( -pow([1]/x, [2]))",
+	// 			  "[0] * exp( -pow([1]/x, [2]))" };
 
+	formulas =	{ "[0]*pow( x, -abs( [1] ) ) + [2] * exp( -[3] * x )",
+				"[0]*exp( -[1] * x ) + [2] * exp( -[3] * x )",
+				"[0]*exp( -[1] * x ) + [2] * exp( -[3] * x )",
+				"[0]*exp( -[1] * x ) + [2] * exp( -[3] * x )",
+				"[0]*exp( -[1] * x ) + [2] * exp( -[3] * x * x )",
+				"pow( [0] + [1] * pow( x, [2] ), -1 )" };
+	
 				// formulas =	{ "[0] * pow( x, - abs([1])) + [2] * exp( -[3] * x )",
 				// "[0] * pow( x, - abs([1])) + [2] * exp( -[3] * x )",
 				// "([0]*exp( -[1] * x ) + [2] * exp( -[3] * x ))",
@@ -166,11 +173,14 @@ void FeedDownFitter::background( string name, int plcIndex, int bin, ofstream &o
 	TH1 * back = nullptr;
 	TH1 * total = nullptr;
 
+	string fitTo = config.getString( nodePath + ".FitTo:name",  "sig_");
+	INFOC( "Fitting to " << fitTo );
+
 	if ( bin >= 0 ){
-		back  = book->get( "sig_" + name +"_" + ts(bin) );
+		back  = book->get( fitTo + name +"_" + ts(bin) );
 		total = book->get( "spectra_" + name + "_" + ts(bin) );
 	} else {
-		back  = book->get( "sig_" + name  );
+		back  = book->get( fitTo + name  );
 		total = book->get( "spectra_" + name  );
 	}
 	//back->Draw();
@@ -188,31 +198,45 @@ void FeedDownFitter::background( string name, int plcIndex, int bin, ofstream &o
 
 	g->Divide( back, total );
 
-	rpl.style( g ).set( config, "Style.frac_" + name ).set( config, "Style.frac" ).set( "title", hNames[ plcIndex ] + " : bin " + ts(bin) ).draw();
+	vector<string> labels = config.getStringVector( nodePath + ".CentralityLabels" );
+	string cLabel = "0-80%";
+	if ( bin >= 0 )
+		cLabel = labels[bin];
 
+	rpl.style( g ).set( config, "Style.frac_" + name ).set( config, "Style.frac" ).set( "title", hNames[ plcIndex ] + " : bin " + cLabel ).draw();
+	// g->Draw();
+
+	if ( config.exists( nodePath + ".Formulas." + name ) ){
+		formulas[ plcIndex ] = config.getString( nodePath + ".Formulas." + name );
+	}
 	INFO( "Fitting to : " << formulas[ plcIndex ]  )
+
 	TF1 * fracFun = new TF1( "fn", formulas[ plcIndex ].c_str() , 0.01, 4.5 );
+	
 	
 	// fracFun->SetParLimits( 0, 0, 10 );
 	fracFun->SetParameters( config.getDouble( nodePath + ".FitRange:p0", 1 ), 
 							config.getDouble( nodePath + ".FitRange:p1", 1 ), 
-							config.getDouble( nodePath + ".FitRange:p2", 1 ));
+							config.getDouble( nodePath + ".FitRange:p2", 1 ),
+							config.getDouble( nodePath + ".FitRange:p3", 1 ));
 
 	fracFun->SetParLimits( 0, 0, 1.0 );
-	fracFun->SetParLimits( 1, 0, 10 );
-	fracFun->SetParLimits( 2, 0, 1000 );
+	fracFun->SetParLimits( 1, 0, 1.0 );
+	fracFun->SetParLimits( 2, 0, 1.0 );
+	fracFun->SetParLimits( 3, 0, 5.0 );
 	
 
 	double fMin = config.getDouble( nodePath + ".FitRange:min", 0.0 );
 	double fMax = config.getDouble( nodePath + ".FitRange:max", 1.5 );
-	g->Fit( fracFun, "RNQ", "", fMin, fMax );
-	g->Fit( fracFun, "RNQ", "", fMin, fMax );
-	TFitResultPtr fitPointer = g->Fit( fracFun, "QRSM", "", fMin, fMax );
-
+	string fopts = config[ nodePath + ".FitRange:opts" ];
+	g->Fit( fracFun, fopts.c_str(), "", fMin, fMax );
+	g->Fit( fracFun, fopts.c_str(), "", fMin, fMax );
+	TFitResultPtr fitPointer = g->Fit( fracFun, fopts.c_str(), "", fMin, fMax );
+	fracFun->Draw("same");
 	
 	// TGraphErrors * band = Common::choleskyBands( fitPointer, fracFun, 500, 100, reporter.get() );
 	// TH1 * band = FitConfidence::fitCL( fracFun, "uncer_band", 0.95 );
-	TGraphAsymmErrors * band = FitConfidence::fitUncertaintyBand( fracFun, 0.05, 0.05, 100 );
+	TGraphAsymmErrors * band = FitConfidence::fitUncertaintyBand( fracFun, 0.01, 0.01, 100 );
 
 	fracFun->SetRange( 0.0, 5 );
 	

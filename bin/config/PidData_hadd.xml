@@ -12,7 +12,7 @@
 
 	<CommandRunner>
 		<Logger color="true" globalLogLevel="info" logLevel="all" />
-		<command> hadd -f {env:cwd}PidData_PostCorr_{plc}.root {env:cwd}PidData_PostCorr_{plc}_*.root </command>
+		<command> hadd -f {env:cwd}PidData_PostCorr_Pi.root {env:cwd}PidData_PostCorr_Pi_*.root; hadd -f {env:cwd}PidData_PostCorr_K.root {env:cwd}PidData_PostCorr_K_*.root; hadd -f {env:cwd}PidData_PostCorr_P.root {env:cwd}PidData_PostCorr_P_*.root </command>
 	</CommandRunner>
 
 </config>
