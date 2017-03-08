@@ -118,7 +118,7 @@ double SpectraCorrecter::feedDownWeight( string plc, double pt, int iCen, int ch
 			DEBUG( classname(), "systematics on feedDown fd = " << val );
 			return val;
 		}
-		return feedDown[ name ]->eval( pt );
+		return 1.0 - feedDown[ name ]->eval( pt );
 	} else
 		ERROR( classname(), "Cannot find feedDown correction for " << name );
 	return 1.0;

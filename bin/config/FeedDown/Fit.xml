@@ -15,6 +15,14 @@
 			<P_p>[0]*exp( -[1] * x ) + [2] * exp( -[3] * x * x )</P_p>
 			<P_n>pow( [0] + [1] * pow( x, [2] ), -1 )</P_n>
 		</Formulas>
+
+		<FitFunctions>
+			<XmlFunction name="Pi_p" formula="[0]*pow( x, -abs( [1] ) ) + [2] * exp( -[3] * x )" p0="0.026607" p1="0.349812" p2="0.054151" p3="2.682178" cov="6.58774e-06, 0.000313463, -5.17046e-05, 0.000424073, 0.000313463, 0.0483415, -0.007761, -0.0675139, -5.17046e-05, -0.007761, 0.00128024, 0.0118456, 0.000424073, -0.0675139, 0.0118456, 0.313686"/>
+			<XmlFunction name="Pi_n" formula="[0]*pow( x, -abs( [1] ) ) + [2] * exp( -[3] * x )" p0="0.026607" p1="0.349812" p2="0.054151" p3="2.682178" cov="6.58774e-06, 0.000313463, -5.17046e-05, 0.000424073, 0.000313463, 0.0483415, -0.007761, -0.0675139, -5.17046e-05, -0.007761, 0.00128024, 0.0118456, 0.000424073, -0.0675139, 0.0118456, 0.313686"/>
+
+			<XmlFunction name="P_n" formula="pow( [0] + [1] * pow( x, [2] ), -1 )" p0="2.0" p1="4.037578" p2="1.829665" cov="2.19993e-15, 2.36037e-11, -1.73443e-11, 2.36037e-11, 0.069139, 0.0142114, -1.73443e-11, 0.0142114, 0.0301171"/>
+			<XmlFunction name="P_p" formula="[0]*exp( -[1] * x ) + [2] * exp( -[3] * x * x )" p0="0.286969" p1="0.764487" p2="0.638782" p3="23.555338" e3="4.854552" cov="6.74894e-05, 0.000233831, 0.000437032, 0.0181504, 0.000233831, 0.000905852, 0.00133531, 0.0568871, 0.000437032, 0.00133531, 0.0435251, 0.873797, 0.0181504, 0.0568871, 0.873797, 23.87"/>
+		</FitFunctions>
 		
 
 		<input url="{env:cwd}/FeedDown.root" />
@@ -40,14 +48,14 @@
 	<Style>
 		<energyLoss draw="colz" logz="1" optstat="0" xr="0, 2.0" yr="-0.1, 0.1" />
 		<energyLoss1D draw="pe same" logz="0" optstat="0" xr="0, 2.0" mst="8" mc="black" ms="1.5" lc="black" lw="3" yr="-0.1, 0.1"/>
-		<logy1D draw="h" logy="1" optstat="0" fc="red" xr="-0.5, 33.5"/>
+		<logy1D draw="" logy="1" optstat="0" fc="red" xr="-0.5, 33.5"/>
 
-		<frac title="Background Fraction" y="Background / Total" logy="1" ms="2" mst="1" xr="0.0, 3.0" yto="0.5" yts="0.06" optstat="0" yr="0.0, 0.3" />
+		<frac title="Background Fraction" y="Background / Total" logy="1" ms="2" mst="1" xr="0, 3.0" yto="0.5" yts="0.06" optstat="0" />
 	
 		<frac_P_p  yr="2e-2, 2" />
 		<frac_P_n  yr="2e-2, 2" />
 
-		<ratio title="" y="data / fit"  yls="0.1" xls="0.1" logy="0" yr="0.5, 1.5" xr="0, 3.0" mst="8" mc="black" lc="black" yto="0.2" yts="0.15" />
+		<ratio title="" y="data / fit"  yls="0.1" xls="0.1" logy="0" yr="0.8, 1.25" xr="0, 3.0" mst="8" mc="black" lc="black" yto="0.2" yts="0.15" />
 	</Style>
 
 	<!-- Include common resources -->

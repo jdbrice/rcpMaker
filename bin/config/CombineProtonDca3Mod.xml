@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+
+	<plc>P</plc>
+	<cen>0</cen>
+	<charge>p</charge>
+
+	<fqn>Yield_14p5_{plc}_{charge}_{cen}_stat_normed</fqn>
+
+
+	<Task name="skimmer" type="VegaXmlPlotter" config="" nodePath="" />
+	<Logger globalLogLevel="all" color="true" />
+
+	<Include url="./Common/env.xml" />
+
+	<Data name="dca1" url="{env:out}sys/dca_1p0/Spectra_{plc}.root" />
+	<Data name="dca3" url="{env:out}sys/dca_3p0/Spectra_{plc}.root" />
+
+	<TFile url="{env:cwd}Merged_wdca3.root" />
+
+	<Transform>
+		<Clone save_as="dca1_{fqn}" name="dca1/{fqn}" />
+		<Clone save_as="dca3_{fqn}" name="dca3/{fqn}" />
+
+		<Clone save_as="dca1_only" name="dca1/{fqn}" b1="16" b2="33" />
+		<Clone save_as="dca3_only" name="dca3/{fqn}" b1="10" b2="16" />
+	</Transform>
+	<Transform>
+		<Add save_as="{fqn}" nameA="dca1_only" nameB="dca3_only" />
+	</Transform>
+</root>

@@ -3,9 +3,11 @@
 
 	<plc>P</plc>
 	<cen>0</cen>
+	<cen2>{cen}</cen2>
 	<charge>p</charge>
 
-	<fqn>{plc}_{cen}_{charge}</fqn>
+	<fqn1>{plc}_{cen}_{charge}</fqn1>
+	<fqn2>{plc}_{cen2}_{charge}</fqn2>
 	<m1>dca_1p0</m1>
 	<m2>dca_3p0</m2>
 
@@ -20,30 +22,30 @@
 	<Include url="palette.xml"/>
 
 	<Transform>
-		<Divide save_as="ratio" nameB="mod1/{plc}_yield/yield_{fqn}" nameA="mod2/{plc}_yield/yield_{fqn}" />
+		<Divide save_as="ratio" nameB="mod1/{plc}_yield/yield_{fqn1}" nameA="mod2/{plc}_yield/yield_{fqn2}" />
 	</Transform>
 
 
 	<Plot>
 		<!-- <Axes lsx="0, 5, 100" lsy="0.001, 1e2, 100" title="@title.{plc}" /> -->
 		
-		<Histo names="mod1/{plc}_yield/yield_{fqn}, mod2/{plc}_yield/yield_{fqn}" style="styles.common" >
+		<Histo names="mod1/{plc}_yield/yield_{fqn1}, mod2/{plc}_yield/yield_{fqn2}" style="styles.common" >
 			<style draw="same pe" c="@Palette.C[{i}]" clone="true"/>
 		</Histo>
 
 		
-		<Export url="{env:cwd}Plots/Sys/{fqn}/draw_{m2}_vs_{m1}.pdf" />
+		<Export url="{env:cwd}Plots/Sys/{fqn1}/draw_{m2}_vs_{m1}.pdf" />
 	</Plot>
 
 	<Plot>
-		<Axes lsx="0, 2.5, 100" lsy="0.5, 1.2, 100" title="; p_{T} (Gev/c); {m2} / {m1}" />
+		<Axes lsx="0, 2.5, 100" lsy="0.85, 1.15, 100" title="; p_{T} (Gev/c); {m2} / {m1}" />
 		
 		<Histo name="ratio" style="" >
-			<style draw="same pe" c="@Palette.C[{i}]" yr="0.5, 1.2"/>
+			<style draw="same pe" c="@Palette.C[{i}]" yr="0.8, 1.2" gridy="1"/>
 		</Histo>
 		<TLine x1="0.0" x2="2.5" y1="1.0" y2="1.0" color="#000000" />
 		
-		<Export url="{env:cwd}Plots/Sys/{fqn}/ratio_{m2}_over_{m1}.pdf" />
+		<Export url="{env:cwd}Plots/Sys/{fqn1}/ratio_{m2}_over_{m1}.pdf" />
 	</Plot>
 
 	<styles>
